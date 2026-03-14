@@ -43,13 +43,13 @@ If you’d like to use the repository from source, you can either install from g
 To install via git in your `Gemfile`:
 
 ```ruby
-gem "context.dev", git: "https://github.com/stainless-sdks/context.dev-ruby"
+gem "context.dev", git: "https://github.com/brand-dot-dev/context-ruby-sdk"
 ```
 
 Alternatively, reference local copy of the repo:
 
 ```bash
-$ git clone -- 'https://github.com/stainless-sdks/context.dev-ruby' '<path-to-repo>'
+$ git clone -- 'https://github.com/brand-dot-dev/context-ruby-sdk' '<path-to-repo>'
 ```
 
 ```ruby
