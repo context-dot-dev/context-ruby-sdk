@@ -1,0 +1,151 @@
+module ContextDev
+  module Resources
+    class Brand
+      def retrieve: (
+        domain: String,
+        ?force_language: ContextDev::Models::BrandRetrieveParams::force_language,
+        ?max_speed: bool,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandRetrieveResponse
+
+      def ai_product: (
+        url: String,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandAIProductResponse
+
+      def ai_products: (
+        body: ContextDev::Models::BrandAIProductsParams::body,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandAIProductsResponse
+
+      def ai_query: (
+        data_to_extract: ::Array[ContextDev::BrandAIQueryParams::DataToExtract],
+        domain: String,
+        ?specific_pages: ContextDev::BrandAIQueryParams::SpecificPages,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandAIQueryResponse
+
+      def fonts: (
+        domain: String,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandFontsResponse
+
+      def identify_from_transaction: (
+        transaction_info: String,
+        ?city: String,
+        ?country_gl: ContextDev::Models::BrandIdentifyFromTransactionParams::country_gl,
+        ?force_language: ContextDev::Models::BrandIdentifyFromTransactionParams::force_language,
+        ?high_confidence_only: bool,
+        ?max_speed: bool,
+        ?mcc: String,
+        ?phone: Float,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandIdentifyFromTransactionResponse
+
+      def prefetch: (
+        domain: String,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandPrefetchResponse
+
+      def prefetch_by_email: (
+        email: String,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandPrefetchByEmailResponse
+
+      def retrieve_by_email: (
+        email: String,
+        ?force_language: ContextDev::Models::BrandRetrieveByEmailParams::force_language,
+        ?max_speed: bool,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandRetrieveByEmailResponse
+
+      def retrieve_by_isin: (
+        isin: String,
+        ?force_language: ContextDev::Models::BrandRetrieveByIsinParams::force_language,
+        ?max_speed: bool,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandRetrieveByIsinResponse
+
+      def retrieve_by_name: (
+        name: String,
+        ?force_language: ContextDev::Models::BrandRetrieveByNameParams::force_language,
+        ?max_speed: bool,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandRetrieveByNameResponse
+
+      def retrieve_by_ticker: (
+        ticker: String,
+        ?force_language: ContextDev::Models::BrandRetrieveByTickerParams::force_language,
+        ?max_speed: bool,
+        ?ticker_exchange: ContextDev::Models::BrandRetrieveByTickerParams::ticker_exchange,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandRetrieveByTickerResponse
+
+      def retrieve_naics: (
+        input: String,
+        ?max_results: Integer,
+        ?min_results: Integer,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandRetrieveNaicsResponse
+
+      def retrieve_simplified: (
+        domain: String,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandRetrieveSimplifiedResponse
+
+      def screenshot: (
+        domain: String,
+        ?full_screenshot: ContextDev::Models::BrandScreenshotParams::full_screenshot,
+        ?page: ContextDev::Models::BrandScreenshotParams::page,
+        ?prioritize: ContextDev::Models::BrandScreenshotParams::prioritize,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandScreenshotResponse
+
+      def styleguide: (
+        ?direct_url: String,
+        ?domain: String,
+        ?prioritize: ContextDev::Models::BrandStyleguideParams::prioritize,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandStyleguideResponse
+
+      def web_scrape_html: (
+        url: String,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandWebScrapeHTMLResponse
+
+      def web_scrape_images: (
+        url: String,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandWebScrapeImagesResponse
+
+      def web_scrape_md: (
+        url: String,
+        ?include_images: bool,
+        ?include_links: bool,
+        ?shorten_base64_images: bool,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandWebScrapeMdResponse
+
+      def web_scrape_sitemap: (
+        domain: String,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandWebScrapeSitemapResponse
+
+      def initialize: (client: ContextDev::Client) -> void
+    end
+  end
+end
