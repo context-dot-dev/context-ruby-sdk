@@ -131,6 +131,11 @@ module ContextDev
             :bulgarian,
             ContextDev::BrandRetrieveParams::ForceLanguage::TaggedSymbol
           )
+        CANTONESE =
+          T.let(
+            :cantonese,
+            ContextDev::BrandRetrieveParams::ForceLanguage::TaggedSymbol
+          )
         CEBUANO =
           T.let(
             :cebuano,
@@ -224,6 +229,11 @@ module ContextDev
         KAZAKH =
           T.let(
             :kazakh,
+            ContextDev::BrandRetrieveParams::ForceLanguage::TaggedSymbol
+          )
+        KOREAN =
+          T.let(
+            :korean,
             ContextDev::BrandRetrieveParams::ForceLanguage::TaggedSymbol
           )
         KYRGYZ =
@@ -334,6 +344,11 @@ module ContextDev
         TAGALOG =
           T.let(
             :tagalog,
+            ContextDev::BrandRetrieveParams::ForceLanguage::TaggedSymbol
+          )
+        THAI =
+          T.let(
+            :thai,
             ContextDev::BrandRetrieveParams::ForceLanguage::TaggedSymbol
           )
         TURKISH =
