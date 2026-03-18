@@ -3,6 +3,41 @@
 module ContextDev
   module Resources
     class Web
+      # Capture a screenshot of a website. Supports both viewport (standard browser
+      # view) and full-page screenshots. Can also screenshot specific page types (login,
+      # pricing, etc.) by using heuristics to find the appropriate URL. Returns a URL to
+      # the uploaded screenshot image hosted on our CDN.
+      sig do
+        params(
+          domain: String,
+          full_screenshot:
+            ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
+          page: ContextDev::WebScreenshotParams::Page::OrSymbol,
+          prioritize: ContextDev::WebScreenshotParams::Prioritize::OrSymbol,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebScreenshotResponse)
+      end
+      def screenshot(
+        # Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The
+        # domain will be automatically normalized and validated.
+        domain:,
+        # Optional parameter to determine screenshot type. If 'true', takes a full page
+        # screenshot capturing all content. If 'false' or not provided, takes a viewport
+        # screenshot (standard browser view).
+        full_screenshot: nil,
+        # Optional parameter to specify which page type to screenshot. If provided, the
+        # system will scrape the domain's links and use heuristics to find the most
+        # appropriate URL for the specified page type (30 supported languages). If not
+        # provided, screenshots the main domain landing page.
+        page: nil,
+        # Optional parameter to prioritize screenshot capture. If 'speed', optimizes for
+        # faster capture with basic quality. If 'quality', optimizes for higher quality
+        # with longer wait times. Defaults to 'quality' if not provided.
+        prioritize: nil,
+        request_options: {}
+      )
+      end
+
       # Scrapes the given URL and returns the raw HTML content of the page. Uses
       # automatic proxy escalation to handle blocked sites.
       sig do

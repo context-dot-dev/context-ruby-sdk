@@ -34,91 +34,6 @@ module ContextDev
       )
       end
 
-      # Beta feature: Given a single URL, determines if it is a product detail page,
-      # classifies the platform/product type, and extracts the product information.
-      # Supports Amazon, TikTok Shop, Etsy, and generic ecommerce sites.
-      sig do
-        params(
-          url: String,
-          timeout_ms: Integer,
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::BrandAIProductResponse)
-      end
-      def ai_product(
-        # The product page URL to extract product data from.
-        url:,
-        # Optional timeout in milliseconds for the request. Maximum allowed value is
-        # 300000ms (5 minutes).
-        timeout_ms: nil,
-        request_options: {}
-      )
-      end
-
-      # Beta feature: Extract product information from a brand's website. Brand.dev will
-      # analyze the website and return a list of products with details such as name,
-      # description, image, pricing, features, and more.
-      sig do
-        params(
-          body:
-            T.any(
-              ContextDev::BrandAIProductsParams::Body::ByDomain::OrHash,
-              ContextDev::BrandAIProductsParams::Body::ByDirectURL::OrHash
-            ),
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::BrandAIProductsResponse)
-      end
-      def ai_products(body:, request_options: {})
-      end
-
-      # Use AI to extract specific data points from a brand's website. The AI will crawl
-      # the website and extract the requested information based on the provided data
-      # points.
-      sig do
-        params(
-          data_to_extract:
-            T::Array[ContextDev::BrandAIQueryParams::DataToExtract::OrHash],
-          domain: String,
-          specific_pages: ContextDev::BrandAIQueryParams::SpecificPages::OrHash,
-          timeout_ms: Integer,
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::BrandAIQueryResponse)
-      end
-      def ai_query(
-        # Array of data points to extract from the website
-        data_to_extract:,
-        # The domain name to analyze
-        domain:,
-        # Optional object specifying which pages to analyze
-        specific_pages: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
-        request_options: {}
-      )
-      end
-
-      # Extract font information from a brand's website including font families, usage
-      # statistics, fallbacks, and element/word counts.
-      sig do
-        params(
-          domain: String,
-          timeout_ms: Integer,
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::BrandFontsResponse)
-      end
-      def fonts(
-        # Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The
-        # domain will be automatically normalized and validated.
-        domain:,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
-        request_options: {}
-      )
-      end
-
       # Endpoint specially designed for platforms that want to identify transaction data
       # by the transaction title.
       sig do
@@ -160,54 +75,6 @@ module ContextDev
         mcc: nil,
         # Optional phone number from the transaction to help verify brand match.
         phone: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
-        request_options: {}
-      )
-      end
-
-      # Signal that you may fetch brand data for a particular domain soon to improve
-      # latency. This endpoint does not charge credits and is available for paid
-      # customers to optimize future requests. [You must be on a paid plan to use this
-      # endpoint]
-      sig do
-        params(
-          domain: String,
-          timeout_ms: Integer,
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::BrandPrefetchResponse)
-      end
-      def prefetch(
-        # Domain name to prefetch brand data for
-        domain:,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
-        request_options: {}
-      )
-      end
-
-      # Signal that you may fetch brand data for a particular domain soon to improve
-      # latency. This endpoint accepts an email address, extracts the domain from it,
-      # validates that it's not a disposable or free email provider, and queues the
-      # domain for prefetching. This endpoint does not charge credits and is available
-      # for paid customers to optimize future requests. [You must be on a paid plan to
-      # use this endpoint]
-      sig do
-        params(
-          email: String,
-          timeout_ms: Integer,
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::BrandPrefetchByEmailResponse)
-      end
-      def prefetch_by_email(
-        # Email address to prefetch brand data for. The domain will be extracted from the
-        # email. Free email providers (gmail.com, yahoo.com, etc.) and disposable email
-        # addresses are not allowed.
-        email:,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -350,34 +217,6 @@ module ContextDev
       )
       end
 
-      # Endpoint to classify any brand into a 2022 NAICS code.
-      sig do
-        params(
-          input: String,
-          max_results: Integer,
-          min_results: Integer,
-          timeout_ms: Integer,
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::BrandRetrieveNaicsResponse)
-      end
-      def retrieve_naics(
-        # Brand domain or title to retrieve NAICS code for. If a valid domain is provided
-        # in `input`, it will be used for classification, otherwise, we will search for
-        # the brand using the provided title.
-        input:,
-        # Maximum number of NAICS codes to return. Must be between 1 and 10. Defaults
-        # to 5.
-        max_results: nil,
-        # Minimum number of NAICS codes to return. Must be at least 1. Defaults to 1.
-        min_results: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
-        request_options: {}
-      )
-      end
-
       # Returns a simplified version of brand data containing only essential
       # information: domain, title, colors, logos, and backdrops. This endpoint is
       # optimized for faster responses and reduced data transfer.
@@ -391,74 +230,6 @@ module ContextDev
       def retrieve_simplified(
         # Domain name to retrieve simplified brand data for
         domain:,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
-        request_options: {}
-      )
-      end
-
-      # Capture a screenshot of a website. Supports both viewport (standard browser
-      # view) and full-page screenshots. Can also screenshot specific page types (login,
-      # pricing, etc.) by using heuristics to find the appropriate URL. Returns a URL to
-      # the uploaded screenshot image hosted on our CDN.
-      sig do
-        params(
-          domain: String,
-          full_screenshot:
-            ContextDev::BrandScreenshotParams::FullScreenshot::OrSymbol,
-          page: ContextDev::BrandScreenshotParams::Page::OrSymbol,
-          prioritize: ContextDev::BrandScreenshotParams::Prioritize::OrSymbol,
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::BrandScreenshotResponse)
-      end
-      def screenshot(
-        # Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The
-        # domain will be automatically normalized and validated.
-        domain:,
-        # Optional parameter to determine screenshot type. If 'true', takes a full page
-        # screenshot capturing all content. If 'false' or not provided, takes a viewport
-        # screenshot (standard browser view).
-        full_screenshot: nil,
-        # Optional parameter to specify which page type to screenshot. If provided, the
-        # system will scrape the domain's links and use heuristics to find the most
-        # appropriate URL for the specified page type (30 supported languages). If not
-        # provided, screenshots the main domain landing page.
-        page: nil,
-        # Optional parameter to prioritize screenshot capture. If 'speed', optimizes for
-        # faster capture with basic quality. If 'quality', optimizes for higher quality
-        # with longer wait times. Defaults to 'quality' if not provided.
-        prioritize: nil,
-        request_options: {}
-      )
-      end
-
-      # Automatically extract comprehensive design system information from a brand's
-      # website including colors, typography, spacing, shadows, and UI components.
-      # Either 'domain' or 'directUrl' must be provided as a query parameter, but not
-      # both.
-      sig do
-        params(
-          direct_url: String,
-          domain: String,
-          prioritize: ContextDev::BrandStyleguideParams::Prioritize::OrSymbol,
-          timeout_ms: Integer,
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::BrandStyleguideResponse)
-      end
-      def styleguide(
-        # A specific URL to fetch the styleguide from directly, bypassing domain
-        # resolution (e.g., 'https://example.com/design-system').
-        direct_url: nil,
-        # Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
-        # domain will be automatically normalized and validated.
-        domain: nil,
-        # Optional parameter to prioritize screenshot capture for styleguide extraction.
-        # If 'speed', optimizes for faster capture with basic quality. If 'quality',
-        # optimizes for higher quality with longer wait times. Defaults to 'quality' if
-        # not provided.
-        prioritize: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
