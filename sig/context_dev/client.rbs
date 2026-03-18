@@ -10,6 +10,8 @@ module ContextDev
 
     attr_reader api_key: String
 
+    attr_reader web: ContextDev::Resources::Web
+
     attr_reader brand: ContextDev::Resources::Brand
 
     private def auth_headers: -> ::Hash[String, String]

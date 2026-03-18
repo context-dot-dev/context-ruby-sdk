@@ -31,11 +31,11 @@ module ContextDev
 
   class BrandStyleguideParams = ContextDev::Models::BrandStyleguideParams
 
-  class BrandWebScrapeHTMLParams = ContextDev::Models::BrandWebScrapeHTMLParams
+  class WebWebScrapeHTMLParams = ContextDev::Models::WebWebScrapeHTMLParams
 
-  class BrandWebScrapeImagesParams = ContextDev::Models::BrandWebScrapeImagesParams
+  class WebWebScrapeImagesParams = ContextDev::Models::WebWebScrapeImagesParams
 
-  class BrandWebScrapeMdParams = ContextDev::Models::BrandWebScrapeMdParams
+  class WebWebScrapeMdParams = ContextDev::Models::WebWebScrapeMdParams
 
-  class BrandWebScrapeSitemapParams = ContextDev::Models::BrandWebScrapeSitemapParams
+  class WebWebScrapeSitemapParams = ContextDev::Models::WebWebScrapeSitemapParams
 end

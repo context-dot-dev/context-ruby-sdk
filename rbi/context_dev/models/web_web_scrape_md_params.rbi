@@ -2,16 +2,13 @@
 
 module ContextDev
   module Models
-    class BrandWebScrapeMdParams < ContextDev::Internal::Type::BaseModel
+    class WebWebScrapeMdParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
       OrHash =
         T.type_alias do
-          T.any(
-            ContextDev::BrandWebScrapeMdParams,
-            ContextDev::Internal::AnyHash
-          )
+          T.any(ContextDev::WebWebScrapeMdParams, ContextDev::Internal::AnyHash)
         end
 
       # Full URL to scrape and convert to markdown (must include http:// or https://

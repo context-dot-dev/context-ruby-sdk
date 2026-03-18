@@ -2,11 +2,11 @@
 
 module ContextDev
   module Models
-    class BrandWebScrapeSitemapResponse < ContextDev::Internal::Type::BaseModel
+    class WebWebScrapeSitemapResponse < ContextDev::Internal::Type::BaseModel
       OrHash =
         T.type_alias do
           T.any(
-            ContextDev::Models::BrandWebScrapeSitemapResponse,
+            ContextDev::Models::WebWebScrapeSitemapResponse,
             ContextDev::Internal::AnyHash
           )
         end
@@ -16,12 +16,12 @@ module ContextDev
       attr_accessor :domain
 
       # Metadata about the sitemap crawl operation
-      sig { returns(ContextDev::Models::BrandWebScrapeSitemapResponse::Meta) }
+      sig { returns(ContextDev::Models::WebWebScrapeSitemapResponse::Meta) }
       attr_reader :meta
 
       sig do
         params(
-          meta: ContextDev::Models::BrandWebScrapeSitemapResponse::Meta::OrHash
+          meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta::OrHash
         ).void
       end
       attr_writer :meta
@@ -29,7 +29,7 @@ module ContextDev
       # Indicates success
       sig do
         returns(
-          ContextDev::Models::BrandWebScrapeSitemapResponse::Success::TaggedBoolean
+          ContextDev::Models::WebWebScrapeSitemapResponse::Success::TaggedBoolean
         )
       end
       attr_accessor :success
@@ -41,9 +41,9 @@ module ContextDev
       sig do
         params(
           domain: String,
-          meta: ContextDev::Models::BrandWebScrapeSitemapResponse::Meta::OrHash,
+          meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta::OrHash,
           success:
-            ContextDev::Models::BrandWebScrapeSitemapResponse::Success::OrBoolean,
+            ContextDev::Models::WebWebScrapeSitemapResponse::Success::OrBoolean,
           urls: T::Array[String]
         ).returns(T.attached_class)
       end
@@ -63,9 +63,9 @@ module ContextDev
         override.returns(
           {
             domain: String,
-            meta: ContextDev::Models::BrandWebScrapeSitemapResponse::Meta,
+            meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
             success:
-              ContextDev::Models::BrandWebScrapeSitemapResponse::Success::TaggedBoolean,
+              ContextDev::Models::WebWebScrapeSitemapResponse::Success::TaggedBoolean,
             urls: T::Array[String]
           }
         )
@@ -77,7 +77,7 @@ module ContextDev
         OrHash =
           T.type_alias do
             T.any(
-              ContextDev::Models::BrandWebScrapeSitemapResponse::Meta,
+              ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
               ContextDev::Internal::AnyHash
             )
           end
@@ -141,7 +141,7 @@ module ContextDev
           T.type_alias do
             T.all(
               T::Boolean,
-              ContextDev::Models::BrandWebScrapeSitemapResponse::Success
+              ContextDev::Models::WebWebScrapeSitemapResponse::Success
             )
           end
         OrBoolean = T.type_alias { T::Boolean }
@@ -149,13 +149,13 @@ module ContextDev
         TRUE =
           T.let(
             true,
-            ContextDev::Models::BrandWebScrapeSitemapResponse::Success::TaggedBoolean
+            ContextDev::Models::WebWebScrapeSitemapResponse::Success::TaggedBoolean
           )
 
         sig do
           override.returns(
             T::Array[
-              ContextDev::Models::BrandWebScrapeSitemapResponse::Success::TaggedBoolean
+              ContextDev::Models::WebWebScrapeSitemapResponse::Success::TaggedBoolean
             ]
           )
         end

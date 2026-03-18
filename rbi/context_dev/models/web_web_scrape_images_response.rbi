@@ -2,27 +2,25 @@
 
 module ContextDev
   module Models
-    class BrandWebScrapeImagesResponse < ContextDev::Internal::Type::BaseModel
+    class WebWebScrapeImagesResponse < ContextDev::Internal::Type::BaseModel
       OrHash =
         T.type_alias do
           T.any(
-            ContextDev::Models::BrandWebScrapeImagesResponse,
+            ContextDev::Models::WebWebScrapeImagesResponse,
             ContextDev::Internal::AnyHash
           )
         end
 
       # Array of scraped images
       sig do
-        returns(
-          T::Array[ContextDev::Models::BrandWebScrapeImagesResponse::Image]
-        )
+        returns(T::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image])
       end
       attr_accessor :images
 
       # Indicates success
       sig do
         returns(
-          ContextDev::Models::BrandWebScrapeImagesResponse::Success::TaggedBoolean
+          ContextDev::Models::WebWebScrapeImagesResponse::Success::TaggedBoolean
         )
       end
       attr_accessor :success
@@ -35,10 +33,10 @@ module ContextDev
         params(
           images:
             T::Array[
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image::OrHash
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::OrHash
             ],
           success:
-            ContextDev::Models::BrandWebScrapeImagesResponse::Success::OrBoolean,
+            ContextDev::Models::WebWebScrapeImagesResponse::Success::OrBoolean,
           url: String
         ).returns(T.attached_class)
       end
@@ -56,9 +54,9 @@ module ContextDev
         override.returns(
           {
             images:
-              T::Array[ContextDev::Models::BrandWebScrapeImagesResponse::Image],
+              T::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image],
             success:
-              ContextDev::Models::BrandWebScrapeImagesResponse::Success::TaggedBoolean,
+              ContextDev::Models::WebWebScrapeImagesResponse::Success::TaggedBoolean,
             url: String
           }
         )
@@ -70,7 +68,7 @@ module ContextDev
         OrHash =
           T.type_alias do
             T.any(
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image,
+              ContextDev::Models::WebWebScrapeImagesResponse::Image,
               ContextDev::Internal::AnyHash
             )
           end
@@ -82,7 +80,7 @@ module ContextDev
         # The HTML element the image was found in
         sig do
           returns(
-            ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element::TaggedSymbol
+            ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
           )
         end
         attr_accessor :element
@@ -94,7 +92,7 @@ module ContextDev
         # The type/format of the src value
         sig do
           returns(
-            ContextDev::Models::BrandWebScrapeImagesResponse::Image::Type::TaggedSymbol
+            ContextDev::Models::WebWebScrapeImagesResponse::Image::Type::TaggedSymbol
           )
         end
         attr_accessor :type
@@ -103,10 +101,10 @@ module ContextDev
           params(
             alt: T.nilable(String),
             element:
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element::OrSymbol,
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::OrSymbol,
             src: String,
             type:
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image::Type::OrSymbol
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Type::OrSymbol
           ).returns(T.attached_class)
         end
         def self.new(
@@ -126,10 +124,10 @@ module ContextDev
             {
               alt: T.nilable(String),
               element:
-                ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element::TaggedSymbol,
+                ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol,
               src: String,
               type:
-                ContextDev::Models::BrandWebScrapeImagesResponse::Image::Type::TaggedSymbol
+                ContextDev::Models::WebWebScrapeImagesResponse::Image::Type::TaggedSymbol
             }
           )
         end
@@ -144,7 +142,7 @@ module ContextDev
             T.type_alias do
               T.all(
                 Symbol,
-                ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element
+                ContextDev::Models::WebWebScrapeImagesResponse::Image::Element
               )
             end
           OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -152,33 +150,33 @@ module ContextDev
           IMG =
             T.let(
               :img,
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element::TaggedSymbol
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
             )
           SVG =
             T.let(
               :svg,
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element::TaggedSymbol
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
             )
           LINK =
             T.let(
               :link,
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element::TaggedSymbol
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
             )
           SOURCE =
             T.let(
               :source,
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element::TaggedSymbol
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
             )
           VIDEO =
             T.let(
               :video,
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element::TaggedSymbol
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
             )
 
           sig do
             override.returns(
               T::Array[
-                ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element::TaggedSymbol
+                ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
               ]
             )
           end
@@ -194,7 +192,7 @@ module ContextDev
             T.type_alias do
               T.all(
                 Symbol,
-                ContextDev::Models::BrandWebScrapeImagesResponse::Image::Type
+                ContextDev::Models::WebWebScrapeImagesResponse::Image::Type
               )
             end
           OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -202,23 +200,23 @@ module ContextDev
           URL =
             T.let(
               :url,
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image::Type::TaggedSymbol
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Type::TaggedSymbol
             )
           HTML =
             T.let(
               :html,
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image::Type::TaggedSymbol
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Type::TaggedSymbol
             )
           BASE64 =
             T.let(
               :base64,
-              ContextDev::Models::BrandWebScrapeImagesResponse::Image::Type::TaggedSymbol
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Type::TaggedSymbol
             )
 
           sig do
             override.returns(
               T::Array[
-                ContextDev::Models::BrandWebScrapeImagesResponse::Image::Type::TaggedSymbol
+                ContextDev::Models::WebWebScrapeImagesResponse::Image::Type::TaggedSymbol
               ]
             )
           end
@@ -235,7 +233,7 @@ module ContextDev
           T.type_alias do
             T.all(
               T::Boolean,
-              ContextDev::Models::BrandWebScrapeImagesResponse::Success
+              ContextDev::Models::WebWebScrapeImagesResponse::Success
             )
           end
         OrBoolean = T.type_alias { T::Boolean }
@@ -243,13 +241,13 @@ module ContextDev
         TRUE =
           T.let(
             true,
-            ContextDev::Models::BrandWebScrapeImagesResponse::Success::TaggedBoolean
+            ContextDev::Models::WebWebScrapeImagesResponse::Success::TaggedBoolean
           )
 
         sig do
           override.returns(
             T::Array[
-              ContextDev::Models::BrandWebScrapeImagesResponse::Success::TaggedBoolean
+              ContextDev::Models::WebWebScrapeImagesResponse::Success::TaggedBoolean
             ]
           )
         end

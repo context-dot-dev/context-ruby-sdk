@@ -2,8 +2,8 @@
 
 module ContextDev
   module Models
-    # @see ContextDev::Resources::Brand#web_scrape_images
-    class BrandWebScrapeImagesParams < ContextDev::Internal::Type::BaseModel
+    # @see ContextDev::Resources::Web#web_scrape_images
+    class WebWebScrapeImagesParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 

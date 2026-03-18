@@ -2,20 +2,20 @@
 
 module ContextDev
   module Models
-    # @see ContextDev::Resources::Brand#web_scrape_images
-    class BrandWebScrapeImagesResponse < ContextDev::Internal::Type::BaseModel
+    # @see ContextDev::Resources::Web#web_scrape_images
+    class WebWebScrapeImagesResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute images
       #   Array of scraped images
       #
-      #   @return [Array<ContextDev::Models::BrandWebScrapeImagesResponse::Image>]
+      #   @return [Array<ContextDev::Models::WebWebScrapeImagesResponse::Image>]
       required :images,
-               -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BrandWebScrapeImagesResponse::Image] }
+               -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeImagesResponse::Image] }
 
       # @!attribute success
       #   Indicates success
       #
-      #   @return [Boolean, ContextDev::Models::BrandWebScrapeImagesResponse::Success]
-      required :success, enum: -> { ContextDev::Models::BrandWebScrapeImagesResponse::Success }
+      #   @return [Boolean, ContextDev::Models::WebWebScrapeImagesResponse::Success]
+      required :success, enum: -> { ContextDev::Models::WebWebScrapeImagesResponse::Success }
 
       # @!attribute url
       #   The URL that was scraped
@@ -24,9 +24,9 @@ module ContextDev
       required :url, String
 
       # @!method initialize(images:, success:, url:)
-      #   @param images [Array<ContextDev::Models::BrandWebScrapeImagesResponse::Image>] Array of scraped images
+      #   @param images [Array<ContextDev::Models::WebWebScrapeImagesResponse::Image>] Array of scraped images
       #
-      #   @param success [Boolean, ContextDev::Models::BrandWebScrapeImagesResponse::Success] Indicates success
+      #   @param success [Boolean, ContextDev::Models::WebWebScrapeImagesResponse::Success] Indicates success
       #
       #   @param url [String] The URL that was scraped
 
@@ -40,8 +40,8 @@ module ContextDev
         # @!attribute element
         #   The HTML element the image was found in
         #
-        #   @return [Symbol, ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element]
-        required :element, enum: -> { ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element }
+        #   @return [Symbol, ContextDev::Models::WebWebScrapeImagesResponse::Image::Element]
+        required :element, enum: -> { ContextDev::Models::WebWebScrapeImagesResponse::Image::Element }
 
         # @!attribute src
         #   The image source - can be a URL, inline HTML (for SVGs), or a base64 data URI
@@ -52,21 +52,21 @@ module ContextDev
         # @!attribute type
         #   The type/format of the src value
         #
-        #   @return [Symbol, ContextDev::Models::BrandWebScrapeImagesResponse::Image::Type]
-        required :type, enum: -> { ContextDev::Models::BrandWebScrapeImagesResponse::Image::Type }
+        #   @return [Symbol, ContextDev::Models::WebWebScrapeImagesResponse::Image::Type]
+        required :type, enum: -> { ContextDev::Models::WebWebScrapeImagesResponse::Image::Type }
 
         # @!method initialize(alt:, element:, src:, type:)
         #   @param alt [String, nil] Alt text of the image, or null if not present
         #
-        #   @param element [Symbol, ContextDev::Models::BrandWebScrapeImagesResponse::Image::Element] The HTML element the image was found in
+        #   @param element [Symbol, ContextDev::Models::WebWebScrapeImagesResponse::Image::Element] The HTML element the image was found in
         #
         #   @param src [String] The image source - can be a URL, inline HTML (for SVGs), or a base64 data URI
         #
-        #   @param type [Symbol, ContextDev::Models::BrandWebScrapeImagesResponse::Image::Type] The type/format of the src value
+        #   @param type [Symbol, ContextDev::Models::WebWebScrapeImagesResponse::Image::Type] The type/format of the src value
 
         # The HTML element the image was found in
         #
-        # @see ContextDev::Models::BrandWebScrapeImagesResponse::Image#element
+        # @see ContextDev::Models::WebWebScrapeImagesResponse::Image#element
         module Element
           extend ContextDev::Internal::Type::Enum
 
@@ -82,7 +82,7 @@ module ContextDev
 
         # The type/format of the src value
         #
-        # @see ContextDev::Models::BrandWebScrapeImagesResponse::Image#type
+        # @see ContextDev::Models::WebWebScrapeImagesResponse::Image#type
         module Type
           extend ContextDev::Internal::Type::Enum
 
@@ -97,7 +97,7 @@ module ContextDev
 
       # Indicates success
       #
-      # @see ContextDev::Models::BrandWebScrapeImagesResponse#success
+      # @see ContextDev::Models::WebWebScrapeImagesResponse#success
       module Success
         extend ContextDev::Internal::Type::Enum
 
