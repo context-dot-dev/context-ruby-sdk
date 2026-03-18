@@ -2,40 +2,38 @@
 
 module ContextDev
   module Models
-    class BrandWebScrapeSitemapParams < ContextDev::Internal::Type::BaseModel
+    class WebWebScrapeImagesParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
       OrHash =
         T.type_alias do
           T.any(
-            ContextDev::BrandWebScrapeSitemapParams,
+            ContextDev::WebWebScrapeImagesParams,
             ContextDev::Internal::AnyHash
           )
         end
 
-      # Domain name to crawl sitemaps for (e.g., 'example.com'). The domain will be
-      # automatically normalized and validated.
+      # Full URL to scrape images from (must include http:// or https:// protocol)
       sig { returns(String) }
-      attr_accessor :domain
+      attr_accessor :url
 
       sig do
         params(
-          domain: String,
+          url: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
       def self.new(
-        # Domain name to crawl sitemaps for (e.g., 'example.com'). The domain will be
-        # automatically normalized and validated.
-        domain:,
+        # Full URL to scrape images from (must include http:// or https:// protocol)
+        url:,
         request_options: {}
       )
       end
 
       sig do
         override.returns(
-          { domain: String, request_options: ContextDev::RequestOptions }
+          { url: String, request_options: ContextDev::RequestOptions }
         )
       end
       def to_hash

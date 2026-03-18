@@ -438,11 +438,11 @@ module ContextDev
         # @return [Hash{Symbol=>Object}]
         #
         # @example
-        #   # `brand_retrieve_response` is a `ContextDev::Models::BrandRetrieveResponse`
-        #   brand_retrieve_response => {
-        #     brand: brand,
-        #     code: code,
-        #     status: status
+        #   # `web_web_scrape_html_response` is a `ContextDev::Models::WebWebScrapeHTMLResponse`
+        #   web_web_scrape_html_response => {
+        #     html: html,
+        #     success: success,
+        #     url: url
         #   }
         def deconstruct_keys(keys)
           (keys || self.class.known_fields.keys)

@@ -123,29 +123,6 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::BrandStyleguideResponse
 
-      def web_scrape_html: (
-        url: String,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::BrandWebScrapeHTMLResponse
-
-      def web_scrape_images: (
-        url: String,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::BrandWebScrapeImagesResponse
-
-      def web_scrape_md: (
-        url: String,
-        ?include_images: bool,
-        ?include_links: bool,
-        ?shorten_base64_images: bool,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::BrandWebScrapeMdResponse
-
-      def web_scrape_sitemap: (
-        domain: String,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::BrandWebScrapeSitemapResponse
-
       def initialize: (client: ContextDev::Client) -> void
     end
   end

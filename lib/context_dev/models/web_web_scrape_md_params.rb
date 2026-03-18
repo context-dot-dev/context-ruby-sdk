@@ -2,8 +2,8 @@
 
 module ContextDev
   module Models
-    # @see ContextDev::Resources::Brand#web_scrape_md
-    class BrandWebScrapeMdParams < ContextDev::Internal::Type::BaseModel
+    # @see ContextDev::Resources::Web#web_scrape_md
+    class WebWebScrapeMdParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
@@ -34,7 +34,7 @@ module ContextDev
 
       # @!method initialize(url:, include_images: nil, include_links: nil, shorten_base64_images: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
-      #   {ContextDev::Models::BrandWebScrapeMdParams} for more details.
+      #   {ContextDev::Models::WebWebScrapeMdParams} for more details.
       #
       #   @param url [String] Full URL to scrape and convert to markdown (must include http:// or https:// pro
       #

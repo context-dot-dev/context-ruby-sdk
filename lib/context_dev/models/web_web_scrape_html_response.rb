@@ -2,8 +2,8 @@
 
 module ContextDev
   module Models
-    # @see ContextDev::Resources::Brand#web_scrape_html
-    class BrandWebScrapeHTMLResponse < ContextDev::Internal::Type::BaseModel
+    # @see ContextDev::Resources::Web#web_scrape_html
+    class WebWebScrapeHTMLResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute html
       #   Raw HTML content of the page
       #
@@ -13,8 +13,8 @@ module ContextDev
       # @!attribute success
       #   Indicates success
       #
-      #   @return [Boolean, ContextDev::Models::BrandWebScrapeHTMLResponse::Success]
-      required :success, enum: -> { ContextDev::Models::BrandWebScrapeHTMLResponse::Success }
+      #   @return [Boolean, ContextDev::Models::WebWebScrapeHTMLResponse::Success]
+      required :success, enum: -> { ContextDev::Models::WebWebScrapeHTMLResponse::Success }
 
       # @!attribute url
       #   The URL that was scraped
@@ -25,13 +25,13 @@ module ContextDev
       # @!method initialize(html:, success:, url:)
       #   @param html [String] Raw HTML content of the page
       #
-      #   @param success [Boolean, ContextDev::Models::BrandWebScrapeHTMLResponse::Success] Indicates success
+      #   @param success [Boolean, ContextDev::Models::WebWebScrapeHTMLResponse::Success] Indicates success
       #
       #   @param url [String] The URL that was scraped
 
       # Indicates success
       #
-      # @see ContextDev::Models::BrandWebScrapeHTMLResponse#success
+      # @see ContextDev::Models::WebWebScrapeHTMLResponse#success
       module Success
         extend ContextDev::Internal::Type::Enum
 

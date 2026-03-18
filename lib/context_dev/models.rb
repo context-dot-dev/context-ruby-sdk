@@ -71,11 +71,11 @@ module ContextDev
 
   BrandStyleguideParams = ContextDev::Models::BrandStyleguideParams
 
-  BrandWebScrapeHTMLParams = ContextDev::Models::BrandWebScrapeHTMLParams
+  WebWebScrapeHTMLParams = ContextDev::Models::WebWebScrapeHTMLParams
 
-  BrandWebScrapeImagesParams = ContextDev::Models::BrandWebScrapeImagesParams
+  WebWebScrapeImagesParams = ContextDev::Models::WebWebScrapeImagesParams
 
-  BrandWebScrapeMdParams = ContextDev::Models::BrandWebScrapeMdParams
+  WebWebScrapeMdParams = ContextDev::Models::WebWebScrapeMdParams
 
-  BrandWebScrapeSitemapParams = ContextDev::Models::BrandWebScrapeSitemapParams
+  WebWebScrapeSitemapParams = ContextDev::Models::WebWebScrapeSitemapParams
 end

@@ -2,11 +2,11 @@
 
 module ContextDev
   module Models
-    class BrandWebScrapeHTMLResponse < ContextDev::Internal::Type::BaseModel
+    class WebWebScrapeHTMLResponse < ContextDev::Internal::Type::BaseModel
       OrHash =
         T.type_alias do
           T.any(
-            ContextDev::Models::BrandWebScrapeHTMLResponse,
+            ContextDev::Models::WebWebScrapeHTMLResponse,
             ContextDev::Internal::AnyHash
           )
         end
@@ -18,7 +18,7 @@ module ContextDev
       # Indicates success
       sig do
         returns(
-          ContextDev::Models::BrandWebScrapeHTMLResponse::Success::TaggedBoolean
+          ContextDev::Models::WebWebScrapeHTMLResponse::Success::TaggedBoolean
         )
       end
       attr_accessor :success
@@ -31,7 +31,7 @@ module ContextDev
         params(
           html: String,
           success:
-            ContextDev::Models::BrandWebScrapeHTMLResponse::Success::OrBoolean,
+            ContextDev::Models::WebWebScrapeHTMLResponse::Success::OrBoolean,
           url: String
         ).returns(T.attached_class)
       end
@@ -50,7 +50,7 @@ module ContextDev
           {
             html: String,
             success:
-              ContextDev::Models::BrandWebScrapeHTMLResponse::Success::TaggedBoolean,
+              ContextDev::Models::WebWebScrapeHTMLResponse::Success::TaggedBoolean,
             url: String
           }
         )
@@ -66,7 +66,7 @@ module ContextDev
           T.type_alias do
             T.all(
               T::Boolean,
-              ContextDev::Models::BrandWebScrapeHTMLResponse::Success
+              ContextDev::Models::WebWebScrapeHTMLResponse::Success
             )
           end
         OrBoolean = T.type_alias { T::Boolean }
@@ -74,13 +74,13 @@ module ContextDev
         TRUE =
           T.let(
             true,
-            ContextDev::Models::BrandWebScrapeHTMLResponse::Success::TaggedBoolean
+            ContextDev::Models::WebWebScrapeHTMLResponse::Success::TaggedBoolean
           )
 
         sig do
           override.returns(
             T::Array[
-              ContextDev::Models::BrandWebScrapeHTMLResponse::Success::TaggedBoolean
+              ContextDev::Models::WebWebScrapeHTMLResponse::Success::TaggedBoolean
             ]
           )
         end

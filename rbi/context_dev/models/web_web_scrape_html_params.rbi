@@ -2,14 +2,14 @@
 
 module ContextDev
   module Models
-    class BrandWebScrapeHTMLParams < ContextDev::Internal::Type::BaseModel
+    class WebWebScrapeHTMLParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
       OrHash =
         T.type_alias do
           T.any(
-            ContextDev::BrandWebScrapeHTMLParams,
+            ContextDev::WebWebScrapeHTMLParams,
             ContextDev::Internal::AnyHash
           )
         end

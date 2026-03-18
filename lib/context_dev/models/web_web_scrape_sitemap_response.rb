@@ -2,8 +2,8 @@
 
 module ContextDev
   module Models
-    # @see ContextDev::Resources::Brand#web_scrape_sitemap
-    class BrandWebScrapeSitemapResponse < ContextDev::Internal::Type::BaseModel
+    # @see ContextDev::Resources::Web#web_scrape_sitemap
+    class WebWebScrapeSitemapResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute domain
       #   The normalized domain that was crawled
       #
@@ -13,14 +13,14 @@ module ContextDev
       # @!attribute meta
       #   Metadata about the sitemap crawl operation
       #
-      #   @return [ContextDev::Models::BrandWebScrapeSitemapResponse::Meta]
-      required :meta, -> { ContextDev::Models::BrandWebScrapeSitemapResponse::Meta }
+      #   @return [ContextDev::Models::WebWebScrapeSitemapResponse::Meta]
+      required :meta, -> { ContextDev::Models::WebWebScrapeSitemapResponse::Meta }
 
       # @!attribute success
       #   Indicates success
       #
-      #   @return [Boolean, ContextDev::Models::BrandWebScrapeSitemapResponse::Success]
-      required :success, enum: -> { ContextDev::Models::BrandWebScrapeSitemapResponse::Success }
+      #   @return [Boolean, ContextDev::Models::WebWebScrapeSitemapResponse::Success]
+      required :success, enum: -> { ContextDev::Models::WebWebScrapeSitemapResponse::Success }
 
       # @!attribute urls
       #   Array of discovered page URLs from the sitemap (max 500)
@@ -31,13 +31,13 @@ module ContextDev
       # @!method initialize(domain:, meta:, success:, urls:)
       #   @param domain [String] The normalized domain that was crawled
       #
-      #   @param meta [ContextDev::Models::BrandWebScrapeSitemapResponse::Meta] Metadata about the sitemap crawl operation
+      #   @param meta [ContextDev::Models::WebWebScrapeSitemapResponse::Meta] Metadata about the sitemap crawl operation
       #
-      #   @param success [Boolean, ContextDev::Models::BrandWebScrapeSitemapResponse::Success] Indicates success
+      #   @param success [Boolean, ContextDev::Models::WebWebScrapeSitemapResponse::Success] Indicates success
       #
       #   @param urls [Array<String>] Array of discovered page URLs from the sitemap (max 500)
 
-      # @see ContextDev::Models::BrandWebScrapeSitemapResponse#meta
+      # @see ContextDev::Models::WebWebScrapeSitemapResponse#meta
       class Meta < ContextDev::Internal::Type::BaseModel
         # @!attribute errors
         #   Number of errors encountered during crawling
@@ -77,7 +77,7 @@ module ContextDev
 
       # Indicates success
       #
-      # @see ContextDev::Models::BrandWebScrapeSitemapResponse#success
+      # @see ContextDev::Models::WebWebScrapeSitemapResponse#success
       module Success
         extend ContextDev::Internal::Type::Enum
 

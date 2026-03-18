@@ -1,6 +1,6 @@
 module ContextDev
   module Models
-    type brand_web_scrape_md_params =
+    type web_web_scrape_md_params =
       {
         url: String,
         include_images: bool,
@@ -9,7 +9,7 @@ module ContextDev
       }
       & ContextDev::Internal::Type::request_parameters
 
-    class BrandWebScrapeMdParams < ContextDev::Internal::Type::BaseModel
+    class WebWebScrapeMdParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 

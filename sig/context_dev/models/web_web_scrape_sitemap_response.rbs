@@ -1,33 +1,33 @@
 module ContextDev
   module Models
-    type brand_web_scrape_sitemap_response =
+    type web_web_scrape_sitemap_response =
       {
         domain: String,
-        meta: ContextDev::Models::BrandWebScrapeSitemapResponse::Meta,
-        success: ContextDev::Models::BrandWebScrapeSitemapResponse::success,
+        meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
+        success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
         urls: ::Array[String]
       }
 
-    class BrandWebScrapeSitemapResponse < ContextDev::Internal::Type::BaseModel
+    class WebWebScrapeSitemapResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor domain: String
 
-      attr_accessor meta: ContextDev::Models::BrandWebScrapeSitemapResponse::Meta
+      attr_accessor meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta
 
-      attr_accessor success: ContextDev::Models::BrandWebScrapeSitemapResponse::success
+      attr_accessor success: ContextDev::Models::WebWebScrapeSitemapResponse::success
 
       attr_accessor urls: ::Array[String]
 
       def initialize: (
         domain: String,
-        meta: ContextDev::Models::BrandWebScrapeSitemapResponse::Meta,
-        success: ContextDev::Models::BrandWebScrapeSitemapResponse::success,
+        meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
+        success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
         urls: ::Array[String]
       ) -> void
 
       def to_hash: -> {
         domain: String,
-        meta: ContextDev::Models::BrandWebScrapeSitemapResponse::Meta,
-        success: ContextDev::Models::BrandWebScrapeSitemapResponse::success,
+        meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
+        success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
         urls: ::Array[String]
       }
 
@@ -70,7 +70,7 @@ module ContextDev
 
         TRUE: true
 
-        def self?.values: -> ::Array[ContextDev::Models::BrandWebScrapeSitemapResponse::success]
+        def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeSitemapResponse::success]
       end
     end
   end

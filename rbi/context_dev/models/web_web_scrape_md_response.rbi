@@ -2,11 +2,11 @@
 
 module ContextDev
   module Models
-    class BrandWebScrapeMdResponse < ContextDev::Internal::Type::BaseModel
+    class WebWebScrapeMdResponse < ContextDev::Internal::Type::BaseModel
       OrHash =
         T.type_alias do
           T.any(
-            ContextDev::Models::BrandWebScrapeMdResponse,
+            ContextDev::Models::WebWebScrapeMdResponse,
             ContextDev::Internal::AnyHash
           )
         end
@@ -18,7 +18,7 @@ module ContextDev
       # Indicates success
       sig do
         returns(
-          ContextDev::Models::BrandWebScrapeMdResponse::Success::TaggedBoolean
+          ContextDev::Models::WebWebScrapeMdResponse::Success::TaggedBoolean
         )
       end
       attr_accessor :success
@@ -31,7 +31,7 @@ module ContextDev
         params(
           markdown: String,
           success:
-            ContextDev::Models::BrandWebScrapeMdResponse::Success::OrBoolean,
+            ContextDev::Models::WebWebScrapeMdResponse::Success::OrBoolean,
           url: String
         ).returns(T.attached_class)
       end
@@ -50,7 +50,7 @@ module ContextDev
           {
             markdown: String,
             success:
-              ContextDev::Models::BrandWebScrapeMdResponse::Success::TaggedBoolean,
+              ContextDev::Models::WebWebScrapeMdResponse::Success::TaggedBoolean,
             url: String
           }
         )
@@ -66,7 +66,7 @@ module ContextDev
           T.type_alias do
             T.all(
               T::Boolean,
-              ContextDev::Models::BrandWebScrapeMdResponse::Success
+              ContextDev::Models::WebWebScrapeMdResponse::Success
             )
           end
         OrBoolean = T.type_alias { T::Boolean }
@@ -74,13 +74,13 @@ module ContextDev
         TRUE =
           T.let(
             true,
-            ContextDev::Models::BrandWebScrapeMdResponse::Success::TaggedBoolean
+            ContextDev::Models::WebWebScrapeMdResponse::Success::TaggedBoolean
           )
 
         sig do
           override.returns(
             T::Array[
-              ContextDev::Models::BrandWebScrapeMdResponse::Success::TaggedBoolean
+              ContextDev::Models::WebWebScrapeMdResponse::Success::TaggedBoolean
             ]
           )
         end
