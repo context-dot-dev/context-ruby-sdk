@@ -67,6 +67,7 @@ module ContextDev
         AZERI = :azeri
         BENGALI = :bengali
         BULGARIAN = :bulgarian
+        CANTONESE = :cantonese
         CEBUANO = :cebuano
         CROATIAN = :croatian
         CZECH = :czech
@@ -86,6 +87,7 @@ module ContextDev
         INDONESIAN = :indonesian
         ITALIAN = :italian
         KAZAKH = :kazakh
+        KOREAN = :korean
         KYRGYZ = :kyrgyz
         LATIN = :latin
         LATVIAN = :latvian
@@ -108,6 +110,7 @@ module ContextDev
         SWAHILI = :swahili
         SWEDISH = :swedish
         TAGALOG = :tagalog
+        THAI = :thai
         TURKISH = :turkish
         UKRAINIAN = :ukrainian
         URDU = :urdu
