@@ -3,6 +3,41 @@
 module ContextDev
   module Resources
     class Web
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebScreenshotParams} for more details.
+      #
+      # Capture a screenshot of a website. Supports both viewport (standard browser
+      # view) and full-page screenshots. Can also screenshot specific page types (login,
+      # pricing, etc.) by using heuristics to find the appropriate URL. Returns a URL to
+      # the uploaded screenshot image hosted on our CDN.
+      #
+      # @overload screenshot(domain:, full_screenshot: nil, page: nil, prioritize: nil, request_options: {})
+      #
+      # @param domain [String] Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The domai
+      #
+      # @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
+      #
+      # @param page [Symbol, ContextDev::Models::WebScreenshotParams::Page] Optional parameter to specify which page type to screenshot. If provided, the sy
+      #
+      # @param prioritize [Symbol, ContextDev::Models::WebScreenshotParams::Prioritize] Optional parameter to prioritize screenshot capture. If 'speed', optimizes for f
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::WebScreenshotResponse]
+      #
+      # @see ContextDev::Models::WebScreenshotParams
+      def screenshot(params)
+        parsed, options = ContextDev::WebScreenshotParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "brand/screenshot",
+          query: query.transform_keys(full_screenshot: "fullScreenshot"),
+          model: ContextDev::Models::WebScreenshotResponse,
+          options: options
+        )
+      end
+
       # Scrapes the given URL and returns the raw HTML content of the page. Uses
       # automatic proxy escalation to handle blocked sites.
       #
