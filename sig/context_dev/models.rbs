@@ -1,17 +1,11 @@
 module ContextDev
-  class BrandAIProductParams = ContextDev::Models::BrandAIProductParams
+  class AIAIQueryParams = ContextDev::Models::AIAIQueryParams
 
-  class BrandAIProductsParams = ContextDev::Models::BrandAIProductsParams
+  class AIExtractProductParams = ContextDev::Models::AIExtractProductParams
 
-  class BrandAIQueryParams = ContextDev::Models::BrandAIQueryParams
-
-  class BrandFontsParams = ContextDev::Models::BrandFontsParams
+  class AIExtractProductsParams = ContextDev::Models::AIExtractProductsParams
 
   class BrandIdentifyFromTransactionParams = ContextDev::Models::BrandIdentifyFromTransactionParams
-
-  class BrandPrefetchByEmailParams = ContextDev::Models::BrandPrefetchByEmailParams
-
-  class BrandPrefetchParams = ContextDev::Models::BrandPrefetchParams
 
   class BrandRetrieveByEmailParams = ContextDev::Models::BrandRetrieveByEmailParams
 
@@ -21,21 +15,27 @@ module ContextDev
 
   class BrandRetrieveByTickerParams = ContextDev::Models::BrandRetrieveByTickerParams
 
-  class BrandRetrieveNaicsParams = ContextDev::Models::BrandRetrieveNaicsParams
-
   class BrandRetrieveParams = ContextDev::Models::BrandRetrieveParams
 
   class BrandRetrieveSimplifiedParams = ContextDev::Models::BrandRetrieveSimplifiedParams
 
-  class BrandScreenshotParams = ContextDev::Models::BrandScreenshotParams
+  class IndustryRetrieveNaicsParams = ContextDev::Models::IndustryRetrieveNaicsParams
 
-  class BrandStyleguideParams = ContextDev::Models::BrandStyleguideParams
+  class StyleExtractFontsParams = ContextDev::Models::StyleExtractFontsParams
 
-  class BrandWebScrapeHTMLParams = ContextDev::Models::BrandWebScrapeHTMLParams
+  class StyleExtractStyleguideParams = ContextDev::Models::StyleExtractStyleguideParams
 
-  class BrandWebScrapeImagesParams = ContextDev::Models::BrandWebScrapeImagesParams
+  class UtilityPrefetchByEmailParams = ContextDev::Models::UtilityPrefetchByEmailParams
 
-  class BrandWebScrapeMdParams = ContextDev::Models::BrandWebScrapeMdParams
+  class UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 
-  class BrandWebScrapeSitemapParams = ContextDev::Models::BrandWebScrapeSitemapParams
+  class WebScreenshotParams = ContextDev::Models::WebScreenshotParams
+
+  class WebWebScrapeHTMLParams = ContextDev::Models::WebWebScrapeHTMLParams
+
+  class WebWebScrapeImagesParams = ContextDev::Models::WebWebScrapeImagesParams
+
+  class WebWebScrapeMdParams = ContextDev::Models::WebWebScrapeMdParams
+
+  class WebWebScrapeSitemapParams = ContextDev::Models::WebWebScrapeSitemapParams
 end

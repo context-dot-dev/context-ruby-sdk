@@ -18,8 +18,23 @@ module ContextDev
     # @return [String]
     attr_reader :api_key
 
+    # @return [ContextDev::Resources::Web]
+    attr_reader :web
+
+    # @return [ContextDev::Resources::AI]
+    attr_reader :ai
+
+    # @return [ContextDev::Resources::Style]
+    attr_reader :style
+
     # @return [ContextDev::Resources::Brand]
     attr_reader :brand
+
+    # @return [ContextDev::Resources::Industry]
+    attr_reader :industry
+
+    # @return [ContextDev::Resources::Utility]
+    attr_reader :utility
 
     # @api private
     #
@@ -68,7 +83,12 @@ module ContextDev
         max_retry_delay: max_retry_delay
       )
 
+      @web = ContextDev::Resources::Web.new(client: self)
+      @ai = ContextDev::Resources::AI.new(client: self)
+      @style = ContextDev::Resources::Style.new(client: self)
       @brand = ContextDev::Resources::Brand.new(client: self)
+      @industry = ContextDev::Resources::Industry.new(client: self)
+      @utility = ContextDev::Resources::Utility.new(client: self)
     end
   end
 end

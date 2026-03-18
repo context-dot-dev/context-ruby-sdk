@@ -13,8 +13,23 @@ module ContextDev
     sig { returns(String) }
     attr_reader :api_key
 
+    sig { returns(ContextDev::Resources::Web) }
+    attr_reader :web
+
+    sig { returns(ContextDev::Resources::AI) }
+    attr_reader :ai
+
+    sig { returns(ContextDev::Resources::Style) }
+    attr_reader :style
+
     sig { returns(ContextDev::Resources::Brand) }
     attr_reader :brand
+
+    sig { returns(ContextDev::Resources::Industry) }
+    attr_reader :industry
+
+    sig { returns(ContextDev::Resources::Utility) }
+    attr_reader :utility
 
     # @api private
     sig { override.returns(T::Hash[String, String]) }

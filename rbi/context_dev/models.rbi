@@ -1,20 +1,14 @@
 # typed: strong
 
 module ContextDev
-  BrandAIProductParams = ContextDev::Models::BrandAIProductParams
+  AIAIQueryParams = ContextDev::Models::AIAIQueryParams
 
-  BrandAIProductsParams = ContextDev::Models::BrandAIProductsParams
+  AIExtractProductParams = ContextDev::Models::AIExtractProductParams
 
-  BrandAIQueryParams = ContextDev::Models::BrandAIQueryParams
-
-  BrandFontsParams = ContextDev::Models::BrandFontsParams
+  AIExtractProductsParams = ContextDev::Models::AIExtractProductsParams
 
   BrandIdentifyFromTransactionParams =
     ContextDev::Models::BrandIdentifyFromTransactionParams
-
-  BrandPrefetchByEmailParams = ContextDev::Models::BrandPrefetchByEmailParams
-
-  BrandPrefetchParams = ContextDev::Models::BrandPrefetchParams
 
   BrandRetrieveByEmailParams = ContextDev::Models::BrandRetrieveByEmailParams
 
@@ -24,22 +18,30 @@ module ContextDev
 
   BrandRetrieveByTickerParams = ContextDev::Models::BrandRetrieveByTickerParams
 
-  BrandRetrieveNaicsParams = ContextDev::Models::BrandRetrieveNaicsParams
-
   BrandRetrieveParams = ContextDev::Models::BrandRetrieveParams
 
   BrandRetrieveSimplifiedParams =
     ContextDev::Models::BrandRetrieveSimplifiedParams
 
-  BrandScreenshotParams = ContextDev::Models::BrandScreenshotParams
+  IndustryRetrieveNaicsParams = ContextDev::Models::IndustryRetrieveNaicsParams
 
-  BrandStyleguideParams = ContextDev::Models::BrandStyleguideParams
+  StyleExtractFontsParams = ContextDev::Models::StyleExtractFontsParams
 
-  BrandWebScrapeHTMLParams = ContextDev::Models::BrandWebScrapeHTMLParams
+  StyleExtractStyleguideParams =
+    ContextDev::Models::StyleExtractStyleguideParams
 
-  BrandWebScrapeImagesParams = ContextDev::Models::BrandWebScrapeImagesParams
+  UtilityPrefetchByEmailParams =
+    ContextDev::Models::UtilityPrefetchByEmailParams
 
-  BrandWebScrapeMdParams = ContextDev::Models::BrandWebScrapeMdParams
+  UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 
-  BrandWebScrapeSitemapParams = ContextDev::Models::BrandWebScrapeSitemapParams
+  WebScreenshotParams = ContextDev::Models::WebScreenshotParams
+
+  WebWebScrapeHTMLParams = ContextDev::Models::WebWebScrapeHTMLParams
+
+  WebWebScrapeImagesParams = ContextDev::Models::WebWebScrapeImagesParams
+
+  WebWebScrapeMdParams = ContextDev::Models::WebWebScrapeMdParams
+
+  WebWebScrapeSitemapParams = ContextDev::Models::WebWebScrapeSitemapParams
 end

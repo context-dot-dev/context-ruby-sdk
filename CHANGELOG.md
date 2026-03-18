@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 (2026-03-18)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/brand-dot-dev/context-ruby-sdk/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** api update ([ff1db16](https://github.com/brand-dot-dev/context-ruby-sdk/commit/ff1db1692a06315279532c93a05722223cb2c7ee))
+* **api:** manual updates ([d120a5d](https://github.com/brand-dot-dev/context-ruby-sdk/commit/d120a5dde6665acced2c75394beb6910389e344e))
+* **api:** manual updates ([fe32a5e](https://github.com/brand-dot-dev/context-ruby-sdk/commit/fe32a5e431bf152d8b0966f9927efcd8ebc3b5c1))
+
 ## 0.1.0 (2026-03-18)
 
 Full Changelog: [v0.0.2...v0.1.0](https://github.com/brand-dot-dev/context-ruby-sdk/compare/v0.0.2...v0.1.0)
