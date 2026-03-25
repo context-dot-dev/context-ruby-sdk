@@ -132,9 +132,11 @@ module ContextDev
       # Supports sitemap index files (recursive), parallel fetching with concurrency
       # control, deduplication, and filters out non-page resources (images, PDFs, etc.).
       #
-      # @overload web_scrape_sitemap(domain:, request_options: {})
+      # @overload web_scrape_sitemap(domain:, max_links: nil, request_options: {})
       #
       # @param domain [String] Domain name to crawl sitemaps for (e.g., 'example.com'). The domain will be auto
+      #
+      # @param max_links [Integer] Maximum number of links to return from the sitemap crawl. Defaults to 10,000. Mi
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -147,7 +149,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/sitemap",
-          query: query,
+          query: query.transform_keys(max_links: "maxLinks"),
           model: ContextDev::Models::WebWebScrapeSitemapResponse,
           options: options
         )
