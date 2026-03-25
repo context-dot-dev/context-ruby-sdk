@@ -38,8 +38,7 @@ module ContextDev
         )
       end
 
-      # Scrapes the given URL and returns the raw HTML content of the page. Uses
-      # automatic proxy escalation to handle blocked sites.
+      # Scrapes the given URL and returns the raw HTML content of the page.
       #
       # @overload web_scrape_html(url:, request_options: {})
       #
@@ -90,9 +89,8 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebWebScrapeMdParams} for more details.
       #
-      # Scrapes the given URL, converts the HTML content to GitHub Flavored Markdown
-      # (GFM), and returns the result. Uses automatic proxy escalation to handle blocked
-      # sites.
+      # Scrapes the given URL, converts the HTML content to Markdown, and returns the
+      # result.
       #
       # @overload web_scrape_md(url:, include_images: nil, include_links: nil, shorten_base64_images: nil, request_options: {})
       #
