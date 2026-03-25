@@ -1,7 +1,8 @@
 module ContextDev
   module Models
     type web_web_scrape_sitemap_params =
-      { domain: String } & ContextDev::Internal::Type::request_parameters
+      { domain: String, max_links: Integer }
+      & ContextDev::Internal::Type::request_parameters
 
     class WebWebScrapeSitemapParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
@@ -9,13 +10,19 @@ module ContextDev
 
       attr_accessor domain: String
 
+      attr_reader max_links: Integer?
+
+      def max_links=: (Integer) -> Integer
+
       def initialize: (
         domain: String,
+        ?max_links: Integer,
         ?request_options: ContextDev::request_opts
       ) -> void
 
       def to_hash: -> {
         domain: String,
+        max_links: Integer,
         request_options: ContextDev::RequestOptions
       }
     end
