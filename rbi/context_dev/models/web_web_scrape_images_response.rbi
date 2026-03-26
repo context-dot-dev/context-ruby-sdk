@@ -172,6 +172,26 @@ module ContextDev
               :video,
               ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
             )
+          CSS =
+            T.let(
+              :css,
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
+            )
+          OBJECT =
+            T.let(
+              :object,
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
+            )
+          META =
+            T.let(
+              :meta,
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
+            )
+          BACKGROUND =
+            T.let(
+              :background,
+              ContextDev::Models::WebWebScrapeImagesResponse::Image::Element::TaggedSymbol
+            )
 
           sig do
             override.returns(
