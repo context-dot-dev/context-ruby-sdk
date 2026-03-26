@@ -57,7 +57,16 @@ module ContextDev
           type: ContextDev::Models::WebWebScrapeImagesResponse::Image::type_
         }
 
-        type element = :img | :svg | :link | :source | :video
+        type element =
+          :img
+          | :svg
+          | :link
+          | :source
+          | :video
+          | :css
+          | :object
+          | :meta
+          | :background
 
         module Element
           extend ContextDev::Internal::Type::Enum
@@ -67,6 +76,10 @@ module ContextDev
           LINK: :link
           SOURCE: :source
           VIDEO: :video
+          CSS: :css
+          OBJECT: :object
+          META: :meta
+          BACKGROUND: :background
 
           def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image::element]
         end
