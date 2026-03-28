@@ -24,6 +24,7 @@ module ContextDev
         ?include_images: bool,
         ?include_links: bool,
         ?shorten_base64_images: bool,
+        ?use_main_content_only: bool,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeMdResponse
 
