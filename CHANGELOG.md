@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.1.0 (2026-03-28)
+
+Full Changelog: [v1.0.0...v1.1.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.0.0...v1.1.0)
+
+### Features
+
+* **api:** api update ([9ae9b10](https://github.com/context-dot-dev/context-ruby-sdk/commit/9ae9b108ce2737b42574a6f781103410a546f704))
+* **api:** api update ([58ed755](https://github.com/context-dot-dev/context-ruby-sdk/commit/58ed7551637936ea3c007e28af3358eb96a339ca))
+
+
+### Bug Fixes
+
+* **internal:** correct multipart form field name encoding ([221d059](https://github.com/context-dot-dev/context-ruby-sdk/commit/221d0598148243acddae6c9679c949c07e1dcd7a))
+
+
+### Chores
+
+* **ci:** support opting out of skipping builds on metadata-only commits ([aad82ac](https://github.com/context-dot-dev/context-ruby-sdk/commit/aad82ac90dd1c55ca4db05e63b70b46abded53e3))
+
 ## 1.0.0 (2026-03-25)
 
 Full Changelog: [v0.4.0...v1.0.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v0.4.0...v1.0.0)
