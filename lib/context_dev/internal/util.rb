@@ -157,7 +157,7 @@ module ContextDev
           in Hash | nil => coerced
             coerced
           else
-            message = "Expected a #{Hash} or #{ContextDev::Internal::Type::BaseModel}, got #{data.inspect}"
+            message = "Expected a #{Hash} or #{ContextDev::Internal::Type::BaseModel}, got #{input.inspect}"
             raise ArgumentError.new(message)
           end
         end
