@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.2.0 (2026-04-03)
+
+Full Changelog: [v1.1.0...v1.2.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.1.0...v1.2.0)
+
+### Features
+
+* **api:** api update ([5f00bc0](https://github.com/context-dot-dev/context-ruby-sdk/commit/5f00bc076f0081065bc274ce9f28cd26a7daa944))
+
+
+### Bug Fixes
+
+* align path encoding with RFC 3986 section 3.3 ([2c4072d](https://github.com/context-dot-dev/context-ruby-sdk/commit/2c4072df7df531933f5352c611183b1d152e3ec2))
+* variable name typo ([10e1853](https://github.com/context-dot-dev/context-ruby-sdk/commit/10e185365b3196732fc5e0649975ab696f80e893))
+
 ## 1.1.0 (2026-03-28)
 
 Full Changelog: [v1.0.0...v1.1.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.0.0...v1.1.0)
