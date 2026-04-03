@@ -30,27 +30,6 @@ module ContextDev
       sig { params(domain: String).void }
       attr_writer :domain
 
-      # Optional parameter to prioritize screenshot capture for styleguide extraction.
-      # If 'speed', optimizes for faster capture with basic quality. If 'quality',
-      # optimizes for higher quality with longer wait times. Defaults to 'quality' if
-      # not provided.
-      sig do
-        returns(
-          T.nilable(
-            ContextDev::StyleExtractStyleguideParams::Prioritize::OrSymbol
-          )
-        )
-      end
-      attr_reader :prioritize
-
-      sig do
-        params(
-          prioritize:
-            ContextDev::StyleExtractStyleguideParams::Prioritize::OrSymbol
-        ).void
-      end
-      attr_writer :prioritize
-
       # Optional timeout in milliseconds for the request. If the request takes longer
       # than this value, it will be aborted with a 408 status code. Maximum allowed
       # value is 300000ms (5 minutes).
@@ -64,8 +43,6 @@ module ContextDev
         params(
           direct_url: String,
           domain: String,
-          prioritize:
-            ContextDev::StyleExtractStyleguideParams::Prioritize::OrSymbol,
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
@@ -77,11 +54,6 @@ module ContextDev
         # Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
         # domain will be automatically normalized and validated.
         domain: nil,
-        # Optional parameter to prioritize screenshot capture for styleguide extraction.
-        # If 'speed', optimizes for faster capture with basic quality. If 'quality',
-        # optimizes for higher quality with longer wait times. Defaults to 'quality' if
-        # not provided.
-        prioritize: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -95,49 +67,12 @@ module ContextDev
           {
             direct_url: String,
             domain: String,
-            prioritize:
-              ContextDev::StyleExtractStyleguideParams::Prioritize::OrSymbol,
             timeout_ms: Integer,
             request_options: ContextDev::RequestOptions
           }
         )
       end
       def to_hash
-      end
-
-      # Optional parameter to prioritize screenshot capture for styleguide extraction.
-      # If 'speed', optimizes for faster capture with basic quality. If 'quality',
-      # optimizes for higher quality with longer wait times. Defaults to 'quality' if
-      # not provided.
-      module Prioritize
-        extend ContextDev::Internal::Type::Enum
-
-        TaggedSymbol =
-          T.type_alias do
-            T.all(Symbol, ContextDev::StyleExtractStyleguideParams::Prioritize)
-          end
-        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-        SPEED =
-          T.let(
-            :speed,
-            ContextDev::StyleExtractStyleguideParams::Prioritize::TaggedSymbol
-          )
-        QUALITY =
-          T.let(
-            :quality,
-            ContextDev::StyleExtractStyleguideParams::Prioritize::TaggedSymbol
-          )
-
-        sig do
-          override.returns(
-            T::Array[
-              ContextDev::StyleExtractStyleguideParams::Prioritize::TaggedSymbol
-            ]
-          )
-        end
-        def self.values
-        end
       end
     end
   end
