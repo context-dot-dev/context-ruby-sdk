@@ -23,6 +23,23 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     end
   end
 
+  def test_web_crawl_md_required_params
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.web.web_crawl_md(url: "https://example.com")
+
+    assert_pattern do
+      response => ContextDev::Models::WebWebCrawlMdResponse
+    end
+
+    assert_pattern do
+      response => {
+        metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata,
+        results: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebCrawlMdResponse::Result])
+      }
+    end
+  end
+
   def test_web_scrape_html_required_params
     skip("Mock server tests are disabled")
 

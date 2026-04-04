@@ -38,6 +38,49 @@ module ContextDev
       )
       end
 
+      # Performs a crawl starting from a given URL, extracts page content as Markdown,
+      # and returns results for all crawled pages. Only follows links within the same
+      # domain as the starting URL. Costs 1 credit per successful page crawled.
+      sig do
+        params(
+          url: String,
+          follow_subdomains: T::Boolean,
+          include_images: T::Boolean,
+          include_links: T::Boolean,
+          max_depth: Integer,
+          max_pages: Integer,
+          shorten_base64_images: T::Boolean,
+          url_regex: String,
+          use_main_content_only: T::Boolean,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebWebCrawlMdResponse)
+      end
+      def web_crawl_md(
+        # The starting URL for the crawl (must include http:// or https:// protocol)
+        url:,
+        # When true, follow links on subdomains of the starting URL's domain (e.g.
+        # docs.example.com when starting from example.com). www and apex are always
+        # treated as equivalent.
+        follow_subdomains: nil,
+        # Include image references in the Markdown output
+        include_images: nil,
+        # Preserve hyperlinks in the Markdown output
+        include_links: nil,
+        # Maximum link depth from the starting URL (0 = only the starting page)
+        max_depth: nil,
+        # Maximum number of pages to crawl. Hard cap: 500.
+        max_pages: nil,
+        # Truncate base64-encoded image data in the Markdown output
+        shorten_base64_images: nil,
+        # Regex pattern. Only URLs matching this pattern will be followed and scraped.
+        url_regex: nil,
+        # Extract only the main content, stripping headers, footers, sidebars, and
+        # navigation
+        use_main_content_only: nil,
+        request_options: {}
+      )
+      end
+
       # Scrapes the given URL and returns the raw HTML content of the page.
       sig do
         params(

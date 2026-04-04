@@ -1,0 +1,92 @@
+# frozen_string_literal: true
+
+module ContextDev
+  module Models
+    # @see ContextDev::Resources::Web#web_crawl_md
+    class WebWebCrawlMdParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      # @!attribute url
+      #   The starting URL for the crawl (must include http:// or https:// protocol)
+      #
+      #   @return [String]
+      required :url, String
+
+      # @!attribute follow_subdomains
+      #   When true, follow links on subdomains of the starting URL's domain (e.g.
+      #   docs.example.com when starting from example.com). www and apex are always
+      #   treated as equivalent.
+      #
+      #   @return [Boolean, nil]
+      optional :follow_subdomains, ContextDev::Internal::Type::Boolean, api_name: :followSubdomains
+
+      # @!attribute include_images
+      #   Include image references in the Markdown output
+      #
+      #   @return [Boolean, nil]
+      optional :include_images, ContextDev::Internal::Type::Boolean, api_name: :includeImages
+
+      # @!attribute include_links
+      #   Preserve hyperlinks in the Markdown output
+      #
+      #   @return [Boolean, nil]
+      optional :include_links, ContextDev::Internal::Type::Boolean, api_name: :includeLinks
+
+      # @!attribute max_depth
+      #   Maximum link depth from the starting URL (0 = only the starting page)
+      #
+      #   @return [Integer, nil]
+      optional :max_depth, Integer, api_name: :maxDepth
+
+      # @!attribute max_pages
+      #   Maximum number of pages to crawl. Hard cap: 500.
+      #
+      #   @return [Integer, nil]
+      optional :max_pages, Integer, api_name: :maxPages
+
+      # @!attribute shorten_base64_images
+      #   Truncate base64-encoded image data in the Markdown output
+      #
+      #   @return [Boolean, nil]
+      optional :shorten_base64_images, ContextDev::Internal::Type::Boolean, api_name: :shortenBase64Images
+
+      # @!attribute url_regex
+      #   Regex pattern. Only URLs matching this pattern will be followed and scraped.
+      #
+      #   @return [String, nil]
+      optional :url_regex, String, api_name: :urlRegex
+
+      # @!attribute use_main_content_only
+      #   Extract only the main content, stripping headers, footers, sidebars, and
+      #   navigation
+      #
+      #   @return [Boolean, nil]
+      optional :use_main_content_only, ContextDev::Internal::Type::Boolean, api_name: :useMainContentOnly
+
+      # @!method initialize(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_depth: nil, max_pages: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::WebWebCrawlMdParams} for more details.
+      #
+      #   @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
+      #
+      #   @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
+      #
+      #   @param include_images [Boolean] Include image references in the Markdown output
+      #
+      #   @param include_links [Boolean] Preserve hyperlinks in the Markdown output
+      #
+      #   @param max_depth [Integer] Maximum link depth from the starting URL (0 = only the starting page)
+      #
+      #   @param max_pages [Integer] Maximum number of pages to crawl. Hard cap: 500.
+      #
+      #   @param shorten_base64_images [Boolean] Truncate base64-encoded image data in the Markdown output
+      #
+      #   @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped.
+      #
+      #   @param use_main_content_only [Boolean] Extract only the main content, stripping headers, footers, sidebars, and navigat
+      #
+      #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+    end
+  end
+end

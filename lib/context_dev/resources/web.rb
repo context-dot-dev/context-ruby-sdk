@@ -38,6 +38,49 @@ module ContextDev
         )
       end
 
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebWebCrawlMdParams} for more details.
+      #
+      # Performs a crawl starting from a given URL, extracts page content as Markdown,
+      # and returns results for all crawled pages. Only follows links within the same
+      # domain as the starting URL. Costs 1 credit per successful page crawled.
+      #
+      # @overload web_crawl_md(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_depth: nil, max_pages: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
+      #
+      # @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
+      #
+      # @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
+      #
+      # @param include_images [Boolean] Include image references in the Markdown output
+      #
+      # @param include_links [Boolean] Preserve hyperlinks in the Markdown output
+      #
+      # @param max_depth [Integer] Maximum link depth from the starting URL (0 = only the starting page)
+      #
+      # @param max_pages [Integer] Maximum number of pages to crawl. Hard cap: 500.
+      #
+      # @param shorten_base64_images [Boolean] Truncate base64-encoded image data in the Markdown output
+      #
+      # @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped.
+      #
+      # @param use_main_content_only [Boolean] Extract only the main content, stripping headers, footers, sidebars, and navigat
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::WebWebCrawlMdResponse]
+      #
+      # @see ContextDev::Models::WebWebCrawlMdParams
+      def web_crawl_md(params)
+        parsed, options = ContextDev::WebWebCrawlMdParams.dump_request(params)
+        @client.request(
+          method: :post,
+          path: "web/crawl",
+          body: parsed,
+          model: ContextDev::Models::WebWebCrawlMdResponse,
+          options: options
+        )
+      end
+
       # Scrapes the given URL and returns the raw HTML content of the page.
       #
       # @overload web_scrape_html(url:, request_options: {})
