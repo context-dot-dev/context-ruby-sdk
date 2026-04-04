@@ -1,0 +1,121 @@
+# frozen_string_literal: true
+
+module ContextDev
+  module Models
+    # @see ContextDev::Resources::Web#web_crawl_md
+    class WebWebCrawlMdResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute metadata
+      #
+      #   @return [ContextDev::Models::WebWebCrawlMdResponse::Metadata]
+      required :metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::Metadata }
+
+      # @!attribute results
+      #
+      #   @return [Array<ContextDev::Models::WebWebCrawlMdResponse::Result>]
+      required :results,
+               -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebCrawlMdResponse::Result] }
+
+      # @!method initialize(metadata:, results:)
+      #   @param metadata [ContextDev::Models::WebWebCrawlMdResponse::Metadata]
+      #   @param results [Array<ContextDev::Models::WebWebCrawlMdResponse::Result>]
+
+      # @see ContextDev::Models::WebWebCrawlMdResponse#metadata
+      class Metadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute max_crawl_depth
+        #   Maximum crawl depth reached during the crawl
+        #
+        #   @return [Integer]
+        required :max_crawl_depth, Integer, api_name: :maxCrawlDepth
+
+        # @!attribute num_failed
+        #   Number of pages that failed to crawl
+        #
+        #   @return [Integer]
+        required :num_failed, Integer, api_name: :numFailed
+
+        # @!attribute num_succeeded
+        #   Number of pages successfully crawled
+        #
+        #   @return [Integer]
+        required :num_succeeded, Integer, api_name: :numSucceeded
+
+        # @!attribute num_urls
+        #   Total number of URLs crawled
+        #
+        #   @return [Integer]
+        required :num_urls, Integer, api_name: :numUrls
+
+        # @!method initialize(max_crawl_depth:, num_failed:, num_succeeded:, num_urls:)
+        #   @param max_crawl_depth [Integer] Maximum crawl depth reached during the crawl
+        #
+        #   @param num_failed [Integer] Number of pages that failed to crawl
+        #
+        #   @param num_succeeded [Integer] Number of pages successfully crawled
+        #
+        #   @param num_urls [Integer] Total number of URLs crawled
+      end
+
+      class Result < ContextDev::Internal::Type::BaseModel
+        # @!attribute markdown
+        #   Extracted page content as Markdown (empty string on failure)
+        #
+        #   @return [String]
+        required :markdown, String
+
+        # @!attribute metadata
+        #
+        #   @return [ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata]
+        required :metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata }
+
+        # @!method initialize(markdown:, metadata:)
+        #   @param markdown [String] Extracted page content as Markdown (empty string on failure)
+        #
+        #   @param metadata [ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata]
+
+        # @see ContextDev::Models::WebWebCrawlMdResponse::Result#metadata
+        class Metadata < ContextDev::Internal::Type::BaseModel
+          # @!attribute crawl_depth
+          #   Depth relative to the start URL. 0 = start URL, 1 = one link away.
+          #
+          #   @return [Integer]
+          required :crawl_depth, Integer, api_name: :crawlDepth
+
+          # @!attribute status_code
+          #   HTTP status code of the response
+          #
+          #   @return [Integer]
+          required :status_code, Integer, api_name: :statusCode
+
+          # @!attribute success
+          #   true if the page was fetched and parsed successfully
+          #
+          #   @return [Boolean]
+          required :success, ContextDev::Internal::Type::Boolean
+
+          # @!attribute title
+          #   The page's <title> content (empty string if unavailable)
+          #
+          #   @return [String]
+          required :title, String
+
+          # @!attribute url
+          #   The URL that was fetched
+          #
+          #   @return [String]
+          required :url, String
+
+          # @!method initialize(crawl_depth:, status_code:, success:, title:, url:)
+          #   @param crawl_depth [Integer] Depth relative to the start URL. 0 = start URL, 1 = one link away.
+          #
+          #   @param status_code [Integer] HTTP status code of the response
+          #
+          #   @param success [Boolean] true if the page was fetched and parsed successfully
+          #
+          #   @param title [String] The page's <title> content (empty string if unavailable)
+          #
+          #   @param url [String] The URL that was fetched
+        end
+      end
+    end
+  end
+end

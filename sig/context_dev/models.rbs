@@ -31,6 +31,8 @@ module ContextDev
 
   class WebScreenshotParams = ContextDev::Models::WebScreenshotParams
 
+  class WebWebCrawlMdParams = ContextDev::Models::WebWebCrawlMdParams
+
   class WebWebScrapeHTMLParams = ContextDev::Models::WebWebScrapeHTMLParams
 
   class WebWebScrapeImagesParams = ContextDev::Models::WebWebScrapeImagesParams

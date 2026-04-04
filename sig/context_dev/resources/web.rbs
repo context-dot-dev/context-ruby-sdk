@@ -9,6 +9,19 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebScreenshotResponse
 
+      def web_crawl_md: (
+        url: String,
+        ?follow_subdomains: bool,
+        ?include_images: bool,
+        ?include_links: bool,
+        ?max_depth: Integer,
+        ?max_pages: Integer,
+        ?shorten_base64_images: bool,
+        ?url_regex: String,
+        ?use_main_content_only: bool,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::WebWebCrawlMdResponse
+
       def web_scrape_html: (
         url: String,
         ?request_options: ContextDev::request_opts
