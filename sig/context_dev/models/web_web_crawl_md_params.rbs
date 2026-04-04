@@ -1,0 +1,82 @@
+module ContextDev
+  module Models
+    type web_web_crawl_md_params =
+      {
+        url: String,
+        follow_subdomains: bool,
+        include_images: bool,
+        include_links: bool,
+        max_depth: Integer,
+        max_pages: Integer,
+        :shorten_base64_images => bool,
+        url_regex: String,
+        use_main_content_only: bool
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class WebWebCrawlMdParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor url: String
+
+      attr_reader follow_subdomains: bool?
+
+      def follow_subdomains=: (bool) -> bool
+
+      attr_reader include_images: bool?
+
+      def include_images=: (bool) -> bool
+
+      attr_reader include_links: bool?
+
+      def include_links=: (bool) -> bool
+
+      attr_reader max_depth: Integer?
+
+      def max_depth=: (Integer) -> Integer
+
+      attr_reader max_pages: Integer?
+
+      def max_pages=: (Integer) -> Integer
+
+      attr_reader shorten_base64_images: bool?
+
+      def shorten_base64_images=: (bool) -> bool
+
+      attr_reader url_regex: String?
+
+      def url_regex=: (String) -> String
+
+      attr_reader use_main_content_only: bool?
+
+      def use_main_content_only=: (bool) -> bool
+
+      def initialize: (
+        url: String,
+        ?follow_subdomains: bool,
+        ?include_images: bool,
+        ?include_links: bool,
+        ?max_depth: Integer,
+        ?max_pages: Integer,
+        ?shorten_base64_images: bool,
+        ?url_regex: String,
+        ?use_main_content_only: bool,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        url: String,
+        follow_subdomains: bool,
+        include_images: bool,
+        include_links: bool,
+        max_depth: Integer,
+        max_pages: Integer,
+        :shorten_base64_images => bool,
+        url_regex: String,
+        use_main_content_only: bool,
+        request_options: ContextDev::RequestOptions
+      }
+    end
+  end
+end
