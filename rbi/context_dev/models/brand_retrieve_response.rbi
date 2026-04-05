@@ -223,6 +223,17 @@ module ContextDev
         sig { params(phone: String).void }
         attr_writer :phone
 
+        # The primary language of the brand's website content. Detected from the HTML lang
+        # tag, page content analysis, or social media descriptions.
+        sig do
+          returns(
+            T.nilable(
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          )
+        end
+        attr_accessor :primary_language
+
         # The brand's slogan
         sig { returns(T.nilable(String)) }
         attr_reader :slogan
@@ -300,6 +311,10 @@ module ContextDev
                 ContextDev::Models::BrandRetrieveResponse::Brand::Logo::OrHash
               ],
             phone: String,
+            primary_language:
+              T.nilable(
+                ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::OrSymbol
+              ),
             slogan: String,
             socials:
               T::Array[
@@ -333,6 +348,9 @@ module ContextDev
           logos: nil,
           # Company phone number
           phone: nil,
+          # The primary language of the brand's website content. Detected from the HTML lang
+          # tag, page content analysis, or social media descriptions.
+          primary_language: nil,
           # The brand's slogan
           slogan: nil,
           # An array of social media links for the brand
@@ -370,6 +388,10 @@ module ContextDev
                   ContextDev::Models::BrandRetrieveResponse::Brand::Logo
                 ],
               phone: String,
+              primary_language:
+                T.nilable(
+                  ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+                ),
               slogan: String,
               socials:
                 T::Array[
@@ -2488,6 +2510,632 @@ module ContextDev
             end
             def self.values
             end
+          end
+        end
+
+        # The primary language of the brand's website content. Detected from the HTML lang
+        # tag, page content analysis, or social media descriptions.
+        module PrimaryLanguage
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          AFRIKAANS =
+            T.let(
+              :afrikaans,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ALBANIAN =
+            T.let(
+              :albanian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          AMHARIC =
+            T.let(
+              :amharic,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ARABIC =
+            T.let(
+              :arabic,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ARMENIAN =
+            T.let(
+              :armenian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ASSAMESE =
+            T.let(
+              :assamese,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          AYMARA =
+            T.let(
+              :aymara,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          AZERI =
+            T.let(
+              :azeri,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          BASQUE =
+            T.let(
+              :basque,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          BELARUSIAN =
+            T.let(
+              :belarusian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          BENGALI =
+            T.let(
+              :bengali,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          BOSNIAN =
+            T.let(
+              :bosnian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          BULGARIAN =
+            T.let(
+              :bulgarian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          BURMESE =
+            T.let(
+              :burmese,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          CANTONESE =
+            T.let(
+              :cantonese,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          CATALAN =
+            T.let(
+              :catalan,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          CEBUANO =
+            T.let(
+              :cebuano,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          CHINESE =
+            T.let(
+              :chinese,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          CORSICAN =
+            T.let(
+              :corsican,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          CROATIAN =
+            T.let(
+              :croatian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          CZECH =
+            T.let(
+              :czech,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          DANISH =
+            T.let(
+              :danish,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          DUTCH =
+            T.let(
+              :dutch,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ENGLISH =
+            T.let(
+              :english,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ESPERANTO =
+            T.let(
+              :esperanto,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ESTONIAN =
+            T.let(
+              :estonian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          FARSI =
+            T.let(
+              :farsi,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          FIJIAN =
+            T.let(
+              :fijian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          FINNISH =
+            T.let(
+              :finnish,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          FRENCH =
+            T.let(
+              :french,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          GALICIAN =
+            T.let(
+              :galician,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          GEORGIAN =
+            T.let(
+              :georgian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          GERMAN =
+            T.let(
+              :german,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          GREEK =
+            T.let(
+              :greek,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          GUARANI =
+            T.let(
+              :guarani,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          GUJARATI =
+            T.let(
+              :gujarati,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          HAITIAN_CREOLE =
+            T.let(
+              :"haitian-creole",
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          HAUSA =
+            T.let(
+              :hausa,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          HAWAIIAN =
+            T.let(
+              :hawaiian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          HEBREW =
+            T.let(
+              :hebrew,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          HINDI =
+            T.let(
+              :hindi,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          HMONG =
+            T.let(
+              :hmong,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          HUNGARIAN =
+            T.let(
+              :hungarian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ICELANDIC =
+            T.let(
+              :icelandic,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          IGBO =
+            T.let(
+              :igbo,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          INDONESIAN =
+            T.let(
+              :indonesian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          IRISH =
+            T.let(
+              :irish,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ITALIAN =
+            T.let(
+              :italian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          JAPANESE =
+            T.let(
+              :japanese,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          JAVANESE =
+            T.let(
+              :javanese,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          KANNADA =
+            T.let(
+              :kannada,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          KAZAKH =
+            T.let(
+              :kazakh,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          KHMER =
+            T.let(
+              :khmer,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          KINYARWANDA =
+            T.let(
+              :kinyarwanda,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          KOREAN =
+            T.let(
+              :korean,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          KURDISH =
+            T.let(
+              :kurdish,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          KYRGYZ =
+            T.let(
+              :kyrgyz,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          LAO =
+            T.let(
+              :lao,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          LATIN =
+            T.let(
+              :latin,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          LATVIAN =
+            T.let(
+              :latvian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          LINGALA =
+            T.let(
+              :lingala,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          LITHUANIAN =
+            T.let(
+              :lithuanian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          LUXEMBOURGISH =
+            T.let(
+              :luxembourgish,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          MACEDONIAN =
+            T.let(
+              :macedonian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          MALAGASY =
+            T.let(
+              :malagasy,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          MALAY =
+            T.let(
+              :malay,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          MALAYALAM =
+            T.let(
+              :malayalam,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          MALTESE =
+            T.let(
+              :maltese,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          MAORI =
+            T.let(
+              :maori,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          MARATHI =
+            T.let(
+              :marathi,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          MONGOLIAN =
+            T.let(
+              :mongolian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          NEPALI =
+            T.let(
+              :nepali,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          NORWEGIAN =
+            T.let(
+              :norwegian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ODIA =
+            T.let(
+              :odia,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          OROMO =
+            T.let(
+              :oromo,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          PASHTO =
+            T.let(
+              :pashto,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          PIDGIN =
+            T.let(
+              :pidgin,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          POLISH =
+            T.let(
+              :polish,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          PORTUGUESE =
+            T.let(
+              :portuguese,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          PUNJABI =
+            T.let(
+              :punjabi,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          QUECHUA =
+            T.let(
+              :quechua,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ROMANIAN =
+            T.let(
+              :romanian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          RUSSIAN =
+            T.let(
+              :russian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SAMOAN =
+            T.let(
+              :samoan,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SCOTTISH_GAELIC =
+            T.let(
+              :"scottish-gaelic",
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SERBIAN =
+            T.let(
+              :serbian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SESOTHO =
+            T.let(
+              :sesotho,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SHONA =
+            T.let(
+              :shona,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SINDHI =
+            T.let(
+              :sindhi,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SINHALA =
+            T.let(
+              :sinhala,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SLOVAK =
+            T.let(
+              :slovak,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SLOVENE =
+            T.let(
+              :slovene,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SOMALI =
+            T.let(
+              :somali,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SPANISH =
+            T.let(
+              :spanish,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SUNDANESE =
+            T.let(
+              :sundanese,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SWAHILI =
+            T.let(
+              :swahili,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          SWEDISH =
+            T.let(
+              :swedish,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          TAGALOG =
+            T.let(
+              :tagalog,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          TAJIK =
+            T.let(
+              :tajik,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          TAMIL =
+            T.let(
+              :tamil,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          TATAR =
+            T.let(
+              :tatar,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          TELUGU =
+            T.let(
+              :telugu,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          THAI =
+            T.let(
+              :thai,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          TIBETAN =
+            T.let(
+              :tibetan,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          TIGRINYA =
+            T.let(
+              :tigrinya,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          TONGAN =
+            T.let(
+              :tongan,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          TSWANA =
+            T.let(
+              :tswana,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          TURKISH =
+            T.let(
+              :turkish,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          TURKMEN =
+            T.let(
+              :turkmen,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          UKRAINIAN =
+            T.let(
+              :ukrainian,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          URDU =
+            T.let(
+              :urdu,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          UYGHUR =
+            T.let(
+              :uyghur,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          UZBEK =
+            T.let(
+              :uzbek,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          VIETNAMESE =
+            T.let(
+              :vietnamese,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          WELSH =
+            T.let(
+              :welsh,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          WOLOF =
+            T.let(
+              :wolof,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          XHOSA =
+            T.let(
+              :xhosa,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          YIDDISH =
+            T.let(
+              :yiddish,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          YORUBA =
+            T.let(
+              :yoruba,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+          ZULU =
+            T.let(
+              :zulu,
+              ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
           end
         end
 
