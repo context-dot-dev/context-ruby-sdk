@@ -948,10 +948,10 @@ module ContextDev
 
         class Social < ContextDev::Internal::Type::BaseModel
           # @!attribute type
-          #   Type of social media, e.g., 'facebook', 'twitter'
+          #   Type of social media platform
           #
-          #   @return [String, nil]
-          optional :type, String
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveByNameResponse::Brand::Social::Type, nil]
+          optional :type, enum: -> { ContextDev::Models::BrandRetrieveByNameResponse::Brand::Social::Type }
 
           # @!attribute url
           #   URL of the social media page
@@ -960,9 +960,51 @@ module ContextDev
           optional :url, String
 
           # @!method initialize(type: nil, url: nil)
-          #   @param type [String] Type of social media, e.g., 'facebook', 'twitter'
+          #   @param type [Symbol, ContextDev::Models::BrandRetrieveByNameResponse::Brand::Social::Type] Type of social media platform
           #
           #   @param url [String] URL of the social media page
+
+          # Type of social media platform
+          #
+          # @see ContextDev::Models::BrandRetrieveByNameResponse::Brand::Social#type
+          module Type
+            extend ContextDev::Internal::Type::Enum
+
+            X = :x
+            FACEBOOK = :facebook
+            INSTAGRAM = :instagram
+            LINKEDIN = :linkedin
+            YOUTUBE = :youtube
+            PINTEREST = :pinterest
+            TIKTOK = :tiktok
+            DRIBBBLE = :dribbble
+            GITHUB = :github
+            BEHANCE = :behance
+            SNAPCHAT = :snapchat
+            WHATSAPP = :whatsapp
+            TELEGRAM = :telegram
+            LINE = :line
+            DISCORD = :discord
+            TWITCH = :twitch
+            VIMEO = :vimeo
+            IMDB = :imdb
+            TUMBLR = :tumblr
+            FLICKR = :flickr
+            GIPHY = :giphy
+            MEDIUM = :medium
+            SPOTIFY = :spotify
+            SOUNDCLOUD = :soundcloud
+            TRIPADVISOR = :tripadvisor
+            YELP = :yelp
+            PRODUCTHUNT = :producthunt
+            REDDIT = :reddit
+            CRUNCHBASE = :crunchbase
+            APPSTORE = :appstore
+            PLAYSTORE = :playstore
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
         end
 
         # @see ContextDev::Models::BrandRetrieveByNameResponse::Brand#stock
