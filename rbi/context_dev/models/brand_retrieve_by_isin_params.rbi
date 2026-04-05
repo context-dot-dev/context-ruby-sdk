@@ -110,9 +110,19 @@ module ContextDev
           end
         OrSymbol = T.type_alias { T.any(Symbol, String) }
 
+        AFRIKAANS =
+          T.let(
+            :afrikaans,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         ALBANIAN =
           T.let(
             :albanian,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        AMHARIC =
+          T.let(
+            :amharic,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         ARABIC =
@@ -120,9 +130,34 @@ module ContextDev
             :arabic,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        ARMENIAN =
+          T.let(
+            :armenian,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        ASSAMESE =
+          T.let(
+            :assamese,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        AYMARA =
+          T.let(
+            :aymara,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         AZERI =
           T.let(
             :azeri,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        BASQUE =
+          T.let(
+            :basque,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        BELARUSIAN =
+          T.let(
+            :belarusian,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         BENGALI =
@@ -130,9 +165,19 @@ module ContextDev
             :bengali,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        BOSNIAN =
+          T.let(
+            :bosnian,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         BULGARIAN =
           T.let(
             :bulgarian,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        BURMESE =
+          T.let(
+            :burmese,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         CANTONESE =
@@ -140,9 +185,24 @@ module ContextDev
             :cantonese,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        CATALAN =
+          T.let(
+            :catalan,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         CEBUANO =
           T.let(
             :cebuano,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        CHINESE =
+          T.let(
+            :chinese,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        CORSICAN =
+          T.let(
+            :corsican,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         CROATIAN =
@@ -170,6 +230,11 @@ module ContextDev
             :english,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        ESPERANTO =
+          T.let(
+            :esperanto,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         ESTONIAN =
           T.let(
             :estonian,
@@ -178,6 +243,11 @@ module ContextDev
         FARSI =
           T.let(
             :farsi,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        FIJIAN =
+          T.let(
+            :fijian,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         FINNISH =
@@ -190,9 +260,39 @@ module ContextDev
             :french,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        GALICIAN =
+          T.let(
+            :galician,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        GEORGIAN =
+          T.let(
+            :georgian,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         GERMAN =
           T.let(
             :german,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        GREEK =
+          T.let(
+            :greek,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        GUARANI =
+          T.let(
+            :guarani,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        GUJARATI =
+          T.let(
+            :gujarati,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        HAITIAN_CREOLE =
+          T.let(
+            :"haitian-creole",
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         HAUSA =
@@ -205,9 +305,19 @@ module ContextDev
             :hawaiian,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        HEBREW =
+          T.let(
+            :hebrew,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         HINDI =
           T.let(
             :hindi,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        HMONG =
+          T.let(
+            :hmong,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         HUNGARIAN =
@@ -220,9 +330,19 @@ module ContextDev
             :icelandic,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        IGBO =
+          T.let(
+            :igbo,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         INDONESIAN =
           T.let(
             :indonesian,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        IRISH =
+          T.let(
+            :irish,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         ITALIAN =
@@ -230,9 +350,34 @@ module ContextDev
             :italian,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        JAPANESE =
+          T.let(
+            :japanese,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        JAVANESE =
+          T.let(
+            :javanese,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        KANNADA =
+          T.let(
+            :kannada,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         KAZAKH =
           T.let(
             :kazakh,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        KHMER =
+          T.let(
+            :khmer,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        KINYARWANDA =
+          T.let(
+            :kinyarwanda,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         KOREAN =
@@ -240,9 +385,19 @@ module ContextDev
             :korean,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        KURDISH =
+          T.let(
+            :kurdish,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         KYRGYZ =
           T.let(
             :kyrgyz,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        LAO =
+          T.let(
+            :lao,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         LATIN =
@@ -255,14 +410,54 @@ module ContextDev
             :latvian,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        LINGALA =
+          T.let(
+            :lingala,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         LITHUANIAN =
           T.let(
             :lithuanian,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        LUXEMBOURGISH =
+          T.let(
+            :luxembourgish,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         MACEDONIAN =
           T.let(
             :macedonian,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        MALAGASY =
+          T.let(
+            :malagasy,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        MALAY =
+          T.let(
+            :malay,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        MALAYALAM =
+          T.let(
+            :malayalam,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        MALTESE =
+          T.let(
+            :maltese,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        MAORI =
+          T.let(
+            :maori,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        MARATHI =
+          T.let(
+            :marathi,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         MONGOLIAN =
@@ -278,6 +473,16 @@ module ContextDev
         NORWEGIAN =
           T.let(
             :norwegian,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        ODIA =
+          T.let(
+            :odia,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        OROMO =
+          T.let(
+            :oromo,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         PASHTO =
@@ -300,6 +505,16 @@ module ContextDev
             :portuguese,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        PUNJABI =
+          T.let(
+            :punjabi,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        QUECHUA =
+          T.let(
+            :quechua,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         ROMANIAN =
           T.let(
             :romanian,
@@ -310,9 +525,39 @@ module ContextDev
             :russian,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        SAMOAN =
+          T.let(
+            :samoan,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        SCOTTISH_GAELIC =
+          T.let(
+            :"scottish-gaelic",
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         SERBIAN =
           T.let(
             :serbian,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        SESOTHO =
+          T.let(
+            :sesotho,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        SHONA =
+          T.let(
+            :shona,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        SINDHI =
+          T.let(
+            :sindhi,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        SINHALA =
+          T.let(
+            :sinhala,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         SLOVAK =
@@ -335,6 +580,11 @@ module ContextDev
             :spanish,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        SUNDANESE =
+          T.let(
+            :sundanese,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         SWAHILI =
           T.let(
             :swahili,
@@ -350,14 +600,59 @@ module ContextDev
             :tagalog,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        TAJIK =
+          T.let(
+            :tajik,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        TAMIL =
+          T.let(
+            :tamil,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        TATAR =
+          T.let(
+            :tatar,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        TELUGU =
+          T.let(
+            :telugu,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         THAI =
           T.let(
             :thai,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
+        TIBETAN =
+          T.let(
+            :tibetan,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        TIGRINYA =
+          T.let(
+            :tigrinya,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        TONGAN =
+          T.let(
+            :tongan,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        TSWANA =
+          T.let(
+            :tswana,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
         TURKISH =
           T.let(
             :turkish,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        TURKMEN =
+          T.let(
+            :turkmen,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         UKRAINIAN =
@@ -368,6 +663,11 @@ module ContextDev
         URDU =
           T.let(
             :urdu,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        UYGHUR =
+          T.let(
+            :uyghur,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
         UZBEK =
@@ -383,6 +683,31 @@ module ContextDev
         WELSH =
           T.let(
             :welsh,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        WOLOF =
+          T.let(
+            :wolof,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        XHOSA =
+          T.let(
+            :xhosa,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        YIDDISH =
+          T.let(
+            :yiddish,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        YORUBA =
+          T.let(
+            :yoruba,
+            ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
+          )
+        ZULU =
+          T.let(
+            :zulu,
             ContextDev::BrandRetrieveByIsinParams::ForceLanguage::TaggedSymbol
           )
 
