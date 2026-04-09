@@ -3,10 +3,10 @@
 require_relative "../test_helper"
 
 class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
-  def test_screenshot_required_params
+  def test_screenshot
     skip("Mock server tests are disabled")
 
-    response = @context_dev.web.screenshot(domain: "domain")
+    response = @context_dev.web.screenshot
 
     assert_pattern do
       response => ContextDev::Models::WebScreenshotResponse

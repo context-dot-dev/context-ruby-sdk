@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.4.0 (2026-04-09)
+
+Full Changelog: [v1.3.0...v1.4.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.3.0...v1.4.0)
+
+### Features
+
+* **api:** api update ([f475665](https://github.com/context-dot-dev/context-ruby-sdk/commit/f47566556bc4d2c81a52084979f83be62cb17cf2))
+* **api:** api update ([a4e99e6](https://github.com/context-dot-dev/context-ruby-sdk/commit/a4e99e6e0659cb7b09375d7a467e9771aa6cea44))
+* **api:** api update ([b13514f](https://github.com/context-dot-dev/context-ruby-sdk/commit/b13514f872498b08e54fc8b4264179201ee30311))
+
+
+### Bug Fixes
+
+* multipart encoding for file arrays ([105116f](https://github.com/context-dot-dev/context-ruby-sdk/commit/105116f48178f46bae721d32e987d684fc662dd0))
+
 ## 1.3.0 (2026-04-04)
 
 Full Changelog: [v1.2.0...v1.3.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.2.0...v1.3.0)
