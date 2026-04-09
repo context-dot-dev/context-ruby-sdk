@@ -2,7 +2,8 @@ module ContextDev
   module Resources
     class Web
       def screenshot: (
-        domain: String,
+        ?direct_url: String,
+        ?domain: String,
         ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
         ?page: ContextDev::Models::WebScreenshotParams::page,
         ?prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
