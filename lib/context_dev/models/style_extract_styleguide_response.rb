@@ -59,6 +59,16 @@ module ContextDev
                  -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing },
                  api_name: :elementSpacing
 
+        # @!attribute font_links
+        #   Font assets keyed by family name as it appears in fontFamily/fontFallbacks
+        #   (non-generic names only). Clients match typography.fontFamily / fontWeight or
+        #   button styles to pick a file URL from files.
+        #
+        #   @return [Hash{Symbol=>ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink}]
+        required :font_links,
+                 -> { ContextDev::Internal::Type::HashOf[ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink] },
+                 api_name: :fontLinks
+
         # @!attribute mode
         #   The primary color mode of the website design
         #
@@ -77,7 +87,11 @@ module ContextDev
         #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography]
         required :typography, -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography }
 
-        # @!method initialize(colors:, components:, element_spacing:, mode:, shadows:, typography:)
+        # @!method initialize(colors:, components:, element_spacing:, font_links:, mode:, shadows:, typography:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::StyleExtractStyleguideResponse::Styleguide} for more
+        #   details.
+        #
         #   Comprehensive styleguide data extracted from the website
         #
         #   @param colors [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors] Primary colors used on the website
@@ -85,6 +99,8 @@ module ContextDev
         #   @param components [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components] UI component styles
         #
         #   @param element_spacing [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing] Spacing system used on the website
+        #
+        #   @param font_links [Hash{Symbol=>ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink}] Font assets keyed by family name as it appears in fontFamily/fontFallbacks (non-
         #
         #   @param mode [Symbol, ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode] The primary color mode of the website design
         #
@@ -692,6 +708,60 @@ module ContextDev
           #   @param sm [String]
           #   @param xl [String]
           #   @param xs [String]
+        end
+
+        class FontLink < ContextDev::Internal::Type::BaseModel
+          # @!attribute files
+          #   Upright font files keyed by weight string (e.g. "400" for regular, "500",
+          #   "700"). Values are absolute URLs.
+          #
+          #   @return [Hash{Symbol=>String}]
+          required :files, ContextDev::Internal::Type::HashOf[String]
+
+          # @!attribute type
+          #
+          #   @return [Symbol, ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::Type]
+          required :type,
+                   enum: -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::Type }
+
+          # @!attribute category
+          #   Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
+          #   display, handwriting). Omitted for custom fonts when unknown.
+          #
+          #   @return [String, nil]
+          optional :category, String
+
+          # @!attribute display_name
+          #   Present when type is custom: human-readable name derived from the fontLinks key
+          #   (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
+          #   Google entries omit this.
+          #
+          #   @return [String, nil]
+          optional :display_name, String, api_name: :displayName
+
+          # @!method initialize(files:, type:, category: nil, display_name: nil)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink} for
+          #   more details.
+          #
+          #   @param files [Hash{Symbol=>String}] Upright font files keyed by weight string (e.g. "400" for regular, "500", "700")
+          #
+          #   @param type [Symbol, ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::Type]
+          #
+          #   @param category [String] Google Fonts category when type is google (e.g. sans-serif, serif, monospace, di
+          #
+          #   @param display_name [String] Present when type is custom: human-readable name derived from the fontLinks key
+
+          # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink#type
+          module Type
+            extend ContextDev::Internal::Type::Enum
+
+            GOOGLE = :google
+            CUSTOM = :custom
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
         end
 
         # The primary color mode of the website design
