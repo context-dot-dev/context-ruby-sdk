@@ -46,6 +46,7 @@ module ContextDev
           colors: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors,
           components: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components,
           element_spacing: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing,
+          font_links: ::Hash[Symbol, ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink],
           mode: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::mode,
           shadows: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows,
           typography: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography
@@ -58,6 +59,8 @@ module ContextDev
 
         attr_accessor element_spacing: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing
 
+        attr_accessor font_links: ::Hash[Symbol, ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink]
+
         attr_accessor mode: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::mode
 
         attr_accessor shadows: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows
@@ -68,6 +71,7 @@ module ContextDev
           colors: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors,
           components: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components,
           element_spacing: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing,
+          font_links: ::Hash[Symbol, ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink],
           mode: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::mode,
           shadows: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows,
           typography: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography
@@ -77,6 +81,7 @@ module ContextDev
           colors: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors,
           components: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components,
           element_spacing: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing,
+          font_links: ::Hash[Symbol, ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink],
           mode: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::mode,
           shadows: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows,
           typography: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography
@@ -560,6 +565,53 @@ module ContextDev
             xl: String,
             xs: String
           }
+        end
+
+        type font_link =
+          {
+            files: ::Hash[Symbol, String],
+            type: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::type_,
+            category: String,
+            display_name: String
+          }
+
+        class FontLink < ContextDev::Internal::Type::BaseModel
+          attr_accessor files: ::Hash[Symbol, String]
+
+          attr_accessor type: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::type_
+
+          attr_reader category: String?
+
+          def category=: (String) -> String
+
+          attr_reader display_name: String?
+
+          def display_name=: (String) -> String
+
+          def initialize: (
+            files: ::Hash[Symbol, String],
+            type: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::type_,
+            ?category: String,
+            ?display_name: String
+          ) -> void
+
+          def to_hash: -> {
+            files: ::Hash[Symbol, String],
+            type: ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::type_,
+            category: String,
+            display_name: String
+          }
+
+          type type_ = :google | :custom
+
+          module Type
+            extend ContextDev::Internal::Type::Enum
+
+            GOOGLE: :google
+            CUSTOM: :custom
+
+            def self?.values: -> ::Array[ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::type_]
+          end
         end
 
         type mode = :light | :dark

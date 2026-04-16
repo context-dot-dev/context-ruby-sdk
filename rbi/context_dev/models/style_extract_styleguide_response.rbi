@@ -142,6 +142,19 @@ module ContextDev
         end
         attr_writer :element_spacing
 
+        # Font assets keyed by family name as it appears in fontFamily/fontFallbacks
+        # (non-generic names only). Clients match typography.fontFamily / fontWeight or
+        # button styles to pick a file URL from files.
+        sig do
+          returns(
+            T::Hash[
+              Symbol,
+              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink
+            ]
+          )
+        end
+        attr_accessor :font_links
+
         # The primary color mode of the website design
         sig do
           returns(
@@ -191,6 +204,11 @@ module ContextDev
               ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::OrHash,
             element_spacing:
               ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing::OrHash,
+            font_links:
+              T::Hash[
+                Symbol,
+                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::OrHash
+              ],
             mode:
               ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode::OrSymbol,
             shadows:
@@ -206,6 +224,10 @@ module ContextDev
           components:,
           # Spacing system used on the website
           element_spacing:,
+          # Font assets keyed by family name as it appears in fontFamily/fontFallbacks
+          # (non-generic names only). Clients match typography.fontFamily / fontWeight or
+          # button styles to pick a file URL from files.
+          font_links:,
           # The primary color mode of the website design
           mode:,
           # Shadow styles used on the website
@@ -224,6 +246,11 @@ module ContextDev
                 ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components,
               element_spacing:
                 ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing,
+              font_links:
+                T::Hash[
+                  Symbol,
+                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink
+                ],
               mode:
                 ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol,
               shadows:
@@ -1045,6 +1072,117 @@ module ContextDev
             )
           end
           def to_hash
+          end
+        end
+
+        class FontLink < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Upright font files keyed by weight string (e.g. "400" for regular, "500",
+          # "700"). Values are absolute URLs.
+          sig { returns(T::Hash[Symbol, String]) }
+          attr_accessor :files
+
+          sig do
+            returns(
+              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol
+            )
+          end
+          attr_accessor :type
+
+          # Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
+          # display, handwriting). Omitted for custom fonts when unknown.
+          sig { returns(T.nilable(String)) }
+          attr_reader :category
+
+          sig { params(category: String).void }
+          attr_writer :category
+
+          # Present when type is custom: human-readable name derived from the fontLinks key
+          # (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
+          # Google entries omit this.
+          sig { returns(T.nilable(String)) }
+          attr_reader :display_name
+
+          sig { params(display_name: String).void }
+          attr_writer :display_name
+
+          sig do
+            params(
+              files: T::Hash[Symbol, String],
+              type:
+                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::Type::OrSymbol,
+              category: String,
+              display_name: String
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            # Upright font files keyed by weight string (e.g. "400" for regular, "500",
+            # "700"). Values are absolute URLs.
+            files:,
+            type:,
+            # Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
+            # display, handwriting). Omitted for custom fonts when unknown.
+            category: nil,
+            # Present when type is custom: human-readable name derived from the fontLinks key
+            # (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
+            # Google entries omit this.
+            display_name: nil
+          )
+          end
+
+          sig do
+            override.returns(
+              {
+                files: T::Hash[Symbol, String],
+                type:
+                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol,
+                category: String,
+                display_name: String
+              }
+            )
+          end
+          def to_hash
+          end
+
+          module Type
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::Type
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            GOOGLE =
+              T.let(
+                :google,
+                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol
+              )
+            CUSTOM =
+              T.let(
+                :custom,
+                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
           end
         end
 
