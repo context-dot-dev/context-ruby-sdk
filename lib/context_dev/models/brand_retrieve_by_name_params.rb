@@ -15,8 +15,8 @@ module ContextDev
       required :name, String
 
       # @!attribute country_gl
-      #   Optional country code (GL parameter) to specify the country. This affects the
-      #   geographic location used for search queries.
+      #   Optional country code hint (GL parameter) to specify the country for the company
+      #   name.
       #
       #   @return [Symbol, ContextDev::Models::BrandRetrieveByNameParams::CountryGl, nil]
       optional :country_gl, enum: -> { ContextDev::BrandRetrieveByNameParams::CountryGl }
@@ -49,7 +49,7 @@ module ContextDev
       #
       #   @param name [String] Company name to retrieve brand data for (e.g., 'Apple Inc', 'Microsoft Corporati
       #
-      #   @param country_gl [Symbol, ContextDev::Models::BrandRetrieveByNameParams::CountryGl] Optional country code (GL parameter) to specify the country. This affects the ge
+      #   @param country_gl [Symbol, ContextDev::Models::BrandRetrieveByNameParams::CountryGl] Optional country code hint (GL parameter) to specify the country for the company
       #
       #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveByNameParams::ForceLanguage] Optional parameter to force the language of the retrieved brand data.
       #
@@ -59,8 +59,8 @@ module ContextDev
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Optional country code (GL parameter) to specify the country. This affects the
-      # geographic location used for search queries.
+      # Optional country code hint (GL parameter) to specify the country for the company
+      # name.
       module CountryGl
         extend ContextDev::Internal::Type::Enum
 

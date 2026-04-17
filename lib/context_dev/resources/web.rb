@@ -239,7 +239,7 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebWebScrapeSitemapParams} for more details.
       #
-      # Crawl an entire website's sitemap and return all discovered page URLs
+      # Crawl an entire website's sitemap and return all discovered page URLs.
       #
       # @overload web_scrape_sitemap(domain:, max_links: nil, request_options: {})
       #

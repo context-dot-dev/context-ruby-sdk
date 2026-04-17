@@ -63,7 +63,6 @@ module ContextDev
         force_language: nil,
         # When set to true, the API will perform an additional verification steps to
         # ensure the identified brand matches the transaction with high confidence.
-        # Defaults to false.
         high_confidence_only: nil,
         # Optional parameter to optimize the API call for maximum speed. When set to true,
         # the API will skip time-consuming operations for faster response at the cost of
@@ -83,9 +82,8 @@ module ContextDev
       end
 
       # Retrieve brand information using an email address while detecting disposable and
-      # free email addresses. This endpoint extracts the domain from the email address
-      # and returns brand data for that domain. Disposable and free email addresses
-      # (like gmail.com, yahoo.com) will throw a 422 error.
+      # free email addresses. Disposable and free email addresses (like gmail.com,
+      # yahoo.com) will throw a 422 error.
       sig do
         params(
           email: String,
@@ -116,8 +114,7 @@ module ContextDev
       end
 
       # Retrieve brand information using an ISIN (International Securities
-      # Identification Number). This endpoint looks up the company associated with the
-      # ISIN and returns its brand data.
+      # Identification Number).
       sig do
         params(
           isin: String,
@@ -147,8 +144,7 @@ module ContextDev
       )
       end
 
-      # Retrieve brand information using a company name. This endpoint searches for the
-      # company by name and returns its brand data.
+      # Retrieve brand information using a company name.
       sig do
         params(
           name: String,
@@ -165,8 +161,8 @@ module ContextDev
         # Company name to retrieve brand data for (e.g., 'Apple Inc', 'Microsoft
         # Corporation'). Must be 3-30 characters.
         name:,
-        # Optional country code (GL parameter) to specify the country. This affects the
-        # geographic location used for search queries.
+        # Optional country code hint (GL parameter) to specify the country for the company
+        # name.
         country_gl: nil,
         # Optional parameter to force the language of the retrieved brand data.
         force_language: nil,
@@ -182,8 +178,7 @@ module ContextDev
       )
       end
 
-      # Retrieve brand information using a stock ticker symbol. This endpoint looks up
-      # the company associated with the ticker and returns its brand data.
+      # Retrieve brand information using a stock ticker symbol.
       sig do
         params(
           ticker: String,
@@ -217,8 +212,8 @@ module ContextDev
       end
 
       # Returns a simplified version of brand data containing only essential
-      # information: domain, title, colors, logos, and backdrops. This endpoint is
-      # optimized for faster responses and reduced data transfer.
+      # information: domain, title, colors, logos, and backdrops. Optimized for faster
+      # responses and reduced data transfer.
       sig do
         params(
           domain: String,
