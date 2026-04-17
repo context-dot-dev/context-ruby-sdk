@@ -25,9 +25,6 @@ module ContextDev
 
   IndustryRetrieveNaicsParams = ContextDev::Models::IndustryRetrieveNaicsParams
 
-  StyleExtractStyleguideParams =
-    ContextDev::Models::StyleExtractStyleguideParams
-
   UtilityPrefetchByEmailParams =
     ContextDev::Models::UtilityPrefetchByEmailParams
 

@@ -15,10 +15,12 @@ module ContextDev
       end
       def extract_fonts(
         # A specific URL to fetch fonts from directly, bypassing domain resolution (e.g.,
-        # 'https://example.com/design-system').
+        # 'https://example.com/design-system'). When provided, fonts are extracted from
+        # this exact URL. You must provide either 'domain' or 'directUrl', but not both.
         direct_url: nil,
         # Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The
-        # domain will be automatically normalized and validated.
+        # domain will be automatically normalized and validated. You must provide either
+        # 'domain' or 'directUrl', but not both.
         domain: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
