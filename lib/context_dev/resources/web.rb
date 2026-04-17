@@ -7,8 +7,7 @@ module ContextDev
       # {ContextDev::Models::WebExtractFontsParams} for more details.
       #
       # Scrape font information from a website including font families, usage
-      # statistics, fallbacks, and element/word counts. Either 'domain' or 'directUrl'
-      # must be provided as a query parameter, but not both.
+      # statistics, fallbacks, and element/word counts.
       #
       # @overload extract_fonts(direct_url: nil, domain: nil, timeout_ms: nil, request_options: {})
       #
@@ -31,44 +30,6 @@ module ContextDev
           path: "web/fonts",
           query: query.transform_keys(direct_url: "directUrl", timeout_ms: "timeoutMS"),
           model: ContextDev::Models::WebExtractFontsResponse,
-          options: options
-        )
-      end
-
-      # Some parameter documentations has been truncated, see
-      # {ContextDev::Models::WebScreenshotParams} for more details.
-      #
-      # Capture a screenshot of a website. Supports both viewport (standard browser
-      # view) and full-page screenshots. Can also screenshot specific page types (login,
-      # pricing, etc.) by using heuristics to find the appropriate URL. Either 'domain'
-      # or 'directUrl' must be provided as a query parameter, but not both. Returns a
-      # URL to the uploaded screenshot image hosted on our CDN.
-      #
-      # @overload screenshot(direct_url: nil, domain: nil, full_screenshot: nil, page: nil, prioritize: nil, request_options: {})
-      #
-      # @param direct_url [String] A specific URL to screenshot directly, bypassing domain resolution (e.g., 'https
-      #
-      # @param domain [String] Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The domai
-      #
-      # @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
-      #
-      # @param page [Symbol, ContextDev::Models::WebScreenshotParams::Page] Optional parameter to specify which page type to screenshot. If provided, the sy
-      #
-      # @param prioritize [Symbol, ContextDev::Models::WebScreenshotParams::Prioritize] Optional parameter to prioritize screenshot capture. If 'speed', optimizes for f
-      #
-      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
-      #
-      # @return [ContextDev::Models::WebScreenshotResponse]
-      #
-      # @see ContextDev::Models::WebScreenshotParams
-      def screenshot(params = {})
-        parsed, options = ContextDev::WebScreenshotParams.dump_request(params)
-        query = ContextDev::Internal::Util.encode_query_params(parsed)
-        @client.request(
-          method: :get,
-          path: "brand/screenshot",
-          query: query.transform_keys(direct_url: "directUrl", full_screenshot: "fullScreenshot"),
-          model: ContextDev::Models::WebScreenshotResponse,
           options: options
         )
       end

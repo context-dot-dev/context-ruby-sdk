@@ -8,15 +8,6 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractFontsResponse
 
-      def screenshot: (
-        ?direct_url: String,
-        ?domain: String,
-        ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
-        ?page: ContextDev::Models::WebScreenshotParams::page,
-        ?prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::WebScreenshotResponse
-
       def web_crawl_md: (
         url: String,
         ?follow_subdomains: bool,

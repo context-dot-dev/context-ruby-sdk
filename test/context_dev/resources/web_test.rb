@@ -22,26 +22,6 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     end
   end
 
-  def test_screenshot
-    skip("Mock server tests are disabled")
-
-    response = @context_dev.web.screenshot
-
-    assert_pattern do
-      response => ContextDev::Models::WebScreenshotResponse
-    end
-
-    assert_pattern do
-      response => {
-        code: Integer | nil,
-        domain: String | nil,
-        screenshot: String | nil,
-        screenshot_type: ContextDev::Models::WebScreenshotResponse::ScreenshotType | nil,
-        status: String | nil
-      }
-    end
-  end
-
   def test_web_crawl_md_required_params
     skip("Mock server tests are disabled")
 
