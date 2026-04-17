@@ -33,6 +33,8 @@ module ContextDev
 
   UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 
+  WebExtractFontsParams = ContextDev::Models::WebExtractFontsParams
+
   WebScreenshotParams = ContextDev::Models::WebScreenshotParams
 
   WebWebCrawlMdParams = ContextDev::Models::WebWebCrawlMdParams

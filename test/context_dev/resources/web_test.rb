@@ -3,6 +3,25 @@
 require_relative "../test_helper"
 
 class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
+  def test_extract_fonts
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.web.extract_fonts
+
+    assert_pattern do
+      response => ContextDev::Models::WebExtractFontsResponse
+    end
+
+    assert_pattern do
+      response => {
+        code: Integer,
+        domain: String,
+        fonts: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebExtractFontsResponse::Font]),
+        status: String
+      }
+    end
+  end
+
   def test_screenshot
     skip("Mock server tests are disabled")
 
