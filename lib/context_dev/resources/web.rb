@@ -45,8 +45,7 @@ module ContextDev
       # {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
-      # and returns results for all crawled pages. Only follows links within the same
-      # domain as the starting URL. Costs 1 credit per successful page crawled.
+      # and returns results for all crawled pages.
       #
       # @overload web_crawl_md(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_depth: nil, max_pages: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
       #
