@@ -156,9 +156,7 @@ module ContextDev
       )
       end
 
-      # Crawls the sitemap of the given domain and returns all discovered page URLs.
-      # Supports sitemap index files (recursive), parallel fetching with concurrency
-      # control, deduplication, and filters out non-page resources (images, PDFs, etc.).
+      # Crawl an entire website's sitemap and return all discovered page URLs
       sig do
         params(
           domain: String,
@@ -167,8 +165,7 @@ module ContextDev
         ).returns(ContextDev::Models::WebWebScrapeSitemapResponse)
       end
       def web_scrape_sitemap(
-        # Domain name to crawl sitemaps for (e.g., 'example.com'). The domain will be
-        # automatically normalized and validated.
+        # Domain to build a sitemap for
         domain:,
         # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
         # Minimum is 1, maximum is 100,000.
