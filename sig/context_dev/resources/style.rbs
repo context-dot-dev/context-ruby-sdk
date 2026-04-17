@@ -1,7 +1,0 @@
-module ContextDev
-  module Resources
-    class Style
-      def initialize: (client: ContextDev::Client) -> void
-    end
-  end
-end
