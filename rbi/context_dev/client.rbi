@@ -19,9 +19,6 @@ module ContextDev
     sig { returns(ContextDev::Resources::AI) }
     attr_reader :ai
 
-    sig { returns(ContextDev::Resources::Style) }
-    attr_reader :style
-
     sig { returns(ContextDev::Resources::Brand) }
     attr_reader :brand
 
