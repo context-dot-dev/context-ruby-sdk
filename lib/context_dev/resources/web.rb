@@ -4,6 +4,38 @@ module ContextDev
   module Resources
     class Web
       # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebExtractFontsParams} for more details.
+      #
+      # Scrape font information from a website including font families, usage
+      # statistics, fallbacks, and element/word counts. Either 'domain' or 'directUrl'
+      # must be provided as a query parameter, but not both.
+      #
+      # @overload extract_fonts(direct_url: nil, domain: nil, timeout_ms: nil, request_options: {})
+      #
+      # @param direct_url [String] A specific URL to fetch fonts from directly, bypassing domain resolution (e.g.,
+      #
+      # @param domain [String] Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The domai
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::WebExtractFontsResponse]
+      #
+      # @see ContextDev::Models::WebExtractFontsParams
+      def extract_fonts(params = {})
+        parsed, options = ContextDev::WebExtractFontsParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "web/fonts",
+          query: query.transform_keys(direct_url: "directUrl", timeout_ms: "timeoutMS"),
+          model: ContextDev::Models::WebExtractFontsResponse,
+          options: options
+        )
+      end
+
+      # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebScreenshotParams} for more details.
       #
       # Capture a screenshot of a website. Supports both viewport (standard browser

@@ -1,6 +1,13 @@
 module ContextDev
   module Resources
     class Web
+      def extract_fonts: (
+        ?direct_url: String,
+        ?domain: String,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::WebExtractFontsResponse
+
       def screenshot: (
         ?direct_url: String,
         ?domain: String,

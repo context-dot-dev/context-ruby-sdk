@@ -3,6 +3,32 @@
 module ContextDev
   module Resources
     class Web
+      # Scrape font information from a website including font families, usage
+      # statistics, fallbacks, and element/word counts. Either 'domain' or 'directUrl'
+      # must be provided as a query parameter, but not both.
+      sig do
+        params(
+          direct_url: String,
+          domain: String,
+          timeout_ms: Integer,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebExtractFontsResponse)
+      end
+      def extract_fonts(
+        # A specific URL to fetch fonts from directly, bypassing domain resolution (e.g.,
+        # 'https://example.com/design-system').
+        direct_url: nil,
+        # Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The
+        # domain will be automatically normalized and validated.
+        domain: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
+        request_options: {}
+      )
+      end
+
       # Capture a screenshot of a website. Supports both viewport (standard browser
       # view) and full-page screenshots. Can also screenshot specific page types (login,
       # pricing, etc.) by using heuristics to find the appropriate URL. Either 'domain'
