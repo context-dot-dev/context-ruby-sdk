@@ -83,9 +83,8 @@ module ContextDev
       # {ContextDev::Models::BrandRetrieveByEmailParams} for more details.
       #
       # Retrieve brand information using an email address while detecting disposable and
-      # free email addresses. This endpoint extracts the domain from the email address
-      # and returns brand data for that domain. Disposable and free email addresses
-      # (like gmail.com, yahoo.com) will throw a 422 error.
+      # free email addresses. Disposable and free email addresses (like gmail.com,
+      # yahoo.com) will throw a 422 error.
       #
       # @overload retrieve_by_email(email:, force_language: nil, max_speed: nil, timeout_ms: nil, request_options: {})
       #
@@ -118,8 +117,7 @@ module ContextDev
       # {ContextDev::Models::BrandRetrieveByIsinParams} for more details.
       #
       # Retrieve brand information using an ISIN (International Securities
-      # Identification Number). This endpoint looks up the company associated with the
-      # ISIN and returns its brand data.
+      # Identification Number).
       #
       # @overload retrieve_by_isin(isin:, force_language: nil, max_speed: nil, timeout_ms: nil, request_options: {})
       #
@@ -151,14 +149,13 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::BrandRetrieveByNameParams} for more details.
       #
-      # Retrieve brand information using a company name. This endpoint searches for the
-      # company by name and returns its brand data.
+      # Retrieve brand information using a company name.
       #
       # @overload retrieve_by_name(name:, country_gl: nil, force_language: nil, max_speed: nil, timeout_ms: nil, request_options: {})
       #
       # @param name [String] Company name to retrieve brand data for (e.g., 'Apple Inc', 'Microsoft Corporati
       #
-      # @param country_gl [Symbol, ContextDev::Models::BrandRetrieveByNameParams::CountryGl] Optional country code (GL parameter) to specify the country. This affects the ge
+      # @param country_gl [Symbol, ContextDev::Models::BrandRetrieveByNameParams::CountryGl] Optional country code hint (GL parameter) to specify the country for the company
       #
       # @param force_language [Symbol, ContextDev::Models::BrandRetrieveByNameParams::ForceLanguage] Optional parameter to force the language of the retrieved brand data.
       #
@@ -186,8 +183,7 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::BrandRetrieveByTickerParams} for more details.
       #
-      # Retrieve brand information using a stock ticker symbol. This endpoint looks up
-      # the company associated with the ticker and returns its brand data.
+      # Retrieve brand information using a stock ticker symbol.
       #
       # @overload retrieve_by_ticker(ticker:, force_language: nil, max_speed: nil, ticker_exchange: nil, timeout_ms: nil, request_options: {})
       #
@@ -222,8 +218,8 @@ module ContextDev
       # {ContextDev::Models::BrandRetrieveSimplifiedParams} for more details.
       #
       # Returns a simplified version of brand data containing only essential
-      # information: domain, title, colors, logos, and backdrops. This endpoint is
-      # optimized for faster responses and reduced data transfer.
+      # information: domain, title, colors, logos, and backdrops. Optimized for faster
+      # responses and reduced data transfer.
       #
       # @overload retrieve_simplified(domain:, timeout_ms: nil, request_options: {})
       #

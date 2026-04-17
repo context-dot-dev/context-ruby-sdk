@@ -207,7 +207,7 @@ module ContextDev
       )
       end
 
-      # Crawl an entire website's sitemap and return all discovered page URLs
+      # Crawl an entire website's sitemap and return all discovered page URLs.
       sig do
         params(
           domain: String,
