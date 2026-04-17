@@ -4,35 +4,6 @@ module ContextDev
   module Resources
     class Style
       # Some parameter documentations has been truncated, see
-      # {ContextDev::Models::StyleExtractFontsParams} for more details.
-      #
-      # Extract font information from a brand's website including font families, usage
-      # statistics, fallbacks, and element/word counts.
-      #
-      # @overload extract_fonts(domain:, timeout_ms: nil, request_options: {})
-      #
-      # @param domain [String] Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The domai
-      #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
-      #
-      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
-      #
-      # @return [ContextDev::Models::StyleExtractFontsResponse]
-      #
-      # @see ContextDev::Models::StyleExtractFontsParams
-      def extract_fonts(params)
-        parsed, options = ContextDev::StyleExtractFontsParams.dump_request(params)
-        query = ContextDev::Internal::Util.encode_query_params(parsed)
-        @client.request(
-          method: :get,
-          path: "brand/fonts",
-          query: query.transform_keys(timeout_ms: "timeoutMS"),
-          model: ContextDev::Models::StyleExtractFontsResponse,
-          options: options
-        )
-      end
-
-      # Some parameter documentations has been truncated, see
       # {ContextDev::Models::StyleExtractStyleguideParams} for more details.
       #
       # Automatically extract comprehensive design system information from a brand's
