@@ -30,6 +30,73 @@ module ContextDev
       )
       end
 
+      # Extract a comprehensive design system from a website including colors,
+      # typography, spacing, shadows, and UI components.
+      sig do
+        params(
+          direct_url: String,
+          domain: String,
+          timeout_ms: Integer,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebExtractStyleguideResponse)
+      end
+      def extract_styleguide(
+        # A specific URL to fetch the styleguide from directly, bypassing domain
+        # resolution (e.g., 'https://example.com/design-system'). When provided, the
+        # styleguide is extracted from this exact URL. You must provide either 'domain' or
+        # 'directUrl', but not both.
+        direct_url: nil,
+        # Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
+        # domain will be automatically normalized and validated. You must provide either
+        # 'domain' or 'directUrl', but not both.
+        domain: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
+        request_options: {}
+      )
+      end
+
+      # Capture a screenshot of a website.
+      sig do
+        params(
+          direct_url: String,
+          domain: String,
+          full_screenshot:
+            ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
+          page: ContextDev::WebScreenshotParams::Page::OrSymbol,
+          prioritize: ContextDev::WebScreenshotParams::Prioritize::OrSymbol,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebScreenshotResponse)
+      end
+      def screenshot(
+        # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
+        # 'https://example.com/pricing'). When provided, the screenshot is taken of this
+        # exact URL. You must provide either 'domain' or 'directUrl', but not both.
+        direct_url: nil,
+        # Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The
+        # domain will be automatically normalized and validated. You must provide either
+        # 'domain' or 'directUrl', but not both.
+        domain: nil,
+        # Optional parameter to determine screenshot type. If 'true', takes a full page
+        # screenshot capturing all content. If 'false' or not provided, takes a viewport
+        # screenshot (standard browser view).
+        full_screenshot: nil,
+        # Optional parameter to specify which page type to screenshot. If provided, the
+        # system will scrape the domain's links and use heuristics to find the most
+        # appropriate URL for the specified page type (30 supported languages). If not
+        # provided, screenshots the main domain landing page. Only applicable when using
+        # 'domain', not 'directUrl'.
+        page: nil,
+        # Optional parameter to prioritize screenshot capture. If 'speed', optimizes for
+        # faster capture with basic quality. If 'quality', optimizes for higher quality
+        # with longer wait times. Defaults to 'quality' if not provided.
+        prioritize: nil,
+        request_options: {}
+      )
+      end
+
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
       # and returns results for all crawled pages.
       sig do
