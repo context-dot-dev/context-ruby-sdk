@@ -23,8 +23,6 @@ module ContextDev
   BrandRetrieveSimplifiedParams =
     ContextDev::Models::BrandRetrieveSimplifiedParams
 
-  IndustryRetrieveNaicsParams = ContextDev::Models::IndustryRetrieveNaicsParams
-
   UtilityPrefetchByEmailParams =
     ContextDev::Models::UtilityPrefetchByEmailParams
 
