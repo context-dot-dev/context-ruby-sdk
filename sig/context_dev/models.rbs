@@ -19,6 +19,8 @@ module ContextDev
 
   class BrandRetrieveSimplifiedParams = ContextDev::Models::BrandRetrieveSimplifiedParams
 
+  class IndustryRetrieveNaicsParams = ContextDev::Models::IndustryRetrieveNaicsParams
+
   class UtilityPrefetchByEmailParams = ContextDev::Models::UtilityPrefetchByEmailParams
 
   class UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
