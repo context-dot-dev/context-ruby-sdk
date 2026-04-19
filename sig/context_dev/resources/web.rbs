@@ -61,6 +61,7 @@ module ContextDev
       def web_scrape_sitemap: (
         domain: String,
         ?max_links: Integer,
+        ?url_regex: String,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeSitemapResponse
 

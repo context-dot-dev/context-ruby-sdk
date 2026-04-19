@@ -241,11 +241,13 @@ module ContextDev
       #
       # Crawl an entire website's sitemap and return all discovered page URLs.
       #
-      # @overload web_scrape_sitemap(domain:, max_links: nil, request_options: {})
+      # @overload web_scrape_sitemap(domain:, max_links: nil, url_regex: nil, request_options: {})
       #
       # @param domain [String] Domain to build a sitemap for
       #
       # @param max_links [Integer] Maximum number of links to return from the sitemap crawl. Defaults to 10,000. Mi
+      #
+      # @param url_regex [String] Optional RE2-compatible regex pattern. Only URLs matching this pattern are retur
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -258,7 +260,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/sitemap",
-          query: query.transform_keys(max_links: "maxLinks"),
+          query: query.transform_keys(max_links: "maxLinks", url_regex: "urlRegex"),
           model: ContextDev::Models::WebWebScrapeSitemapResponse,
           options: options
         )
