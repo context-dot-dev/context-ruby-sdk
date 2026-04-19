@@ -2,17 +2,26 @@
 
 module ContextDev
   module Models
-    # @see ContextDev::Resources::Style#extract_fonts
-    class StyleExtractFontsParams < ContextDev::Internal::Type::BaseModel
+    # @see ContextDev::Resources::Web#extract_fonts
+    class WebExtractFontsParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
+      # @!attribute direct_url
+      #   A specific URL to fetch fonts from directly, bypassing domain resolution (e.g.,
+      #   'https://example.com/design-system'). When provided, fonts are extracted from
+      #   this exact URL. You must provide either 'domain' or 'directUrl', but not both.
+      #
+      #   @return [String, nil]
+      optional :direct_url, String
+
       # @!attribute domain
       #   Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The
-      #   domain will be automatically normalized and validated.
+      #   domain will be automatically normalized and validated. You must provide either
+      #   'domain' or 'directUrl', but not both.
       #
-      #   @return [String]
-      required :domain, String
+      #   @return [String, nil]
+      optional :domain, String
 
       # @!attribute timeout_ms
       #   Optional timeout in milliseconds for the request. If the request takes longer
@@ -22,9 +31,11 @@ module ContextDev
       #   @return [Integer, nil]
       optional :timeout_ms, Integer
 
-      # @!method initialize(domain:, timeout_ms: nil, request_options: {})
+      # @!method initialize(direct_url: nil, domain: nil, timeout_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
-      #   {ContextDev::Models::StyleExtractFontsParams} for more details.
+      #   {ContextDev::Models::WebExtractFontsParams} for more details.
+      #
+      #   @param direct_url [String] A specific URL to fetch fonts from directly, bypassing domain resolution (e.g.,
       #
       #   @param domain [String] Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The domai
       #

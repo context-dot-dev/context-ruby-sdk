@@ -2,8 +2,8 @@
 
 module ContextDev
   module Models
-    # @see ContextDev::Resources::Style#extract_fonts
-    class StyleExtractFontsResponse < ContextDev::Internal::Type::BaseModel
+    # @see ContextDev::Resources::Web#extract_fonts
+    class WebExtractFontsResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute code
       #   HTTP status code, e.g., 200
       #
@@ -19,9 +19,9 @@ module ContextDev
       # @!attribute fonts
       #   Array of font usage information
       #
-      #   @return [Array<ContextDev::Models::StyleExtractFontsResponse::Font>]
+      #   @return [Array<ContextDev::Models::WebExtractFontsResponse::Font>]
       required :fonts,
-               -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::StyleExtractFontsResponse::Font] }
+               -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebExtractFontsResponse::Font] }
 
       # @!attribute status
       #   Status of the response, e.g., 'ok'
@@ -34,7 +34,7 @@ module ContextDev
       #
       #   @param domain [String] The normalized domain that was processed
       #
-      #   @param fonts [Array<ContextDev::Models::StyleExtractFontsResponse::Font>] Array of font usage information
+      #   @param fonts [Array<ContextDev::Models::WebExtractFontsResponse::Font>] Array of font usage information
       #
       #   @param status [String] Status of the response, e.g., 'ok'
 

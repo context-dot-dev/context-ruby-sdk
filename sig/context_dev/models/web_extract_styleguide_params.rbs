@@ -1,10 +1,10 @@
 module ContextDev
   module Models
-    type style_extract_styleguide_params =
+    type web_extract_styleguide_params =
       { direct_url: String, domain: String, timeout_ms: Integer }
       & ContextDev::Internal::Type::request_parameters
 
-    class StyleExtractStyleguideParams < ContextDev::Internal::Type::BaseModel
+    class WebExtractStyleguideParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 

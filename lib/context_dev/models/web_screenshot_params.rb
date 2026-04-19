@@ -10,14 +10,15 @@ module ContextDev
       # @!attribute direct_url
       #   A specific URL to screenshot directly, bypassing domain resolution (e.g.,
       #   'https://example.com/pricing'). When provided, the screenshot is taken of this
-      #   exact URL.
+      #   exact URL. You must provide either 'domain' or 'directUrl', but not both.
       #
       #   @return [String, nil]
       optional :direct_url, String
 
       # @!attribute domain
       #   Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The
-      #   domain will be automatically normalized and validated.
+      #   domain will be automatically normalized and validated. You must provide either
+      #   'domain' or 'directUrl', but not both.
       #
       #   @return [String, nil]
       optional :domain, String

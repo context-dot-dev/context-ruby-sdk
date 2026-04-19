@@ -4,13 +4,71 @@ module ContextDev
   module Resources
     class Web
       # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebExtractFontsParams} for more details.
+      #
+      # Scrape font information from a website including font families, usage
+      # statistics, fallbacks, and element/word counts.
+      #
+      # @overload extract_fonts(direct_url: nil, domain: nil, timeout_ms: nil, request_options: {})
+      #
+      # @param direct_url [String] A specific URL to fetch fonts from directly, bypassing domain resolution (e.g.,
+      #
+      # @param domain [String] Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The domai
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::WebExtractFontsResponse]
+      #
+      # @see ContextDev::Models::WebExtractFontsParams
+      def extract_fonts(params = {})
+        parsed, options = ContextDev::WebExtractFontsParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "web/fonts",
+          query: query.transform_keys(direct_url: "directUrl", timeout_ms: "timeoutMS"),
+          model: ContextDev::Models::WebExtractFontsResponse,
+          options: options
+        )
+      end
+
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebExtractStyleguideParams} for more details.
+      #
+      # Extract a comprehensive design system from a website including colors,
+      # typography, spacing, shadows, and UI components.
+      #
+      # @overload extract_styleguide(direct_url: nil, domain: nil, timeout_ms: nil, request_options: {})
+      #
+      # @param direct_url [String] A specific URL to fetch the styleguide from directly, bypassing domain resolutio
+      #
+      # @param domain [String] Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::WebExtractStyleguideResponse]
+      #
+      # @see ContextDev::Models::WebExtractStyleguideParams
+      def extract_styleguide(params = {})
+        parsed, options = ContextDev::WebExtractStyleguideParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "web/styleguide",
+          query: query.transform_keys(direct_url: "directUrl", timeout_ms: "timeoutMS"),
+          model: ContextDev::Models::WebExtractStyleguideResponse,
+          options: options
+        )
+      end
+
+      # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebScreenshotParams} for more details.
       #
-      # Capture a screenshot of a website. Supports both viewport (standard browser
-      # view) and full-page screenshots. Can also screenshot specific page types (login,
-      # pricing, etc.) by using heuristics to find the appropriate URL. Either 'domain'
-      # or 'directUrl' must be provided as a query parameter, but not both. Returns a
-      # URL to the uploaded screenshot image hosted on our CDN.
+      # Capture a screenshot of a website.
       #
       # @overload screenshot(direct_url: nil, domain: nil, full_screenshot: nil, page: nil, prioritize: nil, request_options: {})
       #
@@ -34,7 +92,7 @@ module ContextDev
         query = ContextDev::Internal::Util.encode_query_params(parsed)
         @client.request(
           method: :get,
-          path: "brand/screenshot",
+          path: "web/screenshot",
           query: query.transform_keys(direct_url: "directUrl", full_screenshot: "fullScreenshot"),
           model: ContextDev::Models::WebScreenshotResponse,
           options: options
@@ -45,8 +103,7 @@ module ContextDev
       # {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
-      # and returns results for all crawled pages. Only follows links within the same
-      # domain as the starting URL. Costs 1 credit per successful page crawled.
+      # and returns results for all crawled pages.
       #
       # @overload web_crawl_md(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_depth: nil, max_pages: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
       #
@@ -84,11 +141,16 @@ module ContextDev
         )
       end
 
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebWebScrapeHTMLParams} for more details.
+      #
       # Scrapes the given URL and returns the raw HTML content of the page.
       #
-      # @overload web_scrape_html(url:, request_options: {})
+      # @overload web_scrape_html(url:, max_age_ms: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
+      #
+      # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -101,7 +163,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/html",
-          query: query,
+          query: query.transform_keys(max_age_ms: "maxAgeMs"),
           model: ContextDev::Models::WebWebScrapeHTMLResponse,
           options: options
         )
@@ -135,16 +197,17 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebWebScrapeMdParams} for more details.
       #
-      # Scrapes the given URL, converts the HTML content to Markdown, and returns the
-      # result.
+      # Scrapes the given URL into LLM usable Markdown.
       #
-      # @overload web_scrape_md(url:, include_images: nil, include_links: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
+      # @overload web_scrape_md(url:, include_images: nil, include_links: nil, max_age_ms: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
       #
-      # @param url [String] Full URL to scrape and convert to markdown (must include http:// or https:// pro
+      # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
       #
       # @param include_images [Boolean] Include image references in Markdown output
       #
       # @param include_links [Boolean] Preserve hyperlinks in Markdown output
+      #
+      # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       # @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
       #
@@ -164,6 +227,7 @@ module ContextDev
           query: query.transform_keys(
             include_images: "includeImages",
             include_links: "includeLinks",
+            max_age_ms: "maxAgeMs",
             shorten_base64_images: "shortenBase64Images",
             use_main_content_only: "useMainContentOnly"
           ),
@@ -175,13 +239,11 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebWebScrapeSitemapParams} for more details.
       #
-      # Crawls the sitemap of the given domain and returns all discovered page URLs.
-      # Supports sitemap index files (recursive), parallel fetching with concurrency
-      # control, deduplication, and filters out non-page resources (images, PDFs, etc.).
+      # Crawl an entire website's sitemap and return all discovered page URLs.
       #
       # @overload web_scrape_sitemap(domain:, max_links: nil, request_options: {})
       #
-      # @param domain [String] Domain name to crawl sitemaps for (e.g., 'example.com'). The domain will be auto
+      # @param domain [String] Domain to build a sitemap for
       #
       # @param max_links [Integer] Maximum number of links to return from the sitemap crawl. Defaults to 10,000. Mi
       #

@@ -13,7 +13,7 @@ module ContextDev
 
       # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
       # 'https://example.com/pricing'). When provided, the screenshot is taken of this
-      # exact URL.
+      # exact URL. You must provide either 'domain' or 'directUrl', but not both.
       sig { returns(T.nilable(String)) }
       attr_reader :direct_url
 
@@ -21,7 +21,8 @@ module ContextDev
       attr_writer :direct_url
 
       # Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The
-      # domain will be automatically normalized and validated.
+      # domain will be automatically normalized and validated. You must provide either
+      # 'domain' or 'directUrl', but not both.
       sig { returns(T.nilable(String)) }
       attr_reader :domain
 
@@ -90,10 +91,11 @@ module ContextDev
       def self.new(
         # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
         # 'https://example.com/pricing'). When provided, the screenshot is taken of this
-        # exact URL.
+        # exact URL. You must provide either 'domain' or 'directUrl', but not both.
         direct_url: nil,
         # Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The
-        # domain will be automatically normalized and validated.
+        # domain will be automatically normalized and validated. You must provide either
+        # 'domain' or 'directUrl', but not both.
         domain: nil,
         # Optional parameter to determine screenshot type. If 'true', takes a full page
         # screenshot capturing all content. If 'false' or not provided, takes a viewport

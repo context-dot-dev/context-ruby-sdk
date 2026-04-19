@@ -2,11 +2,11 @@
 
 module ContextDev
   module Models
-    class StyleExtractFontsResponse < ContextDev::Internal::Type::BaseModel
+    class WebExtractFontsResponse < ContextDev::Internal::Type::BaseModel
       OrHash =
         T.type_alias do
           T.any(
-            ContextDev::Models::StyleExtractFontsResponse,
+            ContextDev::Models::WebExtractFontsResponse,
             ContextDev::Internal::AnyHash
           )
         end
@@ -21,7 +21,7 @@ module ContextDev
 
       # Array of font usage information
       sig do
-        returns(T::Array[ContextDev::Models::StyleExtractFontsResponse::Font])
+        returns(T::Array[ContextDev::Models::WebExtractFontsResponse::Font])
       end
       attr_accessor :fonts
 
@@ -34,9 +34,7 @@ module ContextDev
           code: Integer,
           domain: String,
           fonts:
-            T::Array[
-              ContextDev::Models::StyleExtractFontsResponse::Font::OrHash
-            ],
+            T::Array[ContextDev::Models::WebExtractFontsResponse::Font::OrHash],
           status: String
         ).returns(T.attached_class)
       end
@@ -57,8 +55,7 @@ module ContextDev
           {
             code: Integer,
             domain: String,
-            fonts:
-              T::Array[ContextDev::Models::StyleExtractFontsResponse::Font],
+            fonts: T::Array[ContextDev::Models::WebExtractFontsResponse::Font],
             status: String
           }
         )
@@ -70,7 +67,7 @@ module ContextDev
         OrHash =
           T.type_alias do
             T.any(
-              ContextDev::Models::StyleExtractFontsResponse::Font,
+              ContextDev::Models::WebExtractFontsResponse::Font,
               ContextDev::Internal::AnyHash
             )
           end

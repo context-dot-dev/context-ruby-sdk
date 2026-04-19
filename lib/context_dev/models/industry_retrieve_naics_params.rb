@@ -8,9 +8,9 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute input
-      #   Brand domain or title to retrieve NAICS code for. If a valid domain is provided
-      #   in `input`, it will be used for classification, otherwise, we will search for
-      #   the brand using the provided title.
+      #   Brand domain or title to retrieve NAICS code for. If a valid domain is provided,
+      #   it will be used for classification, otherwise, we will search for the brand
+      #   using the provided title.
       #
       #   @return [String]
       required :input, String
@@ -40,7 +40,7 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::IndustryRetrieveNaicsParams} for more details.
       #
-      #   @param input [String] Brand domain or title to retrieve NAICS code for. If a valid domain is provided
+      #   @param input [String] Brand domain or title to retrieve NAICS code for. If a valid domain is provided,
       #
       #   @param max_results [Integer] Maximum number of NAICS codes to return. Must be between 1 and 10. Defaults to 5
       #

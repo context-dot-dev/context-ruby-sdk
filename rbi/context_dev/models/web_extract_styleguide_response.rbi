@@ -2,11 +2,11 @@
 
 module ContextDev
   module Models
-    class StyleExtractStyleguideResponse < ContextDev::Internal::Type::BaseModel
+    class WebExtractStyleguideResponse < ContextDev::Internal::Type::BaseModel
       OrHash =
         T.type_alias do
           T.any(
-            ContextDev::Models::StyleExtractStyleguideResponse,
+            ContextDev::Models::WebExtractStyleguideResponse,
             ContextDev::Internal::AnyHash
           )
         end
@@ -36,7 +36,7 @@ module ContextDev
       sig do
         returns(
           T.nilable(
-            ContextDev::Models::StyleExtractStyleguideResponse::Styleguide
+            ContextDev::Models::WebExtractStyleguideResponse::Styleguide
           )
         )
       end
@@ -45,7 +45,7 @@ module ContextDev
       sig do
         params(
           styleguide:
-            ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::OrHash
+            ContextDev::Models::WebExtractStyleguideResponse::Styleguide::OrHash
         ).void
       end
       attr_writer :styleguide
@@ -56,7 +56,7 @@ module ContextDev
           domain: String,
           status: String,
           styleguide:
-            ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::OrHash
+            ContextDev::Models::WebExtractStyleguideResponse::Styleguide::OrHash
         ).returns(T.attached_class)
       end
       def self.new(
@@ -78,7 +78,7 @@ module ContextDev
             domain: String,
             status: String,
             styleguide:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide
           }
         )
       end
@@ -89,7 +89,7 @@ module ContextDev
         OrHash =
           T.type_alias do
             T.any(
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide,
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide,
               ContextDev::Internal::AnyHash
             )
           end
@@ -97,7 +97,7 @@ module ContextDev
         # Primary colors used on the website
         sig do
           returns(
-            ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors
+            ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors
           )
         end
         attr_reader :colors
@@ -105,7 +105,7 @@ module ContextDev
         sig do
           params(
             colors:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors::OrHash
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors::OrHash
           ).void
         end
         attr_writer :colors
@@ -113,7 +113,7 @@ module ContextDev
         # UI component styles
         sig do
           returns(
-            ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components
+            ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components
           )
         end
         attr_reader :components
@@ -121,7 +121,7 @@ module ContextDev
         sig do
           params(
             components:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::OrHash
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::OrHash
           ).void
         end
         attr_writer :components
@@ -129,7 +129,7 @@ module ContextDev
         # Spacing system used on the website
         sig do
           returns(
-            ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing
+            ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing
           )
         end
         attr_reader :element_spacing
@@ -137,15 +137,28 @@ module ContextDev
         sig do
           params(
             element_spacing:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing::OrHash
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing::OrHash
           ).void
         end
         attr_writer :element_spacing
 
+        # Font assets keyed by family name as it appears in fontFamily/fontFallbacks
+        # (non-generic names only). Clients match typography.fontFamily / fontWeight or
+        # button styles to pick a file URL from files.
+        sig do
+          returns(
+            T::Hash[
+              Symbol,
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink
+            ]
+          )
+        end
+        attr_accessor :font_links
+
         # The primary color mode of the website design
         sig do
           returns(
-            ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol
+            ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol
           )
         end
         attr_accessor :mode
@@ -153,7 +166,7 @@ module ContextDev
         # Shadow styles used on the website
         sig do
           returns(
-            ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows
+            ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows
           )
         end
         attr_reader :shadows
@@ -161,7 +174,7 @@ module ContextDev
         sig do
           params(
             shadows:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows::OrHash
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows::OrHash
           ).void
         end
         attr_writer :shadows
@@ -169,7 +182,7 @@ module ContextDev
         # Typography styles used on the website
         sig do
           returns(
-            ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography
+            ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography
           )
         end
         attr_reader :typography
@@ -177,7 +190,7 @@ module ContextDev
         sig do
           params(
             typography:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::OrHash
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::OrHash
           ).void
         end
         attr_writer :typography
@@ -186,17 +199,22 @@ module ContextDev
         sig do
           params(
             colors:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors::OrHash,
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors::OrHash,
             components:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::OrHash,
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::OrHash,
             element_spacing:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing::OrHash,
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing::OrHash,
+            font_links:
+              T::Hash[
+                Symbol,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::OrHash
+              ],
             mode:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode::OrSymbol,
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode::OrSymbol,
             shadows:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows::OrHash,
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows::OrHash,
             typography:
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::OrHash
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::OrHash
           ).returns(T.attached_class)
         end
         def self.new(
@@ -206,6 +224,10 @@ module ContextDev
           components:,
           # Spacing system used on the website
           element_spacing:,
+          # Font assets keyed by family name as it appears in fontFamily/fontFallbacks
+          # (non-generic names only). Clients match typography.fontFamily / fontWeight or
+          # button styles to pick a file URL from files.
+          font_links:,
           # The primary color mode of the website design
           mode:,
           # Shadow styles used on the website
@@ -219,17 +241,22 @@ module ContextDev
           override.returns(
             {
               colors:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors,
               components:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components,
               element_spacing:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing,
+              font_links:
+                T::Hash[
+                  Symbol,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink
+                ],
               mode:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol,
               shadows:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows,
               typography:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography
             }
           )
         end
@@ -240,7 +267,7 @@ module ContextDev
           OrHash =
             T.type_alias do
               T.any(
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors,
                 ContextDev::Internal::AnyHash
               )
             end
@@ -286,7 +313,7 @@ module ContextDev
           OrHash =
             T.type_alias do
               T.any(
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components,
                 ContextDev::Internal::AnyHash
               )
             end
@@ -294,7 +321,7 @@ module ContextDev
           # Button component styles
           sig do
             returns(
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button
             )
           end
           attr_reader :button
@@ -302,7 +329,7 @@ module ContextDev
           sig do
             params(
               button:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::OrHash
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::OrHash
             ).void
           end
           attr_writer :button
@@ -311,7 +338,7 @@ module ContextDev
           sig do
             returns(
               T.nilable(
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Card
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card
               )
             )
           end
@@ -320,7 +347,7 @@ module ContextDev
           sig do
             params(
               card:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Card::OrHash
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card::OrHash
             ).void
           end
           attr_writer :card
@@ -329,9 +356,9 @@ module ContextDev
           sig do
             params(
               button:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::OrHash,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::OrHash,
               card:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Card::OrHash
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card::OrHash
             ).returns(T.attached_class)
           end
           def self.new(
@@ -346,9 +373,9 @@ module ContextDev
             override.returns(
               {
                 button:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button,
                 card:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Card
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card
               }
             )
           end
@@ -359,7 +386,7 @@ module ContextDev
             OrHash =
               T.type_alias do
                 T.any(
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button,
                   ContextDev::Internal::AnyHash
                 )
               end
@@ -367,7 +394,7 @@ module ContextDev
             sig do
               returns(
                 T.nilable(
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Link
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Link
                 )
               )
             end
@@ -376,7 +403,7 @@ module ContextDev
             sig do
               params(
                 link:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Link::OrHash
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Link::OrHash
               ).void
             end
             attr_writer :link
@@ -384,7 +411,7 @@ module ContextDev
             sig do
               returns(
                 T.nilable(
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Primary
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Primary
                 )
               )
             end
@@ -393,7 +420,7 @@ module ContextDev
             sig do
               params(
                 primary:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Primary::OrHash
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Primary::OrHash
               ).void
             end
             attr_writer :primary
@@ -401,7 +428,7 @@ module ContextDev
             sig do
               returns(
                 T.nilable(
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Secondary
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Secondary
                 )
               )
             end
@@ -410,7 +437,7 @@ module ContextDev
             sig do
               params(
                 secondary:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Secondary::OrHash
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Secondary::OrHash
               ).void
             end
             attr_writer :secondary
@@ -419,11 +446,11 @@ module ContextDev
             sig do
               params(
                 link:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Link::OrHash,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Link::OrHash,
                 primary:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Primary::OrHash,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Primary::OrHash,
                 secondary:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Secondary::OrHash
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Secondary::OrHash
               ).returns(T.attached_class)
             end
             def self.new(link: nil, primary: nil, secondary: nil)
@@ -433,11 +460,11 @@ module ContextDev
               override.returns(
                 {
                   link:
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Link,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Link,
                   primary:
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Primary,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Primary,
                   secondary:
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Secondary
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Secondary
                 }
               )
             end
@@ -448,7 +475,7 @@ module ContextDev
               OrHash =
                 T.type_alias do
                   T.any(
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Link,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Link,
                     ContextDev::Internal::AnyHash
                   )
                 end
@@ -604,7 +631,7 @@ module ContextDev
               OrHash =
                 T.type_alias do
                   T.any(
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Primary,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Primary,
                     ContextDev::Internal::AnyHash
                   )
                 end
@@ -760,7 +787,7 @@ module ContextDev
               OrHash =
                 T.type_alias do
                   T.any(
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Secondary,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Secondary,
                     ContextDev::Internal::AnyHash
                   )
                 end
@@ -917,7 +944,7 @@ module ContextDev
             OrHash =
               T.type_alias do
                 T.any(
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Card,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card,
                   ContextDev::Internal::AnyHash
                 )
               end
@@ -1006,7 +1033,7 @@ module ContextDev
           OrHash =
             T.type_alias do
               T.any(
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing,
                 ContextDev::Internal::AnyHash
               )
             end
@@ -1048,6 +1075,117 @@ module ContextDev
           end
         end
 
+        class FontLink < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Upright font files keyed by weight string (e.g. "400" for regular, "500",
+          # "700"). Values are absolute URLs.
+          sig { returns(T::Hash[Symbol, String]) }
+          attr_accessor :files
+
+          sig do
+            returns(
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol
+            )
+          end
+          attr_accessor :type
+
+          # Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
+          # display, handwriting). Omitted for custom fonts when unknown.
+          sig { returns(T.nilable(String)) }
+          attr_reader :category
+
+          sig { params(category: String).void }
+          attr_writer :category
+
+          # Present when type is custom: human-readable name derived from the fontLinks key
+          # (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
+          # Google entries omit this.
+          sig { returns(T.nilable(String)) }
+          attr_reader :display_name
+
+          sig { params(display_name: String).void }
+          attr_writer :display_name
+
+          sig do
+            params(
+              files: T::Hash[Symbol, String],
+              type:
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type::OrSymbol,
+              category: String,
+              display_name: String
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            # Upright font files keyed by weight string (e.g. "400" for regular, "500",
+            # "700"). Values are absolute URLs.
+            files:,
+            type:,
+            # Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
+            # display, handwriting). Omitted for custom fonts when unknown.
+            category: nil,
+            # Present when type is custom: human-readable name derived from the fontLinks key
+            # (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
+            # Google entries omit this.
+            display_name: nil
+          )
+          end
+
+          sig do
+            override.returns(
+              {
+                files: T::Hash[Symbol, String],
+                type:
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol,
+                category: String,
+                display_name: String
+              }
+            )
+          end
+          def to_hash
+          end
+
+          module Type
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            GOOGLE =
+              T.let(
+                :google,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol
+              )
+            CUSTOM =
+              T.let(
+                :custom,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
+          end
+        end
+
         # The primary color mode of the website design
         module Mode
           extend ContextDev::Internal::Type::Enum
@@ -1056,7 +1194,7 @@ module ContextDev
             T.type_alias do
               T.all(
                 Symbol,
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode
               )
             end
           OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -1064,18 +1202,18 @@ module ContextDev
           LIGHT =
             T.let(
               :light,
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol
             )
           DARK =
             T.let(
               :dark,
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol
             )
 
           sig do
             override.returns(
               T::Array[
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol
               ]
             )
           end
@@ -1087,7 +1225,7 @@ module ContextDev
           OrHash =
             T.type_alias do
               T.any(
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows,
                 ContextDev::Internal::AnyHash
               )
             end
@@ -1133,7 +1271,7 @@ module ContextDev
           OrHash =
             T.type_alias do
               T.any(
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography,
                 ContextDev::Internal::AnyHash
               )
             end
@@ -1141,7 +1279,7 @@ module ContextDev
           # Heading styles
           sig do
             returns(
-              ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings
+              ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings
             )
           end
           attr_reader :headings
@@ -1149,7 +1287,7 @@ module ContextDev
           sig do
             params(
               headings:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::OrHash
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::OrHash
             ).void
           end
           attr_writer :headings
@@ -1157,7 +1295,7 @@ module ContextDev
           sig do
             returns(
               T.nilable(
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::P
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::P
               )
             )
           end
@@ -1166,7 +1304,7 @@ module ContextDev
           sig do
             params(
               p_:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::P::OrHash
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::P::OrHash
             ).void
           end
           attr_writer :p_
@@ -1175,9 +1313,9 @@ module ContextDev
           sig do
             params(
               headings:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::OrHash,
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::OrHash,
               p_:
-                ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::P::OrHash
+                ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::P::OrHash
             ).returns(T.attached_class)
           end
           def self.new(
@@ -1191,9 +1329,9 @@ module ContextDev
             override.returns(
               {
                 headings:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings,
                 p_:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::P
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::P
               }
             )
           end
@@ -1204,7 +1342,7 @@ module ContextDev
             OrHash =
               T.type_alias do
                 T.any(
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings,
                   ContextDev::Internal::AnyHash
                 )
               end
@@ -1212,7 +1350,7 @@ module ContextDev
             sig do
               returns(
                 T.nilable(
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H1
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H1
                 )
               )
             end
@@ -1221,7 +1359,7 @@ module ContextDev
             sig do
               params(
                 h1:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H1::OrHash
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H1::OrHash
               ).void
             end
             attr_writer :h1
@@ -1229,7 +1367,7 @@ module ContextDev
             sig do
               returns(
                 T.nilable(
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H2
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H2
                 )
               )
             end
@@ -1238,7 +1376,7 @@ module ContextDev
             sig do
               params(
                 h2:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H2::OrHash
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H2::OrHash
               ).void
             end
             attr_writer :h2
@@ -1246,7 +1384,7 @@ module ContextDev
             sig do
               returns(
                 T.nilable(
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H3
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H3
                 )
               )
             end
@@ -1255,7 +1393,7 @@ module ContextDev
             sig do
               params(
                 h3:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H3::OrHash
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H3::OrHash
               ).void
             end
             attr_writer :h3
@@ -1263,7 +1401,7 @@ module ContextDev
             sig do
               returns(
                 T.nilable(
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H4
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H4
                 )
               )
             end
@@ -1272,7 +1410,7 @@ module ContextDev
             sig do
               params(
                 h4:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H4::OrHash
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H4::OrHash
               ).void
             end
             attr_writer :h4
@@ -1281,13 +1419,13 @@ module ContextDev
             sig do
               params(
                 h1:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H1::OrHash,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H1::OrHash,
                 h2:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H2::OrHash,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H2::OrHash,
                 h3:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H3::OrHash,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H3::OrHash,
                 h4:
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H4::OrHash
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H4::OrHash
               ).returns(T.attached_class)
             end
             def self.new(h1: nil, h2: nil, h3: nil, h4: nil)
@@ -1297,13 +1435,13 @@ module ContextDev
               override.returns(
                 {
                   h1:
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H1,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H1,
                   h2:
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H2,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H2,
                   h3:
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H3,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H3,
                   h4:
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H4
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H4
                 }
               )
             end
@@ -1314,7 +1452,7 @@ module ContextDev
               OrHash =
                 T.type_alias do
                   T.any(
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H1,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H1,
                     ContextDev::Internal::AnyHash
                   )
                 end
@@ -1381,7 +1519,7 @@ module ContextDev
               OrHash =
                 T.type_alias do
                   T.any(
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H2,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H2,
                     ContextDev::Internal::AnyHash
                   )
                 end
@@ -1448,7 +1586,7 @@ module ContextDev
               OrHash =
                 T.type_alias do
                   T.any(
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H3,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H3,
                     ContextDev::Internal::AnyHash
                   )
                 end
@@ -1515,7 +1653,7 @@ module ContextDev
               OrHash =
                 T.type_alias do
                   T.any(
-                    ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H4,
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H4,
                     ContextDev::Internal::AnyHash
                   )
                 end
@@ -1583,7 +1721,7 @@ module ContextDev
             OrHash =
               T.type_alias do
                 T.any(
-                  ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::P,
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::P,
                   ContextDev::Internal::AnyHash
                 )
               end

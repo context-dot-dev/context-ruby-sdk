@@ -61,13 +61,13 @@ module ContextDev
 
   IndustryRetrieveNaicsParams = ContextDev::Models::IndustryRetrieveNaicsParams
 
-  StyleExtractFontsParams = ContextDev::Models::StyleExtractFontsParams
-
-  StyleExtractStyleguideParams = ContextDev::Models::StyleExtractStyleguideParams
-
   UtilityPrefetchByEmailParams = ContextDev::Models::UtilityPrefetchByEmailParams
 
   UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
+
+  WebExtractFontsParams = ContextDev::Models::WebExtractFontsParams
+
+  WebExtractStyleguideParams = ContextDev::Models::WebExtractStyleguideParams
 
   WebScreenshotParams = ContextDev::Models::WebScreenshotParams
 

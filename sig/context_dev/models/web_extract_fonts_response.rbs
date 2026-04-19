@@ -1,33 +1,33 @@
 module ContextDev
   module Models
-    type style_extract_fonts_response =
+    type web_extract_fonts_response =
       {
         code: Integer,
         domain: String,
-        fonts: ::Array[ContextDev::Models::StyleExtractFontsResponse::Font],
+        fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
         status: String
       }
 
-    class StyleExtractFontsResponse < ContextDev::Internal::Type::BaseModel
+    class WebExtractFontsResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor code: Integer
 
       attr_accessor domain: String
 
-      attr_accessor fonts: ::Array[ContextDev::Models::StyleExtractFontsResponse::Font]
+      attr_accessor fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font]
 
       attr_accessor status: String
 
       def initialize: (
         code: Integer,
         domain: String,
-        fonts: ::Array[ContextDev::Models::StyleExtractFontsResponse::Font],
+        fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
         status: String
       ) -> void
 
       def to_hash: -> {
         code: Integer,
         domain: String,
-        fonts: ::Array[ContextDev::Models::StyleExtractFontsResponse::Font],
+        fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
         status: String
       }
 

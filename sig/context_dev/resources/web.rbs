@@ -1,6 +1,20 @@
 module ContextDev
   module Resources
     class Web
+      def extract_fonts: (
+        ?direct_url: String,
+        ?domain: String,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::WebExtractFontsResponse
+
+      def extract_styleguide: (
+        ?direct_url: String,
+        ?domain: String,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::WebExtractStyleguideResponse
+
       def screenshot: (
         ?direct_url: String,
         ?domain: String,
@@ -25,6 +39,7 @@ module ContextDev
 
       def web_scrape_html: (
         url: String,
+        ?max_age_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeHTMLResponse
 
@@ -37,6 +52,7 @@ module ContextDev
         url: String,
         ?include_images: bool,
         ?include_links: bool,
+        ?max_age_ms: Integer,
         ?shorten_base64_images: bool,
         ?use_main_content_only: bool,
         ?request_options: ContextDev::request_opts

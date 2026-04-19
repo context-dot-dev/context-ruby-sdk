@@ -2,8 +2,8 @@
 
 module ContextDev
   module Models
-    # @see ContextDev::Resources::Style#extract_styleguide
-    class StyleExtractStyleguideResponse < ContextDev::Internal::Type::BaseModel
+    # @see ContextDev::Resources::Web#extract_styleguide
+    class WebExtractStyleguideResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute code
       #   HTTP status code
       #
@@ -25,8 +25,8 @@ module ContextDev
       # @!attribute styleguide
       #   Comprehensive styleguide data extracted from the website
       #
-      #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide, nil]
-      optional :styleguide, -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide }
+      #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide, nil]
+      optional :styleguide, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide }
 
       # @!method initialize(code: nil, domain: nil, status: nil, styleguide: nil)
       #   @param code [Integer] HTTP status code
@@ -35,64 +35,79 @@ module ContextDev
       #
       #   @param status [String] Status of the response, e.g., 'ok'
       #
-      #   @param styleguide [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide] Comprehensive styleguide data extracted from the website
+      #   @param styleguide [ContextDev::Models::WebExtractStyleguideResponse::Styleguide] Comprehensive styleguide data extracted from the website
 
-      # @see ContextDev::Models::StyleExtractStyleguideResponse#styleguide
+      # @see ContextDev::Models::WebExtractStyleguideResponse#styleguide
       class Styleguide < ContextDev::Internal::Type::BaseModel
         # @!attribute colors
         #   Primary colors used on the website
         #
-        #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors]
-        required :colors, -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors }
+        #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors]
+        required :colors, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors }
 
         # @!attribute components
         #   UI component styles
         #
-        #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components]
-        required :components, -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components }
+        #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components]
+        required :components, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components }
 
         # @!attribute element_spacing
         #   Spacing system used on the website
         #
-        #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing]
+        #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing]
         required :element_spacing,
-                 -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing },
+                 -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing },
                  api_name: :elementSpacing
+
+        # @!attribute font_links
+        #   Font assets keyed by family name as it appears in fontFamily/fontFallbacks
+        #   (non-generic names only). Clients match typography.fontFamily / fontWeight or
+        #   button styles to pick a file URL from files.
+        #
+        #   @return [Hash{Symbol=>ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink}]
+        required :font_links,
+                 -> { ContextDev::Internal::Type::HashOf[ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink] },
+                 api_name: :fontLinks
 
         # @!attribute mode
         #   The primary color mode of the website design
         #
-        #   @return [Symbol, ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode]
-        required :mode, enum: -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode }
+        #   @return [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode]
+        required :mode, enum: -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode }
 
         # @!attribute shadows
         #   Shadow styles used on the website
         #
-        #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows]
-        required :shadows, -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows }
+        #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows]
+        required :shadows, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows }
 
         # @!attribute typography
         #   Typography styles used on the website
         #
-        #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography]
-        required :typography, -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography }
+        #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography]
+        required :typography, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography }
 
-        # @!method initialize(colors:, components:, element_spacing:, mode:, shadows:, typography:)
+        # @!method initialize(colors:, components:, element_spacing:, font_links:, mode:, shadows:, typography:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide} for more details.
+        #
         #   Comprehensive styleguide data extracted from the website
         #
-        #   @param colors [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Colors] Primary colors used on the website
+        #   @param colors [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors] Primary colors used on the website
         #
-        #   @param components [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components] UI component styles
+        #   @param components [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components] UI component styles
         #
-        #   @param element_spacing [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::ElementSpacing] Spacing system used on the website
+        #   @param element_spacing [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing] Spacing system used on the website
         #
-        #   @param mode [Symbol, ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Mode] The primary color mode of the website design
+        #   @param font_links [Hash{Symbol=>ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink}] Font assets keyed by family name as it appears in fontFamily/fontFallbacks (non-
         #
-        #   @param shadows [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Shadows] Shadow styles used on the website
+        #   @param mode [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode] The primary color mode of the website design
         #
-        #   @param typography [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography] Typography styles used on the website
+        #   @param shadows [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows] Shadow styles used on the website
+        #
+        #   @param typography [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography] Typography styles used on the website
 
-        # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide#colors
+        # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide#colors
         class Colors < ContextDev::Internal::Type::BaseModel
           # @!attribute accent
           #   Accent color (hex format)
@@ -122,56 +137,55 @@ module ContextDev
           #   @param text [String] Text color (hex format)
         end
 
-        # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide#components
+        # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide#components
         class Components < ContextDev::Internal::Type::BaseModel
           # @!attribute button
           #   Button component styles
           #
-          #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button]
-          required :button,
-                   -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button }
+          #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button]
+          required :button, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button }
 
           # @!attribute card
           #   Card component style
           #
-          #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Card, nil]
-          optional :card, -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Card }
+          #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card, nil]
+          optional :card, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card }
 
           # @!method initialize(button:, card: nil)
           #   UI component styles
           #
-          #   @param button [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button] Button component styles
+          #   @param button [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button] Button component styles
           #
-          #   @param card [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Card] Card component style
+          #   @param card [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card] Card component style
 
-          # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components#button
+          # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components#button
           class Button < ContextDev::Internal::Type::BaseModel
             # @!attribute link
             #
-            #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Link, nil]
+            #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Link, nil]
             optional :link,
-                     -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Link }
+                     -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Link }
 
             # @!attribute primary
             #
-            #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Primary, nil]
+            #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Primary, nil]
             optional :primary,
-                     -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Primary }
+                     -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Primary }
 
             # @!attribute secondary
             #
-            #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Secondary, nil]
+            #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Secondary, nil]
             optional :secondary,
-                     -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Secondary }
+                     -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Secondary }
 
             # @!method initialize(link: nil, primary: nil, secondary: nil)
             #   Button component styles
             #
-            #   @param link [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Link]
-            #   @param primary [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Primary]
-            #   @param secondary [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Secondary]
+            #   @param link [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Link]
+            #   @param primary [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Primary]
+            #   @param secondary [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Secondary]
 
-            # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button#link
+            # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button#link
             class Link < ContextDev::Internal::Type::BaseModel
               # @!attribute background_color
               #
@@ -269,7 +283,7 @@ module ContextDev
 
               # @!method initialize(background_color:, border_color:, border_radius:, border_style:, border_width:, box_shadow:, color:, css:, font_size:, font_weight:, min_height:, min_width:, padding:, text_decoration:, font_fallbacks: nil, font_family: nil, text_decoration_color: nil)
               #   Some parameter documentations has been truncated, see
-              #   {ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Link}
+              #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Link}
               #   for more details.
               #
               #   @param background_color [String]
@@ -307,7 +321,7 @@ module ContextDev
               #   @param text_decoration_color [String] Hex color of the underline when it differs from the text color
             end
 
-            # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button#primary
+            # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button#primary
             class Primary < ContextDev::Internal::Type::BaseModel
               # @!attribute background_color
               #
@@ -405,7 +419,7 @@ module ContextDev
 
               # @!method initialize(background_color:, border_color:, border_radius:, border_style:, border_width:, box_shadow:, color:, css:, font_size:, font_weight:, min_height:, min_width:, padding:, text_decoration:, font_fallbacks: nil, font_family: nil, text_decoration_color: nil)
               #   Some parameter documentations has been truncated, see
-              #   {ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Primary}
+              #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Primary}
               #   for more details.
               #
               #   @param background_color [String]
@@ -443,7 +457,7 @@ module ContextDev
               #   @param text_decoration_color [String] Hex color of the underline when it differs from the text color
             end
 
-            # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button#secondary
+            # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button#secondary
             class Secondary < ContextDev::Internal::Type::BaseModel
               # @!attribute background_color
               #
@@ -541,7 +555,7 @@ module ContextDev
 
               # @!method initialize(background_color:, border_color:, border_radius:, border_style:, border_width:, box_shadow:, color:, css:, font_size:, font_weight:, min_height:, min_width:, padding:, text_decoration:, font_fallbacks: nil, font_family: nil, text_decoration_color: nil)
               #   Some parameter documentations has been truncated, see
-              #   {ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Button::Secondary}
+              #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Secondary}
               #   for more details.
               #
               #   @param background_color [String]
@@ -580,7 +594,7 @@ module ContextDev
             end
           end
 
-          # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components#card
+          # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components#card
           class Card < ContextDev::Internal::Type::BaseModel
             # @!attribute background_color
             #
@@ -632,7 +646,7 @@ module ContextDev
 
             # @!method initialize(background_color:, border_color:, border_radius:, border_style:, border_width:, box_shadow:, css:, padding:, text_color:)
             #   Some parameter documentations has been truncated, see
-            #   {ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Components::Card}
+            #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card}
             #   for more details.
             #
             #   Card component style
@@ -657,7 +671,7 @@ module ContextDev
           end
         end
 
-        # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide#element_spacing
+        # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide#element_spacing
         class ElementSpacing < ContextDev::Internal::Type::BaseModel
           # @!attribute lg
           #
@@ -694,9 +708,62 @@ module ContextDev
           #   @param xs [String]
         end
 
+        class FontLink < ContextDev::Internal::Type::BaseModel
+          # @!attribute files
+          #   Upright font files keyed by weight string (e.g. "400" for regular, "500",
+          #   "700"). Values are absolute URLs.
+          #
+          #   @return [Hash{Symbol=>String}]
+          required :files, ContextDev::Internal::Type::HashOf[String]
+
+          # @!attribute type
+          #
+          #   @return [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type]
+          required :type, enum: -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type }
+
+          # @!attribute category
+          #   Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
+          #   display, handwriting). Omitted for custom fonts when unknown.
+          #
+          #   @return [String, nil]
+          optional :category, String
+
+          # @!attribute display_name
+          #   Present when type is custom: human-readable name derived from the fontLinks key
+          #   (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
+          #   Google entries omit this.
+          #
+          #   @return [String, nil]
+          optional :display_name, String, api_name: :displayName
+
+          # @!method initialize(files:, type:, category: nil, display_name: nil)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink} for
+          #   more details.
+          #
+          #   @param files [Hash{Symbol=>String}] Upright font files keyed by weight string (e.g. "400" for regular, "500", "700")
+          #
+          #   @param type [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type]
+          #
+          #   @param category [String] Google Fonts category when type is google (e.g. sans-serif, serif, monospace, di
+          #
+          #   @param display_name [String] Present when type is custom: human-readable name derived from the fontLinks key
+
+          # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink#type
+          module Type
+            extend ContextDev::Internal::Type::Enum
+
+            GOOGLE = :google
+            CUSTOM = :custom
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
+        end
+
         # The primary color mode of the website design
         #
-        # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide#mode
+        # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide#mode
         module Mode
           extend ContextDev::Internal::Type::Enum
 
@@ -707,7 +774,7 @@ module ContextDev
           #   @return [Array<Symbol>]
         end
 
-        # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide#shadows
+        # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide#shadows
         class Shadows < ContextDev::Internal::Type::BaseModel
           # @!attribute inner
           #
@@ -744,64 +811,64 @@ module ContextDev
           #   @param xl [String]
         end
 
-        # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide#typography
+        # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide#typography
         class Typography < ContextDev::Internal::Type::BaseModel
           # @!attribute headings
           #   Heading styles
           #
-          #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings]
+          #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings]
           required :headings,
-                   -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings }
+                   -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings }
 
           # @!attribute p_
           #
-          #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::P, nil]
+          #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::P, nil]
           optional :p_,
-                   -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::P },
+                   -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::P },
                    api_name: :p
 
           # @!method initialize(headings:, p_: nil)
           #   Typography styles used on the website
           #
-          #   @param headings [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings] Heading styles
+          #   @param headings [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings] Heading styles
           #
-          #   @param p_ [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::P]
+          #   @param p_ [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::P]
 
-          # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography#headings
+          # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography#headings
           class Headings < ContextDev::Internal::Type::BaseModel
             # @!attribute h1
             #
-            #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H1, nil]
+            #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H1, nil]
             optional :h1,
-                     -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H1 }
+                     -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H1 }
 
             # @!attribute h2
             #
-            #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H2, nil]
+            #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H2, nil]
             optional :h2,
-                     -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H2 }
+                     -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H2 }
 
             # @!attribute h3
             #
-            #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H3, nil]
+            #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H3, nil]
             optional :h3,
-                     -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H3 }
+                     -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H3 }
 
             # @!attribute h4
             #
-            #   @return [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H4, nil]
+            #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H4, nil]
             optional :h4,
-                     -> { ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H4 }
+                     -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H4 }
 
             # @!method initialize(h1: nil, h2: nil, h3: nil, h4: nil)
             #   Heading styles
             #
-            #   @param h1 [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H1]
-            #   @param h2 [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H2]
-            #   @param h3 [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H3]
-            #   @param h4 [ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings::H4]
+            #   @param h1 [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H1]
+            #   @param h2 [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H2]
+            #   @param h3 [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H3]
+            #   @param h4 [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H4]
 
-            # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings#h1
+            # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings#h1
             class H1 < ContextDev::Internal::Type::BaseModel
               # @!attribute font_fallbacks
               #   Full ordered font list from resolved computed font-family
@@ -849,7 +916,7 @@ module ContextDev
               #   @param line_height [String]
             end
 
-            # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings#h2
+            # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings#h2
             class H2 < ContextDev::Internal::Type::BaseModel
               # @!attribute font_fallbacks
               #   Full ordered font list from resolved computed font-family
@@ -897,7 +964,7 @@ module ContextDev
               #   @param line_height [String]
             end
 
-            # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings#h3
+            # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings#h3
             class H3 < ContextDev::Internal::Type::BaseModel
               # @!attribute font_fallbacks
               #   Full ordered font list from resolved computed font-family
@@ -945,7 +1012,7 @@ module ContextDev
               #   @param line_height [String]
             end
 
-            # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography::Headings#h4
+            # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings#h4
             class H4 < ContextDev::Internal::Type::BaseModel
               # @!attribute font_fallbacks
               #   Full ordered font list from resolved computed font-family
@@ -994,7 +1061,7 @@ module ContextDev
             end
           end
 
-          # @see ContextDev::Models::StyleExtractStyleguideResponse::Styleguide::Typography#p_
+          # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography#p_
           class P < ContextDev::Internal::Type::BaseModel
             # @!attribute font_fallbacks
             #   Full ordered font list from resolved computed font-family

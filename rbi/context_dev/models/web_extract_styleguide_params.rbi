@@ -2,20 +2,22 @@
 
 module ContextDev
   module Models
-    class StyleExtractStyleguideParams < ContextDev::Internal::Type::BaseModel
+    class WebExtractStyleguideParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
       OrHash =
         T.type_alias do
           T.any(
-            ContextDev::StyleExtractStyleguideParams,
+            ContextDev::WebExtractStyleguideParams,
             ContextDev::Internal::AnyHash
           )
         end
 
       # A specific URL to fetch the styleguide from directly, bypassing domain
-      # resolution (e.g., 'https://example.com/design-system').
+      # resolution (e.g., 'https://example.com/design-system'). When provided, the
+      # styleguide is extracted from this exact URL. You must provide either 'domain' or
+      # 'directUrl', but not both.
       sig { returns(T.nilable(String)) }
       attr_reader :direct_url
 
@@ -23,7 +25,8 @@ module ContextDev
       attr_writer :direct_url
 
       # Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
-      # domain will be automatically normalized and validated.
+      # domain will be automatically normalized and validated. You must provide either
+      # 'domain' or 'directUrl', but not both.
       sig { returns(T.nilable(String)) }
       attr_reader :domain
 
@@ -49,10 +52,13 @@ module ContextDev
       end
       def self.new(
         # A specific URL to fetch the styleguide from directly, bypassing domain
-        # resolution (e.g., 'https://example.com/design-system').
+        # resolution (e.g., 'https://example.com/design-system'). When provided, the
+        # styleguide is extracted from this exact URL. You must provide either 'domain' or
+        # 'directUrl', but not both.
         direct_url: nil,
         # Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
-        # domain will be automatically normalized and validated.
+        # domain will be automatically normalized and validated. You must provide either
+        # 'domain' or 'directUrl', but not both.
         domain: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed

@@ -14,9 +14,9 @@ module ContextDev
           )
         end
 
-      # Brand domain or title to retrieve NAICS code for. If a valid domain is provided
-      # in `input`, it will be used for classification, otherwise, we will search for
-      # the brand using the provided title.
+      # Brand domain or title to retrieve NAICS code for. If a valid domain is provided,
+      # it will be used for classification, otherwise, we will search for the brand
+      # using the provided title.
       sig { returns(String) }
       attr_accessor :input
 
@@ -54,9 +54,9 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Brand domain or title to retrieve NAICS code for. If a valid domain is provided
-        # in `input`, it will be used for classification, otherwise, we will search for
-        # the brand using the provided title.
+        # Brand domain or title to retrieve NAICS code for. If a valid domain is provided,
+        # it will be used for classification, otherwise, we will search for the brand
+        # using the provided title.
         input:,
         # Maximum number of NAICS codes to return. Must be between 1 and 10. Defaults
         # to 5.
