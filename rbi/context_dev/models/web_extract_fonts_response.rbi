@@ -29,13 +29,44 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :status
 
+      # Font assets keyed by family name as it appears in the fonts array (non-generic
+      # names only). Clients match entries in fonts to pick a file URL from files.
+      # Omitted when no families resolve to Google or custom @font-face URLs.
+      sig do
+        returns(
+          T.nilable(
+            T::Hash[
+              Symbol,
+              ContextDev::Models::WebExtractFontsResponse::FontLink
+            ]
+          )
+        )
+      end
+      attr_reader :font_links
+
+      sig do
+        params(
+          font_links:
+            T::Hash[
+              Symbol,
+              ContextDev::Models::WebExtractFontsResponse::FontLink::OrHash
+            ]
+        ).void
+      end
+      attr_writer :font_links
+
       sig do
         params(
           code: Integer,
           domain: String,
           fonts:
             T::Array[ContextDev::Models::WebExtractFontsResponse::Font::OrHash],
-          status: String
+          status: String,
+          font_links:
+            T::Hash[
+              Symbol,
+              ContextDev::Models::WebExtractFontsResponse::FontLink::OrHash
+            ]
         ).returns(T.attached_class)
       end
       def self.new(
@@ -46,7 +77,11 @@ module ContextDev
         # Array of font usage information
         fonts:,
         # Status of the response, e.g., 'ok'
-        status:
+        status:,
+        # Font assets keyed by family name as it appears in the fonts array (non-generic
+        # names only). Clients match entries in fonts to pick a file URL from files.
+        # Omitted when no families resolve to Google or custom @font-face URLs.
+        font_links: nil
       )
       end
 
@@ -56,7 +91,12 @@ module ContextDev
             code: Integer,
             domain: String,
             fonts: T::Array[ContextDev::Models::WebExtractFontsResponse::Font],
-            status: String
+            status: String,
+            font_links:
+              T::Hash[
+                Symbol,
+                ContextDev::Models::WebExtractFontsResponse::FontLink
+              ]
           }
         )
       end
@@ -143,6 +183,117 @@ module ContextDev
           )
         end
         def to_hash
+        end
+      end
+
+      class FontLink < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::WebExtractFontsResponse::FontLink,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Upright font files keyed by weight string (e.g. "400" for regular, "500",
+        # "700"). Values are absolute URLs.
+        sig { returns(T::Hash[Symbol, String]) }
+        attr_accessor :files
+
+        sig do
+          returns(
+            ContextDev::Models::WebExtractFontsResponse::FontLink::Type::TaggedSymbol
+          )
+        end
+        attr_accessor :type
+
+        # Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
+        # display, handwriting). Omitted for custom fonts when unknown.
+        sig { returns(T.nilable(String)) }
+        attr_reader :category
+
+        sig { params(category: String).void }
+        attr_writer :category
+
+        # Present when type is custom: human-readable name derived from the fontLinks key
+        # (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
+        # Google entries omit this.
+        sig { returns(T.nilable(String)) }
+        attr_reader :display_name
+
+        sig { params(display_name: String).void }
+        attr_writer :display_name
+
+        sig do
+          params(
+            files: T::Hash[Symbol, String],
+            type:
+              ContextDev::Models::WebExtractFontsResponse::FontLink::Type::OrSymbol,
+            category: String,
+            display_name: String
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # Upright font files keyed by weight string (e.g. "400" for regular, "500",
+          # "700"). Values are absolute URLs.
+          files:,
+          type:,
+          # Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
+          # display, handwriting). Omitted for custom fonts when unknown.
+          category: nil,
+          # Present when type is custom: human-readable name derived from the fontLinks key
+          # (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
+          # Google entries omit this.
+          display_name: nil
+        )
+        end
+
+        sig do
+          override.returns(
+            {
+              files: T::Hash[Symbol, String],
+              type:
+                ContextDev::Models::WebExtractFontsResponse::FontLink::Type::TaggedSymbol,
+              category: String,
+              display_name: String
+            }
+          )
+        end
+        def to_hash
+        end
+
+        module Type
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::Models::WebExtractFontsResponse::FontLink::Type
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          GOOGLE =
+            T.let(
+              :google,
+              ContextDev::Models::WebExtractFontsResponse::FontLink::Type::TaggedSymbol
+            )
+          CUSTOM =
+            T.let(
+              :custom,
+              ContextDev::Models::WebExtractFontsResponse::FontLink::Type::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::WebExtractFontsResponse::FontLink::Type::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
         end
       end
     end
