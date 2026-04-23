@@ -33,6 +33,14 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :include_links, ContextDev::Internal::Type::Boolean, api_name: :includeLinks
 
+      # @!attribute max_age_ms
+      #   Return a cached result if a prior scrape for the same parameters exists and is
+      #   younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+      #   omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+      #
+      #   @return [Integer, nil]
+      optional :max_age_ms, Integer, api_name: :maxAgeMs
+
       # @!attribute max_depth
       #   Maximum link depth from the starting URL (0 = only the starting page)
       #
@@ -64,7 +72,7 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :use_main_content_only, ContextDev::Internal::Type::Boolean, api_name: :useMainContentOnly
 
-      # @!method initialize(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_depth: nil, max_pages: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
+      # @!method initialize(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
@@ -75,6 +83,8 @@ module ContextDev
       #   @param include_images [Boolean] Include image references in the Markdown output
       #
       #   @param include_links [Boolean] Preserve hyperlinks in the Markdown output
+      #
+      #   @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       #   @param max_depth [Integer] Maximum link depth from the starting URL (0 = only the starting page)
       #
