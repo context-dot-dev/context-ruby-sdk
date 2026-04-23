@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.6.0 (2026-04-23)
+
+Full Changelog: [v1.5.0...v1.6.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.5.0...v1.6.0)
+
+### Features
+
+* **api:** api update ([c1543f7](https://github.com/context-dot-dev/context-ruby-sdk/commit/c1543f7513b2d88b0c8ad8e209e62075bd9658bc))
+* **api:** api update ([9c98e20](https://github.com/context-dot-dev/context-ruby-sdk/commit/9c98e20725dcda8466a2274b61be75943d0564d9))
+* **api:** api update ([8ccafd9](https://github.com/context-dot-dev/context-ruby-sdk/commit/8ccafd9625079f40393fe23890958a80d8bdb4e8))
+
+
+### Chores
+
+* **internal:** more robust bootstrap script ([57b2d93](https://github.com/context-dot-dev/context-ruby-sdk/commit/57b2d93877e5ceeb388679f239e21c09b087b2a1))
+
 ## 1.5.0 (2026-04-19)
 
 Full Changelog: [v1.4.0...v1.5.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.4.0...v1.5.0)
