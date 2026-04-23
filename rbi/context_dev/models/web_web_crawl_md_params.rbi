@@ -38,6 +38,15 @@ module ContextDev
       sig { params(include_links: T::Boolean).void }
       attr_writer :include_links
 
+      # Return a cached result if a prior scrape for the same parameters exists and is
+      # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+      # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :max_age_ms
+
+      sig { params(max_age_ms: Integer).void }
+      attr_writer :max_age_ms
+
       # Maximum link depth from the starting URL (0 = only the starting page)
       sig { returns(T.nilable(Integer)) }
       attr_reader :max_depth
@@ -80,6 +89,7 @@ module ContextDev
           follow_subdomains: T::Boolean,
           include_images: T::Boolean,
           include_links: T::Boolean,
+          max_age_ms: Integer,
           max_depth: Integer,
           max_pages: Integer,
           shorten_base64_images: T::Boolean,
@@ -99,6 +109,10 @@ module ContextDev
         include_images: nil,
         # Preserve hyperlinks in the Markdown output
         include_links: nil,
+        # Return a cached result if a prior scrape for the same parameters exists and is
+        # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+        # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+        max_age_ms: nil,
         # Maximum link depth from the starting URL (0 = only the starting page)
         max_depth: nil,
         # Maximum number of pages to crawl. Hard cap: 500.
@@ -121,6 +135,7 @@ module ContextDev
             follow_subdomains: T::Boolean,
             include_images: T::Boolean,
             include_links: T::Boolean,
+            max_age_ms: Integer,
             max_depth: Integer,
             max_pages: Integer,
             shorten_base64_images: T::Boolean,

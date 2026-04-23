@@ -29,6 +29,7 @@ module ContextDev
         ?follow_subdomains: bool,
         ?include_images: bool,
         ?include_links: bool,
+        ?max_age_ms: Integer,
         ?max_depth: Integer,
         ?max_pages: Integer,
         ?shorten_base64_images: bool,
