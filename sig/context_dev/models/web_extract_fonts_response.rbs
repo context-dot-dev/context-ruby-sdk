@@ -5,7 +5,8 @@ module ContextDev
         code: Integer,
         domain: String,
         fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
-        status: String
+        status: String,
+        font_links: ::Hash[Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink]
       }
 
     class WebExtractFontsResponse < ContextDev::Internal::Type::BaseModel
@@ -17,18 +18,26 @@ module ContextDev
 
       attr_accessor status: String
 
+      attr_reader font_links: ::Hash[Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink]?
+
+      def font_links=: (
+        ::Hash[Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink]
+      ) -> ::Hash[Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink]
+
       def initialize: (
         code: Integer,
         domain: String,
         fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
-        status: String
+        status: String,
+        ?font_links: ::Hash[Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink]
       ) -> void
 
       def to_hash: -> {
         code: Integer,
         domain: String,
         fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
-        status: String
+        status: String,
+        font_links: ::Hash[Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink]
       }
 
       type font =
@@ -76,6 +85,53 @@ module ContextDev
           percent_words: Float,
           uses: ::Array[String]
         }
+      end
+
+      type font_link =
+        {
+          files: ::Hash[Symbol, String],
+          type: ContextDev::Models::WebExtractFontsResponse::FontLink::type_,
+          category: String,
+          display_name: String
+        }
+
+      class FontLink < ContextDev::Internal::Type::BaseModel
+        attr_accessor files: ::Hash[Symbol, String]
+
+        attr_accessor type: ContextDev::Models::WebExtractFontsResponse::FontLink::type_
+
+        attr_reader category: String?
+
+        def category=: (String) -> String
+
+        attr_reader display_name: String?
+
+        def display_name=: (String) -> String
+
+        def initialize: (
+          files: ::Hash[Symbol, String],
+          type: ContextDev::Models::WebExtractFontsResponse::FontLink::type_,
+          ?category: String,
+          ?display_name: String
+        ) -> void
+
+        def to_hash: -> {
+          files: ::Hash[Symbol, String],
+          type: ContextDev::Models::WebExtractFontsResponse::FontLink::type_,
+          category: String,
+          display_name: String
+        }
+
+        type type_ = :google | :custom
+
+        module Type
+          extend ContextDev::Internal::Type::Enum
+
+          GOOGLE: :google
+          CUSTOM: :custom
+
+          def self?.values: -> ::Array[ContextDev::Models::WebExtractFontsResponse::FontLink::type_]
+        end
       end
     end
   end

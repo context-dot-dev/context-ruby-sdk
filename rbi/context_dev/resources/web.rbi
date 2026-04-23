@@ -105,6 +105,7 @@ module ContextDev
           follow_subdomains: T::Boolean,
           include_images: T::Boolean,
           include_links: T::Boolean,
+          max_age_ms: Integer,
           max_depth: Integer,
           max_pages: Integer,
           shorten_base64_images: T::Boolean,
@@ -124,6 +125,10 @@ module ContextDev
         include_images: nil,
         # Preserve hyperlinks in the Markdown output
         include_links: nil,
+        # Return a cached result if a prior scrape for the same parameters exists and is
+        # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+        # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+        max_age_ms: nil,
         # Maximum link depth from the starting URL (0 = only the starting page)
         max_depth: nil,
         # Maximum number of pages to crawl. Hard cap: 500.
@@ -212,6 +217,7 @@ module ContextDev
         params(
           domain: String,
           max_links: Integer,
+          url_regex: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeSitemapResponse)
       end
@@ -221,6 +227,9 @@ module ContextDev
         # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
         # Minimum is 1, maximum is 100,000.
         max_links: nil,
+        # Optional RE2-compatible regex pattern. Only URLs matching this pattern are
+        # returned and counted against maxLinks.
+        url_regex: nil,
         request_options: {}
       )
       end

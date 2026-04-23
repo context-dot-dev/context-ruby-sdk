@@ -29,7 +29,20 @@ module ContextDev
       #   @return [String]
       required :status, String
 
-      # @!method initialize(code:, domain:, fonts:, status:)
+      # @!attribute font_links
+      #   Font assets keyed by family name as it appears in the fonts array (non-generic
+      #   names only). Clients match entries in fonts to pick a file URL from files.
+      #   Omitted when no families resolve to Google or custom @font-face URLs.
+      #
+      #   @return [Hash{Symbol=>ContextDev::Models::WebExtractFontsResponse::FontLink}, nil]
+      optional :font_links,
+               -> { ContextDev::Internal::Type::HashOf[ContextDev::Models::WebExtractFontsResponse::FontLink] },
+               api_name: :fontLinks
+
+      # @!method initialize(code:, domain:, fonts:, status:, font_links: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::WebExtractFontsResponse} for more details.
+      #
       #   @param code [Integer] HTTP status code, e.g., 200
       #
       #   @param domain [String] The normalized domain that was processed
@@ -37,6 +50,8 @@ module ContextDev
       #   @param fonts [Array<ContextDev::Models::WebExtractFontsResponse::Font>] Array of font usage information
       #
       #   @param status [String] Status of the response, e.g., 'ok'
+      #
+      #   @param font_links [Hash{Symbol=>ContextDev::Models::WebExtractFontsResponse::FontLink}] Font assets keyed by family name as it appears in the fonts array (non-generic n
 
       class Font < ContextDev::Internal::Type::BaseModel
         # @!attribute fallbacks
@@ -95,6 +110,58 @@ module ContextDev
         #   @param percent_words [Float] Percentage of words using this font
         #
         #   @param uses [Array<String>] Array of CSS selectors or element types where this font is used
+      end
+
+      class FontLink < ContextDev::Internal::Type::BaseModel
+        # @!attribute files
+        #   Upright font files keyed by weight string (e.g. "400" for regular, "500",
+        #   "700"). Values are absolute URLs.
+        #
+        #   @return [Hash{Symbol=>String}]
+        required :files, ContextDev::Internal::Type::HashOf[String]
+
+        # @!attribute type
+        #
+        #   @return [Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink::Type]
+        required :type, enum: -> { ContextDev::Models::WebExtractFontsResponse::FontLink::Type }
+
+        # @!attribute category
+        #   Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
+        #   display, handwriting). Omitted for custom fonts when unknown.
+        #
+        #   @return [String, nil]
+        optional :category, String
+
+        # @!attribute display_name
+        #   Present when type is custom: human-readable name derived from the fontLinks key
+        #   (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
+        #   Google entries omit this.
+        #
+        #   @return [String, nil]
+        optional :display_name, String, api_name: :displayName
+
+        # @!method initialize(files:, type:, category: nil, display_name: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebExtractFontsResponse::FontLink} for more details.
+        #
+        #   @param files [Hash{Symbol=>String}] Upright font files keyed by weight string (e.g. "400" for regular, "500", "700")
+        #
+        #   @param type [Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink::Type]
+        #
+        #   @param category [String] Google Fonts category when type is google (e.g. sans-serif, serif, monospace, di
+        #
+        #   @param display_name [String] Present when type is custom: human-readable name derived from the fontLinks key
+
+        # @see ContextDev::Models::WebExtractFontsResponse::FontLink#type
+        module Type
+          extend ContextDev::Internal::Type::Enum
+
+          GOOGLE = :google
+          CUSTOM = :custom
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
       end
     end
   end

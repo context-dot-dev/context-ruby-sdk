@@ -17,7 +17,8 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         code: Integer,
         domain: String,
         fonts: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebExtractFontsResponse::Font]),
-        status: String
+        status: String,
+        font_links: ^(ContextDev::Internal::Type::HashOf[ContextDev::Models::WebExtractFontsResponse::FontLink]) | nil
       }
     end
   end
