@@ -105,7 +105,7 @@ module ContextDev
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
       # and returns results for all crawled pages.
       #
-      # @overload web_crawl_md(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
+      # @overload web_crawl_md(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, parse_pdf: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
       #
       # @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
       #
@@ -120,6 +120,8 @@ module ContextDev
       # @param max_depth [Integer] Maximum link depth from the starting URL (0 = only the starting page)
       #
       # @param max_pages [Integer] Maximum number of pages to crawl. Hard cap: 500.
+      #
+      # @param parse_pdf [Boolean] When true (default), PDF pages are fetched and their text layer is extracted and
       #
       # @param shorten_base64_images [Boolean] Truncate base64-encoded image data in the Markdown output
       #
@@ -148,11 +150,13 @@ module ContextDev
       #
       # Scrapes the given URL and returns the raw HTML content of the page.
       #
-      # @overload web_scrape_html(url:, max_age_ms: nil, request_options: {})
+      # @overload web_scrape_html(url:, max_age_ms: nil, parse_pdf: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
       #
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
+      #
+      # @param parse_pdf [Boolean] When true (default), PDF URLs are fetched and their text layer is extracted and
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -165,7 +169,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/html",
-          query: query.transform_keys(max_age_ms: "maxAgeMs"),
+          query: query.transform_keys(max_age_ms: "maxAgeMs", parse_pdf: "parsePDF"),
           model: ContextDev::Models::WebWebScrapeHTMLResponse,
           options: options
         )
@@ -201,7 +205,7 @@ module ContextDev
       #
       # Scrapes the given URL into LLM usable Markdown.
       #
-      # @overload web_scrape_md(url:, include_images: nil, include_links: nil, max_age_ms: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
+      # @overload web_scrape_md(url:, include_images: nil, include_links: nil, max_age_ms: nil, parse_pdf: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
       #
@@ -210,6 +214,8 @@ module ContextDev
       # @param include_links [Boolean] Preserve hyperlinks in Markdown output
       #
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
+      #
+      # @param parse_pdf [Boolean] When true (default), PDF URLs are fetched and their text layer is extracted and
       #
       # @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
       #
@@ -230,6 +236,7 @@ module ContextDev
             include_images: "includeImages",
             include_links: "includeLinks",
             max_age_ms: "maxAgeMs",
+            parse_pdf: "parsePDF",
             shorten_base64_images: "shortenBase64Images",
             use_main_content_only: "useMainContentOnly"
           ),

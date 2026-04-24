@@ -1,7 +1,7 @@
 module ContextDev
   module Models
     type web_web_scrape_html_params =
-      { url: String, max_age_ms: Integer }
+      { url: String, max_age_ms: Integer, parse_pdf: bool }
       & ContextDev::Internal::Type::request_parameters
 
     class WebWebScrapeHTMLParams < ContextDev::Internal::Type::BaseModel
@@ -14,15 +14,21 @@ module ContextDev
 
       def max_age_ms=: (Integer) -> Integer
 
+      attr_reader parse_pdf: bool?
+
+      def parse_pdf=: (bool) -> bool
+
       def initialize: (
         url: String,
         ?max_age_ms: Integer,
+        ?parse_pdf: bool,
         ?request_options: ContextDev::request_opts
       ) -> void
 
       def to_hash: -> {
         url: String,
         max_age_ms: Integer,
+        parse_pdf: bool,
         request_options: ContextDev::RequestOptions
       }
     end

@@ -61,6 +61,15 @@ module ContextDev
       sig { params(max_pages: Integer).void }
       attr_writer :max_pages
 
+      # When true (default), PDF pages are fetched and their text layer is extracted and
+      # converted to Markdown alongside HTML pages. When false, PDF pages are skipped
+      # entirely (not included in results and not counted as failures).
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :parse_pdf
+
+      sig { params(parse_pdf: T::Boolean).void }
+      attr_writer :parse_pdf
+
       # Truncate base64-encoded image data in the Markdown output
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :shorten_base64_images
@@ -92,6 +101,7 @@ module ContextDev
           max_age_ms: Integer,
           max_depth: Integer,
           max_pages: Integer,
+          parse_pdf: T::Boolean,
           shorten_base64_images: T::Boolean,
           url_regex: String,
           use_main_content_only: T::Boolean,
@@ -117,6 +127,10 @@ module ContextDev
         max_depth: nil,
         # Maximum number of pages to crawl. Hard cap: 500.
         max_pages: nil,
+        # When true (default), PDF pages are fetched and their text layer is extracted and
+        # converted to Markdown alongside HTML pages. When false, PDF pages are skipped
+        # entirely (not included in results and not counted as failures).
+        parse_pdf: nil,
         # Truncate base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
         # Regex pattern. Only URLs matching this pattern will be followed and scraped.
@@ -138,6 +152,7 @@ module ContextDev
             max_age_ms: Integer,
             max_depth: Integer,
             max_pages: Integer,
+            parse_pdf: T::Boolean,
             shorten_base64_images: T::Boolean,
             url_regex: String,
             use_main_content_only: T::Boolean,
