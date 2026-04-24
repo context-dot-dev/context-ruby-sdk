@@ -9,6 +9,7 @@ module ContextDev
         max_age_ms: Integer,
         max_depth: Integer,
         max_pages: Integer,
+        parse_pdf: bool,
         :shorten_base64_images => bool,
         url_regex: String,
         use_main_content_only: bool
@@ -45,6 +46,10 @@ module ContextDev
 
       def max_pages=: (Integer) -> Integer
 
+      attr_reader parse_pdf: bool?
+
+      def parse_pdf=: (bool) -> bool
+
       attr_reader shorten_base64_images: bool?
 
       def shorten_base64_images=: (bool) -> bool
@@ -65,6 +70,7 @@ module ContextDev
         ?max_age_ms: Integer,
         ?max_depth: Integer,
         ?max_pages: Integer,
+        ?parse_pdf: bool,
         ?shorten_base64_images: bool,
         ?url_regex: String,
         ?use_main_content_only: bool,
@@ -79,6 +85,7 @@ module ContextDev
         max_age_ms: Integer,
         max_depth: Integer,
         max_pages: Integer,
+        parse_pdf: bool,
         :shorten_base64_images => bool,
         url_regex: String,
         use_main_content_only: bool,

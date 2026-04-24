@@ -32,6 +32,7 @@ module ContextDev
         ?max_age_ms: Integer,
         ?max_depth: Integer,
         ?max_pages: Integer,
+        ?parse_pdf: bool,
         ?shorten_base64_images: bool,
         ?url_regex: String,
         ?use_main_content_only: bool,
@@ -41,6 +42,7 @@ module ContextDev
       def web_scrape_html: (
         url: String,
         ?max_age_ms: Integer,
+        ?parse_pdf: bool,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeHTMLResponse
 
@@ -54,6 +56,7 @@ module ContextDev
         ?include_images: bool,
         ?include_links: bool,
         ?max_age_ms: Integer,
+        ?parse_pdf: bool,
         ?shorten_base64_images: bool,
         ?use_main_content_only: bool,
         ?request_options: ContextDev::request_opts

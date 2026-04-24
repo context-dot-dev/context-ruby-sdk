@@ -53,6 +53,14 @@ module ContextDev
       #   @return [Integer, nil]
       optional :max_pages, Integer, api_name: :maxPages
 
+      # @!attribute parse_pdf
+      #   When true (default), PDF pages are fetched and their text layer is extracted and
+      #   converted to Markdown alongside HTML pages. When false, PDF pages are skipped
+      #   entirely (not included in results and not counted as failures).
+      #
+      #   @return [Boolean, nil]
+      optional :parse_pdf, ContextDev::Internal::Type::Boolean, api_name: :parsePDF
+
       # @!attribute shorten_base64_images
       #   Truncate base64-encoded image data in the Markdown output
       #
@@ -72,7 +80,7 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :use_main_content_only, ContextDev::Internal::Type::Boolean, api_name: :useMainContentOnly
 
-      # @!method initialize(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
+      # @!method initialize(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, parse_pdf: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
@@ -89,6 +97,8 @@ module ContextDev
       #   @param max_depth [Integer] Maximum link depth from the starting URL (0 = only the starting page)
       #
       #   @param max_pages [Integer] Maximum number of pages to crawl. Hard cap: 500.
+      #
+      #   @param parse_pdf [Boolean] When true (default), PDF pages are fetched and their text layer is extracted and
       #
       #   @param shorten_base64_images [Boolean] Truncate base64-encoded image data in the Markdown output
       #
