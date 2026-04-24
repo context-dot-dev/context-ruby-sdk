@@ -33,6 +33,12 @@ module ContextDev
         #   @return [Integer]
         required :num_failed, Integer, api_name: :numFailed
 
+        # @!attribute num_skipped
+        #   Number of URLs skipped (PDFs when parsePDF=false, or URLs not matching urlRegex)
+        #
+        #   @return [Integer]
+        required :num_skipped, Integer, api_name: :numSkipped
+
         # @!attribute num_succeeded
         #   Number of pages successfully crawled
         #
@@ -45,10 +51,15 @@ module ContextDev
         #   @return [Integer]
         required :num_urls, Integer, api_name: :numUrls
 
-        # @!method initialize(max_crawl_depth:, num_failed:, num_succeeded:, num_urls:)
+        # @!method initialize(max_crawl_depth:, num_failed:, num_skipped:, num_succeeded:, num_urls:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebWebCrawlMdResponse::Metadata} for more details.
+        #
         #   @param max_crawl_depth [Integer] Maximum crawl depth reached during the crawl
         #
         #   @param num_failed [Integer] Number of pages that failed to crawl
+        #
+        #   @param num_skipped [Integer] Number of URLs skipped (PDFs when parsePDF=false, or URLs not matching urlRegex)
         #
         #   @param num_succeeded [Integer] Number of pages successfully crawled
         #

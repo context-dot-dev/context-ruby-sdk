@@ -25,6 +25,7 @@ module ContextDev
         {
           max_crawl_depth: Integer,
           num_failed: Integer,
+          num_skipped: Integer,
           num_succeeded: Integer,
           num_urls: Integer
         }
@@ -34,6 +35,8 @@ module ContextDev
 
         attr_accessor num_failed: Integer
 
+        attr_accessor num_skipped: Integer
+
         attr_accessor num_succeeded: Integer
 
         attr_accessor num_urls: Integer
@@ -41,6 +44,7 @@ module ContextDev
         def initialize: (
           max_crawl_depth: Integer,
           num_failed: Integer,
+          num_skipped: Integer,
           num_succeeded: Integer,
           num_urls: Integer
         ) -> void
@@ -48,6 +52,7 @@ module ContextDev
         def to_hash: -> {
           max_crawl_depth: Integer,
           num_failed: Integer,
+          num_skipped: Integer,
           num_succeeded: Integer,
           num_urls: Integer
         }

@@ -108,6 +108,7 @@ module ContextDev
           max_age_ms: Integer,
           max_depth: Integer,
           max_pages: Integer,
+          parse_pdf: T::Boolean,
           shorten_base64_images: T::Boolean,
           url_regex: String,
           use_main_content_only: T::Boolean,
@@ -133,6 +134,10 @@ module ContextDev
         max_depth: nil,
         # Maximum number of pages to crawl. Hard cap: 500.
         max_pages: nil,
+        # When true (default), PDF pages are fetched and their text layer is extracted and
+        # converted to Markdown alongside HTML pages. When false, PDF pages are skipped
+        # entirely (not included in results and not counted as failures).
+        parse_pdf: nil,
         # Truncate base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
         # Regex pattern. Only URLs matching this pattern will be followed and scraped.
@@ -149,6 +154,7 @@ module ContextDev
         params(
           url: String,
           max_age_ms: Integer,
+          parse_pdf: T::Boolean,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeHTMLResponse)
       end
@@ -159,6 +165,10 @@ module ContextDev
         # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
         max_age_ms: nil,
+        # When true (default), PDF URLs are fetched and their text layer is extracted and
+        # returned wrapped in <html><pdf>…</pdf></html>. When false, PDF URLs are skipped
+        # and a 400 WEBSITE_ACCESS_ERROR is returned.
+        parse_pdf: nil,
         request_options: {}
       )
       end
@@ -186,6 +196,7 @@ module ContextDev
           include_images: T::Boolean,
           include_links: T::Boolean,
           max_age_ms: Integer,
+          parse_pdf: T::Boolean,
           shorten_base64_images: T::Boolean,
           use_main_content_only: T::Boolean,
           request_options: ContextDev::RequestOptions::OrHash
@@ -203,6 +214,10 @@ module ContextDev
         # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
         max_age_ms: nil,
+        # When true (default), PDF URLs are fetched and their text layer is extracted and
+        # converted to Markdown. When false, PDF URLs are skipped and a 400
+        # WEBSITE_ACCESS_ERROR is returned.
+        parse_pdf: nil,
         # Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
         # Extract only the main content of the page, excluding headers, footers, sidebars,
