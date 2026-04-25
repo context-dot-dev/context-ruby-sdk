@@ -21,6 +21,8 @@ module ContextDev
 
   class IndustryRetrieveNaicsParams = ContextDev::Models::IndustryRetrieveNaicsParams
 
+  class IndustryRetrieveSicParams = ContextDev::Models::IndustryRetrieveSicParams
+
   class UtilityPrefetchByEmailParams = ContextDev::Models::UtilityPrefetchByEmailParams
 
   class UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams

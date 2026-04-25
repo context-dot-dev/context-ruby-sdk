@@ -9,6 +9,15 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::IndustryRetrieveNaicsResponse
 
+      def retrieve_sic: (
+        input: String,
+        ?max_results: Integer,
+        ?min_results: Integer,
+        ?timeout_ms: Integer,
+        ?type: ContextDev::Models::IndustryRetrieveSicParams::type_,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::IndustryRetrieveSicResponse
+
       def initialize: (client: ContextDev::Client) -> void
     end
   end
