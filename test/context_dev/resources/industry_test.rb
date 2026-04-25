@@ -21,4 +21,24 @@ class ContextDev::Test::Resources::IndustryTest < ContextDev::Test::ResourceTest
       }
     end
   end
+
+  def test_retrieve_sic_required_params
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.industry.retrieve_sic(input: "input")
+
+    assert_pattern do
+      response => ContextDev::Models::IndustryRetrieveSicResponse
+    end
+
+    assert_pattern do
+      response => {
+        classification: ContextDev::Models::IndustryRetrieveSicResponse::Classification | nil,
+        codes: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::IndustryRetrieveSicResponse::Code]) | nil,
+        domain: String | nil,
+        status: String | nil,
+        type: String | nil
+      }
+    end
+  end
 end

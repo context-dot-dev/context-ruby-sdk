@@ -1,0 +1,125 @@
+module ContextDev
+  module Models
+    type industry_retrieve_sic_response =
+      {
+        classification: ContextDev::Models::IndustryRetrieveSicResponse::classification,
+        codes: ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code],
+        domain: String,
+        status: String,
+        type: String
+      }
+
+    class IndustryRetrieveSicResponse < ContextDev::Internal::Type::BaseModel
+      attr_reader classification: ContextDev::Models::IndustryRetrieveSicResponse::classification?
+
+      def classification=: (
+        ContextDev::Models::IndustryRetrieveSicResponse::classification
+      ) -> ContextDev::Models::IndustryRetrieveSicResponse::classification
+
+      attr_reader codes: ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code]?
+
+      def codes=: (
+        ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code]
+      ) -> ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code]
+
+      attr_reader domain: String?
+
+      def domain=: (String) -> String
+
+      attr_reader status: String?
+
+      def status=: (String) -> String
+
+      attr_reader type: String?
+
+      def type=: (String) -> String
+
+      def initialize: (
+        ?classification: ContextDev::Models::IndustryRetrieveSicResponse::classification,
+        ?codes: ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code],
+        ?domain: String,
+        ?status: String,
+        ?type: String
+      ) -> void
+
+      def to_hash: -> {
+        classification: ContextDev::Models::IndustryRetrieveSicResponse::classification,
+        codes: ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code],
+        domain: String,
+        status: String,
+        type: String
+      }
+
+      type classification = :original_sic | :latest_sec
+
+      module Classification
+        extend ContextDev::Internal::Type::Enum
+
+        ORIGINAL_SIC: :original_sic
+        LATEST_SEC: :latest_sec
+
+        def self?.values: -> ::Array[ContextDev::Models::IndustryRetrieveSicResponse::classification]
+      end
+
+      type code =
+        {
+          code: String,
+          confidence: ContextDev::Models::IndustryRetrieveSicResponse::Code::confidence,
+          name: String,
+          major_group: String,
+          major_group_name: String,
+          office: String
+        }
+
+      class Code < ContextDev::Internal::Type::BaseModel
+        attr_accessor code: String
+
+        attr_accessor confidence: ContextDev::Models::IndustryRetrieveSicResponse::Code::confidence
+
+        attr_accessor name: String
+
+        attr_reader major_group: String?
+
+        def major_group=: (String) -> String
+
+        attr_reader major_group_name: String?
+
+        def major_group_name=: (String) -> String
+
+        attr_reader office: String?
+
+        def office=: (String) -> String
+
+        def initialize: (
+          code: String,
+          confidence: ContextDev::Models::IndustryRetrieveSicResponse::Code::confidence,
+          name: String,
+          ?major_group: String,
+          ?major_group_name: String,
+          ?office: String
+        ) -> void
+
+        def to_hash: -> {
+          code: String,
+          confidence: ContextDev::Models::IndustryRetrieveSicResponse::Code::confidence,
+          name: String,
+          major_group: String,
+          major_group_name: String,
+          office: String
+        }
+
+        type confidence = :high | :medium | :low
+
+        module Confidence
+          extend ContextDev::Internal::Type::Enum
+
+          HIGH: :high
+          MEDIUM: :medium
+          LOW: :low
+
+          def self?.values: -> ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code::confidence]
+        end
+      end
+    end
+  end
+end
