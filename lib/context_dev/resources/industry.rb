@@ -39,6 +39,46 @@ module ContextDev
         )
       end
 
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::IndustryRetrieveSicParams} for more details.
+      #
+      # Classify any brand into Standard Industrial Classification (SIC) codes from its
+      # domain or name. Choose between the original 1987 SIC system (`original_sic`) or
+      # the latest SIC list maintained by the SEC (`latest_sec`).
+      #
+      # @overload retrieve_sic(input:, max_results: nil, min_results: nil, timeout_ms: nil, type: nil, request_options: {})
+      #
+      # @param input [String] Brand domain or title to retrieve SIC code for. If a valid domain is provided, i
+      #
+      # @param max_results [Integer] Maximum number of SIC codes to return. Must be between 1 and 10. Defaults to 5.
+      #
+      # @param min_results [Integer] Minimum number of SIC codes to return. Must be at least 1. Defaults to 1.
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #
+      # @param type [Symbol, ContextDev::Models::IndustryRetrieveSicParams::Type] Which SIC dataset to classify against. `original_sic` uses the 1987 Standard Ind
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::IndustryRetrieveSicResponse]
+      #
+      # @see ContextDev::Models::IndustryRetrieveSicParams
+      def retrieve_sic(params)
+        parsed, options = ContextDev::IndustryRetrieveSicParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "web/sic",
+          query: query.transform_keys(
+            max_results: "maxResults",
+            min_results: "minResults",
+            timeout_ms: "timeoutMS"
+          ),
+          model: ContextDev::Models::IndustryRetrieveSicResponse,
+          options: options
+        )
+      end
+
       # @api private
       #
       # @param client [ContextDev::Client]
