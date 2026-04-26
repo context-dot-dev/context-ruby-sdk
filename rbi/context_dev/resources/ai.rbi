@@ -31,9 +31,8 @@ module ContextDev
       )
       end
 
-      # Beta feature: Given a single URL, determines if it is a product detail page,
-      # classifies the platform/product type, and extracts the product information.
-      # Supports Amazon, TikTok Shop, Etsy, and generic ecommerce sites.
+      # Given a single URL, determines if it is a product page and extracts the product
+      # information.
       sig do
         params(
           url: String,
@@ -51,9 +50,9 @@ module ContextDev
       )
       end
 
-      # Beta feature: Extract product information from a brand's website. We will
-      # analyze the website and return a list of products with details such as name,
-      # description, image, pricing, features, and more.
+      # Extract product information from a brand's website. We will analyze the website
+      # and return a list of products with details such as name, description, image,
+      # pricing, features, and more.
       sig do
         params(
           body:
