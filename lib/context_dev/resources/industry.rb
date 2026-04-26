@@ -43,8 +43,8 @@ module ContextDev
       # {ContextDev::Models::IndustryRetrieveSicParams} for more details.
       #
       # Classify any brand into Standard Industrial Classification (SIC) codes from its
-      # domain or name. Choose between the original 1987 SIC system (`original_sic`) or
-      # the latest SIC list maintained by the SEC (`latest_sec`).
+      # domain or name. Choose between the original SIC system (`original_sic`) or the
+      # latest SIC list maintained by the SEC (`latest_sec`).
       #
       # @overload retrieve_sic(input:, max_results: nil, min_results: nil, timeout_ms: nil, type: nil, request_options: {})
       #
