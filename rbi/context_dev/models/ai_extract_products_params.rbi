@@ -76,6 +76,15 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :domain
 
+          # Return a cached result if a prior scrape for the same parameters exists and is
+          # younger than this many milliseconds. Defaults to 7 days (604800000 ms) when
+          # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+          sig { returns(T.nilable(Integer)) }
+          attr_reader :max_age_ms
+
+          sig { params(max_age_ms: Integer).void }
+          attr_writer :max_age_ms
+
           # Maximum number of products to extract.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_products
@@ -94,6 +103,7 @@ module ContextDev
           sig do
             params(
               domain: String,
+              max_age_ms: Integer,
               max_products: Integer,
               timeout_ms: Integer
             ).returns(T.attached_class)
@@ -101,6 +111,10 @@ module ContextDev
           def self.new(
             # The domain name to analyze.
             domain:,
+            # Return a cached result if a prior scrape for the same parameters exists and is
+            # younger than this many milliseconds. Defaults to 7 days (604800000 ms) when
+            # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+            max_age_ms: nil,
             # Maximum number of products to extract.
             max_products: nil,
             # Optional timeout in milliseconds for the request. Maximum allowed value is
@@ -111,7 +125,12 @@ module ContextDev
 
           sig do
             override.returns(
-              { domain: String, max_products: Integer, timeout_ms: Integer }
+              {
+                domain: String,
+                max_age_ms: Integer,
+                max_products: Integer,
+                timeout_ms: Integer
+              }
             )
           end
           def to_hash
@@ -132,6 +151,15 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :direct_url
 
+          # Return a cached result if a prior scrape for the same parameters exists and is
+          # younger than this many milliseconds. Defaults to 7 days (604800000 ms) when
+          # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+          sig { returns(T.nilable(Integer)) }
+          attr_reader :max_age_ms
+
+          sig { params(max_age_ms: Integer).void }
+          attr_writer :max_age_ms
+
           # Maximum number of products to extract.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_products
@@ -150,6 +178,7 @@ module ContextDev
           sig do
             params(
               direct_url: String,
+              max_age_ms: Integer,
               max_products: Integer,
               timeout_ms: Integer
             ).returns(T.attached_class)
@@ -158,6 +187,10 @@ module ContextDev
             # A specific URL to use directly as the starting point for extraction without
             # domain resolution.
             direct_url:,
+            # Return a cached result if a prior scrape for the same parameters exists and is
+            # younger than this many milliseconds. Defaults to 7 days (604800000 ms) when
+            # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+            max_age_ms: nil,
             # Maximum number of products to extract.
             max_products: nil,
             # Optional timeout in milliseconds for the request. Maximum allowed value is
@@ -168,7 +201,12 @@ module ContextDev
 
           sig do
             override.returns(
-              { direct_url: String, max_products: Integer, timeout_ms: Integer }
+              {
+                direct_url: String,
+                max_age_ms: Integer,
+                max_products: Integer,
+                timeout_ms: Integer
+              }
             )
           end
           def to_hash
