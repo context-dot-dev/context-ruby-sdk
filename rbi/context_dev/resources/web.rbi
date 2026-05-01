@@ -103,6 +103,7 @@ module ContextDev
         params(
           url: String,
           follow_subdomains: T::Boolean,
+          include_frames: T::Boolean,
           include_images: T::Boolean,
           include_links: T::Boolean,
           max_age_ms: Integer,
@@ -122,6 +123,9 @@ module ContextDev
         # docs.example.com when starting from example.com). www and apex are always
         # treated as equivalent.
         follow_subdomains: nil,
+        # When true, the contents of iframes are rendered to Markdown for each crawled
+        # page.
+        include_frames: nil,
         # Include image references in the Markdown output
         include_images: nil,
         # Preserve hyperlinks in the Markdown output
@@ -153,6 +157,7 @@ module ContextDev
       sig do
         params(
           url: String,
+          include_frames: T::Boolean,
           max_age_ms: Integer,
           parse_pdf: T::Boolean,
           request_options: ContextDev::RequestOptions::OrHash
@@ -161,6 +166,8 @@ module ContextDev
       def web_scrape_html(
         # Full URL to scrape (must include http:// or https:// protocol)
         url:,
+        # When true, iframes are rendered inline into the returned HTML.
+        include_frames: nil,
         # Return a cached result if a prior scrape for the same parameters exists and is
         # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
@@ -193,6 +200,7 @@ module ContextDev
       sig do
         params(
           url: String,
+          include_frames: T::Boolean,
           include_images: T::Boolean,
           include_links: T::Boolean,
           max_age_ms: Integer,
@@ -206,6 +214,8 @@ module ContextDev
         # Full URL to scrape into LLM usable Markdown (must include http:// or https://
         # protocol)
         url:,
+        # When true, the contents of iframes are rendered to Markdown.
+        include_frames: nil,
         # Include image references in Markdown output
         include_images: nil,
         # Preserve hyperlinks in Markdown output

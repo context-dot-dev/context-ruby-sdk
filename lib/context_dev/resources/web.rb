@@ -105,11 +105,13 @@ module ContextDev
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
       # and returns results for all crawled pages.
       #
-      # @overload web_crawl_md(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, parse_pdf: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
+      # @overload web_crawl_md(url:, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, parse_pdf: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
       #
       # @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
       #
       # @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
+      #
+      # @param include_frames [Boolean] When true, the contents of iframes are rendered to Markdown for each crawled pag
       #
       # @param include_images [Boolean] Include image references in the Markdown output
       #
@@ -150,9 +152,11 @@ module ContextDev
       #
       # Scrapes the given URL and returns the raw HTML content of the page.
       #
-      # @overload web_scrape_html(url:, max_age_ms: nil, parse_pdf: nil, request_options: {})
+      # @overload web_scrape_html(url:, include_frames: nil, max_age_ms: nil, parse_pdf: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
+      #
+      # @param include_frames [Boolean] When true, iframes are rendered inline into the returned HTML.
       #
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
@@ -169,7 +173,11 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/html",
-          query: query.transform_keys(max_age_ms: "maxAgeMs", parse_pdf: "parsePDF"),
+          query: query.transform_keys(
+            include_frames: "includeFrames",
+            max_age_ms: "maxAgeMs",
+            parse_pdf: "parsePDF"
+          ),
           model: ContextDev::Models::WebWebScrapeHTMLResponse,
           options: options
         )
@@ -205,9 +213,11 @@ module ContextDev
       #
       # Scrapes the given URL into LLM usable Markdown.
       #
-      # @overload web_scrape_md(url:, include_images: nil, include_links: nil, max_age_ms: nil, parse_pdf: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
+      # @overload web_scrape_md(url:, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, parse_pdf: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
+      #
+      # @param include_frames [Boolean] When true, the contents of iframes are rendered to Markdown.
       #
       # @param include_images [Boolean] Include image references in Markdown output
       #
@@ -233,6 +243,7 @@ module ContextDev
           method: :get,
           path: "web/scrape/markdown",
           query: query.transform_keys(
+            include_frames: "includeFrames",
             include_images: "includeImages",
             include_links: "includeLinks",
             max_age_ms: "maxAgeMs",
