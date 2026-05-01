@@ -27,6 +27,7 @@ module ContextDev
       def web_crawl_md: (
         url: String,
         ?follow_subdomains: bool,
+        ?include_frames: bool,
         ?include_images: bool,
         ?include_links: bool,
         ?max_age_ms: Integer,
@@ -41,6 +42,7 @@ module ContextDev
 
       def web_scrape_html: (
         url: String,
+        ?include_frames: bool,
         ?max_age_ms: Integer,
         ?parse_pdf: bool,
         ?request_options: ContextDev::request_opts
@@ -53,6 +55,7 @@ module ContextDev
 
       def web_scrape_md: (
         url: String,
+        ?include_frames: bool,
         ?include_images: bool,
         ?include_links: bool,
         ?max_age_ms: Integer,
