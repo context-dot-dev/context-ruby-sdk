@@ -39,13 +39,14 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::AIExtractProductParams} for more details.
       #
-      # Beta feature: Given a single URL, determines if it is a product detail page,
-      # classifies the platform/product type, and extracts the product information.
-      # Supports Amazon, TikTok Shop, Etsy, and generic ecommerce sites.
+      # Given a single URL, determines if it is a product page and extracts the product
+      # information.
       #
-      # @overload extract_product(url:, timeout_ms: nil, request_options: {})
+      # @overload extract_product(url:, max_age_ms: nil, timeout_ms: nil, request_options: {})
       #
       # @param url [String] The product page URL to extract product data from.
+      #
+      # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. Maximum allowed value is 30000
       #
@@ -65,9 +66,9 @@ module ContextDev
         )
       end
 
-      # Beta feature: Extract product information from a brand's website. We will
-      # analyze the website and return a list of products with details such as name,
-      # description, image, pricing, features, and more.
+      # Extract product information from a brand's website. We will analyze the website
+      # and return a list of products with details such as name, description, image,
+      # pricing, features, and more.
       #
       # @overload extract_products(body:, request_options: {})
       #

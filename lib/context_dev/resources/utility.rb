@@ -7,9 +7,7 @@ module ContextDev
       # {ContextDev::Models::UtilityPrefetchParams} for more details.
       #
       # Signal that you may fetch brand data for a particular domain soon to improve
-      # latency. This endpoint does not charge credits and is available for paid
-      # customers to optimize future requests. [You must be on a paid plan to use this
-      # endpoint]
+      # latency.
       #
       # @overload prefetch(domain:, timeout_ms: nil, request_options: {})
       #
@@ -39,9 +37,7 @@ module ContextDev
       # Signal that you may fetch brand data for a particular domain soon to improve
       # latency. This endpoint accepts an email address, extracts the domain from it,
       # validates that it's not a disposable or free email provider, and queues the
-      # domain for prefetching. This endpoint does not charge credits and is available
-      # for paid customers to optimize future requests. [You must be on a paid plan to
-      # use this endpoint]
+      # domain for prefetching.
       #
       # @overload prefetch_by_email(email:, timeout_ms: nil, request_options: {})
       #

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.10.0 (2026-05-01)
+
+Full Changelog: [v1.9.0...v1.10.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.9.0...v1.10.0)
+
+### Features
+
+* **api:** api update ([c74cbf3](https://github.com/context-dot-dev/context-ruby-sdk/commit/c74cbf354e15c2b56680b4248ed69462a1a84d23))
+* **api:** api update ([cc57672](https://github.com/context-dot-dev/context-ruby-sdk/commit/cc576729ce6c522ee578e7dc5f99122463014515))
+* support setting headers via env ([e625fee](https://github.com/context-dot-dev/context-ruby-sdk/commit/e625fee97a6d4f6ab25f69447b33521cac6a896c))
+
 ## 1.9.0 (2026-04-25)
 
 Full Changelog: [v1.8.0...v1.9.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.8.0...v1.9.0)
