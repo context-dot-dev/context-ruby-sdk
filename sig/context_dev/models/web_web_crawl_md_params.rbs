@@ -4,6 +4,7 @@ module ContextDev
       {
         url: String,
         follow_subdomains: bool,
+        include_frames: bool,
         include_images: bool,
         include_links: bool,
         max_age_ms: Integer,
@@ -25,6 +26,10 @@ module ContextDev
       attr_reader follow_subdomains: bool?
 
       def follow_subdomains=: (bool) -> bool
+
+      attr_reader include_frames: bool?
+
+      def include_frames=: (bool) -> bool
 
       attr_reader include_images: bool?
 
@@ -65,6 +70,7 @@ module ContextDev
       def initialize: (
         url: String,
         ?follow_subdomains: bool,
+        ?include_frames: bool,
         ?include_images: bool,
         ?include_links: bool,
         ?max_age_ms: Integer,
@@ -80,6 +86,7 @@ module ContextDev
       def to_hash: -> {
         url: String,
         follow_subdomains: bool,
+        include_frames: bool,
         include_images: bool,
         include_links: bool,
         max_age_ms: Integer,

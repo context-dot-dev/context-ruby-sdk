@@ -21,6 +21,13 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :follow_subdomains, ContextDev::Internal::Type::Boolean, api_name: :followSubdomains
 
+      # @!attribute include_frames
+      #   When true, the contents of iframes are rendered to Markdown for each crawled
+      #   page.
+      #
+      #   @return [Boolean, nil]
+      optional :include_frames, ContextDev::Internal::Type::Boolean, api_name: :includeFrames
+
       # @!attribute include_images
       #   Include image references in the Markdown output
       #
@@ -80,13 +87,15 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :use_main_content_only, ContextDev::Internal::Type::Boolean, api_name: :useMainContentOnly
 
-      # @!method initialize(url:, follow_subdomains: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, parse_pdf: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
+      # @!method initialize(url:, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, parse_pdf: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
       #   @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
       #
       #   @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
+      #
+      #   @param include_frames [Boolean] When true, the contents of iframes are rendered to Markdown for each crawled pag
       #
       #   @param include_images [Boolean] Include image references in the Markdown output
       #

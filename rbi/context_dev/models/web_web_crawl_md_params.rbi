@@ -24,6 +24,14 @@ module ContextDev
       sig { params(follow_subdomains: T::Boolean).void }
       attr_writer :follow_subdomains
 
+      # When true, the contents of iframes are rendered to Markdown for each crawled
+      # page.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :include_frames
+
+      sig { params(include_frames: T::Boolean).void }
+      attr_writer :include_frames
+
       # Include image references in the Markdown output
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :include_images
@@ -96,6 +104,7 @@ module ContextDev
         params(
           url: String,
           follow_subdomains: T::Boolean,
+          include_frames: T::Boolean,
           include_images: T::Boolean,
           include_links: T::Boolean,
           max_age_ms: Integer,
@@ -115,6 +124,9 @@ module ContextDev
         # docs.example.com when starting from example.com). www and apex are always
         # treated as equivalent.
         follow_subdomains: nil,
+        # When true, the contents of iframes are rendered to Markdown for each crawled
+        # page.
+        include_frames: nil,
         # Include image references in the Markdown output
         include_images: nil,
         # Preserve hyperlinks in the Markdown output
@@ -147,6 +159,7 @@ module ContextDev
           {
             url: String,
             follow_subdomains: T::Boolean,
+            include_frames: T::Boolean,
             include_images: T::Boolean,
             include_links: T::Boolean,
             max_age_ms: Integer,
