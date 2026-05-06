@@ -1,7 +1,12 @@
 module ContextDev
   module Models
     type web_web_scrape_images_params =
-      { url: String } & ContextDev::Internal::Type::request_parameters
+      {
+        url: String,
+        enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
+        max_age_ms: Integer
+      }
+      & ContextDev::Internal::Type::request_parameters
 
     class WebWebScrapeImagesParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
@@ -9,15 +14,69 @@ module ContextDev
 
       attr_accessor url: String
 
+      attr_reader enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment?
+
+      def enrichment=: (
+        ContextDev::WebWebScrapeImagesParams::Enrichment
+      ) -> ContextDev::WebWebScrapeImagesParams::Enrichment
+
+      attr_reader max_age_ms: Integer?
+
+      def max_age_ms=: (Integer) -> Integer
+
       def initialize: (
         url: String,
+        ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
+        ?max_age_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> void
 
       def to_hash: -> {
         url: String,
+        enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
+        max_age_ms: Integer,
         request_options: ContextDev::RequestOptions
       }
+
+      type enrichment =
+        {
+          classification: bool,
+          hosted_url: bool,
+          max_time_per_ms: Integer,
+          resolution: bool
+        }
+
+      class Enrichment < ContextDev::Internal::Type::BaseModel
+        attr_reader classification: bool?
+
+        def classification=: (bool) -> bool
+
+        attr_reader hosted_url: bool?
+
+        def hosted_url=: (bool) -> bool
+
+        attr_reader max_time_per_ms: Integer?
+
+        def max_time_per_ms=: (Integer) -> Integer
+
+        attr_reader resolution: bool?
+
+        def resolution=: (bool) -> bool
+
+        def initialize: (
+          ?classification: bool,
+          ?hosted_url: bool,
+          ?max_time_per_ms: Integer,
+          ?resolution: bool
+        ) -> void
+
+        def to_hash: -> {
+          classification: bool,
+          hosted_url: bool,
+          max_time_per_ms: Integer,
+          resolution: bool
+        }
+      end
     end
   end
 end
