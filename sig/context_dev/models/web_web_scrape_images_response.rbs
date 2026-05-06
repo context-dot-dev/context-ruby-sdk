@@ -31,7 +31,8 @@ module ContextDev
           alt: String?,
           element: ContextDev::Models::WebWebScrapeImagesResponse::Image::element,
           src: String,
-          type: ContextDev::Models::WebWebScrapeImagesResponse::Image::type_
+          type: ContextDev::Models::WebWebScrapeImagesResponse::Image::type_,
+          enrichment: ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment
         }
 
       class Image < ContextDev::Internal::Type::BaseModel
@@ -43,18 +44,26 @@ module ContextDev
 
         attr_accessor type: ContextDev::Models::WebWebScrapeImagesResponse::Image::type_
 
+        attr_reader enrichment: ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment?
+
+        def enrichment=: (
+          ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment
+        ) -> ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment
+
         def initialize: (
           alt: String?,
           element: ContextDev::Models::WebWebScrapeImagesResponse::Image::element,
           src: String,
-          type: ContextDev::Models::WebWebScrapeImagesResponse::Image::type_
+          type: ContextDev::Models::WebWebScrapeImagesResponse::Image::type_,
+          ?enrichment: ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment
         ) -> void
 
         def to_hash: -> {
           alt: String?,
           element: ContextDev::Models::WebWebScrapeImagesResponse::Image::element,
           src: String,
-          type: ContextDev::Models::WebWebScrapeImagesResponse::Image::type_
+          type: ContextDev::Models::WebWebScrapeImagesResponse::Image::type_,
+          enrichment: ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment
         }
 
         type element =
@@ -94,6 +103,80 @@ module ContextDev
           BASE64: :base64
 
           def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image::type_]
+        end
+
+        type enrichment =
+          {
+            height: Integer,
+            mimetype: String,
+            type: ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment::type_,
+            url: String,
+            width: Integer
+          }
+
+        class Enrichment < ContextDev::Internal::Type::BaseModel
+          attr_reader height: Integer?
+
+          def height=: (Integer) -> Integer
+
+          attr_reader mimetype: String?
+
+          def mimetype=: (String) -> String
+
+          attr_reader type: ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment::type_?
+
+          def type=: (
+            ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment::type_
+          ) -> ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment::type_
+
+          attr_reader url: String?
+
+          def url=: (String) -> String
+
+          attr_reader width: Integer?
+
+          def width=: (Integer) -> Integer
+
+          def initialize: (
+            ?height: Integer,
+            ?mimetype: String,
+            ?type: ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment::type_,
+            ?url: String,
+            ?width: Integer
+          ) -> void
+
+          def to_hash: -> {
+            height: Integer,
+            mimetype: String,
+            type: ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment::type_,
+            url: String,
+            width: Integer
+          }
+
+          type type_ =
+            :photography
+            | :illustration
+            | :logo
+            | :wordmark
+            | :icon
+            | :pattern
+            | :graphic
+            | :other
+
+          module Type
+            extend ContextDev::Internal::Type::Enum
+
+            PHOTOGRAPHY: :photography
+            ILLUSTRATION: :illustration
+            LOGO: :logo
+            WORDMARK: :wordmark
+            ICON: :icon
+            PATTERN: :pattern
+            GRAPHIC: :graphic
+            OTHER: :other
+
+            def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image::Enrichment::type_]
+          end
         end
       end
 
