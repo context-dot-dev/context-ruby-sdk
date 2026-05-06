@@ -50,6 +50,8 @@ module ContextDev
 
       def web_scrape_images: (
         url: String,
+        ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
+        ?max_age_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeImagesResponse
 
