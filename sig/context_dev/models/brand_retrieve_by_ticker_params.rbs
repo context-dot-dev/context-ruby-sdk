@@ -4,6 +4,7 @@ module ContextDev
       {
         ticker: String,
         force_language: ContextDev::Models::BrandRetrieveByTickerParams::force_language,
+        max_age_ms: Integer,
         max_speed: bool,
         ticker_exchange: ContextDev::Models::BrandRetrieveByTickerParams::ticker_exchange,
         timeout_ms: Integer
@@ -22,6 +23,10 @@ module ContextDev
         ContextDev::Models::BrandRetrieveByTickerParams::force_language
       ) -> ContextDev::Models::BrandRetrieveByTickerParams::force_language
 
+      attr_reader max_age_ms: Integer?
+
+      def max_age_ms=: (Integer) -> Integer
+
       attr_reader max_speed: bool?
 
       def max_speed=: (bool) -> bool
@@ -39,6 +44,7 @@ module ContextDev
       def initialize: (
         ticker: String,
         ?force_language: ContextDev::Models::BrandRetrieveByTickerParams::force_language,
+        ?max_age_ms: Integer,
         ?max_speed: bool,
         ?ticker_exchange: ContextDev::Models::BrandRetrieveByTickerParams::ticker_exchange,
         ?timeout_ms: Integer,
@@ -48,6 +54,7 @@ module ContextDev
       def to_hash: -> {
         ticker: String,
         force_language: ContextDev::Models::BrandRetrieveByTickerParams::force_language,
+        max_age_ms: Integer,
         max_speed: bool,
         ticker_exchange: ContextDev::Models::BrandRetrieveByTickerParams::ticker_exchange,
         timeout_ms: Integer,
