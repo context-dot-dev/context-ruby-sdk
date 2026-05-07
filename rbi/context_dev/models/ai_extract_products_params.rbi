@@ -92,8 +92,9 @@ module ContextDev
           sig { params(max_products: Integer).void }
           attr_writer :max_products
 
-          # Optional timeout in milliseconds for the request. Maximum allowed value is
-          # 300000ms (5 minutes).
+          # Optional timeout in milliseconds for the request. If the request takes longer
+          # than this value, it will be aborted with a 408 status code. Maximum allowed
+          # value is 300000ms (5 minutes).
           sig { returns(T.nilable(Integer)) }
           attr_reader :timeout_ms
 
@@ -117,8 +118,9 @@ module ContextDev
             max_age_ms: nil,
             # Maximum number of products to extract.
             max_products: nil,
-            # Optional timeout in milliseconds for the request. Maximum allowed value is
-            # 300000ms (5 minutes).
+            # Optional timeout in milliseconds for the request. If the request takes longer
+            # than this value, it will be aborted with a 408 status code. Maximum allowed
+            # value is 300000ms (5 minutes).
             timeout_ms: nil
           )
           end
@@ -167,8 +169,9 @@ module ContextDev
           sig { params(max_products: Integer).void }
           attr_writer :max_products
 
-          # Optional timeout in milliseconds for the request. Maximum allowed value is
-          # 300000ms (5 minutes).
+          # Optional timeout in milliseconds for the request. If the request takes longer
+          # than this value, it will be aborted with a 408 status code. Maximum allowed
+          # value is 300000ms (5 minutes).
           sig { returns(T.nilable(Integer)) }
           attr_reader :timeout_ms
 
@@ -193,8 +196,9 @@ module ContextDev
             max_age_ms: nil,
             # Maximum number of products to extract.
             max_products: nil,
-            # Optional timeout in milliseconds for the request. Maximum allowed value is
-            # 300000ms (5 minutes).
+            # Optional timeout in milliseconds for the request. If the request takes longer
+            # than this value, it will be aborted with a 408 status code. Maximum allowed
+            # value is 300000ms (5 minutes).
             timeout_ms: nil
           )
           end

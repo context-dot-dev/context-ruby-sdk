@@ -48,8 +48,9 @@ module ContextDev
         # younger than this many milliseconds. Defaults to 7 days (604800000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
         max_age_ms: nil,
-        # Optional timeout in milliseconds for the request. Maximum allowed value is
-        # 300000ms (5 minutes).
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
         timeout_ms: nil,
         request_options: {}
       )

@@ -48,7 +48,7 @@ module ContextDev
       #
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. Maximum allowed value is 30000
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

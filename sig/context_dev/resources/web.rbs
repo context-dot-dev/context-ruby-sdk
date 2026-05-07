@@ -22,6 +22,7 @@ module ContextDev
         ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
         ?prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
+        ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebScreenshotResponse
@@ -37,6 +38,7 @@ module ContextDev
         ?max_pages: Integer,
         ?parse_pdf: bool,
         ?shorten_base64_images: bool,
+        ?timeout_ms: Integer,
         ?url_regex: String,
         ?use_main_content_only: bool,
         ?request_options: ContextDev::request_opts
@@ -47,6 +49,7 @@ module ContextDev
         ?include_frames: bool,
         ?max_age_ms: Integer,
         ?parse_pdf: bool,
+        ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeHTMLResponse
 
@@ -54,6 +57,7 @@ module ContextDev
         url: String,
         ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
         ?max_age_ms: Integer,
+        ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeImagesResponse
 
@@ -65,6 +69,7 @@ module ContextDev
         ?max_age_ms: Integer,
         ?parse_pdf: bool,
         ?shorten_base64_images: bool,
+        ?timeout_ms: Integer,
         ?use_main_content_only: bool,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeMdResponse
@@ -72,6 +77,7 @@ module ContextDev
       def web_scrape_sitemap: (
         domain: String,
         ?max_links: Integer,
+        ?timeout_ms: Integer,
         ?url_regex: String,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeSitemapResponse

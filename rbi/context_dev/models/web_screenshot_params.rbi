@@ -86,6 +86,15 @@ module ContextDev
       end
       attr_writer :prioritize
 
+      # Optional timeout in milliseconds for the request. If the request takes longer
+      # than this value, it will be aborted with a 408 status code. Maximum allowed
+      # value is 300000ms (5 minutes).
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :timeout_ms
+
+      sig { params(timeout_ms: Integer).void }
+      attr_writer :timeout_ms
+
       # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       sig { returns(T.nilable(ContextDev::WebScreenshotParams::Viewport)) }
       attr_reader :viewport
@@ -104,6 +113,7 @@ module ContextDev
           max_age_ms: Integer,
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           prioritize: ContextDev::WebScreenshotParams::Prioritize::OrSymbol,
+          timeout_ms: Integer,
           viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
@@ -135,6 +145,10 @@ module ContextDev
         # faster capture with basic quality. If 'quality', optimizes for higher quality
         # with longer wait times. Defaults to 'quality' if not provided.
         prioritize: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
         # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
         viewport: nil,
         request_options: {}
@@ -151,6 +165,7 @@ module ContextDev
             max_age_ms: Integer,
             page: ContextDev::WebScreenshotParams::Page::OrSymbol,
             prioritize: ContextDev::WebScreenshotParams::Prioritize::OrSymbol,
+            timeout_ms: Integer,
             viewport: ContextDev::WebScreenshotParams::Viewport,
             request_options: ContextDev::RequestOptions
           }
