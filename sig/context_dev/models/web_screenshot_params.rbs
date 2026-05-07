@@ -5,8 +5,10 @@ module ContextDev
         direct_url: String,
         domain: String,
         full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
+        max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
-        prioritize: ContextDev::Models::WebScreenshotParams::prioritize
+        prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
+        viewport: ContextDev::WebScreenshotParams::Viewport
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -28,6 +30,10 @@ module ContextDev
         ContextDev::Models::WebScreenshotParams::full_screenshot
       ) -> ContextDev::Models::WebScreenshotParams::full_screenshot
 
+      attr_reader max_age_ms: Integer?
+
+      def max_age_ms=: (Integer) -> Integer
+
       attr_reader page: ContextDev::Models::WebScreenshotParams::page?
 
       def page=: (
@@ -40,12 +46,20 @@ module ContextDev
         ContextDev::Models::WebScreenshotParams::prioritize
       ) -> ContextDev::Models::WebScreenshotParams::prioritize
 
+      attr_reader viewport: ContextDev::WebScreenshotParams::Viewport?
+
+      def viewport=: (
+        ContextDev::WebScreenshotParams::Viewport
+      ) -> ContextDev::WebScreenshotParams::Viewport
+
       def initialize: (
         ?direct_url: String,
         ?domain: String,
         ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
+        ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
         ?prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
+        ?viewport: ContextDev::WebScreenshotParams::Viewport,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -53,8 +67,10 @@ module ContextDev
         direct_url: String,
         domain: String,
         full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
+        max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
         prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
+        viewport: ContextDev::WebScreenshotParams::Viewport,
         request_options: ContextDev::RequestOptions
       }
 
@@ -103,6 +119,22 @@ module ContextDev
         QUALITY: :quality
 
         def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::prioritize]
+      end
+
+      type viewport = { height: Integer, width: Integer }
+
+      class Viewport < ContextDev::Internal::Type::BaseModel
+        attr_reader height: Integer?
+
+        def height=: (Integer) -> Integer
+
+        attr_reader width: Integer?
+
+        def width=: (Integer) -> Integer
+
+        def initialize: (?height: Integer, ?width: Integer) -> void
+
+        def to_hash: -> { height: Integer, width: Integer }
       end
     end
   end

@@ -16,6 +16,12 @@ module ContextDev
       #   @return [String, nil]
       optional :domain, String
 
+      # @!attribute height
+      #   Height in pixels of the returned screenshot image
+      #
+      #   @return [Integer, nil]
+      optional :height, Integer
+
       # @!attribute screenshot
       #   Public URL of the uploaded screenshot image
       #
@@ -36,16 +42,26 @@ module ContextDev
       #   @return [String, nil]
       optional :status, String
 
-      # @!method initialize(code: nil, domain: nil, screenshot: nil, screenshot_type: nil, status: nil)
+      # @!attribute width
+      #   Width in pixels of the returned screenshot image
+      #
+      #   @return [Integer, nil]
+      optional :width, Integer
+
+      # @!method initialize(code: nil, domain: nil, height: nil, screenshot: nil, screenshot_type: nil, status: nil, width: nil)
       #   @param code [Integer] HTTP status code
       #
       #   @param domain [String] The normalized domain that was processed
+      #
+      #   @param height [Integer] Height in pixels of the returned screenshot image
       #
       #   @param screenshot [String] Public URL of the uploaded screenshot image
       #
       #   @param screenshot_type [Symbol, ContextDev::Models::WebScreenshotResponse::ScreenshotType] Type of screenshot that was captured
       #
       #   @param status [String] Status of the response, e.g., 'ok'
+      #
+      #   @param width [Integer] Width in pixels of the returned screenshot image
 
       # Type of screenshot that was captured
       #

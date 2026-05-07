@@ -31,6 +31,14 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot, nil]
       optional :full_screenshot, enum: -> { ContextDev::WebScreenshotParams::FullScreenshot }
 
+      # @!attribute max_age_ms
+      #   Return a cached screenshot if a prior screenshot for the same parameters exists
+      #   and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+      #   omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
+      #
+      #   @return [Integer, nil]
+      optional :max_age_ms, Integer
+
       # @!attribute page
       #   Optional parameter to specify which page type to screenshot. If provided, the
       #   system will scrape the domain's links and use heuristics to find the most
@@ -49,7 +57,13 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebScreenshotParams::Prioritize, nil]
       optional :prioritize, enum: -> { ContextDev::WebScreenshotParams::Prioritize }
 
-      # @!method initialize(direct_url: nil, domain: nil, full_screenshot: nil, page: nil, prioritize: nil, request_options: {})
+      # @!attribute viewport
+      #   Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
+      #
+      #   @return [ContextDev::Models::WebScreenshotParams::Viewport, nil]
+      optional :viewport, -> { ContextDev::WebScreenshotParams::Viewport }
+
+      # @!method initialize(direct_url: nil, domain: nil, full_screenshot: nil, max_age_ms: nil, page: nil, prioritize: nil, viewport: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScreenshotParams} for more details.
       #
@@ -59,9 +73,13 @@ module ContextDev
       #
       #   @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
+      #   @param max_age_ms [Integer] Return a cached screenshot if a prior screenshot for the same parameters exists
+      #
       #   @param page [Symbol, ContextDev::Models::WebScreenshotParams::Page] Optional parameter to specify which page type to screenshot. If provided, the sy
       #
       #   @param prioritize [Symbol, ContextDev::Models::WebScreenshotParams::Prioritize] Optional parameter to prioritize screenshot capture. If 'speed', optimizes for f
+      #
+      #   @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -110,6 +128,27 @@ module ContextDev
 
         # @!method self.values
         #   @return [Array<Symbol>]
+      end
+
+      class Viewport < ContextDev::Internal::Type::BaseModel
+        # @!attribute height
+        #   Viewport height in pixels.
+        #
+        #   @return [Integer, nil]
+        optional :height, Integer
+
+        # @!attribute width
+        #   Viewport width in pixels.
+        #
+        #   @return [Integer, nil]
+        optional :width, Integer
+
+        # @!method initialize(height: nil, width: nil)
+        #   Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
+        #
+        #   @param height [Integer] Viewport height in pixels.
+        #
+        #   @param width [Integer] Viewport width in pixels.
       end
     end
   end
