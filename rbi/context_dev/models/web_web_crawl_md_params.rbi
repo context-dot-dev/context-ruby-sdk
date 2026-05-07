@@ -85,6 +85,15 @@ module ContextDev
       sig { params(shorten_base64_images: T::Boolean).void }
       attr_writer :shorten_base64_images
 
+      # Optional timeout in milliseconds for the request. If the request takes longer
+      # than this value, it will be aborted with a 408 status code. Maximum allowed
+      # value is 300000ms (5 minutes).
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :timeout_ms
+
+      sig { params(timeout_ms: Integer).void }
+      attr_writer :timeout_ms
+
       # Regex pattern. Only URLs matching this pattern will be followed and scraped.
       sig { returns(T.nilable(String)) }
       attr_reader :url_regex
@@ -112,6 +121,7 @@ module ContextDev
           max_pages: Integer,
           parse_pdf: T::Boolean,
           shorten_base64_images: T::Boolean,
+          timeout_ms: Integer,
           url_regex: String,
           use_main_content_only: T::Boolean,
           request_options: ContextDev::RequestOptions::OrHash
@@ -145,6 +155,10 @@ module ContextDev
         parse_pdf: nil,
         # Truncate base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
         # Regex pattern. Only URLs matching this pattern will be followed and scraped.
         url_regex: nil,
         # Extract only the main content, stripping headers, footers, sidebars, and
@@ -167,6 +181,7 @@ module ContextDev
             max_pages: Integer,
             parse_pdf: T::Boolean,
             shorten_base64_images: T::Boolean,
+            timeout_ms: Integer,
             url_regex: String,
             use_main_content_only: T::Boolean,
             request_options: ContextDev::RequestOptions

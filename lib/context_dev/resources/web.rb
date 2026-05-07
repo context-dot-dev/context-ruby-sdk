@@ -70,7 +70,7 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(direct_url: nil, domain: nil, full_screenshot: nil, max_age_ms: nil, page: nil, prioritize: nil, viewport: nil, request_options: {})
+      # @overload screenshot(direct_url: nil, domain: nil, full_screenshot: nil, max_age_ms: nil, page: nil, prioritize: nil, timeout_ms: nil, viewport: nil, request_options: {})
       #
       # @param direct_url [String] A specific URL to screenshot directly, bypassing domain resolution (e.g., 'https
       #
@@ -83,6 +83,8 @@ module ContextDev
       # @param page [Symbol, ContextDev::Models::WebScreenshotParams::Page] Optional parameter to specify which page type to screenshot. If provided, the sy
       #
       # @param prioritize [Symbol, ContextDev::Models::WebScreenshotParams::Prioritize] Optional parameter to prioritize screenshot capture. If 'speed', optimizes for f
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       # @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       #
@@ -100,7 +102,8 @@ module ContextDev
           query: query.transform_keys(
             direct_url: "directUrl",
             full_screenshot: "fullScreenshot",
-            max_age_ms: "maxAgeMs"
+            max_age_ms: "maxAgeMs",
+            timeout_ms: "timeoutMS"
           ),
           model: ContextDev::Models::WebScreenshotResponse,
           options: options
@@ -113,7 +116,7 @@ module ContextDev
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
       # and returns results for all crawled pages.
       #
-      # @overload web_crawl_md(url:, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, parse_pdf: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
+      # @overload web_crawl_md(url:, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, parse_pdf: nil, shorten_base64_images: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
       #
       # @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
       #
@@ -134,6 +137,8 @@ module ContextDev
       # @param parse_pdf [Boolean] When true (default), PDF pages are fetched and their text layer is extracted and
       #
       # @param shorten_base64_images [Boolean] Truncate base64-encoded image data in the Markdown output
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       # @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped.
       #
@@ -160,7 +165,7 @@ module ContextDev
       #
       # Scrapes the given URL and returns the raw HTML content of the page.
       #
-      # @overload web_scrape_html(url:, include_frames: nil, max_age_ms: nil, parse_pdf: nil, request_options: {})
+      # @overload web_scrape_html(url:, include_frames: nil, max_age_ms: nil, parse_pdf: nil, timeout_ms: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
       #
@@ -169,6 +174,8 @@ module ContextDev
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       # @param parse_pdf [Boolean] When true (default), PDF URLs are fetched and their text layer is extracted and
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -184,7 +191,8 @@ module ContextDev
           query: query.transform_keys(
             include_frames: "includeFrames",
             max_age_ms: "maxAgeMs",
-            parse_pdf: "parsePDF"
+            parse_pdf: "parsePDF",
+            timeout_ms: "timeoutMS"
           ),
           model: ContextDev::Models::WebWebScrapeHTMLResponse,
           options: options
@@ -199,13 +207,15 @@ module ContextDev
       # embeds. The base request costs 1 credit; enrichment costs 1 credit per returned
       # image.
       #
-      # @overload web_scrape_images(url:, enrichment: nil, max_age_ms: nil, request_options: {})
+      # @overload web_scrape_images(url:, enrichment: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
       #
       # @param url [String] Page URL to inspect. Must include http:// or https://.
       #
       # @param enrichment [ContextDev::Models::WebWebScrapeImagesParams::Enrichment] Optional per-image processing, sent as deep-object query params such as enrichme
       #
       # @param max_age_ms [Integer] Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -218,7 +228,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/images",
-          query: query.transform_keys(max_age_ms: "maxAgeMs"),
+          query: query.transform_keys(max_age_ms: "maxAgeMs", timeout_ms: "timeoutMS"),
           model: ContextDev::Models::WebWebScrapeImagesResponse,
           options: options
         )
@@ -229,7 +239,7 @@ module ContextDev
       #
       # Scrapes the given URL into LLM usable Markdown.
       #
-      # @overload web_scrape_md(url:, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, parse_pdf: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
+      # @overload web_scrape_md(url:, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, parse_pdf: nil, shorten_base64_images: nil, timeout_ms: nil, use_main_content_only: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
       #
@@ -244,6 +254,8 @@ module ContextDev
       # @param parse_pdf [Boolean] When true (default), PDF URLs are fetched and their text layer is extracted and
       #
       # @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       # @param use_main_content_only [Boolean] Extract only the main content of the page, excluding headers, footers, sidebars,
       #
@@ -265,6 +277,7 @@ module ContextDev
             max_age_ms: "maxAgeMs",
             parse_pdf: "parsePDF",
             shorten_base64_images: "shortenBase64Images",
+            timeout_ms: "timeoutMS",
             use_main_content_only: "useMainContentOnly"
           ),
           model: ContextDev::Models::WebWebScrapeMdResponse,
@@ -277,11 +290,13 @@ module ContextDev
       #
       # Crawl an entire website's sitemap and return all discovered page URLs.
       #
-      # @overload web_scrape_sitemap(domain:, max_links: nil, url_regex: nil, request_options: {})
+      # @overload web_scrape_sitemap(domain:, max_links: nil, timeout_ms: nil, url_regex: nil, request_options: {})
       #
       # @param domain [String] Domain to build a sitemap for
       #
       # @param max_links [Integer] Maximum number of links to return from the sitemap crawl. Defaults to 10,000. Mi
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       # @param url_regex [String] Optional RE2-compatible regex pattern. Only URLs matching this pattern are retur
       #
@@ -296,7 +311,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/sitemap",
-          query: query.transform_keys(max_links: "maxLinks", url_regex: "urlRegex"),
+          query: query.transform_keys(max_links: "maxLinks", timeout_ms: "timeoutMS", url_regex: "urlRegex"),
           model: ContextDev::Models::WebWebScrapeSitemapResponse,
           options: options
         )

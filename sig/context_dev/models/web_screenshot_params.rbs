@@ -8,6 +8,7 @@ module ContextDev
         max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
         prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
+        timeout_ms: Integer,
         viewport: ContextDev::WebScreenshotParams::Viewport
       }
       & ContextDev::Internal::Type::request_parameters
@@ -46,6 +47,10 @@ module ContextDev
         ContextDev::Models::WebScreenshotParams::prioritize
       ) -> ContextDev::Models::WebScreenshotParams::prioritize
 
+      attr_reader timeout_ms: Integer?
+
+      def timeout_ms=: (Integer) -> Integer
+
       attr_reader viewport: ContextDev::WebScreenshotParams::Viewport?
 
       def viewport=: (
@@ -59,6 +64,7 @@ module ContextDev
         ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
         ?prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
+        ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
         ?request_options: ContextDev::request_opts
       ) -> void
@@ -70,6 +76,7 @@ module ContextDev
         max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
         prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
+        timeout_ms: Integer,
         viewport: ContextDev::WebScreenshotParams::Viewport,
         request_options: ContextDev::RequestOptions
       }

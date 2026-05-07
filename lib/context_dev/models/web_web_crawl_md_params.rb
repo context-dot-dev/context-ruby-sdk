@@ -74,6 +74,14 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :shorten_base64_images, ContextDev::Internal::Type::Boolean, api_name: :shortenBase64Images
 
+      # @!attribute timeout_ms
+      #   Optional timeout in milliseconds for the request. If the request takes longer
+      #   than this value, it will be aborted with a 408 status code. Maximum allowed
+      #   value is 300000ms (5 minutes).
+      #
+      #   @return [Integer, nil]
+      optional :timeout_ms, Integer, api_name: :timeoutMS
+
       # @!attribute url_regex
       #   Regex pattern. Only URLs matching this pattern will be followed and scraped.
       #
@@ -87,7 +95,7 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :use_main_content_only, ContextDev::Internal::Type::Boolean, api_name: :useMainContentOnly
 
-      # @!method initialize(url:, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, parse_pdf: nil, shorten_base64_images: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
+      # @!method initialize(url:, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, parse_pdf: nil, shorten_base64_images: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
@@ -110,6 +118,8 @@ module ContextDev
       #   @param parse_pdf [Boolean] When true (default), PDF pages are fetched and their text layer is extracted and
       #
       #   @param shorten_base64_images [Boolean] Truncate base64-encoded image data in the Markdown output
+      #
+      #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       #   @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped.
       #
