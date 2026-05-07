@@ -25,6 +25,13 @@ module ContextDev
       sig { params(domain: String).void }
       attr_writer :domain
 
+      # Height in pixels of the returned screenshot image
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :height
+
+      sig { params(height: Integer).void }
+      attr_writer :height
+
       # Public URL of the uploaded screenshot image
       sig { returns(T.nilable(String)) }
       attr_reader :screenshot
@@ -57,14 +64,23 @@ module ContextDev
       sig { params(status: String).void }
       attr_writer :status
 
+      # Width in pixels of the returned screenshot image
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :width
+
+      sig { params(width: Integer).void }
+      attr_writer :width
+
       sig do
         params(
           code: Integer,
           domain: String,
+          height: Integer,
           screenshot: String,
           screenshot_type:
             ContextDev::Models::WebScreenshotResponse::ScreenshotType::OrSymbol,
-          status: String
+          status: String,
+          width: Integer
         ).returns(T.attached_class)
       end
       def self.new(
@@ -72,12 +88,16 @@ module ContextDev
         code: nil,
         # The normalized domain that was processed
         domain: nil,
+        # Height in pixels of the returned screenshot image
+        height: nil,
         # Public URL of the uploaded screenshot image
         screenshot: nil,
         # Type of screenshot that was captured
         screenshot_type: nil,
         # Status of the response, e.g., 'ok'
-        status: nil
+        status: nil,
+        # Width in pixels of the returned screenshot image
+        width: nil
       )
       end
 
@@ -86,10 +106,12 @@ module ContextDev
           {
             code: Integer,
             domain: String,
+            height: Integer,
             screenshot: String,
             screenshot_type:
               ContextDev::Models::WebScreenshotResponse::ScreenshotType::TaggedSymbol,
-            status: String
+            status: String,
+            width: Integer
           }
         )
       end

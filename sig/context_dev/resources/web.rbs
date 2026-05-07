@@ -19,8 +19,10 @@ module ContextDev
         ?direct_url: String,
         ?domain: String,
         ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
+        ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
         ?prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
+        ?viewport: ContextDev::WebScreenshotParams::Viewport,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebScreenshotResponse
 
