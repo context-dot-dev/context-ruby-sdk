@@ -70,7 +70,7 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(direct_url: nil, domain: nil, full_screenshot: nil, page: nil, prioritize: nil, request_options: {})
+      # @overload screenshot(direct_url: nil, domain: nil, full_screenshot: nil, max_age_ms: nil, page: nil, prioritize: nil, viewport: nil, request_options: {})
       #
       # @param direct_url [String] A specific URL to screenshot directly, bypassing domain resolution (e.g., 'https
       #
@@ -78,9 +78,13 @@ module ContextDev
       #
       # @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
+      # @param max_age_ms [Integer] Return a cached screenshot if a prior screenshot for the same parameters exists
+      #
       # @param page [Symbol, ContextDev::Models::WebScreenshotParams::Page] Optional parameter to specify which page type to screenshot. If provided, the sy
       #
       # @param prioritize [Symbol, ContextDev::Models::WebScreenshotParams::Prioritize] Optional parameter to prioritize screenshot capture. If 'speed', optimizes for f
+      #
+      # @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -93,7 +97,11 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/screenshot",
-          query: query.transform_keys(direct_url: "directUrl", full_screenshot: "fullScreenshot"),
+          query: query.transform_keys(
+            direct_url: "directUrl",
+            full_screenshot: "fullScreenshot",
+            max_age_ms: "maxAgeMs"
+          ),
           model: ContextDev::Models::WebScreenshotResponse,
           options: options
         )

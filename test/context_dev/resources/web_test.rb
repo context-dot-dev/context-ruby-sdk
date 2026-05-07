@@ -55,9 +55,11 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
       response => {
         code: Integer | nil,
         domain: String | nil,
+        height: Integer | nil,
         screenshot: String | nil,
         screenshot_type: ContextDev::Models::WebScreenshotResponse::ScreenshotType | nil,
-        status: String | nil
+        status: String | nil,
+        width: Integer | nil
       }
     end
   end

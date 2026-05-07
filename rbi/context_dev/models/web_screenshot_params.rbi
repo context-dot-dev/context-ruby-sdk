@@ -47,6 +47,15 @@ module ContextDev
       end
       attr_writer :full_screenshot
 
+      # Return a cached screenshot if a prior screenshot for the same parameters exists
+      # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+      # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :max_age_ms
+
+      sig { params(max_age_ms: Integer).void }
+      attr_writer :max_age_ms
+
       # Optional parameter to specify which page type to screenshot. If provided, the
       # system will scrape the domain's links and use heuristics to find the most
       # appropriate URL for the specified page type (30 supported languages). If not
@@ -77,14 +86,25 @@ module ContextDev
       end
       attr_writer :prioritize
 
+      # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
+      sig { returns(T.nilable(ContextDev::WebScreenshotParams::Viewport)) }
+      attr_reader :viewport
+
+      sig do
+        params(viewport: ContextDev::WebScreenshotParams::Viewport::OrHash).void
+      end
+      attr_writer :viewport
+
       sig do
         params(
           direct_url: String,
           domain: String,
           full_screenshot:
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
+          max_age_ms: Integer,
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           prioritize: ContextDev::WebScreenshotParams::Prioritize::OrSymbol,
+          viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -101,6 +121,10 @@ module ContextDev
         # screenshot capturing all content. If 'false' or not provided, takes a viewport
         # screenshot (standard browser view).
         full_screenshot: nil,
+        # Return a cached screenshot if a prior screenshot for the same parameters exists
+        # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+        # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
+        max_age_ms: nil,
         # Optional parameter to specify which page type to screenshot. If provided, the
         # system will scrape the domain's links and use heuristics to find the most
         # appropriate URL for the specified page type (30 supported languages). If not
@@ -111,6 +135,8 @@ module ContextDev
         # faster capture with basic quality. If 'quality', optimizes for higher quality
         # with longer wait times. Defaults to 'quality' if not provided.
         prioritize: nil,
+        # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
+        viewport: nil,
         request_options: {}
       )
       end
@@ -122,8 +148,10 @@ module ContextDev
             domain: String,
             full_screenshot:
               ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
+            max_age_ms: Integer,
             page: ContextDev::WebScreenshotParams::Page::OrSymbol,
             prioritize: ContextDev::WebScreenshotParams::Prioritize::OrSymbol,
+            viewport: ContextDev::WebScreenshotParams::Viewport,
             request_options: ContextDev::RequestOptions
           }
         )
@@ -231,6 +259,46 @@ module ContextDev
           )
         end
         def self.values
+        end
+      end
+
+      class Viewport < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::WebScreenshotParams::Viewport,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Viewport height in pixels.
+        sig { returns(T.nilable(Integer)) }
+        attr_reader :height
+
+        sig { params(height: Integer).void }
+        attr_writer :height
+
+        # Viewport width in pixels.
+        sig { returns(T.nilable(Integer)) }
+        attr_reader :width
+
+        sig { params(width: Integer).void }
+        attr_writer :width
+
+        # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
+        sig do
+          params(height: Integer, width: Integer).returns(T.attached_class)
+        end
+        def self.new(
+          # Viewport height in pixels.
+          height: nil,
+          # Viewport width in pixels.
+          width: nil
+        )
+        end
+
+        sig { override.returns({ height: Integer, width: Integer }) }
+        def to_hash
         end
       end
     end

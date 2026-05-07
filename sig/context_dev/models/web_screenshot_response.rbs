@@ -4,9 +4,11 @@ module ContextDev
       {
         code: Integer,
         domain: String,
+        height: Integer,
         screenshot: String,
         screenshot_type: ContextDev::Models::WebScreenshotResponse::screenshot_type,
-        status: String
+        status: String,
+        width: Integer
       }
 
     class WebScreenshotResponse < ContextDev::Internal::Type::BaseModel
@@ -17,6 +19,10 @@ module ContextDev
       attr_reader domain: String?
 
       def domain=: (String) -> String
+
+      attr_reader height: Integer?
+
+      def height=: (Integer) -> Integer
 
       attr_reader screenshot: String?
 
@@ -32,20 +38,28 @@ module ContextDev
 
       def status=: (String) -> String
 
+      attr_reader width: Integer?
+
+      def width=: (Integer) -> Integer
+
       def initialize: (
         ?code: Integer,
         ?domain: String,
+        ?height: Integer,
         ?screenshot: String,
         ?screenshot_type: ContextDev::Models::WebScreenshotResponse::screenshot_type,
-        ?status: String
+        ?status: String,
+        ?width: Integer
       ) -> void
 
       def to_hash: -> {
         code: Integer,
         domain: String,
+        height: Integer,
         screenshot: String,
         screenshot_type: ContextDev::Models::WebScreenshotResponse::screenshot_type,
-        status: String
+        status: String,
+        width: Integer
       }
 
       type screenshot_type = :viewport | :fullPage
