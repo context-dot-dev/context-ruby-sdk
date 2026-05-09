@@ -5,7 +5,9 @@ module ContextDev
         url: String,
         include_frames: bool,
         max_age_ms: Integer,
-        parse_pdf: bool
+        parse_pdf: bool,
+        timeout_ms: Integer,
+        wait_for_ms: Integer
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -27,11 +29,21 @@ module ContextDev
 
       def parse_pdf=: (bool) -> bool
 
+      attr_reader timeout_ms: Integer?
+
+      def timeout_ms=: (Integer) -> Integer
+
+      attr_reader wait_for_ms: Integer?
+
+      def wait_for_ms=: (Integer) -> Integer
+
       def initialize: (
         url: String,
         ?include_frames: bool,
         ?max_age_ms: Integer,
         ?parse_pdf: bool,
+        ?timeout_ms: Integer,
+        ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -40,6 +52,8 @@ module ContextDev
         include_frames: bool,
         max_age_ms: Integer,
         parse_pdf: bool,
+        timeout_ms: Integer,
+        wait_for_ms: Integer,
         request_options: ContextDev::RequestOptions
       }
     end

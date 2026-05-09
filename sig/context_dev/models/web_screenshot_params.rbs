@@ -7,8 +7,9 @@ module ContextDev
         full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
         max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
-        prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
-        viewport: ContextDev::WebScreenshotParams::Viewport
+        timeout_ms: Integer,
+        viewport: ContextDev::WebScreenshotParams::Viewport,
+        wait_for_ms: Integer
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -40,11 +41,9 @@ module ContextDev
         ContextDev::Models::WebScreenshotParams::page
       ) -> ContextDev::Models::WebScreenshotParams::page
 
-      attr_reader prioritize: ContextDev::Models::WebScreenshotParams::prioritize?
+      attr_reader timeout_ms: Integer?
 
-      def prioritize=: (
-        ContextDev::Models::WebScreenshotParams::prioritize
-      ) -> ContextDev::Models::WebScreenshotParams::prioritize
+      def timeout_ms=: (Integer) -> Integer
 
       attr_reader viewport: ContextDev::WebScreenshotParams::Viewport?
 
@@ -52,14 +51,19 @@ module ContextDev
         ContextDev::WebScreenshotParams::Viewport
       ) -> ContextDev::WebScreenshotParams::Viewport
 
+      attr_reader wait_for_ms: Integer?
+
+      def wait_for_ms=: (Integer) -> Integer
+
       def initialize: (
         ?direct_url: String,
         ?domain: String,
         ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
         ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
-        ?prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
+        ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
+        ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -69,8 +73,9 @@ module ContextDev
         full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
         max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
-        prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
+        timeout_ms: Integer,
         viewport: ContextDev::WebScreenshotParams::Viewport,
+        wait_for_ms: Integer,
         request_options: ContextDev::RequestOptions
       }
 
@@ -108,17 +113,6 @@ module ContextDev
         CONTACT: :contact
 
         def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::page]
-      end
-
-      type prioritize = :speed | :quality
-
-      module Prioritize
-        extend ContextDev::Internal::Type::Enum
-
-        SPEED: :speed
-        QUALITY: :quality
-
-        def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::prioritize]
       end
 
       type viewport = { height: Integer, width: Integer }

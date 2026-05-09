@@ -35,7 +35,22 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :parse_pdf, ContextDev::Internal::Type::Boolean
 
-      # @!method initialize(url:, include_frames: nil, max_age_ms: nil, parse_pdf: nil, request_options: {})
+      # @!attribute timeout_ms
+      #   Optional timeout in milliseconds for the request. If the request takes longer
+      #   than this value, it will be aborted with a 408 status code. Maximum allowed
+      #   value is 300000ms (5 minutes).
+      #
+      #   @return [Integer, nil]
+      optional :timeout_ms, Integer
+
+      # @!attribute wait_for_ms
+      #   Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
+      #   30000 (30 seconds).
+      #
+      #   @return [Integer, nil]
+      optional :wait_for_ms, Integer
+
+      # @!method initialize(url:, include_frames: nil, max_age_ms: nil, parse_pdf: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeHTMLParams} for more details.
       #
@@ -46,6 +61,10 @@ module ContextDev
       #   @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       #   @param parse_pdf [Boolean] When true (default), PDF URLs are fetched and their text layer is extracted and
+      #
+      #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #
+      #   @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
     end

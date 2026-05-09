@@ -4,7 +4,9 @@ module ContextDev
       {
         url: String,
         enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
-        max_age_ms: Integer
+        max_age_ms: Integer,
+        timeout_ms: Integer,
+        wait_for_ms: Integer
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -24,10 +26,20 @@ module ContextDev
 
       def max_age_ms=: (Integer) -> Integer
 
+      attr_reader timeout_ms: Integer?
+
+      def timeout_ms=: (Integer) -> Integer
+
+      attr_reader wait_for_ms: Integer?
+
+      def wait_for_ms=: (Integer) -> Integer
+
       def initialize: (
         url: String,
         ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
         ?max_age_ms: Integer,
+        ?timeout_ms: Integer,
+        ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -35,6 +47,8 @@ module ContextDev
         url: String,
         enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
         max_age_ms: Integer,
+        timeout_ms: Integer,
+        wait_for_ms: Integer,
         request_options: ContextDev::RequestOptions
       }
 

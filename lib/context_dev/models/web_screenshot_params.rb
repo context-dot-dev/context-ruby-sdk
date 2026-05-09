@@ -49,13 +49,13 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebScreenshotParams::Page, nil]
       optional :page, enum: -> { ContextDev::WebScreenshotParams::Page }
 
-      # @!attribute prioritize
-      #   Optional parameter to prioritize screenshot capture. If 'speed', optimizes for
-      #   faster capture with basic quality. If 'quality', optimizes for higher quality
-      #   with longer wait times. Defaults to 'quality' if not provided.
+      # @!attribute timeout_ms
+      #   Optional timeout in milliseconds for the request. If the request takes longer
+      #   than this value, it will be aborted with a 408 status code. Maximum allowed
+      #   value is 300000ms (5 minutes).
       #
-      #   @return [Symbol, ContextDev::Models::WebScreenshotParams::Prioritize, nil]
-      optional :prioritize, enum: -> { ContextDev::WebScreenshotParams::Prioritize }
+      #   @return [Integer, nil]
+      optional :timeout_ms, Integer
 
       # @!attribute viewport
       #   Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
@@ -63,7 +63,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebScreenshotParams::Viewport, nil]
       optional :viewport, -> { ContextDev::WebScreenshotParams::Viewport }
 
-      # @!method initialize(direct_url: nil, domain: nil, full_screenshot: nil, max_age_ms: nil, page: nil, prioritize: nil, viewport: nil, request_options: {})
+      # @!attribute wait_for_ms
+      #   Optional browser wait time in milliseconds after initial page load before taking
+      #   the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
+      #   omitted.
+      #
+      #   @return [Integer, nil]
+      optional :wait_for_ms, Integer
+
+      # @!method initialize(direct_url: nil, domain: nil, full_screenshot: nil, max_age_ms: nil, page: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScreenshotParams} for more details.
       #
@@ -77,9 +85,11 @@ module ContextDev
       #
       #   @param page [Symbol, ContextDev::Models::WebScreenshotParams::Page] Optional parameter to specify which page type to screenshot. If provided, the sy
       #
-      #   @param prioritize [Symbol, ContextDev::Models::WebScreenshotParams::Prioritize] Optional parameter to prioritize screenshot capture. If 'speed', optimizes for f
+      #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       #   @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
+      #
+      #   @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load before taking
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -112,19 +122,6 @@ module ContextDev
         TERMS = :terms
         PRIVACY = :privacy
         CONTACT = :contact
-
-        # @!method self.values
-        #   @return [Array<Symbol>]
-      end
-
-      # Optional parameter to prioritize screenshot capture. If 'speed', optimizes for
-      # faster capture with basic quality. If 'quality', optimizes for higher quality
-      # with longer wait times. Defaults to 'quality' if not provided.
-      module Prioritize
-        extend ContextDev::Internal::Type::Enum
-
-        SPEED = :speed
-        QUALITY = :quality
 
         # @!method self.values
         #   @return [Array<Symbol>]

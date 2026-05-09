@@ -62,6 +62,15 @@ module ContextDev
       sig { params(shorten_base64_images: T::Boolean).void }
       attr_writer :shorten_base64_images
 
+      # Optional timeout in milliseconds for the request. If the request takes longer
+      # than this value, it will be aborted with a 408 status code. Maximum allowed
+      # value is 300000ms (5 minutes).
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :timeout_ms
+
+      sig { params(timeout_ms: Integer).void }
+      attr_writer :timeout_ms
+
       # Extract only the main content of the page, excluding headers, footers, sidebars,
       # and navigation
       sig { returns(T.nilable(T::Boolean)) }
@@ -69,6 +78,14 @@ module ContextDev
 
       sig { params(use_main_content_only: T::Boolean).void }
       attr_writer :use_main_content_only
+
+      # Optional browser wait time in milliseconds after initial page load before
+      # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds).
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :wait_for_ms
+
+      sig { params(wait_for_ms: Integer).void }
+      attr_writer :wait_for_ms
 
       sig do
         params(
@@ -79,7 +96,9 @@ module ContextDev
           max_age_ms: Integer,
           parse_pdf: T::Boolean,
           shorten_base64_images: T::Boolean,
+          timeout_ms: Integer,
           use_main_content_only: T::Boolean,
+          wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -103,9 +122,16 @@ module ContextDev
         parse_pdf: nil,
         # Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
         # Extract only the main content of the page, excluding headers, footers, sidebars,
         # and navigation
         use_main_content_only: nil,
+        # Optional browser wait time in milliseconds after initial page load before
+        # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds).
+        wait_for_ms: nil,
         request_options: {}
       )
       end
@@ -120,7 +146,9 @@ module ContextDev
             max_age_ms: Integer,
             parse_pdf: T::Boolean,
             shorten_base64_images: T::Boolean,
+            timeout_ms: Integer,
             use_main_content_only: T::Boolean,
+            wait_for_ms: Integer,
             request_options: ContextDev::RequestOptions
           }
         )

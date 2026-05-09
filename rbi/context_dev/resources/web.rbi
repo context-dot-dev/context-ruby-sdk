@@ -67,8 +67,9 @@ module ContextDev
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
           max_age_ms: Integer,
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
-          prioritize: ContextDev::WebScreenshotParams::Prioritize::OrSymbol,
+          timeout_ms: Integer,
           viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
+          wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebScreenshotResponse)
       end
@@ -95,12 +96,16 @@ module ContextDev
         # provided, screenshots the main domain landing page. Only applicable when using
         # 'domain', not 'directUrl'.
         page: nil,
-        # Optional parameter to prioritize screenshot capture. If 'speed', optimizes for
-        # faster capture with basic quality. If 'quality', optimizes for higher quality
-        # with longer wait times. Defaults to 'quality' if not provided.
-        prioritize: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
         # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
         viewport: nil,
+        # Optional browser wait time in milliseconds after initial page load before taking
+        # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
+        # omitted.
+        wait_for_ms: nil,
         request_options: {}
       )
       end
@@ -119,8 +124,10 @@ module ContextDev
           max_pages: Integer,
           parse_pdf: T::Boolean,
           shorten_base64_images: T::Boolean,
+          timeout_ms: Integer,
           url_regex: String,
           use_main_content_only: T::Boolean,
+          wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebCrawlMdResponse)
       end
@@ -152,11 +159,18 @@ module ContextDev
         parse_pdf: nil,
         # Truncate base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
         # Regex pattern. Only URLs matching this pattern will be followed and scraped.
         url_regex: nil,
         # Extract only the main content, stripping headers, footers, sidebars, and
         # navigation
         use_main_content_only: nil,
+        # Optional browser wait time in milliseconds after initial page load for each
+        # crawled page. Min: 0. Max: 30000 (30 seconds).
+        wait_for_ms: nil,
         request_options: {}
       )
       end
@@ -168,6 +182,8 @@ module ContextDev
           include_frames: T::Boolean,
           max_age_ms: Integer,
           parse_pdf: T::Boolean,
+          timeout_ms: Integer,
+          wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeHTMLResponse)
       end
@@ -184,6 +200,13 @@ module ContextDev
         # returned wrapped in <html><pdf>…</pdf></html>. When false, PDF URLs are skipped
         # and a 400 WEBSITE_ACCESS_ERROR is returned.
         parse_pdf: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
+        # Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
+        # 30000 (30 seconds).
+        wait_for_ms: nil,
         request_options: {}
       )
       end
@@ -197,6 +220,8 @@ module ContextDev
           url: String,
           enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash,
           max_age_ms: Integer,
+          timeout_ms: Integer,
+          wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeImagesResponse)
       end
@@ -209,6 +234,13 @@ module ContextDev
         # Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
         # day). Set to 0 to bypass cache. Maximum: 2592000000 (30 days).
         max_age_ms: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
+        # Optional browser wait time in milliseconds after initial page load before
+        # collecting images. Min: 0. Max: 30000 (30 seconds).
+        wait_for_ms: nil,
         request_options: {}
       )
       end
@@ -223,7 +255,9 @@ module ContextDev
           max_age_ms: Integer,
           parse_pdf: T::Boolean,
           shorten_base64_images: T::Boolean,
+          timeout_ms: Integer,
           use_main_content_only: T::Boolean,
+          wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeMdResponse)
       end
@@ -247,9 +281,16 @@ module ContextDev
         parse_pdf: nil,
         # Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
         # Extract only the main content of the page, excluding headers, footers, sidebars,
         # and navigation
         use_main_content_only: nil,
+        # Optional browser wait time in milliseconds after initial page load before
+        # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds).
+        wait_for_ms: nil,
         request_options: {}
       )
       end
@@ -259,6 +300,7 @@ module ContextDev
         params(
           domain: String,
           max_links: Integer,
+          timeout_ms: Integer,
           url_regex: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeSitemapResponse)
@@ -269,6 +311,10 @@ module ContextDev
         # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
         # Minimum is 1, maximum is 100,000.
         max_links: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
         # Optional RE2-compatible regex pattern. Only URLs matching this pattern are
         # returned and counted against maxLinks.
         url_regex: nil,

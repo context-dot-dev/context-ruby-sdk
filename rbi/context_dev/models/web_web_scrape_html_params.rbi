@@ -43,12 +43,31 @@ module ContextDev
       sig { params(parse_pdf: T::Boolean).void }
       attr_writer :parse_pdf
 
+      # Optional timeout in milliseconds for the request. If the request takes longer
+      # than this value, it will be aborted with a 408 status code. Maximum allowed
+      # value is 300000ms (5 minutes).
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :timeout_ms
+
+      sig { params(timeout_ms: Integer).void }
+      attr_writer :timeout_ms
+
+      # Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
+      # 30000 (30 seconds).
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :wait_for_ms
+
+      sig { params(wait_for_ms: Integer).void }
+      attr_writer :wait_for_ms
+
       sig do
         params(
           url: String,
           include_frames: T::Boolean,
           max_age_ms: Integer,
           parse_pdf: T::Boolean,
+          timeout_ms: Integer,
+          wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -65,6 +84,13 @@ module ContextDev
         # returned wrapped in <html><pdf>…</pdf></html>. When false, PDF URLs are skipped
         # and a 400 WEBSITE_ACCESS_ERROR is returned.
         parse_pdf: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
+        # Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
+        # 30000 (30 seconds).
+        wait_for_ms: nil,
         request_options: {}
       )
       end
@@ -76,6 +102,8 @@ module ContextDev
             include_frames: T::Boolean,
             max_age_ms: Integer,
             parse_pdf: T::Boolean,
+            timeout_ms: Integer,
+            wait_for_ms: Integer,
             request_options: ContextDev::RequestOptions
           }
         )

@@ -69,22 +69,14 @@ module ContextDev
       sig { params(page: ContextDev::WebScreenshotParams::Page::OrSymbol).void }
       attr_writer :page
 
-      # Optional parameter to prioritize screenshot capture. If 'speed', optimizes for
-      # faster capture with basic quality. If 'quality', optimizes for higher quality
-      # with longer wait times. Defaults to 'quality' if not provided.
-      sig do
-        returns(
-          T.nilable(ContextDev::WebScreenshotParams::Prioritize::OrSymbol)
-        )
-      end
-      attr_reader :prioritize
+      # Optional timeout in milliseconds for the request. If the request takes longer
+      # than this value, it will be aborted with a 408 status code. Maximum allowed
+      # value is 300000ms (5 minutes).
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :timeout_ms
 
-      sig do
-        params(
-          prioritize: ContextDev::WebScreenshotParams::Prioritize::OrSymbol
-        ).void
-      end
-      attr_writer :prioritize
+      sig { params(timeout_ms: Integer).void }
+      attr_writer :timeout_ms
 
       # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       sig { returns(T.nilable(ContextDev::WebScreenshotParams::Viewport)) }
@@ -95,6 +87,15 @@ module ContextDev
       end
       attr_writer :viewport
 
+      # Optional browser wait time in milliseconds after initial page load before taking
+      # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
+      # omitted.
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :wait_for_ms
+
+      sig { params(wait_for_ms: Integer).void }
+      attr_writer :wait_for_ms
+
       sig do
         params(
           direct_url: String,
@@ -103,8 +104,9 @@ module ContextDev
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
           max_age_ms: Integer,
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
-          prioritize: ContextDev::WebScreenshotParams::Prioritize::OrSymbol,
+          timeout_ms: Integer,
           viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
+          wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -131,12 +133,16 @@ module ContextDev
         # provided, screenshots the main domain landing page. Only applicable when using
         # 'domain', not 'directUrl'.
         page: nil,
-        # Optional parameter to prioritize screenshot capture. If 'speed', optimizes for
-        # faster capture with basic quality. If 'quality', optimizes for higher quality
-        # with longer wait times. Defaults to 'quality' if not provided.
-        prioritize: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
         # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
         viewport: nil,
+        # Optional browser wait time in milliseconds after initial page load before taking
+        # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
+        # omitted.
+        wait_for_ms: nil,
         request_options: {}
       )
       end
@@ -150,8 +156,9 @@ module ContextDev
               ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
             max_age_ms: Integer,
             page: ContextDev::WebScreenshotParams::Page::OrSymbol,
-            prioritize: ContextDev::WebScreenshotParams::Prioritize::OrSymbol,
+            timeout_ms: Integer,
             viewport: ContextDev::WebScreenshotParams::Viewport,
+            wait_for_ms: Integer,
             request_options: ContextDev::RequestOptions
           }
         )
@@ -224,38 +231,6 @@ module ContextDev
         sig do
           override.returns(
             T::Array[ContextDev::WebScreenshotParams::Page::TaggedSymbol]
-          )
-        end
-        def self.values
-        end
-      end
-
-      # Optional parameter to prioritize screenshot capture. If 'speed', optimizes for
-      # faster capture with basic quality. If 'quality', optimizes for higher quality
-      # with longer wait times. Defaults to 'quality' if not provided.
-      module Prioritize
-        extend ContextDev::Internal::Type::Enum
-
-        TaggedSymbol =
-          T.type_alias do
-            T.all(Symbol, ContextDev::WebScreenshotParams::Prioritize)
-          end
-        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-        SPEED =
-          T.let(
-            :speed,
-            ContextDev::WebScreenshotParams::Prioritize::TaggedSymbol
-          )
-        QUALITY =
-          T.let(
-            :quality,
-            ContextDev::WebScreenshotParams::Prioritize::TaggedSymbol
-          )
-
-        sig do
-          override.returns(
-            T::Array[ContextDev::WebScreenshotParams::Prioritize::TaggedSymbol]
           )
         end
         def self.values
