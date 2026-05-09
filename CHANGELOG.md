@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.17.0 (2026-05-09)
+
+Full Changelog: [v1.16.0...v1.17.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.16.0...v1.17.0)
+
+### Features
+
+* **api:** api update ([ae638b0](https://github.com/context-dot-dev/context-ruby-sdk/commit/ae638b04d0e08bf93e2cdd1211236d841d5313b1))
+* **api:** api update ([8376344](https://github.com/context-dot-dev/context-ruby-sdk/commit/8376344a7a72a7ff01906bc3d6a5913a4de60bcb))
+
 ## 1.16.0 (2026-05-07)
 
 Full Changelog: [v1.15.0...v1.16.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.15.0...v1.16.0)
