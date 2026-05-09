@@ -109,6 +109,14 @@ module ContextDev
       sig { params(use_main_content_only: T::Boolean).void }
       attr_writer :use_main_content_only
 
+      # Optional browser wait time in milliseconds after initial page load for each
+      # crawled page. Min: 0. Max: 30000 (30 seconds).
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :wait_for_ms
+
+      sig { params(wait_for_ms: Integer).void }
+      attr_writer :wait_for_ms
+
       sig do
         params(
           url: String,
@@ -124,6 +132,7 @@ module ContextDev
           timeout_ms: Integer,
           url_regex: String,
           use_main_content_only: T::Boolean,
+          wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -164,6 +173,9 @@ module ContextDev
         # Extract only the main content, stripping headers, footers, sidebars, and
         # navigation
         use_main_content_only: nil,
+        # Optional browser wait time in milliseconds after initial page load for each
+        # crawled page. Min: 0. Max: 30000 (30 seconds).
+        wait_for_ms: nil,
         request_options: {}
       )
       end
@@ -184,6 +196,7 @@ module ContextDev
             timeout_ms: Integer,
             url_regex: String,
             use_main_content_only: T::Boolean,
+            wait_for_ms: Integer,
             request_options: ContextDev::RequestOptions
           }
         )
