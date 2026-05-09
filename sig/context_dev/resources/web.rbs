@@ -21,9 +21,9 @@ module ContextDev
         ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
         ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
-        ?prioritize: ContextDev::Models::WebScreenshotParams::prioritize,
         ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
+        ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebScreenshotResponse
 
@@ -41,6 +41,7 @@ module ContextDev
         ?timeout_ms: Integer,
         ?url_regex: String,
         ?use_main_content_only: bool,
+        ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebCrawlMdResponse
 
@@ -50,6 +51,7 @@ module ContextDev
         ?max_age_ms: Integer,
         ?parse_pdf: bool,
         ?timeout_ms: Integer,
+        ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeHTMLResponse
 
@@ -58,6 +60,7 @@ module ContextDev
         ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
         ?max_age_ms: Integer,
         ?timeout_ms: Integer,
+        ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeImagesResponse
 
@@ -71,6 +74,7 @@ module ContextDev
         ?shorten_base64_images: bool,
         ?timeout_ms: Integer,
         ?use_main_content_only: bool,
+        ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeMdResponse
 
