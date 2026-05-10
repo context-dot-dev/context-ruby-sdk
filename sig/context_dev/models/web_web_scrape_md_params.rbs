@@ -7,7 +7,7 @@ module ContextDev
         include_images: bool,
         include_links: bool,
         max_age_ms: Integer,
-        parse_pdf: bool,
+        pdf: ContextDev::WebWebScrapeMdParams::Pdf,
         :shorten_base64_images => bool,
         timeout_ms: Integer,
         use_main_content_only: bool,
@@ -37,9 +37,11 @@ module ContextDev
 
       def max_age_ms=: (Integer) -> Integer
 
-      attr_reader parse_pdf: bool?
+      attr_reader pdf: ContextDev::WebWebScrapeMdParams::Pdf?
 
-      def parse_pdf=: (bool) -> bool
+      def pdf=: (
+        ContextDev::WebWebScrapeMdParams::Pdf
+      ) -> ContextDev::WebWebScrapeMdParams::Pdf
 
       attr_reader shorten_base64_images: bool?
 
@@ -63,7 +65,7 @@ module ContextDev
         ?include_images: bool,
         ?include_links: bool,
         ?max_age_ms: Integer,
-        ?parse_pdf: bool,
+        ?pdf: ContextDev::WebWebScrapeMdParams::Pdf,
         ?shorten_base64_images: bool,
         ?timeout_ms: Integer,
         ?use_main_content_only: bool,
@@ -77,13 +79,37 @@ module ContextDev
         include_images: bool,
         include_links: bool,
         max_age_ms: Integer,
-        parse_pdf: bool,
+        pdf: ContextDev::WebWebScrapeMdParams::Pdf,
         :shorten_base64_images => bool,
         timeout_ms: Integer,
         use_main_content_only: bool,
         wait_for_ms: Integer,
         request_options: ContextDev::RequestOptions
       }
+
+      type pdf = { end_: Integer, should_parse: bool, start: Integer }
+
+      class Pdf < ContextDev::Internal::Type::BaseModel
+        attr_reader end_: Integer?
+
+        def end_=: (Integer) -> Integer
+
+        attr_reader should_parse: bool?
+
+        def should_parse=: (bool) -> bool
+
+        attr_reader start: Integer?
+
+        def start=: (Integer) -> Integer
+
+        def initialize: (
+          ?end_: Integer,
+          ?should_parse: bool,
+          ?start: Integer
+        ) -> void
+
+        def to_hash: -> { end_: Integer, should_parse: bool, start: Integer }
+      end
     end
   end
 end

@@ -34,7 +34,8 @@ module ContextDev
         required :num_failed, Integer, api_name: :numFailed
 
         # @!attribute num_skipped
-        #   Number of URLs skipped (PDFs when parsePDF=false, or URLs not matching urlRegex)
+        #   Number of URLs skipped (PDFs when pdf.shouldParse=false, or URLs not matching
+        #   urlRegex)
         #
         #   @return [Integer]
         required :num_skipped, Integer, api_name: :numSkipped
@@ -59,7 +60,7 @@ module ContextDev
         #
         #   @param num_failed [Integer] Number of pages that failed to crawl
         #
-        #   @param num_skipped [Integer] Number of URLs skipped (PDFs when parsePDF=false, or URLs not matching urlRegex)
+        #   @param num_skipped [Integer] Number of URLs skipped (PDFs when pdf.shouldParse=false, or URLs not matching ur
         #
         #   @param num_succeeded [Integer] Number of pages successfully crawled
         #
