@@ -38,6 +38,7 @@ module ContextDev
         ?max_pages: Integer,
         ?pdf: ContextDev::WebWebCrawlMdParams::Pdf,
         ?shorten_base64_images: bool,
+        ?stop_after_ms: Integer,
         ?timeout_ms: Integer,
         ?url_regex: String,
         ?use_main_content_only: bool,

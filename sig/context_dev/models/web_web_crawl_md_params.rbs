@@ -12,6 +12,7 @@ module ContextDev
         max_pages: Integer,
         pdf: ContextDev::WebWebCrawlMdParams::Pdf,
         :shorten_base64_images => bool,
+        stop_after_ms: Integer,
         timeout_ms: Integer,
         url_regex: String,
         use_main_content_only: bool,
@@ -63,6 +64,10 @@ module ContextDev
 
       def shorten_base64_images=: (bool) -> bool
 
+      attr_reader stop_after_ms: Integer?
+
+      def stop_after_ms=: (Integer) -> Integer
+
       attr_reader timeout_ms: Integer?
 
       def timeout_ms=: (Integer) -> Integer
@@ -90,6 +95,7 @@ module ContextDev
         ?max_pages: Integer,
         ?pdf: ContextDev::WebWebCrawlMdParams::Pdf,
         ?shorten_base64_images: bool,
+        ?stop_after_ms: Integer,
         ?timeout_ms: Integer,
         ?url_regex: String,
         ?use_main_content_only: bool,
@@ -108,6 +114,7 @@ module ContextDev
         max_pages: Integer,
         pdf: ContextDev::WebWebCrawlMdParams::Pdf,
         :shorten_base64_images => bool,
+        stop_after_ms: Integer,
         timeout_ms: Integer,
         url_regex: String,
         use_main_content_only: bool,
