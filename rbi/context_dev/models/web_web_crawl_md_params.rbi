@@ -69,14 +69,13 @@ module ContextDev
       sig { params(max_pages: Integer).void }
       attr_writer :max_pages
 
-      # When true (default), PDF pages are fetched and their text layer is extracted and
-      # converted to Markdown alongside HTML pages. When false, PDF pages are skipped
-      # entirely (not included in results and not counted as failures).
-      sig { returns(T.nilable(T::Boolean)) }
-      attr_reader :parse_pdf
+      # PDF parsing controls. Use start/end to limit text extraction and OCR to an
+      # inclusive 1-based page range.
+      sig { returns(T.nilable(ContextDev::WebWebCrawlMdParams::Pdf)) }
+      attr_reader :pdf
 
-      sig { params(parse_pdf: T::Boolean).void }
-      attr_writer :parse_pdf
+      sig { params(pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash).void }
+      attr_writer :pdf
 
       # Truncate base64-encoded image data in the Markdown output
       sig { returns(T.nilable(T::Boolean)) }
@@ -84,6 +83,16 @@ module ContextDev
 
       sig { params(shorten_base64_images: T::Boolean).void }
       attr_writer :shorten_base64_images
+
+      # Soft time budget for the crawl in milliseconds. After each scrape, the crawler
+      # checks the elapsed time and, if exceeded, returns the pages collected so far
+      # instead of continuing. Min: 10000 (10s). Max: 240000 (4 min). Default: 120000 (2
+      # min).
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :stop_after_ms
+
+      sig { params(stop_after_ms: Integer).void }
+      attr_writer :stop_after_ms
 
       # Optional timeout in milliseconds for the request. If the request takes longer
       # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -127,8 +136,9 @@ module ContextDev
           max_age_ms: Integer,
           max_depth: Integer,
           max_pages: Integer,
-          parse_pdf: T::Boolean,
+          pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash,
           shorten_base64_images: T::Boolean,
+          stop_after_ms: Integer,
           timeout_ms: Integer,
           url_regex: String,
           use_main_content_only: T::Boolean,
@@ -158,12 +168,16 @@ module ContextDev
         max_depth: nil,
         # Maximum number of pages to crawl. Hard cap: 500.
         max_pages: nil,
-        # When true (default), PDF pages are fetched and their text layer is extracted and
-        # converted to Markdown alongside HTML pages. When false, PDF pages are skipped
-        # entirely (not included in results and not counted as failures).
-        parse_pdf: nil,
+        # PDF parsing controls. Use start/end to limit text extraction and OCR to an
+        # inclusive 1-based page range.
+        pdf: nil,
         # Truncate base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
+        # Soft time budget for the crawl in milliseconds. After each scrape, the crawler
+        # checks the elapsed time and, if exceeded, returns the pages collected so far
+        # instead of continuing. Min: 10000 (10s). Max: 240000 (4 min). Default: 120000 (2
+        # min).
+        stop_after_ms: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -191,8 +205,9 @@ module ContextDev
             max_age_ms: Integer,
             max_depth: Integer,
             max_pages: Integer,
-            parse_pdf: T::Boolean,
+            pdf: ContextDev::WebWebCrawlMdParams::Pdf,
             shorten_base64_images: T::Boolean,
+            stop_after_ms: Integer,
             timeout_ms: Integer,
             url_regex: String,
             use_main_content_only: T::Boolean,
@@ -202,6 +217,68 @@ module ContextDev
         )
       end
       def to_hash
+      end
+
+      class Pdf < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::WebWebCrawlMdParams::Pdf,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
+        # Must be greater than or equal to start when both are provided.
+        sig { returns(T.nilable(Integer)) }
+        attr_reader :end_
+
+        sig { params(end_: Integer).void }
+        attr_writer :end_
+
+        # When true, PDF pages are fetched and parsed. When false, PDF pages are skipped
+        # entirely (not included in results and not counted as failures).
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_reader :should_parse
+
+        sig { params(should_parse: T::Boolean).void }
+        attr_writer :should_parse
+
+        # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+        sig { returns(T.nilable(Integer)) }
+        attr_reader :start
+
+        sig { params(start: Integer).void }
+        attr_writer :start
+
+        # PDF parsing controls. Use start/end to limit text extraction and OCR to an
+        # inclusive 1-based page range.
+        sig do
+          params(
+            end_: Integer,
+            should_parse: T::Boolean,
+            start: Integer
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
+          # Must be greater than or equal to start when both are provided.
+          end_: nil,
+          # When true, PDF pages are fetched and parsed. When false, PDF pages are skipped
+          # entirely (not included in results and not counted as failures).
+          should_parse: nil,
+          # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+          start: nil
+        )
+        end
+
+        sig do
+          override.returns(
+            { end_: Integer, should_parse: T::Boolean, start: Integer }
+          )
+        end
+        def to_hash
+        end
       end
     end
   end

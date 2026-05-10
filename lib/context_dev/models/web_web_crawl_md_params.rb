@@ -60,19 +60,27 @@ module ContextDev
       #   @return [Integer, nil]
       optional :max_pages, Integer, api_name: :maxPages
 
-      # @!attribute parse_pdf
-      #   When true (default), PDF pages are fetched and their text layer is extracted and
-      #   converted to Markdown alongside HTML pages. When false, PDF pages are skipped
-      #   entirely (not included in results and not counted as failures).
+      # @!attribute pdf
+      #   PDF parsing controls. Use start/end to limit text extraction and OCR to an
+      #   inclusive 1-based page range.
       #
-      #   @return [Boolean, nil]
-      optional :parse_pdf, ContextDev::Internal::Type::Boolean, api_name: :parsePDF
+      #   @return [ContextDev::Models::WebWebCrawlMdParams::Pdf, nil]
+      optional :pdf, -> { ContextDev::WebWebCrawlMdParams::Pdf }
 
       # @!attribute shorten_base64_images
       #   Truncate base64-encoded image data in the Markdown output
       #
       #   @return [Boolean, nil]
       optional :shorten_base64_images, ContextDev::Internal::Type::Boolean, api_name: :shortenBase64Images
+
+      # @!attribute stop_after_ms
+      #   Soft time budget for the crawl in milliseconds. After each scrape, the crawler
+      #   checks the elapsed time and, if exceeded, returns the pages collected so far
+      #   instead of continuing. Min: 10000 (10s). Max: 240000 (4 min). Default: 120000 (2
+      #   min).
+      #
+      #   @return [Integer, nil]
+      optional :stop_after_ms, Integer, api_name: :stopAfterMs
 
       # @!attribute timeout_ms
       #   Optional timeout in milliseconds for the request. If the request takes longer
@@ -102,7 +110,7 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, api_name: :waitForMs
 
-      # @!method initialize(url:, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, parse_pdf: nil, shorten_base64_images: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(url:, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
@@ -122,9 +130,11 @@ module ContextDev
       #
       #   @param max_pages [Integer] Maximum number of pages to crawl. Hard cap: 500.
       #
-      #   @param parse_pdf [Boolean] When true (default), PDF pages are fetched and their text layer is extracted and
+      #   @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
       #
       #   @param shorten_base64_images [Boolean] Truncate base64-encoded image data in the Markdown output
+      #
+      #   @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds. After each scrape, the crawler c
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -135,6 +145,41 @@ module ContextDev
       #   @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load for each craw
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      class Pdf < ContextDev::Internal::Type::BaseModel
+        # @!attribute end_
+        #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
+        #   Must be greater than or equal to start when both are provided.
+        #
+        #   @return [Integer, nil]
+        optional :end_, Integer, api_name: :end
+
+        # @!attribute should_parse
+        #   When true, PDF pages are fetched and parsed. When false, PDF pages are skipped
+        #   entirely (not included in results and not counted as failures).
+        #
+        #   @return [Boolean, nil]
+        optional :should_parse, ContextDev::Internal::Type::Boolean, api_name: :shouldParse
+
+        # @!attribute start
+        #   First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+        #
+        #   @return [Integer, nil]
+        optional :start, Integer
+
+        # @!method initialize(end_: nil, should_parse: nil, start: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebWebCrawlMdParams::Pdf} for more details.
+        #
+        #   PDF parsing controls. Use start/end to limit text extraction and OCR to an
+        #   inclusive 1-based page range.
+        #
+        #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
+        #
+        #   @param should_parse [Boolean] When true, PDF pages are fetched and parsed. When false, PDF pages are skipped e
+        #
+        #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+      end
     end
   end
 end

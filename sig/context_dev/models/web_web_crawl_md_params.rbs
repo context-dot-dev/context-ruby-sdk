@@ -10,8 +10,9 @@ module ContextDev
         max_age_ms: Integer,
         max_depth: Integer,
         max_pages: Integer,
-        parse_pdf: bool,
+        pdf: ContextDev::WebWebCrawlMdParams::Pdf,
         :shorten_base64_images => bool,
+        stop_after_ms: Integer,
         timeout_ms: Integer,
         url_regex: String,
         use_main_content_only: bool,
@@ -53,13 +54,19 @@ module ContextDev
 
       def max_pages=: (Integer) -> Integer
 
-      attr_reader parse_pdf: bool?
+      attr_reader pdf: ContextDev::WebWebCrawlMdParams::Pdf?
 
-      def parse_pdf=: (bool) -> bool
+      def pdf=: (
+        ContextDev::WebWebCrawlMdParams::Pdf
+      ) -> ContextDev::WebWebCrawlMdParams::Pdf
 
       attr_reader shorten_base64_images: bool?
 
       def shorten_base64_images=: (bool) -> bool
+
+      attr_reader stop_after_ms: Integer?
+
+      def stop_after_ms=: (Integer) -> Integer
 
       attr_reader timeout_ms: Integer?
 
@@ -86,8 +93,9 @@ module ContextDev
         ?max_age_ms: Integer,
         ?max_depth: Integer,
         ?max_pages: Integer,
-        ?parse_pdf: bool,
+        ?pdf: ContextDev::WebWebCrawlMdParams::Pdf,
         ?shorten_base64_images: bool,
+        ?stop_after_ms: Integer,
         ?timeout_ms: Integer,
         ?url_regex: String,
         ?use_main_content_only: bool,
@@ -104,14 +112,39 @@ module ContextDev
         max_age_ms: Integer,
         max_depth: Integer,
         max_pages: Integer,
-        parse_pdf: bool,
+        pdf: ContextDev::WebWebCrawlMdParams::Pdf,
         :shorten_base64_images => bool,
+        stop_after_ms: Integer,
         timeout_ms: Integer,
         url_regex: String,
         use_main_content_only: bool,
         wait_for_ms: Integer,
         request_options: ContextDev::RequestOptions
       }
+
+      type pdf = { end_: Integer, should_parse: bool, start: Integer }
+
+      class Pdf < ContextDev::Internal::Type::BaseModel
+        attr_reader end_: Integer?
+
+        def end_=: (Integer) -> Integer
+
+        attr_reader should_parse: bool?
+
+        def should_parse=: (bool) -> bool
+
+        attr_reader start: Integer?
+
+        def start=: (Integer) -> Integer
+
+        def initialize: (
+          ?end_: Integer,
+          ?should_parse: bool,
+          ?start: Integer
+        ) -> void
+
+        def to_hash: -> { end_: Integer, should_parse: bool, start: Integer }
+      end
     end
   end
 end
