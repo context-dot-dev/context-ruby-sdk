@@ -124,6 +124,7 @@ module ContextDev
           max_pages: Integer,
           pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash,
           shorten_base64_images: T::Boolean,
+          stop_after_ms: Integer,
           timeout_ms: Integer,
           url_regex: String,
           use_main_content_only: T::Boolean,
@@ -158,6 +159,11 @@ module ContextDev
         pdf: nil,
         # Truncate base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
+        # Soft time budget for the crawl in milliseconds. After each scrape, the crawler
+        # checks the elapsed time and, if exceeded, returns the pages collected so far
+        # instead of continuing. Min: 10000 (10s). Max: 240000 (4 min). Default: 120000 (2
+        # min).
+        stop_after_ms: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
