@@ -122,7 +122,7 @@ module ContextDev
           max_age_ms: Integer,
           max_depth: Integer,
           max_pages: Integer,
-          parse_pdf: T::Boolean,
+          pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash,
           shorten_base64_images: T::Boolean,
           timeout_ms: Integer,
           url_regex: String,
@@ -153,10 +153,9 @@ module ContextDev
         max_depth: nil,
         # Maximum number of pages to crawl. Hard cap: 500.
         max_pages: nil,
-        # When true (default), PDF pages are fetched and their text layer is extracted and
-        # converted to Markdown alongside HTML pages. When false, PDF pages are skipped
-        # entirely (not included in results and not counted as failures).
-        parse_pdf: nil,
+        # PDF parsing controls. Use start/end to limit text extraction and OCR to an
+        # inclusive 1-based page range.
+        pdf: nil,
         # Truncate base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
@@ -181,7 +180,7 @@ module ContextDev
           url: String,
           include_frames: T::Boolean,
           max_age_ms: Integer,
-          parse_pdf: T::Boolean,
+          pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
           timeout_ms: Integer,
           wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
@@ -196,10 +195,9 @@ module ContextDev
         # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
         max_age_ms: nil,
-        # When true (default), PDF URLs are fetched and their text layer is extracted and
-        # returned wrapped in <html><pdf>…</pdf></html>. When false, PDF URLs are skipped
-        # and a 400 WEBSITE_ACCESS_ERROR is returned.
-        parse_pdf: nil,
+        # PDF parsing controls. Use start/end to limit text extraction and OCR to an
+        # inclusive 1-based page range.
+        pdf: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -253,7 +251,7 @@ module ContextDev
           include_images: T::Boolean,
           include_links: T::Boolean,
           max_age_ms: Integer,
-          parse_pdf: T::Boolean,
+          pdf: ContextDev::WebWebScrapeMdParams::Pdf::OrHash,
           shorten_base64_images: T::Boolean,
           timeout_ms: Integer,
           use_main_content_only: T::Boolean,
@@ -275,10 +273,9 @@ module ContextDev
         # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
         max_age_ms: nil,
-        # When true (default), PDF URLs are fetched and their text layer is extracted and
-        # converted to Markdown. When false, PDF URLs are skipped and a 400
-        # WEBSITE_ACCESS_ERROR is returned.
-        parse_pdf: nil,
+        # PDF parsing controls. Use start/end to limit text extraction and OCR to an
+        # inclusive 1-based page range.
+        pdf: nil,
         # Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
