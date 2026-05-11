@@ -70,13 +70,15 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(direct_url: nil, domain: nil, full_screenshot: nil, max_age_ms: nil, page: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      # @overload screenshot(direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
       #
       # @param direct_url [String] A specific URL to screenshot directly, bypassing domain resolution (e.g., 'https
       #
       # @param domain [String] Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The domai
       #
       # @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
+      #
+      # @param handle_cookie_popup [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', the brow
       #
       # @param max_age_ms [Integer] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
@@ -102,6 +104,7 @@ module ContextDev
           query: query.transform_keys(
             direct_url: "directUrl",
             full_screenshot: "fullScreenshot",
+            handle_cookie_popup: "handleCookiePopup",
             max_age_ms: "maxAgeMs",
             timeout_ms: "timeoutMS",
             wait_for_ms: "waitForMs"

@@ -65,6 +65,8 @@ module ContextDev
           domain: String,
           full_screenshot:
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
+          handle_cookie_popup:
+            ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol,
           max_age_ms: Integer,
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           timeout_ms: Integer,
@@ -86,6 +88,11 @@ module ContextDev
         # screenshot capturing all content. If 'false' or not provided, takes a viewport
         # screenshot (standard browser view).
         full_screenshot: nil,
+        # Optional parameter to control cookie/consent popup handling. If 'true', the
+        # browser service dismisses cookie consent before capture. If 'false' or not
+        # provided, captures the page without that step. This value is part of the
+        # screenshot cache key.
+        handle_cookie_popup: nil,
         # Return a cached screenshot if a prior screenshot for the same parameters exists
         # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.

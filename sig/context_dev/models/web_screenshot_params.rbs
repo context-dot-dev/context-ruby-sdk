@@ -5,6 +5,7 @@ module ContextDev
         direct_url: String,
         domain: String,
         full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
+        handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
         max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
         timeout_ms: Integer,
@@ -30,6 +31,12 @@ module ContextDev
       def full_screenshot=: (
         ContextDev::Models::WebScreenshotParams::full_screenshot
       ) -> ContextDev::Models::WebScreenshotParams::full_screenshot
+
+      attr_reader handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup?
+
+      def handle_cookie_popup=: (
+        ContextDev::Models::WebScreenshotParams::handle_cookie_popup
+      ) -> ContextDev::Models::WebScreenshotParams::handle_cookie_popup
 
       attr_reader max_age_ms: Integer?
 
@@ -59,6 +66,7 @@ module ContextDev
         ?direct_url: String,
         ?domain: String,
         ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
+        ?handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
         ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
         ?timeout_ms: Integer,
@@ -71,6 +79,7 @@ module ContextDev
         direct_url: String,
         domain: String,
         full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
+        handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
         max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
         timeout_ms: Integer,
@@ -88,6 +97,17 @@ module ContextDev
         FALSE: :false
 
         def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::full_screenshot]
+      end
+
+      type handle_cookie_popup = :true | :false
+
+      module HandleCookiePopup
+        extend ContextDev::Internal::Type::Enum
+
+        TRUE: :true
+        FALSE: :false
+
+        def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::handle_cookie_popup]
       end
 
       type page =
