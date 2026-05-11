@@ -78,7 +78,7 @@ module ContextDev
       #
       # @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
-      # @param handle_cookie_popup [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', the brow
+      # @param handle_cookie_popup [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
       #
       # @param max_age_ms [Integer] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
