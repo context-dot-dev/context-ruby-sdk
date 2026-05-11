@@ -31,6 +31,14 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot, nil]
       optional :full_screenshot, enum: -> { ContextDev::WebScreenshotParams::FullScreenshot }
 
+      # @!attribute handle_cookie_popup
+      #   Optional parameter to control cookie/consent popup handling. If 'true', we
+      #   dismiss cookie banner before capture. If 'false' or not provided, captures the
+      #   page without that step.
+      #
+      #   @return [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup, nil]
+      optional :handle_cookie_popup, enum: -> { ContextDev::WebScreenshotParams::HandleCookiePopup }
+
       # @!attribute max_age_ms
       #   Return a cached screenshot if a prior screenshot for the same parameters exists
       #   and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
@@ -71,7 +79,7 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer
 
-      # @!method initialize(direct_url: nil, domain: nil, full_screenshot: nil, max_age_ms: nil, page: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScreenshotParams} for more details.
       #
@@ -80,6 +88,8 @@ module ContextDev
       #   @param domain [String] Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The domai
       #
       #   @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
+      #
+      #   @param handle_cookie_popup [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
       #
       #   @param max_age_ms [Integer] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
@@ -97,6 +107,19 @@ module ContextDev
       # screenshot capturing all content. If 'false' or not provided, takes a viewport
       # screenshot (standard browser view).
       module FullScreenshot
+        extend ContextDev::Internal::Type::Enum
+
+        TRUE = :true
+        FALSE = :false
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
+      end
+
+      # Optional parameter to control cookie/consent popup handling. If 'true', we
+      # dismiss cookie banner before capture. If 'false' or not provided, captures the
+      # page without that step.
+      module HandleCookiePopup
         extend ContextDev::Internal::Type::Enum
 
         TRUE = :true

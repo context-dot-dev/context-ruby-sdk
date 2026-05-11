@@ -47,6 +47,26 @@ module ContextDev
       end
       attr_writer :full_screenshot
 
+      # Optional parameter to control cookie/consent popup handling. If 'true', we
+      # dismiss cookie banner before capture. If 'false' or not provided, captures the
+      # page without that step.
+      sig do
+        returns(
+          T.nilable(
+            ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
+          )
+        )
+      end
+      attr_reader :handle_cookie_popup
+
+      sig do
+        params(
+          handle_cookie_popup:
+            ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
+        ).void
+      end
+      attr_writer :handle_cookie_popup
+
       # Return a cached screenshot if a prior screenshot for the same parameters exists
       # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
       # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
@@ -102,6 +122,8 @@ module ContextDev
           domain: String,
           full_screenshot:
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
+          handle_cookie_popup:
+            ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol,
           max_age_ms: Integer,
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           timeout_ms: Integer,
@@ -123,6 +145,10 @@ module ContextDev
         # screenshot capturing all content. If 'false' or not provided, takes a viewport
         # screenshot (standard browser view).
         full_screenshot: nil,
+        # Optional parameter to control cookie/consent popup handling. If 'true', we
+        # dismiss cookie banner before capture. If 'false' or not provided, captures the
+        # page without that step.
+        handle_cookie_popup: nil,
         # Return a cached screenshot if a prior screenshot for the same parameters exists
         # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
@@ -154,6 +180,8 @@ module ContextDev
             domain: String,
             full_screenshot:
               ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
+            handle_cookie_popup:
+              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol,
             max_age_ms: Integer,
             page: ContextDev::WebScreenshotParams::Page::OrSymbol,
             timeout_ms: Integer,
@@ -193,6 +221,40 @@ module ContextDev
           override.returns(
             T::Array[
               ContextDev::WebScreenshotParams::FullScreenshot::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
+        end
+      end
+
+      # Optional parameter to control cookie/consent popup handling. If 'true', we
+      # dismiss cookie banner before capture. If 'false' or not provided, captures the
+      # page without that step.
+      module HandleCookiePopup
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::WebScreenshotParams::HandleCookiePopup)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        TRUE =
+          T.let(
+            :true,
+            ContextDev::WebScreenshotParams::HandleCookiePopup::TaggedSymbol
+          )
+        FALSE =
+          T.let(
+            :false,
+            ContextDev::WebScreenshotParams::HandleCookiePopup::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::WebScreenshotParams::HandleCookiePopup::TaggedSymbol
             ]
           )
         end
