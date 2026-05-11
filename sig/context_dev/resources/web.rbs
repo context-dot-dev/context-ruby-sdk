@@ -19,6 +19,7 @@ module ContextDev
         ?direct_url: String,
         ?domain: String,
         ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
+        ?handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
         ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
         ?timeout_ms: Integer,
