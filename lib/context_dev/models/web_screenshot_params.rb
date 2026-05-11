@@ -32,10 +32,9 @@ module ContextDev
       optional :full_screenshot, enum: -> { ContextDev::WebScreenshotParams::FullScreenshot }
 
       # @!attribute handle_cookie_popup
-      #   Optional parameter to control cookie/consent popup handling. If 'true', the
-      #   browser service dismisses cookie consent before capture. If 'false' or not
-      #   provided, captures the page without that step. This value is part of the
-      #   screenshot cache key.
+      #   Optional parameter to control cookie/consent popup handling. If 'true', we
+      #   dismiss cookie banner before capture. If 'false' or not provided, captures the
+      #   page without that step.
       #
       #   @return [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup, nil]
       optional :handle_cookie_popup, enum: -> { ContextDev::WebScreenshotParams::HandleCookiePopup }
@@ -90,7 +89,7 @@ module ContextDev
       #
       #   @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
-      #   @param handle_cookie_popup [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', the brow
+      #   @param handle_cookie_popup [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
       #
       #   @param max_age_ms [Integer] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
@@ -117,10 +116,9 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Optional parameter to control cookie/consent popup handling. If 'true', the
-      # browser service dismisses cookie consent before capture. If 'false' or not
-      # provided, captures the page without that step. This value is part of the
-      # screenshot cache key.
+      # Optional parameter to control cookie/consent popup handling. If 'true', we
+      # dismiss cookie banner before capture. If 'false' or not provided, captures the
+      # page without that step.
       module HandleCookiePopup
         extend ContextDev::Internal::Type::Enum
 
