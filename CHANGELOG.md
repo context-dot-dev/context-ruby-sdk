@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.20.1 (2026-05-14)
+
+Full Changelog: [v1.20.0...v1.20.1](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.20.0...v1.20.1)
+
+### Bug Fixes
+
+* **client:** elide content type header on requests without body ([f53ad05](https://github.com/context-dot-dev/context-ruby-sdk/commit/f53ad05fc7e00b2be604cc1e637998bf4ed187f5))
+
 ## 1.20.0 (2026-05-11)
 
 Full Changelog: [v1.19.0...v1.20.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.19.0...v1.20.0)
