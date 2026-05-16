@@ -115,6 +115,43 @@ module ContextDev
       end
 
       # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebSearchParams} for more details.
+      #
+      # Search the web and optionally scrape each result to Markdown in one round-trip.
+      #
+      # @overload search(query:, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, query_fanout: nil, timeout_ms: nil, request_options: {})
+      #
+      # @param query [String] Natural-language search query.
+      #
+      # @param exclude_domains [Array<String>] Blocklist — drop results from these domains. Example: ["pinterest.com", "reddit.
+      #
+      # @param freshness [Symbol, ContextDev::Models::WebSearchParams::Freshness] Restrict results to content published within this window.
+      #
+      # @param include_domains [Array<String>] Allowlist — only return results from these domains. Example: ["arxiv.org", "gith
+      #
+      # @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions] Inline Markdown scraping for each result. Set `enabled: true` to activate.
+      #
+      # @param query_fanout [Boolean] Expand the query into multiple parallel variants for broader recall.
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::WebSearchResponse]
+      #
+      # @see ContextDev::Models::WebSearchParams
+      def search(params)
+        parsed, options = ContextDev::WebSearchParams.dump_request(params)
+        @client.request(
+          method: :post,
+          path: "web/search",
+          body: parsed,
+          model: ContextDev::Models::WebSearchResponse,
+          options: options
+        )
+      end
+
+      # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
       # Performs a crawl starting from a given URL, extracts page content as Markdown,

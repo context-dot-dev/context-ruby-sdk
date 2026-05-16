@@ -1,0 +1,115 @@
+module ContextDev
+  module Models
+    type web_search_response =
+      {
+        query: String,
+        results: ::Array[ContextDev::Models::WebSearchResponse::Result]
+      }
+
+    class WebSearchResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor query: String
+
+      attr_accessor results: ::Array[ContextDev::Models::WebSearchResponse::Result]
+
+      def initialize: (
+        query: String,
+        results: ::Array[ContextDev::Models::WebSearchResponse::Result]
+      ) -> void
+
+      def to_hash: -> {
+        query: String,
+        results: ::Array[ContextDev::Models::WebSearchResponse::Result]
+      }
+
+      type result =
+        {
+          description: String,
+          markdown: ContextDev::Models::WebSearchResponse::Result::Markdown,
+          relevance: ContextDev::Models::WebSearchResponse::Result::relevance,
+          title: String,
+          url: String
+        }
+
+      class Result < ContextDev::Internal::Type::BaseModel
+        attr_accessor description: String
+
+        attr_accessor markdown: ContextDev::Models::WebSearchResponse::Result::Markdown
+
+        attr_accessor relevance: ContextDev::Models::WebSearchResponse::Result::relevance
+
+        attr_accessor title: String
+
+        attr_accessor url: String
+
+        def initialize: (
+          description: String,
+          markdown: ContextDev::Models::WebSearchResponse::Result::Markdown,
+          relevance: ContextDev::Models::WebSearchResponse::Result::relevance,
+          title: String,
+          url: String
+        ) -> void
+
+        def to_hash: -> {
+          description: String,
+          markdown: ContextDev::Models::WebSearchResponse::Result::Markdown,
+          relevance: ContextDev::Models::WebSearchResponse::Result::relevance,
+          title: String,
+          url: String
+        }
+
+        type markdown =
+          {
+            code: ContextDev::Models::WebSearchResponse::Result::Markdown::code,
+            markdown: String?
+          }
+
+        class Markdown < ContextDev::Internal::Type::BaseModel
+          attr_accessor code: ContextDev::Models::WebSearchResponse::Result::Markdown::code
+
+          attr_accessor markdown: String?
+
+          def initialize: (
+            code: ContextDev::Models::WebSearchResponse::Result::Markdown::code,
+            markdown: String?
+          ) -> void
+
+          def to_hash: -> {
+            code: ContextDev::Models::WebSearchResponse::Result::Markdown::code,
+            markdown: String?
+          }
+
+          type code =
+            :SUCCESS
+            | :NOT_REQUESTED
+            | :TIMEOUT
+            | :WEBSITE_ACCESS_ERROR
+            | :ERROR
+
+          module Code
+            extend ContextDev::Internal::Type::Enum
+
+            SUCCESS: :SUCCESS
+            NOT_REQUESTED: :NOT_REQUESTED
+            TIMEOUT: :TIMEOUT
+            WEBSITE_ACCESS_ERROR: :WEBSITE_ACCESS_ERROR
+            ERROR: :ERROR
+
+            def self?.values: -> ::Array[ContextDev::Models::WebSearchResponse::Result::Markdown::code]
+          end
+        end
+
+        type relevance = :high | :medium | :low
+
+        module Relevance
+          extend ContextDev::Internal::Type::Enum
+
+          HIGH: :high
+          MEDIUM: :medium
+          LOW: :low
+
+          def self?.values: -> ::Array[ContextDev::Models::WebSearchResponse::Result::relevance]
+        end
+      end
+    end
+  end
+end
