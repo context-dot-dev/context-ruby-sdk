@@ -28,6 +28,17 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebScreenshotResponse
 
+      def search: (
+        query: String,
+        ?exclude_domains: ::Array[String],
+        ?freshness: ContextDev::Models::WebSearchParams::freshness,
+        ?include_domains: ::Array[String],
+        ?markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
+        ?query_fanout: bool,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::WebSearchResponse
+
       def web_crawl_md: (
         url: String,
         ?follow_subdomains: bool,
