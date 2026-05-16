@@ -73,6 +73,8 @@ module ContextDev
 
   WebScreenshotParams = ContextDev::Models::WebScreenshotParams
 
+  WebSearchParams = ContextDev::Models::WebSearchParams
+
   WebWebCrawlMdParams = ContextDev::Models::WebWebCrawlMdParams
 
   WebWebScrapeHTMLParams = ContextDev::Models::WebWebScrapeHTMLParams

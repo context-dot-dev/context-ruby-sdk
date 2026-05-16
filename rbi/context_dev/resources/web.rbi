@@ -116,6 +116,43 @@ module ContextDev
       )
       end
 
+      # Search the web and optionally scrape each result to Markdown in one round-trip.
+      sig do
+        params(
+          query: String,
+          exclude_domains: T::Array[String],
+          freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
+          include_domains: T::Array[String],
+          markdown_options:
+            ContextDev::WebSearchParams::MarkdownOptions::OrHash,
+          query_fanout: T::Boolean,
+          timeout_ms: Integer,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebSearchResponse)
+      end
+      def search(
+        # Natural-language search query.
+        query:,
+        # Blocklist — drop results from these domains. Example: ["pinterest.com",
+        # "reddit.com"].
+        exclude_domains: nil,
+        # Restrict results to content published within this window.
+        freshness: nil,
+        # Allowlist — only return results from these domains. Example: ["arxiv.org",
+        # "github.com"].
+        include_domains: nil,
+        # Inline Markdown scraping for each result. Set `enabled: true` to activate.
+        markdown_options: nil,
+        # Expand the query into multiple parallel variants for broader recall.
+        query_fanout: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
+        request_options: {}
+      )
+      end
+
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
       # and returns results for all crawled pages.
       sig do

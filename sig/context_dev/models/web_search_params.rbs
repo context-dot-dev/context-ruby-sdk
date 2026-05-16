@@ -1,0 +1,193 @@
+module ContextDev
+  module Models
+    type web_search_params =
+      {
+        query: String,
+        exclude_domains: ::Array[String],
+        freshness: ContextDev::Models::WebSearchParams::freshness,
+        include_domains: ::Array[String],
+        markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
+        query_fanout: bool,
+        timeout_ms: Integer
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class WebSearchParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor query: String
+
+      attr_reader exclude_domains: ::Array[String]?
+
+      def exclude_domains=: (::Array[String]) -> ::Array[String]
+
+      attr_reader freshness: ContextDev::Models::WebSearchParams::freshness?
+
+      def freshness=: (
+        ContextDev::Models::WebSearchParams::freshness
+      ) -> ContextDev::Models::WebSearchParams::freshness
+
+      attr_reader include_domains: ::Array[String]?
+
+      def include_domains=: (::Array[String]) -> ::Array[String]
+
+      attr_reader markdown_options: ContextDev::WebSearchParams::MarkdownOptions?
+
+      def markdown_options=: (
+        ContextDev::WebSearchParams::MarkdownOptions
+      ) -> ContextDev::WebSearchParams::MarkdownOptions
+
+      attr_reader query_fanout: bool?
+
+      def query_fanout=: (bool) -> bool
+
+      attr_reader timeout_ms: Integer?
+
+      def timeout_ms=: (Integer) -> Integer
+
+      def initialize: (
+        query: String,
+        ?exclude_domains: ::Array[String],
+        ?freshness: ContextDev::Models::WebSearchParams::freshness,
+        ?include_domains: ::Array[String],
+        ?markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
+        ?query_fanout: bool,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        query: String,
+        exclude_domains: ::Array[String],
+        freshness: ContextDev::Models::WebSearchParams::freshness,
+        include_domains: ::Array[String],
+        markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
+        query_fanout: bool,
+        timeout_ms: Integer,
+        request_options: ContextDev::RequestOptions
+      }
+
+      type freshness = :last_24_hours | :last_week | :last_month | :last_year
+
+      module Freshness
+        extend ContextDev::Internal::Type::Enum
+
+        LAST_24_HOURS: :last_24_hours
+        LAST_WEEK: :last_week
+        LAST_MONTH: :last_month
+        LAST_YEAR: :last_year
+
+        def self?.values: -> ::Array[ContextDev::Models::WebSearchParams::freshness]
+      end
+
+      type markdown_options =
+        {
+          enabled: bool,
+          include_frames: bool,
+          include_images: bool,
+          include_links: bool,
+          max_age_ms: Integer,
+          pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf,
+          :shorten_base64_images => bool,
+          timeout_ms: Integer,
+          use_main_content_only: bool,
+          wait_for_ms: Integer
+        }
+
+      class MarkdownOptions < ContextDev::Internal::Type::BaseModel
+        attr_reader enabled: bool?
+
+        def enabled=: (bool) -> bool
+
+        attr_reader include_frames: bool?
+
+        def include_frames=: (bool) -> bool
+
+        attr_reader include_images: bool?
+
+        def include_images=: (bool) -> bool
+
+        attr_reader include_links: bool?
+
+        def include_links=: (bool) -> bool
+
+        attr_reader max_age_ms: Integer?
+
+        def max_age_ms=: (Integer) -> Integer
+
+        attr_reader pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf?
+
+        def pdf=: (
+          ContextDev::WebSearchParams::MarkdownOptions::Pdf
+        ) -> ContextDev::WebSearchParams::MarkdownOptions::Pdf
+
+        attr_reader shorten_base64_images: bool?
+
+        def shorten_base64_images=: (bool) -> bool
+
+        attr_reader timeout_ms: Integer?
+
+        def timeout_ms=: (Integer) -> Integer
+
+        attr_reader use_main_content_only: bool?
+
+        def use_main_content_only=: (bool) -> bool
+
+        attr_reader wait_for_ms: Integer?
+
+        def wait_for_ms=: (Integer) -> Integer
+
+        def initialize: (
+          ?enabled: bool,
+          ?include_frames: bool,
+          ?include_images: bool,
+          ?include_links: bool,
+          ?max_age_ms: Integer,
+          ?pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf,
+          ?shorten_base64_images: bool,
+          ?timeout_ms: Integer,
+          ?use_main_content_only: bool,
+          ?wait_for_ms: Integer
+        ) -> void
+
+        def to_hash: -> {
+          enabled: bool,
+          include_frames: bool,
+          include_images: bool,
+          include_links: bool,
+          max_age_ms: Integer,
+          pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf,
+          :shorten_base64_images => bool,
+          timeout_ms: Integer,
+          use_main_content_only: bool,
+          wait_for_ms: Integer
+        }
+
+        type pdf = { end_: Integer, should_parse: bool, start: Integer }
+
+        class Pdf < ContextDev::Internal::Type::BaseModel
+          attr_reader end_: Integer?
+
+          def end_=: (Integer) -> Integer
+
+          attr_reader should_parse: bool?
+
+          def should_parse=: (bool) -> bool
+
+          attr_reader start: Integer?
+
+          def start=: (Integer) -> Integer
+
+          def initialize: (
+            ?end_: Integer,
+            ?should_parse: bool,
+            ?start: Integer
+          ) -> void
+
+          def to_hash: -> { end_: Integer, should_parse: bool, start: Integer }
+        end
+      end
+    end
+  end
+end

@@ -64,6 +64,23 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     end
   end
 
+  def test_search_required_params
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.web.search(query: "x")
+
+    assert_pattern do
+      response => ContextDev::Models::WebSearchResponse
+    end
+
+    assert_pattern do
+      response => {
+        query: String,
+        results: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebSearchResponse::Result])
+      }
+    end
+  end
+
   def test_web_crawl_md_required_params
     skip("Mock server tests are disabled")
 
