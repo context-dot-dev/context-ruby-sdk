@@ -68,7 +68,7 @@ module ContextDev
         end
         attr_writer :markdown
 
-        # Model-judged relevance to the original query.
+        # Relevance to the original query.
         sig do
           returns(
             ContextDev::Models::WebSearchResponse::Result::Relevance::TaggedSymbol
@@ -100,7 +100,7 @@ module ContextDev
           description:,
           # Markdown scrape status and content for this result.
           markdown:,
-          # Model-judged relevance to the original query.
+          # Relevance to the original query.
           relevance:,
           # Page title.
           title:,
@@ -226,7 +226,7 @@ module ContextDev
           end
         end
 
-        # Model-judged relevance to the original query.
+        # Relevance to the original query.
         module Relevance
           extend ContextDev::Internal::Type::Enum
 
