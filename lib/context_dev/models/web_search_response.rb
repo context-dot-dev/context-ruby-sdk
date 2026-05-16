@@ -35,7 +35,7 @@ module ContextDev
         required :markdown, -> { ContextDev::Models::WebSearchResponse::Result::Markdown }
 
         # @!attribute relevance
-        #   Model-judged relevance to the original query.
+        #   Relevance to the original query.
         #
         #   @return [Symbol, ContextDev::Models::WebSearchResponse::Result::Relevance]
         required :relevance, enum: -> { ContextDev::Models::WebSearchResponse::Result::Relevance }
@@ -57,7 +57,7 @@ module ContextDev
         #
         #   @param markdown [ContextDev::Models::WebSearchResponse::Result::Markdown] Markdown scrape status and content for this result.
         #
-        #   @param relevance [Symbol, ContextDev::Models::WebSearchResponse::Result::Relevance] Model-judged relevance to the original query.
+        #   @param relevance [Symbol, ContextDev::Models::WebSearchResponse::Result::Relevance] Relevance to the original query.
         #
         #   @param title [String] Page title.
         #
@@ -105,7 +105,7 @@ module ContextDev
           end
         end
 
-        # Model-judged relevance to the original query.
+        # Relevance to the original query.
         #
         # @see ContextDev::Models::WebSearchResponse::Result#relevance
         module Relevance
