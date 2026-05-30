@@ -9,11 +9,13 @@ module ContextDev
       # Scrape font information from a website including font families, usage
       # statistics, fallbacks, and element/word counts.
       #
-      # @overload extract_fonts(direct_url: nil, domain: nil, timeout_ms: nil, request_options: {})
+      # @overload extract_fonts(direct_url: nil, domain: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
       #
       # @param direct_url [String] A specific URL to fetch fonts from directly, bypassing domain resolution (e.g.,
       #
       # @param domain [String] Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The domai
+      #
+      # @param max_age_ms [Integer] Maximum age in milliseconds for cached data before the API performs a hard refre
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -28,7 +30,11 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/fonts",
-          query: query.transform_keys(direct_url: "directUrl", timeout_ms: "timeoutMS"),
+          query: query.transform_keys(
+            direct_url: "directUrl",
+            max_age_ms: "maxAgeMs",
+            timeout_ms: "timeoutMS"
+          ),
           model: ContextDev::Models::WebExtractFontsResponse,
           options: options
         )
@@ -40,11 +46,13 @@ module ContextDev
       # Extract a comprehensive design system from a website including colors,
       # typography, spacing, shadows, and UI components.
       #
-      # @overload extract_styleguide(direct_url: nil, domain: nil, timeout_ms: nil, request_options: {})
+      # @overload extract_styleguide(direct_url: nil, domain: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
       #
       # @param direct_url [String] A specific URL to fetch the styleguide from directly, bypassing domain resolutio
       #
       # @param domain [String] Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
+      #
+      # @param max_age_ms [Integer] Maximum age in milliseconds for cached data before the API performs a hard refre
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -59,7 +67,11 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/styleguide",
-          query: query.transform_keys(direct_url: "directUrl", timeout_ms: "timeoutMS"),
+          query: query.transform_keys(
+            direct_url: "directUrl",
+            max_age_ms: "maxAgeMs",
+            timeout_ms: "timeoutMS"
+          ),
           model: ContextDev::Models::WebExtractStyleguideResponse,
           options: options
         )
