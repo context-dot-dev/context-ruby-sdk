@@ -6,10 +6,7 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebExtractParams} for more details.
       #
-      # Crawl a website, convert pages to Markdown using the scrape cache, and extract
-      # structured data into the provided JSON Schema. The schema must describe the
-      # response data object. This endpoint does not accept targeted page-type
-      # selection.
+      # Crawl a website and extract structured data using the provided JSON Schema.
       #
       # @overload extract(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, pdf: nil, stop_after_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #

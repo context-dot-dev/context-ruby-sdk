@@ -3,10 +3,7 @@
 module ContextDev
   module Resources
     class Web
-      # Crawl a website, convert pages to Markdown using the scrape cache, and extract
-      # structured data into the provided JSON Schema. The schema must describe the
-      # response data object. This endpoint does not accept targeted page-type
-      # selection.
+      # Crawl a website and extract structured data using the provided JSON Schema.
       sig do
         params(
           schema: T::Hash[Symbol, T.anything],
