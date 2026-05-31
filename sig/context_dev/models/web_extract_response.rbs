@@ -1,0 +1,77 @@
+module ContextDev
+  module Models
+    type web_extract_response =
+      {
+        data: ::Hash[Symbol, top],
+        metadata: ContextDev::Models::WebExtractResponse::Metadata,
+        status: String,
+        url: String,
+        urls_analyzed: ::Array[String]
+      }
+
+    class WebExtractResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor data: ::Hash[Symbol, top]
+
+      attr_accessor metadata: ContextDev::Models::WebExtractResponse::Metadata
+
+      attr_accessor status: String
+
+      attr_accessor url: String
+
+      attr_accessor urls_analyzed: ::Array[String]
+
+      def initialize: (
+        data: ::Hash[Symbol, top],
+        metadata: ContextDev::Models::WebExtractResponse::Metadata,
+        status: String,
+        url: String,
+        urls_analyzed: ::Array[String]
+      ) -> void
+
+      def to_hash: -> {
+        data: ::Hash[Symbol, top],
+        metadata: ContextDev::Models::WebExtractResponse::Metadata,
+        status: String,
+        url: String,
+        urls_analyzed: ::Array[String]
+      }
+
+      type metadata =
+        {
+          max_crawl_depth: Integer,
+          num_failed: Integer,
+          num_skipped: Integer,
+          num_succeeded: Integer,
+          num_urls: Integer
+        }
+
+      class Metadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor max_crawl_depth: Integer
+
+        attr_accessor num_failed: Integer
+
+        attr_accessor num_skipped: Integer
+
+        attr_accessor num_succeeded: Integer
+
+        attr_accessor num_urls: Integer
+
+        def initialize: (
+          max_crawl_depth: Integer,
+          num_failed: Integer,
+          num_skipped: Integer,
+          num_succeeded: Integer,
+          num_urls: Integer
+        ) -> void
+
+        def to_hash: -> {
+          max_crawl_depth: Integer,
+          num_failed: Integer,
+          num_skipped: Integer,
+          num_succeeded: Integer,
+          num_urls: Integer
+        }
+      end
+    end
+  end
+end

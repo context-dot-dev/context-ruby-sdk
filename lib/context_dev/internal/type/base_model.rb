@@ -438,11 +438,11 @@ module ContextDev
         # @return [Hash{Symbol=>Object}]
         #
         # @example
-        #   # `web_extract_fonts_response` is a `ContextDev::Models::WebExtractFontsResponse`
-        #   web_extract_fonts_response => {
-        #     code: code,
-        #     domain: domain,
-        #     fonts: fonts
+        #   # `web_extract_response` is a `ContextDev::Models::WebExtractResponse`
+        #   web_extract_response => {
+        #     data: data,
+        #     metadata: metadata,
+        #     status: status
         #   }
         def deconstruct_keys(keys)
           (keys || self.class.known_fields.keys)
