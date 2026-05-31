@@ -3,6 +3,30 @@
 require_relative "../test_helper"
 
 class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
+  def test_extract_required_params
+    skip("Mock server tests are disabled")
+
+    response =
+      @context_dev.web.extract(
+        schema: {type: "bar", properties: "bar", required: "bar", additionalProperties: "bar"},
+        url: "https://example.com"
+      )
+
+    assert_pattern do
+      response => ContextDev::Models::WebExtractResponse
+    end
+
+    assert_pattern do
+      response => {
+        data: ^(ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]),
+        metadata: ContextDev::Models::WebExtractResponse::Metadata,
+        status: String,
+        url: String,
+        urls_analyzed: ^(ContextDev::Internal::Type::ArrayOf[String])
+      }
+    end
+  end
+
   def test_extract_fonts
     skip("Mock server tests are disabled")
 

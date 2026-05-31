@@ -1,0 +1,120 @@
+module ContextDev
+  module Models
+    type web_extract_params =
+      {
+        schema: ::Hash[Symbol, top],
+        url: String,
+        fact_check: bool,
+        follow_subdomains: bool,
+        include_frames: bool,
+        instructions: String,
+        max_age_ms: Integer,
+        pdf: ContextDev::WebExtractParams::Pdf,
+        stop_after_ms: Integer,
+        timeout_ms: Integer,
+        wait_for_ms: Integer
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class WebExtractParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor schema: ::Hash[Symbol, top]
+
+      attr_accessor url: String
+
+      attr_reader fact_check: bool?
+
+      def fact_check=: (bool) -> bool
+
+      attr_reader follow_subdomains: bool?
+
+      def follow_subdomains=: (bool) -> bool
+
+      attr_reader include_frames: bool?
+
+      def include_frames=: (bool) -> bool
+
+      attr_reader instructions: String?
+
+      def instructions=: (String) -> String
+
+      attr_reader max_age_ms: Integer?
+
+      def max_age_ms=: (Integer) -> Integer
+
+      attr_reader pdf: ContextDev::WebExtractParams::Pdf?
+
+      def pdf=: (
+        ContextDev::WebExtractParams::Pdf
+      ) -> ContextDev::WebExtractParams::Pdf
+
+      attr_reader stop_after_ms: Integer?
+
+      def stop_after_ms=: (Integer) -> Integer
+
+      attr_reader timeout_ms: Integer?
+
+      def timeout_ms=: (Integer) -> Integer
+
+      attr_reader wait_for_ms: Integer?
+
+      def wait_for_ms=: (Integer) -> Integer
+
+      def initialize: (
+        schema: ::Hash[Symbol, top],
+        url: String,
+        ?fact_check: bool,
+        ?follow_subdomains: bool,
+        ?include_frames: bool,
+        ?instructions: String,
+        ?max_age_ms: Integer,
+        ?pdf: ContextDev::WebExtractParams::Pdf,
+        ?stop_after_ms: Integer,
+        ?timeout_ms: Integer,
+        ?wait_for_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        schema: ::Hash[Symbol, top],
+        url: String,
+        fact_check: bool,
+        follow_subdomains: bool,
+        include_frames: bool,
+        instructions: String,
+        max_age_ms: Integer,
+        pdf: ContextDev::WebExtractParams::Pdf,
+        stop_after_ms: Integer,
+        timeout_ms: Integer,
+        wait_for_ms: Integer,
+        request_options: ContextDev::RequestOptions
+      }
+
+      type pdf = { end_: Integer, should_parse: bool, start: Integer }
+
+      class Pdf < ContextDev::Internal::Type::BaseModel
+        attr_reader end_: Integer?
+
+        def end_=: (Integer) -> Integer
+
+        attr_reader should_parse: bool?
+
+        def should_parse=: (bool) -> bool
+
+        attr_reader start: Integer?
+
+        def start=: (Integer) -> Integer
+
+        def initialize: (
+          ?end_: Integer,
+          ?should_parse: bool,
+          ?start: Integer
+        ) -> void
+
+        def to_hash: -> { end_: Integer, should_parse: bool, start: Integer }
+      end
+    end
+  end
+end
