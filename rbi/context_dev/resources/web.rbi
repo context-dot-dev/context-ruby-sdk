@@ -28,12 +28,12 @@ module ContextDev
         # The starting website URL to crawl and extract from. Must include http:// or
         # https://.
         url:,
-        # When true (default), every returned value must be grounded in facts stated on
-        # the page; fields that cannot be supported by the page are returned as
-        # null/empty. When false, the model may make reasonable inferences and derivations
-        # from the page content (e.g. ideal customer, competitor analysis,
-        # recommendations) while keeping verifiable specifics (names, quotes, URLs, dates,
-        # metrics) faithful to the source.
+        # When true, every returned value must be grounded in facts stated on the page;
+        # fields that cannot be supported by the page are returned as null/empty. When
+        # false (default), the model may make reasonable inferences and derivations from
+        # the page content (e.g. ideal customer, competitor analysis, recommendations)
+        # while keeping verifiable specifics (names, quotes, URLs, dates, metrics)
+        # faithful to the source.
         fact_check: nil,
         # When true, follow links on subdomains of the starting URL's domain.
         follow_subdomains: nil,

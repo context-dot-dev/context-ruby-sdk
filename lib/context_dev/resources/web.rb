@@ -14,7 +14,7 @@ module ContextDev
       #
       # @param url [String] The starting website URL to crawl and extract from. Must include http:// or http
       #
-      # @param fact_check [Boolean] When true (default), every returned value must be grounded in facts stated on th
+      # @param fact_check [Boolean] When true, every returned value must be grounded in facts stated on the page; fi
       #
       # @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain.
       #
