@@ -3,6 +3,65 @@
 module ContextDev
   module Resources
     class Web
+      # Crawl a website, convert pages to Markdown using the scrape cache, and extract
+      # structured data into the provided JSON Schema. The schema must describe the
+      # response data object. This endpoint does not accept targeted page-type
+      # selection.
+      sig do
+        params(
+          schema: T::Hash[Symbol, T.anything],
+          url: String,
+          fact_check: T::Boolean,
+          follow_subdomains: T::Boolean,
+          include_frames: T::Boolean,
+          instructions: String,
+          max_age_ms: Integer,
+          pdf: ContextDev::WebExtractParams::Pdf::OrHash,
+          stop_after_ms: Integer,
+          timeout_ms: Integer,
+          wait_for_ms: Integer,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebExtractResponse)
+      end
+      def extract(
+        # JSON Schema for the returned data object. TypeScript Zod users can pass a JSON
+        # Schema generated from a Zod object; Python users can pass the equivalent JSON
+        # Schema object.
+        schema:,
+        # The starting website URL to crawl and extract from. Must include http:// or
+        # https://.
+        url:,
+        # When true (default), every returned value must be grounded in facts stated on
+        # the page; fields that cannot be supported by the page are returned as
+        # null/empty. When false, the model may make reasonable inferences and derivations
+        # from the page content (e.g. ideal customer, competitor analysis,
+        # recommendations) while keeping verifiable specifics (names, quotes, URLs, dates,
+        # metrics) faithful to the source.
+        fact_check: nil,
+        # When true, follow links on subdomains of the starting URL's domain.
+        follow_subdomains: nil,
+        # When true, iframe contents are included in Markdown before extraction.
+        include_frames: nil,
+        # Optional extraction guidance, such as which facts to prioritize or how to
+        # interpret fields in the schema.
+        instructions: nil,
+        # Return cached scrape results if a prior scrape for the same parameters is
+        # younger than this many milliseconds.
+        max_age_ms: nil,
+        pdf: nil,
+        # Soft time budget for the crawl in milliseconds.
+        stop_after_ms: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
+        # Optional browser wait time in milliseconds after initial page load for each
+        # crawled page.
+        wait_for_ms: nil,
+        request_options: {}
+      )
+      end
+
       # Scrape font information from a website including font families, usage
       # statistics, fallbacks, and element/word counts.
       sig do

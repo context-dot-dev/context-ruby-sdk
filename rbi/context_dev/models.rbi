@@ -34,6 +34,8 @@ module ContextDev
 
   WebExtractFontsParams = ContextDev::Models::WebExtractFontsParams
 
+  WebExtractParams = ContextDev::Models::WebExtractParams
+
   WebExtractStyleguideParams = ContextDev::Models::WebExtractStyleguideParams
 
   WebScreenshotParams = ContextDev::Models::WebScreenshotParams

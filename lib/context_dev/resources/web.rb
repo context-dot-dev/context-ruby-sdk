@@ -4,6 +4,54 @@ module ContextDev
   module Resources
     class Web
       # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebExtractParams} for more details.
+      #
+      # Crawl a website, convert pages to Markdown using the scrape cache, and extract
+      # structured data into the provided JSON Schema. The schema must describe the
+      # response data object. This endpoint does not accept targeted page-type
+      # selection.
+      #
+      # @overload extract(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, pdf: nil, stop_after_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      #
+      # @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. TypeScript Zod users can pass a JSON S
+      #
+      # @param url [String] The starting website URL to crawl and extract from. Must include http:// or http
+      #
+      # @param fact_check [Boolean] When true (default), every returned value must be grounded in facts stated on th
+      #
+      # @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain.
+      #
+      # @param include_frames [Boolean] When true, iframe contents are included in Markdown before extraction.
+      #
+      # @param instructions [String] Optional extraction guidance, such as which facts to prioritize or how to interp
+      #
+      # @param max_age_ms [Integer] Return cached scrape results if a prior scrape for the same parameters is younge
+      #
+      # @param pdf [ContextDev::Models::WebExtractParams::Pdf]
+      #
+      # @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds.
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #
+      # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load for each craw
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::WebExtractResponse]
+      #
+      # @see ContextDev::Models::WebExtractParams
+      def extract(params)
+        parsed, options = ContextDev::WebExtractParams.dump_request(params)
+        @client.request(
+          method: :post,
+          path: "web/extract",
+          body: parsed,
+          model: ContextDev::Models::WebExtractResponse,
+          options: options
+        )
+      end
+
+      # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebExtractFontsParams} for more details.
       #
       # Scrape font information from a website including font families, usage

@@ -1,6 +1,21 @@
 module ContextDev
   module Resources
     class Web
+      def extract: (
+        schema: ::Hash[Symbol, top],
+        url: String,
+        ?fact_check: bool,
+        ?follow_subdomains: bool,
+        ?include_frames: bool,
+        ?instructions: String,
+        ?max_age_ms: Integer,
+        ?pdf: ContextDev::WebExtractParams::Pdf,
+        ?stop_after_ms: Integer,
+        ?timeout_ms: Integer,
+        ?wait_for_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::WebExtractResponse
+
       def extract_fonts: (
         ?direct_url: String,
         ?domain: String,
