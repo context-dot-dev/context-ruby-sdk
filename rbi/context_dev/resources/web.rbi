@@ -3,10 +3,8 @@
 module ContextDev
   module Resources
     class Web
-      # Crawl a website, convert pages to Markdown using the scrape cache, and extract
-      # structured data into the provided JSON Schema. The schema must describe the
-      # response data object. This endpoint does not accept targeted page-type
-      # selection.
+      # Crawl a website, use the provided JSON Schema and instructions to prioritize
+      # relevant internal links, and extract structured data from the selected pages.
       sig do
         params(
           schema: T::Hash[Symbol, T.anything],
@@ -31,12 +29,12 @@ module ContextDev
         # The starting website URL to crawl and extract from. Must include http:// or
         # https://.
         url:,
-        # When true (default), every returned value must be grounded in facts stated on
-        # the page; fields that cannot be supported by the page are returned as
-        # null/empty. When false, the model may make reasonable inferences and derivations
-        # from the page content (e.g. ideal customer, competitor analysis,
-        # recommendations) while keeping verifiable specifics (names, quotes, URLs, dates,
-        # metrics) faithful to the source.
+        # When true, every returned value must be grounded in facts stated on the page;
+        # fields that cannot be supported by the page are returned as null/empty. When
+        # false (default), the model may make reasonable inferences and derivations from
+        # the page content (e.g. ideal customer, competitor analysis, recommendations)
+        # while keeping verifiable specifics (names, quotes, URLs, dates, metrics)
+        # faithful to the source.
         fact_check: nil,
         # When true, follow links on subdomains of the starting URL's domain.
         follow_subdomains: nil,
@@ -46,7 +44,7 @@ module ContextDev
         # interpret fields in the schema.
         instructions: nil,
         # Return cached scrape results if a prior scrape for the same parameters is
-        # younger than this many milliseconds.
+        # younger than this many milliseconds. Defaults to 7 days (604800000 ms).
         max_age_ms: nil,
         pdf: nil,
         # Soft time budget for the crawl in milliseconds.
