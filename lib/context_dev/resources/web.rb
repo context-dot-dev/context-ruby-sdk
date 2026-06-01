@@ -50,6 +50,37 @@ module ContextDev
       end
 
       # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebExtractCompetitorsParams} for more details.
+      #
+      # Analyze a company's landing page and web search evidence to return direct
+      # competitors for the same product or market.
+      #
+      # @overload extract_competitors(domain:, num_competitors: nil, timeout_ms: nil, request_options: {})
+      #
+      # @param domain [String] Company domain to analyze, such as `stripe.com`. Full http(s) URLs are accepted
+      #
+      # @param num_competitors [Integer] Exact number of direct competitors to return. Defaults to 5.
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::WebExtractCompetitorsResponse]
+      #
+      # @see ContextDev::Models::WebExtractCompetitorsParams
+      def extract_competitors(params)
+        parsed, options = ContextDev::WebExtractCompetitorsParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "web/competitors",
+          query: query.transform_keys(num_competitors: "numCompetitors", timeout_ms: "timeoutMS"),
+          model: ContextDev::Models::WebExtractCompetitorsResponse,
+          options: options
+        )
+      end
+
+      # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebExtractFontsParams} for more details.
       #
       # Scrape font information from a website including font families, usage
