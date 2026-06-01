@@ -67,6 +67,8 @@ module ContextDev
 
   UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 
+  WebExtractCompetitorsParams = ContextDev::Models::WebExtractCompetitorsParams
+
   WebExtractFontsParams = ContextDev::Models::WebExtractFontsParams
 
   WebExtractParams = ContextDev::Models::WebExtractParams
