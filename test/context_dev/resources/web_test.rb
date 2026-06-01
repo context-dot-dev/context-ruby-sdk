@@ -27,6 +27,25 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     end
   end
 
+  def test_extract_competitors_required_params
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.web.extract_competitors(domain: "xxx")
+
+    assert_pattern do
+      response => ContextDev::Models::WebExtractCompetitorsResponse
+    end
+
+    assert_pattern do
+      response => {
+        competitors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebExtractCompetitorsResponse::Competitor]),
+        domain: String,
+        status: ContextDev::Models::WebExtractCompetitorsResponse::Status,
+        target: ContextDev::Models::WebExtractCompetitorsResponse::Target
+      }
+    end
+  end
+
   def test_extract_fonts
     skip("Mock server tests are disabled")
 

@@ -60,6 +60,30 @@ module ContextDev
       )
       end
 
+      # Analyze a company's landing page and web search evidence to return direct
+      # competitors for the same product or market.
+      sig do
+        params(
+          domain: String,
+          num_competitors: Integer,
+          timeout_ms: Integer,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebExtractCompetitorsResponse)
+      end
+      def extract_competitors(
+        # Company domain to analyze, such as `stripe.com`. Full http(s) URLs are accepted
+        # and normalized to their domain.
+        domain:,
+        # Exact number of direct competitors to return. Defaults to 5.
+        num_competitors: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
+        request_options: {}
+      )
+      end
+
       # Scrape font information from a website including font families, usage
       # statistics, fallbacks, and element/word counts.
       sig do

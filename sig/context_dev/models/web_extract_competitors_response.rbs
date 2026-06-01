@@ -1,0 +1,130 @@
+module ContextDev
+  module Models
+    type web_extract_competitors_response =
+      {
+        competitors: ::Array[ContextDev::Models::WebExtractCompetitorsResponse::Competitor],
+        domain: String,
+        status: ContextDev::Models::WebExtractCompetitorsResponse::status,
+        target: ContextDev::Models::WebExtractCompetitorsResponse::Target
+      }
+
+    class WebExtractCompetitorsResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor competitors: ::Array[ContextDev::Models::WebExtractCompetitorsResponse::Competitor]
+
+      attr_accessor domain: String
+
+      attr_accessor status: ContextDev::Models::WebExtractCompetitorsResponse::status
+
+      attr_accessor target: ContextDev::Models::WebExtractCompetitorsResponse::Target
+
+      def initialize: (
+        competitors: ::Array[ContextDev::Models::WebExtractCompetitorsResponse::Competitor],
+        domain: String,
+        status: ContextDev::Models::WebExtractCompetitorsResponse::status,
+        target: ContextDev::Models::WebExtractCompetitorsResponse::Target
+      ) -> void
+
+      def to_hash: -> {
+        competitors: ::Array[ContextDev::Models::WebExtractCompetitorsResponse::Competitor],
+        domain: String,
+        status: ContextDev::Models::WebExtractCompetitorsResponse::status,
+        target: ContextDev::Models::WebExtractCompetitorsResponse::Target
+      }
+
+      type competitor =
+        {
+          confidence: ContextDev::Models::WebExtractCompetitorsResponse::Competitor::confidence,
+          description: String,
+          domain: String,
+          name: String,
+          source_urls: ::Array[String],
+          url: String
+        }
+
+      class Competitor < ContextDev::Internal::Type::BaseModel
+        attr_accessor confidence: ContextDev::Models::WebExtractCompetitorsResponse::Competitor::confidence
+
+        attr_accessor description: String
+
+        attr_accessor domain: String
+
+        attr_accessor name: String
+
+        attr_accessor source_urls: ::Array[String]
+
+        attr_accessor url: String
+
+        def initialize: (
+          confidence: ContextDev::Models::WebExtractCompetitorsResponse::Competitor::confidence,
+          description: String,
+          domain: String,
+          name: String,
+          source_urls: ::Array[String],
+          url: String
+        ) -> void
+
+        def to_hash: -> {
+          confidence: ContextDev::Models::WebExtractCompetitorsResponse::Competitor::confidence,
+          description: String,
+          domain: String,
+          name: String,
+          source_urls: ::Array[String],
+          url: String
+        }
+
+        type confidence = :high | :medium
+
+        module Confidence
+          extend ContextDev::Internal::Type::Enum
+
+          HIGH: :high
+          MEDIUM: :medium
+
+          def self?.values: -> ::Array[ContextDev::Models::WebExtractCompetitorsResponse::Competitor::confidence]
+        end
+      end
+
+      type status = :ok
+
+      module Status
+        extend ContextDev::Internal::Type::Enum
+
+        OK: :ok
+
+        def self?.values: -> ::Array[ContextDev::Models::WebExtractCompetitorsResponse::status]
+      end
+
+      type target =
+        {
+          company_name: String,
+          field: String,
+          field_description: String,
+          website_url: String
+        }
+
+      class Target < ContextDev::Internal::Type::BaseModel
+        attr_accessor company_name: String
+
+        attr_accessor field: String
+
+        attr_accessor field_description: String
+
+        attr_accessor website_url: String
+
+        def initialize: (
+          company_name: String,
+          field: String,
+          field_description: String,
+          website_url: String
+        ) -> void
+
+        def to_hash: -> {
+          company_name: String,
+          field: String,
+          field_description: String,
+          website_url: String
+        }
+      end
+    end
+  end
+end

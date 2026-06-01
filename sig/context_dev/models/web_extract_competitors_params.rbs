@@ -1,0 +1,36 @@
+module ContextDev
+  module Models
+    type web_extract_competitors_params =
+      { domain: String, num_competitors: Integer, timeout_ms: Integer }
+      & ContextDev::Internal::Type::request_parameters
+
+    class WebExtractCompetitorsParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor domain: String
+
+      attr_reader num_competitors: Integer?
+
+      def num_competitors=: (Integer) -> Integer
+
+      attr_reader timeout_ms: Integer?
+
+      def timeout_ms=: (Integer) -> Integer
+
+      def initialize: (
+        domain: String,
+        ?num_competitors: Integer,
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        domain: String,
+        num_competitors: Integer,
+        timeout_ms: Integer,
+        request_options: ContextDev::RequestOptions
+      }
+    end
+  end
+end
