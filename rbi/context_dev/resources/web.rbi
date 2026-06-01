@@ -3,7 +3,8 @@
 module ContextDev
   module Resources
     class Web
-      # Crawl a website and extract structured data using the provided JSON Schema.
+      # Crawl a website, use the provided JSON Schema and instructions to prioritize
+      # relevant internal links, and extract structured data from the selected pages.
       sig do
         params(
           schema: T::Hash[Symbol, T.anything],
@@ -43,7 +44,7 @@ module ContextDev
         # interpret fields in the schema.
         instructions: nil,
         # Return cached scrape results if a prior scrape for the same parameters is
-        # younger than this many milliseconds.
+        # younger than this many milliseconds. Defaults to 7 days (604800000 ms).
         max_age_ms: nil,
         pdf: nil,
         # Soft time budget for the crawl in milliseconds.
