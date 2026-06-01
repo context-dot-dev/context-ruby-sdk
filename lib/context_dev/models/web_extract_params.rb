@@ -54,7 +54,7 @@ module ContextDev
 
       # @!attribute max_age_ms
       #   Return cached scrape results if a prior scrape for the same parameters is
-      #   younger than this many milliseconds.
+      #   younger than this many milliseconds. Defaults to 7 days (604800000 ms).
       #
       #   @return [Integer, nil]
       optional :max_age_ms, Integer, api_name: :maxAgeMs

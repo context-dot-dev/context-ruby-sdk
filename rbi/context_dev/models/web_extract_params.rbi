@@ -57,7 +57,7 @@ module ContextDev
       attr_writer :instructions
 
       # Return cached scrape results if a prior scrape for the same parameters is
-      # younger than this many milliseconds.
+      # younger than this many milliseconds. Defaults to 7 days (604800000 ms).
       sig { returns(T.nilable(Integer)) }
       attr_reader :max_age_ms
 
@@ -133,7 +133,7 @@ module ContextDev
         # interpret fields in the schema.
         instructions: nil,
         # Return cached scrape results if a prior scrape for the same parameters is
-        # younger than this many milliseconds.
+        # younger than this many milliseconds. Defaults to 7 days (604800000 ms).
         max_age_ms: nil,
         pdf: nil,
         # Soft time budget for the crawl in milliseconds.
