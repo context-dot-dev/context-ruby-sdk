@@ -20,6 +20,14 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeImagesParams::Enrichment, nil]
       optional :enrichment, -> { ContextDev::WebWebScrapeImagesParams::Enrichment }
 
+      # @!attribute headers
+      #   Optional outbound HTTP headers forwarded only to the target URL, sent as
+      #   deep-object query params such as headers[X-Custom]=value. When provided, caching
+      #   is bypassed: the result is neither read from nor written to cache.
+      #
+      #   @return [Hash{Symbol=>String}, nil]
+      optional :headers, ContextDev::Internal::Type::HashOf[String]
+
       # @!attribute max_age_ms
       #   Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
       #   day). Set to 0 to bypass cache. Maximum: 2592000000 (30 days).
@@ -42,13 +50,15 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer
 
-      # @!method initialize(url:, enrichment: nil, max_age_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(url:, enrichment: nil, headers: nil, max_age_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeImagesParams} for more details.
       #
       #   @param url [String] Page URL to inspect. Must include http:// or https://.
       #
       #   @param enrichment [ContextDev::Models::WebWebScrapeImagesParams::Enrichment] Optional per-image processing, sent as deep-object query params such as enrichme
+      #
+      #   @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
       #   @param max_age_ms [Integer] Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
       #
