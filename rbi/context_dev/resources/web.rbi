@@ -320,6 +320,7 @@ module ContextDev
       sig do
         params(
           url: String,
+          headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
           max_age_ms: Integer,
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
@@ -331,6 +332,10 @@ module ContextDev
       def web_scrape_html(
         # Full URL to scrape (must include http:// or https:// protocol)
         url:,
+        # Optional outbound HTTP headers forwarded only to the target URL, sent as
+        # deep-object query params such as headers[X-Custom]=value. When provided, caching
+        # is bypassed: the result is neither read from nor written to cache.
+        headers: nil,
         # When true, iframes are rendered inline into the returned HTML.
         include_frames: nil,
         # Return a cached result if a prior scrape for the same parameters exists and is
@@ -359,6 +364,7 @@ module ContextDev
         params(
           url: String,
           enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash,
+          headers: T::Hash[Symbol, String],
           max_age_ms: Integer,
           timeout_ms: Integer,
           wait_for_ms: Integer,
@@ -371,6 +377,10 @@ module ContextDev
         # Optional per-image processing, sent as deep-object query params such as
         # enrichment[resolution]=true.
         enrichment: nil,
+        # Optional outbound HTTP headers forwarded only to the target URL, sent as
+        # deep-object query params such as headers[X-Custom]=value. When provided, caching
+        # is bypassed: the result is neither read from nor written to cache.
+        headers: nil,
         # Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
         # day). Set to 0 to bypass cache. Maximum: 2592000000 (30 days).
         max_age_ms: nil,
@@ -389,6 +399,7 @@ module ContextDev
       sig do
         params(
           url: String,
+          headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
           include_images: T::Boolean,
           include_links: T::Boolean,
@@ -405,6 +416,10 @@ module ContextDev
         # Full URL to scrape into LLM usable Markdown (must include http:// or https://
         # protocol)
         url:,
+        # Optional outbound HTTP headers forwarded only to the target URL, sent as
+        # deep-object query params such as headers[X-Custom]=value. When provided, caching
+        # is bypassed: the result is neither read from nor written to cache.
+        headers: nil,
         # When true, the contents of iframes are rendered to Markdown.
         include_frames: nil,
         # Include image references in Markdown output
@@ -438,6 +453,7 @@ module ContextDev
       sig do
         params(
           domain: String,
+          headers: T::Hash[Symbol, String],
           max_links: Integer,
           timeout_ms: Integer,
           url_regex: String,
@@ -447,6 +463,10 @@ module ContextDev
       def web_scrape_sitemap(
         # Domain to build a sitemap for
         domain:,
+        # Optional outbound HTTP headers forwarded only to the target URL, sent as
+        # deep-object query params such as headers[X-Custom]=value. When provided, caching
+        # is bypassed: the result is neither read from nor written to cache.
+        headers: nil,
         # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
         # Minimum is 1, maximum is 100,000.
         max_links: nil,
