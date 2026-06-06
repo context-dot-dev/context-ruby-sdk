@@ -18,6 +18,15 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
+      # Optional outbound HTTP headers forwarded only to the target URL, sent as
+      # deep-object query params such as headers[X-Custom]=value. When provided, caching
+      # is bypassed: the result is neither read from nor written to cache.
+      sig { returns(T.nilable(T::Hash[Symbol, String])) }
+      attr_reader :headers
+
+      sig { params(headers: T::Hash[Symbol, String]).void }
+      attr_writer :headers
+
       # When true, iframes are rendered inline into the returned HTML.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :include_frames
@@ -62,6 +71,7 @@ module ContextDev
       sig do
         params(
           url: String,
+          headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
           max_age_ms: Integer,
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
@@ -73,6 +83,10 @@ module ContextDev
       def self.new(
         # Full URL to scrape (must include http:// or https:// protocol)
         url:,
+        # Optional outbound HTTP headers forwarded only to the target URL, sent as
+        # deep-object query params such as headers[X-Custom]=value. When provided, caching
+        # is bypassed: the result is neither read from nor written to cache.
+        headers: nil,
         # When true, iframes are rendered inline into the returned HTML.
         include_frames: nil,
         # Return a cached result if a prior scrape for the same parameters exists and is
@@ -97,6 +111,7 @@ module ContextDev
         override.returns(
           {
             url: String,
+            headers: T::Hash[Symbol, String],
             include_frames: T::Boolean,
             max_age_ms: Integer,
             pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
