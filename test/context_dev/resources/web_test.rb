@@ -154,6 +154,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
       response => {
         html: String,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::Success,
+        type: ContextDev::Models::WebWebScrapeHTMLResponse::Type,
         url: String
       }
     end

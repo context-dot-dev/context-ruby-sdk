@@ -4,6 +4,7 @@ module ContextDev
       {
         html: String,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
+        type: ContextDev::Models::WebWebScrapeHTMLResponse::type_,
         url: String
       }
 
@@ -12,17 +13,21 @@ module ContextDev
 
       attr_accessor success: ContextDev::Models::WebWebScrapeHTMLResponse::success
 
+      attr_accessor type: ContextDev::Models::WebWebScrapeHTMLResponse::type_
+
       attr_accessor url: String
 
       def initialize: (
         html: String,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
+        type: ContextDev::Models::WebWebScrapeHTMLResponse::type_,
         url: String
       ) -> void
 
       def to_hash: -> {
         html: String,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
+        type: ContextDev::Models::WebWebScrapeHTMLResponse::type_,
         url: String
       }
 
@@ -34,6 +39,23 @@ module ContextDev
         TRUE: true
 
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::success]
+      end
+
+      type type_ = :html | :xml | :json | :text | :csv | :markdown | :svg | :pdf
+
+      module Type
+        extend ContextDev::Internal::Type::Enum
+
+        HTML: :html
+        XML: :xml
+        JSON: :json
+        TEXT: :text
+        CSV: :csv
+        MARKDOWN: :markdown
+        SVG: :svg
+        PDF: :pdf
+
+        def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::type_]
       end
     end
   end
