@@ -13,6 +13,14 @@ module ContextDev
       #   @return [String]
       required :url, String
 
+      # @!attribute exclude_selectors
+      #   CSS selectors to remove before each crawled page is converted to Markdown.
+      #   Applied after includeSelectors. Exclusion takes precedence: an element matching
+      #   both is removed. Examples: "nav", "footer", ".ad-banner", "[aria-hidden=true]".
+      #
+      #   @return [Array<String>, nil]
+      optional :exclude_selectors, ContextDev::Internal::Type::ArrayOf[String], api_name: :excludeSelectors
+
       # @!attribute follow_subdomains
       #   When true, follow links on subdomains of the starting URL's domain (e.g.
       #   docs.example.com when starting from example.com). www and apex are always
@@ -39,6 +47,15 @@ module ContextDev
       #
       #   @return [Boolean, nil]
       optional :include_links, ContextDev::Internal::Type::Boolean, api_name: :includeLinks
+
+      # @!attribute include_selectors
+      #   CSS selectors. When provided, only matching HTML subtrees (and their
+      #   descendants) are kept before each crawled page is converted to Markdown. When
+      #   omitted, the entire document is kept. Examples: "article.main", "#content",
+      #   "[role=main]".
+      #
+      #   @return [Array<String>, nil]
+      optional :include_selectors, ContextDev::Internal::Type::ArrayOf[String], api_name: :includeSelectors
 
       # @!attribute max_age_ms
       #   Return a cached result if a prior scrape for the same parameters exists and is
@@ -110,11 +127,13 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, api_name: :waitForMs
 
-      # @!method initialize(url:, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(url:, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
       #   @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
+      #
+      #   @param exclude_selectors [Array<String>] CSS selectors to remove before each crawled page is converted to Markdown. Appli
       #
       #   @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
       #
@@ -123,6 +142,8 @@ module ContextDev
       #   @param include_images [Boolean] Include image references in the Markdown output
       #
       #   @param include_links [Boolean] Preserve hyperlinks in the Markdown output
+      #
+      #   @param include_selectors [Array<String>] CSS selectors. When provided, only matching HTML subtrees (and their descendants
       #
       #   @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
