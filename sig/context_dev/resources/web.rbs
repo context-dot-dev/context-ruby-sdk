@@ -65,10 +65,12 @@ module ContextDev
 
       def web_crawl_md: (
         url: String,
+        ?exclude_selectors: ::Array[String],
         ?follow_subdomains: bool,
         ?include_frames: bool,
         ?include_images: bool,
         ?include_links: bool,
+        ?include_selectors: ::Array[String],
         ?max_age_ms: Integer,
         ?max_depth: Integer,
         ?max_pages: Integer,
@@ -84,8 +86,10 @@ module ContextDev
 
       def web_scrape_html: (
         url: String,
+        ?exclude_selectors: ::Array[String],
         ?headers: ::Hash[Symbol, String],
         ?include_frames: bool,
+        ?include_selectors: ::Array[String],
         ?max_age_ms: Integer,
         ?pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
         ?timeout_ms: Integer,
@@ -105,10 +109,12 @@ module ContextDev
 
       def web_scrape_md: (
         url: String,
+        ?exclude_selectors: ::Array[String],
         ?headers: ::Hash[Symbol, String],
         ?include_frames: bool,
         ?include_images: bool,
         ?include_links: bool,
+        ?include_selectors: ::Array[String],
         ?max_age_ms: Integer,
         ?pdf: ContextDev::WebWebScrapeMdParams::Pdf,
         ?shorten_base64_images: bool,

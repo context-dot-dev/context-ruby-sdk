@@ -3,10 +3,12 @@ module ContextDev
     type web_web_crawl_md_params =
       {
         url: String,
+        exclude_selectors: ::Array[String],
         follow_subdomains: bool,
         include_frames: bool,
         include_images: bool,
         include_links: bool,
+        include_selectors: ::Array[String],
         max_age_ms: Integer,
         max_depth: Integer,
         max_pages: Integer,
@@ -26,6 +28,10 @@ module ContextDev
 
       attr_accessor url: String
 
+      attr_reader exclude_selectors: ::Array[String]?
+
+      def exclude_selectors=: (::Array[String]) -> ::Array[String]
+
       attr_reader follow_subdomains: bool?
 
       def follow_subdomains=: (bool) -> bool
@@ -41,6 +47,10 @@ module ContextDev
       attr_reader include_links: bool?
 
       def include_links=: (bool) -> bool
+
+      attr_reader include_selectors: ::Array[String]?
+
+      def include_selectors=: (::Array[String]) -> ::Array[String]
 
       attr_reader max_age_ms: Integer?
 
@@ -86,10 +96,12 @@ module ContextDev
 
       def initialize: (
         url: String,
+        ?exclude_selectors: ::Array[String],
         ?follow_subdomains: bool,
         ?include_frames: bool,
         ?include_images: bool,
         ?include_links: bool,
+        ?include_selectors: ::Array[String],
         ?max_age_ms: Integer,
         ?max_depth: Integer,
         ?max_pages: Integer,
@@ -105,10 +117,12 @@ module ContextDev
 
       def to_hash: -> {
         url: String,
+        exclude_selectors: ::Array[String],
         follow_subdomains: bool,
         include_frames: bool,
         include_images: bool,
         include_links: bool,
+        include_selectors: ::Array[String],
         max_age_ms: Integer,
         max_depth: Integer,
         max_pages: Integer,

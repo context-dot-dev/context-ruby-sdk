@@ -251,10 +251,12 @@ module ContextDev
       sig do
         params(
           url: String,
+          exclude_selectors: T::Array[String],
           follow_subdomains: T::Boolean,
           include_frames: T::Boolean,
           include_images: T::Boolean,
           include_links: T::Boolean,
+          include_selectors: T::Array[String],
           max_age_ms: Integer,
           max_depth: Integer,
           max_pages: Integer,
@@ -271,6 +273,10 @@ module ContextDev
       def web_crawl_md(
         # The starting URL for the crawl (must include http:// or https:// protocol)
         url:,
+        # CSS selectors to remove before each crawled page is converted to Markdown.
+        # Applied after includeSelectors. Exclusion takes precedence: an element matching
+        # both is removed. Examples: "nav", "footer", ".ad-banner", "[aria-hidden=true]".
+        exclude_selectors: nil,
         # When true, follow links on subdomains of the starting URL's domain (e.g.
         # docs.example.com when starting from example.com). www and apex are always
         # treated as equivalent.
@@ -282,6 +288,11 @@ module ContextDev
         include_images: nil,
         # Preserve hyperlinks in the Markdown output
         include_links: nil,
+        # CSS selectors. When provided, only matching HTML subtrees (and their
+        # descendants) are kept before each crawled page is converted to Markdown. When
+        # omitted, the entire document is kept. Examples: "article.main", "#content",
+        # "[role=main]".
+        include_selectors: nil,
         # Return a cached result if a prior scrape for the same parameters exists and is
         # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
@@ -320,8 +331,10 @@ module ContextDev
       sig do
         params(
           url: String,
+          exclude_selectors: T::Array[String],
           headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
+          include_selectors: T::Array[String],
           max_age_ms: Integer,
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
           timeout_ms: Integer,
@@ -332,12 +345,20 @@ module ContextDev
       def web_scrape_html(
         # Full URL to scrape (must include http:// or https:// protocol)
         url:,
+        # CSS selectors to remove from the result. Applied after includeSelectors.
+        # Exclusion takes precedence: an element matching both is removed. Examples:
+        # "nav", "footer", ".ad-banner", "[aria-hidden=true]".
+        exclude_selectors: nil,
         # Optional outbound HTTP headers forwarded only to the target URL, sent as
         # deep-object query params such as headers[X-Custom]=value. When provided, caching
         # is bypassed: the result is neither read from nor written to cache.
         headers: nil,
         # When true, iframes are rendered inline into the returned HTML.
         include_frames: nil,
+        # CSS selectors. When provided, only matching subtrees (and their descendants) are
+        # kept and everything else is dropped. When omitted, the entire document is kept.
+        # Examples: "article.main", "#content", "[role=main]".
+        include_selectors: nil,
         # Return a cached result if a prior scrape for the same parameters exists and is
         # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
@@ -399,10 +420,12 @@ module ContextDev
       sig do
         params(
           url: String,
+          exclude_selectors: T::Array[String],
           headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
           include_images: T::Boolean,
           include_links: T::Boolean,
+          include_selectors: T::Array[String],
           max_age_ms: Integer,
           pdf: ContextDev::WebWebScrapeMdParams::Pdf::OrHash,
           shorten_base64_images: T::Boolean,
@@ -416,6 +439,10 @@ module ContextDev
         # Full URL to scrape into LLM usable Markdown (must include http:// or https://
         # protocol)
         url:,
+        # CSS selectors to remove before conversion to Markdown. Applied after
+        # includeSelectors. Exclusion takes precedence: an element matching both is
+        # removed. Examples: "nav", "footer", ".ad-banner", "[aria-hidden=true]".
+        exclude_selectors: nil,
         # Optional outbound HTTP headers forwarded only to the target URL, sent as
         # deep-object query params such as headers[X-Custom]=value. When provided, caching
         # is bypassed: the result is neither read from nor written to cache.
@@ -426,6 +453,10 @@ module ContextDev
         include_images: nil,
         # Preserve hyperlinks in Markdown output
         include_links: nil,
+        # CSS selectors. When provided, only matching HTML subtrees (and their
+        # descendants) are kept before conversion to Markdown. When omitted, the entire
+        # document is kept. Examples: "article.main", "#content", "[role=main]".
+        include_selectors: nil,
         # Return a cached result if a prior scrape for the same parameters exists and is
         # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.

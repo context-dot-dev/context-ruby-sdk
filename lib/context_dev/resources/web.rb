@@ -246,9 +246,11 @@ module ContextDev
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
       # and returns results for all crawled pages.
       #
-      # @overload web_crawl_md(url:, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_crawl_md(url:, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
+      #
+      # @param exclude_selectors [Array<String>] CSS selectors to remove before each crawled page is converted to Markdown. Appli
       #
       # @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
       #
@@ -257,6 +259,8 @@ module ContextDev
       # @param include_images [Boolean] Include image references in the Markdown output
       #
       # @param include_links [Boolean] Preserve hyperlinks in the Markdown output
+      #
+      # @param include_selectors [Array<String>] CSS selectors. When provided, only matching HTML subtrees (and their descendants
       #
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
@@ -299,13 +303,17 @@ module ContextDev
       #
       # Scrapes the given URL and returns the raw HTML content of the page.
       #
-      # @overload web_scrape_html(url:, headers: nil, include_frames: nil, max_age_ms: nil, pdf: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_html(url:, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
+      #
+      # @param exclude_selectors [Array<String>] CSS selectors to remove from the result. Applied after includeSelectors. Exclusi
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
       # @param include_frames [Boolean] When true, iframes are rendered inline into the returned HTML.
+      #
+      # @param include_selectors [Array<String>] CSS selectors. When provided, only matching subtrees (and their descendants) are
       #
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
@@ -327,7 +335,9 @@ module ContextDev
           method: :get,
           path: "web/scrape/html",
           query: query.transform_keys(
+            exclude_selectors: "excludeSelectors",
             include_frames: "includeFrames",
+            include_selectors: "includeSelectors",
             max_age_ms: "maxAgeMs",
             timeout_ms: "timeoutMS",
             wait_for_ms: "waitForMs"
@@ -385,9 +395,11 @@ module ContextDev
       #
       # Scrapes the given URL into LLM usable Markdown.
       #
-      # @overload web_scrape_md(url:, headers: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, pdf: nil, shorten_base64_images: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_md(url:, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, shorten_base64_images: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
+      #
+      # @param exclude_selectors [Array<String>] CSS selectors to remove before conversion to Markdown. Applied after includeSele
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
@@ -396,6 +408,8 @@ module ContextDev
       # @param include_images [Boolean] Include image references in Markdown output
       #
       # @param include_links [Boolean] Preserve hyperlinks in Markdown output
+      #
+      # @param include_selectors [Array<String>] CSS selectors. When provided, only matching HTML subtrees (and their descendants
       #
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
@@ -421,9 +435,11 @@ module ContextDev
           method: :get,
           path: "web/scrape/markdown",
           query: query.transform_keys(
+            exclude_selectors: "excludeSelectors",
             include_frames: "includeFrames",
             include_images: "includeImages",
             include_links: "includeLinks",
+            include_selectors: "includeSelectors",
             max_age_ms: "maxAgeMs",
             shorten_base64_images: "shortenBase64Images",
             timeout_ms: "timeoutMS",
