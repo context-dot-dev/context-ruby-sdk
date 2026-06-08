@@ -59,6 +59,19 @@ module ContextDev
       #   @return [Integer, nil]
       optional :max_age_ms, Integer, api_name: :maxAgeMs
 
+      # @!attribute max_depth
+      #   Optional maximum link depth from the starting URL (0 = only the starting page).
+      #   If omitted, there is no crawl depth limit.
+      #
+      #   @return [Integer, nil]
+      optional :max_depth, Integer, api_name: :maxDepth
+
+      # @!attribute max_pages
+      #   Maximum number of pages to analyze for extraction. Hard cap: 50. Defaults to 5.
+      #
+      #   @return [Integer, nil]
+      optional :max_pages, Integer, api_name: :maxPages
+
       # @!attribute pdf
       #
       #   @return [ContextDev::Models::WebExtractParams::Pdf, nil]
@@ -86,7 +99,7 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, api_name: :waitForMs
 
-      # @!method initialize(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, pdf: nil, stop_after_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, stop_after_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractParams} for more details.
       #
@@ -103,6 +116,10 @@ module ContextDev
       #   @param instructions [String] Optional extraction guidance, such as which facts to prioritize or how to interp
       #
       #   @param max_age_ms [Integer] Return cached scrape results if a prior scrape for the same parameters is younge
+      #
+      #   @param max_depth [Integer] Optional maximum link depth from the starting URL (0 = only the starting page).
+      #
+      #   @param max_pages [Integer] Maximum number of pages to analyze for extraction. Hard cap: 50. Defaults to 5.
       #
       #   @param pdf [ContextDev::Models::WebExtractParams::Pdf]
       #
