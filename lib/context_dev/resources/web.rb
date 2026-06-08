@@ -27,7 +27,7 @@ module ContextDev
       #
       # @param pdf [ContextDev::Models::WebExtractParams::Pdf]
       #
-      # @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds.
+      # @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000 (1
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -303,7 +303,7 @@ module ContextDev
       #
       # Scrapes the given URL and returns the raw HTML content of the page.
       #
-      # @overload web_scrape_html(url:, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_html(url:, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
       #
@@ -320,6 +320,8 @@ module ContextDev
       # @param pdf [ContextDev::Models::WebWebScrapeHTMLParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #
+      # @param use_main_content_only [Boolean] When true, return only the page's main content in the HTML response, excluding h
       #
       # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
       #
@@ -340,6 +342,7 @@ module ContextDev
             include_selectors: "includeSelectors",
             max_age_ms: "maxAgeMs",
             timeout_ms: "timeoutMS",
+            use_main_content_only: "useMainContentOnly",
             wait_for_ms: "waitForMs"
           ),
           model: ContextDev::Models::WebWebScrapeHTMLResponse,

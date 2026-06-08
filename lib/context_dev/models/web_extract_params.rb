@@ -65,7 +65,8 @@ module ContextDev
       optional :pdf, -> { ContextDev::WebExtractParams::Pdf }
 
       # @!attribute stop_after_ms
-      #   Soft time budget for the crawl in milliseconds.
+      #   Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
+      #   (110s). Default: 80000 (80s).
       #
       #   @return [Integer, nil]
       optional :stop_after_ms, Integer, api_name: :stopAfterMs
@@ -105,7 +106,7 @@ module ContextDev
       #
       #   @param pdf [ContextDev::Models::WebExtractParams::Pdf]
       #
-      #   @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds.
+      #   @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000 (1
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

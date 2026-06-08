@@ -93,6 +93,7 @@ module ContextDev
         ?max_age_ms: Integer,
         ?pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
         ?timeout_ms: Integer,
+        ?use_main_content_only: bool,
         ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeHTMLResponse

@@ -47,7 +47,8 @@ module ContextDev
         # younger than this many milliseconds. Defaults to 7 days (604800000 ms).
         max_age_ms: nil,
         pdf: nil,
-        # Soft time budget for the crawl in milliseconds.
+        # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
+        # (110s). Default: 80000 (80s).
         stop_after_ms: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -308,8 +309,8 @@ module ContextDev
         shorten_base64_images: nil,
         # Soft time budget for the crawl in milliseconds. After each scrape, the crawler
         # checks the elapsed time and, if exceeded, returns the pages collected so far
-        # instead of continuing. Min: 10000 (10s). Max: 240000 (4 min). Default: 120000 (2
-        # min).
+        # instead of continuing. Min: 10000 (10s). Max: 110000 (110s). Default: 80000
+        # (80s).
         stop_after_ms: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -338,6 +339,7 @@ module ContextDev
           max_age_ms: Integer,
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
           timeout_ms: Integer,
+          use_main_content_only: T::Boolean,
           wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeHTMLResponse)
@@ -370,6 +372,9 @@ module ContextDev
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
         timeout_ms: nil,
+        # When true, return only the page's main content in the HTML response, excluding
+        # headers, footers, sidebars, and navigation when detectable.
+        use_main_content_only: nil,
         # Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
         # 30000 (30 seconds).
         wait_for_ms: nil,

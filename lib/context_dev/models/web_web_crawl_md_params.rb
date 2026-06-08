@@ -93,8 +93,8 @@ module ContextDev
       # @!attribute stop_after_ms
       #   Soft time budget for the crawl in milliseconds. After each scrape, the crawler
       #   checks the elapsed time and, if exceeded, returns the pages collected so far
-      #   instead of continuing. Min: 10000 (10s). Max: 240000 (4 min). Default: 120000 (2
-      #   min).
+      #   instead of continuing. Min: 10000 (10s). Max: 110000 (110s). Default: 80000
+      #   (80s).
       #
       #   @return [Integer, nil]
       optional :stop_after_ms, Integer, api_name: :stopAfterMs
