@@ -27,7 +27,7 @@ module ContextDev
       #
       # @param pdf [ContextDev::Models::WebExtractParams::Pdf]
       #
-      # @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds.
+      # @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000 (1
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
