@@ -9,6 +9,8 @@ module ContextDev
         ?include_frames: bool,
         ?instructions: String,
         ?max_age_ms: Integer,
+        ?max_depth: Integer,
+        ?max_pages: Integer,
         ?pdf: ContextDev::WebExtractParams::Pdf,
         ?stop_after_ms: Integer,
         ?timeout_ms: Integer,

@@ -64,6 +64,21 @@ module ContextDev
       sig { params(max_age_ms: Integer).void }
       attr_writer :max_age_ms
 
+      # Optional maximum link depth from the starting URL (0 = only the starting page).
+      # If omitted, there is no crawl depth limit.
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :max_depth
+
+      sig { params(max_depth: Integer).void }
+      attr_writer :max_depth
+
+      # Maximum number of pages to analyze for extraction. Hard cap: 50. Defaults to 5.
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :max_pages
+
+      sig { params(max_pages: Integer).void }
+      attr_writer :max_pages
+
       sig { returns(T.nilable(ContextDev::WebExtractParams::Pdf)) }
       attr_reader :pdf
 
@@ -104,6 +119,8 @@ module ContextDev
           include_frames: T::Boolean,
           instructions: String,
           max_age_ms: Integer,
+          max_depth: Integer,
+          max_pages: Integer,
           pdf: ContextDev::WebExtractParams::Pdf::OrHash,
           stop_after_ms: Integer,
           timeout_ms: Integer,
@@ -136,6 +153,11 @@ module ContextDev
         # Return cached scrape results if a prior scrape for the same parameters is
         # younger than this many milliseconds. Defaults to 7 days (604800000 ms).
         max_age_ms: nil,
+        # Optional maximum link depth from the starting URL (0 = only the starting page).
+        # If omitted, there is no crawl depth limit.
+        max_depth: nil,
+        # Maximum number of pages to analyze for extraction. Hard cap: 50. Defaults to 5.
+        max_pages: nil,
         pdf: nil,
         # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
         # (110s). Default: 80000 (80s).
@@ -161,6 +183,8 @@ module ContextDev
             include_frames: T::Boolean,
             instructions: String,
             max_age_ms: Integer,
+            max_depth: Integer,
+            max_pages: Integer,
             pdf: ContextDev::WebExtractParams::Pdf,
             stop_after_ms: Integer,
             timeout_ms: Integer,

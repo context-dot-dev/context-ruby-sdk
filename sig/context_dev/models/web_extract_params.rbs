@@ -9,6 +9,8 @@ module ContextDev
         include_frames: bool,
         instructions: String,
         max_age_ms: Integer,
+        max_depth: Integer,
+        max_pages: Integer,
         pdf: ContextDev::WebExtractParams::Pdf,
         stop_after_ms: Integer,
         timeout_ms: Integer,
@@ -44,6 +46,14 @@ module ContextDev
 
       def max_age_ms=: (Integer) -> Integer
 
+      attr_reader max_depth: Integer?
+
+      def max_depth=: (Integer) -> Integer
+
+      attr_reader max_pages: Integer?
+
+      def max_pages=: (Integer) -> Integer
+
       attr_reader pdf: ContextDev::WebExtractParams::Pdf?
 
       def pdf=: (
@@ -70,6 +80,8 @@ module ContextDev
         ?include_frames: bool,
         ?instructions: String,
         ?max_age_ms: Integer,
+        ?max_depth: Integer,
+        ?max_pages: Integer,
         ?pdf: ContextDev::WebExtractParams::Pdf,
         ?stop_after_ms: Integer,
         ?timeout_ms: Integer,
@@ -85,6 +97,8 @@ module ContextDev
         include_frames: bool,
         instructions: String,
         max_age_ms: Integer,
+        max_depth: Integer,
+        max_pages: Integer,
         pdf: ContextDev::WebExtractParams::Pdf,
         stop_after_ms: Integer,
         timeout_ms: Integer,
