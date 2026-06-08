@@ -70,7 +70,8 @@ module ContextDev
       sig { params(pdf: ContextDev::WebExtractParams::Pdf::OrHash).void }
       attr_writer :pdf
 
-      # Soft time budget for the crawl in milliseconds.
+      # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
+      # (110s). Default: 80000 (80s).
       sig { returns(T.nilable(Integer)) }
       attr_reader :stop_after_ms
 
@@ -136,7 +137,8 @@ module ContextDev
         # younger than this many milliseconds. Defaults to 7 days (604800000 ms).
         max_age_ms: nil,
         pdf: nil,
-        # Soft time budget for the crawl in milliseconds.
+        # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
+        # (110s). Default: 80000 (80s).
         stop_after_ms: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
