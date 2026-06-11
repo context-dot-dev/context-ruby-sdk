@@ -15,9 +15,22 @@ module ContextDev
       required :results,
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebCrawlMdResponse::Result] }
 
-      # @!method initialize(metadata:, results:)
+      # @!attribute key_metadata
+      #   Metadata about the API key used for the request. Included in every response
+      #   whenever a valid API key is provided, even when the response status is not 200.
+      #
+      #   @return [ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata }
+
+      # @!method initialize(metadata:, results:, key_metadata: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::WebWebCrawlMdResponse} for more details.
+      #
       #   @param metadata [ContextDev::Models::WebWebCrawlMdResponse::Metadata]
+      #
       #   @param results [Array<ContextDev::Models::WebWebCrawlMdResponse::Result>]
+      #
+      #   @param key_metadata [ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
 
       # @see ContextDev::Models::WebWebCrawlMdResponse#metadata
       class Metadata < ContextDev::Internal::Type::BaseModel
@@ -127,6 +140,29 @@ module ContextDev
           #
           #   @param url [String] The URL that was fetched
         end
+      end
+
+      # @see ContextDev::Models::WebWebCrawlMdResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   The number of credits consumed by this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   The number of credits remaining for your organization after this request.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Metadata about the API key used for the request. Included in every response
+        #   whenever a valid API key is provided, even when the response status is not 200.
+        #
+        #   @param credits_consumed [Integer] The number of credits consumed by this request.
+        #
+        #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
       end
     end
   end

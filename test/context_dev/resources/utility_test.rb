@@ -15,6 +15,7 @@ class ContextDev::Test::Resources::UtilityTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         domain: String | nil,
+        key_metadata: ContextDev::Models::UtilityPrefetchResponse::KeyMetadata | nil,
         message: String | nil,
         status: String | nil
       }
@@ -33,6 +34,7 @@ class ContextDev::Test::Resources::UtilityTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         domain: String | nil,
+        key_metadata: ContextDev::Models::UtilityPrefetchByEmailResponse::KeyMetadata | nil,
         message: String | nil,
         status: String | nil
       }

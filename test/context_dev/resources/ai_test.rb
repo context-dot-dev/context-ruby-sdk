@@ -27,6 +27,7 @@ class ContextDev::Test::Resources::AITest < ContextDev::Test::ResourceTest
       response => {
         data_extracted: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::AIAIQueryResponse::DataExtracted]) | nil,
         domain: String | nil,
+        key_metadata: ContextDev::Models::AIAIQueryResponse::KeyMetadata | nil,
         status: String | nil,
         urls_analyzed: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil
       }
@@ -45,6 +46,7 @@ class ContextDev::Test::Resources::AITest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         is_product_page: ContextDev::Internal::Type::Boolean | nil,
+        key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata | nil,
         platform: ContextDev::Models::AIExtractProductResponse::Platform | nil,
         product: ContextDev::Models::AIExtractProductResponse::Product | nil
       }
@@ -62,6 +64,7 @@ class ContextDev::Test::Resources::AITest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        key_metadata: ContextDev::Models::AIExtractProductsResponse::KeyMetadata | nil,
         products: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::AIExtractProductsResponse::Product]) | nil
       }
     end

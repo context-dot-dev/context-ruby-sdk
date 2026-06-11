@@ -9,7 +9,7 @@ module ContextDev
       # Crawl a website, use the provided JSON Schema and instructions to prioritize
       # relevant internal links, and extract structured data from the selected pages.
       #
-      # @overload extract(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, pdf: nil, stop_after_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @overload extract(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, stop_after_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #
       # @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. TypeScript Zod users can pass a JSON S
       #
@@ -24,6 +24,10 @@ module ContextDev
       # @param instructions [String] Optional extraction guidance, such as which facts to prioritize or how to interp
       #
       # @param max_age_ms [Integer] Return cached scrape results if a prior scrape for the same parameters is younge
+      #
+      # @param max_depth [Integer] Optional maximum link depth from the starting URL (0 = only the starting page).
+      #
+      # @param max_pages [Integer] Maximum number of pages to analyze for extraction. Hard cap: 50. Defaults to 5.
       #
       # @param pdf [ContextDev::Models::WebExtractParams::Pdf]
       #
