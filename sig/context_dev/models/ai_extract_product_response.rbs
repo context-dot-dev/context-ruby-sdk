@@ -3,6 +3,7 @@ module ContextDev
     type ai_extract_product_response =
       {
         is_product_page: bool,
+        key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
         platform: ContextDev::Models::AIExtractProductResponse::platform?,
         product: ContextDev::Models::AIExtractProductResponse::Product?
       }
@@ -12,21 +13,48 @@ module ContextDev
 
       def is_product_page=: (bool) -> bool
 
+      attr_reader key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::AIExtractProductResponse::KeyMetadata
+      ) -> ContextDev::Models::AIExtractProductResponse::KeyMetadata
+
       attr_accessor platform: ContextDev::Models::AIExtractProductResponse::platform?
 
       attr_accessor product: ContextDev::Models::AIExtractProductResponse::Product?
 
       def initialize: (
         ?is_product_page: bool,
+        ?key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
         ?platform: ContextDev::Models::AIExtractProductResponse::platform?,
         ?product: ContextDev::Models::AIExtractProductResponse::Product?
       ) -> void
 
       def to_hash: -> {
         is_product_page: bool,
+        key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
         platform: ContextDev::Models::AIExtractProductResponse::platform?,
         product: ContextDev::Models::AIExtractProductResponse::Product?
       }
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
 
       type platform = :amazon | :tiktok_shop | :etsy | :generic
 

@@ -5,7 +5,8 @@ module ContextDev
         domain: String,
         meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
         success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
-        urls: ::Array[String]
+        urls: ::Array[String],
+        key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
       }
 
     class WebWebScrapeSitemapResponse < ContextDev::Internal::Type::BaseModel
@@ -17,18 +18,26 @@ module ContextDev
 
       attr_accessor urls: ::Array[String]
 
+      attr_reader key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
+      ) -> ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
+
       def initialize: (
         domain: String,
         meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
         success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
-        urls: ::Array[String]
+        urls: ::Array[String],
+        ?key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
       ) -> void
 
       def to_hash: -> {
         domain: String,
         meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
         success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
-        urls: ::Array[String]
+        urls: ::Array[String],
+        key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
       }
 
       type meta =
@@ -71,6 +80,25 @@ module ContextDev
         TRUE: true
 
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeSitemapResponse::success]
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
       end
     end
   end

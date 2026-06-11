@@ -22,6 +22,13 @@ module ContextDev
       #   @return [Integer, nil]
       optional :height, Integer
 
+      # @!attribute key_metadata
+      #   Metadata about the API key used for the request. Included in every response
+      #   whenever a valid API key is provided, even when the response status is not 200.
+      #
+      #   @return [ContextDev::Models::WebScreenshotResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::WebScreenshotResponse::KeyMetadata }
+
       # @!attribute screenshot
       #   Public URL of the uploaded screenshot image
       #
@@ -48,12 +55,17 @@ module ContextDev
       #   @return [Integer, nil]
       optional :width, Integer
 
-      # @!method initialize(code: nil, domain: nil, height: nil, screenshot: nil, screenshot_type: nil, status: nil, width: nil)
+      # @!method initialize(code: nil, domain: nil, height: nil, key_metadata: nil, screenshot: nil, screenshot_type: nil, status: nil, width: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::WebScreenshotResponse} for more details.
+      #
       #   @param code [Integer] HTTP status code
       #
       #   @param domain [String] The normalized domain that was processed
       #
       #   @param height [Integer] Height in pixels of the returned screenshot image
+      #
+      #   @param key_metadata [ContextDev::Models::WebScreenshotResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
       #
       #   @param screenshot [String] Public URL of the uploaded screenshot image
       #
@@ -62,6 +74,29 @@ module ContextDev
       #   @param status [String] Status of the response, e.g., 'ok'
       #
       #   @param width [Integer] Width in pixels of the returned screenshot image
+
+      # @see ContextDev::Models::WebScreenshotResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   The number of credits consumed by this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   The number of credits remaining for your organization after this request.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Metadata about the API key used for the request. Included in every response
+        #   whenever a valid API key is provided, even when the response status is not 200.
+        #
+        #   @param credits_consumed [Integer] The number of credits consumed by this request.
+        #
+        #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
+      end
 
       # Type of screenshot that was captured
       #

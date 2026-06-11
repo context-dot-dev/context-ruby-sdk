@@ -10,6 +10,13 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :is_product_page, ContextDev::Internal::Type::Boolean
 
+      # @!attribute key_metadata
+      #   Metadata about the API key used for the request. Included in every response
+      #   whenever a valid API key is provided, even when the response status is not 200.
+      #
+      #   @return [ContextDev::Models::AIExtractProductResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::AIExtractProductResponse::KeyMetadata }
+
       # @!attribute platform
       #   The detected ecommerce platform, or null if not a product page
       #
@@ -22,12 +29,40 @@ module ContextDev
       #   @return [ContextDev::Models::AIExtractProductResponse::Product, nil]
       optional :product, -> { ContextDev::Models::AIExtractProductResponse::Product }, nil?: true
 
-      # @!method initialize(is_product_page: nil, platform: nil, product: nil)
+      # @!method initialize(is_product_page: nil, key_metadata: nil, platform: nil, product: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::AIExtractProductResponse} for more details.
+      #
       #   @param is_product_page [Boolean] Whether the given URL is a product detail page
+      #
+      #   @param key_metadata [ContextDev::Models::AIExtractProductResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
       #
       #   @param platform [Symbol, ContextDev::Models::AIExtractProductResponse::Platform, nil] The detected ecommerce platform, or null if not a product page
       #
       #   @param product [ContextDev::Models::AIExtractProductResponse::Product, nil] The extracted product data, or null if not a product page
+
+      # @see ContextDev::Models::AIExtractProductResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   The number of credits consumed by this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   The number of credits remaining for your organization after this request.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Metadata about the API key used for the request. Included in every response
+        #   whenever a valid API key is provided, even when the response status is not 200.
+        #
+        #   @param credits_consumed [Integer] The number of credits consumed by this request.
+        #
+        #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
+      end
 
       # The detected ecommerce platform, or null if not a product page
       #

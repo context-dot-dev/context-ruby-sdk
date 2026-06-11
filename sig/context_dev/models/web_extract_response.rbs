@@ -6,7 +6,8 @@ module ContextDev
         metadata: ContextDev::Models::WebExtractResponse::Metadata,
         status: String,
         url: String,
-        urls_analyzed: ::Array[String]
+        urls_analyzed: ::Array[String],
+        key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata
       }
 
     class WebExtractResponse < ContextDev::Internal::Type::BaseModel
@@ -20,12 +21,19 @@ module ContextDev
 
       attr_accessor urls_analyzed: ::Array[String]
 
+      attr_reader key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::WebExtractResponse::KeyMetadata
+      ) -> ContextDev::Models::WebExtractResponse::KeyMetadata
+
       def initialize: (
         data: ::Hash[Symbol, top],
         metadata: ContextDev::Models::WebExtractResponse::Metadata,
         status: String,
         url: String,
-        urls_analyzed: ::Array[String]
+        urls_analyzed: ::Array[String],
+        ?key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata
       ) -> void
 
       def to_hash: -> {
@@ -33,7 +41,8 @@ module ContextDev
         metadata: ContextDev::Models::WebExtractResponse::Metadata,
         status: String,
         url: String,
-        urls_analyzed: ::Array[String]
+        urls_analyzed: ::Array[String],
+        key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata
       }
 
       type metadata =
@@ -70,6 +79,25 @@ module ContextDev
           num_skipped: Integer,
           num_succeeded: Integer,
           num_urls: Integer
+        }
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
         }
       end
     end

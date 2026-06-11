@@ -29,7 +29,17 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractCompetitorsResponse::Target]
       required :target, -> { ContextDev::Models::WebExtractCompetitorsResponse::Target }
 
-      # @!method initialize(competitors:, domain:, status:, target:)
+      # @!attribute key_metadata
+      #   Metadata about the API key used for the request. Included in every response
+      #   whenever a valid API key is provided, even when the response status is not 200.
+      #
+      #   @return [ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata }
+
+      # @!method initialize(competitors:, domain:, status:, target:, key_metadata: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::WebExtractCompetitorsResponse} for more details.
+      #
       #   @param competitors [Array<ContextDev::Models::WebExtractCompetitorsResponse::Competitor>] Direct competitors ordered by relevance and confidence.
       #
       #   @param domain [String] Normalized input domain.
@@ -37,6 +47,8 @@ module ContextDev
       #   @param status [Symbol, ContextDev::Models::WebExtractCompetitorsResponse::Status] Status of the response.
       #
       #   @param target [ContextDev::Models::WebExtractCompetitorsResponse::Target] Target company profile inferred from the landing page.
+      #
+      #   @param key_metadata [ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
 
       class Competitor < ContextDev::Internal::Type::BaseModel
         # @!attribute confidence
@@ -151,6 +163,29 @@ module ContextDev
         #   @param field_description [String] One-sentence description of what the target company sells and who it serves.
         #
         #   @param website_url [String] Resolved URL used for the landing page analysis.
+      end
+
+      # @see ContextDev::Models::WebExtractCompetitorsResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   The number of credits consumed by this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   The number of credits remaining for your organization after this request.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Metadata about the API key used for the request. Included in every response
+        #   whenever a valid API key is provided, even when the response status is not 200.
+        #
+        #   @param credits_consumed [Integer] The number of credits consumed by this request.
+        #
+        #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
       end
     end
   end

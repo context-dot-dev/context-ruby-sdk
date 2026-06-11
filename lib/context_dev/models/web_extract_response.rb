@@ -33,7 +33,17 @@ module ContextDev
       #   @return [Array<String>]
       required :urls_analyzed, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!method initialize(data:, metadata:, status:, url:, urls_analyzed:)
+      # @!attribute key_metadata
+      #   Metadata about the API key used for the request. Included in every response
+      #   whenever a valid API key is provided, even when the response status is not 200.
+      #
+      #   @return [ContextDev::Models::WebExtractResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::WebExtractResponse::KeyMetadata }
+
+      # @!method initialize(data:, metadata:, status:, url:, urls_analyzed:, key_metadata: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::WebExtractResponse} for more details.
+      #
       #   @param data [Hash{Symbol=>Object}] Extracted data matching the request schema
       #
       #   @param metadata [ContextDev::Models::WebExtractResponse::Metadata]
@@ -43,6 +53,8 @@ module ContextDev
       #   @param url [String] The starting URL that was analyzed
       #
       #   @param urls_analyzed [Array<String>] List of URLs whose Markdown was used for extraction
+      #
+      #   @param key_metadata [ContextDev::Models::WebExtractResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
 
       # @see ContextDev::Models::WebExtractResponse#metadata
       class Metadata < ContextDev::Internal::Type::BaseModel
@@ -77,6 +89,29 @@ module ContextDev
         #   @param num_skipped [Integer]
         #   @param num_succeeded [Integer]
         #   @param num_urls [Integer]
+      end
+
+      # @see ContextDev::Models::WebExtractResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   The number of credits consumed by this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   The number of credits remaining for your organization after this request.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Metadata about the API key used for the request. Included in every response
+        #   whenever a valid API key is provided, even when the response status is not 200.
+        #
+        #   @param credits_consumed [Integer] The number of credits consumed by this request.
+        #
+        #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
       end
     end
   end
