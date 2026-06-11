@@ -4,7 +4,8 @@ module ContextDev
       {
         images: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image],
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
-        url: String
+        url: String,
+        key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
       }
 
     class WebWebScrapeImagesResponse < ContextDev::Internal::Type::BaseModel
@@ -14,16 +15,24 @@ module ContextDev
 
       attr_accessor url: String
 
+      attr_reader key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
+      ) -> ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
+
       def initialize: (
         images: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image],
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
-        url: String
+        url: String,
+        ?key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
       ) -> void
 
       def to_hash: -> {
         images: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image],
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
-        url: String
+        url: String,
+        key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
       }
 
       type image =
@@ -188,6 +197,25 @@ module ContextDev
         TRUE: true
 
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeImagesResponse::success]
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
       end
     end
   end

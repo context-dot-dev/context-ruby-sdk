@@ -39,7 +39,14 @@ module ContextDev
                -> { ContextDev::Internal::Type::HashOf[ContextDev::Models::WebExtractFontsResponse::FontLink] },
                api_name: :fontLinks
 
-      # @!method initialize(code:, domain:, fonts:, status:, font_links: nil)
+      # @!attribute key_metadata
+      #   Metadata about the API key used for the request. Included in every response
+      #   whenever a valid API key is provided, even when the response status is not 200.
+      #
+      #   @return [ContextDev::Models::WebExtractFontsResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::WebExtractFontsResponse::KeyMetadata }
+
+      # @!method initialize(code:, domain:, fonts:, status:, font_links: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractFontsResponse} for more details.
       #
@@ -52,6 +59,8 @@ module ContextDev
       #   @param status [String] Status of the response, e.g., 'ok'
       #
       #   @param font_links [Hash{Symbol=>ContextDev::Models::WebExtractFontsResponse::FontLink}] Font assets keyed by family name as it appears in the fonts array (non-generic n
+      #
+      #   @param key_metadata [ContextDev::Models::WebExtractFontsResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
 
       class Font < ContextDev::Internal::Type::BaseModel
         # @!attribute fallbacks
@@ -162,6 +171,29 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      # @see ContextDev::Models::WebExtractFontsResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   The number of credits consumed by this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   The number of credits remaining for your organization after this request.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Metadata about the API key used for the request. Included in every response
+        #   whenever a valid API key is provided, even when the response status is not 200.
+        #
+        #   @param credits_consumed [Integer] The number of credits consumed by this request.
+        #
+        #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
       end
     end
   end

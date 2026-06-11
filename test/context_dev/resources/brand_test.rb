@@ -16,6 +16,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
       response => {
         brand: ContextDev::Models::BrandRetrieveResponse::Brand | nil,
         code: Integer | nil,
+        key_metadata: ContextDev::Models::BrandRetrieveResponse::KeyMetadata | nil,
         status: String | nil
       }
     end
@@ -34,6 +35,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
       response => {
         brand: ContextDev::Models::BrandIdentifyFromTransactionResponse::Brand | nil,
         code: Integer | nil,
+        key_metadata: ContextDev::Models::BrandIdentifyFromTransactionResponse::KeyMetadata | nil,
         status: String | nil
       }
     end
@@ -52,6 +54,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
       response => {
         brand: ContextDev::Models::BrandRetrieveByEmailResponse::Brand | nil,
         code: Integer | nil,
+        key_metadata: ContextDev::Models::BrandRetrieveByEmailResponse::KeyMetadata | nil,
         status: String | nil
       }
     end
@@ -70,6 +73,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
       response => {
         brand: ContextDev::Models::BrandRetrieveByIsinResponse::Brand | nil,
         code: Integer | nil,
+        key_metadata: ContextDev::Models::BrandRetrieveByIsinResponse::KeyMetadata | nil,
         status: String | nil
       }
     end
@@ -88,6 +92,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
       response => {
         brand: ContextDev::Models::BrandRetrieveByNameResponse::Brand | nil,
         code: Integer | nil,
+        key_metadata: ContextDev::Models::BrandRetrieveByNameResponse::KeyMetadata | nil,
         status: String | nil
       }
     end
@@ -106,6 +111,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
       response => {
         brand: ContextDev::Models::BrandRetrieveByTickerResponse::Brand | nil,
         code: Integer | nil,
+        key_metadata: ContextDev::Models::BrandRetrieveByTickerResponse::KeyMetadata | nil,
         status: String | nil
       }
     end
@@ -124,6 +130,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
       response => {
         brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand | nil,
         code: Integer | nil,
+        key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata | nil,
         status: String | nil
       }
     end

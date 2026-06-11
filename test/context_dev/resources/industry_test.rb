@@ -16,6 +16,7 @@ class ContextDev::Test::Resources::IndustryTest < ContextDev::Test::ResourceTest
       response => {
         codes: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::IndustryRetrieveNaicsResponse::Code]) | nil,
         domain: String | nil,
+        key_metadata: ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata | nil,
         status: String | nil,
         type: String | nil
       }
@@ -36,6 +37,7 @@ class ContextDev::Test::Resources::IndustryTest < ContextDev::Test::ResourceTest
         classification: ContextDev::Models::IndustryRetrieveSicResponse::Classification | nil,
         codes: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::IndustryRetrieveSicResponse::Code]) | nil,
         domain: String | nil,
+        key_metadata: ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata | nil,
         status: String | nil,
         type: String | nil
       }

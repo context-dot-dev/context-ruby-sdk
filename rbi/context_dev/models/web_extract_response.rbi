@@ -37,13 +37,30 @@ module ContextDev
       sig { returns(T::Array[String]) }
       attr_accessor :urls_analyzed
 
+      # Metadata about the API key used for the request. Included in every response
+      # whenever a valid API key is provided, even when the response status is not 200.
+      sig do
+        returns(T.nilable(ContextDev::Models::WebExtractResponse::KeyMetadata))
+      end
+      attr_reader :key_metadata
+
+      sig do
+        params(
+          key_metadata:
+            ContextDev::Models::WebExtractResponse::KeyMetadata::OrHash
+        ).void
+      end
+      attr_writer :key_metadata
+
       sig do
         params(
           data: T::Hash[Symbol, T.anything],
           metadata: ContextDev::Models::WebExtractResponse::Metadata::OrHash,
           status: String,
           url: String,
-          urls_analyzed: T::Array[String]
+          urls_analyzed: T::Array[String],
+          key_metadata:
+            ContextDev::Models::WebExtractResponse::KeyMetadata::OrHash
         ).returns(T.attached_class)
       end
       def self.new(
@@ -55,7 +72,10 @@ module ContextDev
         # The starting URL that was analyzed
         url:,
         # List of URLs whose Markdown was used for extraction
-        urls_analyzed:
+        urls_analyzed:,
+        # Metadata about the API key used for the request. Included in every response
+        # whenever a valid API key is provided, even when the response status is not 200.
+        key_metadata: nil
       )
       end
 
@@ -66,7 +86,8 @@ module ContextDev
             metadata: ContextDev::Models::WebExtractResponse::Metadata,
             status: String,
             url: String,
-            urls_analyzed: T::Array[String]
+            urls_analyzed: T::Array[String],
+            key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata
           }
         )
       end
@@ -124,6 +145,47 @@ module ContextDev
               num_succeeded: Integer,
               num_urls: Integer
             }
+          )
+        end
+        def to_hash
+        end
+      end
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::WebExtractResponse::KeyMetadata,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # The number of credits consumed by this request.
+        sig { returns(Integer) }
+        attr_accessor :credits_consumed
+
+        # The number of credits remaining for your organization after this request.
+        sig { returns(Integer) }
+        attr_accessor :credits_remaining
+
+        # Metadata about the API key used for the request. Included in every response
+        # whenever a valid API key is provided, even when the response status is not 200.
+        sig do
+          params(credits_consumed: Integer, credits_remaining: Integer).returns(
+            T.attached_class
+          )
+        end
+        def self.new(
+          # The number of credits consumed by this request.
+          credits_consumed:,
+          # The number of credits remaining for your organization after this request.
+          credits_remaining:
+        )
+        end
+
+        sig do
+          override.returns(
+            { credits_consumed: Integer, credits_remaining: Integer }
           )
         end
         def to_hash

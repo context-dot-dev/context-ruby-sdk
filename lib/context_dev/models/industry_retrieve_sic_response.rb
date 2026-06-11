@@ -25,6 +25,13 @@ module ContextDev
       #   @return [String, nil]
       optional :domain, String
 
+      # @!attribute key_metadata
+      #   Metadata about the API key used for the request. Included in every response
+      #   whenever a valid API key is provided, even when the response status is not 200.
+      #
+      #   @return [ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata }
+
       # @!attribute status
       #   Status of the response, e.g., 'ok'
       #
@@ -37,7 +44,7 @@ module ContextDev
       #   @return [String, nil]
       optional :type, String
 
-      # @!method initialize(classification: nil, codes: nil, domain: nil, status: nil, type: nil)
+      # @!method initialize(classification: nil, codes: nil, domain: nil, key_metadata: nil, status: nil, type: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::IndustryRetrieveSicResponse} for more details.
       #
@@ -46,6 +53,8 @@ module ContextDev
       #   @param codes [Array<ContextDev::Models::IndustryRetrieveSicResponse::Code>] Array of SIC codes with confidence scores. Extra fields depend on the requested
       #
       #   @param domain [String] Domain found for the brand
+      #
+      #   @param key_metadata [ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
       #
       #   @param status [String] Status of the response, e.g., 'ok'
       #
@@ -133,6 +142,29 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      # @see ContextDev::Models::IndustryRetrieveSicResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   The number of credits consumed by this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   The number of credits remaining for your organization after this request.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Metadata about the API key used for the request. Included in every response
+        #   whenever a valid API key is provided, even when the response status is not 200.
+        #
+        #   @param credits_consumed [Integer] The number of credits consumed by this request.
+        #
+        #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
       end
     end
   end
