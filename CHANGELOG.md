@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.33.0 (2026-06-18)
+
+Full Changelog: [v1.32.0...v1.33.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.32.0...v1.33.0)
+
+### Features
+
+* **api:** api update ([65310de](https://github.com/context-dot-dev/context-ruby-sdk/commit/65310de1d9739b217660fc4ab8e5462bc5a0f081))
+
+
+### Bug Fixes
+
+* **client:** send content-type header for requests with an omitted optional body ([63d0f66](https://github.com/context-dot-dev/context-ruby-sdk/commit/63d0f66c1d871786bf80989b7a8ad11b859ec12a))
+
 ## 1.32.0 (2026-06-11)
 
 Full Changelog: [v1.31.0...v1.32.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v1.31.0...v1.32.0)
