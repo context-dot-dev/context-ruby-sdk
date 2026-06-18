@@ -160,6 +160,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         html: String,
+        metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::Success,
         type: ContextDev::Models::WebWebScrapeHTMLResponse::Type,
         url: String,
@@ -199,6 +200,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         markdown: String,
+        metadata: ContextDev::Models::WebWebScrapeMdResponse::Metadata,
         success: ContextDev::Models::WebWebScrapeMdResponse::Success,
         url: String,
         key_metadata: ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata | nil
