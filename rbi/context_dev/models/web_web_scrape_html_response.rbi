@@ -657,6 +657,16 @@ module ContextDev
             :pdf,
             ContextDev::Models::WebWebScrapeHTMLResponse::Type::TaggedSymbol
           )
+        DOCX =
+          T.let(
+            :docx,
+            ContextDev::Models::WebWebScrapeHTMLResponse::Type::TaggedSymbol
+          )
+        DOC =
+          T.let(
+            :doc,
+            ContextDev::Models::WebWebScrapeHTMLResponse::Type::TaggedSymbol
+          )
 
         sig do
           override.returns(
