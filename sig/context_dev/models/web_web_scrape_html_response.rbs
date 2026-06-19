@@ -269,7 +269,17 @@ module ContextDev
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::success]
       end
 
-      type type_ = :html | :xml | :json | :text | :csv | :markdown | :svg | :pdf
+      type type_ =
+        :html
+        | :xml
+        | :json
+        | :text
+        | :csv
+        | :markdown
+        | :svg
+        | :pdf
+        | :docx
+        | :doc
 
       module Type
         extend ContextDev::Internal::Type::Enum
@@ -282,6 +292,8 @@ module ContextDev
         MARKDOWN: :markdown
         SVG: :svg
         PDF: :pdf
+        DOCX: :docx
+        DOC: :doc
 
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::type_]
       end
