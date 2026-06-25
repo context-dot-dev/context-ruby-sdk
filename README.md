@@ -26,7 +26,7 @@ To use this gem, install via Bundler by adding the following to your application
 <!-- x-release-please-start-version -->
 
 ```ruby
-gem "context.dev", "~> 1.34.0"
+gem "context.dev", "~> 1.35.0"
 ```
 
 <!-- x-release-please-end -->
