@@ -48,6 +48,7 @@ module ContextDev
         ?handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
         ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
+        ?scroll_offset: Integer,
         ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
         ?wait_for_ms: Integer,
