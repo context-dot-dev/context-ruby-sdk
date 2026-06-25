@@ -8,6 +8,7 @@ module ContextDev
         handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
         max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
+        scroll_offset: Integer,
         timeout_ms: Integer,
         viewport: ContextDev::WebScreenshotParams::Viewport,
         wait_for_ms: Integer
@@ -48,6 +49,10 @@ module ContextDev
         ContextDev::Models::WebScreenshotParams::page
       ) -> ContextDev::Models::WebScreenshotParams::page
 
+      attr_reader scroll_offset: Integer?
+
+      def scroll_offset=: (Integer) -> Integer
+
       attr_reader timeout_ms: Integer?
 
       def timeout_ms=: (Integer) -> Integer
@@ -69,6 +74,7 @@ module ContextDev
         ?handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
         ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
+        ?scroll_offset: Integer,
         ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
         ?wait_for_ms: Integer,
@@ -82,6 +88,7 @@ module ContextDev
         handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
         max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
+        scroll_offset: Integer,
         timeout_ms: Integer,
         viewport: ContextDev::WebScreenshotParams::Viewport,
         wait_for_ms: Integer,

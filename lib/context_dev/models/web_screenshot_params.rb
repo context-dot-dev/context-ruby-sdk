@@ -57,6 +57,17 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebScreenshotParams::Page, nil]
       optional :page, enum: -> { ContextDev::WebScreenshotParams::Page }
 
+      # @!attribute scroll_offset
+      #   Optional vertical scroll offset in pixels for capturing a long page in
+      #   viewport-sized chunks. When provided, the full page is captured once and the
+      #   returned image is the viewport-sized slice that begins at this Y offset (e.g.
+      #   request scrollOffset=0, then 1080, then 2160 to walk a 1920x1080 landing page
+      #   top to bottom). The final slice may be shorter than the viewport height. Takes
+      #   precedence over fullScreenshot. Max: 100000.
+      #
+      #   @return [Integer, nil]
+      optional :scroll_offset, Integer
+
       # @!attribute timeout_ms
       #   Optional timeout in milliseconds for the request. If the request takes longer
       #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -79,7 +90,7 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer
 
-      # @!method initialize(direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScreenshotParams} for more details.
       #
@@ -94,6 +105,8 @@ module ContextDev
       #   @param max_age_ms [Integer] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
       #   @param page [Symbol, ContextDev::Models::WebScreenshotParams::Page] Optional parameter to specify which page type to screenshot. If provided, the sy
+      #
+      #   @param scroll_offset [Integer] Optional vertical scroll offset in pixels for capturing a long page in viewport-
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

@@ -163,7 +163,7 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      # @overload screenshot(direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
       #
       # @param direct_url [String] A specific URL to screenshot directly, bypassing domain resolution (e.g., 'https
       #
@@ -176,6 +176,8 @@ module ContextDev
       # @param max_age_ms [Integer] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
       # @param page [Symbol, ContextDev::Models::WebScreenshotParams::Page] Optional parameter to specify which page type to screenshot. If provided, the sy
+      #
+      # @param scroll_offset [Integer] Optional vertical scroll offset in pixels for capturing a long page in viewport-
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -199,6 +201,7 @@ module ContextDev
             full_screenshot: "fullScreenshot",
             handle_cookie_popup: "handleCookiePopup",
             max_age_ms: "maxAgeMs",
+            scroll_offset: "scrollOffset",
             timeout_ms: "timeoutMS",
             wait_for_ms: "waitForMs"
           ),
