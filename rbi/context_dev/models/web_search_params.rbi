@@ -11,9 +11,20 @@ module ContextDev
           T.any(ContextDev::WebSearchParams, ContextDev::Internal::AnyHash)
         end
 
-      # Natural-language search query.
+      # Search query. Accepts natural language as well as Google-style search operators
+      # such as `site:`, `-site:`, `inurl:`, `intitle:`, quoted phrases, and `OR`.
       sig { returns(String) }
       attr_accessor :query
+
+      # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
+      # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
+      sig { returns(T.nilable(ContextDev::WebSearchParams::Country::OrSymbol)) }
+      attr_reader :country
+
+      sig do
+        params(country: ContextDev::WebSearchParams::Country::OrSymbol).void
+      end
+      attr_writer :country
 
       # Blocklist — drop results from these domains. Example: ["pinterest.com",
       # "reddit.com"].
@@ -53,6 +64,13 @@ module ContextDev
       end
       attr_writer :markdown_options
 
+      # Number of results to request and return (10–100). Defaults to 10.
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :num_results
+
+      sig { params(num_results: Integer).void }
+      attr_writer :num_results
+
       # Expand the query into multiple parallel variants for broader recall.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :query_fanout
@@ -72,19 +90,25 @@ module ContextDev
       sig do
         params(
           query: String,
+          country: ContextDev::WebSearchParams::Country::OrSymbol,
           exclude_domains: T::Array[String],
           freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
           include_domains: T::Array[String],
           markdown_options:
             ContextDev::WebSearchParams::MarkdownOptions::OrHash,
+          num_results: Integer,
           query_fanout: T::Boolean,
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
       def self.new(
-        # Natural-language search query.
+        # Search query. Accepts natural language as well as Google-style search operators
+        # such as `site:`, `-site:`, `inurl:`, `intitle:`, quoted phrases, and `OR`.
         query:,
+        # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
+        # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
+        country: nil,
         # Blocklist — drop results from these domains. Example: ["pinterest.com",
         # "reddit.com"].
         exclude_domains: nil,
@@ -95,6 +119,8 @@ module ContextDev
         include_domains: nil,
         # Inline Markdown scraping for each result. Set `enabled: true` to activate.
         markdown_options: nil,
+        # Number of results to request and return (10–100). Defaults to 10.
+        num_results: nil,
         # Expand the query into multiple parallel variants for broader recall.
         query_fanout: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
@@ -109,10 +135,12 @@ module ContextDev
         override.returns(
           {
             query: String,
+            country: ContextDev::WebSearchParams::Country::OrSymbol,
             exclude_domains: T::Array[String],
             freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
             include_domains: T::Array[String],
             markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
+            num_results: Integer,
             query_fanout: T::Boolean,
             timeout_ms: Integer,
             request_options: ContextDev::RequestOptions
@@ -120,6 +148,264 @@ module ContextDev
         )
       end
       def to_hash
+      end
+
+      # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
+      # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
+      module Country
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias { T.all(Symbol, ContextDev::WebSearchParams::Country) }
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        AF = T.let(:af, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AL = T.let(:al, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        DZ = T.let(:dz, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AS = T.let(:as, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AD = T.let(:ad, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AO = T.let(:ao, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AI = T.let(:ai, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AQ = T.let(:aq, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AG = T.let(:ag, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AR = T.let(:ar, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AM = T.let(:am, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AW = T.let(:aw, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AU = T.let(:au, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AT = T.let(:at, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AZ = T.let(:az, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BS = T.let(:bs, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BH = T.let(:bh, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BD = T.let(:bd, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BB = T.let(:bb, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BY = T.let(:by, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BE = T.let(:be, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BZ = T.let(:bz, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BJ = T.let(:bj, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BM = T.let(:bm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BT = T.let(:bt, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BO = T.let(:bo, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BA = T.let(:ba, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BW = T.let(:bw, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BV = T.let(:bv, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BR = T.let(:br, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        IO = T.let(:io, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BN = T.let(:bn, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BG = T.let(:bg, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BF = T.let(:bf, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        BI = T.let(:bi, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        KH = T.let(:kh, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CM = T.let(:cm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CA = T.let(:ca, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CV = T.let(:cv, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        KY = T.let(:ky, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CF = T.let(:cf, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TD = T.let(:td, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CL = T.let(:cl, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CN = T.let(:cn, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CX = T.let(:cx, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CC = T.let(:cc, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CO = T.let(:co, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        KM = T.let(:km, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CG = T.let(:cg, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CD = T.let(:cd, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CK = T.let(:ck, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CR = T.let(:cr, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CI = T.let(:ci, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        HR = T.let(:hr, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CU = T.let(:cu, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CY = T.let(:cy, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CZ = T.let(:cz, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        DK = T.let(:dk, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        DJ = T.let(:dj, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        DM = T.let(:dm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        DO = T.let(:do, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        EC = T.let(:ec, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        EG = T.let(:eg, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SV = T.let(:sv, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GQ = T.let(:gq, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        ER = T.let(:er, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        EE = T.let(:ee, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        ET = T.let(:et, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        FK = T.let(:fk, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        FO = T.let(:fo, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        FJ = T.let(:fj, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        FI = T.let(:fi, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        FR = T.let(:fr, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GF = T.let(:gf, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PF = T.let(:pf, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TF = T.let(:tf, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GA = T.let(:ga, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GM = T.let(:gm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GE = T.let(:ge, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        DE = T.let(:de, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GH = T.let(:gh, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GI = T.let(:gi, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GR = T.let(:gr, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GL = T.let(:gl, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GD = T.let(:gd, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GP = T.let(:gp, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GU = T.let(:gu, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GT = T.let(:gt, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GN = T.let(:gn, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GW = T.let(:gw, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GY = T.let(:gy, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        HT = T.let(:ht, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        HM = T.let(:hm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        VA = T.let(:va, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        HN = T.let(:hn, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        HK = T.let(:hk, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        HU = T.let(:hu, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        IS = T.let(:is, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        IN = T.let(:in, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        ID = T.let(:id, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        IR = T.let(:ir, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        IQ = T.let(:iq, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        IE = T.let(:ie, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        IL = T.let(:il, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        IT = T.let(:it, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        JM = T.let(:jm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        JP = T.let(:jp, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        JO = T.let(:jo, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        KZ = T.let(:kz, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        KE = T.let(:ke, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        KI = T.let(:ki, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        KP = T.let(:kp, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        KR = T.let(:kr, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        KW = T.let(:kw, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        KG = T.let(:kg, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        LA = T.let(:la, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        LV = T.let(:lv, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        LB = T.let(:lb, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        LS = T.let(:ls, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        LR = T.let(:lr, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        LY = T.let(:ly, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        LI = T.let(:li, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        LT = T.let(:lt, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        LU = T.let(:lu, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MO = T.let(:mo, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MK = T.let(:mk, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MG = T.let(:mg, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MW = T.let(:mw, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MY = T.let(:my, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MV = T.let(:mv, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        ML = T.let(:ml, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MT = T.let(:mt, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MH = T.let(:mh, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MQ = T.let(:mq, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MR = T.let(:mr, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MU = T.let(:mu, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        YT = T.let(:yt, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MX = T.let(:mx, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        FM = T.let(:fm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MD = T.let(:md, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MC = T.let(:mc, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MN = T.let(:mn, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MS = T.let(:ms, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MA = T.let(:ma, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MZ = T.let(:mz, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MM = T.let(:mm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NA = T.let(:na, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NR = T.let(:nr, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NP = T.let(:np, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NL = T.let(:nl, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AN = T.let(:an, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NC = T.let(:nc, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NZ = T.let(:nz, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NI = T.let(:ni, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NE = T.let(:ne, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NG = T.let(:ng, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NU = T.let(:nu, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NF = T.let(:nf, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        MP = T.let(:mp, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        NO = T.let(:no, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        OM = T.let(:om, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PK = T.let(:pk, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PW = T.let(:pw, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PS = T.let(:ps, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PA = T.let(:pa, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PG = T.let(:pg, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PY = T.let(:py, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PE = T.let(:pe, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PH = T.let(:ph, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PN = T.let(:pn, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PL = T.let(:pl, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PT = T.let(:pt, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PR = T.let(:pr, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        QA = T.let(:qa, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        RE = T.let(:re, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        RO = T.let(:ro, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        RU = T.let(:ru, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        RW = T.let(:rw, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SH = T.let(:sh, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        KN = T.let(:kn, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        LC = T.let(:lc, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        PM = T.let(:pm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        VC = T.let(:vc, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        WS = T.let(:ws, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SM = T.let(:sm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        ST = T.let(:st, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SA = T.let(:sa, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SN = T.let(:sn, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        RS = T.let(:rs, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SC = T.let(:sc, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SL = T.let(:sl, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SG = T.let(:sg, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SK = T.let(:sk, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SI = T.let(:si, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SB = T.let(:sb, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SO = T.let(:so, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        ZA = T.let(:za, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GS = T.let(:gs, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        ES = T.let(:es, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        LK = T.let(:lk, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SD = T.let(:sd, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SR = T.let(:sr, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SJ = T.let(:sj, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SZ = T.let(:sz, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SE = T.let(:se, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        CH = T.let(:ch, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        SY = T.let(:sy, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TW = T.let(:tw, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TJ = T.let(:tj, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TZ = T.let(:tz, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TH = T.let(:th, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TL = T.let(:tl, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TG = T.let(:tg, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TK = T.let(:tk, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TO = T.let(:to, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TT = T.let(:tt, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TN = T.let(:tn, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TR = T.let(:tr, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TM = T.let(:tm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TC = T.let(:tc, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        TV = T.let(:tv, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        UG = T.let(:ug, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        UA = T.let(:ua, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        AE = T.let(:ae, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        GB = T.let(:gb, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        US = T.let(:us, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        UM = T.let(:um, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        UY = T.let(:uy, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        UZ = T.let(:uz, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        VU = T.let(:vu, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        VE = T.let(:ve, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        VN = T.let(:vn, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        VG = T.let(:vg, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        VI = T.let(:vi, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        WF = T.let(:wf, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        EH = T.let(:eh, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        YE = T.let(:ye, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        ZM = T.let(:zm, ContextDev::WebSearchParams::Country::TaggedSymbol)
+        ZW = T.let(:zw, ContextDev::WebSearchParams::Country::TaggedSymbol)
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebSearchParams::Country::TaggedSymbol]
+          )
+        end
+        def self.values
+        end
       end
 
       # Restrict results to content published within this window.

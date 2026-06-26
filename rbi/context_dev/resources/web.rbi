@@ -233,19 +233,25 @@ module ContextDev
       sig do
         params(
           query: String,
+          country: ContextDev::WebSearchParams::Country::OrSymbol,
           exclude_domains: T::Array[String],
           freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
           include_domains: T::Array[String],
           markdown_options:
             ContextDev::WebSearchParams::MarkdownOptions::OrHash,
+          num_results: Integer,
           query_fanout: T::Boolean,
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebSearchResponse)
       end
       def search(
-        # Natural-language search query.
+        # Search query. Accepts natural language as well as Google-style search operators
+        # such as `site:`, `-site:`, `inurl:`, `intitle:`, quoted phrases, and `OR`.
         query:,
+        # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
+        # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
+        country: nil,
         # Blocklist — drop results from these domains. Example: ["pinterest.com",
         # "reddit.com"].
         exclude_domains: nil,
@@ -256,6 +262,8 @@ module ContextDev
         include_domains: nil,
         # Inline Markdown scraping for each result. Set `enabled: true` to activate.
         markdown_options: nil,
+        # Number of results to request and return (10–100). Defaults to 10.
+        num_results: nil,
         # Expand the query into multiple parallel variants for broader recall.
         query_fanout: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer

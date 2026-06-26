@@ -58,10 +58,12 @@ module ContextDev
 
       def search: (
         query: String,
+        ?country: ContextDev::Models::WebSearchParams::country,
         ?exclude_domains: ::Array[String],
         ?freshness: ContextDev::Models::WebSearchParams::freshness,
         ?include_domains: ::Array[String],
         ?markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
+        ?num_results: Integer,
         ?query_fanout: bool,
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
