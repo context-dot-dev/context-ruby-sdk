@@ -217,9 +217,11 @@ module ContextDev
       #
       # Search the web and optionally scrape each result to Markdown in one round-trip.
       #
-      # @overload search(query:, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, query_fanout: nil, timeout_ms: nil, request_options: {})
+      # @overload search(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, timeout_ms: nil, request_options: {})
       #
-      # @param query [String] Natural-language search query.
+      # @param query [String] Search query. Accepts natural language as well as Google-style search operators
+      #
+      # @param country [Symbol, ContextDev::Models::WebSearchParams::Country] Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific cou
       #
       # @param exclude_domains [Array<String>] Blocklist — drop results from these domains. Example: ["pinterest.com", "reddit.
       #
@@ -228,6 +230,8 @@ module ContextDev
       # @param include_domains [Array<String>] Allowlist — only return results from these domains. Example: ["arxiv.org", "gith
       #
       # @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions] Inline Markdown scraping for each result. Set `enabled: true` to activate.
+      #
+      # @param num_results [Integer] Number of results to request and return (10–100). Defaults to 10.
       #
       # @param query_fanout [Boolean] Expand the query into multiple parallel variants for broader recall.
       #
