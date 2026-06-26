@@ -42,6 +42,7 @@ module ContextDev
       ) -> ContextDev::Models::WebExtractStyleguideResponse
 
       def screenshot: (
+        ?country: ContextDev::Models::WebScreenshotParams::country,
         ?direct_url: String,
         ?domain: String,
         ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
@@ -68,6 +69,7 @@ module ContextDev
 
       def web_crawl_md: (
         url: String,
+        ?country: ContextDev::Models::WebWebCrawlMdParams::country,
         ?exclude_selectors: ::Array[String],
         ?follow_subdomains: bool,
         ?include_frames: bool,
@@ -89,6 +91,7 @@ module ContextDev
 
       def web_scrape_html: (
         url: String,
+        ?country: ContextDev::Models::WebWebScrapeHTMLParams::country,
         ?exclude_selectors: ::Array[String],
         ?headers: ::Hash[Symbol, String],
         ?include_frames: bool,
@@ -113,6 +116,7 @@ module ContextDev
 
       def web_scrape_md: (
         url: String,
+        ?country: ContextDev::Models::WebWebScrapeMdParams::country,
         ?exclude_selectors: ::Array[String],
         ?headers: ::Hash[Symbol, String],
         ?include_frames: bool,

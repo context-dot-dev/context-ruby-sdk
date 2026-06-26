@@ -162,6 +162,7 @@ module ContextDev
       # Capture a screenshot of a website.
       sig do
         params(
+          country: ContextDev::WebScreenshotParams::Country::OrSymbol,
           direct_url: String,
           domain: String,
           full_screenshot:
@@ -178,6 +179,9 @@ module ContextDev
         ).returns(ContextDev::Models::WebScreenshotResponse)
       end
       def screenshot(
+        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
+        # When provided, Context.dev fetches the target page from that country.
+        country: nil,
         # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
         # 'https://example.com/pricing'). When provided, the screenshot is taken of this
         # exact URL. You must provide either 'domain' or 'directUrl', but not both.
@@ -267,6 +271,7 @@ module ContextDev
       sig do
         params(
           url: String,
+          country: ContextDev::WebWebCrawlMdParams::Country::OrSymbol,
           exclude_selectors: T::Array[String],
           follow_subdomains: T::Boolean,
           include_frames: T::Boolean,
@@ -289,6 +294,10 @@ module ContextDev
       def web_crawl_md(
         # The starting URL for the crawl (must include http:// or https:// protocol)
         url:,
+        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+        # residential proxy exit location. Must be one of Context.dev's supported
+        # countries. When provided, Context.dev fetches the target page from that country.
+        country: nil,
         # CSS selectors to remove before each crawled page is converted to Markdown.
         # Applied after includeSelectors. Exclusion takes precedence: an element matching
         # both is removed. Examples: "nav", "footer", ".ad-banner", "[aria-hidden=true]".
@@ -347,6 +356,7 @@ module ContextDev
       sig do
         params(
           url: String,
+          country: ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol,
           exclude_selectors: T::Array[String],
           headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
@@ -362,6 +372,9 @@ module ContextDev
       def web_scrape_html(
         # Full URL to scrape (must include http:// or https:// protocol)
         url:,
+        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
+        # When provided, Context.dev fetches the target page from that country.
+        country: nil,
         # CSS selectors to remove from the result. Applied after includeSelectors.
         # Exclusion takes precedence: an element matching both is removed. Examples:
         # "nav", "footer", ".ad-banner", "[aria-hidden=true]".
@@ -440,6 +453,7 @@ module ContextDev
       sig do
         params(
           url: String,
+          country: ContextDev::WebWebScrapeMdParams::Country::OrSymbol,
           exclude_selectors: T::Array[String],
           headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
@@ -459,6 +473,9 @@ module ContextDev
         # Full URL to scrape into LLM usable Markdown (must include http:// or https://
         # protocol)
         url:,
+        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
+        # When provided, Context.dev fetches the target page from that country.
+        country: nil,
         # CSS selectors to remove before conversion to Markdown. Applied after
         # includeSelectors. Exclusion takes precedence: an element matching both is
         # removed. Examples: "nav", "footer", ".ad-banner", "[aria-hidden=true]".
