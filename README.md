@@ -206,11 +206,11 @@ context_dev.brand.retrieve(**params)
 Since this library does not depend on `sorbet-runtime`, it cannot provide [`T::Enum`](https://sorbet.org/docs/tenum) instances. Instead, we provide "tagged symbols" instead, which is always a primitive at runtime:
 
 ```ruby
-# :true
-puts(ContextDev::WebScreenshotParams::FullScreenshot::TRUE)
+# :ad
+puts(ContextDev::WebScreenshotParams::Country::AD)
 
-# Revealed type: `T.all(ContextDev::WebScreenshotParams::FullScreenshot, Symbol)`
-T.reveal_type(ContextDev::WebScreenshotParams::FullScreenshot::TRUE)
+# Revealed type: `T.all(ContextDev::WebScreenshotParams::Country, Symbol)`
+T.reveal_type(ContextDev::WebScreenshotParams::Country::AD)
 ```
 
 Enum parameters have a "relaxed" type, so you can either pass in enum constants or their literal value:
@@ -218,13 +218,13 @@ Enum parameters have a "relaxed" type, so you can either pass in enum constants 
 ```ruby
 # Using the enum constants preserves the tagged type information:
 context_dev.web.screenshot(
-  full_screenshot: ContextDev::WebScreenshotParams::FullScreenshot::TRUE,
+  country: ContextDev::WebScreenshotParams::Country::AD,
   # …
 )
 
 # Literal values are also permissible:
 context_dev.web.screenshot(
-  full_screenshot: :true,
+  country: :ad,
   # …
 )
 ```
