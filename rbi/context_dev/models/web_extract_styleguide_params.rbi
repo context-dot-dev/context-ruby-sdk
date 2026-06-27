@@ -14,6 +14,25 @@ module ContextDev
           )
         end
 
+      # Optional browser color scheme to emulate for websites that respond to
+      # prefers-color-scheme. This value is part of the styleguide cache key.
+      sig do
+        returns(
+          T.nilable(
+            ContextDev::WebExtractStyleguideParams::ColorScheme::OrSymbol
+          )
+        )
+      end
+      attr_reader :color_scheme
+
+      sig do
+        params(
+          color_scheme:
+            ContextDev::WebExtractStyleguideParams::ColorScheme::OrSymbol
+        ).void
+      end
+      attr_writer :color_scheme
+
       # A specific URL to fetch the styleguide from directly, bypassing domain
       # resolution (e.g., 'https://example.com/design-system'). When provided, the
       # styleguide is extracted from this exact URL. You must provide either 'domain' or
@@ -54,6 +73,8 @@ module ContextDev
 
       sig do
         params(
+          color_scheme:
+            ContextDev::WebExtractStyleguideParams::ColorScheme::OrSymbol,
           direct_url: String,
           domain: String,
           max_age_ms: Integer,
@@ -62,6 +83,9 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Optional browser color scheme to emulate for websites that respond to
+        # prefers-color-scheme. This value is part of the styleguide cache key.
+        color_scheme: nil,
         # A specific URL to fetch the styleguide from directly, bypassing domain
         # resolution (e.g., 'https://example.com/design-system'). When provided, the
         # styleguide is extracted from this exact URL. You must provide either 'domain' or
@@ -87,6 +111,8 @@ module ContextDev
       sig do
         override.returns(
           {
+            color_scheme:
+              ContextDev::WebExtractStyleguideParams::ColorScheme::OrSymbol,
             direct_url: String,
             domain: String,
             max_age_ms: Integer,
@@ -96,6 +122,39 @@ module ContextDev
         )
       end
       def to_hash
+      end
+
+      # Optional browser color scheme to emulate for websites that respond to
+      # prefers-color-scheme. This value is part of the styleguide cache key.
+      module ColorScheme
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::WebExtractStyleguideParams::ColorScheme)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        LIGHT =
+          T.let(
+            :light,
+            ContextDev::WebExtractStyleguideParams::ColorScheme::TaggedSymbol
+          )
+        DARK =
+          T.let(
+            :dark,
+            ContextDev::WebExtractStyleguideParams::ColorScheme::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::WebExtractStyleguideParams::ColorScheme::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
+        end
       end
     end
   end

@@ -34,6 +34,7 @@ module ContextDev
       ) -> ContextDev::Models::WebExtractFontsResponse
 
       def extract_styleguide: (
+        ?color_scheme: ContextDev::Models::WebExtractStyleguideParams::color_scheme,
         ?direct_url: String,
         ?domain: String,
         ?max_age_ms: Integer,

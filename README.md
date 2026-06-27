@@ -207,23 +207,23 @@ Since this library does not depend on `sorbet-runtime`, it cannot provide [`T::E
 
 ```ruby
 # :light
-puts(ContextDev::WebScreenshotParams::ColorScheme::LIGHT)
+puts(ContextDev::WebExtractStyleguideParams::ColorScheme::LIGHT)
 
-# Revealed type: `T.all(ContextDev::WebScreenshotParams::ColorScheme, Symbol)`
-T.reveal_type(ContextDev::WebScreenshotParams::ColorScheme::LIGHT)
+# Revealed type: `T.all(ContextDev::WebExtractStyleguideParams::ColorScheme, Symbol)`
+T.reveal_type(ContextDev::WebExtractStyleguideParams::ColorScheme::LIGHT)
 ```
 
 Enum parameters have a "relaxed" type, so you can either pass in enum constants or their literal value:
 
 ```ruby
 # Using the enum constants preserves the tagged type information:
-context_dev.web.screenshot(
-  color_scheme: ContextDev::WebScreenshotParams::ColorScheme::LIGHT,
+context_dev.web.extract_styleguide(
+  color_scheme: ContextDev::WebExtractStyleguideParams::ColorScheme::LIGHT,
   # …
 )
 
 # Literal values are also permissible:
-context_dev.web.screenshot(
+context_dev.web.extract_styleguide(
   color_scheme: :light,
   # …
 )
