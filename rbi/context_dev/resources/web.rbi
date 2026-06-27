@@ -129,6 +129,8 @@ module ContextDev
       # typography, spacing, shadows, and UI components.
       sig do
         params(
+          color_scheme:
+            ContextDev::WebExtractStyleguideParams::ColorScheme::OrSymbol,
           direct_url: String,
           domain: String,
           max_age_ms: Integer,
@@ -137,6 +139,9 @@ module ContextDev
         ).returns(ContextDev::Models::WebExtractStyleguideResponse)
       end
       def extract_styleguide(
+        # Optional browser color scheme to emulate for websites that respond to
+        # prefers-color-scheme. This value is part of the styleguide cache key.
+        color_scheme: nil,
         # A specific URL to fetch the styleguide from directly, bypassing domain
         # resolution (e.g., 'https://example.com/design-system'). When provided, the
         # styleguide is extracted from this exact URL. You must provide either 'domain' or
@@ -162,6 +167,8 @@ module ContextDev
       # Capture a screenshot of a website.
       sig do
         params(
+          color_scheme: ContextDev::WebScreenshotParams::ColorScheme::OrSymbol,
+          country: ContextDev::WebScreenshotParams::Country::OrSymbol,
           direct_url: String,
           domain: String,
           full_screenshot:
@@ -178,6 +185,12 @@ module ContextDev
         ).returns(ContextDev::Models::WebScreenshotResponse)
       end
       def screenshot(
+        # Optional parameter to choose the site's visual theme in the screenshot. Use
+        # 'light' or 'dark' when the site offers both appearances.
+        color_scheme: nil,
+        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
+        # When provided, Context.dev fetches the target page from that country.
+        country: nil,
         # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
         # 'https://example.com/pricing'). When provided, the screenshot is taken of this
         # exact URL. You must provide either 'domain' or 'directUrl', but not both.
@@ -229,19 +242,25 @@ module ContextDev
       sig do
         params(
           query: String,
+          country: ContextDev::WebSearchParams::Country::OrSymbol,
           exclude_domains: T::Array[String],
           freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
           include_domains: T::Array[String],
           markdown_options:
             ContextDev::WebSearchParams::MarkdownOptions::OrHash,
+          num_results: Integer,
           query_fanout: T::Boolean,
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebSearchResponse)
       end
       def search(
-        # Natural-language search query.
+        # Search query. Accepts natural language as well as Google-style search operators
+        # such as `site:`, `-site:`, `inurl:`, `intitle:`, quoted phrases, and `OR`.
         query:,
+        # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
+        # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
+        country: nil,
         # Blocklist — drop results from these domains. Example: ["pinterest.com",
         # "reddit.com"].
         exclude_domains: nil,
@@ -252,6 +271,8 @@ module ContextDev
         include_domains: nil,
         # Inline Markdown scraping for each result. Set `enabled: true` to activate.
         markdown_options: nil,
+        # Number of results to request and return (10–100). Defaults to 10.
+        num_results: nil,
         # Expand the query into multiple parallel variants for broader recall.
         query_fanout: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
@@ -267,6 +288,7 @@ module ContextDev
       sig do
         params(
           url: String,
+          country: ContextDev::WebWebCrawlMdParams::Country::OrSymbol,
           exclude_selectors: T::Array[String],
           follow_subdomains: T::Boolean,
           include_frames: T::Boolean,
@@ -289,6 +311,10 @@ module ContextDev
       def web_crawl_md(
         # The starting URL for the crawl (must include http:// or https:// protocol)
         url:,
+        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+        # residential proxy exit location. Must be one of Context.dev's supported
+        # countries. When provided, Context.dev fetches the target page from that country.
+        country: nil,
         # CSS selectors to remove before each crawled page is converted to Markdown.
         # Applied after includeSelectors. Exclusion takes precedence: an element matching
         # both is removed. Examples: "nav", "footer", ".ad-banner", "[aria-hidden=true]".
@@ -347,6 +373,7 @@ module ContextDev
       sig do
         params(
           url: String,
+          country: ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol,
           exclude_selectors: T::Array[String],
           headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
@@ -362,6 +389,9 @@ module ContextDev
       def web_scrape_html(
         # Full URL to scrape (must include http:// or https:// protocol)
         url:,
+        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
+        # When provided, Context.dev fetches the target page from that country.
+        country: nil,
         # CSS selectors to remove from the result. Applied after includeSelectors.
         # Exclusion takes precedence: an element matching both is removed. Examples:
         # "nav", "footer", ".ad-banner", "[aria-hidden=true]".
@@ -440,6 +470,7 @@ module ContextDev
       sig do
         params(
           url: String,
+          country: ContextDev::WebWebScrapeMdParams::Country::OrSymbol,
           exclude_selectors: T::Array[String],
           headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
@@ -459,6 +490,9 @@ module ContextDev
         # Full URL to scrape into LLM usable Markdown (must include http:// or https://
         # protocol)
         url:,
+        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
+        # When provided, Context.dev fetches the target page from that country.
+        country: nil,
         # CSS selectors to remove before conversion to Markdown. Applied after
         # includeSelectors. Exclusion takes precedence: an element matching both is
         # removed. Examples: "nav", "footer", ".ad-banner", "[aria-hidden=true]".

@@ -127,7 +127,9 @@ module ContextDev
       # Extract a comprehensive design system from a website including colors,
       # typography, spacing, shadows, and UI components.
       #
-      # @overload extract_styleguide(direct_url: nil, domain: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
+      # @overload extract_styleguide(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
+      #
+      # @param color_scheme [Symbol, ContextDev::Models::WebExtractStyleguideParams::ColorScheme] Optional browser color scheme to emulate for websites that respond to prefers-co
       #
       # @param direct_url [String] A specific URL to fetch the styleguide from directly, bypassing domain resolutio
       #
@@ -149,6 +151,7 @@ module ContextDev
           method: :get,
           path: "web/styleguide",
           query: query.transform_keys(
+            color_scheme: "colorScheme",
             direct_url: "directUrl",
             max_age_ms: "maxAgeMs",
             timeout_ms: "timeoutMS"
@@ -163,7 +166,11 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      # @overload screenshot(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      #
+      # @param color_scheme [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
+      #
+      # @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
       #
       # @param direct_url [String] A specific URL to screenshot directly, bypassing domain resolution (e.g., 'https
       #
@@ -197,6 +204,7 @@ module ContextDev
           method: :get,
           path: "web/screenshot",
           query: query.transform_keys(
+            color_scheme: "colorScheme",
             direct_url: "directUrl",
             full_screenshot: "fullScreenshot",
             handle_cookie_popup: "handleCookiePopup",
@@ -215,9 +223,11 @@ module ContextDev
       #
       # Search the web and optionally scrape each result to Markdown in one round-trip.
       #
-      # @overload search(query:, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, query_fanout: nil, timeout_ms: nil, request_options: {})
+      # @overload search(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, timeout_ms: nil, request_options: {})
       #
-      # @param query [String] Natural-language search query.
+      # @param query [String] Search query. Accepts natural language as well as Google-style search operators
+      #
+      # @param country [Symbol, ContextDev::Models::WebSearchParams::Country] Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific cou
       #
       # @param exclude_domains [Array<String>] Blocklist — drop results from these domains. Example: ["pinterest.com", "reddit.
       #
@@ -226,6 +236,8 @@ module ContextDev
       # @param include_domains [Array<String>] Allowlist — only return results from these domains. Example: ["arxiv.org", "gith
       #
       # @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions] Inline Markdown scraping for each result. Set `enabled: true` to activate.
+      #
+      # @param num_results [Integer] Number of results to request and return (10–100). Defaults to 10.
       #
       # @param query_fanout [Boolean] Expand the query into multiple parallel variants for broader recall.
       #
@@ -253,9 +265,11 @@ module ContextDev
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
       # and returns results for all crawled pages.
       #
-      # @overload web_crawl_md(url:, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_crawl_md(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
+      #
+      # @param country [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
       #
       # @param exclude_selectors [Array<String>] CSS selectors to remove before each crawled page is converted to Markdown. Appli
       #
@@ -310,9 +324,11 @@ module ContextDev
       #
       # Scrapes the given URL and returns the raw HTML content of the page.
       #
-      # @overload web_scrape_html(url:, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_html(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
+      #
+      # @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
       #
       # @param exclude_selectors [Array<String>] CSS selectors to remove from the result. Applied after includeSelectors. Exclusi
       #
@@ -405,9 +421,11 @@ module ContextDev
       #
       # Scrapes the given URL into LLM usable Markdown.
       #
-      # @overload web_scrape_md(url:, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, shorten_base64_images: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_md(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, shorten_base64_images: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
+      #
+      # @param country [Symbol, ContextDev::Models::WebWebScrapeMdParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
       #
       # @param exclude_selectors [Array<String>] CSS selectors to remove before conversion to Markdown. Applied after includeSele
       #

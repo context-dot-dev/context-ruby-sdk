@@ -26,7 +26,7 @@ To use this gem, install via Bundler by adding the following to your application
 <!-- x-release-please-start-version -->
 
 ```ruby
-gem "context.dev", "~> 1.35.0"
+gem "context.dev", "~> 1.36.0"
 ```
 
 <!-- x-release-please-end -->
@@ -206,25 +206,25 @@ context_dev.brand.retrieve(**params)
 Since this library does not depend on `sorbet-runtime`, it cannot provide [`T::Enum`](https://sorbet.org/docs/tenum) instances. Instead, we provide "tagged symbols" instead, which is always a primitive at runtime:
 
 ```ruby
-# :true
-puts(ContextDev::WebScreenshotParams::FullScreenshot::TRUE)
+# :light
+puts(ContextDev::WebExtractStyleguideParams::ColorScheme::LIGHT)
 
-# Revealed type: `T.all(ContextDev::WebScreenshotParams::FullScreenshot, Symbol)`
-T.reveal_type(ContextDev::WebScreenshotParams::FullScreenshot::TRUE)
+# Revealed type: `T.all(ContextDev::WebExtractStyleguideParams::ColorScheme, Symbol)`
+T.reveal_type(ContextDev::WebExtractStyleguideParams::ColorScheme::LIGHT)
 ```
 
 Enum parameters have a "relaxed" type, so you can either pass in enum constants or their literal value:
 
 ```ruby
 # Using the enum constants preserves the tagged type information:
-context_dev.web.screenshot(
-  full_screenshot: ContextDev::WebScreenshotParams::FullScreenshot::TRUE,
+context_dev.web.extract_styleguide(
+  color_scheme: ContextDev::WebExtractStyleguideParams::ColorScheme::LIGHT,
   # …
 )
 
 # Literal values are also permissible:
-context_dev.web.screenshot(
-  full_screenshot: :true,
+context_dev.web.extract_styleguide(
+  color_scheme: :light,
   # …
 )
 ```
