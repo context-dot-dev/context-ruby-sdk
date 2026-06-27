@@ -129,6 +129,8 @@ module ContextDev
       # typography, spacing, shadows, and UI components.
       sig do
         params(
+          color_scheme:
+            ContextDev::WebExtractStyleguideParams::ColorScheme::OrSymbol,
           direct_url: String,
           domain: String,
           max_age_ms: Integer,
@@ -137,6 +139,9 @@ module ContextDev
         ).returns(ContextDev::Models::WebExtractStyleguideResponse)
       end
       def extract_styleguide(
+        # Optional browser color scheme to emulate for websites that respond to
+        # prefers-color-scheme. This value is part of the styleguide cache key.
+        color_scheme: nil,
         # A specific URL to fetch the styleguide from directly, bypassing domain
         # resolution (e.g., 'https://example.com/design-system'). When provided, the
         # styleguide is extracted from this exact URL. You must provide either 'domain' or

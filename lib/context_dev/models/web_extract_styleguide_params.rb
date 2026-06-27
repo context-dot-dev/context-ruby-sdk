@@ -7,6 +7,13 @@ module ContextDev
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
+      # @!attribute color_scheme
+      #   Optional browser color scheme to emulate for websites that respond to
+      #   prefers-color-scheme. This value is part of the styleguide cache key.
+      #
+      #   @return [Symbol, ContextDev::Models::WebExtractStyleguideParams::ColorScheme, nil]
+      optional :color_scheme, enum: -> { ContextDev::WebExtractStyleguideParams::ColorScheme }
+
       # @!attribute direct_url
       #   A specific URL to fetch the styleguide from directly, bypassing domain
       #   resolution (e.g., 'https://example.com/design-system'). When provided, the
@@ -41,9 +48,11 @@ module ContextDev
       #   @return [Integer, nil]
       optional :timeout_ms, Integer
 
-      # @!method initialize(direct_url: nil, domain: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
+      # @!method initialize(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractStyleguideParams} for more details.
+      #
+      #   @param color_scheme [Symbol, ContextDev::Models::WebExtractStyleguideParams::ColorScheme] Optional browser color scheme to emulate for websites that respond to prefers-co
       #
       #   @param direct_url [String] A specific URL to fetch the styleguide from directly, bypassing domain resolutio
       #
@@ -54,6 +63,18 @@ module ContextDev
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      # Optional browser color scheme to emulate for websites that respond to
+      # prefers-color-scheme. This value is part of the styleguide cache key.
+      module ColorScheme
+        extend ContextDev::Internal::Type::Enum
+
+        LIGHT = :light
+        DARK = :dark
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
+      end
     end
   end
 end

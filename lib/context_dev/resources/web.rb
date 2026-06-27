@@ -127,7 +127,9 @@ module ContextDev
       # Extract a comprehensive design system from a website including colors,
       # typography, spacing, shadows, and UI components.
       #
-      # @overload extract_styleguide(direct_url: nil, domain: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
+      # @overload extract_styleguide(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
+      #
+      # @param color_scheme [Symbol, ContextDev::Models::WebExtractStyleguideParams::ColorScheme] Optional browser color scheme to emulate for websites that respond to prefers-co
       #
       # @param direct_url [String] A specific URL to fetch the styleguide from directly, bypassing domain resolutio
       #
@@ -149,6 +151,7 @@ module ContextDev
           method: :get,
           path: "web/styleguide",
           query: query.transform_keys(
+            color_scheme: "colorScheme",
             direct_url: "directUrl",
             max_age_ms: "maxAgeMs",
             timeout_ms: "timeoutMS"
