@@ -11,6 +11,22 @@ module ContextDev
           T.any(ContextDev::WebScreenshotParams, ContextDev::Internal::AnyHash)
         end
 
+      # Optional parameter to choose the site's visual theme in the screenshot. Use
+      # 'light' or 'dark' when the site offers both appearances.
+      sig do
+        returns(
+          T.nilable(ContextDev::WebScreenshotParams::ColorScheme::OrSymbol)
+        )
+      end
+      attr_reader :color_scheme
+
+      sig do
+        params(
+          color_scheme: ContextDev::WebScreenshotParams::ColorScheme::OrSymbol
+        ).void
+      end
+      attr_writer :color_scheme
+
       # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
       # When provided, Context.dev fetches the target page from that country.
       sig do
@@ -142,6 +158,7 @@ module ContextDev
 
       sig do
         params(
+          color_scheme: ContextDev::WebScreenshotParams::ColorScheme::OrSymbol,
           country: ContextDev::WebScreenshotParams::Country::OrSymbol,
           direct_url: String,
           domain: String,
@@ -159,6 +176,9 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Optional parameter to choose the site's visual theme in the screenshot. Use
+        # 'light' or 'dark' when the site offers both appearances.
+        color_scheme: nil,
         # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
         # When provided, Context.dev fetches the target page from that country.
         country: nil,
@@ -212,6 +232,8 @@ module ContextDev
       sig do
         override.returns(
           {
+            color_scheme:
+              ContextDev::WebScreenshotParams::ColorScheme::OrSymbol,
             country: ContextDev::WebScreenshotParams::Country::OrSymbol,
             direct_url: String,
             domain: String,
@@ -230,6 +252,37 @@ module ContextDev
         )
       end
       def to_hash
+      end
+
+      # Optional parameter to choose the site's visual theme in the screenshot. Use
+      # 'light' or 'dark' when the site offers both appearances.
+      module ColorScheme
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::WebScreenshotParams::ColorScheme)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        LIGHT =
+          T.let(
+            :light,
+            ContextDev::WebScreenshotParams::ColorScheme::TaggedSymbol
+          )
+        DARK =
+          T.let(
+            :dark,
+            ContextDev::WebScreenshotParams::ColorScheme::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebScreenshotParams::ColorScheme::TaggedSymbol]
+          )
+        end
+        def self.values
+        end
       end
 
       # Two-letter ISO 3166-1 alpha-2 country code for the website request location.

@@ -7,6 +7,13 @@ module ContextDev
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
+      # @!attribute color_scheme
+      #   Optional parameter to choose the site's visual theme in the screenshot. Use
+      #   'light' or 'dark' when the site offers both appearances.
+      #
+      #   @return [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme, nil]
+      optional :color_scheme, enum: -> { ContextDev::WebScreenshotParams::ColorScheme }
+
       # @!attribute country
       #   Two-letter ISO 3166-1 alpha-2 country code for the website request location.
       #   When provided, Context.dev fetches the target page from that country.
@@ -97,9 +104,11 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer
 
-      # @!method initialize(country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScreenshotParams} for more details.
+      #
+      #   @param color_scheme [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
       #
       #   @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
       #
@@ -124,6 +133,18 @@ module ContextDev
       #   @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load before taking
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      # Optional parameter to choose the site's visual theme in the screenshot. Use
+      # 'light' or 'dark' when the site offers both appearances.
+      module ColorScheme
+        extend ContextDev::Internal::Type::Enum
+
+        LIGHT = :light
+        DARK = :dark
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
+      end
 
       # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
       # When provided, Context.dev fetches the target page from that country.

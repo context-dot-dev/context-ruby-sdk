@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type web_screenshot_params =
       {
+        color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme,
         country: ContextDev::Models::WebScreenshotParams::country,
         direct_url: String,
         domain: String,
@@ -19,6 +20,12 @@ module ContextDev
     class WebScreenshotParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
+
+      attr_reader color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme?
+
+      def color_scheme=: (
+        ContextDev::Models::WebScreenshotParams::color_scheme
+      ) -> ContextDev::Models::WebScreenshotParams::color_scheme
 
       attr_reader country: ContextDev::Models::WebScreenshotParams::country?
 
@@ -75,6 +82,7 @@ module ContextDev
       def wait_for_ms=: (Integer) -> Integer
 
       def initialize: (
+        ?color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme,
         ?country: ContextDev::Models::WebScreenshotParams::country,
         ?direct_url: String,
         ?domain: String,
@@ -90,6 +98,7 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme,
         country: ContextDev::Models::WebScreenshotParams::country,
         direct_url: String,
         domain: String,
@@ -103,6 +112,17 @@ module ContextDev
         wait_for_ms: Integer,
         request_options: ContextDev::RequestOptions
       }
+
+      type color_scheme = :light | :dark
+
+      module ColorScheme
+        extend ContextDev::Internal::Type::Enum
+
+        LIGHT: :light
+        DARK: :dark
+
+        def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::color_scheme]
+      end
 
       type country =
         :ad
