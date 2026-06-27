@@ -162,6 +162,7 @@ module ContextDev
       # Capture a screenshot of a website.
       sig do
         params(
+          color_scheme: ContextDev::WebScreenshotParams::ColorScheme::OrSymbol,
           country: ContextDev::WebScreenshotParams::Country::OrSymbol,
           direct_url: String,
           domain: String,
@@ -179,6 +180,9 @@ module ContextDev
         ).returns(ContextDev::Models::WebScreenshotResponse)
       end
       def screenshot(
+        # Optional parameter to choose the site's visual theme in the screenshot. Use
+        # 'light' or 'dark' when the site offers both appearances.
+        color_scheme: nil,
         # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
         # When provided, Context.dev fetches the target page from that country.
         country: nil,

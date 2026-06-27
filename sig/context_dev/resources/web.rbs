@@ -42,6 +42,7 @@ module ContextDev
       ) -> ContextDev::Models::WebExtractStyleguideResponse
 
       def screenshot: (
+        ?color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme,
         ?country: ContextDev::Models::WebScreenshotParams::country,
         ?direct_url: String,
         ?domain: String,

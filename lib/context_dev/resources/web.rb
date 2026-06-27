@@ -163,7 +163,9 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      # @overload screenshot(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      #
+      # @param color_scheme [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
       #
       # @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
       #
@@ -199,6 +201,7 @@ module ContextDev
           method: :get,
           path: "web/screenshot",
           query: query.transform_keys(
+            color_scheme: "colorScheme",
             direct_url: "directUrl",
             full_screenshot: "fullScreenshot",
             handle_cookie_popup: "handleCookiePopup",
