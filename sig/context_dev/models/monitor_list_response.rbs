@@ -1,0 +1,968 @@
+module ContextDev
+  module Models
+    type monitor_list_response =
+      {
+        data: ::Array[ContextDev::Models::MonitorListResponse::data],
+        has_more: bool,
+        next_cursor: String?
+      }
+
+    class MonitorListResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor data: ::Array[ContextDev::Models::MonitorListResponse::data]
+
+      attr_accessor has_more: bool
+
+      attr_accessor next_cursor: String?
+
+      def initialize: (
+        data: ::Array[ContextDev::Models::MonitorListResponse::data],
+        has_more: bool,
+        next_cursor: String?
+      ) -> void
+
+      def to_hash: -> {
+        data: ::Array[ContextDev::Models::MonitorListResponse::data],
+        has_more: bool,
+        next_cursor: String?
+      }
+
+      type data =
+        ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor
+        | ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor
+        | ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor
+        | ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor
+
+      module Data
+        extend ContextDev::Internal::Type::Union
+
+        type monitors_page_exact_monitor =
+          {
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Target,
+            updated_at: Time,
+            last_change_at: Time?,
+            last_run_at: Time?,
+            tags: ::Array[String],
+            webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Webhook?
+          }
+
+        class MonitorsPageExactMonitor < ContextDev::Internal::Type::BaseModel
+          attr_accessor id: String
+
+          attr_accessor change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::ChangeDetection
+
+          attr_accessor created_at: Time
+
+          attr_accessor name: String
+
+          attr_accessor schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule
+
+          attr_accessor status: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::status
+
+          attr_accessor target: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Target
+
+          attr_accessor updated_at: Time
+
+          attr_accessor last_change_at: Time?
+
+          attr_accessor last_run_at: Time?
+
+          attr_reader tags: ::Array[String]?
+
+          def tags=: (::Array[String]) -> ::Array[String]
+
+          attr_accessor webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Webhook?
+
+          def initialize: (
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Target,
+            updated_at: Time,
+            ?last_change_at: Time?,
+            ?last_run_at: Time?,
+            ?tags: ::Array[String],
+            ?webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Webhook?
+          ) -> void
+
+          def to_hash: -> {
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Target,
+            updated_at: Time,
+            last_change_at: Time?,
+            last_run_at: Time?,
+            tags: ::Array[String],
+            webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Webhook?
+          }
+
+          type change_detection =
+            {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::ChangeDetection::type_
+            }
+
+          class ChangeDetection < ContextDev::Internal::Type::BaseModel
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::ChangeDetection::type_
+
+            def initialize: (
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::ChangeDetection::type_
+            ) -> void
+
+            def to_hash: -> {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::ChangeDetection::type_
+            }
+
+            type type_ = :exact
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              EXACT: :exact
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::ChangeDetection::type_]
+            end
+          end
+
+          type schedule =
+            {
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule::unit
+            }
+
+          class Schedule < ContextDev::Internal::Type::BaseModel
+            attr_accessor frequency: Integer
+
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule::type_
+
+            attr_accessor unit: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule::unit
+
+            def initialize: (
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule::unit
+            ) -> void
+
+            def to_hash: -> {
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule::unit
+            }
+
+            type type_ = :interval
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              INTERVAL: :interval
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule::type_]
+            end
+
+            type unit = :minutes | :hours | :days
+
+            module Unit
+              extend ContextDev::Internal::Type::Enum
+
+              MINUTES: :minutes
+              HOURS: :hours
+              DAYS: :days
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Schedule::unit]
+            end
+          end
+
+          type status = :active | :paused | :failed
+
+          module Status
+            extend ContextDev::Internal::Type::Enum
+
+            ACTIVE: :active
+            PAUSED: :paused
+            FAILED: :failed
+
+            def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::status]
+          end
+
+          type target =
+            {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Target::type_,
+              url: String,
+              normalize_whitespace: bool
+            }
+
+          class Target < ContextDev::Internal::Type::BaseModel
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Target::type_
+
+            attr_accessor url: String
+
+            attr_reader normalize_whitespace: bool?
+
+            def normalize_whitespace=: (bool) -> bool
+
+            def initialize: (
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Target::type_,
+              url: String,
+              ?normalize_whitespace: bool
+            ) -> void
+
+            def to_hash: -> {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Target::type_,
+              url: String,
+              normalize_whitespace: bool
+            }
+
+            type type_ = :page
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              PAGE: :page
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsPageExactMonitor::Target::type_]
+            end
+          end
+
+          type webhook = { url: String, secret: String }
+
+          class Webhook < ContextDev::Internal::Type::BaseModel
+            attr_accessor url: String
+
+            attr_reader secret: String?
+
+            def secret=: (String) -> String
+
+            def initialize: (url: String, ?secret: String) -> void
+
+            def to_hash: -> { url: String, secret: String }
+          end
+        end
+
+        type monitors_sitemap_exact_monitor =
+          {
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Target,
+            updated_at: Time,
+            last_change_at: Time?,
+            last_run_at: Time?,
+            tags: ::Array[String],
+            webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Webhook?
+          }
+
+        class MonitorsSitemapExactMonitor < ContextDev::Internal::Type::BaseModel
+          attr_accessor id: String
+
+          attr_accessor change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::ChangeDetection
+
+          attr_accessor created_at: Time
+
+          attr_accessor name: String
+
+          attr_accessor schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule
+
+          attr_accessor status: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::status
+
+          attr_accessor target: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Target
+
+          attr_accessor updated_at: Time
+
+          attr_accessor last_change_at: Time?
+
+          attr_accessor last_run_at: Time?
+
+          attr_reader tags: ::Array[String]?
+
+          def tags=: (::Array[String]) -> ::Array[String]
+
+          attr_accessor webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Webhook?
+
+          def initialize: (
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Target,
+            updated_at: Time,
+            ?last_change_at: Time?,
+            ?last_run_at: Time?,
+            ?tags: ::Array[String],
+            ?webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Webhook?
+          ) -> void
+
+          def to_hash: -> {
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Target,
+            updated_at: Time,
+            last_change_at: Time?,
+            last_run_at: Time?,
+            tags: ::Array[String],
+            webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Webhook?
+          }
+
+          type change_detection =
+            {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::ChangeDetection::type_
+            }
+
+          class ChangeDetection < ContextDev::Internal::Type::BaseModel
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::ChangeDetection::type_
+
+            def initialize: (
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::ChangeDetection::type_
+            ) -> void
+
+            def to_hash: -> {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::ChangeDetection::type_
+            }
+
+            type type_ = :exact
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              EXACT: :exact
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::ChangeDetection::type_]
+            end
+          end
+
+          type schedule =
+            {
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule::unit
+            }
+
+          class Schedule < ContextDev::Internal::Type::BaseModel
+            attr_accessor frequency: Integer
+
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule::type_
+
+            attr_accessor unit: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule::unit
+
+            def initialize: (
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule::unit
+            ) -> void
+
+            def to_hash: -> {
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule::unit
+            }
+
+            type type_ = :interval
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              INTERVAL: :interval
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule::type_]
+            end
+
+            type unit = :minutes | :hours | :days
+
+            module Unit
+              extend ContextDev::Internal::Type::Enum
+
+              MINUTES: :minutes
+              HOURS: :hours
+              DAYS: :days
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Schedule::unit]
+            end
+          end
+
+          type status = :active | :paused | :failed
+
+          module Status
+            extend ContextDev::Internal::Type::Enum
+
+            ACTIVE: :active
+            PAUSED: :paused
+            FAILED: :failed
+
+            def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::status]
+          end
+
+          type target =
+            {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Target::type_,
+              url: String,
+              exclude: ::Array[String],
+              include: ::Array[String],
+              max_urls: Integer
+            }
+
+          class Target < ContextDev::Internal::Type::BaseModel
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Target::type_
+
+            attr_accessor url: String
+
+            attr_reader exclude: ::Array[String]?
+
+            def exclude=: (::Array[String]) -> ::Array[String]
+
+            attr_reader include: ::Array[String]?
+
+            def include=: (::Array[String]) -> ::Array[String]
+
+            attr_reader max_urls: Integer?
+
+            def max_urls=: (Integer) -> Integer
+
+            def initialize: (
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Target::type_,
+              url: String,
+              ?exclude: ::Array[String],
+              ?include: ::Array[String],
+              ?max_urls: Integer
+            ) -> void
+
+            def to_hash: -> {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Target::type_,
+              url: String,
+              exclude: ::Array[String],
+              include: ::Array[String],
+              max_urls: Integer
+            }
+
+            type type_ = :sitemap
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              SITEMAP: :sitemap
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsSitemapExactMonitor::Target::type_]
+            end
+          end
+
+          type webhook = { url: String, secret: String }
+
+          class Webhook < ContextDev::Internal::Type::BaseModel
+            attr_accessor url: String
+
+            attr_reader secret: String?
+
+            def secret=: (String) -> String
+
+            def initialize: (url: String, ?secret: String) -> void
+
+            def to_hash: -> { url: String, secret: String }
+          end
+        end
+
+        type monitors_page_semantic_monitor =
+          {
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Target,
+            updated_at: Time,
+            last_change_at: Time?,
+            last_run_at: Time?,
+            tags: ::Array[String],
+            webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Webhook?
+          }
+
+        class MonitorsPageSemanticMonitor < ContextDev::Internal::Type::BaseModel
+          attr_accessor id: String
+
+          attr_accessor change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::ChangeDetection
+
+          attr_accessor created_at: Time
+
+          attr_accessor name: String
+
+          attr_accessor schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule
+
+          attr_accessor status: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::status
+
+          attr_accessor target: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Target
+
+          attr_accessor updated_at: Time
+
+          attr_accessor last_change_at: Time?
+
+          attr_accessor last_run_at: Time?
+
+          attr_reader tags: ::Array[String]?
+
+          def tags=: (::Array[String]) -> ::Array[String]
+
+          attr_accessor webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Webhook?
+
+          def initialize: (
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Target,
+            updated_at: Time,
+            ?last_change_at: Time?,
+            ?last_run_at: Time?,
+            ?tags: ::Array[String],
+            ?webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Webhook?
+          ) -> void
+
+          def to_hash: -> {
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Target,
+            updated_at: Time,
+            last_change_at: Time?,
+            last_run_at: Time?,
+            tags: ::Array[String],
+            webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Webhook?
+          }
+
+          type change_detection =
+            {
+              query: String,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::ChangeDetection::type_,
+              confidence_threshold: Float
+            }
+
+          class ChangeDetection < ContextDev::Internal::Type::BaseModel
+            attr_accessor query: String
+
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::ChangeDetection::type_
+
+            attr_reader confidence_threshold: Float?
+
+            def confidence_threshold=: (Float) -> Float
+
+            def initialize: (
+              query: String,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::ChangeDetection::type_,
+              ?confidence_threshold: Float
+            ) -> void
+
+            def to_hash: -> {
+              query: String,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::ChangeDetection::type_,
+              confidence_threshold: Float
+            }
+
+            type type_ = :semantic
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              SEMANTIC: :semantic
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::ChangeDetection::type_]
+            end
+          end
+
+          type schedule =
+            {
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule::unit
+            }
+
+          class Schedule < ContextDev::Internal::Type::BaseModel
+            attr_accessor frequency: Integer
+
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule::type_
+
+            attr_accessor unit: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule::unit
+
+            def initialize: (
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule::unit
+            ) -> void
+
+            def to_hash: -> {
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule::unit
+            }
+
+            type type_ = :interval
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              INTERVAL: :interval
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule::type_]
+            end
+
+            type unit = :minutes | :hours | :days
+
+            module Unit
+              extend ContextDev::Internal::Type::Enum
+
+              MINUTES: :minutes
+              HOURS: :hours
+              DAYS: :days
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Schedule::unit]
+            end
+          end
+
+          type status = :active | :paused | :failed
+
+          module Status
+            extend ContextDev::Internal::Type::Enum
+
+            ACTIVE: :active
+            PAUSED: :paused
+            FAILED: :failed
+
+            def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::status]
+          end
+
+          type target =
+            {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Target::type_,
+              url: String,
+              normalize_whitespace: bool
+            }
+
+          class Target < ContextDev::Internal::Type::BaseModel
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Target::type_
+
+            attr_accessor url: String
+
+            attr_reader normalize_whitespace: bool?
+
+            def normalize_whitespace=: (bool) -> bool
+
+            def initialize: (
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Target::type_,
+              url: String,
+              ?normalize_whitespace: bool
+            ) -> void
+
+            def to_hash: -> {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Target::type_,
+              url: String,
+              normalize_whitespace: bool
+            }
+
+            type type_ = :page
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              PAGE: :page
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsPageSemanticMonitor::Target::type_]
+            end
+          end
+
+          type webhook = { url: String, secret: String }
+
+          class Webhook < ContextDev::Internal::Type::BaseModel
+            attr_accessor url: String
+
+            attr_reader secret: String?
+
+            def secret=: (String) -> String
+
+            def initialize: (url: String, ?secret: String) -> void
+
+            def to_hash: -> { url: String, secret: String }
+          end
+        end
+
+        type monitors_extract_semantic_monitor =
+          {
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Target,
+            updated_at: Time,
+            last_change_at: Time?,
+            last_run_at: Time?,
+            tags: ::Array[String],
+            webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Webhook?
+          }
+
+        class MonitorsExtractSemanticMonitor < ContextDev::Internal::Type::BaseModel
+          attr_accessor id: String
+
+          attr_accessor change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::ChangeDetection
+
+          attr_accessor created_at: Time
+
+          attr_accessor name: String
+
+          attr_accessor schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule
+
+          attr_accessor status: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::status
+
+          attr_accessor target: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Target
+
+          attr_accessor updated_at: Time
+
+          attr_accessor last_change_at: Time?
+
+          attr_accessor last_run_at: Time?
+
+          attr_reader tags: ::Array[String]?
+
+          def tags=: (::Array[String]) -> ::Array[String]
+
+          attr_accessor webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Webhook?
+
+          def initialize: (
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Target,
+            updated_at: Time,
+            ?last_change_at: Time?,
+            ?last_run_at: Time?,
+            ?tags: ::Array[String],
+            ?webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Webhook?
+          ) -> void
+
+          def to_hash: -> {
+            id: String,
+            change_detection: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::ChangeDetection,
+            created_at: Time,
+            name: String,
+            schedule: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule,
+            status: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::status,
+            target: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Target,
+            updated_at: Time,
+            last_change_at: Time?,
+            last_run_at: Time?,
+            tags: ::Array[String],
+            webhook: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Webhook?
+          }
+
+          type change_detection =
+            {
+              query: String,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::ChangeDetection::type_,
+              confidence_threshold: Float
+            }
+
+          class ChangeDetection < ContextDev::Internal::Type::BaseModel
+            attr_accessor query: String
+
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::ChangeDetection::type_
+
+            attr_reader confidence_threshold: Float?
+
+            def confidence_threshold=: (Float) -> Float
+
+            def initialize: (
+              query: String,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::ChangeDetection::type_,
+              ?confidence_threshold: Float
+            ) -> void
+
+            def to_hash: -> {
+              query: String,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::ChangeDetection::type_,
+              confidence_threshold: Float
+            }
+
+            type type_ = :semantic
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              SEMANTIC: :semantic
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::ChangeDetection::type_]
+            end
+          end
+
+          type schedule =
+            {
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule::unit
+            }
+
+          class Schedule < ContextDev::Internal::Type::BaseModel
+            attr_accessor frequency: Integer
+
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule::type_
+
+            attr_accessor unit: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule::unit
+
+            def initialize: (
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule::unit
+            ) -> void
+
+            def to_hash: -> {
+              frequency: Integer,
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule::type_,
+              unit: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule::unit
+            }
+
+            type type_ = :interval
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              INTERVAL: :interval
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule::type_]
+            end
+
+            type unit = :minutes | :hours | :days
+
+            module Unit
+              extend ContextDev::Internal::Type::Enum
+
+              MINUTES: :minutes
+              HOURS: :hours
+              DAYS: :days
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Schedule::unit]
+            end
+          end
+
+          type status = :active | :paused | :failed
+
+          module Status
+            extend ContextDev::Internal::Type::Enum
+
+            ACTIVE: :active
+            PAUSED: :paused
+            FAILED: :failed
+
+            def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::status]
+          end
+
+          type target =
+            {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Target::type_,
+              url: String,
+              follow_subdomains: bool,
+              instructions: String,
+              max_depth: Integer,
+              max_pages: Integer,
+              schema: ::Hash[Symbol, top]
+            }
+
+          class Target < ContextDev::Internal::Type::BaseModel
+            attr_accessor type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Target::type_
+
+            attr_accessor url: String
+
+            attr_reader follow_subdomains: bool?
+
+            def follow_subdomains=: (bool) -> bool
+
+            attr_reader instructions: String?
+
+            def instructions=: (String) -> String
+
+            attr_reader max_depth: Integer?
+
+            def max_depth=: (Integer) -> Integer
+
+            attr_reader max_pages: Integer?
+
+            def max_pages=: (Integer) -> Integer
+
+            attr_reader schema: ::Hash[Symbol, top]?
+
+            def schema=: (::Hash[Symbol, top]) -> ::Hash[Symbol, top]
+
+            def initialize: (
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Target::type_,
+              url: String,
+              ?follow_subdomains: bool,
+              ?instructions: String,
+              ?max_depth: Integer,
+              ?max_pages: Integer,
+              ?schema: ::Hash[Symbol, top]
+            ) -> void
+
+            def to_hash: -> {
+              type: ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Target::type_,
+              url: String,
+              follow_subdomains: bool,
+              instructions: String,
+              max_depth: Integer,
+              max_pages: Integer,
+              schema: ::Hash[Symbol, top]
+            }
+
+            type type_ = :extract
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              EXTRACT: :extract
+
+              def self?.values: -> ::Array[ContextDev::Models::MonitorListResponse::Data::MonitorsExtractSemanticMonitor::Target::type_]
+            end
+          end
+
+          type webhook = { url: String, secret: String }
+
+          class Webhook < ContextDev::Internal::Type::BaseModel
+            attr_accessor url: String
+
+            attr_reader secret: String?
+
+            def secret=: (String) -> String
+
+            def initialize: (url: String, ?secret: String) -> void
+
+            def to_hash: -> { url: String, secret: String }
+          end
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::MonitorListResponse::data]
+      end
+    end
+  end
+end

@@ -63,6 +63,28 @@ module ContextDev
 
   IndustryRetrieveSicParams = ContextDev::Models::IndustryRetrieveSicParams
 
+  MonitorCreateParams = ContextDev::Models::MonitorCreateParams
+
+  MonitorDeleteParams = ContextDev::Models::MonitorDeleteParams
+
+  MonitorListAccountChangesParams = ContextDev::Models::MonitorListAccountChangesParams
+
+  MonitorListAccountRunsParams = ContextDev::Models::MonitorListAccountRunsParams
+
+  MonitorListChangesParams = ContextDev::Models::MonitorListChangesParams
+
+  MonitorListParams = ContextDev::Models::MonitorListParams
+
+  MonitorListRunsParams = ContextDev::Models::MonitorListRunsParams
+
+  MonitorRetrieveChangeParams = ContextDev::Models::MonitorRetrieveChangeParams
+
+  MonitorRetrieveParams = ContextDev::Models::MonitorRetrieveParams
+
+  MonitorRunParams = ContextDev::Models::MonitorRunParams
+
+  MonitorUpdateParams = ContextDev::Models::MonitorUpdateParams
+
   UtilityPrefetchByEmailParams = ContextDev::Models::UtilityPrefetchByEmailParams
 
   UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams

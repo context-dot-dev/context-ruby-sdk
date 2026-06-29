@@ -1,0 +1,91 @@
+module ContextDev
+  module Resources
+    class Monitors
+      def create: (
+        body: ContextDev::Models::MonitorCreateParams::body,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::monitor_create_response
+
+      def retrieve: (
+        String monitor_id,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::monitor_retrieve_response
+
+      def update: (
+        String monitor_id,
+        ?change_detection: ContextDev::Models::MonitorUpdateParams::change_detection,
+        ?name: String,
+        ?schedule: ContextDev::MonitorUpdateParams::Schedule,
+        ?status: ContextDev::Models::MonitorUpdateParams::status,
+        ?tags: ::Array[String],
+        ?target: ContextDev::Models::MonitorUpdateParams::target,
+        ?webhook: ContextDev::MonitorUpdateParams::Webhook?,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::monitor_update_response
+
+      def list: (
+        ?change_detection_type: ContextDev::Models::MonitorListParams::change_detection_type,
+        ?cursor: String,
+        ?limit: Integer,
+        ?status: ContextDev::Models::MonitorListParams::status,
+        ?tag: String,
+        ?target_type: ContextDev::Models::MonitorListParams::target_type,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::MonitorListResponse
+
+      def delete: (
+        String monitor_id,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::MonitorDeleteResponse
+
+      def list_account_changes: (
+        ?change_detection_type: ContextDev::Models::MonitorListAccountChangesParams::change_detection_type,
+        ?cursor: String,
+        ?limit: Integer,
+        ?monitor_id: String,
+        ?since: Time,
+        ?tag: String,
+        ?target_type: ContextDev::Models::MonitorListAccountChangesParams::target_type,
+        ?until_: Time,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::MonitorListAccountChangesResponse
+
+      def list_account_runs: (
+        ?cursor: String,
+        ?limit: Integer,
+        ?status: ContextDev::Models::MonitorListAccountRunsParams::status,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::MonitorListAccountRunsResponse
+
+      def list_changes: (
+        String monitor_id,
+        ?cursor: String,
+        ?limit: Integer,
+        ?since: Time,
+        ?tag: String,
+        ?until_: Time,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::MonitorListChangesResponse
+
+      def list_runs: (
+        String monitor_id,
+        ?cursor: String,
+        ?limit: Integer,
+        ?status: ContextDev::Models::MonitorListRunsParams::status,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::MonitorListRunsResponse
+
+      def retrieve_change: (
+        String change_id,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::monitor_retrieve_change_response
+
+      def run: (
+        String monitor_id,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::MonitorRunResponse
+
+      def initialize: (client: ContextDev::Client) -> void
+    end
+  end
+end

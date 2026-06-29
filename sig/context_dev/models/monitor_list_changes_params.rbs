@@ -1,0 +1,61 @@
+module ContextDev
+  module Models
+    type monitor_list_changes_params =
+      {
+        monitor_id: String,
+        cursor: String,
+        limit: Integer,
+        since: Time,
+        tag: String,
+        until_: Time
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class MonitorListChangesParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor monitor_id: String
+
+      attr_reader cursor: String?
+
+      def cursor=: (String) -> String
+
+      attr_reader limit: Integer?
+
+      def limit=: (Integer) -> Integer
+
+      attr_reader since: Time?
+
+      def since=: (Time) -> Time
+
+      attr_reader tag: String?
+
+      def tag=: (String) -> String
+
+      attr_reader until_: Time?
+
+      def until_=: (Time) -> Time
+
+      def initialize: (
+        monitor_id: String,
+        ?cursor: String,
+        ?limit: Integer,
+        ?since: Time,
+        ?tag: String,
+        ?until_: Time,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        monitor_id: String,
+        cursor: String,
+        limit: Integer,
+        since: Time,
+        tag: String,
+        until_: Time,
+        request_options: ContextDev::RequestOptions
+      }
+    end
+  end
+end

@@ -1,0 +1,314 @@
+# frozen_string_literal: true
+
+module ContextDev
+  module Resources
+    # Monitor pages, sitemaps, and extracted website data for exact or semantic
+    # changes. The change.detected webhook payload is documented by the
+    # MonitorsChangeDetectedWebhookPayload schema.
+    class Monitors
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::MonitorCreateParams} for more details.
+      #
+      # Creates a monitor. The request body is a union of the supported target/change
+      # detection combinations. The monitor runs immediately after creation to create
+      # its initial baseline.
+      #
+      # @overload create(body:, request_options: {})
+      #
+      # @param body [ContextDev::Models::MonitorCreateParams::Body::MonitorsCreatePageExactMonitorRequest, ContextDev::Models::MonitorCreateParams::Body::MonitorsCreateSitemapExactMonitorRequest, ContextDev::Models::MonitorCreateParams::Body::MonitorsCreatePageSemanticMonitorRequest, ContextDev::Models::MonitorCreateParams::Body::MonitorsCreateExtractSemanticMonitorRequest] Union of supported monitor creation shapes. Supported combinations are: `page +
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorCreateResponse::MonitorsPageExactMonitor, ContextDev::Models::MonitorCreateResponse::MonitorsSitemapExactMonitor, ContextDev::Models::MonitorCreateResponse::MonitorsPageSemanticMonitor, ContextDev::Models::MonitorCreateResponse::MonitorsExtractSemanticMonitor]
+      #
+      # @see ContextDev::Models::MonitorCreateParams
+      def create(params)
+        parsed, options = ContextDev::MonitorCreateParams.dump_request(params)
+        @client.request(
+          method: :post,
+          path: "monitors",
+          body: parsed[:body],
+          model: ContextDev::Models::MonitorCreateResponse,
+          options: options
+        )
+      end
+
+      # Get a monitor
+      #
+      # @overload retrieve(monitor_id, request_options: {})
+      #
+      # @param monitor_id [String]
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorRetrieveResponse::MonitorsPageExactMonitor, ContextDev::Models::MonitorRetrieveResponse::MonitorsSitemapExactMonitor, ContextDev::Models::MonitorRetrieveResponse::MonitorsPageSemanticMonitor, ContextDev::Models::MonitorRetrieveResponse::MonitorsExtractSemanticMonitor]
+      #
+      # @see ContextDev::Models::MonitorRetrieveParams
+      def retrieve(monitor_id, params = {})
+        @client.request(
+          method: :get,
+          path: ["monitors/%1$s", monitor_id],
+          model: ContextDev::Models::MonitorRetrieveResponse,
+          options: params[:request_options]
+        )
+      end
+
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::MonitorUpdateParams} for more details.
+      #
+      # Updates a monitor. If `target` or `change_detection` changes, the monitor
+      # creates a new baseline. Unsupported target/change detection combinations are
+      # rejected.
+      #
+      # @overload update(monitor_id, change_detection: nil, name: nil, schedule: nil, status: nil, tags: nil, target: nil, webhook: nil, request_options: {})
+      #
+      # @param monitor_id [String]
+      #
+      # @param change_detection [ContextDev::Models::MonitorUpdateParams::ChangeDetection::Exact, ContextDev::Models::MonitorUpdateParams::ChangeDetection::Semantic] Discriminated union describing how changes are detected.
+      #
+      # @param name [String]
+      #
+      # @param schedule [ContextDev::Models::MonitorUpdateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
+      #
+      # @param status [Symbol, ContextDev::Models::MonitorUpdateParams::Status]
+      #
+      # @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes.
+      #
+      # @param target [ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract] Discriminated union describing what the monitor watches.
+      #
+      # @param webhook [ContextDev::Models::MonitorUpdateParams::Webhook, nil] Set to null to remove the webhook.
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorUpdateResponse::MonitorsPageExactMonitor, ContextDev::Models::MonitorUpdateResponse::MonitorsSitemapExactMonitor, ContextDev::Models::MonitorUpdateResponse::MonitorsPageSemanticMonitor, ContextDev::Models::MonitorUpdateResponse::MonitorsExtractSemanticMonitor]
+      #
+      # @see ContextDev::Models::MonitorUpdateParams
+      def update(monitor_id, params = {})
+        parsed, options = ContextDev::MonitorUpdateParams.dump_request(params)
+        @client.request(
+          method: :patch,
+          path: ["monitors/%1$s", monitor_id],
+          body: parsed,
+          model: ContextDev::Models::MonitorUpdateResponse,
+          options: options
+        )
+      end
+
+      # List monitors
+      #
+      # @overload list(change_detection_type: nil, cursor: nil, limit: nil, status: nil, tag: nil, target_type: nil, request_options: {})
+      #
+      # @param change_detection_type [Symbol, ContextDev::Models::MonitorListParams::ChangeDetectionType]
+      #
+      # @param cursor [String]
+      #
+      # @param limit [Integer]
+      #
+      # @param status [Symbol, ContextDev::Models::MonitorListParams::Status]
+      #
+      # @param tag [String] Filter to items that have this tag.
+      #
+      # @param target_type [Symbol, ContextDev::Models::MonitorListParams::TargetType]
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorListResponse]
+      #
+      # @see ContextDev::Models::MonitorListParams
+      def list(params = {})
+        parsed, options = ContextDev::MonitorListParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "monitors",
+          query: query,
+          model: ContextDev::Models::MonitorListResponse,
+          options: options
+        )
+      end
+
+      # Delete a monitor
+      #
+      # @overload delete(monitor_id, request_options: {})
+      #
+      # @param monitor_id [String]
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorDeleteResponse]
+      #
+      # @see ContextDev::Models::MonitorDeleteParams
+      def delete(monitor_id, params = {})
+        @client.request(
+          method: :delete,
+          path: ["monitors/%1$s", monitor_id],
+          model: ContextDev::Models::MonitorDeleteResponse,
+          options: params[:request_options]
+        )
+      end
+
+      # Returns an account-wide feed of detected changes across monitors.
+      #
+      # @overload list_account_changes(change_detection_type: nil, cursor: nil, limit: nil, monitor_id: nil, since: nil, tag: nil, target_type: nil, until_: nil, request_options: {})
+      #
+      # @param change_detection_type [Symbol, ContextDev::Models::MonitorListAccountChangesParams::ChangeDetectionType]
+      #
+      # @param cursor [String]
+      #
+      # @param limit [Integer]
+      #
+      # @param monitor_id [String]
+      #
+      # @param since [Time]
+      #
+      # @param tag [String] Filter to items that have this tag.
+      #
+      # @param target_type [Symbol, ContextDev::Models::MonitorListAccountChangesParams::TargetType]
+      #
+      # @param until_ [Time]
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorListAccountChangesResponse]
+      #
+      # @see ContextDev::Models::MonitorListAccountChangesParams
+      def list_account_changes(params = {})
+        parsed, options = ContextDev::MonitorListAccountChangesParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "monitors/changes",
+          query: query.transform_keys(until_: "until"),
+          model: ContextDev::Models::MonitorListAccountChangesResponse,
+          options: options
+        )
+      end
+
+      # Returns an account-wide feed of monitor runs across all monitors.
+      #
+      # @overload list_account_runs(cursor: nil, limit: nil, status: nil, request_options: {})
+      #
+      # @param cursor [String]
+      # @param limit [Integer]
+      # @param status [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status]
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorListAccountRunsResponse]
+      #
+      # @see ContextDev::Models::MonitorListAccountRunsParams
+      def list_account_runs(params = {})
+        parsed, options = ContextDev::MonitorListAccountRunsParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "monitors/runs",
+          query: query,
+          model: ContextDev::Models::MonitorListAccountRunsResponse,
+          options: options
+        )
+      end
+
+      # List changes for a monitor
+      #
+      # @overload list_changes(monitor_id, cursor: nil, limit: nil, since: nil, tag: nil, until_: nil, request_options: {})
+      #
+      # @param monitor_id [String]
+      #
+      # @param cursor [String]
+      #
+      # @param limit [Integer]
+      #
+      # @param since [Time]
+      #
+      # @param tag [String] Filter to items that have this tag.
+      #
+      # @param until_ [Time]
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorListChangesResponse]
+      #
+      # @see ContextDev::Models::MonitorListChangesParams
+      def list_changes(monitor_id, params = {})
+        parsed, options = ContextDev::MonitorListChangesParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: ["monitors/%1$s/changes", monitor_id],
+          query: query.transform_keys(until_: "until"),
+          model: ContextDev::Models::MonitorListChangesResponse,
+          options: options
+        )
+      end
+
+      # List monitor runs
+      #
+      # @overload list_runs(monitor_id, cursor: nil, limit: nil, status: nil, request_options: {})
+      #
+      # @param monitor_id [String]
+      # @param cursor [String]
+      # @param limit [Integer]
+      # @param status [Symbol, ContextDev::Models::MonitorListRunsParams::Status]
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorListRunsResponse]
+      #
+      # @see ContextDev::Models::MonitorListRunsParams
+      def list_runs(monitor_id, params = {})
+        parsed, options = ContextDev::MonitorListRunsParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: ["monitors/%1$s/runs", monitor_id],
+          query: query,
+          model: ContextDev::Models::MonitorListRunsResponse,
+          options: options
+        )
+      end
+
+      # Get a change
+      #
+      # @overload retrieve_change(change_id, request_options: {})
+      #
+      # @param change_id [String]
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange, ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange, ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange, ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange]
+      #
+      # @see ContextDev::Models::MonitorRetrieveChangeParams
+      def retrieve_change(change_id, params = {})
+        @client.request(
+          method: :get,
+          path: ["monitors/changes/%1$s", change_id],
+          model: ContextDev::Models::MonitorRetrieveChangeResponse,
+          options: params[:request_options]
+        )
+      end
+
+      # Triggers an immediate run of the monitor outside its normal schedule. The run is
+      # queued and processed asynchronously.
+      #
+      # @overload run(monitor_id, request_options: {})
+      #
+      # @param monitor_id [String]
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorRunResponse]
+      #
+      # @see ContextDev::Models::MonitorRunParams
+      def run(monitor_id, params = {})
+        @client.request(
+          method: :post,
+          path: ["monitors/%1$s/run", monitor_id],
+          model: ContextDev::Models::MonitorRunResponse,
+          options: params[:request_options]
+        )
+      end
+
+      # @api private
+      #
+      # @param client [ContextDev::Client]
+      def initialize(client:)
+        @client = client
+      end
+    end
+  end
+end

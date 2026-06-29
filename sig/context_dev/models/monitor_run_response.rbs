@@ -1,0 +1,15 @@
+module ContextDev
+  module Models
+    type monitor_run_response = { monitor_id: String, queued: bool }
+
+    class MonitorRunResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor monitor_id: String
+
+      attr_accessor queued: bool
+
+      def initialize: (monitor_id: String, queued: bool) -> void
+
+      def to_hash: -> { monitor_id: String, queued: bool }
+    end
+  end
+end
