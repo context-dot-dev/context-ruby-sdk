@@ -33,6 +33,12 @@ module ContextDev
     # @return [ContextDev::Resources::Utility]
     attr_reader :utility
 
+    # Monitor pages, sitemaps, and extracted website data for exact or semantic
+    # changes. The change.detected webhook payload is documented by the
+    # MonitorsChangeDetectedWebhookPayload schema.
+    # @return [ContextDev::Resources::Monitors]
+    attr_reader :monitors
+
     # @api private
     #
     # @return [Hash{String=>String}]
@@ -99,6 +105,7 @@ module ContextDev
       @brand = ContextDev::Resources::Brand.new(client: self)
       @industry = ContextDev::Resources::Industry.new(client: self)
       @utility = ContextDev::Resources::Utility.new(client: self)
+      @monitors = ContextDev::Resources::Monitors.new(client: self)
     end
   end
 end

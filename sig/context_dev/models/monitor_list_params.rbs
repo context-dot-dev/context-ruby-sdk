@@ -1,0 +1,104 @@
+module ContextDev
+  module Models
+    type monitor_list_params =
+      {
+        change_detection_type: ContextDev::Models::MonitorListParams::change_detection_type,
+        cursor: String,
+        limit: Integer,
+        status: ContextDev::Models::MonitorListParams::status,
+        tag: String,
+        target_type: ContextDev::Models::MonitorListParams::target_type
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class MonitorListParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_reader change_detection_type: ContextDev::Models::MonitorListParams::change_detection_type?
+
+      def change_detection_type=: (
+        ContextDev::Models::MonitorListParams::change_detection_type
+      ) -> ContextDev::Models::MonitorListParams::change_detection_type
+
+      attr_reader cursor: String?
+
+      def cursor=: (String) -> String
+
+      attr_reader limit: Integer?
+
+      def limit=: (Integer) -> Integer
+
+      attr_reader status: ContextDev::Models::MonitorListParams::status?
+
+      def status=: (
+        ContextDev::Models::MonitorListParams::status
+      ) -> ContextDev::Models::MonitorListParams::status
+
+      attr_reader tag: String?
+
+      def tag=: (String) -> String
+
+      attr_reader target_type: ContextDev::Models::MonitorListParams::target_type?
+
+      def target_type=: (
+        ContextDev::Models::MonitorListParams::target_type
+      ) -> ContextDev::Models::MonitorListParams::target_type
+
+      def initialize: (
+        ?change_detection_type: ContextDev::Models::MonitorListParams::change_detection_type,
+        ?cursor: String,
+        ?limit: Integer,
+        ?status: ContextDev::Models::MonitorListParams::status,
+        ?tag: String,
+        ?target_type: ContextDev::Models::MonitorListParams::target_type,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        change_detection_type: ContextDev::Models::MonitorListParams::change_detection_type,
+        cursor: String,
+        limit: Integer,
+        status: ContextDev::Models::MonitorListParams::status,
+        tag: String,
+        target_type: ContextDev::Models::MonitorListParams::target_type,
+        request_options: ContextDev::RequestOptions
+      }
+
+      type change_detection_type = :exact | :semantic
+
+      module ChangeDetectionType
+        extend ContextDev::Internal::Type::Enum
+
+        EXACT: :exact
+        SEMANTIC: :semantic
+
+        def self?.values: -> ::Array[ContextDev::Models::MonitorListParams::change_detection_type]
+      end
+
+      type status = :active | :paused | :failed
+
+      module Status
+        extend ContextDev::Internal::Type::Enum
+
+        ACTIVE: :active
+        PAUSED: :paused
+        FAILED: :failed
+
+        def self?.values: -> ::Array[ContextDev::Models::MonitorListParams::status]
+      end
+
+      type target_type = :page | :sitemap | :extract
+
+      module TargetType
+        extend ContextDev::Internal::Type::Enum
+
+        PAGE: :page
+        SITEMAP: :sitemap
+        EXTRACT: :extract
+
+        def self?.values: -> ::Array[ContextDev::Models::MonitorListParams::target_type]
+      end
+    end
+  end
+end

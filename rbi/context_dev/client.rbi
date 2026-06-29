@@ -28,6 +28,12 @@ module ContextDev
     sig { returns(ContextDev::Resources::Utility) }
     attr_reader :utility
 
+    # Monitor pages, sitemaps, and extracted website data for exact or semantic
+    # changes. The change.detected webhook payload is documented by the
+    # MonitorsChangeDetectedWebhookPayload schema.
+    sig { returns(ContextDev::Resources::Monitors) }
+    attr_reader :monitors
+
     # @api private
     sig { override.returns(T::Hash[String, String]) }
     private def auth_headers

@@ -4,6 +4,19 @@ module ContextDev
   module Internal
     module Type
       # @api private
+      #
+      # @example
+      #   # `monitor_create_response` is a `ContextDev::Models::MonitorCreateResponse`
+      #   case monitor_create_response
+      #   when ContextDev::Models::MonitorCreateResponse::MonitorsPageExactMonitor
+      #     puts(monitor_create_response.id)
+      #   when ContextDev::Models::MonitorCreateResponse::MonitorsSitemapExactMonitor
+      #     puts(monitor_create_response.change_detection)
+      #   when ContextDev::Models::MonitorCreateResponse::MonitorsPageSemanticMonitor
+      #     puts(monitor_create_response.created_at)
+      #   else
+      #     puts(monitor_create_response)
+      #   end
       module Union
         include ContextDev::Internal::Type::Converter
         include ContextDev::Internal::Util::SorbetRuntimeSupport
