@@ -13,13 +13,25 @@ module ContextDev
       # detection combinations. The monitor runs immediately after creation to create
       # its initial baseline.
       #
-      # @overload create(body:, request_options: {})
+      # @overload create(change_detection:, name:, schedule:, target:, mode: nil, tags: nil, webhook: nil, request_options: {})
       #
-      # @param body [ContextDev::Models::MonitorCreateParams::Body::MonitorsCreatePageExactMonitorRequest, ContextDev::Models::MonitorCreateParams::Body::MonitorsCreateSitemapExactMonitorRequest, ContextDev::Models::MonitorCreateParams::Body::MonitorsCreatePageSemanticMonitorRequest, ContextDev::Models::MonitorCreateParams::Body::MonitorsCreateExtractSemanticMonitorRequest] Union of supported monitor creation shapes. Supported combinations are: `page +
+      # @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] Discriminated union describing how changes are detected.
+      #
+      # @param name [String]
+      #
+      # @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
+      #
+      # @param target [ContextDev::Models::MonitorCreateParams::Target::Page, ContextDev::Models::MonitorCreateParams::Target::Sitemap, ContextDev::Models::MonitorCreateParams::Target::Extract] Discriminated union describing what the monitor watches.
+      #
+      # @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Top-level monitor category. Always `web` today; the concrete behavior is describ
+      #
+      # @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes.
+      #
+      # @param webhook [ContextDev::Models::MonitorCreateParams::Webhook, nil]
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
-      # @return [ContextDev::Models::MonitorCreateResponse::MonitorsPageExactMonitor, ContextDev::Models::MonitorCreateResponse::MonitorsSitemapExactMonitor, ContextDev::Models::MonitorCreateResponse::MonitorsPageSemanticMonitor, ContextDev::Models::MonitorCreateResponse::MonitorsExtractSemanticMonitor]
+      # @return [ContextDev::Models::MonitorCreateResponse]
       #
       # @see ContextDev::Models::MonitorCreateParams
       def create(params)
@@ -27,7 +39,7 @@ module ContextDev
         @client.request(
           method: :post,
           path: "monitors",
-          body: parsed[:body],
+          body: parsed,
           model: ContextDev::Models::MonitorCreateResponse,
           options: options
         )
@@ -40,7 +52,7 @@ module ContextDev
       # @param monitor_id [String]
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
-      # @return [ContextDev::Models::MonitorRetrieveResponse::MonitorsPageExactMonitor, ContextDev::Models::MonitorRetrieveResponse::MonitorsSitemapExactMonitor, ContextDev::Models::MonitorRetrieveResponse::MonitorsPageSemanticMonitor, ContextDev::Models::MonitorRetrieveResponse::MonitorsExtractSemanticMonitor]
+      # @return [ContextDev::Models::MonitorRetrieveResponse]
       #
       # @see ContextDev::Models::MonitorRetrieveParams
       def retrieve(monitor_id, params = {})
@@ -79,7 +91,7 @@ module ContextDev
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
-      # @return [ContextDev::Models::MonitorUpdateResponse::MonitorsPageExactMonitor, ContextDev::Models::MonitorUpdateResponse::MonitorsSitemapExactMonitor, ContextDev::Models::MonitorUpdateResponse::MonitorsPageSemanticMonitor, ContextDev::Models::MonitorUpdateResponse::MonitorsExtractSemanticMonitor]
+      # @return [ContextDev::Models::MonitorUpdateResponse]
       #
       # @see ContextDev::Models::MonitorUpdateParams
       def update(monitor_id, params = {})
@@ -93,9 +105,14 @@ module ContextDev
         )
       end
 
-      # List monitors
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::MonitorListParams} for more details.
       #
-      # @overload list(change_detection_type: nil, cursor: nil, limit: nil, status: nil, tag: nil, target_type: nil, request_options: {})
+      # Lists monitors for the authenticated organization. Supports free-text search
+      # (`q` over `search_by` fields, `prefix` or `exact` via `search_type`) plus
+      # status/type/tag filters. Results are paginated via the opaque `cursor`.
+      #
+      # @overload list(change_detection_type: nil, cursor: nil, limit: nil, q: nil, search_by: nil, search_type: nil, status: nil, tag: nil, tags: nil, target_type: nil, request_options: {})
       #
       # @param change_detection_type [Symbol, ContextDev::Models::MonitorListParams::ChangeDetectionType]
       #
@@ -103,9 +120,17 @@ module ContextDev
       #
       # @param limit [Integer]
       #
+      # @param q [String] Free-text search term, matched against the fields named in `search_by`.
+      #
+      # @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>] Comma-separated fields to search with `q`. Defaults to all of them. Note `query`
+      #
+      # @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
+      #
       # @param status [Symbol, ContextDev::Models::MonitorListParams::Status]
       #
       # @param tag [String] Filter to items that have this tag.
+      #
+      # @param tags [Array<String>] Comma-separated list of tags to filter by (matches monitors having any of them).
       #
       # @param target_type [Symbol, ContextDev::Models::MonitorListParams::TargetType]
       #
@@ -271,7 +296,7 @@ module ContextDev
       # @param change_id [String]
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
-      # @return [ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange, ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange, ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange, ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange]
+      # @return [ContextDev::Models::MonitorRetrieveChangeResponse]
       #
       # @see ContextDev::Models::MonitorRetrieveChangeParams
       def retrieve_change(change_id, params = {})

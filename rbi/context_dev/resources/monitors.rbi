@@ -11,20 +11,41 @@ module ContextDev
       # its initial baseline.
       sig do
         params(
-          body:
+          change_detection:
             T.any(
-              ContextDev::MonitorCreateParams::Body::MonitorsCreatePageExactMonitorRequest::OrHash,
-              ContextDev::MonitorCreateParams::Body::MonitorsCreateSitemapExactMonitorRequest::OrHash,
-              ContextDev::MonitorCreateParams::Body::MonitorsCreatePageSemanticMonitorRequest::OrHash,
-              ContextDev::MonitorCreateParams::Body::MonitorsCreateExtractSemanticMonitorRequest::OrHash
+              ContextDev::MonitorCreateParams::ChangeDetection::Exact::OrHash,
+              ContextDev::MonitorCreateParams::ChangeDetection::Semantic::OrHash
             ),
+          name: String,
+          schedule: ContextDev::MonitorCreateParams::Schedule::OrHash,
+          target:
+            T.any(
+              ContextDev::MonitorCreateParams::Target::Page::OrHash,
+              ContextDev::MonitorCreateParams::Target::Sitemap::OrHash,
+              ContextDev::MonitorCreateParams::Target::Extract::OrHash
+            ),
+          mode: ContextDev::MonitorCreateParams::Mode::OrSymbol,
+          tags: T::Array[String],
+          webhook: T.nilable(ContextDev::MonitorCreateParams::Webhook::OrHash),
           request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::MonitorCreateResponse::Variants)
+        ).returns(ContextDev::Models::MonitorCreateResponse)
       end
       def create(
-        # Union of supported monitor creation shapes. Supported combinations are:
-        # `page + exact`, `sitemap + exact`, `page + semantic`, and `extract + semantic`.
-        body:,
+        # Discriminated union describing how changes are detected.
+        change_detection:,
+        name:,
+        # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
+        # every 6 hours or every 2 days. The total interval (frequency × unit) must be
+        # between 10 minutes and 1 year.
+        schedule:,
+        # Discriminated union describing what the monitor watches.
+        target:,
+        # Top-level monitor category. Always `web` today; the concrete behavior is
+        # described by `target` and `change_detection`.
+        mode: nil,
+        # User-defined tags for grouping and filtering monitors and their changes.
+        tags: nil,
+        webhook: nil,
         request_options: {}
       )
       end
@@ -34,7 +55,7 @@ module ContextDev
         params(
           monitor_id: String,
           request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::MonitorRetrieveResponse::Variants)
+        ).returns(ContextDev::Models::MonitorRetrieveResponse)
       end
       def retrieve(monitor_id, request_options: {})
       end
@@ -62,7 +83,7 @@ module ContextDev
             ),
           webhook: T.nilable(ContextDev::MonitorUpdateParams::Webhook::OrHash),
           request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::MonitorUpdateResponse::Variants)
+        ).returns(ContextDev::Models::MonitorUpdateResponse)
       end
       def update(
         monitor_id,
@@ -84,15 +105,22 @@ module ContextDev
       )
       end
 
-      # List monitors
+      # Lists monitors for the authenticated organization. Supports free-text search
+      # (`q` over `search_by` fields, `prefix` or `exact` via `search_type`) plus
+      # status/type/tag filters. Results are paginated via the opaque `cursor`.
       sig do
         params(
           change_detection_type:
             ContextDev::MonitorListParams::ChangeDetectionType::OrSymbol,
           cursor: String,
           limit: Integer,
+          q: String,
+          search_by:
+            T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol],
+          search_type: ContextDev::MonitorListParams::SearchType::OrSymbol,
           status: ContextDev::MonitorListParams::Status::OrSymbol,
           tag: String,
+          tags: T::Array[String],
           target_type: ContextDev::MonitorListParams::TargetType::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::MonitorListResponse)
@@ -101,9 +129,19 @@ module ContextDev
         change_detection_type: nil,
         cursor: nil,
         limit: nil,
+        # Free-text search term, matched against the fields named in `search_by`.
+        q: nil,
+        # Comma-separated fields to search with `q`. Defaults to all of them. Note `query`
+        # only exists on semantic monitors.
+        search_by: nil,
+        # `prefix` for as-you-type prefix matching (default), `exact` for full-token
+        # matching.
+        search_type: nil,
         status: nil,
         # Filter to items that have this tag.
         tag: nil,
+        # Comma-separated list of tags to filter by (matches monitors having any of them).
+        tags: nil,
         target_type: nil,
         request_options: {}
       )
@@ -214,7 +252,7 @@ module ContextDev
         params(
           change_id: String,
           request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::MonitorRetrieveChangeResponse::Variants)
+        ).returns(ContextDev::Models::MonitorRetrieveChangeResponse)
       end
       def retrieve_change(change_id, request_options: {})
       end

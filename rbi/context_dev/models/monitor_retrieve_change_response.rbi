@@ -2,948 +2,462 @@
 
 module ContextDev
   module Models
-    # Union of full change detail objects.
-    module MonitorRetrieveChangeResponse
-      extend ContextDev::Internal::Type::Union
-
-      Variants =
+    class MonitorRetrieveChangeResponse < ContextDev::Internal::Type::BaseModel
+      OrHash =
         T.type_alias do
           T.any(
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange,
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange,
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange,
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange
+            ContextDev::Models::MonitorRetrieveChangeResponse,
+            ContextDev::Internal::AnyHash
           )
         end
 
-      class MonitorsPageExactChange < ContextDev::Internal::Type::BaseModel
-        OrHash =
-          T.type_alias do
-            T.any(
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange,
-              ContextDev::Internal::AnyHash
-            )
-          end
+      sig { returns(String) }
+      attr_accessor :id
 
-        sig { returns(String) }
-        attr_accessor :id
-
-        sig do
-          returns(
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::ChangeDetectionType::TaggedSymbol
-          )
-        end
-        attr_accessor :change_detection_type
-
-        sig { returns(Time) }
-        attr_accessor :detected_at
-
-        # Text diff between the previous and current page baseline.
-        sig { returns(String) }
-        attr_accessor :diff
-
-        sig { returns(String) }
-        attr_accessor :monitor_id
-
-        sig { returns(String) }
-        attr_accessor :summary
-
-        sig do
-          returns(
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::TargetType::TaggedSymbol
-          )
-        end
-        attr_accessor :target_type
-
-        sig { returns(String) }
-        attr_accessor :title
-
-        sig { returns(String) }
-        attr_accessor :url
-
-        sig { returns(T.nilable(String)) }
-        attr_reader :after_text_excerpt
-
-        sig { params(after_text_excerpt: String).void }
-        attr_writer :after_text_excerpt
-
-        sig { returns(T.nilable(String)) }
-        attr_reader :before_text_excerpt
-
-        sig { params(before_text_excerpt: String).void }
-        attr_writer :before_text_excerpt
-
-        # User-defined tags for grouping and filtering monitors and their changes.
-        sig { returns(T.nilable(T::Array[String])) }
-        attr_reader :tags
-
-        sig { params(tags: T::Array[String]).void }
-        attr_writer :tags
-
-        sig do
-          params(
-            id: String,
-            change_detection_type:
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::ChangeDetectionType::OrSymbol,
-            detected_at: Time,
-            diff: String,
-            monitor_id: String,
-            summary: String,
-            target_type:
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::TargetType::OrSymbol,
-            title: String,
-            url: String,
-            after_text_excerpt: String,
-            before_text_excerpt: String,
-            tags: T::Array[String]
-          ).returns(T.attached_class)
-        end
-        def self.new(
-          id:,
-          change_detection_type:,
-          detected_at:,
-          # Text diff between the previous and current page baseline.
-          diff:,
-          monitor_id:,
-          summary:,
-          target_type:,
-          title:,
-          url:,
-          after_text_excerpt: nil,
-          before_text_excerpt: nil,
-          # User-defined tags for grouping and filtering monitors and their changes.
-          tags: nil
+      sig do
+        returns(
+          ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType::TaggedSymbol
         )
-        end
-
-        sig do
-          override.returns(
-            {
-              id: String,
-              change_detection_type:
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::ChangeDetectionType::TaggedSymbol,
-              detected_at: Time,
-              diff: String,
-              monitor_id: String,
-              summary: String,
-              target_type:
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::TargetType::TaggedSymbol,
-              title: String,
-              url: String,
-              after_text_excerpt: String,
-              before_text_excerpt: String,
-              tags: T::Array[String]
-            }
-          )
-        end
-        def to_hash
-        end
-
-        module ChangeDetectionType
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(
-                Symbol,
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::ChangeDetectionType
-              )
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          EXACT =
-            T.let(
-              :exact,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::ChangeDetectionType::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::ChangeDetectionType::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
-
-        module TargetType
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(
-                Symbol,
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::TargetType
-              )
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          PAGE =
-            T.let(
-              :page,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::TargetType::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange::TargetType::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
       end
+      attr_accessor :change_detection_type
 
-      class MonitorsSitemapExactChange < ContextDev::Internal::Type::BaseModel
-        OrHash =
-          T.type_alias do
-            T.any(
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange,
-              ContextDev::Internal::AnyHash
-            )
-          end
+      sig { returns(Time) }
+      attr_accessor :detected_at
 
-        sig { returns(String) }
-        attr_accessor :id
-
-        sig { returns(Integer) }
-        attr_accessor :added_url_count
-
-        sig { returns(T::Array[String]) }
-        attr_accessor :added_urls
-
-        sig do
-          returns(
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::ChangeDetectionType::TaggedSymbol
-          )
-        end
-        attr_accessor :change_detection_type
-
-        sig { returns(Time) }
-        attr_accessor :detected_at
-
-        sig { returns(String) }
-        attr_accessor :monitor_id
-
-        sig { returns(Integer) }
-        attr_accessor :removed_url_count
-
-        sig { returns(T::Array[String]) }
-        attr_accessor :removed_urls
-
-        sig { returns(String) }
-        attr_accessor :summary
-
-        sig do
-          returns(
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::TargetType::TaggedSymbol
-          )
-        end
-        attr_accessor :target_type
-
-        sig { returns(String) }
-        attr_accessor :title
-
-        sig { returns(String) }
-        attr_accessor :url
-
-        # User-defined tags for grouping and filtering monitors and their changes.
-        sig { returns(T.nilable(T::Array[String])) }
-        attr_reader :tags
-
-        sig { params(tags: T::Array[String]).void }
-        attr_writer :tags
-
-        sig do
-          params(
-            id: String,
-            added_url_count: Integer,
-            added_urls: T::Array[String],
-            change_detection_type:
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::ChangeDetectionType::OrSymbol,
-            detected_at: Time,
-            monitor_id: String,
-            removed_url_count: Integer,
-            removed_urls: T::Array[String],
-            summary: String,
-            target_type:
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::TargetType::OrSymbol,
-            title: String,
-            url: String,
-            tags: T::Array[String]
-          ).returns(T.attached_class)
-        end
-        def self.new(
-          id:,
-          added_url_count:,
-          added_urls:,
-          change_detection_type:,
-          detected_at:,
-          monitor_id:,
-          removed_url_count:,
-          removed_urls:,
-          summary:,
-          target_type:,
-          title:,
-          url:,
-          # User-defined tags for grouping and filtering monitors and their changes.
-          tags: nil
+      # Top-level monitor category. Always `web` today; the concrete behavior is
+      # described by `target` and `change_detection`.
+      sig do
+        returns(
+          ContextDev::Models::MonitorRetrieveChangeResponse::Mode::TaggedSymbol
         )
-        end
-
-        sig do
-          override.returns(
-            {
-              id: String,
-              added_url_count: Integer,
-              added_urls: T::Array[String],
-              change_detection_type:
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::ChangeDetectionType::TaggedSymbol,
-              detected_at: Time,
-              monitor_id: String,
-              removed_url_count: Integer,
-              removed_urls: T::Array[String],
-              summary: String,
-              target_type:
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::TargetType::TaggedSymbol,
-              title: String,
-              url: String,
-              tags: T::Array[String]
-            }
-          )
-        end
-        def to_hash
-        end
-
-        module ChangeDetectionType
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(
-                Symbol,
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::ChangeDetectionType
-              )
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          EXACT =
-            T.let(
-              :exact,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::ChangeDetectionType::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::ChangeDetectionType::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
-
-        module TargetType
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(
-                Symbol,
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::TargetType
-              )
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          SITEMAP =
-            T.let(
-              :sitemap,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::TargetType::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange::TargetType::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
       end
+      attr_accessor :mode
 
-      class MonitorsPageSemanticChange < ContextDev::Internal::Type::BaseModel
-        OrHash =
-          T.type_alias do
-            T.any(
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange,
-              ContextDev::Internal::AnyHash
-            )
-          end
+      sig { returns(String) }
+      attr_accessor :monitor_id
 
-        sig { returns(String) }
-        attr_accessor :id
+      sig { returns(String) }
+      attr_accessor :summary
 
-        sig do
-          returns(
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::ChangeDetectionType::TaggedSymbol
-          )
-        end
-        attr_accessor :change_detection_type
+      sig do
+        returns(
+          ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::TaggedSymbol
+        )
+      end
+      attr_accessor :target_type
 
-        sig { returns(Float) }
-        attr_accessor :confidence
+      sig { returns(String) }
+      attr_accessor :title
 
-        sig { returns(Time) }
-        attr_accessor :detected_at
+      sig { returns(String) }
+      attr_accessor :url
 
-        sig do
-          returns(
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :added_url_count
+
+      sig { params(added_url_count: Integer).void }
+      attr_writer :added_url_count
+
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :added_urls
+
+      sig { params(added_urls: T::Array[String]).void }
+      attr_writer :added_urls
+
+      sig { returns(T.nilable(String)) }
+      attr_reader :after_text_excerpt
+
+      sig { params(after_text_excerpt: String).void }
+      attr_writer :after_text_excerpt
+
+      sig { returns(T.nilable(String)) }
+      attr_reader :before_text_excerpt
+
+      sig { params(before_text_excerpt: String).void }
+      attr_writer :before_text_excerpt
+
+      sig { returns(T.nilable(Float)) }
+      attr_reader :confidence
+
+      sig { params(confidence: Float).void }
+      attr_writer :confidence
+
+      # Text diff between the previous and current page baseline (page targets).
+      sig { returns(T.nilable(String)) }
+      attr_reader :diff
+
+      sig { params(diff: String).void }
+      attr_writer :diff
+
+      sig do
+        returns(
+          T.nilable(
             T::Array[
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Evidence
+              ContextDev::Models::MonitorRetrieveChangeResponse::Evidence
             ]
           )
-        end
-        attr_accessor :evidence
-
-        sig do
-          returns(
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Importance::TaggedSymbol
-          )
-        end
-        attr_accessor :importance
-
-        sig { returns(String) }
-        attr_accessor :monitor_id
-
-        sig { returns(String) }
-        attr_accessor :query
-
-        sig { returns(String) }
-        attr_accessor :summary
-
-        sig do
-          returns(
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::TargetType::TaggedSymbol
-          )
-        end
-        attr_accessor :target_type
-
-        sig { returns(String) }
-        attr_accessor :title
-
-        sig { returns(String) }
-        attr_accessor :url
-
-        # User-defined tags for grouping and filtering monitors and their changes.
-        sig { returns(T.nilable(T::Array[String])) }
-        attr_reader :tags
-
-        sig { params(tags: T::Array[String]).void }
-        attr_writer :tags
-
-        sig do
-          params(
-            id: String,
-            change_detection_type:
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::ChangeDetectionType::OrSymbol,
-            confidence: Float,
-            detected_at: Time,
-            evidence:
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Evidence::OrHash
-              ],
-            importance:
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Importance::OrSymbol,
-            monitor_id: String,
-            query: String,
-            summary: String,
-            target_type:
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::TargetType::OrSymbol,
-            title: String,
-            url: String,
-            tags: T::Array[String]
-          ).returns(T.attached_class)
-        end
-        def self.new(
-          id:,
-          change_detection_type:,
-          confidence:,
-          detected_at:,
-          evidence:,
-          importance:,
-          monitor_id:,
-          query:,
-          summary:,
-          target_type:,
-          title:,
-          url:,
-          # User-defined tags for grouping and filtering monitors and their changes.
-          tags: nil
         )
-        end
-
-        sig do
-          override.returns(
-            {
-              id: String,
-              change_detection_type:
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::ChangeDetectionType::TaggedSymbol,
-              confidence: Float,
-              detected_at: Time,
-              evidence:
-                T::Array[
-                  ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Evidence
-                ],
-              importance:
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Importance::TaggedSymbol,
-              monitor_id: String,
-              query: String,
-              summary: String,
-              target_type:
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::TargetType::TaggedSymbol,
-              title: String,
-              url: String,
-              tags: T::Array[String]
-            }
-          )
-        end
-        def to_hash
-        end
-
-        module ChangeDetectionType
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(
-                Symbol,
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::ChangeDetectionType
-              )
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          SEMANTIC =
-            T.let(
-              :semantic,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::ChangeDetectionType::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::ChangeDetectionType::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
-
-        class Evidence < ContextDev::Internal::Type::BaseModel
-          OrHash =
-            T.type_alias do
-              T.any(
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Evidence,
-                ContextDev::Internal::AnyHash
-              )
-            end
-
-          sig { returns(String) }
-          attr_accessor :after
-
-          sig { returns(String) }
-          attr_accessor :before
-
-          sig do
-            params(after: String, before: String).returns(T.attached_class)
-          end
-          def self.new(after:, before:)
-          end
-
-          sig { override.returns({ after: String, before: String }) }
-          def to_hash
-          end
-        end
-
-        module Importance
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(
-                Symbol,
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Importance
-              )
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          LOW =
-            T.let(
-              :low,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Importance::TaggedSymbol
-            )
-          MEDIUM =
-            T.let(
-              :medium,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Importance::TaggedSymbol
-            )
-          HIGH =
-            T.let(
-              :high,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Importance::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::Importance::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
-
-        module TargetType
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(
-                Symbol,
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::TargetType
-              )
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          PAGE =
-            T.let(
-              :page,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::TargetType::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange::TargetType::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
       end
+      attr_reader :evidence
 
-      class MonitorsExtractSemanticChange < ContextDev::Internal::Type::BaseModel
-        OrHash =
-          T.type_alias do
-            T.any(
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange,
-              ContextDev::Internal::AnyHash
-            )
-          end
-
-        sig { returns(String) }
-        attr_accessor :id
-
-        sig do
-          returns(
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::ChangeDetectionType::TaggedSymbol
-          )
-        end
-        attr_accessor :change_detection_type
-
-        sig { returns(Float) }
-        attr_accessor :confidence
-
-        sig { returns(Time) }
-        attr_accessor :detected_at
-
-        sig do
-          returns(
+      sig do
+        params(
+          evidence:
             T::Array[
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Evidence
+              ContextDev::Models::MonitorRetrieveChangeResponse::Evidence::OrHash
             ]
+        ).void
+      end
+      attr_writer :evidence
+
+      sig do
+        returns(
+          T.nilable(
+            ContextDev::Models::MonitorRetrieveChangeResponse::Importance::TaggedSymbol
           )
-        end
-        attr_accessor :evidence
-
-        sig do
-          returns(
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Importance::TaggedSymbol
-          )
-        end
-        attr_accessor :importance
-
-        sig { returns(Integer) }
-        attr_accessor :matched_url_count
-
-        sig { returns(T::Array[String]) }
-        attr_accessor :matched_urls
-
-        sig { returns(String) }
-        attr_accessor :monitor_id
-
-        sig { returns(String) }
-        attr_accessor :query
-
-        sig { returns(String) }
-        attr_accessor :summary
-
-        sig do
-          returns(
-            ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::TargetType::TaggedSymbol
-          )
-        end
-        attr_accessor :target_type
-
-        sig { returns(String) }
-        attr_accessor :title
-
-        # Root URL of the extract target.
-        sig { returns(String) }
-        attr_accessor :url
-
-        # User-defined tags for grouping and filtering monitors and their changes.
-        sig { returns(T.nilable(T::Array[String])) }
-        attr_reader :tags
-
-        sig { params(tags: T::Array[String]).void }
-        attr_writer :tags
-
-        sig do
-          params(
-            id: String,
-            change_detection_type:
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::ChangeDetectionType::OrSymbol,
-            confidence: Float,
-            detected_at: Time,
-            evidence:
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Evidence::OrHash
-              ],
-            importance:
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Importance::OrSymbol,
-            matched_url_count: Integer,
-            matched_urls: T::Array[String],
-            monitor_id: String,
-            query: String,
-            summary: String,
-            target_type:
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::TargetType::OrSymbol,
-            title: String,
-            url: String,
-            tags: T::Array[String]
-          ).returns(T.attached_class)
-        end
-        def self.new(
-          id:,
-          change_detection_type:,
-          confidence:,
-          detected_at:,
-          evidence:,
-          importance:,
-          matched_url_count:,
-          matched_urls:,
-          monitor_id:,
-          query:,
-          summary:,
-          target_type:,
-          title:,
-          # Root URL of the extract target.
-          url:,
-          # User-defined tags for grouping and filtering monitors and their changes.
-          tags: nil
         )
-        end
+      end
+      attr_reader :importance
 
-        sig do
-          override.returns(
-            {
-              id: String,
-              change_detection_type:
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::ChangeDetectionType::TaggedSymbol,
-              confidence: Float,
-              detected_at: Time,
-              evidence:
-                T::Array[
-                  ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Evidence
-                ],
-              importance:
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Importance::TaggedSymbol,
-              matched_url_count: Integer,
-              matched_urls: T::Array[String],
-              monitor_id: String,
-              query: String,
-              summary: String,
-              target_type:
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::TargetType::TaggedSymbol,
-              title: String,
-              url: String,
-              tags: T::Array[String]
-            }
-          )
-        end
-        def to_hash
-        end
+      sig do
+        params(
+          importance:
+            ContextDev::Models::MonitorRetrieveChangeResponse::Importance::OrSymbol
+        ).void
+      end
+      attr_writer :importance
 
-        module ChangeDetectionType
-          extend ContextDev::Internal::Type::Enum
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :matched_url_count
 
-          TaggedSymbol =
-            T.type_alias do
-              T.all(
-                Symbol,
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::ChangeDetectionType
-              )
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
+      sig { params(matched_url_count: Integer).void }
+      attr_writer :matched_url_count
 
-          SEMANTIC =
-            T.let(
-              :semantic,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::ChangeDetectionType::TaggedSymbol
-            )
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :matched_urls
 
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::ChangeDetectionType::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
+      sig { params(matched_urls: T::Array[String]).void }
+      attr_writer :matched_urls
 
-        class Evidence < ContextDev::Internal::Type::BaseModel
-          OrHash =
-            T.type_alias do
-              T.any(
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Evidence,
-                ContextDev::Internal::AnyHash
-              )
-            end
+      sig { returns(T.nilable(String)) }
+      attr_reader :query
 
-          # Snapshot of the extracted data after the change.
-          sig { returns(String) }
-          attr_accessor :after
+      sig { params(query: String).void }
+      attr_writer :query
 
-          # Snapshot of the extracted data before the change.
-          sig { returns(String) }
-          attr_accessor :before
+      sig { returns(T.nilable(Integer)) }
+      attr_reader :removed_url_count
 
-          # Optional URL the evidence relates to. Absent for whole-target extract diffs.
-          sig { returns(T.nilable(String)) }
-          attr_reader :url
+      sig { params(removed_url_count: Integer).void }
+      attr_writer :removed_url_count
 
-          sig { params(url: String).void }
-          attr_writer :url
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :removed_urls
 
-          sig do
-            params(after: String, before: String, url: String).returns(
-              T.attached_class
-            )
-          end
-          def self.new(
-            # Snapshot of the extracted data after the change.
-            after:,
-            # Snapshot of the extracted data before the change.
-            before:,
-            # Optional URL the evidence relates to. Absent for whole-target extract diffs.
-            url: nil
-          )
-          end
+      sig { params(removed_urls: T::Array[String]).void }
+      attr_writer :removed_urls
 
-          sig do
-            override.returns({ after: String, before: String, url: String })
-          end
-          def to_hash
-          end
-        end
+      # User-defined tags for grouping and filtering monitors and their changes.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :tags
 
-        module Importance
-          extend ContextDev::Internal::Type::Enum
+      sig { params(tags: T::Array[String]).void }
+      attr_writer :tags
 
-          TaggedSymbol =
-            T.type_alias do
-              T.all(
-                Symbol,
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Importance
-              )
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          LOW =
-            T.let(
-              :low,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Importance::TaggedSymbol
-            )
-          MEDIUM =
-            T.let(
-              :medium,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Importance::TaggedSymbol
-            )
-          HIGH =
-            T.let(
-              :high,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Importance::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::Importance::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
-
-        module TargetType
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(
-                Symbol,
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::TargetType
-              )
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          EXTRACT =
-            T.let(
-              :extract,
-              ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::TargetType::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange::TargetType::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
+      # A detected change. `mode` is the constant `web`; `target_type` and
+      # `change_detection_type` describe the change, and which optional fields are
+      # present depends on them (page: `diff` + excerpts; sitemap:
+      # `added_urls`/`removed_urls`; semantic:
+      # `query`/`confidence`/`importance`/`evidence`/`matched_urls`).
+      sig do
+        params(
+          id: String,
+          change_detection_type:
+            ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType::OrSymbol,
+          detected_at: Time,
+          mode:
+            ContextDev::Models::MonitorRetrieveChangeResponse::Mode::OrSymbol,
+          monitor_id: String,
+          summary: String,
+          target_type:
+            ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::OrSymbol,
+          title: String,
+          url: String,
+          added_url_count: Integer,
+          added_urls: T::Array[String],
+          after_text_excerpt: String,
+          before_text_excerpt: String,
+          confidence: Float,
+          diff: String,
+          evidence:
+            T::Array[
+              ContextDev::Models::MonitorRetrieveChangeResponse::Evidence::OrHash
+            ],
+          importance:
+            ContextDev::Models::MonitorRetrieveChangeResponse::Importance::OrSymbol,
+          matched_url_count: Integer,
+          matched_urls: T::Array[String],
+          query: String,
+          removed_url_count: Integer,
+          removed_urls: T::Array[String],
+          tags: T::Array[String]
+        ).returns(T.attached_class)
+      end
+      def self.new(
+        id:,
+        change_detection_type:,
+        detected_at:,
+        # Top-level monitor category. Always `web` today; the concrete behavior is
+        # described by `target` and `change_detection`.
+        mode:,
+        monitor_id:,
+        summary:,
+        target_type:,
+        title:,
+        url:,
+        added_url_count: nil,
+        added_urls: nil,
+        after_text_excerpt: nil,
+        before_text_excerpt: nil,
+        confidence: nil,
+        # Text diff between the previous and current page baseline (page targets).
+        diff: nil,
+        evidence: nil,
+        importance: nil,
+        matched_url_count: nil,
+        matched_urls: nil,
+        query: nil,
+        removed_url_count: nil,
+        removed_urls: nil,
+        # User-defined tags for grouping and filtering monitors and their changes.
+        tags: nil
+      )
       end
 
       sig do
         override.returns(
-          T::Array[ContextDev::Models::MonitorRetrieveChangeResponse::Variants]
+          {
+            id: String,
+            change_detection_type:
+              ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType::TaggedSymbol,
+            detected_at: Time,
+            mode:
+              ContextDev::Models::MonitorRetrieveChangeResponse::Mode::TaggedSymbol,
+            monitor_id: String,
+            summary: String,
+            target_type:
+              ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::TaggedSymbol,
+            title: String,
+            url: String,
+            added_url_count: Integer,
+            added_urls: T::Array[String],
+            after_text_excerpt: String,
+            before_text_excerpt: String,
+            confidence: Float,
+            diff: String,
+            evidence:
+              T::Array[
+                ContextDev::Models::MonitorRetrieveChangeResponse::Evidence
+              ],
+            importance:
+              ContextDev::Models::MonitorRetrieveChangeResponse::Importance::TaggedSymbol,
+            matched_url_count: Integer,
+            matched_urls: T::Array[String],
+            query: String,
+            removed_url_count: Integer,
+            removed_urls: T::Array[String],
+            tags: T::Array[String]
+          }
         )
       end
-      def self.variants
+      def to_hash
+      end
+
+      module ChangeDetectionType
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(
+              Symbol,
+              ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType
+            )
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        EXACT =
+          T.let(
+            :exact,
+            ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType::TaggedSymbol
+          )
+        SEMANTIC =
+          T.let(
+            :semantic,
+            ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
+        end
+      end
+
+      # Top-level monitor category. Always `web` today; the concrete behavior is
+      # described by `target` and `change_detection`.
+      module Mode
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(
+              Symbol,
+              ContextDev::Models::MonitorRetrieveChangeResponse::Mode
+            )
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        WEB =
+          T.let(
+            :web,
+            ContextDev::Models::MonitorRetrieveChangeResponse::Mode::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::MonitorRetrieveChangeResponse::Mode::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
+        end
+      end
+
+      module TargetType
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(
+              Symbol,
+              ContextDev::Models::MonitorRetrieveChangeResponse::TargetType
+            )
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        PAGE =
+          T.let(
+            :page,
+            ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::TaggedSymbol
+          )
+        SITEMAP =
+          T.let(
+            :sitemap,
+            ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::TaggedSymbol
+          )
+        EXTRACT =
+          T.let(
+            :extract,
+            ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
+        end
+      end
+
+      class Evidence < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::MonitorRetrieveChangeResponse::Evidence,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Snapshot of the content after the change.
+        sig { returns(String) }
+        attr_accessor :after
+
+        # Snapshot of the content before the change.
+        sig { returns(String) }
+        attr_accessor :before
+
+        # Optional URL the evidence relates to. Absent for whole-target diffs.
+        sig { returns(T.nilable(String)) }
+        attr_reader :url
+
+        sig { params(url: String).void }
+        attr_writer :url
+
+        sig do
+          params(after: String, before: String, url: String).returns(
+            T.attached_class
+          )
+        end
+        def self.new(
+          # Snapshot of the content after the change.
+          after:,
+          # Snapshot of the content before the change.
+          before:,
+          # Optional URL the evidence relates to. Absent for whole-target diffs.
+          url: nil
+        )
+        end
+
+        sig { override.returns({ after: String, before: String, url: String }) }
+        def to_hash
+        end
+      end
+
+      module Importance
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(
+              Symbol,
+              ContextDev::Models::MonitorRetrieveChangeResponse::Importance
+            )
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        LOW =
+          T.let(
+            :low,
+            ContextDev::Models::MonitorRetrieveChangeResponse::Importance::TaggedSymbol
+          )
+        MEDIUM =
+          T.let(
+            :medium,
+            ContextDev::Models::MonitorRetrieveChangeResponse::Importance::TaggedSymbol
+          )
+        HIGH =
+          T.let(
+            :high,
+            ContextDev::Models::MonitorRetrieveChangeResponse::Importance::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::MonitorRetrieveChangeResponse::Importance::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
+        end
       end
     end
   end
