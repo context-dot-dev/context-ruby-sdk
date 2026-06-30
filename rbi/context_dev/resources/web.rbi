@@ -299,6 +299,7 @@ module ContextDev
           max_depth: Integer,
           max_pages: Integer,
           pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash,
+          settle_animations: T::Boolean,
           shorten_base64_images: T::Boolean,
           stop_after_ms: Integer,
           timeout_ms: Integer,
@@ -346,6 +347,10 @@ module ContextDev
         # PDF parsing controls. Use start/end to limit text extraction and OCR to an
         # inclusive 1-based page range.
         pdf: nil,
+        # When true, waits briefly for CSS and transition animations to settle before
+        # extracting each crawled page. Defaults to false. This adds a bit of latency in
+        # exchange for more stable output on animated pages.
+        settle_animations: nil,
         # Truncate base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
         # Soft time budget for the crawl in milliseconds. After each scrape, the crawler
@@ -380,6 +385,7 @@ module ContextDev
           include_selectors: T::Array[String],
           max_age_ms: Integer,
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
+          settle_animations: T::Boolean,
           timeout_ms: Integer,
           use_main_content_only: T::Boolean,
           wait_for_ms: Integer,
@@ -413,6 +419,10 @@ module ContextDev
         # PDF parsing controls. Use start/end to limit text extraction and OCR to an
         # inclusive 1-based page range.
         pdf: nil,
+        # When true, waits briefly for CSS and transition animations to settle before
+        # extracting HTML. Defaults to false. This adds a bit of latency in exchange for
+        # more stable output on animated pages.
+        settle_animations: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -479,6 +489,7 @@ module ContextDev
           include_selectors: T::Array[String],
           max_age_ms: Integer,
           pdf: ContextDev::WebWebScrapeMdParams::Pdf::OrHash,
+          settle_animations: T::Boolean,
           shorten_base64_images: T::Boolean,
           timeout_ms: Integer,
           use_main_content_only: T::Boolean,
@@ -518,6 +529,10 @@ module ContextDev
         # PDF parsing controls. Use start/end to limit text extraction and OCR to an
         # inclusive 1-based page range.
         pdf: nil,
+        # When true, waits briefly for CSS and transition animations to settle before
+        # converting to Markdown. Defaults to false. This adds a bit of latency in
+        # exchange for more stable output on animated pages.
+        settle_animations: nil,
         # Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer

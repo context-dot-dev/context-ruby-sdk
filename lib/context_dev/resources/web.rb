@@ -265,7 +265,7 @@ module ContextDev
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
       # and returns results for all crawled pages.
       #
-      # @overload web_crawl_md(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_crawl_md(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
       #
@@ -290,6 +290,8 @@ module ContextDev
       # @param max_pages [Integer] Maximum number of pages to crawl. Hard cap: 500.
       #
       # @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
+      #
+      # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
       #
       # @param shorten_base64_images [Boolean] Truncate base64-encoded image data in the Markdown output
       #
@@ -324,7 +326,7 @@ module ContextDev
       #
       # Scrapes the given URL and returns the raw HTML content of the page.
       #
-      # @overload web_scrape_html(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_html(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
       #
@@ -341,6 +343,8 @@ module ContextDev
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       # @param pdf [ContextDev::Models::WebWebScrapeHTMLParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
+      #
+      # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -364,6 +368,7 @@ module ContextDev
             include_frames: "includeFrames",
             include_selectors: "includeSelectors",
             max_age_ms: "maxAgeMs",
+            settle_animations: "settleAnimations",
             timeout_ms: "timeoutMS",
             use_main_content_only: "useMainContentOnly",
             wait_for_ms: "waitForMs"
@@ -421,7 +426,7 @@ module ContextDev
       #
       # Scrapes the given URL into LLM usable Markdown.
       #
-      # @overload web_scrape_md(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, shorten_base64_images: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_md(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
       #
@@ -442,6 +447,8 @@ module ContextDev
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       # @param pdf [ContextDev::Models::WebWebScrapeMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
+      #
+      # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before conv
       #
       # @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
       #
@@ -469,6 +476,7 @@ module ContextDev
             include_links: "includeLinks",
             include_selectors: "includeSelectors",
             max_age_ms: "maxAgeMs",
+            settle_animations: "settleAnimations",
             shorten_base64_images: "shortenBase64Images",
             timeout_ms: "timeoutMS",
             use_main_content_only: "useMainContentOnly",

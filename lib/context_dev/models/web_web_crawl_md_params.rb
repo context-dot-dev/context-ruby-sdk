@@ -92,6 +92,14 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebCrawlMdParams::Pdf, nil]
       optional :pdf, -> { ContextDev::WebWebCrawlMdParams::Pdf }
 
+      # @!attribute settle_animations
+      #   When true, waits briefly for CSS and transition animations to settle before
+      #   extracting each crawled page. Defaults to false. This adds a bit of latency in
+      #   exchange for more stable output on animated pages.
+      #
+      #   @return [Boolean, nil]
+      optional :settle_animations, ContextDev::Internal::Type::Boolean, api_name: :settleAnimations
+
       # @!attribute shorten_base64_images
       #   Truncate base64-encoded image data in the Markdown output
       #
@@ -135,7 +143,7 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, api_name: :waitForMs
 
-      # @!method initialize(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
@@ -162,6 +170,8 @@ module ContextDev
       #   @param max_pages [Integer] Maximum number of pages to crawl. Hard cap: 500.
       #
       #   @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
+      #
+      #   @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
       #
       #   @param shorten_base64_images [Boolean] Truncate base64-encoded image data in the Markdown output
       #

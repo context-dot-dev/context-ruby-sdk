@@ -14,6 +14,7 @@ module ContextDev
         max_depth: Integer,
         max_pages: Integer,
         pdf: ContextDev::WebWebCrawlMdParams::Pdf,
+        settle_animations: bool,
         :shorten_base64_images => bool,
         stop_after_ms: Integer,
         timeout_ms: Integer,
@@ -77,6 +78,10 @@ module ContextDev
         ContextDev::WebWebCrawlMdParams::Pdf
       ) -> ContextDev::WebWebCrawlMdParams::Pdf
 
+      attr_reader settle_animations: bool?
+
+      def settle_animations=: (bool) -> bool
+
       attr_reader shorten_base64_images: bool?
 
       def shorten_base64_images=: (bool) -> bool
@@ -114,6 +119,7 @@ module ContextDev
         ?max_depth: Integer,
         ?max_pages: Integer,
         ?pdf: ContextDev::WebWebCrawlMdParams::Pdf,
+        ?settle_animations: bool,
         ?shorten_base64_images: bool,
         ?stop_after_ms: Integer,
         ?timeout_ms: Integer,
@@ -136,6 +142,7 @@ module ContextDev
         max_depth: Integer,
         max_pages: Integer,
         pdf: ContextDev::WebWebCrawlMdParams::Pdf,
+        settle_animations: bool,
         :shorten_base64_images => bool,
         stop_after_ms: Integer,
         timeout_ms: Integer,
