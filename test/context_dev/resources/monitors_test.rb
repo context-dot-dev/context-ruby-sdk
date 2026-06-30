@@ -8,12 +8,10 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
 
     response =
       @context_dev.monitors.create(
-        body: {
-          change_detection: {type: :exact},
-          name: "Acme pricing page",
-          schedule: {frequency: 6, type: :interval, unit: :hours},
-          target: {type: :page, url: "https://acme.com/pricing"}
-        }
+        change_detection: {type: :exact},
+        name: "Acme pricing page",
+        schedule: {frequency: 6, type: :interval, unit: :hours},
+        target: {type: :page, url: "https://acme.com/pricing"}
       )
 
     assert_pattern do
@@ -21,12 +19,21 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
     end
 
     assert_pattern do
-      case response
-      in ContextDev::Models::MonitorCreateResponse::MonitorsPageExactMonitor
-      in ContextDev::Models::MonitorCreateResponse::MonitorsSitemapExactMonitor
-      in ContextDev::Models::MonitorCreateResponse::MonitorsPageSemanticMonitor
-      in ContextDev::Models::MonitorCreateResponse::MonitorsExtractSemanticMonitor
-      end
+      response => {
+        id: String,
+        change_detection: ContextDev::Models::MonitorCreateResponse::ChangeDetection,
+        created_at: Time,
+        mode: ContextDev::Models::MonitorCreateResponse::Mode,
+        name: String,
+        schedule: ContextDev::Models::MonitorCreateResponse::Schedule,
+        status: ContextDev::Models::MonitorCreateResponse::Status,
+        target: ContextDev::Models::MonitorCreateResponse::Target,
+        updated_at: Time,
+        last_change_at: Time | nil,
+        last_run_at: Time | nil,
+        tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
+        webhook: ContextDev::Models::MonitorCreateResponse::Webhook | nil
+      }
     end
   end
 
@@ -40,12 +47,21 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
     end
 
     assert_pattern do
-      case response
-      in ContextDev::Models::MonitorRetrieveResponse::MonitorsPageExactMonitor
-      in ContextDev::Models::MonitorRetrieveResponse::MonitorsSitemapExactMonitor
-      in ContextDev::Models::MonitorRetrieveResponse::MonitorsPageSemanticMonitor
-      in ContextDev::Models::MonitorRetrieveResponse::MonitorsExtractSemanticMonitor
-      end
+      response => {
+        id: String,
+        change_detection: ContextDev::Models::MonitorRetrieveResponse::ChangeDetection,
+        created_at: Time,
+        mode: ContextDev::Models::MonitorRetrieveResponse::Mode,
+        name: String,
+        schedule: ContextDev::Models::MonitorRetrieveResponse::Schedule,
+        status: ContextDev::Models::MonitorRetrieveResponse::Status,
+        target: ContextDev::Models::MonitorRetrieveResponse::Target,
+        updated_at: Time,
+        last_change_at: Time | nil,
+        last_run_at: Time | nil,
+        tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
+        webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook | nil
+      }
     end
   end
 
@@ -59,12 +75,21 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
     end
 
     assert_pattern do
-      case response
-      in ContextDev::Models::MonitorUpdateResponse::MonitorsPageExactMonitor
-      in ContextDev::Models::MonitorUpdateResponse::MonitorsSitemapExactMonitor
-      in ContextDev::Models::MonitorUpdateResponse::MonitorsPageSemanticMonitor
-      in ContextDev::Models::MonitorUpdateResponse::MonitorsExtractSemanticMonitor
-      end
+      response => {
+        id: String,
+        change_detection: ContextDev::Models::MonitorUpdateResponse::ChangeDetection,
+        created_at: Time,
+        mode: ContextDev::Models::MonitorUpdateResponse::Mode,
+        name: String,
+        schedule: ContextDev::Models::MonitorUpdateResponse::Schedule,
+        status: ContextDev::Models::MonitorUpdateResponse::Status,
+        target: ContextDev::Models::MonitorUpdateResponse::Target,
+        updated_at: Time,
+        last_change_at: Time | nil,
+        last_run_at: Time | nil,
+        tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
+        webhook: ContextDev::Models::MonitorUpdateResponse::Webhook | nil
+      }
     end
   end
 
@@ -79,7 +104,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
-        data: ^(ContextDev::Internal::Type::ArrayOf[union: ContextDev::Models::MonitorListResponse::Data]),
+        data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorListResponse::Data]),
         has_more: ContextDev::Internal::Type::Boolean,
         next_cursor: String | nil
       }
@@ -114,7 +139,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
-        data: ^(ContextDev::Internal::Type::ArrayOf[union: ContextDev::Models::MonitorListAccountChangesResponse::Data]),
+        data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorListAccountChangesResponse::Data]),
         has_more: ContextDev::Internal::Type::Boolean,
         next_cursor: String | nil
       }
@@ -150,7 +175,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
-        data: ^(ContextDev::Internal::Type::ArrayOf[union: ContextDev::Models::MonitorListChangesResponse::Data]),
+        data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorListChangesResponse::Data]),
         has_more: ContextDev::Internal::Type::Boolean,
         next_cursor: String | nil
       }
@@ -185,12 +210,31 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
     end
 
     assert_pattern do
-      case response
-      in ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageExactChange
-      in ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsSitemapExactChange
-      in ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsPageSemanticChange
-      in ContextDev::Models::MonitorRetrieveChangeResponse::MonitorsExtractSemanticChange
-      end
+      response => {
+        id: String,
+        change_detection_type: ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType,
+        detected_at: Time,
+        mode: ContextDev::Models::MonitorRetrieveChangeResponse::Mode,
+        monitor_id: String,
+        summary: String,
+        target_type: ContextDev::Models::MonitorRetrieveChangeResponse::TargetType,
+        title: String,
+        url: String,
+        added_url_count: Integer | nil,
+        added_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
+        after_text_excerpt: String | nil,
+        before_text_excerpt: String | nil,
+        confidence: Float | nil,
+        diff: String | nil,
+        evidence: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorRetrieveChangeResponse::Evidence]) | nil,
+        importance: ContextDev::Models::MonitorRetrieveChangeResponse::Importance | nil,
+        matched_url_count: Integer | nil,
+        matched_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
+        query: String | nil,
+        removed_url_count: Integer | nil,
+        removed_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
+        tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil
+      }
     end
   end
 

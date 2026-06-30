@@ -40,6 +40,43 @@ module ContextDev
       sig { params(limit: Integer).void }
       attr_writer :limit
 
+      # Free-text search term, matched against the fields named in `search_by`.
+      sig { returns(T.nilable(String)) }
+      attr_reader :q
+
+      sig { params(q: String).void }
+      attr_writer :q
+
+      # Comma-separated fields to search with `q`. Defaults to all of them. Note `query`
+      # only exists on semantic monitors.
+      sig do
+        returns(
+          T.nilable(T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol])
+        )
+      end
+      attr_reader :search_by
+
+      sig do
+        params(
+          search_by: T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol]
+        ).void
+      end
+      attr_writer :search_by
+
+      # `prefix` for as-you-type prefix matching (default), `exact` for full-token
+      # matching.
+      sig do
+        returns(T.nilable(ContextDev::MonitorListParams::SearchType::OrSymbol))
+      end
+      attr_reader :search_type
+
+      sig do
+        params(
+          search_type: ContextDev::MonitorListParams::SearchType::OrSymbol
+        ).void
+      end
+      attr_writer :search_type
+
       sig do
         returns(T.nilable(ContextDev::MonitorListParams::Status::OrSymbol))
       end
@@ -56,6 +93,13 @@ module ContextDev
 
       sig { params(tag: String).void }
       attr_writer :tag
+
+      # Comma-separated list of tags to filter by (matches monitors having any of them).
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :tags
+
+      sig { params(tags: T::Array[String]).void }
+      attr_writer :tags
 
       sig do
         returns(T.nilable(ContextDev::MonitorListParams::TargetType::OrSymbol))
@@ -75,8 +119,13 @@ module ContextDev
             ContextDev::MonitorListParams::ChangeDetectionType::OrSymbol,
           cursor: String,
           limit: Integer,
+          q: String,
+          search_by:
+            T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol],
+          search_type: ContextDev::MonitorListParams::SearchType::OrSymbol,
           status: ContextDev::MonitorListParams::Status::OrSymbol,
           tag: String,
+          tags: T::Array[String],
           target_type: ContextDev::MonitorListParams::TargetType::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
@@ -85,9 +134,19 @@ module ContextDev
         change_detection_type: nil,
         cursor: nil,
         limit: nil,
+        # Free-text search term, matched against the fields named in `search_by`.
+        q: nil,
+        # Comma-separated fields to search with `q`. Defaults to all of them. Note `query`
+        # only exists on semantic monitors.
+        search_by: nil,
+        # `prefix` for as-you-type prefix matching (default), `exact` for full-token
+        # matching.
+        search_type: nil,
         status: nil,
         # Filter to items that have this tag.
         tag: nil,
+        # Comma-separated list of tags to filter by (matches monitors having any of them).
+        tags: nil,
         target_type: nil,
         request_options: {}
       )
@@ -100,8 +159,13 @@ module ContextDev
               ContextDev::MonitorListParams::ChangeDetectionType::OrSymbol,
             cursor: String,
             limit: Integer,
+            q: String,
+            search_by:
+              T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol],
+            search_type: ContextDev::MonitorListParams::SearchType::OrSymbol,
             status: ContextDev::MonitorListParams::Status::OrSymbol,
             tag: String,
+            tags: T::Array[String],
             target_type: ContextDev::MonitorListParams::TargetType::OrSymbol,
             request_options: ContextDev::RequestOptions
           }
@@ -135,6 +199,60 @@ module ContextDev
             T::Array[
               ContextDev::MonitorListParams::ChangeDetectionType::TaggedSymbol
             ]
+          )
+        end
+        def self.values
+        end
+      end
+
+      module SearchBy
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::MonitorListParams::SearchBy)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        NAME =
+          T.let(:name, ContextDev::MonitorListParams::SearchBy::TaggedSymbol)
+        URL = T.let(:url, ContextDev::MonitorListParams::SearchBy::TaggedSymbol)
+        QUERY =
+          T.let(:query, ContextDev::MonitorListParams::SearchBy::TaggedSymbol)
+        TAGS =
+          T.let(:tags, ContextDev::MonitorListParams::SearchBy::TaggedSymbol)
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::MonitorListParams::SearchBy::TaggedSymbol]
+          )
+        end
+        def self.values
+        end
+      end
+
+      # `prefix` for as-you-type prefix matching (default), `exact` for full-token
+      # matching.
+      module SearchType
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::MonitorListParams::SearchType)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        EXACT =
+          T.let(:exact, ContextDev::MonitorListParams::SearchType::TaggedSymbol)
+        PREFIX =
+          T.let(
+            :prefix,
+            ContextDev::MonitorListParams::SearchType::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::MonitorListParams::SearchType::TaggedSymbol]
           )
         end
         def self.values

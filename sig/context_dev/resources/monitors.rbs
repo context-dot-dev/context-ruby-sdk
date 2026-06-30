@@ -2,14 +2,20 @@ module ContextDev
   module Resources
     class Monitors
       def create: (
-        body: ContextDev::Models::MonitorCreateParams::body,
+        change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
+        name: String,
+        schedule: ContextDev::MonitorCreateParams::Schedule,
+        target: ContextDev::Models::MonitorCreateParams::target,
+        ?mode: ContextDev::Models::MonitorCreateParams::mode,
+        ?tags: ::Array[String],
+        ?webhook: ContextDev::MonitorCreateParams::Webhook?,
         ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::monitor_create_response
+      ) -> ContextDev::Models::MonitorCreateResponse
 
       def retrieve: (
         String monitor_id,
         ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::monitor_retrieve_response
+      ) -> ContextDev::Models::MonitorRetrieveResponse
 
       def update: (
         String monitor_id,
@@ -21,14 +27,18 @@ module ContextDev
         ?target: ContextDev::Models::MonitorUpdateParams::target,
         ?webhook: ContextDev::MonitorUpdateParams::Webhook?,
         ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::monitor_update_response
+      ) -> ContextDev::Models::MonitorUpdateResponse
 
       def list: (
         ?change_detection_type: ContextDev::Models::MonitorListParams::change_detection_type,
         ?cursor: String,
         ?limit: Integer,
+        ?q: String,
+        ?search_by: ::Array[ContextDev::Models::MonitorListParams::search_by],
+        ?search_type: ContextDev::Models::MonitorListParams::search_type,
         ?status: ContextDev::Models::MonitorListParams::status,
         ?tag: String,
+        ?tags: ::Array[String],
         ?target_type: ContextDev::Models::MonitorListParams::target_type,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::MonitorListResponse
@@ -78,7 +88,7 @@ module ContextDev
       def retrieve_change: (
         String change_id,
         ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::monitor_retrieve_change_response
+      ) -> ContextDev::Models::MonitorRetrieveChangeResponse
 
       def run: (
         String monitor_id,

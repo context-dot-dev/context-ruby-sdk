@@ -201,10 +201,13 @@ module ContextDev
 
         discriminator :type
 
+        # Watch a single web page.
         variant :page, -> { ContextDev::MonitorUpdateParams::Target::Page }
 
+        # Watch a sitemap for URL additions and removals.
         variant :sitemap, -> { ContextDev::MonitorUpdateParams::Target::Sitemap }
 
+        # Watch a site's extracted structured data.
         variant :extract, -> { ContextDev::MonitorUpdateParams::Target::Extract }
 
         class Page < ContextDev::Internal::Type::BaseModel
@@ -225,6 +228,8 @@ module ContextDev
           optional :normalize_whitespace, ContextDev::Internal::Type::Boolean
 
           # @!method initialize(url:, normalize_whitespace: nil, type: :page)
+          #   Watch a single web page.
+          #
           #   @param url [String]
           #
           #   @param normalize_whitespace [Boolean] Normalize whitespace before comparing or analyzing text.
@@ -262,6 +267,8 @@ module ContextDev
           optional :max_urls, Integer
 
           # @!method initialize(url:, exclude: nil, include: nil, max_urls: nil, type: :sitemap)
+          #   Watch a sitemap for URL additions and removals.
+          #
           #   @param url [String] Sitemap URL to monitor.
           #
           #   @param exclude [Array<String>] URL path patterns to exclude.
@@ -318,6 +325,8 @@ module ContextDev
           # @!method initialize(url:, follow_subdomains: nil, instructions: nil, max_depth: nil, max_pages: nil, schema: nil, type: :extract)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorUpdateParams::Target::Extract} for more details.
+          #
+          #   Watch a site's extracted structured data.
           #
           #   @param url [String] Root URL to extract structured data from.
           #

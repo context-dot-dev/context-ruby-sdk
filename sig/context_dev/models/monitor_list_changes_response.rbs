@@ -2,415 +2,174 @@ module ContextDev
   module Models
     type monitor_list_changes_response =
       {
-        data: ::Array[ContextDev::Models::MonitorListChangesResponse::data],
+        data: ::Array[ContextDev::Models::MonitorListChangesResponse::Data],
         has_more: bool,
         next_cursor: String?
       }
 
     class MonitorListChangesResponse < ContextDev::Internal::Type::BaseModel
-      attr_accessor data: ::Array[ContextDev::Models::MonitorListChangesResponse::data]
+      attr_accessor data: ::Array[ContextDev::Models::MonitorListChangesResponse::Data]
 
       attr_accessor has_more: bool
 
       attr_accessor next_cursor: String?
 
       def initialize: (
-        data: ::Array[ContextDev::Models::MonitorListChangesResponse::data],
+        data: ::Array[ContextDev::Models::MonitorListChangesResponse::Data],
         has_more: bool,
         next_cursor: String?
       ) -> void
 
       def to_hash: -> {
-        data: ::Array[ContextDev::Models::MonitorListChangesResponse::data],
+        data: ::Array[ContextDev::Models::MonitorListChangesResponse::Data],
         has_more: bool,
         next_cursor: String?
       }
 
       type data =
-        ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageExactChangeSummary
-        | ContextDev::Models::MonitorListChangesResponse::Data::MonitorsSitemapExactChangeSummary
-        | ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary
-        | ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary
+        {
+          id: String,
+          change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::change_detection_type,
+          detected_at: Time,
+          mode: ContextDev::Models::MonitorListChangesResponse::Data::mode,
+          monitor_id: String,
+          summary: String,
+          target_type: ContextDev::Models::MonitorListChangesResponse::Data::target_type,
+          title: String,
+          url: String,
+          added_url_count: Integer,
+          confidence: Float,
+          importance: ContextDev::Models::MonitorListChangesResponse::Data::importance,
+          matched_url_count: Integer,
+          removed_url_count: Integer,
+          tags: ::Array[String]
+        }
 
-      module Data
-        extend ContextDev::Internal::Type::Union
+      class Data < ContextDev::Internal::Type::BaseModel
+        attr_accessor id: String
 
-        type monitors_page_exact_change_summary =
-          {
-            id: String,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageExactChangeSummary::change_detection_type,
-            detected_at: Time,
-            monitor_id: String,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageExactChangeSummary::target_type,
-            title: String,
-            url: String,
-            tags: ::Array[String]
-          }
+        attr_accessor change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::change_detection_type
 
-        class MonitorsPageExactChangeSummary < ContextDev::Internal::Type::BaseModel
-          attr_accessor id: String
+        attr_accessor detected_at: Time
 
-          attr_accessor change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageExactChangeSummary::change_detection_type
+        attr_accessor mode: ContextDev::Models::MonitorListChangesResponse::Data::mode
 
-          attr_accessor detected_at: Time
+        attr_accessor monitor_id: String
 
-          attr_accessor monitor_id: String
+        attr_accessor summary: String
 
-          attr_accessor summary: String
+        attr_accessor target_type: ContextDev::Models::MonitorListChangesResponse::Data::target_type
 
-          attr_accessor target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageExactChangeSummary::target_type
+        attr_accessor title: String
 
-          attr_accessor title: String
+        attr_accessor url: String
 
-          attr_accessor url: String
+        attr_reader added_url_count: Integer?
 
-          attr_reader tags: ::Array[String]?
+        def added_url_count=: (Integer) -> Integer
 
-          def tags=: (::Array[String]) -> ::Array[String]
+        attr_reader confidence: Float?
 
-          def initialize: (
-            id: String,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageExactChangeSummary::change_detection_type,
-            detected_at: Time,
-            monitor_id: String,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageExactChangeSummary::target_type,
-            title: String,
-            url: String,
-            ?tags: ::Array[String]
-          ) -> void
+        def confidence=: (Float) -> Float
 
-          def to_hash: -> {
-            id: String,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageExactChangeSummary::change_detection_type,
-            detected_at: Time,
-            monitor_id: String,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageExactChangeSummary::target_type,
-            title: String,
-            url: String,
-            tags: ::Array[String]
-          }
+        attr_reader importance: ContextDev::Models::MonitorListChangesResponse::Data::importance?
 
-          type change_detection_type = :exact
+        def importance=: (
+          ContextDev::Models::MonitorListChangesResponse::Data::importance
+        ) -> ContextDev::Models::MonitorListChangesResponse::Data::importance
 
-          module ChangeDetectionType
-            extend ContextDev::Internal::Type::Enum
+        attr_reader matched_url_count: Integer?
 
-            EXACT: :exact
+        def matched_url_count=: (Integer) -> Integer
 
-            def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageExactChangeSummary::change_detection_type]
-          end
+        attr_reader removed_url_count: Integer?
 
-          type target_type = :page
+        def removed_url_count=: (Integer) -> Integer
 
-          module TargetType
-            extend ContextDev::Internal::Type::Enum
+        attr_reader tags: ::Array[String]?
 
-            PAGE: :page
+        def tags=: (::Array[String]) -> ::Array[String]
 
-            def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageExactChangeSummary::target_type]
-          end
+        def initialize: (
+          id: String,
+          change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::change_detection_type,
+          detected_at: Time,
+          mode: ContextDev::Models::MonitorListChangesResponse::Data::mode,
+          monitor_id: String,
+          summary: String,
+          target_type: ContextDev::Models::MonitorListChangesResponse::Data::target_type,
+          title: String,
+          url: String,
+          ?added_url_count: Integer,
+          ?confidence: Float,
+          ?importance: ContextDev::Models::MonitorListChangesResponse::Data::importance,
+          ?matched_url_count: Integer,
+          ?removed_url_count: Integer,
+          ?tags: ::Array[String]
+        ) -> void
+
+        def to_hash: -> {
+          id: String,
+          change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::change_detection_type,
+          detected_at: Time,
+          mode: ContextDev::Models::MonitorListChangesResponse::Data::mode,
+          monitor_id: String,
+          summary: String,
+          target_type: ContextDev::Models::MonitorListChangesResponse::Data::target_type,
+          title: String,
+          url: String,
+          added_url_count: Integer,
+          confidence: Float,
+          importance: ContextDev::Models::MonitorListChangesResponse::Data::importance,
+          matched_url_count: Integer,
+          removed_url_count: Integer,
+          tags: ::Array[String]
+        }
+
+        type change_detection_type = :exact | :semantic
+
+        module ChangeDetectionType
+          extend ContextDev::Internal::Type::Enum
+
+          EXACT: :exact
+          SEMANTIC: :semantic
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::change_detection_type]
         end
 
-        type monitors_sitemap_exact_change_summary =
-          {
-            id: String,
-            added_url_count: Integer,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsSitemapExactChangeSummary::change_detection_type,
-            detected_at: Time,
-            monitor_id: String,
-            removed_url_count: Integer,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsSitemapExactChangeSummary::target_type,
-            title: String,
-            url: String,
-            tags: ::Array[String]
-          }
+        type mode = :web
 
-        class MonitorsSitemapExactChangeSummary < ContextDev::Internal::Type::BaseModel
-          attr_accessor id: String
+        module Mode
+          extend ContextDev::Internal::Type::Enum
 
-          attr_accessor added_url_count: Integer
+          WEB: :web
 
-          attr_accessor change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsSitemapExactChangeSummary::change_detection_type
-
-          attr_accessor detected_at: Time
-
-          attr_accessor monitor_id: String
-
-          attr_accessor removed_url_count: Integer
-
-          attr_accessor summary: String
-
-          attr_accessor target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsSitemapExactChangeSummary::target_type
-
-          attr_accessor title: String
-
-          attr_accessor url: String
-
-          attr_reader tags: ::Array[String]?
-
-          def tags=: (::Array[String]) -> ::Array[String]
-
-          def initialize: (
-            id: String,
-            added_url_count: Integer,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsSitemapExactChangeSummary::change_detection_type,
-            detected_at: Time,
-            monitor_id: String,
-            removed_url_count: Integer,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsSitemapExactChangeSummary::target_type,
-            title: String,
-            url: String,
-            ?tags: ::Array[String]
-          ) -> void
-
-          def to_hash: -> {
-            id: String,
-            added_url_count: Integer,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsSitemapExactChangeSummary::change_detection_type,
-            detected_at: Time,
-            monitor_id: String,
-            removed_url_count: Integer,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsSitemapExactChangeSummary::target_type,
-            title: String,
-            url: String,
-            tags: ::Array[String]
-          }
-
-          type change_detection_type = :exact
-
-          module ChangeDetectionType
-            extend ContextDev::Internal::Type::Enum
-
-            EXACT: :exact
-
-            def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::MonitorsSitemapExactChangeSummary::change_detection_type]
-          end
-
-          type target_type = :sitemap
-
-          module TargetType
-            extend ContextDev::Internal::Type::Enum
-
-            SITEMAP: :sitemap
-
-            def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::MonitorsSitemapExactChangeSummary::target_type]
-          end
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::mode]
         end
 
-        type monitors_page_semantic_change_summary =
-          {
-            id: String,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::change_detection_type,
-            confidence: Float,
-            detected_at: Time,
-            importance: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::importance,
-            monitor_id: String,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::target_type,
-            title: String,
-            url: String,
-            tags: ::Array[String]
-          }
+        type target_type = :page | :sitemap | :extract
 
-        class MonitorsPageSemanticChangeSummary < ContextDev::Internal::Type::BaseModel
-          attr_accessor id: String
+        module TargetType
+          extend ContextDev::Internal::Type::Enum
 
-          attr_accessor change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::change_detection_type
+          PAGE: :page
+          SITEMAP: :sitemap
+          EXTRACT: :extract
 
-          attr_accessor confidence: Float
-
-          attr_accessor detected_at: Time
-
-          attr_accessor importance: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::importance
-
-          attr_accessor monitor_id: String
-
-          attr_accessor summary: String
-
-          attr_accessor target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::target_type
-
-          attr_accessor title: String
-
-          attr_accessor url: String
-
-          attr_reader tags: ::Array[String]?
-
-          def tags=: (::Array[String]) -> ::Array[String]
-
-          def initialize: (
-            id: String,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::change_detection_type,
-            confidence: Float,
-            detected_at: Time,
-            importance: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::importance,
-            monitor_id: String,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::target_type,
-            title: String,
-            url: String,
-            ?tags: ::Array[String]
-          ) -> void
-
-          def to_hash: -> {
-            id: String,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::change_detection_type,
-            confidence: Float,
-            detected_at: Time,
-            importance: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::importance,
-            monitor_id: String,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::target_type,
-            title: String,
-            url: String,
-            tags: ::Array[String]
-          }
-
-          type change_detection_type = :semantic
-
-          module ChangeDetectionType
-            extend ContextDev::Internal::Type::Enum
-
-            SEMANTIC: :semantic
-
-            def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::change_detection_type]
-          end
-
-          type importance = :low | :medium | :high
-
-          module Importance
-            extend ContextDev::Internal::Type::Enum
-
-            LOW: :low
-            MEDIUM: :medium
-            HIGH: :high
-
-            def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::importance]
-          end
-
-          type target_type = :page
-
-          module TargetType
-            extend ContextDev::Internal::Type::Enum
-
-            PAGE: :page
-
-            def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::MonitorsPageSemanticChangeSummary::target_type]
-          end
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::target_type]
         end
 
-        type monitors_extract_semantic_change_summary =
-          {
-            id: String,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::change_detection_type,
-            confidence: Float,
-            detected_at: Time,
-            importance: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::importance,
-            matched_url_count: Integer,
-            monitor_id: String,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::target_type,
-            title: String,
-            url: String,
-            tags: ::Array[String]
-          }
+        type importance = :low | :medium | :high
 
-        class MonitorsExtractSemanticChangeSummary < ContextDev::Internal::Type::BaseModel
-          attr_accessor id: String
+        module Importance
+          extend ContextDev::Internal::Type::Enum
 
-          attr_accessor change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::change_detection_type
+          LOW: :low
+          MEDIUM: :medium
+          HIGH: :high
 
-          attr_accessor confidence: Float
-
-          attr_accessor detected_at: Time
-
-          attr_accessor importance: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::importance
-
-          attr_accessor matched_url_count: Integer
-
-          attr_accessor monitor_id: String
-
-          attr_accessor summary: String
-
-          attr_accessor target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::target_type
-
-          attr_accessor title: String
-
-          attr_accessor url: String
-
-          attr_reader tags: ::Array[String]?
-
-          def tags=: (::Array[String]) -> ::Array[String]
-
-          def initialize: (
-            id: String,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::change_detection_type,
-            confidence: Float,
-            detected_at: Time,
-            importance: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::importance,
-            matched_url_count: Integer,
-            monitor_id: String,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::target_type,
-            title: String,
-            url: String,
-            ?tags: ::Array[String]
-          ) -> void
-
-          def to_hash: -> {
-            id: String,
-            change_detection_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::change_detection_type,
-            confidence: Float,
-            detected_at: Time,
-            importance: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::importance,
-            matched_url_count: Integer,
-            monitor_id: String,
-            summary: String,
-            target_type: ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::target_type,
-            title: String,
-            url: String,
-            tags: ::Array[String]
-          }
-
-          type change_detection_type = :semantic
-
-          module ChangeDetectionType
-            extend ContextDev::Internal::Type::Enum
-
-            SEMANTIC: :semantic
-
-            def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::change_detection_type]
-          end
-
-          type importance = :low | :medium | :high
-
-          module Importance
-            extend ContextDev::Internal::Type::Enum
-
-            LOW: :low
-            MEDIUM: :medium
-            HIGH: :high
-
-            def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::importance]
-          end
-
-          type target_type = :extract
-
-          module TargetType
-            extend ContextDev::Internal::Type::Enum
-
-            EXTRACT: :extract
-
-            def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::MonitorsExtractSemanticChangeSummary::target_type]
-          end
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::importance]
         end
-
-        def self?.variants: -> ::Array[ContextDev::Models::MonitorListChangesResponse::data]
       end
     end
   end

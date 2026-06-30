@@ -441,6 +441,7 @@ module ContextDev
           sig { params(normalize_whitespace: T::Boolean).void }
           attr_writer :normalize_whitespace
 
+          # Watch a single web page.
           sig do
             params(
               url: String,
@@ -501,6 +502,7 @@ module ContextDev
           sig { params(max_urls: Integer).void }
           attr_writer :max_urls
 
+          # Watch a sitemap for URL additions and removals.
           sig do
             params(
               url: String,
@@ -588,6 +590,7 @@ module ContextDev
           sig { params(schema: T::Hash[Symbol, T.anything]).void }
           attr_writer :schema
 
+          # Watch a site's extracted structured data.
           sig do
             params(
               url: String,
