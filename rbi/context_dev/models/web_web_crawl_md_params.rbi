@@ -109,6 +109,15 @@ module ContextDev
       sig { params(pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash).void }
       attr_writer :pdf
 
+      # When true, waits briefly for CSS and transition animations to settle before
+      # extracting each crawled page. Defaults to false. This adds a bit of latency in
+      # exchange for more stable output on animated pages.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :settle_animations
+
+      sig { params(settle_animations: T::Boolean).void }
+      attr_writer :settle_animations
+
       # Truncate base64-encoded image data in the Markdown output
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :shorten_base64_images
@@ -172,6 +181,7 @@ module ContextDev
           max_depth: Integer,
           max_pages: Integer,
           pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash,
+          settle_animations: T::Boolean,
           shorten_base64_images: T::Boolean,
           stop_after_ms: Integer,
           timeout_ms: Integer,
@@ -219,6 +229,10 @@ module ContextDev
         # PDF parsing controls. Use start/end to limit text extraction and OCR to an
         # inclusive 1-based page range.
         pdf: nil,
+        # When true, waits briefly for CSS and transition animations to settle before
+        # extracting each crawled page. Defaults to false. This adds a bit of latency in
+        # exchange for more stable output on animated pages.
+        settle_animations: nil,
         # Truncate base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
         # Soft time budget for the crawl in milliseconds. After each scrape, the crawler
@@ -257,6 +271,7 @@ module ContextDev
             max_depth: Integer,
             max_pages: Integer,
             pdf: ContextDev::WebWebCrawlMdParams::Pdf,
+            settle_animations: T::Boolean,
             shorten_base64_images: T::Boolean,
             stop_after_ms: Integer,
             timeout_ms: Integer,
