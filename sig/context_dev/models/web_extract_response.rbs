@@ -48,6 +48,7 @@ module ContextDev
       type metadata =
         {
           max_crawl_depth: Integer,
+          num_blocked: Integer,
           num_failed: Integer,
           num_skipped: Integer,
           num_succeeded: Integer,
@@ -56,6 +57,8 @@ module ContextDev
 
       class Metadata < ContextDev::Internal::Type::BaseModel
         attr_accessor max_crawl_depth: Integer
+
+        attr_accessor num_blocked: Integer
 
         attr_accessor num_failed: Integer
 
@@ -67,6 +70,7 @@ module ContextDev
 
         def initialize: (
           max_crawl_depth: Integer,
+          num_blocked: Integer,
           num_failed: Integer,
           num_skipped: Integer,
           num_succeeded: Integer,
@@ -75,6 +79,7 @@ module ContextDev
 
         def to_hash: -> {
           max_crawl_depth: Integer,
+          num_blocked: Integer,
           num_failed: Integer,
           num_skipped: Integer,
           num_succeeded: Integer,

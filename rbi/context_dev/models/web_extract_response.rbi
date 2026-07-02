@@ -106,6 +106,11 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :max_crawl_depth
 
+        # Number of crawled pages excluded because they were anti-bot challenges, error
+        # pages, or parked-domain placeholders.
+        sig { returns(Integer) }
+        attr_accessor :num_blocked
+
         sig { returns(Integer) }
         attr_accessor :num_failed
 
@@ -121,6 +126,7 @@ module ContextDev
         sig do
           params(
             max_crawl_depth: Integer,
+            num_blocked: Integer,
             num_failed: Integer,
             num_skipped: Integer,
             num_succeeded: Integer,
@@ -129,6 +135,9 @@ module ContextDev
         end
         def self.new(
           max_crawl_depth:,
+          # Number of crawled pages excluded because they were anti-bot challenges, error
+          # pages, or parked-domain placeholders.
+          num_blocked:,
           num_failed:,
           num_skipped:,
           num_succeeded:,
@@ -140,6 +149,7 @@ module ContextDev
           override.returns(
             {
               max_crawl_depth: Integer,
+              num_blocked: Integer,
               num_failed: Integer,
               num_skipped: Integer,
               num_succeeded: Integer,

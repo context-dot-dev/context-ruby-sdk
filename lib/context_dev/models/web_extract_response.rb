@@ -63,6 +63,13 @@ module ContextDev
         #   @return [Integer]
         required :max_crawl_depth, Integer, api_name: :maxCrawlDepth
 
+        # @!attribute num_blocked
+        #   Number of crawled pages excluded because they were anti-bot challenges, error
+        #   pages, or parked-domain placeholders.
+        #
+        #   @return [Integer]
+        required :num_blocked, Integer, api_name: :numBlocked
+
         # @!attribute num_failed
         #
         #   @return [Integer]
@@ -83,11 +90,20 @@ module ContextDev
         #   @return [Integer]
         required :num_urls, Integer, api_name: :numUrls
 
-        # @!method initialize(max_crawl_depth:, num_failed:, num_skipped:, num_succeeded:, num_urls:)
+        # @!method initialize(max_crawl_depth:, num_blocked:, num_failed:, num_skipped:, num_succeeded:, num_urls:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebExtractResponse::Metadata} for more details.
+        #
         #   @param max_crawl_depth [Integer]
+        #
+        #   @param num_blocked [Integer] Number of crawled pages excluded because they were anti-bot challenges, error pa
+        #
         #   @param num_failed [Integer]
+        #
         #   @param num_skipped [Integer]
+        #
         #   @param num_succeeded [Integer]
+        #
         #   @param num_urls [Integer]
       end
 
