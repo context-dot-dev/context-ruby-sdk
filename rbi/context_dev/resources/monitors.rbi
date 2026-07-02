@@ -137,6 +137,11 @@ module ContextDev
         # `prefix` for as-you-type prefix matching (default), `exact` for full-token
         # matching.
         search_type: nil,
+        # Monitor lifecycle status. `failed` means the most recent run failed (see the
+        # monitor's `last_error`); failed monitors keep running on schedule and flip back
+        # to `active` on the next successful run. Monitors are auto-`paused` after
+        # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
+        # status to `active`.
         status: nil,
         # Filter to items that have this tag.
         tag: nil,
@@ -199,6 +204,8 @@ module ContextDev
       def list_account_runs(
         cursor: nil,
         limit: nil,
+        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+        # (insufficient credits, monitor paused, or superseded by a concurrent run).
         status: nil,
         request_options: {}
       )
@@ -242,6 +249,8 @@ module ContextDev
         monitor_id,
         cursor: nil,
         limit: nil,
+        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+        # (insufficient credits, monitor paused, or superseded by a concurrent run).
         status: nil,
         request_options: {}
       )

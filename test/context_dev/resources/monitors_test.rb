@@ -30,7 +30,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         target: ContextDev::Models::MonitorCreateResponse::Target,
         updated_at: Time,
         last_change_at: Time | nil,
+        last_error: ContextDev::Models::MonitorCreateResponse::LastError | nil,
         last_run_at: Time | nil,
+        next_run_at: Time | nil,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
         webhook: ContextDev::Models::MonitorCreateResponse::Webhook | nil
       }
@@ -58,7 +60,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         target: ContextDev::Models::MonitorRetrieveResponse::Target,
         updated_at: Time,
         last_change_at: Time | nil,
+        last_error: ContextDev::Models::MonitorRetrieveResponse::LastError | nil,
         last_run_at: Time | nil,
+        next_run_at: Time | nil,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
         webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook | nil
       }
@@ -86,7 +90,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         target: ContextDev::Models::MonitorUpdateResponse::Target,
         updated_at: Time,
         last_change_at: Time | nil,
+        last_error: ContextDev::Models::MonitorUpdateResponse::LastError | nil,
         last_run_at: Time | nil,
+        next_run_at: Time | nil,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
         webhook: ContextDev::Models::MonitorUpdateResponse::Webhook | nil
       }
@@ -216,6 +222,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         detected_at: Time,
         mode: ContextDev::Models::MonitorRetrieveChangeResponse::Mode,
         monitor_id: String,
+        run_id: String,
         summary: String,
         target_type: ContextDev::Models::MonitorRetrieveChangeResponse::TargetType,
         title: String,
@@ -250,7 +257,8 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         monitor_id: String,
-        queued: ContextDev::Internal::Type::Boolean
+        queued: ContextDev::Internal::Type::Boolean,
+        run_id: String
       }
     end
   end

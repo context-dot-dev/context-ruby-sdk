@@ -29,6 +29,8 @@ module ContextDev
       sig { params(limit: Integer).void }
       attr_writer :limit
 
+      # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+      # (insufficient credits, monitor paused, or superseded by a concurrent run).
       sig do
         returns(T.nilable(ContextDev::MonitorListRunsParams::Status::OrSymbol))
       end
@@ -52,6 +54,8 @@ module ContextDev
         monitor_id:,
         cursor: nil,
         limit: nil,
+        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+        # (insufficient credits, monitor paused, or superseded by a concurrent run).
         status: nil,
         request_options: {}
       )
@@ -71,6 +75,8 @@ module ContextDev
       def to_hash
       end
 
+      # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+      # (insufficient credits, monitor paused, or superseded by a concurrent run).
       module Status
         extend ContextDev::Internal::Type::Enum
 
@@ -98,6 +104,11 @@ module ContextDev
         FAILED =
           T.let(
             :failed,
+            ContextDev::MonitorListRunsParams::Status::TaggedSymbol
+          )
+        SKIPPED =
+          T.let(
+            :skipped,
             ContextDev::MonitorListRunsParams::Status::TaggedSymbol
           )
 

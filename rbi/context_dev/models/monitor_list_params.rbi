@@ -77,6 +77,11 @@ module ContextDev
       end
       attr_writer :search_type
 
+      # Monitor lifecycle status. `failed` means the most recent run failed (see the
+      # monitor's `last_error`); failed monitors keep running on schedule and flip back
+      # to `active` on the next successful run. Monitors are auto-`paused` after
+      # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
+      # status to `active`.
       sig do
         returns(T.nilable(ContextDev::MonitorListParams::Status::OrSymbol))
       end
@@ -142,6 +147,11 @@ module ContextDev
         # `prefix` for as-you-type prefix matching (default), `exact` for full-token
         # matching.
         search_type: nil,
+        # Monitor lifecycle status. `failed` means the most recent run failed (see the
+        # monitor's `last_error`); failed monitors keep running on schedule and flip back
+        # to `active` on the next successful run. Monitors are auto-`paused` after
+        # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
+        # status to `active`.
         status: nil,
         # Filter to items that have this tag.
         tag: nil,
@@ -259,6 +269,11 @@ module ContextDev
         end
       end
 
+      # Monitor lifecycle status. `failed` means the most recent run failed (see the
+      # monitor's `last_error`); failed monitors keep running on schedule and flip back
+      # to `active` on the next successful run. Monitors are auto-`paused` after
+      # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
+      # status to `active`.
       module Status
         extend ContextDev::Internal::Type::Enum
 

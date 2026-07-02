@@ -32,6 +32,12 @@ module ContextDev
       #   @return [String]
       required :monitor_id, String
 
+      # @!attribute run_id
+      #   The run that detected this change.
+      #
+      #   @return [String]
+      required :run_id, String
+
       # @!attribute summary
       #
       #   @return [String]
@@ -58,6 +64,7 @@ module ContextDev
       optional :added_url_count, Integer
 
       # @!attribute added_urls
+      #   At most 500 URLs are included; the corresponding count field is always exact.
       #
       #   @return [Array<String>, nil]
       optional :added_urls, ContextDev::Internal::Type::ArrayOf[String]
@@ -100,6 +107,7 @@ module ContextDev
       optional :matched_url_count, Integer
 
       # @!attribute matched_urls
+      #   At most 500 URLs are included; the corresponding count field is always exact.
       #
       #   @return [Array<String>, nil]
       optional :matched_urls, ContextDev::Internal::Type::ArrayOf[String]
@@ -115,6 +123,7 @@ module ContextDev
       optional :removed_url_count, Integer
 
       # @!attribute removed_urls
+      #   At most 500 URLs are included; the corresponding count field is always exact.
       #
       #   @return [Array<String>, nil]
       optional :removed_urls, ContextDev::Internal::Type::ArrayOf[String]
@@ -125,7 +134,7 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!method initialize(id:, change_detection_type:, detected_at:, mode:, monitor_id:, summary:, target_type:, title:, url:, added_url_count: nil, added_urls: nil, after_text_excerpt: nil, before_text_excerpt: nil, confidence: nil, diff: nil, evidence: nil, importance: nil, matched_url_count: nil, matched_urls: nil, query: nil, removed_url_count: nil, removed_urls: nil, tags: nil)
+      # @!method initialize(id:, change_detection_type:, detected_at:, mode:, monitor_id:, run_id:, summary:, target_type:, title:, url:, added_url_count: nil, added_urls: nil, after_text_excerpt: nil, before_text_excerpt: nil, confidence: nil, diff: nil, evidence: nil, importance: nil, matched_url_count: nil, matched_urls: nil, query: nil, removed_url_count: nil, removed_urls: nil, tags: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorRetrieveChangeResponse} for more details.
       #
@@ -145,6 +154,8 @@ module ContextDev
       #
       #   @param monitor_id [String]
       #
+      #   @param run_id [String] The run that detected this change.
+      #
       #   @param summary [String]
       #
       #   @param target_type [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::TargetType]
@@ -155,7 +166,7 @@ module ContextDev
       #
       #   @param added_url_count [Integer]
       #
-      #   @param added_urls [Array<String>]
+      #   @param added_urls [Array<String>] At most 500 URLs are included; the corresponding count field is always exact.
       #
       #   @param after_text_excerpt [String]
       #
@@ -171,13 +182,13 @@ module ContextDev
       #
       #   @param matched_url_count [Integer]
       #
-      #   @param matched_urls [Array<String>]
+      #   @param matched_urls [Array<String>] At most 500 URLs are included; the corresponding count field is always exact.
       #
       #   @param query [String]
       #
       #   @param removed_url_count [Integer]
       #
-      #   @param removed_urls [Array<String>]
+      #   @param removed_urls [Array<String>] At most 500 URLs are included; the corresponding count field is always exact.
       #
       #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes.
 

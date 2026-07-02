@@ -44,6 +44,11 @@ module ContextDev
       optional :search_type, enum: -> { ContextDev::MonitorListParams::SearchType }
 
       # @!attribute status
+      #   Monitor lifecycle status. `failed` means the most recent run failed (see the
+      #   monitor's `last_error`); failed monitors keep running on schedule and flip back
+      #   to `active` on the next successful run. Monitors are auto-`paused` after
+      #   repeated consecutive failures or insufficient-credit skips; resume by PATCHing
+      #   status to `active`.
       #
       #   @return [Symbol, ContextDev::Models::MonitorListParams::Status, nil]
       optional :status, enum: -> { ContextDev::MonitorListParams::Status }
@@ -81,7 +86,7 @@ module ContextDev
       #
       #   @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
       #
-      #   @param status [Symbol, ContextDev::Models::MonitorListParams::Status]
+      #   @param status [Symbol, ContextDev::Models::MonitorListParams::Status] Monitor lifecycle status. `failed` means the most recent run failed (see the mon
       #
       #   @param tag [String] Filter to items that have this tag.
       #
@@ -125,6 +130,11 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
+      # Monitor lifecycle status. `failed` means the most recent run failed (see the
+      # monitor's `last_error`); failed monitors keep running on schedule and flip back
+      # to `active` on the next successful run. Monitors are auto-`paused` after
+      # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
+      # status to `active`.
       module Status
         extend ContextDev::Internal::Type::Enum
 

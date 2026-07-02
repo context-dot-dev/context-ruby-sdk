@@ -204,7 +204,7 @@ module ContextDev
         # Watch a single web page.
         variant :page, -> { ContextDev::MonitorUpdateParams::Target::Page }
 
-        # Watch a sitemap for URL additions and removals.
+        # Watch a sitemap for URL additions and removals. Crawled URLs are normalized (lowercased host, no trailing slash/fragment) and scoped to the monitored site and its subdomains before comparison. A new URL set must be observed on two consecutive runs before a change is reported, suppressing one-run crawl flaps.
         variant :sitemap, -> { ContextDev::MonitorUpdateParams::Target::Sitemap }
 
         # Watch a site's extracted structured data.
@@ -262,12 +262,16 @@ module ContextDev
           optional :include, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute max_urls
+          #   Maximum number of sitemap URLs to track (capped at 10,000).
           #
           #   @return [Integer, nil]
           optional :max_urls, Integer
 
           # @!method initialize(url:, exclude: nil, include: nil, max_urls: nil, type: :sitemap)
-          #   Watch a sitemap for URL additions and removals.
+          #   Watch a sitemap for URL additions and removals. Crawled URLs are normalized
+          #   (lowercased host, no trailing slash/fragment) and scoped to the monitored site
+          #   and its subdomains before comparison. A new URL set must be observed on two
+          #   consecutive runs before a change is reported, suppressing one-run crawl flaps.
           #
           #   @param url [String] Sitemap URL to monitor.
           #
@@ -275,7 +279,7 @@ module ContextDev
           #
           #   @param include [Array<String>] URL path patterns to include.
           #
-          #   @param max_urls [Integer]
+          #   @param max_urls [Integer] Maximum number of sitemap URLs to track (capped at 10,000).
           #
           #   @param type [Symbol, :sitemap]
         end

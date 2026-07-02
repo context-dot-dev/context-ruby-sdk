@@ -496,13 +496,17 @@ module ContextDev
           sig { params(include: T::Array[String]).void }
           attr_writer :include
 
+          # Maximum number of sitemap URLs to track (capped at 10,000).
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_urls
 
           sig { params(max_urls: Integer).void }
           attr_writer :max_urls
 
-          # Watch a sitemap for URL additions and removals.
+          # Watch a sitemap for URL additions and removals. Crawled URLs are normalized
+          # (lowercased host, no trailing slash/fragment) and scoped to the monitored site
+          # and its subdomains before comparison. A new URL set must be observed on two
+          # consecutive runs before a change is reported, suppressing one-run crawl flaps.
           sig do
             params(
               url: String,
@@ -519,6 +523,7 @@ module ContextDev
             exclude: nil,
             # URL path patterns to include.
             include: nil,
+            # Maximum number of sitemap URLs to track (capped at 10,000).
             max_urls: nil,
             type: :sitemap
           )

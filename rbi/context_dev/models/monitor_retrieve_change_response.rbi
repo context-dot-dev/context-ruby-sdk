@@ -36,6 +36,10 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :monitor_id
 
+      # The run that detected this change.
+      sig { returns(String) }
+      attr_accessor :run_id
+
       sig { returns(String) }
       attr_accessor :summary
 
@@ -58,6 +62,7 @@ module ContextDev
       sig { params(added_url_count: Integer).void }
       attr_writer :added_url_count
 
+      # At most 500 URLs are included; the corresponding count field is always exact.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :added_urls
 
@@ -133,6 +138,7 @@ module ContextDev
       sig { params(matched_url_count: Integer).void }
       attr_writer :matched_url_count
 
+      # At most 500 URLs are included; the corresponding count field is always exact.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :matched_urls
 
@@ -151,6 +157,7 @@ module ContextDev
       sig { params(removed_url_count: Integer).void }
       attr_writer :removed_url_count
 
+      # At most 500 URLs are included; the corresponding count field is always exact.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :removed_urls
 
@@ -178,6 +185,7 @@ module ContextDev
           mode:
             ContextDev::Models::MonitorRetrieveChangeResponse::Mode::OrSymbol,
           monitor_id: String,
+          run_id: String,
           summary: String,
           target_type:
             ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::OrSymbol,
@@ -211,11 +219,14 @@ module ContextDev
         # described by `target` and `change_detection`.
         mode:,
         monitor_id:,
+        # The run that detected this change.
+        run_id:,
         summary:,
         target_type:,
         title:,
         url:,
         added_url_count: nil,
+        # At most 500 URLs are included; the corresponding count field is always exact.
         added_urls: nil,
         after_text_excerpt: nil,
         before_text_excerpt: nil,
@@ -225,9 +236,11 @@ module ContextDev
         evidence: nil,
         importance: nil,
         matched_url_count: nil,
+        # At most 500 URLs are included; the corresponding count field is always exact.
         matched_urls: nil,
         query: nil,
         removed_url_count: nil,
+        # At most 500 URLs are included; the corresponding count field is always exact.
         removed_urls: nil,
         # User-defined tags for grouping and filtering monitors and their changes.
         tags: nil
@@ -244,6 +257,7 @@ module ContextDev
             mode:
               ContextDev::Models::MonitorRetrieveChangeResponse::Mode::TaggedSymbol,
             monitor_id: String,
+            run_id: String,
             summary: String,
             target_type:
               ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::TaggedSymbol,
