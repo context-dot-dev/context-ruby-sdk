@@ -49,6 +49,12 @@ module ContextDev
         required :change_detection_type,
                  enum: -> { ContextDev::Models::MonitorListRunsResponse::Data::ChangeDetectionType }
 
+        # @!attribute credits_charged
+        #   Credits charged for this run (0 for skipped/failed runs).
+        #
+        #   @return [Integer]
+        required :credits_charged, Integer
+
         # @!attribute monitor_id
         #
         #   @return [String]
@@ -61,6 +67,8 @@ module ContextDev
         required :run_type, enum: -> { ContextDev::Models::MonitorListRunsResponse::Data::RunType }
 
         # @!attribute status
+        #   Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+        #   (insufficient credits, monitor paused, or superseded by a concurrent run).
         #
         #   @return [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::Status]
         required :status, enum: -> { ContextDev::Models::MonitorListRunsResponse::Data::Status }
@@ -85,12 +93,20 @@ module ContextDev
         #   @return [ContextDev::Models::MonitorListRunsResponse::Data::Error, nil]
         optional :error, -> { ContextDev::Models::MonitorListRunsResponse::Data::Error }, nil?: true
 
+        # @!attribute skip_reason
+        #   Why a skipped run never executed; null unless status is `skipped`.
+        #
+        #   @return [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::SkipReason, nil]
+        optional :skip_reason,
+                 enum: -> { ContextDev::Models::MonitorListRunsResponse::Data::SkipReason },
+                 nil?: true
+
         # @!attribute started_at
         #
         #   @return [Time, nil]
         optional :started_at, Time, nil?: true
 
-        # @!method initialize(id:, baseline_created:, change_detected:, change_detection_type:, monitor_id:, run_type:, status:, target_type:, change_id: nil, completed_at: nil, error: nil, started_at: nil)
+        # @!method initialize(id:, baseline_created:, change_detected:, change_detection_type:, credits_charged:, monitor_id:, run_type:, status:, target_type:, change_id: nil, completed_at: nil, error: nil, skip_reason: nil, started_at: nil)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::MonitorListRunsResponse::Data} for more details.
         #
@@ -102,11 +118,13 @@ module ContextDev
         #
         #   @param change_detection_type [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::ChangeDetectionType]
         #
+        #   @param credits_charged [Integer] Credits charged for this run (0 for skipped/failed runs).
+        #
         #   @param monitor_id [String]
         #
         #   @param run_type [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::RunType] The first run after monitor creation is a baseline run.
         #
-        #   @param status [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::Status]
+        #   @param status [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::Status] Lifecycle status of a run. `skipped` runs never executed — see `skip_reason` (in
         #
         #   @param target_type [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::TargetType]
         #
@@ -115,6 +133,8 @@ module ContextDev
         #   @param completed_at [Time, nil]
         #
         #   @param error [ContextDev::Models::MonitorListRunsResponse::Data::Error, nil]
+        #
+        #   @param skip_reason [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::SkipReason, nil] Why a skipped run never executed; null unless status is `skipped`.
         #
         #   @param started_at [Time, nil]
 
@@ -142,6 +162,9 @@ module ContextDev
           #   @return [Array<Symbol>]
         end
 
+        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+        # (insufficient credits, monitor paused, or superseded by a concurrent run).
+        #
         # @see ContextDev::Models::MonitorListRunsResponse::Data#status
         module Status
           extend ContextDev::Internal::Type::Enum
@@ -150,6 +173,7 @@ module ContextDev
           RUNNING = :running
           COMPLETED = :completed
           FAILED = :failed
+          SKIPPED = :skipped
 
           # @!method self.values
           #   @return [Array<Symbol>]
@@ -182,6 +206,20 @@ module ContextDev
           # @!method initialize(code:, message:)
           #   @param code [String]
           #   @param message [String]
+        end
+
+        # Why a skipped run never executed; null unless status is `skipped`.
+        #
+        # @see ContextDev::Models::MonitorListRunsResponse::Data#skip_reason
+        module SkipReason
+          extend ContextDev::Internal::Type::Enum
+
+          INSUFFICIENT_CREDITS = :insufficient_credits
+          MONITOR_PAUSED = :monitor_paused
+          SUPERSEDED = :superseded
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
         end
       end
     end

@@ -7,6 +7,7 @@ module ContextDev
         detected_at: Time,
         mode: ContextDev::Models::MonitorRetrieveChangeResponse::mode,
         monitor_id: String,
+        run_id: String,
         summary: String,
         target_type: ContextDev::Models::MonitorRetrieveChangeResponse::target_type,
         title: String,
@@ -37,6 +38,8 @@ module ContextDev
       attr_accessor mode: ContextDev::Models::MonitorRetrieveChangeResponse::mode
 
       attr_accessor monitor_id: String
+
+      attr_accessor run_id: String
 
       attr_accessor summary: String
 
@@ -112,6 +115,7 @@ module ContextDev
         detected_at: Time,
         mode: ContextDev::Models::MonitorRetrieveChangeResponse::mode,
         monitor_id: String,
+        run_id: String,
         summary: String,
         target_type: ContextDev::Models::MonitorRetrieveChangeResponse::target_type,
         title: String,
@@ -138,6 +142,7 @@ module ContextDev
         detected_at: Time,
         mode: ContextDev::Models::MonitorRetrieveChangeResponse::mode,
         monitor_id: String,
+        run_id: String,
         summary: String,
         target_type: ContextDev::Models::MonitorRetrieveChangeResponse::target_type,
         title: String,

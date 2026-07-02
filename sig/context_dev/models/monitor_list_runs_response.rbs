@@ -32,6 +32,7 @@ module ContextDev
           baseline_created: bool,
           change_detected: bool,
           change_detection_type: ContextDev::Models::MonitorListRunsResponse::Data::change_detection_type,
+          credits_charged: Integer,
           monitor_id: String,
           run_type: ContextDev::Models::MonitorListRunsResponse::Data::run_type,
           status: ContextDev::Models::MonitorListRunsResponse::Data::status,
@@ -39,6 +40,7 @@ module ContextDev
           change_id: String?,
           completed_at: Time?,
           error: ContextDev::Models::MonitorListRunsResponse::Data::Error?,
+          skip_reason: ContextDev::Models::MonitorListRunsResponse::Data::skip_reason?,
           started_at: Time?
         }
 
@@ -50,6 +52,8 @@ module ContextDev
         attr_accessor change_detected: bool
 
         attr_accessor change_detection_type: ContextDev::Models::MonitorListRunsResponse::Data::change_detection_type
+
+        attr_accessor credits_charged: Integer
 
         attr_accessor monitor_id: String
 
@@ -65,6 +69,8 @@ module ContextDev
 
         attr_accessor error: ContextDev::Models::MonitorListRunsResponse::Data::Error?
 
+        attr_accessor skip_reason: ContextDev::Models::MonitorListRunsResponse::Data::skip_reason?
+
         attr_accessor started_at: Time?
 
         def initialize: (
@@ -72,6 +78,7 @@ module ContextDev
           baseline_created: bool,
           change_detected: bool,
           change_detection_type: ContextDev::Models::MonitorListRunsResponse::Data::change_detection_type,
+          credits_charged: Integer,
           monitor_id: String,
           run_type: ContextDev::Models::MonitorListRunsResponse::Data::run_type,
           status: ContextDev::Models::MonitorListRunsResponse::Data::status,
@@ -79,6 +86,7 @@ module ContextDev
           ?change_id: String?,
           ?completed_at: Time?,
           ?error: ContextDev::Models::MonitorListRunsResponse::Data::Error?,
+          ?skip_reason: ContextDev::Models::MonitorListRunsResponse::Data::skip_reason?,
           ?started_at: Time?
         ) -> void
 
@@ -87,6 +95,7 @@ module ContextDev
           baseline_created: bool,
           change_detected: bool,
           change_detection_type: ContextDev::Models::MonitorListRunsResponse::Data::change_detection_type,
+          credits_charged: Integer,
           monitor_id: String,
           run_type: ContextDev::Models::MonitorListRunsResponse::Data::run_type,
           status: ContextDev::Models::MonitorListRunsResponse::Data::status,
@@ -94,6 +103,7 @@ module ContextDev
           change_id: String?,
           completed_at: Time?,
           error: ContextDev::Models::MonitorListRunsResponse::Data::Error?,
+          skip_reason: ContextDev::Models::MonitorListRunsResponse::Data::skip_reason?,
           started_at: Time?
         }
 
@@ -119,7 +129,7 @@ module ContextDev
           def self?.values: -> ::Array[ContextDev::Models::MonitorListRunsResponse::Data::run_type]
         end
 
-        type status = :queued | :running | :completed | :failed
+        type status = :queued | :running | :completed | :failed | :skipped
 
         module Status
           extend ContextDev::Internal::Type::Enum
@@ -128,6 +138,7 @@ module ContextDev
           RUNNING: :running
           COMPLETED: :completed
           FAILED: :failed
+          SKIPPED: :skipped
 
           def self?.values: -> ::Array[ContextDev::Models::MonitorListRunsResponse::Data::status]
         end
@@ -154,6 +165,18 @@ module ContextDev
           def initialize: (code: String, message: String) -> void
 
           def to_hash: -> { code: String, message: String }
+        end
+
+        type skip_reason = :insufficient_credits | :monitor_paused | :superseded
+
+        module SkipReason
+          extend ContextDev::Internal::Type::Enum
+
+          INSUFFICIENT_CREDITS: :insufficient_credits
+          MONITOR_PAUSED: :monitor_paused
+          SUPERSEDED: :superseded
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListRunsResponse::Data::skip_reason]
         end
       end
     end

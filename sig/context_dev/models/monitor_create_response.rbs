@@ -12,7 +12,9 @@ module ContextDev
         target: ContextDev::Models::MonitorCreateResponse::target,
         updated_at: Time,
         last_change_at: Time?,
+        last_error: ContextDev::Models::MonitorCreateResponse::LastError?,
         last_run_at: Time?,
+        next_run_at: Time?,
         tags: ::Array[String],
         webhook: ContextDev::Models::MonitorCreateResponse::Webhook?
       }
@@ -38,7 +40,11 @@ module ContextDev
 
       attr_accessor last_change_at: Time?
 
+      attr_accessor last_error: ContextDev::Models::MonitorCreateResponse::LastError?
+
       attr_accessor last_run_at: Time?
+
+      attr_accessor next_run_at: Time?
 
       attr_reader tags: ::Array[String]?
 
@@ -57,7 +63,9 @@ module ContextDev
         target: ContextDev::Models::MonitorCreateResponse::target,
         updated_at: Time,
         ?last_change_at: Time?,
+        ?last_error: ContextDev::Models::MonitorCreateResponse::LastError?,
         ?last_run_at: Time?,
+        ?next_run_at: Time?,
         ?tags: ::Array[String],
         ?webhook: ContextDev::Models::MonitorCreateResponse::Webhook?
       ) -> void
@@ -73,7 +81,9 @@ module ContextDev
         target: ContextDev::Models::MonitorCreateResponse::target,
         updated_at: Time,
         last_change_at: Time?,
+        last_error: ContextDev::Models::MonitorCreateResponse::LastError?,
         last_run_at: Time?,
+        next_run_at: Time?,
         tags: ::Array[String],
         webhook: ContextDev::Models::MonitorCreateResponse::Webhook?
       }
@@ -327,6 +337,18 @@ module ContextDev
         end
 
         def self?.variants: -> ::Array[ContextDev::Models::MonitorCreateResponse::target]
+      end
+
+      type last_error = { code: String, message: String }
+
+      class LastError < ContextDev::Internal::Type::BaseModel
+        attr_accessor code: String
+
+        attr_accessor message: String
+
+        def initialize: (code: String, message: String) -> void
+
+        def to_hash: -> { code: String, message: String }
       end
 
       type webhook = { url: String, secret: String }

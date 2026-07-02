@@ -40,7 +40,7 @@ module ContextDev
         request_options: ContextDev::RequestOptions
       }
 
-      type status = :queued | :running | :completed | :failed
+      type status = :queued | :running | :completed | :failed | :skipped
 
       module Status
         extend ContextDev::Internal::Type::Enum
@@ -49,6 +49,7 @@ module ContextDev
         RUNNING: :running
         COMPLETED: :completed
         FAILED: :failed
+        SKIPPED: :skipped
 
         def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountRunsParams::status]
       end

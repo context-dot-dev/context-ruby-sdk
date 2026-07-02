@@ -18,16 +18,26 @@ module ContextDev
       optional :limit, Integer
 
       # @!attribute status
+      #   Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+      #   (insufficient credits, monitor paused, or superseded by a concurrent run).
       #
       #   @return [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status, nil]
       optional :status, enum: -> { ContextDev::MonitorListAccountRunsParams::Status }
 
       # @!method initialize(cursor: nil, limit: nil, status: nil, request_options: {})
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::MonitorListAccountRunsParams} for more details.
+      #
       #   @param cursor [String]
+      #
       #   @param limit [Integer]
-      #   @param status [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status]
+      #
+      #   @param status [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status] Lifecycle status of a run. `skipped` runs never executed — see `skip_reason` (in
+      #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
+      # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+      # (insufficient credits, monitor paused, or superseded by a concurrent run).
       module Status
         extend ContextDev::Internal::Type::Enum
 
@@ -35,6 +45,7 @@ module ContextDev
         RUNNING = :running
         COMPLETED = :completed
         FAILED = :failed
+        SKIPPED = :skipped
 
         # @!method self.values
         #   @return [Array<Symbol>]

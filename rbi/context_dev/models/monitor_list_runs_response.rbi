@@ -72,6 +72,10 @@ module ContextDev
         end
         attr_accessor :change_detection_type
 
+        # Credits charged for this run (0 for skipped/failed runs).
+        sig { returns(Integer) }
+        attr_accessor :credits_charged
+
         sig { returns(String) }
         attr_accessor :monitor_id
 
@@ -83,6 +87,8 @@ module ContextDev
         end
         attr_accessor :run_type
 
+        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+        # (insufficient credits, monitor paused, or superseded by a concurrent run).
         sig do
           returns(
             ContextDev::Models::MonitorListRunsResponse::Data::Status::TaggedSymbol
@@ -120,6 +126,16 @@ module ContextDev
         end
         attr_writer :error
 
+        # Why a skipped run never executed; null unless status is `skipped`.
+        sig do
+          returns(
+            T.nilable(
+              ContextDev::Models::MonitorListRunsResponse::Data::SkipReason::TaggedSymbol
+            )
+          )
+        end
+        attr_accessor :skip_reason
+
         sig { returns(T.nilable(Time)) }
         attr_accessor :started_at
 
@@ -130,6 +146,7 @@ module ContextDev
             change_detected: T::Boolean,
             change_detection_type:
               ContextDev::Models::MonitorListRunsResponse::Data::ChangeDetectionType::OrSymbol,
+            credits_charged: Integer,
             monitor_id: String,
             run_type:
               ContextDev::Models::MonitorListRunsResponse::Data::RunType::OrSymbol,
@@ -143,6 +160,10 @@ module ContextDev
               T.nilable(
                 ContextDev::Models::MonitorListRunsResponse::Data::Error::OrHash
               ),
+            skip_reason:
+              T.nilable(
+                ContextDev::Models::MonitorListRunsResponse::Data::SkipReason::OrSymbol
+              ),
             started_at: T.nilable(Time)
           ).returns(T.attached_class)
         end
@@ -153,14 +174,20 @@ module ContextDev
           baseline_created:,
           change_detected:,
           change_detection_type:,
+          # Credits charged for this run (0 for skipped/failed runs).
+          credits_charged:,
           monitor_id:,
           # The first run after monitor creation is a baseline run.
           run_type:,
+          # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+          # (insufficient credits, monitor paused, or superseded by a concurrent run).
           status:,
           target_type:,
           change_id: nil,
           completed_at: nil,
           error: nil,
+          # Why a skipped run never executed; null unless status is `skipped`.
+          skip_reason: nil,
           started_at: nil
         )
         end
@@ -173,6 +200,7 @@ module ContextDev
               change_detected: T::Boolean,
               change_detection_type:
                 ContextDev::Models::MonitorListRunsResponse::Data::ChangeDetectionType::TaggedSymbol,
+              credits_charged: Integer,
               monitor_id: String,
               run_type:
                 ContextDev::Models::MonitorListRunsResponse::Data::RunType::TaggedSymbol,
@@ -185,6 +213,10 @@ module ContextDev
               error:
                 T.nilable(
                   ContextDev::Models::MonitorListRunsResponse::Data::Error
+                ),
+              skip_reason:
+                T.nilable(
+                  ContextDev::Models::MonitorListRunsResponse::Data::SkipReason::TaggedSymbol
                 ),
               started_at: T.nilable(Time)
             }
@@ -262,6 +294,8 @@ module ContextDev
           end
         end
 
+        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
+        # (insufficient credits, monitor paused, or superseded by a concurrent run).
         module Status
           extend ContextDev::Internal::Type::Enum
 
@@ -292,6 +326,11 @@ module ContextDev
           FAILED =
             T.let(
               :failed,
+              ContextDev::Models::MonitorListRunsResponse::Data::Status::TaggedSymbol
+            )
+          SKIPPED =
+            T.let(
+              :skipped,
               ContextDev::Models::MonitorListRunsResponse::Data::Status::TaggedSymbol
             )
 
@@ -368,6 +407,46 @@ module ContextDev
 
           sig { override.returns({ code: String, message: String }) }
           def to_hash
+          end
+        end
+
+        # Why a skipped run never executed; null unless status is `skipped`.
+        module SkipReason
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::Models::MonitorListRunsResponse::Data::SkipReason
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          INSUFFICIENT_CREDITS =
+            T.let(
+              :insufficient_credits,
+              ContextDev::Models::MonitorListRunsResponse::Data::SkipReason::TaggedSymbol
+            )
+          MONITOR_PAUSED =
+            T.let(
+              :monitor_paused,
+              ContextDev::Models::MonitorListRunsResponse::Data::SkipReason::TaggedSymbol
+            )
+          SUPERSEDED =
+            T.let(
+              :superseded,
+              ContextDev::Models::MonitorListRunsResponse::Data::SkipReason::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::MonitorListRunsResponse::Data::SkipReason::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
           end
         end
       end

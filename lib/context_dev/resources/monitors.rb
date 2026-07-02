@@ -126,7 +126,7 @@ module ContextDev
       #
       # @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
       #
-      # @param status [Symbol, ContextDev::Models::MonitorListParams::Status]
+      # @param status [Symbol, ContextDev::Models::MonitorListParams::Status] Monitor lifecycle status. `failed` means the most recent run failed (see the mon
       #
       # @param tag [String] Filter to items that have this tag.
       #
@@ -207,13 +207,19 @@ module ContextDev
         )
       end
 
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::MonitorListAccountRunsParams} for more details.
+      #
       # Returns an account-wide feed of monitor runs across all monitors.
       #
       # @overload list_account_runs(cursor: nil, limit: nil, status: nil, request_options: {})
       #
       # @param cursor [String]
+      #
       # @param limit [Integer]
-      # @param status [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status]
+      #
+      # @param status [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status] Lifecycle status of a run. `skipped` runs never executed — see `skip_reason` (in
+      #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
       # @return [ContextDev::Models::MonitorListAccountRunsResponse]
@@ -264,14 +270,21 @@ module ContextDev
         )
       end
 
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::MonitorListRunsParams} for more details.
+      #
       # List monitor runs
       #
       # @overload list_runs(monitor_id, cursor: nil, limit: nil, status: nil, request_options: {})
       #
       # @param monitor_id [String]
+      #
       # @param cursor [String]
+      #
       # @param limit [Integer]
-      # @param status [Symbol, ContextDev::Models::MonitorListRunsParams::Status]
+      #
+      # @param status [Symbol, ContextDev::Models::MonitorListRunsParams::Status] Lifecycle status of a run. `skipped` runs never executed — see `skip_reason` (in
+      #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
       # @return [ContextDev::Models::MonitorListRunsResponse]

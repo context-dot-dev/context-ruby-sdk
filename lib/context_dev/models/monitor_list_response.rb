@@ -62,6 +62,11 @@ module ContextDev
         required :schedule, -> { ContextDev::Models::MonitorListResponse::Data::Schedule }
 
         # @!attribute status
+        #   Monitor lifecycle status. `failed` means the most recent run failed (see the
+        #   monitor's `last_error`); failed monitors keep running on schedule and flip back
+        #   to `active` on the next successful run. Monitors are auto-`paused` after
+        #   repeated consecutive failures or insufficient-credit skips; resume by PATCHing
+        #   status to `active`.
         #
         #   @return [Symbol, ContextDev::Models::MonitorListResponse::Data::Status]
         required :status, enum: -> { ContextDev::Models::MonitorListResponse::Data::Status }
@@ -82,10 +87,22 @@ module ContextDev
         #   @return [Time, nil]
         optional :last_change_at, Time, nil?: true
 
+        # @!attribute last_error
+        #   Error from the most recent failed run; null when the last run succeeded.
+        #
+        #   @return [ContextDev::Models::MonitorListResponse::Data::LastError, nil]
+        optional :last_error, -> { ContextDev::Models::MonitorListResponse::Data::LastError }, nil?: true
+
         # @!attribute last_run_at
         #
         #   @return [Time, nil]
         optional :last_run_at, Time, nil?: true
+
+        # @!attribute next_run_at
+        #   When the next scheduled run is due.
+        #
+        #   @return [Time, nil]
+        optional :next_run_at, Time, nil?: true
 
         # @!attribute tags
         #   User-defined tags for grouping and filtering monitors and their changes.
@@ -98,7 +115,7 @@ module ContextDev
         #   @return [ContextDev::Models::MonitorListResponse::Data::Webhook, nil]
         optional :webhook, -> { ContextDev::Models::MonitorListResponse::Data::Webhook }, nil?: true
 
-        # @!method initialize(id:, change_detection:, created_at:, mode:, name:, schedule:, status:, target:, updated_at:, last_change_at: nil, last_run_at: nil, tags: nil, webhook: nil)
+        # @!method initialize(id:, change_detection:, created_at:, mode:, name:, schedule:, status:, target:, updated_at:, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, tags: nil, webhook: nil)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::MonitorListResponse::Data} for more details.
         #
@@ -117,7 +134,7 @@ module ContextDev
         #
         #   @param schedule [ContextDev::Models::MonitorListResponse::Data::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
         #
-        #   @param status [Symbol, ContextDev::Models::MonitorListResponse::Data::Status]
+        #   @param status [Symbol, ContextDev::Models::MonitorListResponse::Data::Status] Monitor lifecycle status. `failed` means the most recent run failed (see the mon
         #
         #   @param target [ContextDev::Models::MonitorListResponse::Data::Target::Page, ContextDev::Models::MonitorListResponse::Data::Target::Sitemap, ContextDev::Models::MonitorListResponse::Data::Target::Extract] Discriminated union describing what the monitor watches.
         #
@@ -125,7 +142,11 @@ module ContextDev
         #
         #   @param last_change_at [Time, nil]
         #
+        #   @param last_error [ContextDev::Models::MonitorListResponse::Data::LastError, nil] Error from the most recent failed run; null when the last run succeeded.
+        #
         #   @param last_run_at [Time, nil]
+        #
+        #   @param next_run_at [Time, nil] When the next scheduled run is due.
         #
         #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes.
         #
@@ -256,6 +277,12 @@ module ContextDev
           end
         end
 
+        # Monitor lifecycle status. `failed` means the most recent run failed (see the
+        # monitor's `last_error`); failed monitors keep running on schedule and flip back
+        # to `active` on the next successful run. Monitors are auto-`paused` after
+        # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
+        # status to `active`.
+        #
         # @see ContextDev::Models::MonitorListResponse::Data#status
         module Status
           extend ContextDev::Internal::Type::Enum
@@ -279,7 +306,7 @@ module ContextDev
           # Watch a single web page.
           variant :page, -> { ContextDev::Models::MonitorListResponse::Data::Target::Page }
 
-          # Watch a sitemap for URL additions and removals.
+          # Watch a sitemap for URL additions and removals. Crawled URLs are normalized (lowercased host, no trailing slash/fragment) and scoped to the monitored site and its subdomains before comparison. A new URL set must be observed on two consecutive runs before a change is reported, suppressing one-run crawl flaps.
           variant :sitemap, -> { ContextDev::Models::MonitorListResponse::Data::Target::Sitemap }
 
           # Watch a site's extracted structured data.
@@ -337,12 +364,16 @@ module ContextDev
             optional :include, ContextDev::Internal::Type::ArrayOf[String]
 
             # @!attribute max_urls
+            #   Maximum number of sitemap URLs to track (capped at 10,000).
             #
             #   @return [Integer, nil]
             optional :max_urls, Integer
 
             # @!method initialize(url:, exclude: nil, include: nil, max_urls: nil, type: :sitemap)
-            #   Watch a sitemap for URL additions and removals.
+            #   Watch a sitemap for URL additions and removals. Crawled URLs are normalized
+            #   (lowercased host, no trailing slash/fragment) and scoped to the monitored site
+            #   and its subdomains before comparison. A new URL set must be observed on two
+            #   consecutive runs before a change is reported, suppressing one-run crawl flaps.
             #
             #   @param url [String] Sitemap URL to monitor.
             #
@@ -350,7 +381,7 @@ module ContextDev
             #
             #   @param include [Array<String>] URL path patterns to include.
             #
-            #   @param max_urls [Integer]
+            #   @param max_urls [Integer] Maximum number of sitemap URLs to track (capped at 10,000).
             #
             #   @param type [Symbol, :sitemap]
           end
@@ -421,6 +452,25 @@ module ContextDev
 
           # @!method self.variants
           #   @return [Array(ContextDev::Models::MonitorListResponse::Data::Target::Page, ContextDev::Models::MonitorListResponse::Data::Target::Sitemap, ContextDev::Models::MonitorListResponse::Data::Target::Extract)]
+        end
+
+        # @see ContextDev::Models::MonitorListResponse::Data#last_error
+        class LastError < ContextDev::Internal::Type::BaseModel
+          # @!attribute code
+          #
+          #   @return [String]
+          required :code, String
+
+          # @!attribute message
+          #
+          #   @return [String]
+          required :message, String
+
+          # @!method initialize(code:, message:)
+          #   Error from the most recent failed run; null when the last run succeeded.
+          #
+          #   @param code [String]
+          #   @param message [String]
         end
 
         # @see ContextDev::Models::MonitorListResponse::Data#webhook

@@ -91,6 +91,11 @@ module ContextDev
         end
         attr_writer :schedule
 
+        # Monitor lifecycle status. `failed` means the most recent run failed (see the
+        # monitor's `last_error`); failed monitors keep running on schedule and flip back
+        # to `active` on the next successful run. Monitors are auto-`paused` after
+        # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
+        # status to `active`.
         sig do
           returns(
             ContextDev::Models::MonitorListResponse::Data::Status::TaggedSymbol
@@ -112,8 +117,30 @@ module ContextDev
         sig { returns(T.nilable(Time)) }
         attr_accessor :last_change_at
 
+        # Error from the most recent failed run; null when the last run succeeded.
+        sig do
+          returns(
+            T.nilable(ContextDev::Models::MonitorListResponse::Data::LastError)
+          )
+        end
+        attr_reader :last_error
+
+        sig do
+          params(
+            last_error:
+              T.nilable(
+                ContextDev::Models::MonitorListResponse::Data::LastError::OrHash
+              )
+          ).void
+        end
+        attr_writer :last_error
+
         sig { returns(T.nilable(Time)) }
         attr_accessor :last_run_at
+
+        # When the next scheduled run is due.
+        sig { returns(T.nilable(Time)) }
+        attr_accessor :next_run_at
 
         # User-defined tags for grouping and filtering monitors and their changes.
         sig { returns(T.nilable(T::Array[String])) }
@@ -164,7 +191,12 @@ module ContextDev
               ),
             updated_at: Time,
             last_change_at: T.nilable(Time),
+            last_error:
+              T.nilable(
+                ContextDev::Models::MonitorListResponse::Data::LastError::OrHash
+              ),
             last_run_at: T.nilable(Time),
+            next_run_at: T.nilable(Time),
             tags: T::Array[String],
             webhook:
               T.nilable(
@@ -185,12 +217,21 @@ module ContextDev
           # every 6 hours or every 2 days. The total interval (frequency × unit) must be
           # between 10 minutes and 1 year.
           schedule:,
+          # Monitor lifecycle status. `failed` means the most recent run failed (see the
+          # monitor's `last_error`); failed monitors keep running on schedule and flip back
+          # to `active` on the next successful run. Monitors are auto-`paused` after
+          # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
+          # status to `active`.
           status:,
           # Discriminated union describing what the monitor watches.
           target:,
           updated_at:,
           last_change_at: nil,
+          # Error from the most recent failed run; null when the last run succeeded.
+          last_error: nil,
           last_run_at: nil,
+          # When the next scheduled run is due.
+          next_run_at: nil,
           # User-defined tags for grouping and filtering monitors and their changes.
           tags: nil,
           webhook: nil
@@ -214,7 +255,12 @@ module ContextDev
                 ContextDev::Models::MonitorListResponse::Data::Target::Variants,
               updated_at: Time,
               last_change_at: T.nilable(Time),
+              last_error:
+                T.nilable(
+                  ContextDev::Models::MonitorListResponse::Data::LastError
+                ),
               last_run_at: T.nilable(Time),
+              next_run_at: T.nilable(Time),
               tags: T::Array[String],
               webhook:
                 T.nilable(
@@ -475,6 +521,11 @@ module ContextDev
           end
         end
 
+        # Monitor lifecycle status. `failed` means the most recent run failed (see the
+        # monitor's `last_error`); failed monitors keep running on schedule and flip back
+        # to `active` on the next successful run. Monitors are auto-`paused` after
+        # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
+        # status to `active`.
         module Status
           extend ContextDev::Internal::Type::Enum
 
@@ -604,13 +655,17 @@ module ContextDev
             sig { params(include: T::Array[String]).void }
             attr_writer :include
 
+            # Maximum number of sitemap URLs to track (capped at 10,000).
             sig { returns(T.nilable(Integer)) }
             attr_reader :max_urls
 
             sig { params(max_urls: Integer).void }
             attr_writer :max_urls
 
-            # Watch a sitemap for URL additions and removals.
+            # Watch a sitemap for URL additions and removals. Crawled URLs are normalized
+            # (lowercased host, no trailing slash/fragment) and scoped to the monitored site
+            # and its subdomains before comparison. A new URL set must be observed on two
+            # consecutive runs before a change is reported, suppressing one-run crawl flaps.
             sig do
               params(
                 url: String,
@@ -627,6 +682,7 @@ module ContextDev
               exclude: nil,
               # URL path patterns to include.
               include: nil,
+              # Maximum number of sitemap URLs to track (capped at 10,000).
               max_urls: nil,
               type: :sitemap
             )
@@ -752,6 +808,33 @@ module ContextDev
             )
           end
           def self.variants
+          end
+        end
+
+        class LastError < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::MonitorListResponse::Data::LastError,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(String) }
+          attr_accessor :code
+
+          sig { returns(String) }
+          attr_accessor :message
+
+          # Error from the most recent failed run; null when the last run succeeded.
+          sig do
+            params(code: String, message: String).returns(T.attached_class)
+          end
+          def self.new(code:, message:)
+          end
+
+          sig { override.returns({ code: String, message: String }) }
+          def to_hash
           end
         end
 
