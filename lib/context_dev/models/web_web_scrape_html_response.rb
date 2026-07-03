@@ -26,7 +26,8 @@ module ContextDev
 
       # @!attribute type
       #   Detected content type of the returned `html` field. Sitemaps and feeds are
-      #   surfaced as `xml`; ordinary pages are `html`.
+      #   surfaced as `xml`; ordinary pages are `html`. Excel workbooks are surfaced as
+      #   `xlsx`/`xls` with the extracted sheets as HTML tables.
       #
       #   @return [Symbol, ContextDev::Models::WebWebScrapeHTMLResponse::Type]
       required :type, enum: -> { ContextDev::Models::WebWebScrapeHTMLResponse::Type }
@@ -320,7 +321,8 @@ module ContextDev
       end
 
       # Detected content type of the returned `html` field. Sitemaps and feeds are
-      # surfaced as `xml`; ordinary pages are `html`.
+      # surfaced as `xml`; ordinary pages are `html`. Excel workbooks are surfaced as
+      # `xlsx`/`xls` with the extracted sheets as HTML tables.
       #
       # @see ContextDev::Models::WebWebScrapeHTMLResponse#type
       module Type
@@ -336,6 +338,8 @@ module ContextDev
         PDF = :pdf
         DOCX = :docx
         DOC = :doc
+        XLSX = :xlsx
+        XLS = :xls
 
         # @!method self.values
         #   @return [Array<Symbol>]
