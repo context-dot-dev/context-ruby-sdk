@@ -112,6 +112,7 @@ module ContextDev
 
       def web_scrape_images: (
         url: String,
+        ?dedupe: bool,
         ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
         ?headers: ::Hash[Symbol, String],
         ?max_age_ms: Integer,
