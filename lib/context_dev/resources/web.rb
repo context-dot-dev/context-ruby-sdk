@@ -386,9 +386,11 @@ module ContextDev
       # embeds. The base request costs 1 credit. When enrichment is enabled, the entire
       # call costs 5 credits.
       #
-      # @overload web_scrape_images(url:, enrichment: nil, headers: nil, max_age_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_images(url:, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] Page URL to inspect. Must include http:// or https://.
+      #
+      # @param dedupe [Boolean] When true, visually duplicate images are removed: every image is loaded and perc
       #
       # @param enrichment [ContextDev::Models::WebWebScrapeImagesParams::Enrichment] Optional per-image processing, sent as deep-object query params such as enrichme
       #
