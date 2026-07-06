@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module ContextDev
-  VERSION = "1.36.0"
+  VERSION = "2.0.0"
 end
