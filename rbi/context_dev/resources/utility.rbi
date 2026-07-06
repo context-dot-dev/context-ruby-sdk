@@ -9,7 +9,11 @@ module ContextDev
       # (free email providers and disposable email addresses are not allowed).
       sig do
         params(
-          identifier: ContextDev::UtilityPrefetchParams::Identifier::OrHash,
+          identifier:
+            T.any(
+              ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier::OrHash,
+              ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier::OrHash
+            ),
           type: ContextDev::UtilityPrefetchParams::Type::OrSymbol,
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash

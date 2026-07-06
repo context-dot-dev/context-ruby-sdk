@@ -13,7 +13,7 @@ module ContextDev
       #
       # @overload prefetch(identifier:, type:, timeout_ms: nil, request_options: {})
       #
-      # @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier] Identifier of the brand to prefetch. Provide exactly one of domain or email.
+      # @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier] Identifier of the brand to prefetch. Provide exactly one of domain or email.
       #
       # @param type [Symbol, ContextDev::Models::UtilityPrefetchParams::Type] What to prefetch. Currently only 'brand' is supported.
       #

@@ -2,7 +2,7 @@ module ContextDev
   module Resources
     class Utility
       def prefetch: (
-        identifier: ContextDev::UtilityPrefetchParams::Identifier,
+        identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
         type: ContextDev::Models::UtilityPrefetchParams::type_,
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts

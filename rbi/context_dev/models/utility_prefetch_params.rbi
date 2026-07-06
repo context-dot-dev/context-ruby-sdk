@@ -15,15 +15,15 @@ module ContextDev
         end
 
       # Identifier of the brand to prefetch. Provide exactly one of domain or email.
-      sig { returns(ContextDev::UtilityPrefetchParams::Identifier) }
-      attr_reader :identifier
-
       sig do
-        params(
-          identifier: ContextDev::UtilityPrefetchParams::Identifier::OrHash
-        ).void
+        returns(
+          T.any(
+            ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier,
+            ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier
+          )
+        )
       end
-      attr_writer :identifier
+      attr_accessor :identifier
 
       # What to prefetch. Currently only 'brand' is supported.
       sig { returns(ContextDev::UtilityPrefetchParams::Type::OrSymbol) }
@@ -40,7 +40,11 @@ module ContextDev
 
       sig do
         params(
-          identifier: ContextDev::UtilityPrefetchParams::Identifier::OrHash,
+          identifier:
+            T.any(
+              ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier::OrHash,
+              ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier::OrHash
+            ),
           type: ContextDev::UtilityPrefetchParams::Type::OrSymbol,
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
@@ -62,7 +66,11 @@ module ContextDev
       sig do
         override.returns(
           {
-            identifier: ContextDev::UtilityPrefetchParams::Identifier,
+            identifier:
+              T.any(
+                ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier,
+                ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier
+              ),
             type: ContextDev::UtilityPrefetchParams::Type::OrSymbol,
             timeout_ms: Integer,
             request_options: ContextDev::RequestOptions
@@ -72,45 +80,80 @@ module ContextDev
       def to_hash
       end
 
-      class Identifier < ContextDev::Internal::Type::BaseModel
-        OrHash =
+      # Identifier of the brand to prefetch. Provide exactly one of domain or email.
+      module Identifier
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
           T.type_alias do
             T.any(
-              ContextDev::UtilityPrefetchParams::Identifier,
-              ContextDev::Internal::AnyHash
+              ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier,
+              ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier
             )
           end
 
-        # Domain name to prefetch brand data for
-        sig { returns(T.nilable(String)) }
-        attr_reader :domain
+        class UtilityPrefetchDomainIdentifier < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier,
+                ContextDev::Internal::AnyHash
+              )
+            end
 
-        sig { params(domain: String).void }
-        attr_writer :domain
-
-        # Email address to prefetch brand data for. The domain will be extracted from the
-        # email. Free email providers (gmail.com, yahoo.com, etc.) and disposable email
-        # addresses are not allowed.
-        sig { returns(T.nilable(String)) }
-        attr_reader :email
-
-        sig { params(email: String).void }
-        attr_writer :email
-
-        # Identifier of the brand to prefetch. Provide exactly one of domain or email.
-        sig { params(domain: String, email: String).returns(T.attached_class) }
-        def self.new(
           # Domain name to prefetch brand data for
-          domain: nil,
+          sig { returns(String) }
+          attr_accessor :domain
+
+          # Prefetch brand data by domain.
+          sig { params(domain: String).returns(T.attached_class) }
+          def self.new(
+            # Domain name to prefetch brand data for
+            domain:
+          )
+          end
+
+          sig { override.returns({ domain: String }) }
+          def to_hash
+          end
+        end
+
+        class UtilityPrefetchEmailIdentifier < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
           # Email address to prefetch brand data for. The domain will be extracted from the
           # email. Free email providers (gmail.com, yahoo.com, etc.) and disposable email
           # addresses are not allowed.
-          email: nil
-        )
+          sig { returns(String) }
+          attr_accessor :email
+
+          # Prefetch brand data by email. The domain will be extracted and validated.
+          sig { params(email: String).returns(T.attached_class) }
+          def self.new(
+            # Email address to prefetch brand data for. The domain will be extracted from the
+            # email. Free email providers (gmail.com, yahoo.com, etc.) and disposable email
+            # addresses are not allowed.
+            email:
+          )
+          end
+
+          sig { override.returns({ email: String }) }
+          def to_hash
+          end
         end
 
-        sig { override.returns({ domain: String, email: String }) }
-        def to_hash
+        sig do
+          override.returns(
+            T::Array[ContextDev::UtilityPrefetchParams::Identifier::Variants]
+          )
+        end
+        def self.variants
         end
       end
 
