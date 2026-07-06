@@ -49,13 +49,32 @@ module ContextDev
       sig { params(status: String).void }
       attr_writer :status
 
+      # The type of prefetch that was queued, echoed from the request (currently always
+      # 'brand')
+      sig do
+        returns(
+          T.nilable(
+            ContextDev::Models::UtilityPrefetchResponse::Type::TaggedSymbol
+          )
+        )
+      end
+      attr_reader :type
+
+      sig do
+        params(
+          type: ContextDev::Models::UtilityPrefetchResponse::Type::OrSymbol
+        ).void
+      end
+      attr_writer :type
+
       sig do
         params(
           domain: String,
           key_metadata:
             ContextDev::Models::UtilityPrefetchResponse::KeyMetadata::OrHash,
           message: String,
-          status: String
+          status: String,
+          type: ContextDev::Models::UtilityPrefetchResponse::Type::OrSymbol
         ).returns(T.attached_class)
       end
       def self.new(
@@ -67,7 +86,10 @@ module ContextDev
         # Success message
         message: nil,
         # Status of the response, e.g., 'ok'
-        status: nil
+        status: nil,
+        # The type of prefetch that was queued, echoed from the request (currently always
+        # 'brand')
+        type: nil
       )
       end
 
@@ -78,7 +100,9 @@ module ContextDev
             key_metadata:
               ContextDev::Models::UtilityPrefetchResponse::KeyMetadata,
             message: String,
-            status: String
+            status: String,
+            type:
+              ContextDev::Models::UtilityPrefetchResponse::Type::TaggedSymbol
           }
         )
       end
@@ -123,6 +147,34 @@ module ContextDev
           )
         end
         def to_hash
+        end
+      end
+
+      # The type of prefetch that was queued, echoed from the request (currently always
+      # 'brand')
+      module Type
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::Models::UtilityPrefetchResponse::Type)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        BRAND =
+          T.let(
+            :brand,
+            ContextDev::Models::UtilityPrefetchResponse::Type::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::UtilityPrefetchResponse::Type::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
         end
       end
     end

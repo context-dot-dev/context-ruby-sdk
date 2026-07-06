@@ -1,22 +1,9 @@
 # typed: strong
 
 module ContextDev
-  AIAIQueryParams = ContextDev::Models::AIAIQueryParams
-
   AIExtractProductParams = ContextDev::Models::AIExtractProductParams
 
   AIExtractProductsParams = ContextDev::Models::AIExtractProductsParams
-
-  BrandIdentifyFromTransactionParams =
-    ContextDev::Models::BrandIdentifyFromTransactionParams
-
-  BrandRetrieveByEmailParams = ContextDev::Models::BrandRetrieveByEmailParams
-
-  BrandRetrieveByIsinParams = ContextDev::Models::BrandRetrieveByIsinParams
-
-  BrandRetrieveByNameParams = ContextDev::Models::BrandRetrieveByNameParams
-
-  BrandRetrieveByTickerParams = ContextDev::Models::BrandRetrieveByTickerParams
 
   BrandRetrieveParams = ContextDev::Models::BrandRetrieveParams
 
@@ -50,9 +37,6 @@ module ContextDev
   MonitorRunParams = ContextDev::Models::MonitorRunParams
 
   MonitorUpdateParams = ContextDev::Models::MonitorUpdateParams
-
-  UtilityPrefetchByEmailParams =
-    ContextDev::Models::UtilityPrefetchByEmailParams
 
   UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 

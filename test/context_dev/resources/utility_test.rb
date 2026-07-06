@@ -6,7 +6,7 @@ class ContextDev::Test::Resources::UtilityTest < ContextDev::Test::ResourceTest
   def test_prefetch_required_params
     skip("Mock server tests are disabled")
 
-    response = @context_dev.utility.prefetch(domain: "domain")
+    response = @context_dev.utility.prefetch(identifier: {}, type: :brand)
 
     assert_pattern do
       response => ContextDev::Models::UtilityPrefetchResponse
@@ -17,26 +17,8 @@ class ContextDev::Test::Resources::UtilityTest < ContextDev::Test::ResourceTest
         domain: String | nil,
         key_metadata: ContextDev::Models::UtilityPrefetchResponse::KeyMetadata | nil,
         message: String | nil,
-        status: String | nil
-      }
-    end
-  end
-
-  def test_prefetch_by_email_required_params
-    skip("Mock server tests are disabled")
-
-    response = @context_dev.utility.prefetch_by_email(email: "dev@stainless.com")
-
-    assert_pattern do
-      response => ContextDev::Models::UtilityPrefetchByEmailResponse
-    end
-
-    assert_pattern do
-      response => {
-        domain: String | nil,
-        key_metadata: ContextDev::Models::UtilityPrefetchByEmailResponse::KeyMetadata | nil,
-        message: String | nil,
-        status: String | nil
+        status: String | nil,
+        type: ContextDev::Models::UtilityPrefetchResponse::Type | nil
       }
     end
   end

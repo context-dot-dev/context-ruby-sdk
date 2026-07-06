@@ -7,11 +7,17 @@ module ContextDev
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
-      # @!attribute domain
-      #   Domain name to prefetch brand data for
+      # @!attribute identifier
+      #   Identifier of the brand to prefetch. Provide exactly one of domain or email.
       #
-      #   @return [String]
-      required :domain, String
+      #   @return [ContextDev::Models::UtilityPrefetchParams::Identifier]
+      required :identifier, -> { ContextDev::UtilityPrefetchParams::Identifier }
+
+      # @!attribute type
+      #   What to prefetch. Currently only 'brand' is supported.
+      #
+      #   @return [Symbol, ContextDev::Models::UtilityPrefetchParams::Type]
+      required :type, enum: -> { ContextDev::UtilityPrefetchParams::Type }
 
       # @!attribute timeout_ms
       #   Optional timeout in milliseconds for the request. If the request takes longer
@@ -21,15 +27,53 @@ module ContextDev
       #   @return [Integer, nil]
       optional :timeout_ms, Integer, api_name: :timeoutMS
 
-      # @!method initialize(domain:, timeout_ms: nil, request_options: {})
+      # @!method initialize(identifier:, type:, timeout_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::UtilityPrefetchParams} for more details.
       #
-      #   @param domain [String] Domain name to prefetch brand data for
+      #   @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier] Identifier of the brand to prefetch. Provide exactly one of domain or email.
+      #
+      #   @param type [Symbol, ContextDev::Models::UtilityPrefetchParams::Type] What to prefetch. Currently only 'brand' is supported.
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      class Identifier < ContextDev::Internal::Type::BaseModel
+        # @!attribute domain
+        #   Domain name to prefetch brand data for
+        #
+        #   @return [String, nil]
+        optional :domain, String
+
+        # @!attribute email
+        #   Email address to prefetch brand data for. The domain will be extracted from the
+        #   email. Free email providers (gmail.com, yahoo.com, etc.) and disposable email
+        #   addresses are not allowed.
+        #
+        #   @return [String, nil]
+        optional :email, String
+
+        # @!method initialize(domain: nil, email: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::UtilityPrefetchParams::Identifier} for more details.
+        #
+        #   Identifier of the brand to prefetch. Provide exactly one of domain or email.
+        #
+        #   @param domain [String] Domain name to prefetch brand data for
+        #
+        #   @param email [String] Email address to prefetch brand data for. The domain will be extracted from the
+      end
+
+      # What to prefetch. Currently only 'brand' is supported.
+      module Type
+        extend ContextDev::Internal::Type::Enum
+
+        BRAND = :brand
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
+      end
     end
   end
 end
