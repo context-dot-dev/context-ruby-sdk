@@ -6,7 +6,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
   def test_retrieve_required_params
     skip("Mock server tests are disabled")
 
-    response = @context_dev.brand.retrieve(body: {domain: "stripe.com"})
+    response = @context_dev.brand.retrieve(body: {domain: "stripe.com", type: :by_domain})
 
     assert_pattern do
       response => ContextDev::Models::BrandRetrieveResponse

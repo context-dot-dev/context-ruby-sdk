@@ -40,7 +40,7 @@ class ContextDevTest < Minitest::Test
     context_dev = ContextDev::Client.new(base_url: "http://localhost", api_key: "My API Key")
 
     assert_raises(ContextDev::Errors::InternalServerError) do
-      context_dev.brand.retrieve(body: {domain: "stripe.com"})
+      context_dev.brand.retrieve(body: {domain: "stripe.com", type: :by_domain})
     end
 
     assert_requested(:any, /./, times: 3)
@@ -52,7 +52,7 @@ class ContextDevTest < Minitest::Test
     context_dev = ContextDev::Client.new(base_url: "http://localhost", api_key: "My API Key", max_retries: 3)
 
     assert_raises(ContextDev::Errors::InternalServerError) do
-      context_dev.brand.retrieve(body: {domain: "stripe.com"})
+      context_dev.brand.retrieve(body: {domain: "stripe.com", type: :by_domain})
     end
 
     assert_requested(:any, /./, times: 4)
@@ -64,7 +64,10 @@ class ContextDevTest < Minitest::Test
     context_dev = ContextDev::Client.new(base_url: "http://localhost", api_key: "My API Key")
 
     assert_raises(ContextDev::Errors::InternalServerError) do
-      context_dev.brand.retrieve(body: {domain: "stripe.com"}, request_options: {max_retries: 3})
+      context_dev.brand.retrieve(
+        body: {domain: "stripe.com", type: :by_domain},
+        request_options: {max_retries: 3}
+      )
     end
 
     assert_requested(:any, /./, times: 4)
@@ -76,7 +79,10 @@ class ContextDevTest < Minitest::Test
     context_dev = ContextDev::Client.new(base_url: "http://localhost", api_key: "My API Key", max_retries: 3)
 
     assert_raises(ContextDev::Errors::InternalServerError) do
-      context_dev.brand.retrieve(body: {domain: "stripe.com"}, request_options: {max_retries: 4})
+      context_dev.brand.retrieve(
+        body: {domain: "stripe.com", type: :by_domain},
+        request_options: {max_retries: 4}
+      )
     end
 
     assert_requested(:any, /./, times: 5)
@@ -92,7 +98,7 @@ class ContextDevTest < Minitest::Test
     context_dev = ContextDev::Client.new(base_url: "http://localhost", api_key: "My API Key", max_retries: 1)
 
     assert_raises(ContextDev::Errors::InternalServerError) do
-      context_dev.brand.retrieve(body: {domain: "stripe.com"})
+      context_dev.brand.retrieve(body: {domain: "stripe.com", type: :by_domain})
     end
 
     assert_requested(:any, /./, times: 2)
@@ -112,7 +118,7 @@ class ContextDevTest < Minitest::Test
 
     Thread.current.thread_variable_set(:time_now, time_now)
     assert_raises(ContextDev::Errors::InternalServerError) do
-      context_dev.brand.retrieve(body: {domain: "stripe.com"})
+      context_dev.brand.retrieve(body: {domain: "stripe.com", type: :by_domain})
     end
     Thread.current.thread_variable_set(:time_now, nil)
 
@@ -130,7 +136,7 @@ class ContextDevTest < Minitest::Test
     context_dev = ContextDev::Client.new(base_url: "http://localhost", api_key: "My API Key", max_retries: 1)
 
     assert_raises(ContextDev::Errors::InternalServerError) do
-      context_dev.brand.retrieve(body: {domain: "stripe.com"})
+      context_dev.brand.retrieve(body: {domain: "stripe.com", type: :by_domain})
     end
 
     assert_requested(:any, /./, times: 2)
@@ -143,7 +149,7 @@ class ContextDevTest < Minitest::Test
     context_dev = ContextDev::Client.new(base_url: "http://localhost", api_key: "My API Key")
 
     assert_raises(ContextDev::Errors::InternalServerError) do
-      context_dev.brand.retrieve(body: {domain: "stripe.com"})
+      context_dev.brand.retrieve(body: {domain: "stripe.com", type: :by_domain})
     end
 
     3.times do
@@ -158,7 +164,7 @@ class ContextDevTest < Minitest::Test
 
     assert_raises(ContextDev::Errors::InternalServerError) do
       context_dev.brand.retrieve(
-        body: {domain: "stripe.com"},
+        body: {domain: "stripe.com", type: :by_domain},
         request_options: {extra_headers: {"x-stainless-retry-count" => nil}}
       )
     end
@@ -175,7 +181,7 @@ class ContextDevTest < Minitest::Test
 
     assert_raises(ContextDev::Errors::InternalServerError) do
       context_dev.brand.retrieve(
-        body: {domain: "stripe.com"},
+        body: {domain: "stripe.com", type: :by_domain},
         request_options: {extra_headers: {"x-stainless-retry-count" => "42"}}
       )
     end
@@ -197,7 +203,10 @@ class ContextDevTest < Minitest::Test
     context_dev = ContextDev::Client.new(base_url: "http://localhost", api_key: "My API Key")
 
     assert_raises(ContextDev::Errors::APIConnectionError) do
-      context_dev.brand.retrieve(body: {domain: "stripe.com"}, request_options: {extra_headers: {}})
+      context_dev.brand.retrieve(
+        body: {domain: "stripe.com", type: :by_domain},
+        request_options: {extra_headers: {}}
+      )
     end
 
     recorded, = WebMock::RequestRegistry.instance.requested_signatures.hash.first
@@ -226,7 +235,10 @@ class ContextDevTest < Minitest::Test
     context_dev = ContextDev::Client.new(base_url: "http://localhost", api_key: "My API Key")
 
     assert_raises(ContextDev::Errors::APIConnectionError) do
-      context_dev.brand.retrieve(body: {domain: "stripe.com"}, request_options: {extra_headers: {}})
+      context_dev.brand.retrieve(
+        body: {domain: "stripe.com", type: :by_domain},
+        request_options: {extra_headers: {}}
+      )
     end
 
     assert_requested(:get, "http://localhost/redirected", times: ContextDev::Client::MAX_REDIRECTS) do
@@ -251,7 +263,7 @@ class ContextDevTest < Minitest::Test
 
     assert_raises(ContextDev::Errors::APIConnectionError) do
       context_dev.brand.retrieve(
-        body: {domain: "stripe.com"},
+        body: {domain: "stripe.com", type: :by_domain},
         request_options: {extra_headers: {"authorization" => "Bearer xyz"}}
       )
     end
@@ -281,7 +293,7 @@ class ContextDevTest < Minitest::Test
 
     assert_raises(ContextDev::Errors::APIConnectionError) do
       context_dev.brand.retrieve(
-        body: {domain: "stripe.com"},
+        body: {domain: "stripe.com", type: :by_domain},
         request_options: {extra_headers: {"authorization" => "Bearer xyz"}}
       )
     end
@@ -297,7 +309,7 @@ class ContextDevTest < Minitest::Test
 
     context_dev = ContextDev::Client.new(base_url: "http://localhost", api_key: "My API Key")
 
-    context_dev.brand.retrieve(body: {domain: "stripe.com"})
+    context_dev.brand.retrieve(body: {domain: "stripe.com", type: :by_domain})
 
     assert_requested(:any, /./) do |req|
       headers = req.headers.transform_keys(&:downcase)

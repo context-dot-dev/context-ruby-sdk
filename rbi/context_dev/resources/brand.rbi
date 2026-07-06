@@ -10,18 +10,17 @@ module ContextDev
         params(
           body:
             T.any(
-              ContextDev::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest::OrHash,
-              ContextDev::BrandRetrieveParams::Body::BrandRetrieveByNameRequest::OrHash,
-              ContextDev::BrandRetrieveParams::Body::BrandRetrieveByEmailRequest::OrHash,
-              ContextDev::BrandRetrieveParams::Body::BrandRetrieveByTickerRequest::OrHash,
-              ContextDev::BrandRetrieveParams::Body::BrandRetrieveFromTransactionRequest::OrHash
+              ContextDev::BrandRetrieveParams::Body::ByDomain::OrHash,
+              ContextDev::BrandRetrieveParams::Body::ByName::OrHash,
+              ContextDev::BrandRetrieveParams::Body::ByEmail::OrHash,
+              ContextDev::BrandRetrieveParams::Body::ByTicker::OrHash,
+              ContextDev::BrandRetrieveParams::Body::ByTransaction::OrHash
             ),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::BrandRetrieveResponse)
       end
       def retrieve(
-        # Exactly one of domain, name, email, ticker, or transaction_info must be
-        # provided.
+        # Exactly one lookup type must be provided.
         body:,
         request_options: {}
       )

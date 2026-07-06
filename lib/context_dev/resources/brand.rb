@@ -3,16 +3,13 @@
 module ContextDev
   module Resources
     class Brand
-      # Some parameter documentations has been truncated, see
-      # {ContextDev::Models::BrandRetrieveParams} for more details.
-      #
       # Retrieve logos, backdrops, colors, industry, description, and more. Provide
       # exactly one lookup identifier in the request body: a domain, company name, email
       # address, stock ticker, or transaction descriptor.
       #
       # @overload retrieve(body:, request_options: {})
       #
-      # @param body [ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByNameRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByEmailRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByTickerRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveFromTransactionRequest] Exactly one of domain, name, email, ticker, or transaction_info must be provided
+      # @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] Exactly one lookup type must be provided.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

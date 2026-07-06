@@ -41,7 +41,7 @@ context_dev = ContextDev::Client.new(
   api_key: ENV["CONTEXT_DEV_API_KEY"] # This is the default and can be omitted
 )
 
-brand = context_dev.brand.retrieve(body: {domain: "stripe.com"})
+brand = context_dev.brand.retrieve(body: {domain: "stripe.com", type: "by_domain"})
 
 puts(brand.brand)
 ```
@@ -52,7 +52,7 @@ When the library is unable to connect to the API, or if the API returns a non-su
 
 ```ruby
 begin
-  brand = context_dev.brand.retrieve(body: {domain: "stripe.com"})
+  brand = context_dev.brand.retrieve(body: {domain: "stripe.com", type: "by_domain"})
 rescue ContextDev::Errors::APIConnectionError => e
   puts("The server could not be reached")
   puts(e.cause)  # an underlying Exception, likely raised within `net/http`
@@ -95,7 +95,10 @@ context_dev = ContextDev::Client.new(
 )
 
 # Or, configure per-request:
-context_dev.brand.retrieve(body: {domain: "stripe.com"}, request_options: {max_retries: 5})
+context_dev.brand.retrieve(
+  body: {domain: "stripe.com", type: "by_domain"},
+  request_options: {max_retries: 5}
+)
 ```
 
 ### Timeouts
@@ -109,7 +112,7 @@ context_dev = ContextDev::Client.new(
 )
 
 # Or, configure per-request:
-context_dev.brand.retrieve(body: {domain: "stripe.com"}, request_options: {timeout: 5})
+context_dev.brand.retrieve(body: {domain: "stripe.com", type: "by_domain"}, request_options: {timeout: 5})
 ```
 
 On timeout, `ContextDev::Errors::APITimeoutError` is raised.
@@ -141,7 +144,7 @@ Note: the `extra_` parameters of the same name overrides the documented paramete
 ```ruby
 brand =
   context_dev.brand.retrieve(
-    body: {domain: "stripe.com"},
+    body: {domain: "stripe.com", type: "by_domain"},
     request_options: {
       extra_query: {my_query_parameter: value},
       extra_body: {my_body_parameter: value},
@@ -188,7 +191,7 @@ You can provide typesafe request parameters like so:
 
 ```ruby
 context_dev.brand.retrieve(
-  body: ContextDev::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest.new(domain: "stripe.com")
+  body: ContextDev::BrandRetrieveParams::Body::ByDomain.new(domain: "stripe.com")
 )
 ```
 
@@ -196,11 +199,11 @@ Or, equivalently:
 
 ```ruby
 # Hashes work, but are not typesafe:
-context_dev.brand.retrieve(body: {domain: "stripe.com"})
+context_dev.brand.retrieve(body: {domain: "stripe.com", type: "by_domain"})
 
 # You can also splat a full Params class:
 params = ContextDev::BrandRetrieveParams.new(
-  body: ContextDev::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest.new(domain: "stripe.com")
+  body: ContextDev::BrandRetrieveParams::Body::ByDomain.new(domain: "stripe.com")
 )
 context_dev.brand.retrieve(**params)
 ```
