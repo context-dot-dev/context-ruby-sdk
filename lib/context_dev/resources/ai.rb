@@ -4,39 +4,6 @@ module ContextDev
   module Resources
     class AI
       # Some parameter documentations has been truncated, see
-      # {ContextDev::Models::AIAIQueryParams} for more details.
-      #
-      # Use AI to extract specific data points from a brand's website. The AI will crawl
-      # the website and extract the requested information based on the provided data
-      # points.
-      #
-      # @overload ai_query(data_to_extract:, domain:, specific_pages: nil, timeout_ms: nil, request_options: {})
-      #
-      # @param data_to_extract [Array<ContextDev::Models::AIAIQueryParams::DataToExtract>] Array of data points to extract from the website
-      #
-      # @param domain [String] The domain name to analyze
-      #
-      # @param specific_pages [ContextDev::Models::AIAIQueryParams::SpecificPages] Optional object specifying which pages to analyze
-      #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
-      #
-      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
-      #
-      # @return [ContextDev::Models::AIAIQueryResponse]
-      #
-      # @see ContextDev::Models::AIAIQueryParams
-      def ai_query(params)
-        parsed, options = ContextDev::AIAIQueryParams.dump_request(params)
-        @client.request(
-          method: :post,
-          path: "brand/ai/query",
-          body: parsed,
-          model: ContextDev::Models::AIAIQueryResponse,
-          options: options
-        )
-      end
-
-      # Some parameter documentations has been truncated, see
       # {ContextDev::Models::AIExtractProductParams} for more details.
       #
       # Given a single URL, determines if it is a product page and extracts the product

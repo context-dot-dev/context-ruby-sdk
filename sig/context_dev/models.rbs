@@ -1,19 +1,7 @@
 module ContextDev
-  class AIAIQueryParams = ContextDev::Models::AIAIQueryParams
-
   class AIExtractProductParams = ContextDev::Models::AIExtractProductParams
 
   class AIExtractProductsParams = ContextDev::Models::AIExtractProductsParams
-
-  class BrandIdentifyFromTransactionParams = ContextDev::Models::BrandIdentifyFromTransactionParams
-
-  class BrandRetrieveByEmailParams = ContextDev::Models::BrandRetrieveByEmailParams
-
-  class BrandRetrieveByIsinParams = ContextDev::Models::BrandRetrieveByIsinParams
-
-  class BrandRetrieveByNameParams = ContextDev::Models::BrandRetrieveByNameParams
-
-  class BrandRetrieveByTickerParams = ContextDev::Models::BrandRetrieveByTickerParams
 
   class BrandRetrieveParams = ContextDev::Models::BrandRetrieveParams
 
@@ -44,8 +32,6 @@ module ContextDev
   class MonitorRunParams = ContextDev::Models::MonitorRunParams
 
   class MonitorUpdateParams = ContextDev::Models::MonitorUpdateParams
-
-  class UtilityPrefetchByEmailParams = ContextDev::Models::UtilityPrefetchByEmailParams
 
   class UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 

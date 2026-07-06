@@ -3,42 +3,23 @@
 module ContextDev
   module Resources
     class Utility
-      # Signal that you may fetch brand data for a particular domain soon to improve
-      # latency.
+      # Signal that you may fetch brand data soon to improve latency. The type field
+      # selects what to prefetch (currently only 'brand') and identifier carries exactly
+      # one lookup key: a domain, or an email whose domain is extracted and validated
+      # (free email providers and disposable email addresses are not allowed).
       sig do
         params(
-          domain: String,
+          identifier: ContextDev::UtilityPrefetchParams::Identifier::OrHash,
+          type: ContextDev::UtilityPrefetchParams::Type::OrSymbol,
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::UtilityPrefetchResponse)
       end
       def prefetch(
-        # Domain name to prefetch brand data for
-        domain:,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
-        request_options: {}
-      )
-      end
-
-      # Signal that you may fetch brand data for a particular domain soon to improve
-      # latency. This endpoint accepts an email address, extracts the domain from it,
-      # validates that it's not a disposable or free email provider, and queues the
-      # domain for prefetching.
-      sig do
-        params(
-          email: String,
-          timeout_ms: Integer,
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::UtilityPrefetchByEmailResponse)
-      end
-      def prefetch_by_email(
-        # Email address to prefetch brand data for. The domain will be extracted from the
-        # email. Free email providers (gmail.com, yahoo.com, etc.) and disposable email
-        # addresses are not allowed.
-        email:,
+        # Identifier of the brand to prefetch. Provide exactly one of domain or email.
+        identifier:,
+        # What to prefetch. Currently only 'brand' is supported.
+        type:,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).

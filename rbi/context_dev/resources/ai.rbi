@@ -3,34 +3,6 @@
 module ContextDev
   module Resources
     class AI
-      # Use AI to extract specific data points from a brand's website. The AI will crawl
-      # the website and extract the requested information based on the provided data
-      # points.
-      sig do
-        params(
-          data_to_extract:
-            T::Array[ContextDev::AIAIQueryParams::DataToExtract::OrHash],
-          domain: String,
-          specific_pages: ContextDev::AIAIQueryParams::SpecificPages::OrHash,
-          timeout_ms: Integer,
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::AIAIQueryResponse)
-      end
-      def ai_query(
-        # Array of data points to extract from the website
-        data_to_extract:,
-        # The domain name to analyze
-        domain:,
-        # Optional object specifying which pages to analyze
-        specific_pages: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
-        request_options: {}
-      )
-      end
-
       # Given a single URL, determines if it is a product page and extracts the product
       # information.
       sig do

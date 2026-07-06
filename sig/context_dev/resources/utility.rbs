@@ -2,16 +2,11 @@ module ContextDev
   module Resources
     class Utility
       def prefetch: (
-        domain: String,
+        identifier: ContextDev::UtilityPrefetchParams::Identifier,
+        type: ContextDev::Models::UtilityPrefetchParams::type_,
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::UtilityPrefetchResponse
-
-      def prefetch_by_email: (
-        email: String,
-        ?timeout_ms: Integer,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::UtilityPrefetchByEmailResponse
 
       def initialize: (client: ContextDev::Client) -> void
     end
