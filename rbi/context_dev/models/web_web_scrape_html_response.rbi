@@ -38,7 +38,9 @@ module ContextDev
       attr_accessor :success
 
       # Detected content type of the returned `html` field. Sitemaps and feeds are
-      # surfaced as `xml`; ordinary pages are `html`.
+      # surfaced as `xml`; ordinary pages are `html`. Excel workbooks are surfaced as
+      # `xlsx`/`xls` with the extracted sheets as HTML tables; PowerPoint presentations
+      # are surfaced as `pptx`/`ppt` with the extracted slides as HTML.
       sig do
         returns(
           ContextDev::Models::WebWebScrapeHTMLResponse::Type::TaggedSymbol
@@ -90,7 +92,9 @@ module ContextDev
         # Indicates success
         success:,
         # Detected content type of the returned `html` field. Sitemaps and feeds are
-        # surfaced as `xml`; ordinary pages are `html`.
+        # surfaced as `xml`; ordinary pages are `html`. Excel workbooks are surfaced as
+        # `xlsx`/`xls` with the extracted sheets as HTML tables; PowerPoint presentations
+        # are surfaced as `pptx`/`ppt` with the extracted slides as HTML.
         type:,
         # The URL that was scraped
         url:,
@@ -607,7 +611,9 @@ module ContextDev
       end
 
       # Detected content type of the returned `html` field. Sitemaps and feeds are
-      # surfaced as `xml`; ordinary pages are `html`.
+      # surfaced as `xml`; ordinary pages are `html`. Excel workbooks are surfaced as
+      # `xlsx`/`xls` with the extracted sheets as HTML tables; PowerPoint presentations
+      # are surfaced as `pptx`/`ppt` with the extracted slides as HTML.
       module Type
         extend ContextDev::Internal::Type::Enum
 
@@ -665,6 +671,26 @@ module ContextDev
         DOC =
           T.let(
             :doc,
+            ContextDev::Models::WebWebScrapeHTMLResponse::Type::TaggedSymbol
+          )
+        XLSX =
+          T.let(
+            :xlsx,
+            ContextDev::Models::WebWebScrapeHTMLResponse::Type::TaggedSymbol
+          )
+        XLS =
+          T.let(
+            :xls,
+            ContextDev::Models::WebWebScrapeHTMLResponse::Type::TaggedSymbol
+          )
+        PPTX =
+          T.let(
+            :pptx,
+            ContextDev::Models::WebWebScrapeHTMLResponse::Type::TaggedSymbol
+          )
+        PPT =
+          T.let(
+            :ppt,
             ContextDev::Models::WebWebScrapeHTMLResponse::Type::TaggedSymbol
           )
 

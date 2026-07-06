@@ -280,6 +280,10 @@ module ContextDev
         | :pdf
         | :docx
         | :doc
+        | :xlsx
+        | :xls
+        | :pptx
+        | :ppt
 
       module Type
         extend ContextDev::Internal::Type::Enum
@@ -294,6 +298,10 @@ module ContextDev
         PDF: :pdf
         DOCX: :docx
         DOC: :doc
+        XLSX: :xlsx
+        XLS: :xls
+        PPTX: :pptx
+        PPT: :ppt
 
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::type_]
       end

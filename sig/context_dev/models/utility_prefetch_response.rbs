@@ -5,7 +5,8 @@ module ContextDev
         domain: String,
         key_metadata: ContextDev::Models::UtilityPrefetchResponse::KeyMetadata,
         message: String,
-        status: String
+        status: String,
+        type: ContextDev::Models::UtilityPrefetchResponse::type_
       }
 
     class UtilityPrefetchResponse < ContextDev::Internal::Type::BaseModel
@@ -27,18 +28,26 @@ module ContextDev
 
       def status=: (String) -> String
 
+      attr_reader type: ContextDev::Models::UtilityPrefetchResponse::type_?
+
+      def type=: (
+        ContextDev::Models::UtilityPrefetchResponse::type_
+      ) -> ContextDev::Models::UtilityPrefetchResponse::type_
+
       def initialize: (
         ?domain: String,
         ?key_metadata: ContextDev::Models::UtilityPrefetchResponse::KeyMetadata,
         ?message: String,
-        ?status: String
+        ?status: String,
+        ?type: ContextDev::Models::UtilityPrefetchResponse::type_
       ) -> void
 
       def to_hash: -> {
         domain: String,
         key_metadata: ContextDev::Models::UtilityPrefetchResponse::KeyMetadata,
         message: String,
-        status: String
+        status: String,
+        type: ContextDev::Models::UtilityPrefetchResponse::type_
       }
 
       type key_metadata =
@@ -58,6 +67,16 @@ module ContextDev
           credits_consumed: Integer,
           credits_remaining: Integer
         }
+      end
+
+      type type_ = :brand
+
+      module Type
+        extend ContextDev::Internal::Type::Enum
+
+        BRAND: :brand
+
+        def self?.values: -> ::Array[ContextDev::Models::UtilityPrefetchResponse::type_]
       end
     end
   end

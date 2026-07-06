@@ -1,19 +1,7 @@
 module ContextDev
-  class AIAIQueryParams = ContextDev::Models::AIAIQueryParams
-
   class AIExtractProductParams = ContextDev::Models::AIExtractProductParams
 
   class AIExtractProductsParams = ContextDev::Models::AIExtractProductsParams
-
-  class BrandIdentifyFromTransactionParams = ContextDev::Models::BrandIdentifyFromTransactionParams
-
-  class BrandRetrieveByEmailParams = ContextDev::Models::BrandRetrieveByEmailParams
-
-  class BrandRetrieveByIsinParams = ContextDev::Models::BrandRetrieveByIsinParams
-
-  class BrandRetrieveByNameParams = ContextDev::Models::BrandRetrieveByNameParams
-
-  class BrandRetrieveByTickerParams = ContextDev::Models::BrandRetrieveByTickerParams
 
   class BrandRetrieveParams = ContextDev::Models::BrandRetrieveParams
 
@@ -23,7 +11,27 @@ module ContextDev
 
   class IndustryRetrieveSicParams = ContextDev::Models::IndustryRetrieveSicParams
 
-  class UtilityPrefetchByEmailParams = ContextDev::Models::UtilityPrefetchByEmailParams
+  class MonitorCreateParams = ContextDev::Models::MonitorCreateParams
+
+  class MonitorDeleteParams = ContextDev::Models::MonitorDeleteParams
+
+  class MonitorListAccountChangesParams = ContextDev::Models::MonitorListAccountChangesParams
+
+  class MonitorListAccountRunsParams = ContextDev::Models::MonitorListAccountRunsParams
+
+  class MonitorListChangesParams = ContextDev::Models::MonitorListChangesParams
+
+  class MonitorListParams = ContextDev::Models::MonitorListParams
+
+  class MonitorListRunsParams = ContextDev::Models::MonitorListRunsParams
+
+  class MonitorRetrieveChangeParams = ContextDev::Models::MonitorRetrieveChangeParams
+
+  class MonitorRetrieveParams = ContextDev::Models::MonitorRetrieveParams
+
+  class MonitorRunParams = ContextDev::Models::MonitorRunParams
+
+  class MonitorUpdateParams = ContextDev::Models::MonitorUpdateParams
 
   class UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 

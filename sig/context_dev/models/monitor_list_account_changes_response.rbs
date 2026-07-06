@@ -1,0 +1,176 @@
+module ContextDev
+  module Models
+    type monitor_list_account_changes_response =
+      {
+        data: ::Array[ContextDev::Models::MonitorListAccountChangesResponse::Data],
+        has_more: bool,
+        next_cursor: String?
+      }
+
+    class MonitorListAccountChangesResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor data: ::Array[ContextDev::Models::MonitorListAccountChangesResponse::Data]
+
+      attr_accessor has_more: bool
+
+      attr_accessor next_cursor: String?
+
+      def initialize: (
+        data: ::Array[ContextDev::Models::MonitorListAccountChangesResponse::Data],
+        has_more: bool,
+        next_cursor: String?
+      ) -> void
+
+      def to_hash: -> {
+        data: ::Array[ContextDev::Models::MonitorListAccountChangesResponse::Data],
+        has_more: bool,
+        next_cursor: String?
+      }
+
+      type data =
+        {
+          id: String,
+          change_detection_type: ContextDev::Models::MonitorListAccountChangesResponse::Data::change_detection_type,
+          detected_at: Time,
+          mode: ContextDev::Models::MonitorListAccountChangesResponse::Data::mode,
+          monitor_id: String,
+          summary: String,
+          target_type: ContextDev::Models::MonitorListAccountChangesResponse::Data::target_type,
+          title: String,
+          url: String,
+          added_url_count: Integer,
+          confidence: Float,
+          importance: ContextDev::Models::MonitorListAccountChangesResponse::Data::importance,
+          matched_url_count: Integer,
+          removed_url_count: Integer,
+          tags: ::Array[String]
+        }
+
+      class Data < ContextDev::Internal::Type::BaseModel
+        attr_accessor id: String
+
+        attr_accessor change_detection_type: ContextDev::Models::MonitorListAccountChangesResponse::Data::change_detection_type
+
+        attr_accessor detected_at: Time
+
+        attr_accessor mode: ContextDev::Models::MonitorListAccountChangesResponse::Data::mode
+
+        attr_accessor monitor_id: String
+
+        attr_accessor summary: String
+
+        attr_accessor target_type: ContextDev::Models::MonitorListAccountChangesResponse::Data::target_type
+
+        attr_accessor title: String
+
+        attr_accessor url: String
+
+        attr_reader added_url_count: Integer?
+
+        def added_url_count=: (Integer) -> Integer
+
+        attr_reader confidence: Float?
+
+        def confidence=: (Float) -> Float
+
+        attr_reader importance: ContextDev::Models::MonitorListAccountChangesResponse::Data::importance?
+
+        def importance=: (
+          ContextDev::Models::MonitorListAccountChangesResponse::Data::importance
+        ) -> ContextDev::Models::MonitorListAccountChangesResponse::Data::importance
+
+        attr_reader matched_url_count: Integer?
+
+        def matched_url_count=: (Integer) -> Integer
+
+        attr_reader removed_url_count: Integer?
+
+        def removed_url_count=: (Integer) -> Integer
+
+        attr_reader tags: ::Array[String]?
+
+        def tags=: (::Array[String]) -> ::Array[String]
+
+        def initialize: (
+          id: String,
+          change_detection_type: ContextDev::Models::MonitorListAccountChangesResponse::Data::change_detection_type,
+          detected_at: Time,
+          mode: ContextDev::Models::MonitorListAccountChangesResponse::Data::mode,
+          monitor_id: String,
+          summary: String,
+          target_type: ContextDev::Models::MonitorListAccountChangesResponse::Data::target_type,
+          title: String,
+          url: String,
+          ?added_url_count: Integer,
+          ?confidence: Float,
+          ?importance: ContextDev::Models::MonitorListAccountChangesResponse::Data::importance,
+          ?matched_url_count: Integer,
+          ?removed_url_count: Integer,
+          ?tags: ::Array[String]
+        ) -> void
+
+        def to_hash: -> {
+          id: String,
+          change_detection_type: ContextDev::Models::MonitorListAccountChangesResponse::Data::change_detection_type,
+          detected_at: Time,
+          mode: ContextDev::Models::MonitorListAccountChangesResponse::Data::mode,
+          monitor_id: String,
+          summary: String,
+          target_type: ContextDev::Models::MonitorListAccountChangesResponse::Data::target_type,
+          title: String,
+          url: String,
+          added_url_count: Integer,
+          confidence: Float,
+          importance: ContextDev::Models::MonitorListAccountChangesResponse::Data::importance,
+          matched_url_count: Integer,
+          removed_url_count: Integer,
+          tags: ::Array[String]
+        }
+
+        type change_detection_type = :exact | :semantic
+
+        module ChangeDetectionType
+          extend ContextDev::Internal::Type::Enum
+
+          EXACT: :exact
+          SEMANTIC: :semantic
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountChangesResponse::Data::change_detection_type]
+        end
+
+        type mode = :web
+
+        module Mode
+          extend ContextDev::Internal::Type::Enum
+
+          WEB: :web
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountChangesResponse::Data::mode]
+        end
+
+        type target_type = :page | :sitemap | :extract
+
+        module TargetType
+          extend ContextDev::Internal::Type::Enum
+
+          PAGE: :page
+          SITEMAP: :sitemap
+          EXTRACT: :extract
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountChangesResponse::Data::target_type]
+        end
+
+        type importance = :low | :medium | :high
+
+        module Importance
+          extend ContextDev::Internal::Type::Enum
+
+          LOW: :low
+          MEDIUM: :medium
+          HIGH: :high
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountChangesResponse::Data::importance]
+        end
+      end
+    end
+  end
+end

@@ -84,6 +84,7 @@ module ContextDev
         ?max_depth: Integer,
         ?max_pages: Integer,
         ?pdf: ContextDev::WebWebCrawlMdParams::Pdf,
+        ?settle_animations: bool,
         ?shorten_base64_images: bool,
         ?stop_after_ms: Integer,
         ?timeout_ms: Integer,
@@ -102,6 +103,7 @@ module ContextDev
         ?include_selectors: ::Array[String],
         ?max_age_ms: Integer,
         ?pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
+        ?settle_animations: bool,
         ?timeout_ms: Integer,
         ?use_main_content_only: bool,
         ?wait_for_ms: Integer,
@@ -110,6 +112,7 @@ module ContextDev
 
       def web_scrape_images: (
         url: String,
+        ?dedupe: bool,
         ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
         ?headers: ::Hash[Symbol, String],
         ?max_age_ms: Integer,
@@ -129,6 +132,7 @@ module ContextDev
         ?include_selectors: ::Array[String],
         ?max_age_ms: Integer,
         ?pdf: ContextDev::WebWebScrapeMdParams::Pdf,
+        ?settle_animations: bool,
         ?shorten_base64_images: bool,
         ?timeout_ms: Integer,
         ?use_main_content_only: bool,

@@ -1,14 +1,6 @@
 module ContextDev
   module Resources
     class AI
-      def ai_query: (
-        data_to_extract: ::Array[ContextDev::AIAIQueryParams::DataToExtract],
-        domain: String,
-        ?specific_pages: ContextDev::AIAIQueryParams::SpecificPages,
-        ?timeout_ms: Integer,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::AIAIQueryResponse
-
       def extract_product: (
         url: String,
         ?max_age_ms: Integer,

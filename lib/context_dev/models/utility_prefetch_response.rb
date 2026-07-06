@@ -29,7 +29,14 @@ module ContextDev
       #   @return [String, nil]
       optional :status, String
 
-      # @!method initialize(domain: nil, key_metadata: nil, message: nil, status: nil)
+      # @!attribute type
+      #   The type of prefetch that was queued, echoed from the request (currently always
+      #   'brand')
+      #
+      #   @return [Symbol, ContextDev::Models::UtilityPrefetchResponse::Type, nil]
+      optional :type, enum: -> { ContextDev::Models::UtilityPrefetchResponse::Type }
+
+      # @!method initialize(domain: nil, key_metadata: nil, message: nil, status: nil, type: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::UtilityPrefetchResponse} for more details.
       #
@@ -40,6 +47,8 @@ module ContextDev
       #   @param message [String] Success message
       #
       #   @param status [String] Status of the response, e.g., 'ok'
+      #
+      #   @param type [Symbol, ContextDev::Models::UtilityPrefetchResponse::Type] The type of prefetch that was queued, echoed from the request (currently always
 
       # @see ContextDev::Models::UtilityPrefetchResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
@@ -62,6 +71,19 @@ module ContextDev
         #   @param credits_consumed [Integer] The number of credits consumed by this request.
         #
         #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
+      end
+
+      # The type of prefetch that was queued, echoed from the request (currently always
+      # 'brand')
+      #
+      # @see ContextDev::Models::UtilityPrefetchResponse#type
+      module Type
+        extend ContextDev::Internal::Type::Enum
+
+        BRAND = :brand
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
     end
   end

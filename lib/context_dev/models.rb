@@ -39,21 +39,9 @@ module ContextDev
     mod.define_sorbet_constant!(const) { T.type_alias { mod.to_sorbet_type } }
   end
 
-  AIAIQueryParams = ContextDev::Models::AIAIQueryParams
-
   AIExtractProductParams = ContextDev::Models::AIExtractProductParams
 
   AIExtractProductsParams = ContextDev::Models::AIExtractProductsParams
-
-  BrandIdentifyFromTransactionParams = ContextDev::Models::BrandIdentifyFromTransactionParams
-
-  BrandRetrieveByEmailParams = ContextDev::Models::BrandRetrieveByEmailParams
-
-  BrandRetrieveByIsinParams = ContextDev::Models::BrandRetrieveByIsinParams
-
-  BrandRetrieveByNameParams = ContextDev::Models::BrandRetrieveByNameParams
-
-  BrandRetrieveByTickerParams = ContextDev::Models::BrandRetrieveByTickerParams
 
   BrandRetrieveParams = ContextDev::Models::BrandRetrieveParams
 
@@ -63,7 +51,27 @@ module ContextDev
 
   IndustryRetrieveSicParams = ContextDev::Models::IndustryRetrieveSicParams
 
-  UtilityPrefetchByEmailParams = ContextDev::Models::UtilityPrefetchByEmailParams
+  MonitorCreateParams = ContextDev::Models::MonitorCreateParams
+
+  MonitorDeleteParams = ContextDev::Models::MonitorDeleteParams
+
+  MonitorListAccountChangesParams = ContextDev::Models::MonitorListAccountChangesParams
+
+  MonitorListAccountRunsParams = ContextDev::Models::MonitorListAccountRunsParams
+
+  MonitorListChangesParams = ContextDev::Models::MonitorListChangesParams
+
+  MonitorListParams = ContextDev::Models::MonitorListParams
+
+  MonitorListRunsParams = ContextDev::Models::MonitorListRunsParams
+
+  MonitorRetrieveChangeParams = ContextDev::Models::MonitorRetrieveChangeParams
+
+  MonitorRetrieveParams = ContextDev::Models::MonitorRetrieveParams
+
+  MonitorRunParams = ContextDev::Models::MonitorRunParams
+
+  MonitorUpdateParams = ContextDev::Models::MonitorUpdateParams
 
   UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 

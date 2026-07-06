@@ -1,0 +1,23 @@
+module ContextDev
+  module Models
+    type monitor_retrieve_change_params =
+      { change_id: String } & ContextDev::Internal::Type::request_parameters
+
+    class MonitorRetrieveChangeParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor change_id: String
+
+      def initialize: (
+        change_id: String,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        change_id: String,
+        request_options: ContextDev::RequestOptions
+      }
+    end
+  end
+end

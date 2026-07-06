@@ -1,0 +1,63 @@
+module ContextDev
+  module Models
+    type monitor_list_runs_params =
+      {
+        monitor_id: String,
+        cursor: String,
+        limit: Integer,
+        status: ContextDev::Models::MonitorListRunsParams::status
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class MonitorListRunsParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor monitor_id: String
+
+      attr_reader cursor: String?
+
+      def cursor=: (String) -> String
+
+      attr_reader limit: Integer?
+
+      def limit=: (Integer) -> Integer
+
+      attr_reader status: ContextDev::Models::MonitorListRunsParams::status?
+
+      def status=: (
+        ContextDev::Models::MonitorListRunsParams::status
+      ) -> ContextDev::Models::MonitorListRunsParams::status
+
+      def initialize: (
+        monitor_id: String,
+        ?cursor: String,
+        ?limit: Integer,
+        ?status: ContextDev::Models::MonitorListRunsParams::status,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        monitor_id: String,
+        cursor: String,
+        limit: Integer,
+        status: ContextDev::Models::MonitorListRunsParams::status,
+        request_options: ContextDev::RequestOptions
+      }
+
+      type status = :queued | :running | :completed | :failed | :skipped
+
+      module Status
+        extend ContextDev::Internal::Type::Enum
+
+        QUEUED: :queued
+        RUNNING: :running
+        COMPLETED: :completed
+        FAILED: :failed
+        SKIPPED: :skipped
+
+        def self?.values: -> ::Array[ContextDev::Models::MonitorListRunsParams::status]
+      end
+    end
+  end
+end

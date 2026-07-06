@@ -1,0 +1,311 @@
+module ContextDev
+  module Models
+    type monitor_create_params =
+      {
+        change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
+        name: String,
+        schedule: ContextDev::MonitorCreateParams::Schedule,
+        target: ContextDev::Models::MonitorCreateParams::target,
+        mode: ContextDev::Models::MonitorCreateParams::mode,
+        tags: ::Array[String],
+        webhook: ContextDev::MonitorCreateParams::Webhook?
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class MonitorCreateParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor change_detection: ContextDev::Models::MonitorCreateParams::change_detection
+
+      attr_accessor name: String
+
+      attr_accessor schedule: ContextDev::MonitorCreateParams::Schedule
+
+      attr_accessor target: ContextDev::Models::MonitorCreateParams::target
+
+      attr_reader mode: ContextDev::Models::MonitorCreateParams::mode?
+
+      def mode=: (
+        ContextDev::Models::MonitorCreateParams::mode
+      ) -> ContextDev::Models::MonitorCreateParams::mode
+
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
+      attr_accessor webhook: ContextDev::MonitorCreateParams::Webhook?
+
+      def initialize: (
+        change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
+        name: String,
+        schedule: ContextDev::MonitorCreateParams::Schedule,
+        target: ContextDev::Models::MonitorCreateParams::target,
+        ?mode: ContextDev::Models::MonitorCreateParams::mode,
+        ?tags: ::Array[String],
+        ?webhook: ContextDev::MonitorCreateParams::Webhook?,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
+        name: String,
+        schedule: ContextDev::MonitorCreateParams::Schedule,
+        target: ContextDev::Models::MonitorCreateParams::target,
+        mode: ContextDev::Models::MonitorCreateParams::mode,
+        tags: ::Array[String],
+        webhook: ContextDev::MonitorCreateParams::Webhook?,
+        request_options: ContextDev::RequestOptions
+      }
+
+      type change_detection =
+        ContextDev::MonitorCreateParams::ChangeDetection::Exact
+        | ContextDev::MonitorCreateParams::ChangeDetection::Semantic
+
+      module ChangeDetection
+        extend ContextDev::Internal::Type::Union
+
+        type exact = { type: :exact }
+
+        class Exact < ContextDev::Internal::Type::BaseModel
+          attr_accessor type: :exact
+
+          def initialize: (?type: :exact) -> void
+
+          def to_hash: -> { type: :exact }
+        end
+
+        type semantic =
+          { query: String, type: :semantic, confidence_threshold: Float }
+
+        class Semantic < ContextDev::Internal::Type::BaseModel
+          attr_accessor query: String
+
+          attr_accessor type: :semantic
+
+          attr_reader confidence_threshold: Float?
+
+          def confidence_threshold=: (Float) -> Float
+
+          def initialize: (
+            query: String,
+            ?confidence_threshold: Float,
+            ?type: :semantic
+          ) -> void
+
+          def to_hash: -> {
+            query: String,
+            type: :semantic,
+            confidence_threshold: Float
+          }
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::MonitorCreateParams::change_detection]
+      end
+
+      type schedule =
+        {
+          frequency: Integer,
+          type: ContextDev::Models::MonitorCreateParams::Schedule::type_,
+          unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
+        }
+
+      class Schedule < ContextDev::Internal::Type::BaseModel
+        attr_accessor frequency: Integer
+
+        attr_accessor type: ContextDev::Models::MonitorCreateParams::Schedule::type_
+
+        attr_accessor unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
+
+        def initialize: (
+          frequency: Integer,
+          type: ContextDev::Models::MonitorCreateParams::Schedule::type_,
+          unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
+        ) -> void
+
+        def to_hash: -> {
+          frequency: Integer,
+          type: ContextDev::Models::MonitorCreateParams::Schedule::type_,
+          unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
+        }
+
+        type type_ = :interval
+
+        module Type
+          extend ContextDev::Internal::Type::Enum
+
+          INTERVAL: :interval
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorCreateParams::Schedule::type_]
+        end
+
+        type unit = :minutes | :hours | :days
+
+        module Unit
+          extend ContextDev::Internal::Type::Enum
+
+          MINUTES: :minutes
+          HOURS: :hours
+          DAYS: :days
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorCreateParams::Schedule::unit]
+        end
+      end
+
+      type target =
+        ContextDev::MonitorCreateParams::Target::Page
+        | ContextDev::MonitorCreateParams::Target::Sitemap
+        | ContextDev::MonitorCreateParams::Target::Extract
+
+      module Target
+        extend ContextDev::Internal::Type::Union
+
+        type page = { type: :page, url: String, normalize_whitespace: bool }
+
+        class Page < ContextDev::Internal::Type::BaseModel
+          attr_accessor type: :page
+
+          attr_accessor url: String
+
+          attr_reader normalize_whitespace: bool?
+
+          def normalize_whitespace=: (bool) -> bool
+
+          def initialize: (
+            url: String,
+            ?normalize_whitespace: bool,
+            ?type: :page
+          ) -> void
+
+          def to_hash: -> {
+            type: :page,
+            url: String,
+            normalize_whitespace: bool
+          }
+        end
+
+        type sitemap =
+          {
+            type: :sitemap,
+            url: String,
+            exclude: ::Array[String],
+            include: ::Array[String],
+            max_urls: Integer
+          }
+
+        class Sitemap < ContextDev::Internal::Type::BaseModel
+          attr_accessor type: :sitemap
+
+          attr_accessor url: String
+
+          attr_reader exclude: ::Array[String]?
+
+          def exclude=: (::Array[String]) -> ::Array[String]
+
+          attr_reader include: ::Array[String]?
+
+          def include=: (::Array[String]) -> ::Array[String]
+
+          attr_reader max_urls: Integer?
+
+          def max_urls=: (Integer) -> Integer
+
+          def initialize: (
+            url: String,
+            ?exclude: ::Array[String],
+            ?include: ::Array[String],
+            ?max_urls: Integer,
+            ?type: :sitemap
+          ) -> void
+
+          def to_hash: -> {
+            type: :sitemap,
+            url: String,
+            exclude: ::Array[String],
+            include: ::Array[String],
+            max_urls: Integer
+          }
+        end
+
+        type extract =
+          {
+            type: :extract,
+            url: String,
+            follow_subdomains: bool,
+            instructions: String,
+            max_depth: Integer,
+            max_pages: Integer,
+            schema: ::Hash[Symbol, top]
+          }
+
+        class Extract < ContextDev::Internal::Type::BaseModel
+          attr_accessor type: :extract
+
+          attr_accessor url: String
+
+          attr_reader follow_subdomains: bool?
+
+          def follow_subdomains=: (bool) -> bool
+
+          attr_reader instructions: String?
+
+          def instructions=: (String) -> String
+
+          attr_reader max_depth: Integer?
+
+          def max_depth=: (Integer) -> Integer
+
+          attr_reader max_pages: Integer?
+
+          def max_pages=: (Integer) -> Integer
+
+          attr_reader schema: ::Hash[Symbol, top]?
+
+          def schema=: (::Hash[Symbol, top]) -> ::Hash[Symbol, top]
+
+          def initialize: (
+            url: String,
+            ?follow_subdomains: bool,
+            ?instructions: String,
+            ?max_depth: Integer,
+            ?max_pages: Integer,
+            ?schema: ::Hash[Symbol, top],
+            ?type: :extract
+          ) -> void
+
+          def to_hash: -> {
+            type: :extract,
+            url: String,
+            follow_subdomains: bool,
+            instructions: String,
+            max_depth: Integer,
+            max_pages: Integer,
+            schema: ::Hash[Symbol, top]
+          }
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::MonitorCreateParams::target]
+      end
+
+      type mode = :web
+
+      module Mode
+        extend ContextDev::Internal::Type::Enum
+
+        WEB: :web
+
+        def self?.values: -> ::Array[ContextDev::Models::MonitorCreateParams::mode]
+      end
+
+      type webhook = { url: String, secret: String }
+
+      class Webhook < ContextDev::Internal::Type::BaseModel
+        attr_accessor url: String
+
+        def initialize: (url: String) -> void
+
+        def to_hash: -> { url: String, secret: String }
+      end
+    end
+  end
+end

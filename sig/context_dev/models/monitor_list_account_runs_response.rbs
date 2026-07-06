@@ -1,0 +1,184 @@
+module ContextDev
+  module Models
+    type monitor_list_account_runs_response =
+      {
+        data: ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data],
+        has_more: bool,
+        next_cursor: String?
+      }
+
+    class MonitorListAccountRunsResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor data: ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data]
+
+      attr_accessor has_more: bool
+
+      attr_accessor next_cursor: String?
+
+      def initialize: (
+        data: ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data],
+        has_more: bool,
+        next_cursor: String?
+      ) -> void
+
+      def to_hash: -> {
+        data: ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data],
+        has_more: bool,
+        next_cursor: String?
+      }
+
+      type data =
+        {
+          id: String,
+          baseline_created: bool,
+          change_detected: bool,
+          change_detection_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::change_detection_type,
+          credits_charged: Integer,
+          monitor_id: String,
+          run_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::run_type,
+          status: ContextDev::Models::MonitorListAccountRunsResponse::Data::status,
+          target_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::target_type,
+          change_id: String?,
+          completed_at: Time?,
+          error: ContextDev::Models::MonitorListAccountRunsResponse::Data::Error?,
+          skip_reason: ContextDev::Models::MonitorListAccountRunsResponse::Data::skip_reason?,
+          started_at: Time?
+        }
+
+      class Data < ContextDev::Internal::Type::BaseModel
+        attr_accessor id: String
+
+        attr_accessor baseline_created: bool
+
+        attr_accessor change_detected: bool
+
+        attr_accessor change_detection_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::change_detection_type
+
+        attr_accessor credits_charged: Integer
+
+        attr_accessor monitor_id: String
+
+        attr_accessor run_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::run_type
+
+        attr_accessor status: ContextDev::Models::MonitorListAccountRunsResponse::Data::status
+
+        attr_accessor target_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::target_type
+
+        attr_accessor change_id: String?
+
+        attr_accessor completed_at: Time?
+
+        attr_accessor error: ContextDev::Models::MonitorListAccountRunsResponse::Data::Error?
+
+        attr_accessor skip_reason: ContextDev::Models::MonitorListAccountRunsResponse::Data::skip_reason?
+
+        attr_accessor started_at: Time?
+
+        def initialize: (
+          id: String,
+          baseline_created: bool,
+          change_detected: bool,
+          change_detection_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::change_detection_type,
+          credits_charged: Integer,
+          monitor_id: String,
+          run_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::run_type,
+          status: ContextDev::Models::MonitorListAccountRunsResponse::Data::status,
+          target_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::target_type,
+          ?change_id: String?,
+          ?completed_at: Time?,
+          ?error: ContextDev::Models::MonitorListAccountRunsResponse::Data::Error?,
+          ?skip_reason: ContextDev::Models::MonitorListAccountRunsResponse::Data::skip_reason?,
+          ?started_at: Time?
+        ) -> void
+
+        def to_hash: -> {
+          id: String,
+          baseline_created: bool,
+          change_detected: bool,
+          change_detection_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::change_detection_type,
+          credits_charged: Integer,
+          monitor_id: String,
+          run_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::run_type,
+          status: ContextDev::Models::MonitorListAccountRunsResponse::Data::status,
+          target_type: ContextDev::Models::MonitorListAccountRunsResponse::Data::target_type,
+          change_id: String?,
+          completed_at: Time?,
+          error: ContextDev::Models::MonitorListAccountRunsResponse::Data::Error?,
+          skip_reason: ContextDev::Models::MonitorListAccountRunsResponse::Data::skip_reason?,
+          started_at: Time?
+        }
+
+        type change_detection_type = :exact | :semantic
+
+        module ChangeDetectionType
+          extend ContextDev::Internal::Type::Enum
+
+          EXACT: :exact
+          SEMANTIC: :semantic
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::change_detection_type]
+        end
+
+        type run_type = :baseline | :scheduled
+
+        module RunType
+          extend ContextDev::Internal::Type::Enum
+
+          BASELINE: :baseline
+          SCHEDULED: :scheduled
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::run_type]
+        end
+
+        type status = :queued | :running | :completed | :failed | :skipped
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          QUEUED: :queued
+          RUNNING: :running
+          COMPLETED: :completed
+          FAILED: :failed
+          SKIPPED: :skipped
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::status]
+        end
+
+        type target_type = :page | :sitemap | :extract
+
+        module TargetType
+          extend ContextDev::Internal::Type::Enum
+
+          PAGE: :page
+          SITEMAP: :sitemap
+          EXTRACT: :extract
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::target_type]
+        end
+
+        type error = { code: String, message: String }
+
+        class Error < ContextDev::Internal::Type::BaseModel
+          attr_accessor code: String
+
+          attr_accessor message: String
+
+          def initialize: (code: String, message: String) -> void
+
+          def to_hash: -> { code: String, message: String }
+        end
+
+        type skip_reason = :insufficient_credits | :monitor_paused | :superseded
+
+        module SkipReason
+          extend ContextDev::Internal::Type::Enum
+
+          INSUFFICIENT_CREDITS: :insufficient_credits
+          MONITOR_PAUSED: :monitor_paused
+          SUPERSEDED: :superseded
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::skip_reason]
+        end
+      end
+    end
+  end
+end

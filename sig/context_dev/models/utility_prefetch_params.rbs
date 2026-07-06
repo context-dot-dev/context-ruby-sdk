@@ -1,30 +1,78 @@
 module ContextDev
   module Models
     type utility_prefetch_params =
-      { domain: String, timeout_ms: Integer }
+      {
+        identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
+        type: ContextDev::Models::UtilityPrefetchParams::type_,
+        timeout_ms: Integer
+      }
       & ContextDev::Internal::Type::request_parameters
 
     class UtilityPrefetchParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
-      attr_accessor domain: String
+      attr_accessor identifier: ContextDev::Models::UtilityPrefetchParams::identifier
+
+      attr_accessor type: ContextDev::Models::UtilityPrefetchParams::type_
 
       attr_reader timeout_ms: Integer?
 
       def timeout_ms=: (Integer) -> Integer
 
       def initialize: (
-        domain: String,
+        identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
+        type: ContextDev::Models::UtilityPrefetchParams::type_,
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> void
 
       def to_hash: -> {
-        domain: String,
+        identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
+        type: ContextDev::Models::UtilityPrefetchParams::type_,
         timeout_ms: Integer,
         request_options: ContextDev::RequestOptions
       }
+
+      type identifier =
+        ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier
+        | ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier
+
+      module Identifier
+        extend ContextDev::Internal::Type::Union
+
+        type utility_prefetch_domain_identifier = { domain: String }
+
+        class UtilityPrefetchDomainIdentifier < ContextDev::Internal::Type::BaseModel
+          attr_accessor domain: String
+
+          def initialize: (domain: String) -> void
+
+          def to_hash: -> { domain: String }
+        end
+
+        type utility_prefetch_email_identifier = { email: String }
+
+        class UtilityPrefetchEmailIdentifier < ContextDev::Internal::Type::BaseModel
+          attr_accessor email: String
+
+          def initialize: (email: String) -> void
+
+          def to_hash: -> { email: String }
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::UtilityPrefetchParams::identifier]
+      end
+
+      type type_ = :brand
+
+      module Type
+        extend ContextDev::Internal::Type::Enum
+
+        BRAND: :brand
+
+        def self?.values: -> ::Array[ContextDev::Models::UtilityPrefetchParams::type_]
+      end
     end
   end
 end

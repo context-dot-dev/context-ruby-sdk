@@ -6,12 +6,16 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::UtilityPrefetchParams} for more details.
       #
-      # Signal that you may fetch brand data for a particular domain soon to improve
-      # latency.
+      # Signal that you may fetch brand data soon to improve latency. The type field
+      # selects what to prefetch (currently only 'brand') and identifier carries exactly
+      # one lookup key: a domain, or an email whose domain is extracted and validated
+      # (free email providers and disposable email addresses are not allowed).
       #
-      # @overload prefetch(domain:, timeout_ms: nil, request_options: {})
+      # @overload prefetch(identifier:, type:, timeout_ms: nil, request_options: {})
       #
-      # @param domain [String] Domain name to prefetch brand data for
+      # @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier] Identifier of the brand to prefetch. Provide exactly one of domain or email.
+      #
+      # @param type [Symbol, ContextDev::Models::UtilityPrefetchParams::Type] What to prefetch. Currently only 'brand' is supported.
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -24,39 +28,9 @@ module ContextDev
         parsed, options = ContextDev::UtilityPrefetchParams.dump_request(params)
         @client.request(
           method: :post,
-          path: "brand/prefetch",
+          path: "utility/prefetch",
           body: parsed,
           model: ContextDev::Models::UtilityPrefetchResponse,
-          options: options
-        )
-      end
-
-      # Some parameter documentations has been truncated, see
-      # {ContextDev::Models::UtilityPrefetchByEmailParams} for more details.
-      #
-      # Signal that you may fetch brand data for a particular domain soon to improve
-      # latency. This endpoint accepts an email address, extracts the domain from it,
-      # validates that it's not a disposable or free email provider, and queues the
-      # domain for prefetching.
-      #
-      # @overload prefetch_by_email(email:, timeout_ms: nil, request_options: {})
-      #
-      # @param email [String] Email address to prefetch brand data for. The domain will be extracted from the
-      #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
-      #
-      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
-      #
-      # @return [ContextDev::Models::UtilityPrefetchByEmailResponse]
-      #
-      # @see ContextDev::Models::UtilityPrefetchByEmailParams
-      def prefetch_by_email(params)
-        parsed, options = ContextDev::UtilityPrefetchByEmailParams.dump_request(params)
-        @client.request(
-          method: :post,
-          path: "brand/prefetch-by-email",
-          body: parsed,
-          model: ContextDev::Models::UtilityPrefetchByEmailResponse,
           options: options
         )
       end

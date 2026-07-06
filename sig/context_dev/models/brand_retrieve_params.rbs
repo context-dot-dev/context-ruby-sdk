@@ -1,304 +1,1583 @@
 module ContextDev
   module Models
     type brand_retrieve_params =
-      {
-        domain: String,
-        force_language: ContextDev::Models::BrandRetrieveParams::force_language,
-        max_age_ms: Integer,
-        max_speed: bool,
-        timeout_ms: Integer
-      }
+      { body: ContextDev::Models::BrandRetrieveParams::body }
       & ContextDev::Internal::Type::request_parameters
 
     class BrandRetrieveParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
-      attr_accessor domain: String
-
-      attr_reader force_language: ContextDev::Models::BrandRetrieveParams::force_language?
-
-      def force_language=: (
-        ContextDev::Models::BrandRetrieveParams::force_language
-      ) -> ContextDev::Models::BrandRetrieveParams::force_language
-
-      attr_reader max_age_ms: Integer?
-
-      def max_age_ms=: (Integer) -> Integer
-
-      attr_reader max_speed: bool?
-
-      def max_speed=: (bool) -> bool
-
-      attr_reader timeout_ms: Integer?
-
-      def timeout_ms=: (Integer) -> Integer
+      attr_accessor body: ContextDev::Models::BrandRetrieveParams::body
 
       def initialize: (
-        domain: String,
-        ?force_language: ContextDev::Models::BrandRetrieveParams::force_language,
-        ?max_age_ms: Integer,
-        ?max_speed: bool,
-        ?timeout_ms: Integer,
+        body: ContextDev::Models::BrandRetrieveParams::body,
         ?request_options: ContextDev::request_opts
       ) -> void
 
       def to_hash: -> {
-        domain: String,
-        force_language: ContextDev::Models::BrandRetrieveParams::force_language,
-        max_age_ms: Integer,
-        max_speed: bool,
-        timeout_ms: Integer,
+        body: ContextDev::Models::BrandRetrieveParams::body,
         request_options: ContextDev::RequestOptions
       }
 
-      type force_language =
-        :afrikaans
-        | :albanian
-        | :amharic
-        | :arabic
-        | :armenian
-        | :assamese
-        | :aymara
-        | :azeri
-        | :basque
-        | :belarusian
-        | :bengali
-        | :bosnian
-        | :bulgarian
-        | :burmese
-        | :cantonese
-        | :catalan
-        | :cebuano
-        | :chinese
-        | :corsican
-        | :croatian
-        | :czech
-        | :danish
-        | :dutch
-        | :english
-        | :esperanto
-        | :estonian
-        | :farsi
-        | :fijian
-        | :finnish
-        | :french
-        | :galician
-        | :georgian
-        | :german
-        | :greek
-        | :guarani
-        | :gujarati
-        | :"haitian-creole"
-        | :hausa
-        | :hawaiian
-        | :hebrew
-        | :hindi
-        | :hmong
-        | :hungarian
-        | :icelandic
-        | :igbo
-        | :indonesian
-        | :irish
-        | :italian
-        | :japanese
-        | :javanese
-        | :kannada
-        | :kazakh
-        | :khmer
-        | :kinyarwanda
-        | :korean
-        | :kurdish
-        | :kyrgyz
-        | :lao
-        | :latin
-        | :latvian
-        | :lingala
-        | :lithuanian
-        | :luxembourgish
-        | :macedonian
-        | :malagasy
-        | :malay
-        | :malayalam
-        | :maltese
-        | :maori
-        | :marathi
-        | :mongolian
-        | :nepali
-        | :norwegian
-        | :odia
-        | :oromo
-        | :pashto
-        | :pidgin
-        | :polish
-        | :portuguese
-        | :punjabi
-        | :quechua
-        | :romanian
-        | :russian
-        | :samoan
-        | :"scottish-gaelic"
-        | :serbian
-        | :sesotho
-        | :shona
-        | :sindhi
-        | :sinhala
-        | :slovak
-        | :slovene
-        | :somali
-        | :spanish
-        | :sundanese
-        | :swahili
-        | :swedish
-        | :tagalog
-        | :tajik
-        | :tamil
-        | :tatar
-        | :telugu
-        | :thai
-        | :tibetan
-        | :tigrinya
-        | :tongan
-        | :tswana
-        | :turkish
-        | :turkmen
-        | :ukrainian
-        | :urdu
-        | :uyghur
-        | :uzbek
-        | :vietnamese
-        | :welsh
-        | :wolof
-        | :xhosa
-        | :yiddish
-        | :yoruba
-        | :zulu
+      type body =
+        ContextDev::BrandRetrieveParams::Body::ByDomain
+        | ContextDev::BrandRetrieveParams::Body::ByName
+        | ContextDev::BrandRetrieveParams::Body::ByEmail
+        | ContextDev::BrandRetrieveParams::Body::ByTicker
+        | ContextDev::BrandRetrieveParams::Body::ByTransaction
 
-      module ForceLanguage
-        extend ContextDev::Internal::Type::Enum
+      module Body
+        extend ContextDev::Internal::Type::Union
 
-        AFRIKAANS: :afrikaans
-        ALBANIAN: :albanian
-        AMHARIC: :amharic
-        ARABIC: :arabic
-        ARMENIAN: :armenian
-        ASSAMESE: :assamese
-        AYMARA: :aymara
-        AZERI: :azeri
-        BASQUE: :basque
-        BELARUSIAN: :belarusian
-        BENGALI: :bengali
-        BOSNIAN: :bosnian
-        BULGARIAN: :bulgarian
-        BURMESE: :burmese
-        CANTONESE: :cantonese
-        CATALAN: :catalan
-        CEBUANO: :cebuano
-        CHINESE: :chinese
-        CORSICAN: :corsican
-        CROATIAN: :croatian
-        CZECH: :czech
-        DANISH: :danish
-        DUTCH: :dutch
-        ENGLISH: :english
-        ESPERANTO: :esperanto
-        ESTONIAN: :estonian
-        FARSI: :farsi
-        FIJIAN: :fijian
-        FINNISH: :finnish
-        FRENCH: :french
-        GALICIAN: :galician
-        GEORGIAN: :georgian
-        GERMAN: :german
-        GREEK: :greek
-        GUARANI: :guarani
-        GUJARATI: :gujarati
-        HAITIAN_CREOLE: :"haitian-creole"
-        HAUSA: :hausa
-        HAWAIIAN: :hawaiian
-        HEBREW: :hebrew
-        HINDI: :hindi
-        HMONG: :hmong
-        HUNGARIAN: :hungarian
-        ICELANDIC: :icelandic
-        IGBO: :igbo
-        INDONESIAN: :indonesian
-        IRISH: :irish
-        ITALIAN: :italian
-        JAPANESE: :japanese
-        JAVANESE: :javanese
-        KANNADA: :kannada
-        KAZAKH: :kazakh
-        KHMER: :khmer
-        KINYARWANDA: :kinyarwanda
-        KOREAN: :korean
-        KURDISH: :kurdish
-        KYRGYZ: :kyrgyz
-        LAO: :lao
-        LATIN: :latin
-        LATVIAN: :latvian
-        LINGALA: :lingala
-        LITHUANIAN: :lithuanian
-        LUXEMBOURGISH: :luxembourgish
-        MACEDONIAN: :macedonian
-        MALAGASY: :malagasy
-        MALAY: :malay
-        MALAYALAM: :malayalam
-        MALTESE: :maltese
-        MAORI: :maori
-        MARATHI: :marathi
-        MONGOLIAN: :mongolian
-        NEPALI: :nepali
-        NORWEGIAN: :norwegian
-        ODIA: :odia
-        OROMO: :oromo
-        PASHTO: :pashto
-        PIDGIN: :pidgin
-        POLISH: :polish
-        PORTUGUESE: :portuguese
-        PUNJABI: :punjabi
-        QUECHUA: :quechua
-        ROMANIAN: :romanian
-        RUSSIAN: :russian
-        SAMOAN: :samoan
-        SCOTTISH_GAELIC: :"scottish-gaelic"
-        SERBIAN: :serbian
-        SESOTHO: :sesotho
-        SHONA: :shona
-        SINDHI: :sindhi
-        SINHALA: :sinhala
-        SLOVAK: :slovak
-        SLOVENE: :slovene
-        SOMALI: :somali
-        SPANISH: :spanish
-        SUNDANESE: :sundanese
-        SWAHILI: :swahili
-        SWEDISH: :swedish
-        TAGALOG: :tagalog
-        TAJIK: :tajik
-        TAMIL: :tamil
-        TATAR: :tatar
-        TELUGU: :telugu
-        THAI: :thai
-        TIBETAN: :tibetan
-        TIGRINYA: :tigrinya
-        TONGAN: :tongan
-        TSWANA: :tswana
-        TURKISH: :turkish
-        TURKMEN: :turkmen
-        UKRAINIAN: :ukrainian
-        URDU: :urdu
-        UYGHUR: :uyghur
-        UZBEK: :uzbek
-        VIETNAMESE: :vietnamese
-        WELSH: :welsh
-        WOLOF: :wolof
-        XHOSA: :xhosa
-        YIDDISH: :yiddish
-        YORUBA: :yoruba
-        ZULU: :zulu
+        type by_domain =
+          {
+            domain: String,
+            type: :by_domain,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language,
+            max_age_ms: Integer,
+            max_speed: bool,
+            timeout_ms: Integer
+          }
 
-        def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::force_language]
+        class ByDomain < ContextDev::Internal::Type::BaseModel
+          attr_accessor domain: String
+
+          attr_accessor type: :by_domain
+
+          attr_reader force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language?
+
+          def force_language=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language
+
+          attr_reader max_age_ms: Integer?
+
+          def max_age_ms=: (Integer) -> Integer
+
+          attr_reader max_speed: bool?
+
+          def max_speed=: (bool) -> bool
+
+          attr_reader timeout_ms: Integer?
+
+          def timeout_ms=: (Integer) -> Integer
+
+          def initialize: (
+            domain: String,
+            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language,
+            ?max_age_ms: Integer,
+            ?max_speed: bool,
+            ?timeout_ms: Integer,
+            ?type: :by_domain
+          ) -> void
+
+          def to_hash: -> {
+            domain: String,
+            type: :by_domain,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language,
+            max_age_ms: Integer,
+            max_speed: bool,
+            timeout_ms: Integer
+          }
+
+          type force_language =
+            :afrikaans
+            | :albanian
+            | :amharic
+            | :arabic
+            | :armenian
+            | :assamese
+            | :aymara
+            | :azeri
+            | :basque
+            | :belarusian
+            | :bengali
+            | :bosnian
+            | :bulgarian
+            | :burmese
+            | :cantonese
+            | :catalan
+            | :cebuano
+            | :chinese
+            | :corsican
+            | :croatian
+            | :czech
+            | :danish
+            | :dutch
+            | :english
+            | :esperanto
+            | :estonian
+            | :farsi
+            | :fijian
+            | :finnish
+            | :french
+            | :galician
+            | :georgian
+            | :german
+            | :greek
+            | :guarani
+            | :gujarati
+            | :"haitian-creole"
+            | :hausa
+            | :hawaiian
+            | :hebrew
+            | :hindi
+            | :hmong
+            | :hungarian
+            | :icelandic
+            | :igbo
+            | :indonesian
+            | :irish
+            | :italian
+            | :japanese
+            | :javanese
+            | :kannada
+            | :kazakh
+            | :khmer
+            | :kinyarwanda
+            | :korean
+            | :kurdish
+            | :kyrgyz
+            | :lao
+            | :latin
+            | :latvian
+            | :lingala
+            | :lithuanian
+            | :luxembourgish
+            | :macedonian
+            | :malagasy
+            | :malay
+            | :malayalam
+            | :maltese
+            | :maori
+            | :marathi
+            | :mongolian
+            | :nepali
+            | :norwegian
+            | :odia
+            | :oromo
+            | :pashto
+            | :pidgin
+            | :polish
+            | :portuguese
+            | :punjabi
+            | :quechua
+            | :romanian
+            | :russian
+            | :samoan
+            | :"scottish-gaelic"
+            | :serbian
+            | :sesotho
+            | :shona
+            | :sindhi
+            | :sinhala
+            | :slovak
+            | :slovene
+            | :somali
+            | :spanish
+            | :sundanese
+            | :swahili
+            | :swedish
+            | :tagalog
+            | :tajik
+            | :tamil
+            | :tatar
+            | :telugu
+            | :thai
+            | :tibetan
+            | :tigrinya
+            | :tongan
+            | :tswana
+            | :turkish
+            | :turkmen
+            | :ukrainian
+            | :urdu
+            | :uyghur
+            | :uzbek
+            | :vietnamese
+            | :welsh
+            | :wolof
+            | :xhosa
+            | :yiddish
+            | :yoruba
+            | :zulu
+
+          module ForceLanguage
+            extend ContextDev::Internal::Type::Enum
+
+            AFRIKAANS: :afrikaans
+            ALBANIAN: :albanian
+            AMHARIC: :amharic
+            ARABIC: :arabic
+            ARMENIAN: :armenian
+            ASSAMESE: :assamese
+            AYMARA: :aymara
+            AZERI: :azeri
+            BASQUE: :basque
+            BELARUSIAN: :belarusian
+            BENGALI: :bengali
+            BOSNIAN: :bosnian
+            BULGARIAN: :bulgarian
+            BURMESE: :burmese
+            CANTONESE: :cantonese
+            CATALAN: :catalan
+            CEBUANO: :cebuano
+            CHINESE: :chinese
+            CORSICAN: :corsican
+            CROATIAN: :croatian
+            CZECH: :czech
+            DANISH: :danish
+            DUTCH: :dutch
+            ENGLISH: :english
+            ESPERANTO: :esperanto
+            ESTONIAN: :estonian
+            FARSI: :farsi
+            FIJIAN: :fijian
+            FINNISH: :finnish
+            FRENCH: :french
+            GALICIAN: :galician
+            GEORGIAN: :georgian
+            GERMAN: :german
+            GREEK: :greek
+            GUARANI: :guarani
+            GUJARATI: :gujarati
+            HAITIAN_CREOLE: :"haitian-creole"
+            HAUSA: :hausa
+            HAWAIIAN: :hawaiian
+            HEBREW: :hebrew
+            HINDI: :hindi
+            HMONG: :hmong
+            HUNGARIAN: :hungarian
+            ICELANDIC: :icelandic
+            IGBO: :igbo
+            INDONESIAN: :indonesian
+            IRISH: :irish
+            ITALIAN: :italian
+            JAPANESE: :japanese
+            JAVANESE: :javanese
+            KANNADA: :kannada
+            KAZAKH: :kazakh
+            KHMER: :khmer
+            KINYARWANDA: :kinyarwanda
+            KOREAN: :korean
+            KURDISH: :kurdish
+            KYRGYZ: :kyrgyz
+            LAO: :lao
+            LATIN: :latin
+            LATVIAN: :latvian
+            LINGALA: :lingala
+            LITHUANIAN: :lithuanian
+            LUXEMBOURGISH: :luxembourgish
+            MACEDONIAN: :macedonian
+            MALAGASY: :malagasy
+            MALAY: :malay
+            MALAYALAM: :malayalam
+            MALTESE: :maltese
+            MAORI: :maori
+            MARATHI: :marathi
+            MONGOLIAN: :mongolian
+            NEPALI: :nepali
+            NORWEGIAN: :norwegian
+            ODIA: :odia
+            OROMO: :oromo
+            PASHTO: :pashto
+            PIDGIN: :pidgin
+            POLISH: :polish
+            PORTUGUESE: :portuguese
+            PUNJABI: :punjabi
+            QUECHUA: :quechua
+            ROMANIAN: :romanian
+            RUSSIAN: :russian
+            SAMOAN: :samoan
+            SCOTTISH_GAELIC: :"scottish-gaelic"
+            SERBIAN: :serbian
+            SESOTHO: :sesotho
+            SHONA: :shona
+            SINDHI: :sindhi
+            SINHALA: :sinhala
+            SLOVAK: :slovak
+            SLOVENE: :slovene
+            SOMALI: :somali
+            SPANISH: :spanish
+            SUNDANESE: :sundanese
+            SWAHILI: :swahili
+            SWEDISH: :swedish
+            TAGALOG: :tagalog
+            TAJIK: :tajik
+            TAMIL: :tamil
+            TATAR: :tatar
+            TELUGU: :telugu
+            THAI: :thai
+            TIBETAN: :tibetan
+            TIGRINYA: :tigrinya
+            TONGAN: :tongan
+            TSWANA: :tswana
+            TURKISH: :turkish
+            TURKMEN: :turkmen
+            UKRAINIAN: :ukrainian
+            URDU: :urdu
+            UYGHUR: :uyghur
+            UZBEK: :uzbek
+            VIETNAMESE: :vietnamese
+            WELSH: :welsh
+            WOLOF: :wolof
+            XHOSA: :xhosa
+            YIDDISH: :yiddish
+            YORUBA: :yoruba
+            ZULU: :zulu
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language]
+          end
+        end
+
+        type by_name =
+          {
+            name: String,
+            type: :by_name,
+            country_gl: String,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language,
+            max_age_ms: Integer,
+            max_speed: bool,
+            timeout_ms: Integer
+          }
+
+        class ByName < ContextDev::Internal::Type::BaseModel
+          attr_accessor name: String
+
+          attr_accessor type: :by_name
+
+          attr_reader country_gl: String?
+
+          def country_gl=: (String) -> String
+
+          attr_reader force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language?
+
+          def force_language=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language
+
+          attr_reader max_age_ms: Integer?
+
+          def max_age_ms=: (Integer) -> Integer
+
+          attr_reader max_speed: bool?
+
+          def max_speed=: (bool) -> bool
+
+          attr_reader timeout_ms: Integer?
+
+          def timeout_ms=: (Integer) -> Integer
+
+          def initialize: (
+            name: String,
+            ?country_gl: String,
+            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language,
+            ?max_age_ms: Integer,
+            ?max_speed: bool,
+            ?timeout_ms: Integer,
+            ?type: :by_name
+          ) -> void
+
+          def to_hash: -> {
+            name: String,
+            type: :by_name,
+            country_gl: String,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language,
+            max_age_ms: Integer,
+            max_speed: bool,
+            timeout_ms: Integer
+          }
+
+          type force_language =
+            :afrikaans
+            | :albanian
+            | :amharic
+            | :arabic
+            | :armenian
+            | :assamese
+            | :aymara
+            | :azeri
+            | :basque
+            | :belarusian
+            | :bengali
+            | :bosnian
+            | :bulgarian
+            | :burmese
+            | :cantonese
+            | :catalan
+            | :cebuano
+            | :chinese
+            | :corsican
+            | :croatian
+            | :czech
+            | :danish
+            | :dutch
+            | :english
+            | :esperanto
+            | :estonian
+            | :farsi
+            | :fijian
+            | :finnish
+            | :french
+            | :galician
+            | :georgian
+            | :german
+            | :greek
+            | :guarani
+            | :gujarati
+            | :"haitian-creole"
+            | :hausa
+            | :hawaiian
+            | :hebrew
+            | :hindi
+            | :hmong
+            | :hungarian
+            | :icelandic
+            | :igbo
+            | :indonesian
+            | :irish
+            | :italian
+            | :japanese
+            | :javanese
+            | :kannada
+            | :kazakh
+            | :khmer
+            | :kinyarwanda
+            | :korean
+            | :kurdish
+            | :kyrgyz
+            | :lao
+            | :latin
+            | :latvian
+            | :lingala
+            | :lithuanian
+            | :luxembourgish
+            | :macedonian
+            | :malagasy
+            | :malay
+            | :malayalam
+            | :maltese
+            | :maori
+            | :marathi
+            | :mongolian
+            | :nepali
+            | :norwegian
+            | :odia
+            | :oromo
+            | :pashto
+            | :pidgin
+            | :polish
+            | :portuguese
+            | :punjabi
+            | :quechua
+            | :romanian
+            | :russian
+            | :samoan
+            | :"scottish-gaelic"
+            | :serbian
+            | :sesotho
+            | :shona
+            | :sindhi
+            | :sinhala
+            | :slovak
+            | :slovene
+            | :somali
+            | :spanish
+            | :sundanese
+            | :swahili
+            | :swedish
+            | :tagalog
+            | :tajik
+            | :tamil
+            | :tatar
+            | :telugu
+            | :thai
+            | :tibetan
+            | :tigrinya
+            | :tongan
+            | :tswana
+            | :turkish
+            | :turkmen
+            | :ukrainian
+            | :urdu
+            | :uyghur
+            | :uzbek
+            | :vietnamese
+            | :welsh
+            | :wolof
+            | :xhosa
+            | :yiddish
+            | :yoruba
+            | :zulu
+
+          module ForceLanguage
+            extend ContextDev::Internal::Type::Enum
+
+            AFRIKAANS: :afrikaans
+            ALBANIAN: :albanian
+            AMHARIC: :amharic
+            ARABIC: :arabic
+            ARMENIAN: :armenian
+            ASSAMESE: :assamese
+            AYMARA: :aymara
+            AZERI: :azeri
+            BASQUE: :basque
+            BELARUSIAN: :belarusian
+            BENGALI: :bengali
+            BOSNIAN: :bosnian
+            BULGARIAN: :bulgarian
+            BURMESE: :burmese
+            CANTONESE: :cantonese
+            CATALAN: :catalan
+            CEBUANO: :cebuano
+            CHINESE: :chinese
+            CORSICAN: :corsican
+            CROATIAN: :croatian
+            CZECH: :czech
+            DANISH: :danish
+            DUTCH: :dutch
+            ENGLISH: :english
+            ESPERANTO: :esperanto
+            ESTONIAN: :estonian
+            FARSI: :farsi
+            FIJIAN: :fijian
+            FINNISH: :finnish
+            FRENCH: :french
+            GALICIAN: :galician
+            GEORGIAN: :georgian
+            GERMAN: :german
+            GREEK: :greek
+            GUARANI: :guarani
+            GUJARATI: :gujarati
+            HAITIAN_CREOLE: :"haitian-creole"
+            HAUSA: :hausa
+            HAWAIIAN: :hawaiian
+            HEBREW: :hebrew
+            HINDI: :hindi
+            HMONG: :hmong
+            HUNGARIAN: :hungarian
+            ICELANDIC: :icelandic
+            IGBO: :igbo
+            INDONESIAN: :indonesian
+            IRISH: :irish
+            ITALIAN: :italian
+            JAPANESE: :japanese
+            JAVANESE: :javanese
+            KANNADA: :kannada
+            KAZAKH: :kazakh
+            KHMER: :khmer
+            KINYARWANDA: :kinyarwanda
+            KOREAN: :korean
+            KURDISH: :kurdish
+            KYRGYZ: :kyrgyz
+            LAO: :lao
+            LATIN: :latin
+            LATVIAN: :latvian
+            LINGALA: :lingala
+            LITHUANIAN: :lithuanian
+            LUXEMBOURGISH: :luxembourgish
+            MACEDONIAN: :macedonian
+            MALAGASY: :malagasy
+            MALAY: :malay
+            MALAYALAM: :malayalam
+            MALTESE: :maltese
+            MAORI: :maori
+            MARATHI: :marathi
+            MONGOLIAN: :mongolian
+            NEPALI: :nepali
+            NORWEGIAN: :norwegian
+            ODIA: :odia
+            OROMO: :oromo
+            PASHTO: :pashto
+            PIDGIN: :pidgin
+            POLISH: :polish
+            PORTUGUESE: :portuguese
+            PUNJABI: :punjabi
+            QUECHUA: :quechua
+            ROMANIAN: :romanian
+            RUSSIAN: :russian
+            SAMOAN: :samoan
+            SCOTTISH_GAELIC: :"scottish-gaelic"
+            SERBIAN: :serbian
+            SESOTHO: :sesotho
+            SHONA: :shona
+            SINDHI: :sindhi
+            SINHALA: :sinhala
+            SLOVAK: :slovak
+            SLOVENE: :slovene
+            SOMALI: :somali
+            SPANISH: :spanish
+            SUNDANESE: :sundanese
+            SWAHILI: :swahili
+            SWEDISH: :swedish
+            TAGALOG: :tagalog
+            TAJIK: :tajik
+            TAMIL: :tamil
+            TATAR: :tatar
+            TELUGU: :telugu
+            THAI: :thai
+            TIBETAN: :tibetan
+            TIGRINYA: :tigrinya
+            TONGAN: :tongan
+            TSWANA: :tswana
+            TURKISH: :turkish
+            TURKMEN: :turkmen
+            UKRAINIAN: :ukrainian
+            URDU: :urdu
+            UYGHUR: :uyghur
+            UZBEK: :uzbek
+            VIETNAMESE: :vietnamese
+            WELSH: :welsh
+            WOLOF: :wolof
+            XHOSA: :xhosa
+            YIDDISH: :yiddish
+            YORUBA: :yoruba
+            ZULU: :zulu
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language]
+          end
+        end
+
+        type by_email =
+          {
+            email: String,
+            type: :by_email,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language,
+            max_age_ms: Integer,
+            max_speed: bool,
+            timeout_ms: Integer
+          }
+
+        class ByEmail < ContextDev::Internal::Type::BaseModel
+          attr_accessor email: String
+
+          attr_accessor type: :by_email
+
+          attr_reader force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language?
+
+          def force_language=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language
+
+          attr_reader max_age_ms: Integer?
+
+          def max_age_ms=: (Integer) -> Integer
+
+          attr_reader max_speed: bool?
+
+          def max_speed=: (bool) -> bool
+
+          attr_reader timeout_ms: Integer?
+
+          def timeout_ms=: (Integer) -> Integer
+
+          def initialize: (
+            email: String,
+            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language,
+            ?max_age_ms: Integer,
+            ?max_speed: bool,
+            ?timeout_ms: Integer,
+            ?type: :by_email
+          ) -> void
+
+          def to_hash: -> {
+            email: String,
+            type: :by_email,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language,
+            max_age_ms: Integer,
+            max_speed: bool,
+            timeout_ms: Integer
+          }
+
+          type force_language =
+            :afrikaans
+            | :albanian
+            | :amharic
+            | :arabic
+            | :armenian
+            | :assamese
+            | :aymara
+            | :azeri
+            | :basque
+            | :belarusian
+            | :bengali
+            | :bosnian
+            | :bulgarian
+            | :burmese
+            | :cantonese
+            | :catalan
+            | :cebuano
+            | :chinese
+            | :corsican
+            | :croatian
+            | :czech
+            | :danish
+            | :dutch
+            | :english
+            | :esperanto
+            | :estonian
+            | :farsi
+            | :fijian
+            | :finnish
+            | :french
+            | :galician
+            | :georgian
+            | :german
+            | :greek
+            | :guarani
+            | :gujarati
+            | :"haitian-creole"
+            | :hausa
+            | :hawaiian
+            | :hebrew
+            | :hindi
+            | :hmong
+            | :hungarian
+            | :icelandic
+            | :igbo
+            | :indonesian
+            | :irish
+            | :italian
+            | :japanese
+            | :javanese
+            | :kannada
+            | :kazakh
+            | :khmer
+            | :kinyarwanda
+            | :korean
+            | :kurdish
+            | :kyrgyz
+            | :lao
+            | :latin
+            | :latvian
+            | :lingala
+            | :lithuanian
+            | :luxembourgish
+            | :macedonian
+            | :malagasy
+            | :malay
+            | :malayalam
+            | :maltese
+            | :maori
+            | :marathi
+            | :mongolian
+            | :nepali
+            | :norwegian
+            | :odia
+            | :oromo
+            | :pashto
+            | :pidgin
+            | :polish
+            | :portuguese
+            | :punjabi
+            | :quechua
+            | :romanian
+            | :russian
+            | :samoan
+            | :"scottish-gaelic"
+            | :serbian
+            | :sesotho
+            | :shona
+            | :sindhi
+            | :sinhala
+            | :slovak
+            | :slovene
+            | :somali
+            | :spanish
+            | :sundanese
+            | :swahili
+            | :swedish
+            | :tagalog
+            | :tajik
+            | :tamil
+            | :tatar
+            | :telugu
+            | :thai
+            | :tibetan
+            | :tigrinya
+            | :tongan
+            | :tswana
+            | :turkish
+            | :turkmen
+            | :ukrainian
+            | :urdu
+            | :uyghur
+            | :uzbek
+            | :vietnamese
+            | :welsh
+            | :wolof
+            | :xhosa
+            | :yiddish
+            | :yoruba
+            | :zulu
+
+          module ForceLanguage
+            extend ContextDev::Internal::Type::Enum
+
+            AFRIKAANS: :afrikaans
+            ALBANIAN: :albanian
+            AMHARIC: :amharic
+            ARABIC: :arabic
+            ARMENIAN: :armenian
+            ASSAMESE: :assamese
+            AYMARA: :aymara
+            AZERI: :azeri
+            BASQUE: :basque
+            BELARUSIAN: :belarusian
+            BENGALI: :bengali
+            BOSNIAN: :bosnian
+            BULGARIAN: :bulgarian
+            BURMESE: :burmese
+            CANTONESE: :cantonese
+            CATALAN: :catalan
+            CEBUANO: :cebuano
+            CHINESE: :chinese
+            CORSICAN: :corsican
+            CROATIAN: :croatian
+            CZECH: :czech
+            DANISH: :danish
+            DUTCH: :dutch
+            ENGLISH: :english
+            ESPERANTO: :esperanto
+            ESTONIAN: :estonian
+            FARSI: :farsi
+            FIJIAN: :fijian
+            FINNISH: :finnish
+            FRENCH: :french
+            GALICIAN: :galician
+            GEORGIAN: :georgian
+            GERMAN: :german
+            GREEK: :greek
+            GUARANI: :guarani
+            GUJARATI: :gujarati
+            HAITIAN_CREOLE: :"haitian-creole"
+            HAUSA: :hausa
+            HAWAIIAN: :hawaiian
+            HEBREW: :hebrew
+            HINDI: :hindi
+            HMONG: :hmong
+            HUNGARIAN: :hungarian
+            ICELANDIC: :icelandic
+            IGBO: :igbo
+            INDONESIAN: :indonesian
+            IRISH: :irish
+            ITALIAN: :italian
+            JAPANESE: :japanese
+            JAVANESE: :javanese
+            KANNADA: :kannada
+            KAZAKH: :kazakh
+            KHMER: :khmer
+            KINYARWANDA: :kinyarwanda
+            KOREAN: :korean
+            KURDISH: :kurdish
+            KYRGYZ: :kyrgyz
+            LAO: :lao
+            LATIN: :latin
+            LATVIAN: :latvian
+            LINGALA: :lingala
+            LITHUANIAN: :lithuanian
+            LUXEMBOURGISH: :luxembourgish
+            MACEDONIAN: :macedonian
+            MALAGASY: :malagasy
+            MALAY: :malay
+            MALAYALAM: :malayalam
+            MALTESE: :maltese
+            MAORI: :maori
+            MARATHI: :marathi
+            MONGOLIAN: :mongolian
+            NEPALI: :nepali
+            NORWEGIAN: :norwegian
+            ODIA: :odia
+            OROMO: :oromo
+            PASHTO: :pashto
+            PIDGIN: :pidgin
+            POLISH: :polish
+            PORTUGUESE: :portuguese
+            PUNJABI: :punjabi
+            QUECHUA: :quechua
+            ROMANIAN: :romanian
+            RUSSIAN: :russian
+            SAMOAN: :samoan
+            SCOTTISH_GAELIC: :"scottish-gaelic"
+            SERBIAN: :serbian
+            SESOTHO: :sesotho
+            SHONA: :shona
+            SINDHI: :sindhi
+            SINHALA: :sinhala
+            SLOVAK: :slovak
+            SLOVENE: :slovene
+            SOMALI: :somali
+            SPANISH: :spanish
+            SUNDANESE: :sundanese
+            SWAHILI: :swahili
+            SWEDISH: :swedish
+            TAGALOG: :tagalog
+            TAJIK: :tajik
+            TAMIL: :tamil
+            TATAR: :tatar
+            TELUGU: :telugu
+            THAI: :thai
+            TIBETAN: :tibetan
+            TIGRINYA: :tigrinya
+            TONGAN: :tongan
+            TSWANA: :tswana
+            TURKISH: :turkish
+            TURKMEN: :turkmen
+            UKRAINIAN: :ukrainian
+            URDU: :urdu
+            UYGHUR: :uyghur
+            UZBEK: :uzbek
+            VIETNAMESE: :vietnamese
+            WELSH: :welsh
+            WOLOF: :wolof
+            XHOSA: :xhosa
+            YIDDISH: :yiddish
+            YORUBA: :yoruba
+            ZULU: :zulu
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language]
+          end
+        end
+
+        type by_ticker =
+          {
+            ticker: String,
+            type: :by_ticker,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language,
+            max_age_ms: Integer,
+            max_speed: bool,
+            ticker_exchange: String,
+            timeout_ms: Integer
+          }
+
+        class ByTicker < ContextDev::Internal::Type::BaseModel
+          attr_accessor ticker: String
+
+          attr_accessor type: :by_ticker
+
+          attr_reader force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language?
+
+          def force_language=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language
+
+          attr_reader max_age_ms: Integer?
+
+          def max_age_ms=: (Integer) -> Integer
+
+          attr_reader max_speed: bool?
+
+          def max_speed=: (bool) -> bool
+
+          attr_reader ticker_exchange: String?
+
+          def ticker_exchange=: (String) -> String
+
+          attr_reader timeout_ms: Integer?
+
+          def timeout_ms=: (Integer) -> Integer
+
+          def initialize: (
+            ticker: String,
+            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language,
+            ?max_age_ms: Integer,
+            ?max_speed: bool,
+            ?ticker_exchange: String,
+            ?timeout_ms: Integer,
+            ?type: :by_ticker
+          ) -> void
+
+          def to_hash: -> {
+            ticker: String,
+            type: :by_ticker,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language,
+            max_age_ms: Integer,
+            max_speed: bool,
+            ticker_exchange: String,
+            timeout_ms: Integer
+          }
+
+          type force_language =
+            :afrikaans
+            | :albanian
+            | :amharic
+            | :arabic
+            | :armenian
+            | :assamese
+            | :aymara
+            | :azeri
+            | :basque
+            | :belarusian
+            | :bengali
+            | :bosnian
+            | :bulgarian
+            | :burmese
+            | :cantonese
+            | :catalan
+            | :cebuano
+            | :chinese
+            | :corsican
+            | :croatian
+            | :czech
+            | :danish
+            | :dutch
+            | :english
+            | :esperanto
+            | :estonian
+            | :farsi
+            | :fijian
+            | :finnish
+            | :french
+            | :galician
+            | :georgian
+            | :german
+            | :greek
+            | :guarani
+            | :gujarati
+            | :"haitian-creole"
+            | :hausa
+            | :hawaiian
+            | :hebrew
+            | :hindi
+            | :hmong
+            | :hungarian
+            | :icelandic
+            | :igbo
+            | :indonesian
+            | :irish
+            | :italian
+            | :japanese
+            | :javanese
+            | :kannada
+            | :kazakh
+            | :khmer
+            | :kinyarwanda
+            | :korean
+            | :kurdish
+            | :kyrgyz
+            | :lao
+            | :latin
+            | :latvian
+            | :lingala
+            | :lithuanian
+            | :luxembourgish
+            | :macedonian
+            | :malagasy
+            | :malay
+            | :malayalam
+            | :maltese
+            | :maori
+            | :marathi
+            | :mongolian
+            | :nepali
+            | :norwegian
+            | :odia
+            | :oromo
+            | :pashto
+            | :pidgin
+            | :polish
+            | :portuguese
+            | :punjabi
+            | :quechua
+            | :romanian
+            | :russian
+            | :samoan
+            | :"scottish-gaelic"
+            | :serbian
+            | :sesotho
+            | :shona
+            | :sindhi
+            | :sinhala
+            | :slovak
+            | :slovene
+            | :somali
+            | :spanish
+            | :sundanese
+            | :swahili
+            | :swedish
+            | :tagalog
+            | :tajik
+            | :tamil
+            | :tatar
+            | :telugu
+            | :thai
+            | :tibetan
+            | :tigrinya
+            | :tongan
+            | :tswana
+            | :turkish
+            | :turkmen
+            | :ukrainian
+            | :urdu
+            | :uyghur
+            | :uzbek
+            | :vietnamese
+            | :welsh
+            | :wolof
+            | :xhosa
+            | :yiddish
+            | :yoruba
+            | :zulu
+
+          module ForceLanguage
+            extend ContextDev::Internal::Type::Enum
+
+            AFRIKAANS: :afrikaans
+            ALBANIAN: :albanian
+            AMHARIC: :amharic
+            ARABIC: :arabic
+            ARMENIAN: :armenian
+            ASSAMESE: :assamese
+            AYMARA: :aymara
+            AZERI: :azeri
+            BASQUE: :basque
+            BELARUSIAN: :belarusian
+            BENGALI: :bengali
+            BOSNIAN: :bosnian
+            BULGARIAN: :bulgarian
+            BURMESE: :burmese
+            CANTONESE: :cantonese
+            CATALAN: :catalan
+            CEBUANO: :cebuano
+            CHINESE: :chinese
+            CORSICAN: :corsican
+            CROATIAN: :croatian
+            CZECH: :czech
+            DANISH: :danish
+            DUTCH: :dutch
+            ENGLISH: :english
+            ESPERANTO: :esperanto
+            ESTONIAN: :estonian
+            FARSI: :farsi
+            FIJIAN: :fijian
+            FINNISH: :finnish
+            FRENCH: :french
+            GALICIAN: :galician
+            GEORGIAN: :georgian
+            GERMAN: :german
+            GREEK: :greek
+            GUARANI: :guarani
+            GUJARATI: :gujarati
+            HAITIAN_CREOLE: :"haitian-creole"
+            HAUSA: :hausa
+            HAWAIIAN: :hawaiian
+            HEBREW: :hebrew
+            HINDI: :hindi
+            HMONG: :hmong
+            HUNGARIAN: :hungarian
+            ICELANDIC: :icelandic
+            IGBO: :igbo
+            INDONESIAN: :indonesian
+            IRISH: :irish
+            ITALIAN: :italian
+            JAPANESE: :japanese
+            JAVANESE: :javanese
+            KANNADA: :kannada
+            KAZAKH: :kazakh
+            KHMER: :khmer
+            KINYARWANDA: :kinyarwanda
+            KOREAN: :korean
+            KURDISH: :kurdish
+            KYRGYZ: :kyrgyz
+            LAO: :lao
+            LATIN: :latin
+            LATVIAN: :latvian
+            LINGALA: :lingala
+            LITHUANIAN: :lithuanian
+            LUXEMBOURGISH: :luxembourgish
+            MACEDONIAN: :macedonian
+            MALAGASY: :malagasy
+            MALAY: :malay
+            MALAYALAM: :malayalam
+            MALTESE: :maltese
+            MAORI: :maori
+            MARATHI: :marathi
+            MONGOLIAN: :mongolian
+            NEPALI: :nepali
+            NORWEGIAN: :norwegian
+            ODIA: :odia
+            OROMO: :oromo
+            PASHTO: :pashto
+            PIDGIN: :pidgin
+            POLISH: :polish
+            PORTUGUESE: :portuguese
+            PUNJABI: :punjabi
+            QUECHUA: :quechua
+            ROMANIAN: :romanian
+            RUSSIAN: :russian
+            SAMOAN: :samoan
+            SCOTTISH_GAELIC: :"scottish-gaelic"
+            SERBIAN: :serbian
+            SESOTHO: :sesotho
+            SHONA: :shona
+            SINDHI: :sindhi
+            SINHALA: :sinhala
+            SLOVAK: :slovak
+            SLOVENE: :slovene
+            SOMALI: :somali
+            SPANISH: :spanish
+            SUNDANESE: :sundanese
+            SWAHILI: :swahili
+            SWEDISH: :swedish
+            TAGALOG: :tagalog
+            TAJIK: :tajik
+            TAMIL: :tamil
+            TATAR: :tatar
+            TELUGU: :telugu
+            THAI: :thai
+            TIBETAN: :tibetan
+            TIGRINYA: :tigrinya
+            TONGAN: :tongan
+            TSWANA: :tswana
+            TURKISH: :turkish
+            TURKMEN: :turkmen
+            UKRAINIAN: :ukrainian
+            URDU: :urdu
+            UYGHUR: :uyghur
+            UZBEK: :uzbek
+            VIETNAMESE: :vietnamese
+            WELSH: :welsh
+            WOLOF: :wolof
+            XHOSA: :xhosa
+            YIDDISH: :yiddish
+            YORUBA: :yoruba
+            ZULU: :zulu
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language]
+          end
+        end
+
+        type by_transaction =
+          {
+            transaction_info: String,
+            type: :by_transaction,
+            city: String,
+            country_gl: String,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language,
+            high_confidence_only: bool,
+            max_speed: bool,
+            mcc: Integer,
+            phone: Float,
+            timeout_ms: Integer
+          }
+
+        class ByTransaction < ContextDev::Internal::Type::BaseModel
+          attr_accessor transaction_info: String
+
+          attr_accessor type: :by_transaction
+
+          attr_reader city: String?
+
+          def city=: (String) -> String
+
+          attr_reader country_gl: String?
+
+          def country_gl=: (String) -> String
+
+          attr_reader force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language?
+
+          def force_language=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language
+
+          attr_reader high_confidence_only: bool?
+
+          def high_confidence_only=: (bool) -> bool
+
+          attr_reader max_speed: bool?
+
+          def max_speed=: (bool) -> bool
+
+          attr_reader mcc: Integer?
+
+          def mcc=: (Integer) -> Integer
+
+          attr_reader phone: Float?
+
+          def phone=: (Float) -> Float
+
+          attr_reader timeout_ms: Integer?
+
+          def timeout_ms=: (Integer) -> Integer
+
+          def initialize: (
+            transaction_info: String,
+            ?city: String,
+            ?country_gl: String,
+            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language,
+            ?high_confidence_only: bool,
+            ?max_speed: bool,
+            ?mcc: Integer,
+            ?phone: Float,
+            ?timeout_ms: Integer,
+            ?type: :by_transaction
+          ) -> void
+
+          def to_hash: -> {
+            transaction_info: String,
+            type: :by_transaction,
+            city: String,
+            country_gl: String,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language,
+            high_confidence_only: bool,
+            max_speed: bool,
+            mcc: Integer,
+            phone: Float,
+            timeout_ms: Integer
+          }
+
+          type force_language =
+            :afrikaans
+            | :albanian
+            | :amharic
+            | :arabic
+            | :armenian
+            | :assamese
+            | :aymara
+            | :azeri
+            | :basque
+            | :belarusian
+            | :bengali
+            | :bosnian
+            | :bulgarian
+            | :burmese
+            | :cantonese
+            | :catalan
+            | :cebuano
+            | :chinese
+            | :corsican
+            | :croatian
+            | :czech
+            | :danish
+            | :dutch
+            | :english
+            | :esperanto
+            | :estonian
+            | :farsi
+            | :fijian
+            | :finnish
+            | :french
+            | :galician
+            | :georgian
+            | :german
+            | :greek
+            | :guarani
+            | :gujarati
+            | :"haitian-creole"
+            | :hausa
+            | :hawaiian
+            | :hebrew
+            | :hindi
+            | :hmong
+            | :hungarian
+            | :icelandic
+            | :igbo
+            | :indonesian
+            | :irish
+            | :italian
+            | :japanese
+            | :javanese
+            | :kannada
+            | :kazakh
+            | :khmer
+            | :kinyarwanda
+            | :korean
+            | :kurdish
+            | :kyrgyz
+            | :lao
+            | :latin
+            | :latvian
+            | :lingala
+            | :lithuanian
+            | :luxembourgish
+            | :macedonian
+            | :malagasy
+            | :malay
+            | :malayalam
+            | :maltese
+            | :maori
+            | :marathi
+            | :mongolian
+            | :nepali
+            | :norwegian
+            | :odia
+            | :oromo
+            | :pashto
+            | :pidgin
+            | :polish
+            | :portuguese
+            | :punjabi
+            | :quechua
+            | :romanian
+            | :russian
+            | :samoan
+            | :"scottish-gaelic"
+            | :serbian
+            | :sesotho
+            | :shona
+            | :sindhi
+            | :sinhala
+            | :slovak
+            | :slovene
+            | :somali
+            | :spanish
+            | :sundanese
+            | :swahili
+            | :swedish
+            | :tagalog
+            | :tajik
+            | :tamil
+            | :tatar
+            | :telugu
+            | :thai
+            | :tibetan
+            | :tigrinya
+            | :tongan
+            | :tswana
+            | :turkish
+            | :turkmen
+            | :ukrainian
+            | :urdu
+            | :uyghur
+            | :uzbek
+            | :vietnamese
+            | :welsh
+            | :wolof
+            | :xhosa
+            | :yiddish
+            | :yoruba
+            | :zulu
+
+          module ForceLanguage
+            extend ContextDev::Internal::Type::Enum
+
+            AFRIKAANS: :afrikaans
+            ALBANIAN: :albanian
+            AMHARIC: :amharic
+            ARABIC: :arabic
+            ARMENIAN: :armenian
+            ASSAMESE: :assamese
+            AYMARA: :aymara
+            AZERI: :azeri
+            BASQUE: :basque
+            BELARUSIAN: :belarusian
+            BENGALI: :bengali
+            BOSNIAN: :bosnian
+            BULGARIAN: :bulgarian
+            BURMESE: :burmese
+            CANTONESE: :cantonese
+            CATALAN: :catalan
+            CEBUANO: :cebuano
+            CHINESE: :chinese
+            CORSICAN: :corsican
+            CROATIAN: :croatian
+            CZECH: :czech
+            DANISH: :danish
+            DUTCH: :dutch
+            ENGLISH: :english
+            ESPERANTO: :esperanto
+            ESTONIAN: :estonian
+            FARSI: :farsi
+            FIJIAN: :fijian
+            FINNISH: :finnish
+            FRENCH: :french
+            GALICIAN: :galician
+            GEORGIAN: :georgian
+            GERMAN: :german
+            GREEK: :greek
+            GUARANI: :guarani
+            GUJARATI: :gujarati
+            HAITIAN_CREOLE: :"haitian-creole"
+            HAUSA: :hausa
+            HAWAIIAN: :hawaiian
+            HEBREW: :hebrew
+            HINDI: :hindi
+            HMONG: :hmong
+            HUNGARIAN: :hungarian
+            ICELANDIC: :icelandic
+            IGBO: :igbo
+            INDONESIAN: :indonesian
+            IRISH: :irish
+            ITALIAN: :italian
+            JAPANESE: :japanese
+            JAVANESE: :javanese
+            KANNADA: :kannada
+            KAZAKH: :kazakh
+            KHMER: :khmer
+            KINYARWANDA: :kinyarwanda
+            KOREAN: :korean
+            KURDISH: :kurdish
+            KYRGYZ: :kyrgyz
+            LAO: :lao
+            LATIN: :latin
+            LATVIAN: :latvian
+            LINGALA: :lingala
+            LITHUANIAN: :lithuanian
+            LUXEMBOURGISH: :luxembourgish
+            MACEDONIAN: :macedonian
+            MALAGASY: :malagasy
+            MALAY: :malay
+            MALAYALAM: :malayalam
+            MALTESE: :maltese
+            MAORI: :maori
+            MARATHI: :marathi
+            MONGOLIAN: :mongolian
+            NEPALI: :nepali
+            NORWEGIAN: :norwegian
+            ODIA: :odia
+            OROMO: :oromo
+            PASHTO: :pashto
+            PIDGIN: :pidgin
+            POLISH: :polish
+            PORTUGUESE: :portuguese
+            PUNJABI: :punjabi
+            QUECHUA: :quechua
+            ROMANIAN: :romanian
+            RUSSIAN: :russian
+            SAMOAN: :samoan
+            SCOTTISH_GAELIC: :"scottish-gaelic"
+            SERBIAN: :serbian
+            SESOTHO: :sesotho
+            SHONA: :shona
+            SINDHI: :sindhi
+            SINHALA: :sinhala
+            SLOVAK: :slovak
+            SLOVENE: :slovene
+            SOMALI: :somali
+            SPANISH: :spanish
+            SUNDANESE: :sundanese
+            SWAHILI: :swahili
+            SWEDISH: :swedish
+            TAGALOG: :tagalog
+            TAJIK: :tajik
+            TAMIL: :tamil
+            TATAR: :tatar
+            TELUGU: :telugu
+            THAI: :thai
+            TIBETAN: :tibetan
+            TIGRINYA: :tigrinya
+            TONGAN: :tongan
+            TSWANA: :tswana
+            TURKISH: :turkish
+            TURKMEN: :turkmen
+            UKRAINIAN: :ukrainian
+            URDU: :urdu
+            UYGHUR: :uyghur
+            UZBEK: :uzbek
+            VIETNAMESE: :vietnamese
+            WELSH: :welsh
+            WOLOF: :wolof
+            XHOSA: :xhosa
+            YIDDISH: :yiddish
+            YORUBA: :yoruba
+            ZULU: :zulu
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language]
+          end
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::BrandRetrieveParams::body]
       end
     end
   end
