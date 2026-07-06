@@ -8,52 +8,54 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute body
-      #   Exactly one of domain, name, email, ticker, or transaction_info must be
-      #   provided.
+      #   Exactly one lookup type must be provided.
       #
-      #   @return [ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByNameRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByEmailRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByTickerRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveFromTransactionRequest]
+      #   @return [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction]
       required :body, union: -> { ContextDev::BrandRetrieveParams::Body }
 
       # @!method initialize(body:, request_options: {})
-      #   Some parameter documentations has been truncated, see
-      #   {ContextDev::Models::BrandRetrieveParams} for more details.
-      #
-      #   @param body [ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByNameRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByEmailRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByTickerRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveFromTransactionRequest] Exactly one of domain, name, email, ticker, or transaction_info must be provided
+      #   @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] Exactly one lookup type must be provided.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Exactly one of domain, name, email, ticker, or transaction_info must be
-      # provided.
+      # Exactly one lookup type must be provided.
       module Body
         extend ContextDev::Internal::Type::Union
 
+        discriminator :type
+
         # Retrieve brand data by domain. Cannot be combined with name, email, or ticker.
-        variant -> { ContextDev::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest }
+        variant :by_domain, -> { ContextDev::BrandRetrieveParams::Body::ByDomain }
 
         # Retrieve brand data by company name. Cannot be combined with domain, email, or ticker.
-        variant -> { ContextDev::BrandRetrieveParams::Body::BrandRetrieveByNameRequest }
+        variant :by_name, -> { ContextDev::BrandRetrieveParams::Body::ByName }
 
         # Retrieve brand data by email address. The domain is extracted from the email. Free and disposable email providers are rejected with 422. Cannot be combined with domain, name, or ticker.
-        variant -> { ContextDev::BrandRetrieveParams::Body::BrandRetrieveByEmailRequest }
+        variant :by_email, -> { ContextDev::BrandRetrieveParams::Body::ByEmail }
 
         # Retrieve brand data by stock ticker. Cannot be combined with domain, name, or email.
-        variant -> { ContextDev::BrandRetrieveParams::Body::BrandRetrieveByTickerRequest }
+        variant :by_ticker, -> { ContextDev::BrandRetrieveParams::Body::ByTicker }
 
         # Identify brand data from a transaction descriptor. Cannot be combined with domain, name, email, or ticker.
-        variant -> { ContextDev::BrandRetrieveParams::Body::BrandRetrieveFromTransactionRequest }
+        variant :by_transaction, -> { ContextDev::BrandRetrieveParams::Body::ByTransaction }
 
-        class BrandRetrieveByDomainRequest < ContextDev::Internal::Type::BaseModel
+        class ByDomain < ContextDev::Internal::Type::BaseModel
           # @!attribute domain
           #   Domain name to retrieve brand data for (e.g., 'stripe.com').
           #
           #   @return [String]
           required :domain, String
 
+          # @!attribute type
+          #   Discriminator for domain-based brand retrieval.
+          #
+          #   @return [Symbol, :by_domain]
+          required :type, const: :by_domain
+
           # @!attribute force_language
           #
-          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest::ForceLanguage, nil]
-          optional :force_language,
-                   enum: -> { ContextDev::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest::ForceLanguage }
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage, nil]
+          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByDomain::ForceLanguage }
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -80,24 +82,25 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(domain:, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil)
+          # @!method initialize(domain:, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil, type: :by_domain)
           #   Some parameter documentations has been truncated, see
-          #   {ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest}
-          #   for more details.
+          #   {ContextDev::Models::BrandRetrieveParams::Body::ByDomain} for more details.
           #
           #   Retrieve brand data by domain. Cannot be combined with name, email, or ticker.
           #
           #   @param domain [String] Domain name to retrieve brand data for (e.g., 'stripe.com').
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+          #
+          #   @param type [Symbol, :by_domain] Discriminator for domain-based brand retrieval.
 
-          # @see ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest#force_language
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByDomain#force_language
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
 
@@ -227,12 +230,18 @@ module ContextDev
           end
         end
 
-        class BrandRetrieveByNameRequest < ContextDev::Internal::Type::BaseModel
+        class ByName < ContextDev::Internal::Type::BaseModel
           # @!attribute name
           #   Company name to retrieve brand data for (e.g., 'Apple Inc').
           #
           #   @return [String]
           required :name, String
+
+          # @!attribute type
+          #   Discriminator for name-based brand retrieval.
+          #
+          #   @return [Symbol, :by_name]
+          required :type, const: :by_name
 
           # @!attribute country_gl
           #   Optional country code hint (GL parameter) to specify the country when looking up
@@ -243,9 +252,8 @@ module ContextDev
 
           # @!attribute force_language
           #
-          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByNameRequest::ForceLanguage, nil]
-          optional :force_language,
-                   enum: -> { ContextDev::BrandRetrieveParams::Body::BrandRetrieveByNameRequest::ForceLanguage }
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage, nil]
+          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage }
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -272,10 +280,9 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(name:, country_gl: nil, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil)
+          # @!method initialize(name:, country_gl: nil, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil, type: :by_name)
           #   Some parameter documentations has been truncated, see
-          #   {ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByNameRequest} for
-          #   more details.
+          #   {ContextDev::Models::BrandRetrieveParams::Body::ByName} for more details.
           #
           #   Retrieve brand data by company name. Cannot be combined with domain, email, or
           #   ticker.
@@ -284,15 +291,17 @@ module ContextDev
           #
           #   @param country_gl [String] Optional country code hint (GL parameter) to specify the country when looking up
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByNameRequest::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+          #
+          #   @param type [Symbol, :by_name] Discriminator for name-based brand retrieval.
 
-          # @see ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByNameRequest#force_language
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByName#force_language
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
 
@@ -422,18 +431,23 @@ module ContextDev
           end
         end
 
-        class BrandRetrieveByEmailRequest < ContextDev::Internal::Type::BaseModel
+        class ByEmail < ContextDev::Internal::Type::BaseModel
           # @!attribute email
           #   Email address to retrieve brand data for (e.g., 'jane@stripe.com').
           #
           #   @return [String]
           required :email, String
 
+          # @!attribute type
+          #   Discriminator for email-based brand retrieval.
+          #
+          #   @return [Symbol, :by_email]
+          required :type, const: :by_email
+
           # @!attribute force_language
           #
-          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByEmailRequest::ForceLanguage, nil]
-          optional :force_language,
-                   enum: -> { ContextDev::BrandRetrieveParams::Body::BrandRetrieveByEmailRequest::ForceLanguage }
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage, nil]
+          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByEmail::ForceLanguage }
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -460,10 +474,9 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(email:, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil)
+          # @!method initialize(email:, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil, type: :by_email)
           #   Some parameter documentations has been truncated, see
-          #   {ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByEmailRequest} for
-          #   more details.
+          #   {ContextDev::Models::BrandRetrieveParams::Body::ByEmail} for more details.
           #
           #   Retrieve brand data by email address. The domain is extracted from the email.
           #   Free and disposable email providers are rejected with 422. Cannot be combined
@@ -471,15 +484,17 @@ module ContextDev
           #
           #   @param email [String] Email address to retrieve brand data for (e.g., 'jane@stripe.com').
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByEmailRequest::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+          #
+          #   @param type [Symbol, :by_email] Discriminator for email-based brand retrieval.
 
-          # @see ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByEmailRequest#force_language
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByEmail#force_language
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
 
@@ -609,18 +624,23 @@ module ContextDev
           end
         end
 
-        class BrandRetrieveByTickerRequest < ContextDev::Internal::Type::BaseModel
+        class ByTicker < ContextDev::Internal::Type::BaseModel
           # @!attribute ticker
           #   Stock ticker symbol to retrieve brand data for (e.g., 'AAPL').
           #
           #   @return [String]
           required :ticker, String
 
+          # @!attribute type
+          #   Discriminator for ticker-based brand retrieval.
+          #
+          #   @return [Symbol, :by_ticker]
+          required :type, const: :by_ticker
+
           # @!attribute force_language
           #
-          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByTickerRequest::ForceLanguage, nil]
-          optional :force_language,
-                   enum: -> { ContextDev::BrandRetrieveParams::Body::BrandRetrieveByTickerRequest::ForceLanguage }
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage, nil]
+          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTicker::ForceLanguage }
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -653,17 +673,16 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(ticker:, force_language: nil, max_age_ms: nil, max_speed: nil, ticker_exchange: nil, timeout_ms: nil)
+          # @!method initialize(ticker:, force_language: nil, max_age_ms: nil, max_speed: nil, ticker_exchange: nil, timeout_ms: nil, type: :by_ticker)
           #   Some parameter documentations has been truncated, see
-          #   {ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByTickerRequest}
-          #   for more details.
+          #   {ContextDev::Models::BrandRetrieveParams::Body::ByTicker} for more details.
           #
           #   Retrieve brand data by stock ticker. Cannot be combined with domain, name, or
           #   email.
           #
           #   @param ticker [String] Stock ticker symbol to retrieve brand data for (e.g., 'AAPL').
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByTickerRequest::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
@@ -672,8 +691,10 @@ module ContextDev
           #   @param ticker_exchange [String] Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+          #
+          #   @param type [Symbol, :by_ticker] Discriminator for ticker-based brand retrieval.
 
-          # @see ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByTickerRequest#force_language
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByTicker#force_language
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
 
@@ -803,12 +824,18 @@ module ContextDev
           end
         end
 
-        class BrandRetrieveFromTransactionRequest < ContextDev::Internal::Type::BaseModel
+        class ByTransaction < ContextDev::Internal::Type::BaseModel
           # @!attribute transaction_info
           #   Transaction information to identify the brand.
           #
           #   @return [String]
           required :transaction_info, String
+
+          # @!attribute type
+          #   Discriminator for transaction-based brand retrieval.
+          #
+          #   @return [Symbol, :by_transaction]
+          required :type, const: :by_transaction
 
           # @!attribute city
           #   Optional city name to prioritize when searching for the brand.
@@ -825,9 +852,8 @@ module ContextDev
 
           # @!attribute force_language
           #
-          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveFromTransactionRequest::ForceLanguage, nil]
-          optional :force_language,
-                   enum: -> { ContextDev::BrandRetrieveParams::Body::BrandRetrieveFromTransactionRequest::ForceLanguage }
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage, nil]
+          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage }
 
           # @!attribute high_confidence_only
           #   When set to true, the API performs additional verification to ensure the
@@ -865,10 +891,9 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(transaction_info:, city: nil, country_gl: nil, force_language: nil, high_confidence_only: nil, max_speed: nil, mcc: nil, phone: nil, timeout_ms: nil)
+          # @!method initialize(transaction_info:, city: nil, country_gl: nil, force_language: nil, high_confidence_only: nil, max_speed: nil, mcc: nil, phone: nil, timeout_ms: nil, type: :by_transaction)
           #   Some parameter documentations has been truncated, see
-          #   {ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveFromTransactionRequest}
-          #   for more details.
+          #   {ContextDev::Models::BrandRetrieveParams::Body::ByTransaction} for more details.
           #
           #   Identify brand data from a transaction descriptor. Cannot be combined with
           #   domain, name, email, or ticker.
@@ -879,7 +904,7 @@ module ContextDev
           #
           #   @param country_gl [String] Optional country code hint (GL parameter) to specify the country when identifyin
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveFromTransactionRequest::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage]
           #
           #   @param high_confidence_only [Boolean] When set to true, the API performs additional verification to ensure the identif
           #
@@ -890,8 +915,10 @@ module ContextDev
           #   @param phone [Float] Optional phone number from the transaction to help verify brand match.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+          #
+          #   @param type [Symbol, :by_transaction] Discriminator for transaction-based brand retrieval.
 
-          # @see ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveFromTransactionRequest#force_language
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#force_language
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
 
@@ -1022,7 +1049,7 @@ module ContextDev
         end
 
         # @!method self.variants
-        #   @return [Array(ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByNameRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByEmailRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveByTickerRequest, ContextDev::Models::BrandRetrieveParams::Body::BrandRetrieveFromTransactionRequest)]
+        #   @return [Array(ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction)]
       end
     end
   end
