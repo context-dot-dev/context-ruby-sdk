@@ -10,8 +10,8 @@ module ContextDev
       # @!attribute identifier
       #   Identifier of the brand to prefetch. Provide exactly one of domain or email.
       #
-      #   @return [ContextDev::Models::UtilityPrefetchParams::Identifier]
-      required :identifier, -> { ContextDev::UtilityPrefetchParams::Identifier }
+      #   @return [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier]
+      required :identifier, union: -> { ContextDev::UtilityPrefetchParams::Identifier }
 
       # @!attribute type
       #   What to prefetch. Currently only 'brand' is supported.
@@ -31,7 +31,7 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::UtilityPrefetchParams} for more details.
       #
-      #   @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier] Identifier of the brand to prefetch. Provide exactly one of domain or email.
+      #   @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier] Identifier of the brand to prefetch. Provide exactly one of domain or email.
       #
       #   @param type [Symbol, ContextDev::Models::UtilityPrefetchParams::Type] What to prefetch. Currently only 'brand' is supported.
       #
@@ -39,30 +39,50 @@ module ContextDev
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      class Identifier < ContextDev::Internal::Type::BaseModel
-        # @!attribute domain
-        #   Domain name to prefetch brand data for
-        #
-        #   @return [String, nil]
-        optional :domain, String
+      # Identifier of the brand to prefetch. Provide exactly one of domain or email.
+      module Identifier
+        extend ContextDev::Internal::Type::Union
 
-        # @!attribute email
-        #   Email address to prefetch brand data for. The domain will be extracted from the
-        #   email. Free email providers (gmail.com, yahoo.com, etc.) and disposable email
-        #   addresses are not allowed.
-        #
-        #   @return [String, nil]
-        optional :email, String
+        # Prefetch brand data by domain.
+        variant -> { ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier }
 
-        # @!method initialize(domain: nil, email: nil)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::UtilityPrefetchParams::Identifier} for more details.
-        #
-        #   Identifier of the brand to prefetch. Provide exactly one of domain or email.
-        #
-        #   @param domain [String] Domain name to prefetch brand data for
-        #
-        #   @param email [String] Email address to prefetch brand data for. The domain will be extracted from the
+        # Prefetch brand data by email. The domain will be extracted and validated.
+        variant -> { ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier }
+
+        class UtilityPrefetchDomainIdentifier < ContextDev::Internal::Type::BaseModel
+          # @!attribute domain
+          #   Domain name to prefetch brand data for
+          #
+          #   @return [String]
+          required :domain, String
+
+          # @!method initialize(domain:)
+          #   Prefetch brand data by domain.
+          #
+          #   @param domain [String] Domain name to prefetch brand data for
+        end
+
+        class UtilityPrefetchEmailIdentifier < ContextDev::Internal::Type::BaseModel
+          # @!attribute email
+          #   Email address to prefetch brand data for. The domain will be extracted from the
+          #   email. Free email providers (gmail.com, yahoo.com, etc.) and disposable email
+          #   addresses are not allowed.
+          #
+          #   @return [String]
+          required :email, String
+
+          # @!method initialize(email:)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier}
+          #   for more details.
+          #
+          #   Prefetch brand data by email. The domain will be extracted and validated.
+          #
+          #   @param email [String] Email address to prefetch brand data for. The domain will be extracted from the
+        end
+
+        # @!method self.variants
+        #   @return [Array(ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier)]
       end
 
       # What to prefetch. Currently only 'brand' is supported.
