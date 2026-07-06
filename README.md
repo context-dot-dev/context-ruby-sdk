@@ -41,9 +41,9 @@ context_dev = ContextDev::Client.new(
   api_key: ENV["CONTEXT_DEV_API_KEY"] # This is the default and can be omitted
 )
 
-response = context_dev.web.extract
+brand = context_dev.brand.retrieve(body: {domain: "stripe.com"})
 
-puts(response.data)
+puts(brand.brand)
 ```
 
 ### Handling errors
@@ -52,7 +52,7 @@ When the library is unable to connect to the API, or if the API returns a non-su
 
 ```ruby
 begin
-  web = context_dev.web.extract
+  brand = context_dev.brand.retrieve(body: {domain: "stripe.com"})
 rescue ContextDev::Errors::APIConnectionError => e
   puts("The server could not be reached")
   puts(e.cause)  # an underlying Exception, likely raised within `net/http`
@@ -95,7 +95,7 @@ context_dev = ContextDev::Client.new(
 )
 
 # Or, configure per-request:
-context_dev.web.extract(request_options: {max_retries: 5})
+context_dev.brand.retrieve(body: {domain: "stripe.com"}, request_options: {max_retries: 5})
 ```
 
 ### Timeouts
@@ -109,7 +109,7 @@ context_dev = ContextDev::Client.new(
 )
 
 # Or, configure per-request:
-context_dev.web.extract(request_options: {timeout: 5})
+context_dev.brand.retrieve(body: {domain: "stripe.com"}, request_options: {timeout: 5})
 ```
 
 On timeout, `ContextDev::Errors::APITimeoutError` is raised.
@@ -139,8 +139,9 @@ You can send undocumented parameters to any endpoint, and read undocumented resp
 Note: the `extra_` parameters of the same name overrides the documented parameters.
 
 ```ruby
-response =
-  context_dev.web.extract(
+brand =
+  context_dev.brand.retrieve(
+    body: {domain: "stripe.com"},
     request_options: {
       extra_query: {my_query_parameter: value},
       extra_body: {my_body_parameter: value},
@@ -148,7 +149,7 @@ response =
     }
   )
 
-puts(response[:my_undocumented_property])
+puts(brand[:my_undocumented_property])
 ```
 
 #### Undocumented request params
@@ -186,18 +187,22 @@ This library provides comprehensive [RBI](https://sorbet.org/docs/rbi) definitio
 You can provide typesafe request parameters like so:
 
 ```ruby
-context_dev.web.extract
+context_dev.brand.retrieve(
+  body: ContextDev::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest.new(domain: "stripe.com")
+)
 ```
 
 Or, equivalently:
 
 ```ruby
 # Hashes work, but are not typesafe:
-context_dev.web.extract
+context_dev.brand.retrieve(body: {domain: "stripe.com"})
 
 # You can also splat a full Params class:
-params = ContextDev::WebExtractParams.new
-context_dev.web.extract(**params)
+params = ContextDev::BrandRetrieveParams.new(
+  body: ContextDev::BrandRetrieveParams::Body::BrandRetrieveByDomainRequest.new(domain: "stripe.com")
+)
+context_dev.brand.retrieve(**params)
 ```
 
 ### Enums
