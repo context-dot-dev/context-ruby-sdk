@@ -70,6 +70,19 @@ module ContextDev
       sig { returns(Time) }
       attr_accessor :updated_at
 
+      # Current baseline: the last observed value the monitor compares new snapshots
+      # against. Its shape follows `target.type` (page/sitemap/extract). Only populated
+      # on GET /monitors/{monitor_id}; null until the first baseline run completes (and
+      # after a target or change_detection update, which resets the baseline).
+      sig do
+        returns(
+          T.nilable(
+            ContextDev::Models::MonitorRetrieveResponse::Baseline::Variants
+          )
+        )
+      end
+      attr_accessor :baseline
+
       sig { returns(T.nilable(Time)) }
       attr_accessor :last_change_at
 
@@ -143,6 +156,14 @@ module ContextDev
               ContextDev::Models::MonitorRetrieveResponse::Target::Extract::OrHash
             ),
           updated_at: Time,
+          baseline:
+            T.nilable(
+              T.any(
+                ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline::OrHash,
+                ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline::OrHash,
+                ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline::OrHash
+              )
+            ),
           last_change_at: T.nilable(Time),
           last_error:
             T.nilable(
@@ -179,6 +200,11 @@ module ContextDev
         # Discriminated union describing what the monitor watches.
         target:,
         updated_at:,
+        # Current baseline: the last observed value the monitor compares new snapshots
+        # against. Its shape follows `target.type` (page/sitemap/extract). Only populated
+        # on GET /monitors/{monitor_id}; null until the first baseline run completes (and
+        # after a target or change_detection update, which resets the baseline).
+        baseline: nil,
         last_change_at: nil,
         # Error from the most recent failed run; null when the last run succeeded.
         last_error: nil,
@@ -207,6 +233,10 @@ module ContextDev
             target:
               ContextDev::Models::MonitorRetrieveResponse::Target::Variants,
             updated_at: Time,
+            baseline:
+              T.nilable(
+                ContextDev::Models::MonitorRetrieveResponse::Baseline::Variants
+              ),
             last_change_at: T.nilable(Time),
             last_error:
               T.nilable(ContextDev::Models::MonitorRetrieveResponse::LastError),
@@ -750,6 +780,170 @@ module ContextDev
           override.returns(
             T::Array[
               ContextDev::Models::MonitorRetrieveResponse::Target::Variants
+            ]
+          )
+        end
+        def self.variants
+        end
+      end
+
+      # Current baseline: the last observed value the monitor compares new snapshots
+      # against. Its shape follows `target.type` (page/sitemap/extract). Only populated
+      # on GET /monitors/{monitor_id}; null until the first baseline run completes (and
+      # after a target or change_detection update, which resets the baseline).
+      module Baseline
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline,
+              ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline,
+              ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline
+            )
+          end
+
+        class MonitorsPageBaseline < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # When this baseline was last captured or replaced.
+          sig { returns(Time) }
+          attr_accessor :captured_at
+
+          # The page's visible text as last observed.
+          sig { returns(String) }
+          attr_accessor :text
+
+          # Current baseline of a `page` monitor: the visible page text as last observed.
+          sig do
+            params(captured_at: Time, text: String).returns(T.attached_class)
+          end
+          def self.new(
+            # When this baseline was last captured or replaced.
+            captured_at:,
+            # The page's visible text as last observed.
+            text:
+          )
+          end
+
+          sig { override.returns({ captured_at: Time, text: String }) }
+          def to_hash
+          end
+        end
+
+        class MonitorsSitemapBaseline < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # When this baseline was last captured or replaced.
+          sig { returns(Time) }
+          attr_accessor :captured_at
+
+          # Number of URLs in the baseline.
+          sig { returns(Integer) }
+          attr_accessor :url_count
+
+          # The sitemap URLs as last observed (sorted, normalized).
+          sig { returns(T::Array[String]) }
+          attr_accessor :urls
+
+          # Current baseline of a `sitemap` monitor: the normalized URL set as last
+          # observed.
+          sig do
+            params(
+              captured_at: Time,
+              url_count: Integer,
+              urls: T::Array[String]
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            # When this baseline was last captured or replaced.
+            captured_at:,
+            # Number of URLs in the baseline.
+            url_count:,
+            # The sitemap URLs as last observed (sorted, normalized).
+            urls:
+          )
+          end
+
+          sig do
+            override.returns(
+              { captured_at: Time, url_count: Integer, urls: T::Array[String] }
+            )
+          end
+          def to_hash
+          end
+        end
+
+        class MonitorsExtractBaseline < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # When this baseline was last captured or replaced.
+          sig { returns(Time) }
+          attr_accessor :captured_at
+
+          # The extracted structured data, matching the monitor's extraction schema (same
+          # shape as the /web/extract endpoint's `data`).
+          sig { returns(T.anything) }
+          attr_accessor :data
+
+          # URLs that were analyzed to produce the extracted data.
+          sig { returns(T::Array[String]) }
+          attr_accessor :urls_analyzed
+
+          # Current baseline of an `extract` monitor: the structured data as last extracted.
+          sig do
+            params(
+              captured_at: Time,
+              data: T.anything,
+              urls_analyzed: T::Array[String]
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            # When this baseline was last captured or replaced.
+            captured_at:,
+            # The extracted structured data, matching the monitor's extraction schema (same
+            # shape as the /web/extract endpoint's `data`).
+            data:,
+            # URLs that were analyzed to produce the extracted data.
+            urls_analyzed:
+          )
+          end
+
+          sig do
+            override.returns(
+              {
+                captured_at: Time,
+                data: T.anything,
+                urls_analyzed: T::Array[String]
+              }
+            )
+          end
+          def to_hash
+          end
+        end
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::MonitorRetrieveResponse::Baseline::Variants
             ]
           )
         end
