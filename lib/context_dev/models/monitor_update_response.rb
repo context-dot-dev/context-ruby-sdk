@@ -61,6 +61,15 @@ module ContextDev
       #   @return [Time]
       required :updated_at, Time
 
+      # @!attribute baseline
+      #   Current baseline: the last observed value the monitor compares new snapshots
+      #   against. Its shape follows `target.type` (page/sitemap/extract). Only populated
+      #   on GET /monitors/{monitor_id}; null until the first baseline run completes (and
+      #   after a target or change_detection update, which resets the baseline).
+      #
+      #   @return [ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsExtractBaseline, nil]
+      optional :baseline, union: -> { ContextDev::Models::MonitorUpdateResponse::Baseline }, nil?: true
+
       # @!attribute last_change_at
       #
       #   @return [Time, nil]
@@ -94,7 +103,7 @@ module ContextDev
       #   @return [ContextDev::Models::MonitorUpdateResponse::Webhook, nil]
       optional :webhook, -> { ContextDev::Models::MonitorUpdateResponse::Webhook }, nil?: true
 
-      # @!method initialize(id:, change_detection:, created_at:, mode:, name:, schedule:, status:, target:, updated_at:, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, tags: nil, webhook: nil)
+      # @!method initialize(id:, change_detection:, created_at:, mode:, name:, schedule:, status:, target:, updated_at:, baseline: nil, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, tags: nil, webhook: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorUpdateResponse} for more details.
       #
@@ -118,6 +127,8 @@ module ContextDev
       #   @param target [ContextDev::Models::MonitorUpdateResponse::Target::Page, ContextDev::Models::MonitorUpdateResponse::Target::Sitemap, ContextDev::Models::MonitorUpdateResponse::Target::Extract] Discriminated union describing what the monitor watches.
       #
       #   @param updated_at [Time]
+      #
+      #   @param baseline [ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsExtractBaseline, nil] Current baseline: the last observed value the monitor compares new snapshots aga
       #
       #   @param last_change_at [Time, nil]
       #
@@ -430,6 +441,113 @@ module ContextDev
 
         # @!method self.variants
         #   @return [Array(ContextDev::Models::MonitorUpdateResponse::Target::Page, ContextDev::Models::MonitorUpdateResponse::Target::Sitemap, ContextDev::Models::MonitorUpdateResponse::Target::Extract)]
+      end
+
+      # Current baseline: the last observed value the monitor compares new snapshots
+      # against. Its shape follows `target.type` (page/sitemap/extract). Only populated
+      # on GET /monitors/{monitor_id}; null until the first baseline run completes (and
+      # after a target or change_detection update, which resets the baseline).
+      #
+      # @see ContextDev::Models::MonitorUpdateResponse#baseline
+      module Baseline
+        extend ContextDev::Internal::Type::Union
+
+        # Current baseline of a `page` monitor: the visible page text as last observed.
+        variant -> { ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsPageBaseline }
+
+        # Current baseline of a `sitemap` monitor: the normalized URL set as last observed.
+        variant -> { ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsSitemapBaseline }
+
+        # Current baseline of an `extract` monitor: the structured data as last extracted.
+        variant -> { ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsExtractBaseline }
+
+        class MonitorsPageBaseline < ContextDev::Internal::Type::BaseModel
+          # @!attribute captured_at
+          #   When this baseline was last captured or replaced.
+          #
+          #   @return [Time]
+          required :captured_at, Time
+
+          # @!attribute text
+          #   The page's visible text as last observed.
+          #
+          #   @return [String]
+          required :text, String
+
+          # @!method initialize(captured_at:, text:)
+          #   Current baseline of a `page` monitor: the visible page text as last observed.
+          #
+          #   @param captured_at [Time] When this baseline was last captured or replaced.
+          #
+          #   @param text [String] The page's visible text as last observed.
+        end
+
+        class MonitorsSitemapBaseline < ContextDev::Internal::Type::BaseModel
+          # @!attribute captured_at
+          #   When this baseline was last captured or replaced.
+          #
+          #   @return [Time]
+          required :captured_at, Time
+
+          # @!attribute url_count
+          #   Number of URLs in the baseline.
+          #
+          #   @return [Integer]
+          required :url_count, Integer
+
+          # @!attribute urls
+          #   The sitemap URLs as last observed (sorted, normalized).
+          #
+          #   @return [Array<String>]
+          required :urls, ContextDev::Internal::Type::ArrayOf[String]
+
+          # @!method initialize(captured_at:, url_count:, urls:)
+          #   Current baseline of a `sitemap` monitor: the normalized URL set as last
+          #   observed.
+          #
+          #   @param captured_at [Time] When this baseline was last captured or replaced.
+          #
+          #   @param url_count [Integer] Number of URLs in the baseline.
+          #
+          #   @param urls [Array<String>] The sitemap URLs as last observed (sorted, normalized).
+        end
+
+        class MonitorsExtractBaseline < ContextDev::Internal::Type::BaseModel
+          # @!attribute captured_at
+          #   When this baseline was last captured or replaced.
+          #
+          #   @return [Time]
+          required :captured_at, Time
+
+          # @!attribute data
+          #   The extracted structured data, matching the monitor's extraction schema (same
+          #   shape as the /web/extract endpoint's `data`).
+          #
+          #   @return [Object]
+          required :data, ContextDev::Internal::Type::Unknown
+
+          # @!attribute urls_analyzed
+          #   URLs that were analyzed to produce the extracted data.
+          #
+          #   @return [Array<String>]
+          required :urls_analyzed, ContextDev::Internal::Type::ArrayOf[String]
+
+          # @!method initialize(captured_at:, data:, urls_analyzed:)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsExtractBaseline}
+          #   for more details.
+          #
+          #   Current baseline of an `extract` monitor: the structured data as last extracted.
+          #
+          #   @param captured_at [Time] When this baseline was last captured or replaced.
+          #
+          #   @param data [Object] The extracted structured data, matching the monitor's extraction schema (same sh
+          #
+          #   @param urls_analyzed [Array<String>] URLs that were analyzed to produce the extracted data.
+        end
+
+        # @!method self.variants
+        #   @return [Array(ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorUpdateResponse::Baseline::MonitorsExtractBaseline)]
       end
 
       # @see ContextDev::Models::MonitorUpdateResponse#last_error
