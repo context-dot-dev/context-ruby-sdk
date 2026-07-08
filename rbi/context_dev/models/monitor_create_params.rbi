@@ -186,9 +186,6 @@ module ContextDev
               )
             end
 
-          sig { returns(String) }
-          attr_accessor :query
-
           sig { returns(Symbol) }
           attr_accessor :type
 
@@ -198,21 +195,19 @@ module ContextDev
           sig { params(confidence_threshold: Float).void }
           attr_writer :confidence_threshold
 
-          # Detect meaning-level changes that match a natural language query.
+          # Detect meaning-level changes to the extracted data, ignoring cosmetic or
+          # paraphrase-only differences. What is watched is determined by the extract
+          # target's `schema` and `instructions`.
           sig do
-            params(
-              query: String,
-              confidence_threshold: Float,
-              type: Symbol
-            ).returns(T.attached_class)
+            params(confidence_threshold: Float, type: Symbol).returns(
+              T.attached_class
+            )
           end
-          def self.new(query:, confidence_threshold: nil, type: :semantic)
+          def self.new(confidence_threshold: nil, type: :semantic)
           end
 
           sig do
-            override.returns(
-              { query: String, type: Symbol, confidence_threshold: Float }
-            )
+            override.returns({ type: Symbol, confidence_threshold: Float })
           end
           def to_hash
           end
@@ -494,6 +489,12 @@ module ContextDev
               )
             end
 
+          # Natural-language instructions describing what to extract and watch. This single
+          # prompt scopes both the extraction and what changes get reported: only data
+          # captured by the schema and these instructions is compared between runs.
+          sig { returns(String) }
+          attr_accessor :instructions
+
           sig { returns(Symbol) }
           attr_accessor :type
 
@@ -506,13 +507,6 @@ module ContextDev
 
           sig { params(follow_subdomains: T::Boolean).void }
           attr_writer :follow_subdomains
-
-          # Optional natural-language instructions guiding what to extract.
-          sig { returns(T.nilable(String)) }
-          attr_reader :instructions
-
-          sig { params(instructions: String).void }
-          attr_writer :instructions
 
           # Optional maximum link depth from the starting URL (0 = only the starting page).
           sig { returns(T.nilable(Integer)) }
@@ -539,9 +533,9 @@ module ContextDev
           # Watch a site's extracted structured data.
           sig do
             params(
+              instructions: String,
               url: String,
               follow_subdomains: T::Boolean,
-              instructions: String,
               max_depth: Integer,
               max_pages: Integer,
               schema: T::Hash[Symbol, T.anything],
@@ -549,11 +543,13 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
+            # Natural-language instructions describing what to extract and watch. This single
+            # prompt scopes both the extraction and what changes get reported: only data
+            # captured by the schema and these instructions is compared between runs.
+            instructions:,
             # Root URL to extract structured data from.
             url:,
             follow_subdomains: nil,
-            # Optional natural-language instructions guiding what to extract.
-            instructions: nil,
             # Optional maximum link depth from the starting URL (0 = only the starting page).
             max_depth: nil,
             # Maximum number of pages to analyze during extraction.
@@ -568,10 +564,10 @@ module ContextDev
           sig do
             override.returns(
               {
+                instructions: String,
                 type: Symbol,
                 url: String,
                 follow_subdomains: T::Boolean,
-                instructions: String,
                 max_depth: Integer,
                 max_pages: Integer,
                 schema: T::Hash[Symbol, T.anything]

@@ -108,14 +108,14 @@ module ContextDev
         def self?.values: -> ::Array[ContextDev::Models::MonitorListParams::change_detection_type]
       end
 
-      type search_by = :name | :url | :query | :tags
+      type search_by = :name | :url | :instructions | :tags
 
       module SearchBy
         extend ContextDev::Internal::Type::Enum
 
         NAME: :name
         URL: :url
-        QUERY: :query
+        INSTRUCTIONS: :instructions
         TAGS: :tags
 
         def self?.values: -> ::Array[ContextDev::Models::MonitorListParams::search_by]

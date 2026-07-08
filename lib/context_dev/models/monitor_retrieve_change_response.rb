@@ -112,11 +112,6 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :matched_urls, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!attribute query
-      #
-      #   @return [String, nil]
-      optional :query, String
-
       # @!attribute removed_url_count
       #
       #   @return [Integer, nil]
@@ -134,7 +129,7 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!method initialize(id:, change_detection_type:, detected_at:, mode:, monitor_id:, run_id:, summary:, target_type:, title:, url:, added_url_count: nil, added_urls: nil, after_text_excerpt: nil, before_text_excerpt: nil, confidence: nil, diff: nil, evidence: nil, importance: nil, matched_url_count: nil, matched_urls: nil, query: nil, removed_url_count: nil, removed_urls: nil, tags: nil)
+      # @!method initialize(id:, change_detection_type:, detected_at:, mode:, monitor_id:, run_id:, summary:, target_type:, title:, url:, added_url_count: nil, added_urls: nil, after_text_excerpt: nil, before_text_excerpt: nil, confidence: nil, diff: nil, evidence: nil, importance: nil, matched_url_count: nil, matched_urls: nil, removed_url_count: nil, removed_urls: nil, tags: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorRetrieveChangeResponse} for more details.
       #
@@ -183,8 +178,6 @@ module ContextDev
       #   @param matched_url_count [Integer]
       #
       #   @param matched_urls [Array<String>] At most 500 URLs are included; the corresponding count field is always exact.
-      #
-      #   @param query [String]
       #
       #   @param removed_url_count [Integer]
       #
