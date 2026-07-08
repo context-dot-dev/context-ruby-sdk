@@ -79,7 +79,7 @@ module ContextDev
         # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals.
         variant :exact, -> { ContextDev::MonitorCreateParams::ChangeDetection::Exact }
 
-        # Detect meaning-level changes that match a natural language query.
+        # Detect meaning-level changes to the extracted data, ignoring cosmetic or paraphrase-only differences. What is watched is determined by the extract target's `schema` and `instructions`.
         variant :semantic, -> { ContextDev::MonitorCreateParams::ChangeDetection::Semantic }
 
         class Exact < ContextDev::Internal::Type::BaseModel
@@ -96,11 +96,6 @@ module ContextDev
         end
 
         class Semantic < ContextDev::Internal::Type::BaseModel
-          # @!attribute query
-          #
-          #   @return [String]
-          required :query, String
-
           # @!attribute type
           #
           #   @return [Symbol, :semantic]
@@ -111,10 +106,11 @@ module ContextDev
           #   @return [Float, nil]
           optional :confidence_threshold, Float
 
-          # @!method initialize(query:, confidence_threshold: nil, type: :semantic)
-          #   Detect meaning-level changes that match a natural language query.
+          # @!method initialize(confidence_threshold: nil, type: :semantic)
+          #   Detect meaning-level changes to the extracted data, ignoring cosmetic or
+          #   paraphrase-only differences. What is watched is determined by the extract
+          #   target's `schema` and `instructions`.
           #
-          #   @param query [String]
           #   @param confidence_threshold [Float]
           #   @param type [Symbol, :semantic]
         end
@@ -269,6 +265,14 @@ module ContextDev
         end
 
         class Extract < ContextDev::Internal::Type::BaseModel
+          # @!attribute instructions
+          #   Natural-language instructions describing what to extract and watch. This single
+          #   prompt scopes both the extraction and what changes get reported: only data
+          #   captured by the schema and these instructions is compared between runs.
+          #
+          #   @return [String]
+          required :instructions, String
+
           # @!attribute type
           #
           #   @return [Symbol, :extract]
@@ -284,12 +288,6 @@ module ContextDev
           #
           #   @return [Boolean, nil]
           optional :follow_subdomains, ContextDev::Internal::Type::Boolean
-
-          # @!attribute instructions
-          #   Optional natural-language instructions guiding what to extract.
-          #
-          #   @return [String, nil]
-          optional :instructions, String
 
           # @!attribute max_depth
           #   Optional maximum link depth from the starting URL (0 = only the starting page).
@@ -310,17 +308,17 @@ module ContextDev
           #   @return [Hash{Symbol=>Object}, nil]
           optional :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
 
-          # @!method initialize(url:, follow_subdomains: nil, instructions: nil, max_depth: nil, max_pages: nil, schema: nil, type: :extract)
+          # @!method initialize(instructions:, url:, follow_subdomains: nil, max_depth: nil, max_pages: nil, schema: nil, type: :extract)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorCreateParams::Target::Extract} for more details.
           #
           #   Watch a site's extracted structured data.
           #
+          #   @param instructions [String] Natural-language instructions describing what to extract and watch. This single
+          #
           #   @param url [String] Root URL to extract structured data from.
           #
           #   @param follow_subdomains [Boolean]
-          #
-          #   @param instructions [String] Optional natural-language instructions guiding what to extract.
           #
           #   @param max_depth [Integer] Optional maximum link depth from the starting URL (0 = only the starting page).
           #

@@ -29,8 +29,8 @@ module ContextDev
       optional :q, String
 
       # @!attribute search_by
-      #   Comma-separated fields to search with `q`. Defaults to all of them. Note `query`
-      #   only exists on semantic monitors.
+      #   Comma-separated fields to search with `q`. Defaults to all of them. Note
+      #   `instructions` only exists on extract monitors.
       #
       #   @return [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil]
       optional :search_by,
@@ -82,7 +82,7 @@ module ContextDev
       #
       #   @param q [String] Free-text search term, matched against the fields named in `search_by`.
       #
-      #   @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>] Comma-separated fields to search with `q`. Defaults to all of them. Note `query`
+      #   @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>] Comma-separated fields to search with `q`. Defaults to all of them. Note `instru
       #
       #   @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
       #
@@ -111,7 +111,7 @@ module ContextDev
 
         NAME = :name
         URL = :url
-        QUERY = :query
+        INSTRUCTIONS = :instructions
         TAGS = :tags
 
         # @!method self.values

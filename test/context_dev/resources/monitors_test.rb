@@ -240,7 +240,6 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         importance: ContextDev::Models::MonitorRetrieveChangeResponse::Importance | nil,
         matched_url_count: Integer | nil,
         matched_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
-        query: String | nil,
         removed_url_count: Integer | nil,
         removed_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil
