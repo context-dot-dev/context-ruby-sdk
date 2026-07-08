@@ -19,6 +19,7 @@ module ContextDev
             ContextDev::BrandRetrieveParams::Body::ByName,
             ContextDev::BrandRetrieveParams::Body::ByEmail,
             ContextDev::BrandRetrieveParams::Body::ByTicker,
+            ContextDev::BrandRetrieveParams::Body::ByDirectURL,
             ContextDev::BrandRetrieveParams::Body::ByTransaction
           )
         )
@@ -33,6 +34,7 @@ module ContextDev
               ContextDev::BrandRetrieveParams::Body::ByName::OrHash,
               ContextDev::BrandRetrieveParams::Body::ByEmail::OrHash,
               ContextDev::BrandRetrieveParams::Body::ByTicker::OrHash,
+              ContextDev::BrandRetrieveParams::Body::ByDirectURL::OrHash,
               ContextDev::BrandRetrieveParams::Body::ByTransaction::OrHash
             ),
           request_options: ContextDev::RequestOptions::OrHash
@@ -54,6 +56,7 @@ module ContextDev
                 ContextDev::BrandRetrieveParams::Body::ByName,
                 ContextDev::BrandRetrieveParams::Body::ByEmail,
                 ContextDev::BrandRetrieveParams::Body::ByTicker,
+                ContextDev::BrandRetrieveParams::Body::ByDirectURL,
                 ContextDev::BrandRetrieveParams::Body::ByTransaction
               ),
             request_options: ContextDev::RequestOptions
@@ -74,6 +77,7 @@ module ContextDev
               ContextDev::BrandRetrieveParams::Body::ByName,
               ContextDev::BrandRetrieveParams::Body::ByEmail,
               ContextDev::BrandRetrieveParams::Body::ByTicker,
+              ContextDev::BrandRetrieveParams::Body::ByDirectURL,
               ContextDev::BrandRetrieveParams::Body::ByTransaction
             )
           end
@@ -3051,6 +3055,69 @@ module ContextDev
             end
             def self.values
             end
+          end
+        end
+
+        class ByDirectURL < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::BrandRetrieveParams::Body::ByDirectURL,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Full http(s) URL to fetch brand data from (e.g.,
+          # 'https://stripe.com/enterprise'). Only this URL is fetched — not the entire
+          # internet.
+          sig { returns(String) }
+          attr_accessor :direct_url
+
+          # Discriminator for direct-URL-based brand retrieval.
+          sig { returns(Symbol) }
+          attr_accessor :type
+
+          # Optional timeout in milliseconds for the request. If the request takes longer
+          # than this value, it will be aborted with a 408 status code. Maximum allowed
+          # value is 300000ms (5 minutes).
+          sig { returns(T.nilable(Integer)) }
+          attr_reader :timeout_ms
+
+          sig { params(timeout_ms: Integer).void }
+          attr_writer :timeout_ms
+
+          # Retrieve brand data by fetching the provided URL directly. Note: if you use
+          # this, brand data is fetched only from the provided URL — not from the entire
+          # internet — so results are limited to what that single page contains. No domain
+          # resolution, database lookup, or cross-source enrichment is performed. Cannot be
+          # combined with domain, name, email, or ticker.
+          sig do
+            params(
+              direct_url: String,
+              timeout_ms: Integer,
+              type: Symbol
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            # Full http(s) URL to fetch brand data from (e.g.,
+            # 'https://stripe.com/enterprise'). Only this URL is fetched — not the entire
+            # internet.
+            direct_url:,
+            # Optional timeout in milliseconds for the request. If the request takes longer
+            # than this value, it will be aborted with a 408 status code. Maximum allowed
+            # value is 300000ms (5 minutes).
+            timeout_ms: nil,
+            # Discriminator for direct-URL-based brand retrieval.
+            type: :by_direct_url
+          )
+          end
+
+          sig do
+            override.returns(
+              { direct_url: String, type: Symbol, timeout_ms: Integer }
+            )
+          end
+          def to_hash
           end
         end
 

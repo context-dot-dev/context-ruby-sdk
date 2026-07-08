@@ -10,11 +10,11 @@ module ContextDev
       # @!attribute body
       #   Exactly one lookup type must be provided.
       #
-      #   @return [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction]
+      #   @return [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction]
       required :body, union: -> { ContextDev::BrandRetrieveParams::Body }
 
       # @!method initialize(body:, request_options: {})
-      #   @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] Exactly one lookup type must be provided.
+      #   @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] Exactly one lookup type must be provided.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -35,6 +35,9 @@ module ContextDev
 
         # Retrieve brand data by stock ticker. Cannot be combined with domain, name, or email.
         variant :by_ticker, -> { ContextDev::BrandRetrieveParams::Body::ByTicker }
+
+        # Retrieve brand data by fetching the provided URL directly. Note: if you use this, brand data is fetched only from the provided URL — not from the entire internet — so results are limited to what that single page contains. No domain resolution, database lookup, or cross-source enrichment is performed. Cannot be combined with domain, name, email, or ticker.
+        variant :by_direct_url, -> { ContextDev::BrandRetrieveParams::Body::ByDirectURL }
 
         # Identify brand data from a transaction descriptor. Cannot be combined with domain, name, email, or ticker.
         variant :by_transaction, -> { ContextDev::BrandRetrieveParams::Body::ByTransaction }
@@ -824,6 +827,46 @@ module ContextDev
           end
         end
 
+        class ByDirectURL < ContextDev::Internal::Type::BaseModel
+          # @!attribute direct_url
+          #   Full http(s) URL to fetch brand data from (e.g.,
+          #   'https://stripe.com/enterprise'). Only this URL is fetched — not the entire
+          #   internet.
+          #
+          #   @return [String]
+          required :direct_url, String
+
+          # @!attribute type
+          #   Discriminator for direct-URL-based brand retrieval.
+          #
+          #   @return [Symbol, :by_direct_url]
+          required :type, const: :by_direct_url
+
+          # @!attribute timeout_ms
+          #   Optional timeout in milliseconds for the request. If the request takes longer
+          #   than this value, it will be aborted with a 408 status code. Maximum allowed
+          #   value is 300000ms (5 minutes).
+          #
+          #   @return [Integer, nil]
+          optional :timeout_ms, Integer, api_name: :timeoutMS
+
+          # @!method initialize(direct_url:, timeout_ms: nil, type: :by_direct_url)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL} for more details.
+          #
+          #   Retrieve brand data by fetching the provided URL directly. Note: if you use
+          #   this, brand data is fetched only from the provided URL — not from the entire
+          #   internet — so results are limited to what that single page contains. No domain
+          #   resolution, database lookup, or cross-source enrichment is performed. Cannot be
+          #   combined with domain, name, email, or ticker.
+          #
+          #   @param direct_url [String] Full http(s) URL to fetch brand data from (e.g., 'https://stripe.com/enterprise'
+          #
+          #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+          #
+          #   @param type [Symbol, :by_direct_url] Discriminator for direct-URL-based brand retrieval.
+        end
+
         class ByTransaction < ContextDev::Internal::Type::BaseModel
           # @!attribute transaction_info
           #   Transaction information to identify the brand.
@@ -1049,7 +1092,7 @@ module ContextDev
         end
 
         # @!method self.variants
-        #   @return [Array(ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction)]
+        #   @return [Array(ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction)]
       end
     end
   end
