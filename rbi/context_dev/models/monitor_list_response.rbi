@@ -689,8 +689,9 @@ module ContextDev
 
             # Watch a sitemap for URL additions and removals. Crawled URLs are normalized
             # (lowercased host, no trailing slash/fragment) and scoped to the monitored site
-            # and its subdomains before comparison. A new URL set must be observed on two
-            # consecutive runs before a change is reported, suppressing one-run crawl flaps.
+            # and its subdomains before comparison. On a detected difference the sitemap is
+            # re-fetched within the same run and only URLs both observations agree on are
+            # reported, suppressing transient crawl flaps.
             sig do
               params(
                 url: String,
@@ -737,9 +738,8 @@ module ContextDev
                 )
               end
 
-            # Natural-language instructions describing what to extract and watch. This single
-            # prompt scopes both the extraction and what changes get reported: only data
-            # captured by the schema and these instructions is compared between runs.
+            # Natural-language instructions guiding which pages and facts to track and which
+            # changes to report.
             sig { returns(String) }
             attr_accessor :instructions
 
@@ -763,14 +763,15 @@ module ContextDev
             sig { params(max_depth: Integer).void }
             attr_writer :max_depth
 
-            # Maximum number of pages to analyze during extraction.
+            # Maximum number of pages to track.
             sig { returns(T.nilable(Integer)) }
             attr_reader :max_pages
 
             sig { params(max_pages: Integer).void }
             attr_writer :max_pages
 
-            # JSON Schema describing the structured data to extract and watch for changes. If
+            # JSON Schema describing the data you care about. It guides which pages are
+            # selected for tracking and gives the change judge context on what matters. If
             # omitted, a default summary + key-points schema is used.
             sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
             attr_reader :schema
@@ -778,7 +779,11 @@ module ContextDev
             sig { params(schema: T::Hash[Symbol, T.anything]).void }
             attr_writer :schema
 
-            # Watch a site's extracted structured data.
+            # Watch the monitor-relevant pages of a site for meaningful changes. A crawl
+            # guided by `schema`/`instructions` selects up to `max_pages` relevant pages to
+            # track; each run re-checks exactly those pages, and confirmed content changes are
+            # judged against the monitor's instructions. The tracked page set is refreshed by
+            # a periodic re-discovery crawl.
             sig do
               params(
                 instructions: String,
@@ -791,18 +796,18 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Natural-language instructions describing what to extract and watch. This single
-              # prompt scopes both the extraction and what changes get reported: only data
-              # captured by the schema and these instructions is compared between runs.
+              # Natural-language instructions guiding which pages and facts to track and which
+              # changes to report.
               instructions:,
               # Root URL to extract structured data from.
               url:,
               follow_subdomains: nil,
               # Optional maximum link depth from the starting URL (0 = only the starting page).
               max_depth: nil,
-              # Maximum number of pages to analyze during extraction.
+              # Maximum number of pages to track.
               max_pages: nil,
-              # JSON Schema describing the structured data to extract and watch for changes. If
+              # JSON Schema describing the data you care about. It guides which pages are
+              # selected for tracking and gives the change judge context on what matters. If
               # omitted, a default summary + key-points schema is used.
               schema: nil,
               type: :extract
@@ -954,15 +959,18 @@ module ContextDev
             attr_accessor :captured_at
 
             # The extracted structured data, matching the monitor's extraction schema (same
-            # shape as the /web/extract endpoint's `data`).
+            # shape as the /web/extract endpoint's `data`). Refreshed when the monitor
+            # re-discovers its page set (at most about once a day); `null` when no extraction
+            # has been captured yet.
             sig { returns(T.anything) }
             attr_accessor :data
 
-            # URLs that were analyzed to produce the extracted data.
+            # The page URLs the monitor tracks and analyzes for changes.
             sig { returns(T::Array[String]) }
             attr_accessor :urls_analyzed
 
-            # Current baseline of an `extract` monitor: the structured data as last extracted.
+            # Current baseline of an `extract` monitor: the pages it tracks and the structured
+            # data as last extracted.
             sig do
               params(
                 captured_at: Time,
@@ -974,9 +982,11 @@ module ContextDev
               # When this baseline was last captured or replaced.
               captured_at:,
               # The extracted structured data, matching the monitor's extraction schema (same
-              # shape as the /web/extract endpoint's `data`).
+              # shape as the /web/extract endpoint's `data`). Refreshed when the monitor
+              # re-discovers its page set (at most about once a day); `null` when no extraction
+              # has been captured yet.
               data:,
-              # URLs that were analyzed to produce the extracted data.
+              # The page URLs the monitor tracks and analyzes for changes.
               urls_analyzed:
             )
             end
