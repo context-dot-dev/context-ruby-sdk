@@ -25,6 +25,7 @@ module ContextDev
         | ContextDev::BrandRetrieveParams::Body::ByName
         | ContextDev::BrandRetrieveParams::Body::ByEmail
         | ContextDev::BrandRetrieveParams::Body::ByTicker
+        | ContextDev::BrandRetrieveParams::Body::ByDirectURL
         | ContextDev::BrandRetrieveParams::Body::ByTransaction
 
       module Body
@@ -1246,6 +1247,31 @@ module ContextDev
 
             def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language]
           end
+        end
+
+        type by_direct_url =
+          { direct_url: String, type: :by_direct_url, timeout_ms: Integer }
+
+        class ByDirectURL < ContextDev::Internal::Type::BaseModel
+          attr_accessor direct_url: String
+
+          attr_accessor type: :by_direct_url
+
+          attr_reader timeout_ms: Integer?
+
+          def timeout_ms=: (Integer) -> Integer
+
+          def initialize: (
+            direct_url: String,
+            ?timeout_ms: Integer,
+            ?type: :by_direct_url
+          ) -> void
+
+          def to_hash: -> {
+            direct_url: String,
+            type: :by_direct_url,
+            timeout_ms: Integer
+          }
         end
 
         type by_transaction =

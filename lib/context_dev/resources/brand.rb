@@ -5,11 +5,13 @@ module ContextDev
     class Brand
       # Retrieve logos, backdrops, colors, industry, description, and more. Provide
       # exactly one lookup identifier in the request body: a domain, company name, email
-      # address, stock ticker, or transaction descriptor.
+      # address, stock ticker, transaction descriptor, or direct URL. Note:
+      # `by_direct_url` fetches brand data only from the provided URL — not from the
+      # entire internet.
       #
       # @overload retrieve(body:, request_options: {})
       #
-      # @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] Exactly one lookup type must be provided.
+      # @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] Exactly one lookup type must be provided.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
