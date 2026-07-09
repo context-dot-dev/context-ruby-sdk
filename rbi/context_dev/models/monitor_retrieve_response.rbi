@@ -304,9 +304,9 @@ module ContextDev
           sig { params(confidence_threshold: Float).void }
           attr_writer :confidence_threshold
 
-          # Detect meaning-level changes to the extracted data, ignoring cosmetic or
-          # paraphrase-only differences. What is watched is determined by the extract
-          # target's `schema` and `instructions`.
+          # Detect meaning-level changes to tracked page content, ignoring cosmetic or
+          # paraphrase-only differences. Which changes are meaningful is judged against the
+          # extract target's `instructions` (and `schema`, when provided).
           sig do
             params(confidence_threshold: Float, type: Symbol).returns(
               T.attached_class
@@ -716,9 +716,14 @@ module ContextDev
           sig { params(max_pages: Integer).void }
           attr_writer :max_pages
 
-          # JSON Schema describing the data you care about. It guides which pages are
-          # selected for tracking and gives the change judge context on what matters. If
-          # omitted, a default summary + key-points schema is used.
+          # JSON Schema describing the data you care about. It is used three ways: it guides
+          # which pages are selected for tracking, it gives the change judge extra context
+          # on which changes matter (alongside `instructions`), and it defines the shape of
+          # the baseline `data` snapshot on GET /monitors/{monitor_id} (refreshed at most
+          # about once a day). It is not a response format for changes: change events and
+          # webhook payloads always contain diffs, summaries, and evidence excerpts — never
+          # data in this schema's shape. If omitted, a default summary + key-points schema
+          # is used.
           sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
           attr_reader :schema
 
@@ -728,8 +733,8 @@ module ContextDev
           # Watch the monitor-relevant pages of a site for meaningful changes. A crawl
           # guided by `schema`/`instructions` selects up to `max_pages` relevant pages to
           # track; each run re-checks exactly those pages, and confirmed content changes are
-          # judged against the monitor's instructions. The tracked page set is refreshed by
-          # a periodic re-discovery crawl.
+          # judged for relevance against the monitor's `instructions` (and `schema`, when
+          # provided). The tracked page set is refreshed by a periodic re-discovery crawl.
           sig do
             params(
               instructions: String,
@@ -752,9 +757,14 @@ module ContextDev
             max_depth: nil,
             # Maximum number of pages to track.
             max_pages: nil,
-            # JSON Schema describing the data you care about. It guides which pages are
-            # selected for tracking and gives the change judge context on what matters. If
-            # omitted, a default summary + key-points schema is used.
+            # JSON Schema describing the data you care about. It is used three ways: it guides
+            # which pages are selected for tracking, it gives the change judge extra context
+            # on which changes matter (alongside `instructions`), and it defines the shape of
+            # the baseline `data` snapshot on GET /monitors/{monitor_id} (refreshed at most
+            # about once a day). It is not a response format for changes: change events and
+            # webhook payloads always contain diffs, summaries, and evidence excerpts — never
+            # data in this schema's shape. If omitted, a default summary + key-points schema
+            # is used.
             schema: nil,
             type: :extract
           )
