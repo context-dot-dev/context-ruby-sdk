@@ -153,7 +153,7 @@ module ContextDev
         # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals.
         variant :exact, -> { ContextDev::Models::MonitorUpdateResponse::ChangeDetection::Exact }
 
-        # Detect meaning-level changes to the extracted data, ignoring cosmetic or paraphrase-only differences. What is watched is determined by the extract target's `schema` and `instructions`.
+        # Detect meaning-level changes to tracked page content, ignoring cosmetic or paraphrase-only differences. Which changes are meaningful is judged against the extract target's `instructions` (and `schema`, when provided).
         variant :semantic, -> { ContextDev::Models::MonitorUpdateResponse::ChangeDetection::Semantic }
 
         class Exact < ContextDev::Internal::Type::BaseModel
@@ -181,9 +181,9 @@ module ContextDev
           optional :confidence_threshold, Float
 
           # @!method initialize(confidence_threshold: nil, type: :semantic)
-          #   Detect meaning-level changes to the extracted data, ignoring cosmetic or
-          #   paraphrase-only differences. What is watched is determined by the extract
-          #   target's `schema` and `instructions`.
+          #   Detect meaning-level changes to tracked page content, ignoring cosmetic or
+          #   paraphrase-only differences. Which changes are meaningful is judged against the
+          #   extract target's `instructions` (and `schema`, when provided).
           #
           #   @param confidence_threshold [Float]
           #   @param type [Symbol, :semantic]
@@ -295,7 +295,7 @@ module ContextDev
         # Watch a sitemap for URL additions and removals. Crawled URLs are normalized (lowercased host, no trailing slash/fragment) and scoped to the monitored site and its subdomains before comparison. On a detected difference the sitemap is re-fetched within the same run and only URLs both observations agree on are reported, suppressing transient crawl flaps.
         variant :sitemap, -> { ContextDev::Models::MonitorUpdateResponse::Target::Sitemap }
 
-        # Watch the monitor-relevant pages of a site for meaningful changes. A crawl guided by `schema`/`instructions` selects up to `max_pages` relevant pages to track; each run re-checks exactly those pages, and confirmed content changes are judged against the monitor's instructions. The tracked page set is refreshed by a periodic re-discovery crawl.
+        # Watch the monitor-relevant pages of a site for meaningful changes. A crawl guided by `schema`/`instructions` selects up to `max_pages` relevant pages to track; each run re-checks exactly those pages, and confirmed content changes are judged for relevance against the monitor's `instructions` (and `schema`, when provided). The tracked page set is refreshed by a periodic re-discovery crawl.
         variant :extract, -> { ContextDev::Models::MonitorUpdateResponse::Target::Extract }
 
         class Page < ContextDev::Internal::Type::BaseModel
@@ -410,9 +410,14 @@ module ContextDev
           optional :max_pages, Integer
 
           # @!attribute schema
-          #   JSON Schema describing the data you care about. It guides which pages are
-          #   selected for tracking and gives the change judge context on what matters. If
-          #   omitted, a default summary + key-points schema is used.
+          #   JSON Schema describing the data you care about. It is used three ways: it guides
+          #   which pages are selected for tracking, it gives the change judge extra context
+          #   on which changes matter (alongside `instructions`), and it defines the shape of
+          #   the baseline `data` snapshot on GET /monitors/{monitor_id} (refreshed at most
+          #   about once a day). It is not a response format for changes: change events and
+          #   webhook payloads always contain diffs, summaries, and evidence excerpts — never
+          #   data in this schema's shape. If omitted, a default summary + key-points schema
+          #   is used.
           #
           #   @return [Hash{Symbol=>Object}, nil]
           optional :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
@@ -424,8 +429,8 @@ module ContextDev
           #   Watch the monitor-relevant pages of a site for meaningful changes. A crawl
           #   guided by `schema`/`instructions` selects up to `max_pages` relevant pages to
           #   track; each run re-checks exactly those pages, and confirmed content changes are
-          #   judged against the monitor's instructions. The tracked page set is refreshed by
-          #   a periodic re-discovery crawl.
+          #   judged for relevance against the monitor's `instructions` (and `schema`, when
+          #   provided). The tracked page set is refreshed by a periodic re-discovery crawl.
           #
           #   @param instructions [String] Natural-language instructions guiding which pages and facts to track and which c
           #
@@ -437,7 +442,7 @@ module ContextDev
           #
           #   @param max_pages [Integer] Maximum number of pages to track.
           #
-          #   @param schema [Hash{Symbol=>Object}] JSON Schema describing the data you care about. It guides which pages are select
+          #   @param schema [Hash{Symbol=>Object}] JSON Schema describing the data you care about. It is used three ways: it guides
           #
           #   @param type [Symbol, :extract]
         end
