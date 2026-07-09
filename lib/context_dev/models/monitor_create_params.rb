@@ -79,7 +79,7 @@ module ContextDev
         # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals.
         variant :exact, -> { ContextDev::MonitorCreateParams::ChangeDetection::Exact }
 
-        # Detect meaning-level changes that match a natural language query.
+        # Detect meaning-level changes to the extracted data, ignoring cosmetic or paraphrase-only differences. What is watched is determined by the extract target's `schema` and `instructions`.
         variant :semantic, -> { ContextDev::MonitorCreateParams::ChangeDetection::Semantic }
 
         class Exact < ContextDev::Internal::Type::BaseModel
@@ -96,11 +96,6 @@ module ContextDev
         end
 
         class Semantic < ContextDev::Internal::Type::BaseModel
-          # @!attribute query
-          #
-          #   @return [String]
-          required :query, String
-
           # @!attribute type
           #
           #   @return [Symbol, :semantic]
@@ -111,10 +106,11 @@ module ContextDev
           #   @return [Float, nil]
           optional :confidence_threshold, Float
 
-          # @!method initialize(query:, confidence_threshold: nil, type: :semantic)
-          #   Detect meaning-level changes that match a natural language query.
+          # @!method initialize(confidence_threshold: nil, type: :semantic)
+          #   Detect meaning-level changes to the extracted data, ignoring cosmetic or
+          #   paraphrase-only differences. What is watched is determined by the extract
+          #   target's `schema` and `instructions`.
           #
-          #   @param query [String]
           #   @param confidence_threshold [Float]
           #   @param type [Symbol, :semantic]
         end
@@ -188,10 +184,10 @@ module ContextDev
         # Watch a single web page.
         variant :page, -> { ContextDev::MonitorCreateParams::Target::Page }
 
-        # Watch a sitemap for URL additions and removals. Crawled URLs are normalized (lowercased host, no trailing slash/fragment) and scoped to the monitored site and its subdomains before comparison. A new URL set must be observed on two consecutive runs before a change is reported, suppressing one-run crawl flaps.
+        # Watch a sitemap for URL additions and removals. Crawled URLs are normalized (lowercased host, no trailing slash/fragment) and scoped to the monitored site and its subdomains before comparison. On a detected difference the sitemap is re-fetched within the same run and only URLs both observations agree on are reported, suppressing transient crawl flaps.
         variant :sitemap, -> { ContextDev::MonitorCreateParams::Target::Sitemap }
 
-        # Watch a site's extracted structured data.
+        # Watch the monitor-relevant pages of a site for meaningful changes. A crawl guided by `schema`/`instructions` selects up to `max_pages` relevant pages to track; each run re-checks exactly those pages, and confirmed content changes are judged against the monitor's instructions. The tracked page set is refreshed by a periodic re-discovery crawl.
         variant :extract, -> { ContextDev::MonitorCreateParams::Target::Extract }
 
         class Page < ContextDev::Internal::Type::BaseModel
@@ -254,8 +250,9 @@ module ContextDev
           # @!method initialize(url:, exclude: nil, include: nil, max_urls: nil, type: :sitemap)
           #   Watch a sitemap for URL additions and removals. Crawled URLs are normalized
           #   (lowercased host, no trailing slash/fragment) and scoped to the monitored site
-          #   and its subdomains before comparison. A new URL set must be observed on two
-          #   consecutive runs before a change is reported, suppressing one-run crawl flaps.
+          #   and its subdomains before comparison. On a detected difference the sitemap is
+          #   re-fetched within the same run and only URLs both observations agree on are
+          #   reported, suppressing transient crawl flaps.
           #
           #   @param url [String] Sitemap URL to monitor.
           #
@@ -269,6 +266,13 @@ module ContextDev
         end
 
         class Extract < ContextDev::Internal::Type::BaseModel
+          # @!attribute instructions
+          #   Natural-language instructions guiding which pages and facts to track and which
+          #   changes to report.
+          #
+          #   @return [String]
+          required :instructions, String
+
           # @!attribute type
           #
           #   @return [Symbol, :extract]
@@ -285,12 +289,6 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :follow_subdomains, ContextDev::Internal::Type::Boolean
 
-          # @!attribute instructions
-          #   Optional natural-language instructions guiding what to extract.
-          #
-          #   @return [String, nil]
-          optional :instructions, String
-
           # @!attribute max_depth
           #   Optional maximum link depth from the starting URL (0 = only the starting page).
           #
@@ -298,35 +296,40 @@ module ContextDev
           optional :max_depth, Integer
 
           # @!attribute max_pages
-          #   Maximum number of pages to analyze during extraction.
+          #   Maximum number of pages to track.
           #
           #   @return [Integer, nil]
           optional :max_pages, Integer
 
           # @!attribute schema
-          #   JSON Schema describing the structured data to extract and watch for changes. If
+          #   JSON Schema describing the data you care about. It guides which pages are
+          #   selected for tracking and gives the change judge context on what matters. If
           #   omitted, a default summary + key-points schema is used.
           #
           #   @return [Hash{Symbol=>Object}, nil]
           optional :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
 
-          # @!method initialize(url:, follow_subdomains: nil, instructions: nil, max_depth: nil, max_pages: nil, schema: nil, type: :extract)
+          # @!method initialize(instructions:, url:, follow_subdomains: nil, max_depth: nil, max_pages: nil, schema: nil, type: :extract)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorCreateParams::Target::Extract} for more details.
           #
-          #   Watch a site's extracted structured data.
+          #   Watch the monitor-relevant pages of a site for meaningful changes. A crawl
+          #   guided by `schema`/`instructions` selects up to `max_pages` relevant pages to
+          #   track; each run re-checks exactly those pages, and confirmed content changes are
+          #   judged against the monitor's instructions. The tracked page set is refreshed by
+          #   a periodic re-discovery crawl.
+          #
+          #   @param instructions [String] Natural-language instructions guiding which pages and facts to track and which c
           #
           #   @param url [String] Root URL to extract structured data from.
           #
           #   @param follow_subdomains [Boolean]
           #
-          #   @param instructions [String] Optional natural-language instructions guiding what to extract.
-          #
           #   @param max_depth [Integer] Optional maximum link depth from the starting URL (0 = only the starting page).
           #
-          #   @param max_pages [Integer] Maximum number of pages to analyze during extraction.
+          #   @param max_pages [Integer] Maximum number of pages to track.
           #
-          #   @param schema [Hash{Symbol=>Object}] JSON Schema describing the structured data to extract and watch for changes. If
+          #   @param schema [Hash{Symbol=>Object}] JSON Schema describing the data you care about. It guides which pages are select
           #
           #   @param type [Symbol, :extract]
         end

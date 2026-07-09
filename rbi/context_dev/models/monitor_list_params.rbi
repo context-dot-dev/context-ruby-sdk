@@ -47,8 +47,8 @@ module ContextDev
       sig { params(q: String).void }
       attr_writer :q
 
-      # Comma-separated fields to search with `q`. Defaults to all of them. Note `query`
-      # only exists on semantic monitors.
+      # Comma-separated fields to search with `q`. Defaults to all of them. Note
+      # `instructions` only exists on extract monitors.
       sig do
         returns(
           T.nilable(T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol])
@@ -141,8 +141,8 @@ module ContextDev
         limit: nil,
         # Free-text search term, matched against the fields named in `search_by`.
         q: nil,
-        # Comma-separated fields to search with `q`. Defaults to all of them. Note `query`
-        # only exists on semantic monitors.
+        # Comma-separated fields to search with `q`. Defaults to all of them. Note
+        # `instructions` only exists on extract monitors.
         search_by: nil,
         # `prefix` for as-you-type prefix matching (default), `exact` for full-token
         # matching.
@@ -227,8 +227,11 @@ module ContextDev
         NAME =
           T.let(:name, ContextDev::MonitorListParams::SearchBy::TaggedSymbol)
         URL = T.let(:url, ContextDev::MonitorListParams::SearchBy::TaggedSymbol)
-        QUERY =
-          T.let(:query, ContextDev::MonitorListParams::SearchBy::TaggedSymbol)
+        INSTRUCTIONS =
+          T.let(
+            :instructions,
+            ContextDev::MonitorListParams::SearchBy::TaggedSymbol
+          )
         TAGS =
           T.let(:tags, ContextDev::MonitorListParams::SearchBy::TaggedSymbol)
 

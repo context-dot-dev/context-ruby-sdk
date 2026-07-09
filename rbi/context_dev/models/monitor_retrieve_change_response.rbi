@@ -145,12 +145,6 @@ module ContextDev
       sig { params(matched_urls: T::Array[String]).void }
       attr_writer :matched_urls
 
-      sig { returns(T.nilable(String)) }
-      attr_reader :query
-
-      sig { params(query: String).void }
-      attr_writer :query
-
       sig { returns(T.nilable(Integer)) }
       attr_reader :removed_url_count
 
@@ -205,7 +199,6 @@ module ContextDev
             ContextDev::Models::MonitorRetrieveChangeResponse::Importance::OrSymbol,
           matched_url_count: Integer,
           matched_urls: T::Array[String],
-          query: String,
           removed_url_count: Integer,
           removed_urls: T::Array[String],
           tags: T::Array[String]
@@ -238,7 +231,6 @@ module ContextDev
         matched_url_count: nil,
         # At most 500 URLs are included; the corresponding count field is always exact.
         matched_urls: nil,
-        query: nil,
         removed_url_count: nil,
         # At most 500 URLs are included; the corresponding count field is always exact.
         removed_urls: nil,
@@ -277,7 +269,6 @@ module ContextDev
               ContextDev::Models::MonitorRetrieveChangeResponse::Importance::TaggedSymbol,
             matched_url_count: Integer,
             matched_urls: T::Array[String],
-            query: String,
             removed_url_count: Integer,
             removed_urls: T::Array[String],
             tags: T::Array[String]

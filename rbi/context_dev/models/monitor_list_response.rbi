@@ -114,6 +114,19 @@ module ContextDev
         sig { returns(Time) }
         attr_accessor :updated_at
 
+        # Current baseline: the last observed value the monitor compares new snapshots
+        # against. Its shape follows `target.type` (page/sitemap/extract). Only populated
+        # on GET /monitors/{monitor_id}; null until the first baseline run completes (and
+        # after a target or change_detection update, which resets the baseline).
+        sig do
+          returns(
+            T.nilable(
+              ContextDev::Models::MonitorListResponse::Data::Baseline::Variants
+            )
+          )
+        end
+        attr_accessor :baseline
+
         sig { returns(T.nilable(Time)) }
         attr_accessor :last_change_at
 
@@ -190,6 +203,14 @@ module ContextDev
                 ContextDev::Models::MonitorListResponse::Data::Target::Extract::OrHash
               ),
             updated_at: Time,
+            baseline:
+              T.nilable(
+                T.any(
+                  ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsPageBaseline::OrHash,
+                  ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSitemapBaseline::OrHash,
+                  ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsExtractBaseline::OrHash
+                )
+              ),
             last_change_at: T.nilable(Time),
             last_error:
               T.nilable(
@@ -226,6 +247,11 @@ module ContextDev
           # Discriminated union describing what the monitor watches.
           target:,
           updated_at:,
+          # Current baseline: the last observed value the monitor compares new snapshots
+          # against. Its shape follows `target.type` (page/sitemap/extract). Only populated
+          # on GET /monitors/{monitor_id}; null until the first baseline run completes (and
+          # after a target or change_detection update, which resets the baseline).
+          baseline: nil,
           last_change_at: nil,
           # Error from the most recent failed run; null when the last run succeeded.
           last_error: nil,
@@ -254,6 +280,10 @@ module ContextDev
               target:
                 ContextDev::Models::MonitorListResponse::Data::Target::Variants,
               updated_at: Time,
+              baseline:
+                T.nilable(
+                  ContextDev::Models::MonitorListResponse::Data::Baseline::Variants
+                ),
               last_change_at: T.nilable(Time),
               last_error:
                 T.nilable(
@@ -316,9 +346,6 @@ module ContextDev
                 )
               end
 
-            sig { returns(String) }
-            attr_accessor :query
-
             sig { returns(Symbol) }
             attr_accessor :type
 
@@ -328,21 +355,19 @@ module ContextDev
             sig { params(confidence_threshold: Float).void }
             attr_writer :confidence_threshold
 
-            # Detect meaning-level changes that match a natural language query.
+            # Detect meaning-level changes to the extracted data, ignoring cosmetic or
+            # paraphrase-only differences. What is watched is determined by the extract
+            # target's `schema` and `instructions`.
             sig do
-              params(
-                query: String,
-                confidence_threshold: Float,
-                type: Symbol
-              ).returns(T.attached_class)
+              params(confidence_threshold: Float, type: Symbol).returns(
+                T.attached_class
+              )
             end
-            def self.new(query:, confidence_threshold: nil, type: :semantic)
+            def self.new(confidence_threshold: nil, type: :semantic)
             end
 
             sig do
-              override.returns(
-                { query: String, type: Symbol, confidence_threshold: Float }
-              )
+              override.returns({ type: Symbol, confidence_threshold: Float })
             end
             def to_hash
             end
@@ -664,8 +689,9 @@ module ContextDev
 
             # Watch a sitemap for URL additions and removals. Crawled URLs are normalized
             # (lowercased host, no trailing slash/fragment) and scoped to the monitored site
-            # and its subdomains before comparison. A new URL set must be observed on two
-            # consecutive runs before a change is reported, suppressing one-run crawl flaps.
+            # and its subdomains before comparison. On a detected difference the sitemap is
+            # re-fetched within the same run and only URLs both observations agree on are
+            # reported, suppressing transient crawl flaps.
             sig do
               params(
                 url: String,
@@ -712,6 +738,11 @@ module ContextDev
                 )
               end
 
+            # Natural-language instructions guiding which pages and facts to track and which
+            # changes to report.
+            sig { returns(String) }
+            attr_accessor :instructions
+
             sig { returns(Symbol) }
             attr_accessor :type
 
@@ -725,13 +756,6 @@ module ContextDev
             sig { params(follow_subdomains: T::Boolean).void }
             attr_writer :follow_subdomains
 
-            # Optional natural-language instructions guiding what to extract.
-            sig { returns(T.nilable(String)) }
-            attr_reader :instructions
-
-            sig { params(instructions: String).void }
-            attr_writer :instructions
-
             # Optional maximum link depth from the starting URL (0 = only the starting page).
             sig { returns(T.nilable(Integer)) }
             attr_reader :max_depth
@@ -739,14 +763,15 @@ module ContextDev
             sig { params(max_depth: Integer).void }
             attr_writer :max_depth
 
-            # Maximum number of pages to analyze during extraction.
+            # Maximum number of pages to track.
             sig { returns(T.nilable(Integer)) }
             attr_reader :max_pages
 
             sig { params(max_pages: Integer).void }
             attr_writer :max_pages
 
-            # JSON Schema describing the structured data to extract and watch for changes. If
+            # JSON Schema describing the data you care about. It guides which pages are
+            # selected for tracking and gives the change judge context on what matters. If
             # omitted, a default summary + key-points schema is used.
             sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
             attr_reader :schema
@@ -754,12 +779,16 @@ module ContextDev
             sig { params(schema: T::Hash[Symbol, T.anything]).void }
             attr_writer :schema
 
-            # Watch a site's extracted structured data.
+            # Watch the monitor-relevant pages of a site for meaningful changes. A crawl
+            # guided by `schema`/`instructions` selects up to `max_pages` relevant pages to
+            # track; each run re-checks exactly those pages, and confirmed content changes are
+            # judged against the monitor's instructions. The tracked page set is refreshed by
+            # a periodic re-discovery crawl.
             sig do
               params(
+                instructions: String,
                 url: String,
                 follow_subdomains: T::Boolean,
-                instructions: String,
                 max_depth: Integer,
                 max_pages: Integer,
                 schema: T::Hash[Symbol, T.anything],
@@ -767,16 +796,18 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
+              # Natural-language instructions guiding which pages and facts to track and which
+              # changes to report.
+              instructions:,
               # Root URL to extract structured data from.
               url:,
               follow_subdomains: nil,
-              # Optional natural-language instructions guiding what to extract.
-              instructions: nil,
               # Optional maximum link depth from the starting URL (0 = only the starting page).
               max_depth: nil,
-              # Maximum number of pages to analyze during extraction.
+              # Maximum number of pages to track.
               max_pages: nil,
-              # JSON Schema describing the structured data to extract and watch for changes. If
+              # JSON Schema describing the data you care about. It guides which pages are
+              # selected for tracking and gives the change judge context on what matters. If
               # omitted, a default summary + key-points schema is used.
               schema: nil,
               type: :extract
@@ -786,10 +817,10 @@ module ContextDev
             sig do
               override.returns(
                 {
+                  instructions: String,
                   type: Symbol,
                   url: String,
                   follow_subdomains: T::Boolean,
-                  instructions: String,
                   max_depth: Integer,
                   max_pages: Integer,
                   schema: T::Hash[Symbol, T.anything]
@@ -804,6 +835,179 @@ module ContextDev
             override.returns(
               T::Array[
                 ContextDev::Models::MonitorListResponse::Data::Target::Variants
+              ]
+            )
+          end
+          def self.variants
+          end
+        end
+
+        # Current baseline: the last observed value the monitor compares new snapshots
+        # against. Its shape follows `target.type` (page/sitemap/extract). Only populated
+        # on GET /monitors/{monitor_id}; null until the first baseline run completes (and
+        # after a target or change_detection update, which resets the baseline).
+        module Baseline
+          extend ContextDev::Internal::Type::Union
+
+          Variants =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsPageBaseline,
+                ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSitemapBaseline,
+                ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsExtractBaseline
+              )
+            end
+
+          class MonitorsPageBaseline < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsPageBaseline,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # When this baseline was last captured or replaced.
+            sig { returns(Time) }
+            attr_accessor :captured_at
+
+            # The page's visible text as last observed.
+            sig { returns(String) }
+            attr_accessor :text
+
+            # Current baseline of a `page` monitor: the visible page text as last observed.
+            sig do
+              params(captured_at: Time, text: String).returns(T.attached_class)
+            end
+            def self.new(
+              # When this baseline was last captured or replaced.
+              captured_at:,
+              # The page's visible text as last observed.
+              text:
+            )
+            end
+
+            sig { override.returns({ captured_at: Time, text: String }) }
+            def to_hash
+            end
+          end
+
+          class MonitorsSitemapBaseline < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSitemapBaseline,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # When this baseline was last captured or replaced.
+            sig { returns(Time) }
+            attr_accessor :captured_at
+
+            # Number of URLs in the baseline.
+            sig { returns(Integer) }
+            attr_accessor :url_count
+
+            # The sitemap URLs as last observed (sorted, normalized).
+            sig { returns(T::Array[String]) }
+            attr_accessor :urls
+
+            # Current baseline of a `sitemap` monitor: the normalized URL set as last
+            # observed.
+            sig do
+              params(
+                captured_at: Time,
+                url_count: Integer,
+                urls: T::Array[String]
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # When this baseline was last captured or replaced.
+              captured_at:,
+              # Number of URLs in the baseline.
+              url_count:,
+              # The sitemap URLs as last observed (sorted, normalized).
+              urls:
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  captured_at: Time,
+                  url_count: Integer,
+                  urls: T::Array[String]
+                }
+              )
+            end
+            def to_hash
+            end
+          end
+
+          class MonitorsExtractBaseline < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsExtractBaseline,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # When this baseline was last captured or replaced.
+            sig { returns(Time) }
+            attr_accessor :captured_at
+
+            # The extracted structured data, matching the monitor's extraction schema (same
+            # shape as the /web/extract endpoint's `data`). Refreshed when the monitor
+            # re-discovers its page set (at most about once a day); `null` when no extraction
+            # has been captured yet.
+            sig { returns(T.anything) }
+            attr_accessor :data
+
+            # The page URLs the monitor tracks and analyzes for changes.
+            sig { returns(T::Array[String]) }
+            attr_accessor :urls_analyzed
+
+            # Current baseline of an `extract` monitor: the pages it tracks and the structured
+            # data as last extracted.
+            sig do
+              params(
+                captured_at: Time,
+                data: T.anything,
+                urls_analyzed: T::Array[String]
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # When this baseline was last captured or replaced.
+              captured_at:,
+              # The extracted structured data, matching the monitor's extraction schema (same
+              # shape as the /web/extract endpoint's `data`). Refreshed when the monitor
+              # re-discovers its page set (at most about once a day); `null` when no extraction
+              # has been captured yet.
+              data:,
+              # The page URLs the monitor tracks and analyzes for changes.
+              urls_analyzed:
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  captured_at: Time,
+                  data: T.anything,
+                  urls_analyzed: T::Array[String]
+                }
+              )
+            end
+            def to_hash
+            end
+          end
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::MonitorListResponse::Data::Baseline::Variants
               ]
             )
           end

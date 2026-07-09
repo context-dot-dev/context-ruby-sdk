@@ -75,12 +75,9 @@ module ContextDev
           def to_hash: -> { type: :exact }
         end
 
-        type semantic =
-          { query: String, type: :semantic, confidence_threshold: Float }
+        type semantic = { type: :semantic, confidence_threshold: Float }
 
         class Semantic < ContextDev::Internal::Type::BaseModel
-          attr_accessor query: String
-
           attr_accessor type: :semantic
 
           attr_reader confidence_threshold: Float?
@@ -88,16 +85,11 @@ module ContextDev
           def confidence_threshold=: (Float) -> Float
 
           def initialize: (
-            query: String,
             ?confidence_threshold: Float,
             ?type: :semantic
           ) -> void
 
-          def to_hash: -> {
-            query: String,
-            type: :semantic,
-            confidence_threshold: Float
-          }
+          def to_hash: -> { type: :semantic, confidence_threshold: Float }
         end
 
         def self?.variants: -> ::Array[ContextDev::Models::MonitorCreateParams::change_detection]
@@ -229,16 +221,18 @@ module ContextDev
 
         type extract =
           {
+            instructions: String,
             type: :extract,
             url: String,
             follow_subdomains: bool,
-            instructions: String,
             max_depth: Integer,
             max_pages: Integer,
             schema: ::Hash[Symbol, top]
           }
 
         class Extract < ContextDev::Internal::Type::BaseModel
+          attr_accessor instructions: String
+
           attr_accessor type: :extract
 
           attr_accessor url: String
@@ -246,10 +240,6 @@ module ContextDev
           attr_reader follow_subdomains: bool?
 
           def follow_subdomains=: (bool) -> bool
-
-          attr_reader instructions: String?
-
-          def instructions=: (String) -> String
 
           attr_reader max_depth: Integer?
 
@@ -264,9 +254,9 @@ module ContextDev
           def schema=: (::Hash[Symbol, top]) -> ::Hash[Symbol, top]
 
           def initialize: (
+            instructions: String,
             url: String,
             ?follow_subdomains: bool,
-            ?instructions: String,
             ?max_depth: Integer,
             ?max_pages: Integer,
             ?schema: ::Hash[Symbol, top],
@@ -274,10 +264,10 @@ module ContextDev
           ) -> void
 
           def to_hash: -> {
+            instructions: String,
             type: :extract,
             url: String,
             follow_subdomains: bool,
-            instructions: String,
             max_depth: Integer,
             max_pages: Integer,
             schema: ::Hash[Symbol, top]

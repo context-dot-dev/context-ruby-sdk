@@ -61,6 +61,15 @@ module ContextDev
       #   @return [Time]
       required :updated_at, Time
 
+      # @!attribute baseline
+      #   Current baseline: the last observed value the monitor compares new snapshots
+      #   against. Its shape follows `target.type` (page/sitemap/extract). Only populated
+      #   on GET /monitors/{monitor_id}; null until the first baseline run completes (and
+      #   after a target or change_detection update, which resets the baseline).
+      #
+      #   @return [ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline, nil]
+      optional :baseline, union: -> { ContextDev::Models::MonitorRetrieveResponse::Baseline }, nil?: true
+
       # @!attribute last_change_at
       #
       #   @return [Time, nil]
@@ -94,7 +103,7 @@ module ContextDev
       #   @return [ContextDev::Models::MonitorRetrieveResponse::Webhook, nil]
       optional :webhook, -> { ContextDev::Models::MonitorRetrieveResponse::Webhook }, nil?: true
 
-      # @!method initialize(id:, change_detection:, created_at:, mode:, name:, schedule:, status:, target:, updated_at:, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, tags: nil, webhook: nil)
+      # @!method initialize(id:, change_detection:, created_at:, mode:, name:, schedule:, status:, target:, updated_at:, baseline: nil, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, tags: nil, webhook: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorRetrieveResponse} for more details.
       #
@@ -119,6 +128,8 @@ module ContextDev
       #
       #   @param updated_at [Time]
       #
+      #   @param baseline [ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline, nil] Current baseline: the last observed value the monitor compares new snapshots aga
+      #
       #   @param last_change_at [Time, nil]
       #
       #   @param last_error [ContextDev::Models::MonitorRetrieveResponse::LastError, nil] Error from the most recent failed run; null when the last run succeeded.
@@ -142,7 +153,7 @@ module ContextDev
         # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals.
         variant :exact, -> { ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Exact }
 
-        # Detect meaning-level changes that match a natural language query.
+        # Detect meaning-level changes to the extracted data, ignoring cosmetic or paraphrase-only differences. What is watched is determined by the extract target's `schema` and `instructions`.
         variant :semantic, -> { ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Semantic }
 
         class Exact < ContextDev::Internal::Type::BaseModel
@@ -159,11 +170,6 @@ module ContextDev
         end
 
         class Semantic < ContextDev::Internal::Type::BaseModel
-          # @!attribute query
-          #
-          #   @return [String]
-          required :query, String
-
           # @!attribute type
           #
           #   @return [Symbol, :semantic]
@@ -174,10 +180,11 @@ module ContextDev
           #   @return [Float, nil]
           optional :confidence_threshold, Float
 
-          # @!method initialize(query:, confidence_threshold: nil, type: :semantic)
-          #   Detect meaning-level changes that match a natural language query.
+          # @!method initialize(confidence_threshold: nil, type: :semantic)
+          #   Detect meaning-level changes to the extracted data, ignoring cosmetic or
+          #   paraphrase-only differences. What is watched is determined by the extract
+          #   target's `schema` and `instructions`.
           #
-          #   @param query [String]
           #   @param confidence_threshold [Float]
           #   @param type [Symbol, :semantic]
         end
@@ -285,10 +292,10 @@ module ContextDev
         # Watch a single web page.
         variant :page, -> { ContextDev::Models::MonitorRetrieveResponse::Target::Page }
 
-        # Watch a sitemap for URL additions and removals. Crawled URLs are normalized (lowercased host, no trailing slash/fragment) and scoped to the monitored site and its subdomains before comparison. A new URL set must be observed on two consecutive runs before a change is reported, suppressing one-run crawl flaps.
+        # Watch a sitemap for URL additions and removals. Crawled URLs are normalized (lowercased host, no trailing slash/fragment) and scoped to the monitored site and its subdomains before comparison. On a detected difference the sitemap is re-fetched within the same run and only URLs both observations agree on are reported, suppressing transient crawl flaps.
         variant :sitemap, -> { ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap }
 
-        # Watch a site's extracted structured data.
+        # Watch the monitor-relevant pages of a site for meaningful changes. A crawl guided by `schema`/`instructions` selects up to `max_pages` relevant pages to track; each run re-checks exactly those pages, and confirmed content changes are judged against the monitor's instructions. The tracked page set is refreshed by a periodic re-discovery crawl.
         variant :extract, -> { ContextDev::Models::MonitorRetrieveResponse::Target::Extract }
 
         class Page < ContextDev::Internal::Type::BaseModel
@@ -351,8 +358,9 @@ module ContextDev
           # @!method initialize(url:, exclude: nil, include: nil, max_urls: nil, type: :sitemap)
           #   Watch a sitemap for URL additions and removals. Crawled URLs are normalized
           #   (lowercased host, no trailing slash/fragment) and scoped to the monitored site
-          #   and its subdomains before comparison. A new URL set must be observed on two
-          #   consecutive runs before a change is reported, suppressing one-run crawl flaps.
+          #   and its subdomains before comparison. On a detected difference the sitemap is
+          #   re-fetched within the same run and only URLs both observations agree on are
+          #   reported, suppressing transient crawl flaps.
           #
           #   @param url [String] Sitemap URL to monitor.
           #
@@ -366,6 +374,13 @@ module ContextDev
         end
 
         class Extract < ContextDev::Internal::Type::BaseModel
+          # @!attribute instructions
+          #   Natural-language instructions guiding which pages and facts to track and which
+          #   changes to report.
+          #
+          #   @return [String]
+          required :instructions, String
+
           # @!attribute type
           #
           #   @return [Symbol, :extract]
@@ -382,12 +397,6 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :follow_subdomains, ContextDev::Internal::Type::Boolean
 
-          # @!attribute instructions
-          #   Optional natural-language instructions guiding what to extract.
-          #
-          #   @return [String, nil]
-          optional :instructions, String
-
           # @!attribute max_depth
           #   Optional maximum link depth from the starting URL (0 = only the starting page).
           #
@@ -395,41 +404,156 @@ module ContextDev
           optional :max_depth, Integer
 
           # @!attribute max_pages
-          #   Maximum number of pages to analyze during extraction.
+          #   Maximum number of pages to track.
           #
           #   @return [Integer, nil]
           optional :max_pages, Integer
 
           # @!attribute schema
-          #   JSON Schema describing the structured data to extract and watch for changes. If
+          #   JSON Schema describing the data you care about. It guides which pages are
+          #   selected for tracking and gives the change judge context on what matters. If
           #   omitted, a default summary + key-points schema is used.
           #
           #   @return [Hash{Symbol=>Object}, nil]
           optional :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
 
-          # @!method initialize(url:, follow_subdomains: nil, instructions: nil, max_depth: nil, max_pages: nil, schema: nil, type: :extract)
+          # @!method initialize(instructions:, url:, follow_subdomains: nil, max_depth: nil, max_pages: nil, schema: nil, type: :extract)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorRetrieveResponse::Target::Extract} for more details.
           #
-          #   Watch a site's extracted structured data.
+          #   Watch the monitor-relevant pages of a site for meaningful changes. A crawl
+          #   guided by `schema`/`instructions` selects up to `max_pages` relevant pages to
+          #   track; each run re-checks exactly those pages, and confirmed content changes are
+          #   judged against the monitor's instructions. The tracked page set is refreshed by
+          #   a periodic re-discovery crawl.
+          #
+          #   @param instructions [String] Natural-language instructions guiding which pages and facts to track and which c
           #
           #   @param url [String] Root URL to extract structured data from.
           #
           #   @param follow_subdomains [Boolean]
           #
-          #   @param instructions [String] Optional natural-language instructions guiding what to extract.
-          #
           #   @param max_depth [Integer] Optional maximum link depth from the starting URL (0 = only the starting page).
           #
-          #   @param max_pages [Integer] Maximum number of pages to analyze during extraction.
+          #   @param max_pages [Integer] Maximum number of pages to track.
           #
-          #   @param schema [Hash{Symbol=>Object}] JSON Schema describing the structured data to extract and watch for changes. If
+          #   @param schema [Hash{Symbol=>Object}] JSON Schema describing the data you care about. It guides which pages are select
           #
           #   @param type [Symbol, :extract]
         end
 
         # @!method self.variants
         #   @return [Array(ContextDev::Models::MonitorRetrieveResponse::Target::Page, ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap, ContextDev::Models::MonitorRetrieveResponse::Target::Extract)]
+      end
+
+      # Current baseline: the last observed value the monitor compares new snapshots
+      # against. Its shape follows `target.type` (page/sitemap/extract). Only populated
+      # on GET /monitors/{monitor_id}; null until the first baseline run completes (and
+      # after a target or change_detection update, which resets the baseline).
+      #
+      # @see ContextDev::Models::MonitorRetrieveResponse#baseline
+      module Baseline
+        extend ContextDev::Internal::Type::Union
+
+        # Current baseline of a `page` monitor: the visible page text as last observed.
+        variant -> { ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline }
+
+        # Current baseline of a `sitemap` monitor: the normalized URL set as last observed.
+        variant -> { ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline }
+
+        # Current baseline of an `extract` monitor: the pages it tracks and the structured data as last extracted.
+        variant -> { ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline }
+
+        class MonitorsPageBaseline < ContextDev::Internal::Type::BaseModel
+          # @!attribute captured_at
+          #   When this baseline was last captured or replaced.
+          #
+          #   @return [Time]
+          required :captured_at, Time
+
+          # @!attribute text
+          #   The page's visible text as last observed.
+          #
+          #   @return [String]
+          required :text, String
+
+          # @!method initialize(captured_at:, text:)
+          #   Current baseline of a `page` monitor: the visible page text as last observed.
+          #
+          #   @param captured_at [Time] When this baseline was last captured or replaced.
+          #
+          #   @param text [String] The page's visible text as last observed.
+        end
+
+        class MonitorsSitemapBaseline < ContextDev::Internal::Type::BaseModel
+          # @!attribute captured_at
+          #   When this baseline was last captured or replaced.
+          #
+          #   @return [Time]
+          required :captured_at, Time
+
+          # @!attribute url_count
+          #   Number of URLs in the baseline.
+          #
+          #   @return [Integer]
+          required :url_count, Integer
+
+          # @!attribute urls
+          #   The sitemap URLs as last observed (sorted, normalized).
+          #
+          #   @return [Array<String>]
+          required :urls, ContextDev::Internal::Type::ArrayOf[String]
+
+          # @!method initialize(captured_at:, url_count:, urls:)
+          #   Current baseline of a `sitemap` monitor: the normalized URL set as last
+          #   observed.
+          #
+          #   @param captured_at [Time] When this baseline was last captured or replaced.
+          #
+          #   @param url_count [Integer] Number of URLs in the baseline.
+          #
+          #   @param urls [Array<String>] The sitemap URLs as last observed (sorted, normalized).
+        end
+
+        class MonitorsExtractBaseline < ContextDev::Internal::Type::BaseModel
+          # @!attribute captured_at
+          #   When this baseline was last captured or replaced.
+          #
+          #   @return [Time]
+          required :captured_at, Time
+
+          # @!attribute data
+          #   The extracted structured data, matching the monitor's extraction schema (same
+          #   shape as the /web/extract endpoint's `data`). Refreshed when the monitor
+          #   re-discovers its page set (at most about once a day); `null` when no extraction
+          #   has been captured yet.
+          #
+          #   @return [Object]
+          required :data, ContextDev::Internal::Type::Unknown
+
+          # @!attribute urls_analyzed
+          #   The page URLs the monitor tracks and analyzes for changes.
+          #
+          #   @return [Array<String>]
+          required :urls_analyzed, ContextDev::Internal::Type::ArrayOf[String]
+
+          # @!method initialize(captured_at:, data:, urls_analyzed:)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline}
+          #   for more details.
+          #
+          #   Current baseline of an `extract` monitor: the pages it tracks and the structured
+          #   data as last extracted.
+          #
+          #   @param captured_at [Time] When this baseline was last captured or replaced.
+          #
+          #   @param data [Object] The extracted structured data, matching the monitor's extraction schema (same sh
+          #
+          #   @param urls_analyzed [Array<String>] The page URLs the monitor tracks and analyzes for changes.
+        end
+
+        # @!method self.variants
+        #   @return [Array(ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline)]
       end
 
       # @see ContextDev::Models::MonitorRetrieveResponse#last_error

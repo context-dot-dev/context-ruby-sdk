@@ -37,6 +37,7 @@ module ContextDev
           status: ContextDev::Models::MonitorListResponse::Data::status,
           target: ContextDev::Models::MonitorListResponse::Data::target,
           updated_at: Time,
+          baseline: ContextDev::Models::MonitorListResponse::Data::baseline?,
           last_change_at: Time?,
           last_error: ContextDev::Models::MonitorListResponse::Data::LastError?,
           last_run_at: Time?,
@@ -64,6 +65,8 @@ module ContextDev
 
         attr_accessor updated_at: Time
 
+        attr_accessor baseline: ContextDev::Models::MonitorListResponse::Data::baseline?
+
         attr_accessor last_change_at: Time?
 
         attr_accessor last_error: ContextDev::Models::MonitorListResponse::Data::LastError?
@@ -88,6 +91,7 @@ module ContextDev
           status: ContextDev::Models::MonitorListResponse::Data::status,
           target: ContextDev::Models::MonitorListResponse::Data::target,
           updated_at: Time,
+          ?baseline: ContextDev::Models::MonitorListResponse::Data::baseline?,
           ?last_change_at: Time?,
           ?last_error: ContextDev::Models::MonitorListResponse::Data::LastError?,
           ?last_run_at: Time?,
@@ -106,6 +110,7 @@ module ContextDev
           status: ContextDev::Models::MonitorListResponse::Data::status,
           target: ContextDev::Models::MonitorListResponse::Data::target,
           updated_at: Time,
+          baseline: ContextDev::Models::MonitorListResponse::Data::baseline?,
           last_change_at: Time?,
           last_error: ContextDev::Models::MonitorListResponse::Data::LastError?,
           last_run_at: Time?,
@@ -131,12 +136,9 @@ module ContextDev
             def to_hash: -> { type: :exact }
           end
 
-          type semantic =
-            { query: String, type: :semantic, confidence_threshold: Float }
+          type semantic = { type: :semantic, confidence_threshold: Float }
 
           class Semantic < ContextDev::Internal::Type::BaseModel
-            attr_accessor query: String
-
             attr_accessor type: :semantic
 
             attr_reader confidence_threshold: Float?
@@ -144,16 +146,11 @@ module ContextDev
             def confidence_threshold=: (Float) -> Float
 
             def initialize: (
-              query: String,
               ?confidence_threshold: Float,
               ?type: :semantic
             ) -> void
 
-            def to_hash: -> {
-              query: String,
-              type: :semantic,
-              confidence_threshold: Float
-            }
+            def to_hash: -> { type: :semantic, confidence_threshold: Float }
           end
 
           def self?.variants: -> ::Array[ContextDev::Models::MonitorListResponse::Data::change_detection]
@@ -307,16 +304,18 @@ module ContextDev
 
           type extract =
             {
+              instructions: String,
               type: :extract,
               url: String,
               follow_subdomains: bool,
-              instructions: String,
               max_depth: Integer,
               max_pages: Integer,
               schema: ::Hash[Symbol, top]
             }
 
           class Extract < ContextDev::Internal::Type::BaseModel
+            attr_accessor instructions: String
+
             attr_accessor type: :extract
 
             attr_accessor url: String
@@ -324,10 +323,6 @@ module ContextDev
             attr_reader follow_subdomains: bool?
 
             def follow_subdomains=: (bool) -> bool
-
-            attr_reader instructions: String?
-
-            def instructions=: (String) -> String
 
             attr_reader max_depth: Integer?
 
@@ -342,9 +337,9 @@ module ContextDev
             def schema=: (::Hash[Symbol, top]) -> ::Hash[Symbol, top]
 
             def initialize: (
+              instructions: String,
               url: String,
               ?follow_subdomains: bool,
-              ?instructions: String,
               ?max_depth: Integer,
               ?max_pages: Integer,
               ?schema: ::Hash[Symbol, top],
@@ -352,10 +347,10 @@ module ContextDev
             ) -> void
 
             def to_hash: -> {
+              instructions: String,
               type: :extract,
               url: String,
               follow_subdomains: bool,
-              instructions: String,
               max_depth: Integer,
               max_pages: Integer,
               schema: ::Hash[Symbol, top]
@@ -363,6 +358,75 @@ module ContextDev
           end
 
           def self?.variants: -> ::Array[ContextDev::Models::MonitorListResponse::Data::target]
+        end
+
+        type baseline =
+          ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsPageBaseline
+          | ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSitemapBaseline
+          | ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsExtractBaseline
+
+        module Baseline
+          extend ContextDev::Internal::Type::Union
+
+          type monitors_page_baseline = { captured_at: Time, text: String }
+
+          class MonitorsPageBaseline < ContextDev::Internal::Type::BaseModel
+            attr_accessor captured_at: Time
+
+            attr_accessor text: String
+
+            def initialize: (captured_at: Time, text: String) -> void
+
+            def to_hash: -> { captured_at: Time, text: String }
+          end
+
+          type monitors_sitemap_baseline =
+            { captured_at: Time, url_count: Integer, urls: ::Array[String] }
+
+          class MonitorsSitemapBaseline < ContextDev::Internal::Type::BaseModel
+            attr_accessor captured_at: Time
+
+            attr_accessor url_count: Integer
+
+            attr_accessor urls: ::Array[String]
+
+            def initialize: (
+              captured_at: Time,
+              url_count: Integer,
+              urls: ::Array[String]
+            ) -> void
+
+            def to_hash: -> {
+              captured_at: Time,
+              url_count: Integer,
+              urls: ::Array[String]
+            }
+          end
+
+          type monitors_extract_baseline =
+            { captured_at: Time, data: top, urls_analyzed: ::Array[String] }
+
+          class MonitorsExtractBaseline < ContextDev::Internal::Type::BaseModel
+            attr_accessor captured_at: Time
+
+            attr_accessor data: top
+
+            attr_accessor urls_analyzed: ::Array[String]
+
+            def initialize: (
+              captured_at: Time,
+              data: top,
+              urls_analyzed: ::Array[String]
+            ) -> void
+
+            def to_hash: -> {
+              captured_at: Time,
+              data: top,
+              urls_analyzed: ::Array[String]
+            }
+          end
+
+          def self?.variants: -> ::Array[ContextDev::Models::MonitorListResponse::Data::baseline]
         end
 
         type last_error = { code: String, message: String }

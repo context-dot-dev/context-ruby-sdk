@@ -22,7 +22,6 @@ module ContextDev
         importance: ContextDev::Models::MonitorRetrieveChangeResponse::importance,
         matched_url_count: Integer,
         matched_urls: ::Array[String],
-        query: String,
         removed_url_count: Integer,
         removed_urls: ::Array[String],
         tags: ::Array[String]
@@ -93,10 +92,6 @@ module ContextDev
 
       def matched_urls=: (::Array[String]) -> ::Array[String]
 
-      attr_reader query: String?
-
-      def query=: (String) -> String
-
       attr_reader removed_url_count: Integer?
 
       def removed_url_count=: (Integer) -> Integer
@@ -130,7 +125,6 @@ module ContextDev
         ?importance: ContextDev::Models::MonitorRetrieveChangeResponse::importance,
         ?matched_url_count: Integer,
         ?matched_urls: ::Array[String],
-        ?query: String,
         ?removed_url_count: Integer,
         ?removed_urls: ::Array[String],
         ?tags: ::Array[String]
@@ -157,7 +151,6 @@ module ContextDev
         importance: ContextDev::Models::MonitorRetrieveChangeResponse::importance,
         matched_url_count: Integer,
         matched_urls: ::Array[String],
-        query: String,
         removed_url_count: Integer,
         removed_urls: ::Array[String],
         tags: ::Array[String]
