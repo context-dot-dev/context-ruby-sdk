@@ -148,6 +148,26 @@ module ContextDev
         sig { returns(T.nilable(Time)) }
         attr_accessor :started_at
 
+        # The webhook delivery attempted for a change detected by this run. Omitted when
+        # no webhook was attempted, including historical runs created before delivery
+        # tracking was added.
+        sig do
+          returns(
+            T.nilable(
+              ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery
+            )
+          )
+        end
+        attr_reader :webhook_delivery
+
+        sig do
+          params(
+            webhook_delivery:
+              ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::OrHash
+          ).void
+        end
+        attr_writer :webhook_delivery
+
         sig do
           params(
             id: String,
@@ -173,7 +193,9 @@ module ContextDev
               T.nilable(
                 ContextDev::Models::MonitorListAccountRunsResponse::Data::SkipReason::OrSymbol
               ),
-            started_at: T.nilable(Time)
+            started_at: T.nilable(Time),
+            webhook_delivery:
+              ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::OrHash
           ).returns(T.attached_class)
         end
         def self.new(
@@ -197,7 +219,11 @@ module ContextDev
           error: nil,
           # Why a skipped run never executed; null unless status is `skipped`.
           skip_reason: nil,
-          started_at: nil
+          started_at: nil,
+          # The webhook delivery attempted for a change detected by this run. Omitted when
+          # no webhook was attempted, including historical runs created before delivery
+          # tracking was added.
+          webhook_delivery: nil
         )
         end
 
@@ -227,7 +253,9 @@ module ContextDev
                 T.nilable(
                   ContextDev::Models::MonitorListAccountRunsResponse::Data::SkipReason::TaggedSymbol
                 ),
-              started_at: T.nilable(Time)
+              started_at: T.nilable(Time),
+              webhook_delivery:
+                ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery
             }
           )
         end
@@ -456,6 +484,179 @@ module ContextDev
             )
           end
           def self.values
+          end
+        end
+
+        class WebhookDelivery < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(Time) }
+          attr_accessor :attempted_at
+
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error
+              )
+            )
+          end
+          attr_reader :error
+
+          sig do
+            params(
+              error:
+                T.nilable(
+                  ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error::OrHash
+                )
+            ).void
+          end
+          attr_writer :error
+
+          # Identifier sent in the X-Context-Id header.
+          sig { returns(String) }
+          attr_accessor :event_id
+
+          # The endpoint's final HTTP response status, or null when no response was
+          # received.
+          sig { returns(T.nilable(Integer)) }
+          attr_accessor :http_status
+
+          # Delivery outcome. delivered means any 2xx response; rejected means a non-2xx
+          # response; failed means no HTTP response was received; skipped_unsafe_url means
+          # the URL failed the public-endpoint safety check.
+          sig do
+            returns(
+              ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status::TaggedSymbol
+            )
+          end
+          attr_accessor :status
+
+          # The webhook delivery attempted for a change detected by this run. Omitted when
+          # no webhook was attempted, including historical runs created before delivery
+          # tracking was added.
+          sig do
+            params(
+              attempted_at: Time,
+              error:
+                T.nilable(
+                  ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error::OrHash
+                ),
+              event_id: String,
+              http_status: T.nilable(Integer),
+              status:
+                ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status::OrSymbol
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            attempted_at:,
+            error:,
+            # Identifier sent in the X-Context-Id header.
+            event_id:,
+            # The endpoint's final HTTP response status, or null when no response was
+            # received.
+            http_status:,
+            # Delivery outcome. delivered means any 2xx response; rejected means a non-2xx
+            # response; failed means no HTTP response was received; skipped_unsafe_url means
+            # the URL failed the public-endpoint safety check.
+            status:
+          )
+          end
+
+          sig do
+            override.returns(
+              {
+                attempted_at: Time,
+                error:
+                  T.nilable(
+                    ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error
+                  ),
+                event_id: String,
+                http_status: T.nilable(Integer),
+                status:
+                  ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status::TaggedSymbol
+              }
+            )
+          end
+          def to_hash
+          end
+
+          class Error < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            sig { returns(String) }
+            attr_accessor :code
+
+            sig { returns(String) }
+            attr_accessor :message
+
+            sig do
+              params(code: String, message: String).returns(T.attached_class)
+            end
+            def self.new(code:, message:)
+            end
+
+            sig { override.returns({ code: String, message: String }) }
+            def to_hash
+            end
+          end
+
+          # Delivery outcome. delivered means any 2xx response; rejected means a non-2xx
+          # response; failed means no HTTP response was received; skipped_unsafe_url means
+          # the URL failed the public-endpoint safety check.
+          module Status
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            DELIVERED =
+              T.let(
+                :delivered,
+                ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status::TaggedSymbol
+              )
+            REJECTED =
+              T.let(
+                :rejected,
+                ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status::TaggedSymbol
+              )
+            FAILED =
+              T.let(
+                :failed,
+                ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status::TaggedSymbol
+              )
+            SKIPPED_UNSAFE_URL =
+              T.let(
+                :skipped_unsafe_url,
+                ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
           end
         end
       end

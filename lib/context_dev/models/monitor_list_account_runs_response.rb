@@ -106,7 +106,16 @@ module ContextDev
         #   @return [Time, nil]
         optional :started_at, Time, nil?: true
 
-        # @!method initialize(id:, baseline_created:, change_detected:, change_detection_type:, credits_charged:, monitor_id:, run_type:, status:, target_type:, change_id: nil, completed_at: nil, error: nil, skip_reason: nil, started_at: nil)
+        # @!attribute webhook_delivery
+        #   The webhook delivery attempted for a change detected by this run. Omitted when
+        #   no webhook was attempted, including historical runs created before delivery
+        #   tracking was added.
+        #
+        #   @return [ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery, nil]
+        optional :webhook_delivery,
+                 -> { ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery }
+
+        # @!method initialize(id:, baseline_created:, change_detected:, change_detection_type:, credits_charged:, monitor_id:, run_type:, status:, target_type:, change_id: nil, completed_at: nil, error: nil, skip_reason: nil, started_at: nil, webhook_delivery: nil)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::MonitorListAccountRunsResponse::Data} for more details.
         #
@@ -137,6 +146,8 @@ module ContextDev
         #   @param skip_reason [Symbol, ContextDev::Models::MonitorListAccountRunsResponse::Data::SkipReason, nil] Why a skipped run never executed; null unless status is `skipped`.
         #
         #   @param started_at [Time, nil]
+        #
+        #   @param webhook_delivery [ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery] The webhook delivery attempted for a change detected by this run. Omitted when n
 
         # @see ContextDev::Models::MonitorListAccountRunsResponse::Data#change_detection_type
         module ChangeDetectionType
@@ -220,6 +231,96 @@ module ContextDev
 
           # @!method self.values
           #   @return [Array<Symbol>]
+        end
+
+        # @see ContextDev::Models::MonitorListAccountRunsResponse::Data#webhook_delivery
+        class WebhookDelivery < ContextDev::Internal::Type::BaseModel
+          # @!attribute attempted_at
+          #
+          #   @return [Time]
+          required :attempted_at, Time
+
+          # @!attribute error
+          #
+          #   @return [ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error, nil]
+          required :error,
+                   -> { ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error },
+                   nil?: true
+
+          # @!attribute event_id
+          #   Identifier sent in the X-Context-Id header.
+          #
+          #   @return [String]
+          required :event_id, String
+
+          # @!attribute http_status
+          #   The endpoint's final HTTP response status, or null when no response was
+          #   received.
+          #
+          #   @return [Integer, nil]
+          required :http_status, Integer, nil?: true
+
+          # @!attribute status
+          #   Delivery outcome. delivered means any 2xx response; rejected means a non-2xx
+          #   response; failed means no HTTP response was received; skipped_unsafe_url means
+          #   the URL failed the public-endpoint safety check.
+          #
+          #   @return [Symbol, ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status]
+          required :status,
+                   enum: -> { ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status }
+
+          # @!method initialize(attempted_at:, error:, event_id:, http_status:, status:)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery} for
+          #   more details.
+          #
+          #   The webhook delivery attempted for a change detected by this run. Omitted when
+          #   no webhook was attempted, including historical runs created before delivery
+          #   tracking was added.
+          #
+          #   @param attempted_at [Time]
+          #
+          #   @param error [ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error, nil]
+          #
+          #   @param event_id [String] Identifier sent in the X-Context-Id header.
+          #
+          #   @param http_status [Integer, nil] The endpoint's final HTTP response status, or null when no response was received
+          #
+          #   @param status [Symbol, ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status] Delivery outcome. delivered means any 2xx response; rejected means a non-2xx res
+
+          # @see ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery#error
+          class Error < ContextDev::Internal::Type::BaseModel
+            # @!attribute code
+            #
+            #   @return [String]
+            required :code, String
+
+            # @!attribute message
+            #
+            #   @return [String]
+            required :message, String
+
+            # @!method initialize(code:, message:)
+            #   @param code [String]
+            #   @param message [String]
+          end
+
+          # Delivery outcome. delivered means any 2xx response; rejected means a non-2xx
+          # response; failed means no HTTP response was received; skipped_unsafe_url means
+          # the URL failed the public-endpoint safety check.
+          #
+          # @see ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery#status
+          module Status
+            extend ContextDev::Internal::Type::Enum
+
+            DELIVERED = :delivered
+            REJECTED = :rejected
+            FAILED = :failed
+            SKIPPED_UNSAFE_URL = :skipped_unsafe_url
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
         end
       end
     end
