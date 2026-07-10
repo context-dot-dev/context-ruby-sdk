@@ -43,6 +43,12 @@ module ContextDev
       #   @return [String]
       required :summary, String
 
+      # @!attribute tags
+      #   User-defined tags for grouping and filtering monitors and their changes.
+      #
+      #   @return [Array<String>]
+      required :tags, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute target_type
       #
       #   @return [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::TargetType]
@@ -123,13 +129,7 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :removed_urls, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!attribute tags
-      #   User-defined tags for grouping and filtering monitors and their changes.
-      #
-      #   @return [Array<String>, nil]
-      optional :tags, ContextDev::Internal::Type::ArrayOf[String]
-
-      # @!method initialize(id:, change_detection_type:, detected_at:, mode:, monitor_id:, run_id:, summary:, target_type:, title:, url:, added_url_count: nil, added_urls: nil, after_text_excerpt: nil, before_text_excerpt: nil, confidence: nil, diff: nil, evidence: nil, importance: nil, matched_url_count: nil, matched_urls: nil, removed_url_count: nil, removed_urls: nil, tags: nil)
+      # @!method initialize(id:, change_detection_type:, detected_at:, mode:, monitor_id:, run_id:, summary:, tags:, target_type:, title:, url:, added_url_count: nil, added_urls: nil, after_text_excerpt: nil, before_text_excerpt: nil, confidence: nil, diff: nil, evidence: nil, importance: nil, matched_url_count: nil, matched_urls: nil, removed_url_count: nil, removed_urls: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorRetrieveChangeResponse} for more details.
       #
@@ -137,7 +137,7 @@ module ContextDev
       #   `change_detection_type` describe the change, and which optional fields are
       #   present depends on them (page: `diff` + excerpts; sitemap:
       #   `added_urls`/`removed_urls`; semantic:
-      #   `query`/`confidence`/`importance`/`evidence`/`matched_urls`).
+      #   `confidence`/`importance`/`evidence`/`matched_urls`).
       #
       #   @param id [String]
       #
@@ -152,6 +152,8 @@ module ContextDev
       #   @param run_id [String] The run that detected this change.
       #
       #   @param summary [String]
+      #
+      #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes.
       #
       #   @param target_type [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::TargetType]
       #
@@ -182,8 +184,6 @@ module ContextDev
       #   @param removed_url_count [Integer]
       #
       #   @param removed_urls [Array<String>] At most 500 URLs are included; the corresponding count field is always exact.
-      #
-      #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes.
 
       # @see ContextDev::Models::MonitorRetrieveChangeResponse#change_detection_type
       module ChangeDetectionType

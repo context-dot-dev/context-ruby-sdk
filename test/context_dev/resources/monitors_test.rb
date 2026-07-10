@@ -227,6 +227,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         monitor_id: String,
         run_id: String,
         summary: String,
+        tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
         target_type: ContextDev::Models::MonitorRetrieveChangeResponse::TargetType,
         title: String,
         url: String,
@@ -241,8 +242,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         matched_url_count: Integer | nil,
         matched_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
         removed_url_count: Integer | nil,
-        removed_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
-        tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil
+        removed_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil
       }
     end
   end

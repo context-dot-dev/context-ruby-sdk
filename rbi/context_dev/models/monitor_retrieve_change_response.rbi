@@ -43,6 +43,10 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :summary
 
+      # User-defined tags for grouping and filtering monitors and their changes.
+      sig { returns(T::Array[String]) }
+      attr_accessor :tags
+
       sig do
         returns(
           ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::TaggedSymbol
@@ -158,18 +162,11 @@ module ContextDev
       sig { params(removed_urls: T::Array[String]).void }
       attr_writer :removed_urls
 
-      # User-defined tags for grouping and filtering monitors and their changes.
-      sig { returns(T.nilable(T::Array[String])) }
-      attr_reader :tags
-
-      sig { params(tags: T::Array[String]).void }
-      attr_writer :tags
-
       # A detected change. `mode` is the constant `web`; `target_type` and
       # `change_detection_type` describe the change, and which optional fields are
       # present depends on them (page: `diff` + excerpts; sitemap:
       # `added_urls`/`removed_urls`; semantic:
-      # `query`/`confidence`/`importance`/`evidence`/`matched_urls`).
+      # `confidence`/`importance`/`evidence`/`matched_urls`).
       sig do
         params(
           id: String,
@@ -181,6 +178,7 @@ module ContextDev
           monitor_id: String,
           run_id: String,
           summary: String,
+          tags: T::Array[String],
           target_type:
             ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::OrSymbol,
           title: String,
@@ -200,8 +198,7 @@ module ContextDev
           matched_url_count: Integer,
           matched_urls: T::Array[String],
           removed_url_count: Integer,
-          removed_urls: T::Array[String],
-          tags: T::Array[String]
+          removed_urls: T::Array[String]
         ).returns(T.attached_class)
       end
       def self.new(
@@ -215,6 +212,8 @@ module ContextDev
         # The run that detected this change.
         run_id:,
         summary:,
+        # User-defined tags for grouping and filtering monitors and their changes.
+        tags:,
         target_type:,
         title:,
         url:,
@@ -233,9 +232,7 @@ module ContextDev
         matched_urls: nil,
         removed_url_count: nil,
         # At most 500 URLs are included; the corresponding count field is always exact.
-        removed_urls: nil,
-        # User-defined tags for grouping and filtering monitors and their changes.
-        tags: nil
+        removed_urls: nil
       )
       end
 
@@ -251,6 +248,7 @@ module ContextDev
             monitor_id: String,
             run_id: String,
             summary: String,
+            tags: T::Array[String],
             target_type:
               ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::TaggedSymbol,
             title: String,
@@ -270,8 +268,7 @@ module ContextDev
             matched_url_count: Integer,
             matched_urls: T::Array[String],
             removed_url_count: Integer,
-            removed_urls: T::Array[String],
-            tags: T::Array[String]
+            removed_urls: T::Array[String]
           }
         )
       end
