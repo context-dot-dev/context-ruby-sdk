@@ -41,7 +41,8 @@ module ContextDev
           completed_at: Time?,
           error: ContextDev::Models::MonitorListRunsResponse::Data::Error?,
           skip_reason: ContextDev::Models::MonitorListRunsResponse::Data::skip_reason?,
-          started_at: Time?
+          started_at: Time?,
+          webhook_delivery: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery
         }
 
       class Data < ContextDev::Internal::Type::BaseModel
@@ -73,6 +74,12 @@ module ContextDev
 
         attr_accessor started_at: Time?
 
+        attr_reader webhook_delivery: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery?
+
+        def webhook_delivery=: (
+          ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery
+        ) -> ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery
+
         def initialize: (
           id: String,
           baseline_created: bool,
@@ -87,7 +94,8 @@ module ContextDev
           ?completed_at: Time?,
           ?error: ContextDev::Models::MonitorListRunsResponse::Data::Error?,
           ?skip_reason: ContextDev::Models::MonitorListRunsResponse::Data::skip_reason?,
-          ?started_at: Time?
+          ?started_at: Time?,
+          ?webhook_delivery: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery
         ) -> void
 
         def to_hash: -> {
@@ -104,7 +112,8 @@ module ContextDev
           completed_at: Time?,
           error: ContextDev::Models::MonitorListRunsResponse::Data::Error?,
           skip_reason: ContextDev::Models::MonitorListRunsResponse::Data::skip_reason?,
-          started_at: Time?
+          started_at: Time?,
+          webhook_delivery: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery
         }
 
         type change_detection_type = :exact | :semantic
@@ -177,6 +186,68 @@ module ContextDev
           SUPERSEDED: :superseded
 
           def self?.values: -> ::Array[ContextDev::Models::MonitorListRunsResponse::Data::skip_reason]
+        end
+
+        type webhook_delivery =
+          {
+            attempted_at: Time,
+            error: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Error?,
+            event_id: String,
+            http_status: Integer?,
+            status: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::status
+          }
+
+        class WebhookDelivery < ContextDev::Internal::Type::BaseModel
+          attr_accessor attempted_at: Time
+
+          attr_accessor error: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Error?
+
+          attr_accessor event_id: String
+
+          attr_accessor http_status: Integer?
+
+          attr_accessor status: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::status
+
+          def initialize: (
+            attempted_at: Time,
+            error: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Error?,
+            event_id: String,
+            http_status: Integer?,
+            status: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::status
+          ) -> void
+
+          def to_hash: -> {
+            attempted_at: Time,
+            error: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Error?,
+            event_id: String,
+            http_status: Integer?,
+            status: ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::status
+          }
+
+          type error = { code: String, message: String }
+
+          class Error < ContextDev::Internal::Type::BaseModel
+            attr_accessor code: String
+
+            attr_accessor message: String
+
+            def initialize: (code: String, message: String) -> void
+
+            def to_hash: -> { code: String, message: String }
+          end
+
+          type status = :delivered | :rejected | :failed | :skipped_unsafe_url
+
+          module Status
+            extend ContextDev::Internal::Type::Enum
+
+            DELIVERED: :delivered
+            REJECTED: :rejected
+            FAILED: :failed
+            SKIPPED_UNSAFE_URL: :skipped_unsafe_url
+
+            def self?.values: -> ::Array[ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::status]
+          end
         end
       end
     end
