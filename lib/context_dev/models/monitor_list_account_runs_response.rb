@@ -106,16 +106,27 @@ module ContextDev
         #   @return [Time, nil]
         optional :started_at, Time, nil?: true
 
+        # @!attribute webhook_deliveries
+        #   All webhook deliveries attempted by this run — one per subscribed event that
+        #   fired. Omitted when no webhook was attempted, including runs created before
+        #   event selection was added.
+        #
+        #   @return [Array<ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery>, nil]
+        optional :webhook_deliveries,
+                 -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery] }
+
         # @!attribute webhook_delivery
-        #   The webhook delivery attempted for a change detected by this run. Omitted when
-        #   no webhook was attempted, including historical runs created before delivery
-        #   tracking was added.
+        #   @deprecated
+        #
+        #   Deprecated: use `webhook_deliveries`, which records every attempt now that a run
+        #   can deliver multiple events. Omitted when no webhook was attempted, including
+        #   historical runs created before delivery tracking was added.
         #
         #   @return [ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery, nil]
         optional :webhook_delivery,
                  -> { ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery }
 
-        # @!method initialize(id:, baseline_created:, change_detected:, change_detection_type:, credits_charged:, monitor_id:, run_type:, status:, target_type:, change_id: nil, completed_at: nil, error: nil, skip_reason: nil, started_at: nil, webhook_delivery: nil)
+        # @!method initialize(id:, baseline_created:, change_detected:, change_detection_type:, credits_charged:, monitor_id:, run_type:, status:, target_type:, change_id: nil, completed_at: nil, error: nil, skip_reason: nil, started_at: nil, webhook_deliveries: nil, webhook_delivery: nil)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::MonitorListAccountRunsResponse::Data} for more details.
         #
@@ -147,7 +158,9 @@ module ContextDev
         #
         #   @param started_at [Time, nil]
         #
-        #   @param webhook_delivery [ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery] The webhook delivery attempted for a change detected by this run. Omitted when n
+        #   @param webhook_deliveries [Array<ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery>] All webhook deliveries attempted by this run — one per subscribed event that fir
+        #
+        #   @param webhook_delivery [ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery] Deprecated: use `webhook_deliveries`, which records every attempt now that a run
 
         # @see ContextDev::Models::MonitorListAccountRunsResponse::Data#change_detection_type
         module ChangeDetectionType
@@ -233,7 +246,6 @@ module ContextDev
           #   @return [Array<Symbol>]
         end
 
-        # @see ContextDev::Models::MonitorListAccountRunsResponse::Data#webhook_delivery
         class WebhookDelivery < ContextDev::Internal::Type::BaseModel
           # @!attribute attempted_at
           #
@@ -246,6 +258,14 @@ module ContextDev
           required :error,
                    -> { ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error },
                    nil?: true
+
+          # @!attribute event
+          #   The event this delivery carried. Deliveries recorded before event selection
+          #   existed report change.detected.
+          #
+          #   @return [Symbol, ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Event]
+          required :event,
+                   enum: -> { ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Event }
 
           # @!attribute event_id
           #   Identifier sent in the X-Context-Id header.
@@ -269,18 +289,16 @@ module ContextDev
           required :status,
                    enum: -> { ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Status }
 
-          # @!method initialize(attempted_at:, error:, event_id:, http_status:, status:)
+          # @!method initialize(attempted_at:, error:, event:, event_id:, http_status:, status:)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery} for
           #   more details.
           #
-          #   The webhook delivery attempted for a change detected by this run. Omitted when
-          #   no webhook was attempted, including historical runs created before delivery
-          #   tracking was added.
-          #
           #   @param attempted_at [Time]
           #
           #   @param error [ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error, nil]
+          #
+          #   @param event [Symbol, ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Event] The event this delivery carried. Deliveries recorded before event selection exis
           #
           #   @param event_id [String] Identifier sent in the X-Context-Id header.
           #
@@ -303,6 +321,20 @@ module ContextDev
             # @!method initialize(code:, message:)
             #   @param code [String]
             #   @param message [String]
+          end
+
+          # The event this delivery carried. Deliveries recorded before event selection
+          # existed report change.detected.
+          #
+          # @see ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery#event
+          module Event
+            extend ContextDev::Internal::Type::Enum
+
+            CHANGE_DETECTED = :"change.detected"
+            RUN_COMPLETED = :"run.completed"
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
           end
 
           # Delivery outcome. delivered means any 2xx response; rejected means a non-2xx

@@ -139,9 +139,33 @@ module ContextDev
         sig { returns(T.nilable(Time)) }
         attr_accessor :started_at
 
-        # The webhook delivery attempted for a change detected by this run. Omitted when
-        # no webhook was attempted, including historical runs created before delivery
-        # tracking was added.
+        # All webhook deliveries attempted by this run — one per subscribed event that
+        # fired. Omitted when no webhook was attempted, including runs created before
+        # event selection was added.
+        sig do
+          returns(
+            T.nilable(
+              T::Array[
+                ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery
+              ]
+            )
+          )
+        end
+        attr_reader :webhook_deliveries
+
+        sig do
+          params(
+            webhook_deliveries:
+              T::Array[
+                ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::OrHash
+              ]
+          ).void
+        end
+        attr_writer :webhook_deliveries
+
+        # Deprecated: use `webhook_deliveries`, which records every attempt now that a run
+        # can deliver multiple events. Omitted when no webhook was attempted, including
+        # historical runs created before delivery tracking was added.
         sig do
           returns(
             T.nilable(
@@ -185,6 +209,10 @@ module ContextDev
                 ContextDev::Models::MonitorListRunsResponse::Data::SkipReason::OrSymbol
               ),
             started_at: T.nilable(Time),
+            webhook_deliveries:
+              T::Array[
+                ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::OrHash
+              ],
             webhook_delivery:
               ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::OrHash
           ).returns(T.attached_class)
@@ -211,9 +239,13 @@ module ContextDev
           # Why a skipped run never executed; null unless status is `skipped`.
           skip_reason: nil,
           started_at: nil,
-          # The webhook delivery attempted for a change detected by this run. Omitted when
-          # no webhook was attempted, including historical runs created before delivery
-          # tracking was added.
+          # All webhook deliveries attempted by this run — one per subscribed event that
+          # fired. Omitted when no webhook was attempted, including runs created before
+          # event selection was added.
+          webhook_deliveries: nil,
+          # Deprecated: use `webhook_deliveries`, which records every attempt now that a run
+          # can deliver multiple events. Omitted when no webhook was attempted, including
+          # historical runs created before delivery tracking was added.
           webhook_delivery: nil
         )
         end
@@ -245,6 +277,10 @@ module ContextDev
                   ContextDev::Models::MonitorListRunsResponse::Data::SkipReason::TaggedSymbol
                 ),
               started_at: T.nilable(Time),
+              webhook_deliveries:
+                T::Array[
+                  ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery
+                ],
               webhook_delivery:
                 ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery
             }
@@ -509,6 +545,15 @@ module ContextDev
           end
           attr_writer :error
 
+          # The event this delivery carried. Deliveries recorded before event selection
+          # existed report change.detected.
+          sig do
+            returns(
+              ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Event::TaggedSymbol
+            )
+          end
+          attr_accessor :event
+
           # Identifier sent in the X-Context-Id header.
           sig { returns(String) }
           attr_accessor :event_id
@@ -528,9 +573,6 @@ module ContextDev
           end
           attr_accessor :status
 
-          # The webhook delivery attempted for a change detected by this run. Omitted when
-          # no webhook was attempted, including historical runs created before delivery
-          # tracking was added.
           sig do
             params(
               attempted_at: Time,
@@ -538,6 +580,8 @@ module ContextDev
                 T.nilable(
                   ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Error::OrHash
                 ),
+              event:
+                ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Event::OrSymbol,
               event_id: String,
               http_status: T.nilable(Integer),
               status:
@@ -547,6 +591,9 @@ module ContextDev
           def self.new(
             attempted_at:,
             error:,
+            # The event this delivery carried. Deliveries recorded before event selection
+            # existed report change.detected.
+            event:,
             # Identifier sent in the X-Context-Id header.
             event_id:,
             # The endpoint's final HTTP response status, or null when no response was
@@ -567,6 +614,8 @@ module ContextDev
                   T.nilable(
                     ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Error
                   ),
+                event:
+                  ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Event::TaggedSymbol,
                 event_id: String,
                 http_status: T.nilable(Integer),
                 status:
@@ -600,6 +649,42 @@ module ContextDev
 
             sig { override.returns({ code: String, message: String }) }
             def to_hash
+            end
+          end
+
+          # The event this delivery carried. Deliveries recorded before event selection
+          # existed report change.detected.
+          module Event
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Event
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            CHANGE_DETECTED =
+              T.let(
+                :"change.detected",
+                ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Event::TaggedSymbol
+              )
+            RUN_COMPLETED =
+              T.let(
+                :"run.completed",
+                ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Event::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::Models::MonitorListRunsResponse::Data::WebhookDelivery::Event::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
             end
           end
 

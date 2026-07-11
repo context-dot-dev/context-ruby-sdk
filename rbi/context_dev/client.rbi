@@ -29,8 +29,9 @@ module ContextDev
     attr_reader :utility
 
     # Monitor pages, sitemaps, and extracted website data for exact or semantic
-    # changes. The change.detected webhook payload is documented by the
-    # MonitorsChangeDetectedWebhookPayload schema.
+    # changes. Webhook payloads are documented by the
+    # MonitorsChangeDetectedWebhookPayload and MonitorsRunCompletedWebhookPayload
+    # schemas.
     sig { returns(ContextDev::Resources::Monitors) }
     attr_reader :monitors
 

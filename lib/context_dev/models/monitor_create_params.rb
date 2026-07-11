@@ -356,13 +356,38 @@ module ContextDev
 
       class Webhook < ContextDev::Internal::Type::BaseModel
         # @!attribute url
-        #   Webhook URL called when a change is detected.
+        #   Webhook URL events are delivered to.
         #
         #   @return [String]
         required :url, String
 
-        # @!method initialize(url:)
-        #   @param url [String] Webhook URL called when a change is detected.
+        # @!attribute events
+        #   Events delivered to this endpoint. `change.detected` fires only when a run
+        #   detects a change; `run.completed` fires on every completed run — including runs
+        #   that detected no change — and embeds the change when one was detected. Defaults
+        #   to `["change.detected"]` when omitted.
+        #
+        #   @return [Array<Symbol, ContextDev::Models::MonitorCreateParams::Webhook::Event>, nil]
+        optional :events,
+                 -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::MonitorCreateParams::Webhook::Event] }
+
+        # @!method initialize(url:, events: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::MonitorCreateParams::Webhook} for more details.
+        #
+        #   @param url [String] Webhook URL events are delivered to.
+        #
+        #   @param events [Array<Symbol, ContextDev::Models::MonitorCreateParams::Webhook::Event>] Events delivered to this endpoint. `change.detected` fires only when a run detec
+
+        module Event
+          extend ContextDev::Internal::Type::Enum
+
+          CHANGE_DETECTED = :"change.detected"
+          RUN_COMPLETED = :"run.completed"
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
       end
     end
   end

@@ -420,18 +420,48 @@ module ContextDev
         def to_hash: -> { code: String, message: String }
       end
 
-      type webhook = { url: String, secret: String }
+      type webhook =
+        {
+          url: String,
+          events: ::Array[ContextDev::Models::MonitorCreateResponse::Webhook::event],
+          secret: String
+        }
 
       class Webhook < ContextDev::Internal::Type::BaseModel
         attr_accessor url: String
+
+        attr_reader events: ::Array[ContextDev::Models::MonitorCreateResponse::Webhook::event]?
+
+        def events=: (
+          ::Array[ContextDev::Models::MonitorCreateResponse::Webhook::event]
+        ) -> ::Array[ContextDev::Models::MonitorCreateResponse::Webhook::event]
 
         attr_reader secret: String?
 
         def secret=: (String) -> String
 
-        def initialize: (url: String, ?secret: String) -> void
+        def initialize: (
+          url: String,
+          ?events: ::Array[ContextDev::Models::MonitorCreateResponse::Webhook::event],
+          ?secret: String
+        ) -> void
 
-        def to_hash: -> { url: String, secret: String }
+        def to_hash: -> {
+          url: String,
+          events: ::Array[ContextDev::Models::MonitorCreateResponse::Webhook::event],
+          secret: String
+        }
+
+        type event = :"change.detected" | :"run.completed"
+
+        module Event
+          extend ContextDev::Internal::Type::Enum
+
+          CHANGE_DETECTED: :"change.detected"
+          RUN_COMPLETED: :"run.completed"
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorCreateResponse::Webhook::event]
+        end
       end
 
       type webhook_failure =
