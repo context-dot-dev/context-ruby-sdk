@@ -199,6 +199,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        content_length: Integer,
         markdown: String,
         metadata: ContextDev::Models::WebWebScrapeMdResponse::Metadata,
         success: ContextDev::Models::WebWebScrapeMdResponse::Success,
