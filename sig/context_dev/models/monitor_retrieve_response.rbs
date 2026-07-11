@@ -17,7 +17,8 @@ module ContextDev
         last_run_at: Time?,
         next_run_at: Time?,
         tags: ::Array[String],
-        webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook?
+        webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook?,
+        webhook_failure: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure?
       }
 
     class MonitorRetrieveResponse < ContextDev::Internal::Type::BaseModel
@@ -55,6 +56,8 @@ module ContextDev
 
       attr_accessor webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook?
 
+      attr_accessor webhook_failure: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure?
+
       def initialize: (
         id: String,
         change_detection: ContextDev::Models::MonitorRetrieveResponse::change_detection,
@@ -71,7 +74,8 @@ module ContextDev
         ?last_run_at: Time?,
         ?next_run_at: Time?,
         ?tags: ::Array[String],
-        ?webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook?
+        ?webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook?,
+        ?webhook_failure: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure?
       ) -> void
 
       def to_hash: -> {
@@ -90,7 +94,8 @@ module ContextDev
         last_run_at: Time?,
         next_run_at: Time?,
         tags: ::Array[String],
-        webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook?
+        webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook?,
+        webhook_failure: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure?
       }
 
       type change_detection =
@@ -427,6 +432,50 @@ module ContextDev
         def initialize: (url: String, ?secret: String) -> void
 
         def to_hash: -> { url: String, secret: String }
+      end
+
+      type webhook_failure =
+        {
+          consecutive_failures: Integer,
+          last_failed_at: Time,
+          last_message: String,
+          last_status: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure::last_status
+        }
+
+      class WebhookFailure < ContextDev::Internal::Type::BaseModel
+        attr_accessor consecutive_failures: Integer
+
+        attr_accessor last_failed_at: Time
+
+        attr_accessor last_message: String
+
+        attr_accessor last_status: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure::last_status
+
+        def initialize: (
+          consecutive_failures: Integer,
+          last_failed_at: Time,
+          last_message: String,
+          last_status: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure::last_status
+        ) -> void
+
+        def to_hash: -> {
+          consecutive_failures: Integer,
+          last_failed_at: Time,
+          last_message: String,
+          last_status: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure::last_status
+        }
+
+        type last_status = :rejected | :failed | :skipped_unsafe_url
+
+        module LastStatus
+          extend ContextDev::Internal::Type::Enum
+
+          REJECTED: :rejected
+          FAILED: :failed
+          SKIPPED_UNSAFE_URL: :skipped_unsafe_url
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorRetrieveResponse::WebhookFailure::last_status]
+        end
       end
     end
   end
