@@ -4,6 +4,14 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Web#web_scrape_md
     class WebWebScrapeMdResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute content_length
+      #   UTF-8 byte length of the returned Markdown. Use 0 to identify an empty result
+      #   and compare small values against your workload's minimum useful-content
+      #   threshold.
+      #
+      #   @return [Integer]
+      required :content_length, Integer, api_name: :contentLength
+
       # @!attribute markdown
       #   Page content converted to GitHub Flavored Markdown
       #
@@ -35,9 +43,11 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata }
 
-      # @!method initialize(markdown:, metadata:, success:, url:, key_metadata: nil)
+      # @!method initialize(content_length:, markdown:, metadata:, success:, url:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeMdResponse} for more details.
+      #
+      #   @param content_length [Integer] UTF-8 byte length of the returned Markdown. Use 0 to identify an empty result an
       #
       #   @param markdown [String] Page content converted to GitHub Flavored Markdown
       #
