@@ -103,7 +103,15 @@ module ContextDev
       #   @return [ContextDev::Models::MonitorUpdateResponse::Webhook, nil]
       optional :webhook, -> { ContextDev::Models::MonitorUpdateResponse::Webhook }, nil?: true
 
-      # @!method initialize(id:, change_detection:, created_at:, mode:, name:, schedule:, status:, target:, updated_at:, baseline: nil, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, tags: nil, webhook: nil)
+      # @!attribute webhook_failure
+      #   Present while webhook deliveries are failing consecutively; null when deliveries
+      #   are healthy or no webhook is configured. Cleared on the next successful delivery
+      #   and when the webhook URL changes.
+      #
+      #   @return [ContextDev::Models::MonitorUpdateResponse::WebhookFailure, nil]
+      optional :webhook_failure, -> { ContextDev::Models::MonitorUpdateResponse::WebhookFailure }, nil?: true
+
+      # @!method initialize(id:, change_detection:, created_at:, mode:, name:, schedule:, status:, target:, updated_at:, baseline: nil, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, tags: nil, webhook: nil, webhook_failure: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorUpdateResponse} for more details.
       #
@@ -141,6 +149,8 @@ module ContextDev
       #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes.
       #
       #   @param webhook [ContextDev::Models::MonitorUpdateResponse::Webhook, nil]
+      #
+      #   @param webhook_failure [ContextDev::Models::MonitorUpdateResponse::WebhookFailure, nil] Present while webhook deliveries are failing consecutively; null when deliveries
 
       # Discriminated union describing how changes are detected.
       #
@@ -607,6 +617,66 @@ module ContextDev
         #   @param url [String] Webhook URL called when a change is detected.
         #
         #   @param secret [String] Signing secret used to verify webhook authenticity. Each delivery includes an `X
+      end
+
+      # @see ContextDev::Models::MonitorUpdateResponse#webhook_failure
+      class WebhookFailure < ContextDev::Internal::Type::BaseModel
+        # @!attribute consecutive_failures
+        #   Number of consecutive delivery attempts that did not succeed.
+        #
+        #   @return [Integer]
+        required :consecutive_failures, Integer
+
+        # @!attribute last_failed_at
+        #
+        #   @return [Time]
+        required :last_failed_at, Time
+
+        # @!attribute last_message
+        #   Human-readable description of the most recent failure.
+        #
+        #   @return [String]
+        required :last_message, String
+
+        # @!attribute last_status
+        #   Outcome of the most recent failed delivery. rejected means a non-2xx response;
+        #   failed means no HTTP response was received; skipped_unsafe_url means the URL
+        #   failed the public-endpoint safety check.
+        #
+        #   @return [Symbol, ContextDev::Models::MonitorUpdateResponse::WebhookFailure::LastStatus]
+        required :last_status, enum: -> { ContextDev::Models::MonitorUpdateResponse::WebhookFailure::LastStatus }
+
+        # @!method initialize(consecutive_failures:, last_failed_at:, last_message:, last_status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::MonitorUpdateResponse::WebhookFailure} for more details.
+        #
+        #   Present while webhook deliveries are failing consecutively; null when deliveries
+        #   are healthy or no webhook is configured. Cleared on the next successful delivery
+        #   and when the webhook URL changes.
+        #
+        #   @param consecutive_failures [Integer] Number of consecutive delivery attempts that did not succeed.
+        #
+        #   @param last_failed_at [Time]
+        #
+        #   @param last_message [String] Human-readable description of the most recent failure.
+        #
+        #   @param last_status [Symbol, ContextDev::Models::MonitorUpdateResponse::WebhookFailure::LastStatus] Outcome of the most recent failed delivery. rejected means a non-2xx response; f
+
+        # Outcome of the most recent failed delivery. rejected means a non-2xx response;
+        # failed means no HTTP response was received; skipped_unsafe_url means the URL
+        # failed the public-endpoint safety check.
+        #
+        # @see ContextDev::Models::MonitorUpdateResponse::WebhookFailure#last_status
+        module LastStatus
+          extend ContextDev::Internal::Type::Enum
+
+          REJECTED = :rejected
+          FAILED = :failed
+          SKIPPED_UNSAFE_URL = :skipped_unsafe_url
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
       end
     end
   end
