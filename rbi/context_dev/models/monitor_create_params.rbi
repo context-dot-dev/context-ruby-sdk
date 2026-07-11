@@ -631,19 +631,99 @@ module ContextDev
             )
           end
 
-        # Webhook URL called when a change is detected.
+        # Webhook URL events are delivered to.
         sig { returns(String) }
         attr_accessor :url
 
-        sig { params(url: String).returns(T.attached_class) }
+        # Events delivered to this endpoint. `change.detected` fires only when a run
+        # detects a change; `run.completed` fires on every completed run — including runs
+        # that detected no change — and embeds the change when one was detected. Defaults
+        # to `["change.detected"]` when omitted.
+        sig do
+          returns(
+            T.nilable(
+              T::Array[
+                ContextDev::MonitorCreateParams::Webhook::Event::OrSymbol
+              ]
+            )
+          )
+        end
+        attr_reader :events
+
+        sig do
+          params(
+            events:
+              T::Array[
+                ContextDev::MonitorCreateParams::Webhook::Event::OrSymbol
+              ]
+          ).void
+        end
+        attr_writer :events
+
+        sig do
+          params(
+            url: String,
+            events:
+              T::Array[
+                ContextDev::MonitorCreateParams::Webhook::Event::OrSymbol
+              ]
+          ).returns(T.attached_class)
+        end
         def self.new(
-          # Webhook URL called when a change is detected.
-          url:
+          # Webhook URL events are delivered to.
+          url:,
+          # Events delivered to this endpoint. `change.detected` fires only when a run
+          # detects a change; `run.completed` fires on every completed run — including runs
+          # that detected no change — and embeds the change when one was detected. Defaults
+          # to `["change.detected"]` when omitted.
+          events: nil
         )
         end
 
-        sig { override.returns({ url: String, secret: String }) }
+        sig do
+          override.returns(
+            {
+              url: String,
+              events:
+                T::Array[
+                  ContextDev::MonitorCreateParams::Webhook::Event::OrSymbol
+                ],
+              secret: String
+            }
+          )
+        end
         def to_hash
+        end
+
+        module Event
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(Symbol, ContextDev::MonitorCreateParams::Webhook::Event)
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          CHANGE_DETECTED =
+            T.let(
+              :"change.detected",
+              ContextDev::MonitorCreateParams::Webhook::Event::TaggedSymbol
+            )
+          RUN_COMPLETED =
+            T.let(
+              :"run.completed",
+              ContextDev::MonitorCreateParams::Webhook::Event::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::MonitorCreateParams::Webhook::Event::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
         end
       end
     end

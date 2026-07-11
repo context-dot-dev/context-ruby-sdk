@@ -307,14 +307,43 @@ module ContextDev
         def self?.variants: -> ::Array[ContextDev::Models::MonitorUpdateParams::target]
       end
 
-      type webhook = { url: String, secret: String }
+      type webhook =
+        {
+          url: String,
+          events: ::Array[ContextDev::Models::MonitorUpdateParams::Webhook::event],
+          secret: String
+        }
 
       class Webhook < ContextDev::Internal::Type::BaseModel
         attr_accessor url: String
 
-        def initialize: (url: String) -> void
+        attr_reader events: ::Array[ContextDev::Models::MonitorUpdateParams::Webhook::event]?
 
-        def to_hash: -> { url: String, secret: String }
+        def events=: (
+          ::Array[ContextDev::Models::MonitorUpdateParams::Webhook::event]
+        ) -> ::Array[ContextDev::Models::MonitorUpdateParams::Webhook::event]
+
+        def initialize: (
+          url: String,
+          ?events: ::Array[ContextDev::Models::MonitorUpdateParams::Webhook::event]
+        ) -> void
+
+        def to_hash: -> {
+          url: String,
+          events: ::Array[ContextDev::Models::MonitorUpdateParams::Webhook::event],
+          secret: String
+        }
+
+        type event = :"change.detected" | :"run.completed"
+
+        module Event
+          extend ContextDev::Internal::Type::Enum
+
+          CHANGE_DETECTED: :"change.detected"
+          RUN_COMPLETED: :"run.completed"
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorUpdateParams::Webhook::event]
+        end
       end
     end
   end

@@ -3,8 +3,9 @@
 module ContextDev
   module Resources
     # Monitor pages, sitemaps, and extracted website data for exact or semantic
-    # changes. The change.detected webhook payload is documented by the
-    # MonitorsChangeDetectedWebhookPayload schema.
+    # changes. Webhook payloads are documented by the
+    # MonitorsChangeDetectedWebhookPayload and MonitorsRunCompletedWebhookPayload
+    # schemas.
     class Monitors
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::MonitorCreateParams} for more details.

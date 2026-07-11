@@ -42,6 +42,7 @@ module ContextDev
           error: ContextDev::Models::MonitorListAccountRunsResponse::Data::Error?,
           skip_reason: ContextDev::Models::MonitorListAccountRunsResponse::Data::skip_reason?,
           started_at: Time?,
+          webhook_deliveries: ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery],
           webhook_delivery: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery
         }
 
@@ -74,6 +75,12 @@ module ContextDev
 
         attr_accessor started_at: Time?
 
+        attr_reader webhook_deliveries: ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery]?
+
+        def webhook_deliveries=: (
+          ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery]
+        ) -> ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery]
+
         attr_reader webhook_delivery: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery?
 
         def webhook_delivery=: (
@@ -95,6 +102,7 @@ module ContextDev
           ?error: ContextDev::Models::MonitorListAccountRunsResponse::Data::Error?,
           ?skip_reason: ContextDev::Models::MonitorListAccountRunsResponse::Data::skip_reason?,
           ?started_at: Time?,
+          ?webhook_deliveries: ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery],
           ?webhook_delivery: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery
         ) -> void
 
@@ -113,6 +121,7 @@ module ContextDev
           error: ContextDev::Models::MonitorListAccountRunsResponse::Data::Error?,
           skip_reason: ContextDev::Models::MonitorListAccountRunsResponse::Data::skip_reason?,
           started_at: Time?,
+          webhook_deliveries: ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery],
           webhook_delivery: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery
         }
 
@@ -192,6 +201,7 @@ module ContextDev
           {
             attempted_at: Time,
             error: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error?,
+            event: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::event,
             event_id: String,
             http_status: Integer?,
             status: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::status
@@ -202,6 +212,8 @@ module ContextDev
 
           attr_accessor error: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error?
 
+          attr_accessor event: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::event
+
           attr_accessor event_id: String
 
           attr_accessor http_status: Integer?
@@ -211,6 +223,7 @@ module ContextDev
           def initialize: (
             attempted_at: Time,
             error: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error?,
+            event: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::event,
             event_id: String,
             http_status: Integer?,
             status: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::status
@@ -219,6 +232,7 @@ module ContextDev
           def to_hash: -> {
             attempted_at: Time,
             error: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::Error?,
+            event: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::event,
             event_id: String,
             http_status: Integer?,
             status: ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::status
@@ -234,6 +248,17 @@ module ContextDev
             def initialize: (code: String, message: String) -> void
 
             def to_hash: -> { code: String, message: String }
+          end
+
+          type event = :"change.detected" | :"run.completed"
+
+          module Event
+            extend ContextDev::Internal::Type::Enum
+
+            CHANGE_DETECTED: :"change.detected"
+            RUN_COMPLETED: :"run.completed"
+
+            def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::WebhookDelivery::event]
           end
 
           type status = :delivered | :rejected | :failed | :skipped_unsafe_url

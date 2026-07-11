@@ -617,10 +617,20 @@ module ContextDev
         # @see ContextDev::Models::MonitorListResponse::Data#webhook
         class Webhook < ContextDev::Internal::Type::BaseModel
           # @!attribute url
-          #   Webhook URL called when a change is detected.
+          #   Webhook URL events are delivered to.
           #
           #   @return [String]
           required :url, String
+
+          # @!attribute events
+          #   Events delivered to this endpoint. `change.detected` fires only when a run
+          #   detects a change; `run.completed` fires on every completed run — including runs
+          #   that detected no change — and embeds the change when one was detected. Defaults
+          #   to `["change.detected"]` when omitted.
+          #
+          #   @return [Array<Symbol, ContextDev::Models::MonitorListResponse::Data::Webhook::Event>, nil]
+          optional :events,
+                   -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::Models::MonitorListResponse::Data::Webhook::Event] }
 
           response_only do
             # @!attribute secret
@@ -634,13 +644,25 @@ module ContextDev
             optional :secret, String
           end
 
-          # @!method initialize(url:, secret: nil)
+          # @!method initialize(url:, events: nil, secret: nil)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorListResponse::Data::Webhook} for more details.
           #
-          #   @param url [String] Webhook URL called when a change is detected.
+          #   @param url [String] Webhook URL events are delivered to.
+          #
+          #   @param events [Array<Symbol, ContextDev::Models::MonitorListResponse::Data::Webhook::Event>] Events delivered to this endpoint. `change.detected` fires only when a run detec
           #
           #   @param secret [String] Signing secret used to verify webhook authenticity. Each delivery includes an `X
+
+          module Event
+            extend ContextDev::Internal::Type::Enum
+
+            CHANGE_DETECTED = :"change.detected"
+            RUN_COMPLETED = :"run.completed"
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
         end
 
         # @see ContextDev::Models::MonitorListResponse::Data#webhook_failure
