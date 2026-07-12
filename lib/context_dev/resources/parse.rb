@@ -7,27 +7,23 @@ module ContextDev
       # {ContextDev::Models::ParseHandleParams} for more details.
       #
       # Converts raw text, source code, web/data, PDF, Microsoft Office, and image bytes
-      # into LLM-usable Markdown.
+      # into LLM-usable Markdown. The base request costs 1 credit. When OCR runs
+      # (requires ocr=true), the entire call costs 5 credits; ocr=true requests where no
+      # OCR ends up running still cost 1 credit.
       #
-      # @overload handle(body:, base_url: nil, extension: nil, filename: nil, include_images: nil, include_links: nil, ocr: nil, pdf_end: nil, pdf_start: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
+      # @overload handle(body:, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
       #
       # @param body [Pathname, StringIO, IO, String, ContextDev::FilePart] Body param
       #
-      # @param base_url [String] Query param: Optional HTTP(S) source document URL used to resolve relative links
-      #
-      # @param extension [String] Query param: Optional file extension hint, such as pdf, docx, xlsx, pptx, html,
-      #
-      # @param filename [String] Query param: Optional filename hint used to infer the extension when extension i
+      # @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] Query param: Optional file extension hint. Case-insensitive; a leading dot is ac
       #
       # @param include_images [Boolean] Query param: Include image references in Markdown output
       #
       # @param include_links [Boolean] Query param: Preserve hyperlinks in Markdown output
       #
-      # @param ocr [Boolean] Query param: When true for PDF inputs, detect and OCR images embedded in the sel
+      # @param ocr [Boolean] Query param: Gates all OCR. When true, PDFs get embedded-image OCR (recognized t
       #
-      # @param pdf_end [Integer] Query param: Last 1-based PDF page to parse. When omitted, parsing ends at the l
-      #
-      # @param pdf_start [Integer] Query param: First 1-based PDF page to parse. When omitted, parsing starts at th
+      # @param pdf [ContextDev::Models::ParseHandleParams::Pdf] Query param: PDF page-range controls. Use start/end to limit parsing (and OCR wh
       #
       # @param shorten_base64_images [Boolean] Query param: Shorten base64-encoded image data in the Markdown output
       #
