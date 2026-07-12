@@ -289,7 +289,7 @@ module ContextDev
       #
       # @param max_pages [Integer] Maximum number of pages to crawl. Hard cap: 500.
       #
-      # @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
+      # @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
       # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
       #
@@ -342,7 +342,7 @@ module ContextDev
       #
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
-      # @param pdf [ContextDev::Models::WebWebScrapeHTMLParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
+      # @param pdf [ContextDev::Models::WebWebScrapeHTMLParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
       # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
       #
@@ -463,7 +463,7 @@ module ContextDev
       #
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
-      # @param pdf [ContextDev::Models::WebWebScrapeMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
+      # @param pdf [ContextDev::Models::WebWebScrapeMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
       # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before conv
       #

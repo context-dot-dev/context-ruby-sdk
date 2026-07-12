@@ -101,8 +101,8 @@ module ContextDev
       sig { params(max_pages: Integer).void }
       attr_writer :max_pages
 
-      # PDF parsing controls. Use start/end to limit text extraction and OCR to an
-      # inclusive 1-based page range.
+      # PDF parsing controls. Use start/end to limit text extraction and embedded-image
+      # detection/OCR to an inclusive 1-based page range.
       sig { returns(T.nilable(ContextDev::WebWebCrawlMdParams::Pdf)) }
       attr_reader :pdf
 
@@ -226,8 +226,8 @@ module ContextDev
         max_depth: nil,
         # Maximum number of pages to crawl. Hard cap: 500.
         max_pages: nil,
-        # PDF parsing controls. Use start/end to limit text extraction and OCR to an
-        # inclusive 1-based page range.
+        # PDF parsing controls. Use start/end to limit text extraction and embedded-image
+        # detection/OCR to an inclusive 1-based page range.
         pdf: nil,
         # When true, waits briefly for CSS and transition animations to settle before
         # extracting each crawled page. Defaults to false. This adds a bit of latency in
@@ -528,6 +528,15 @@ module ContextDev
         sig { params(end_: Integer).void }
         attr_writer :end_
 
+        # When true, detect and OCR images embedded in the selected PDF pages, inserting
+        # recognized text at each image's position in page reading order while preserving
+        # the PDF text layer. This is separate from automatic scanned-PDF OCR fallback.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_reader :ocr
+
+        sig { params(ocr: T::Boolean).void }
+        attr_writer :ocr
+
         # When true, PDF pages are fetched and parsed. When false, PDF pages are skipped
         # entirely (not included in results and not counted as failures).
         sig { returns(T.nilable(T::Boolean)) }
@@ -543,11 +552,12 @@ module ContextDev
         sig { params(start: Integer).void }
         attr_writer :start
 
-        # PDF parsing controls. Use start/end to limit text extraction and OCR to an
-        # inclusive 1-based page range.
+        # PDF parsing controls. Use start/end to limit text extraction and embedded-image
+        # detection/OCR to an inclusive 1-based page range.
         sig do
           params(
             end_: Integer,
+            ocr: T::Boolean,
             should_parse: T::Boolean,
             start: Integer
           ).returns(T.attached_class)
@@ -556,6 +566,10 @@ module ContextDev
           # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
           # Must be greater than or equal to start when both are provided.
           end_: nil,
+          # When true, detect and OCR images embedded in the selected PDF pages, inserting
+          # recognized text at each image's position in page reading order while preserving
+          # the PDF text layer. This is separate from automatic scanned-PDF OCR fallback.
+          ocr: nil,
           # When true, PDF pages are fetched and parsed. When false, PDF pages are skipped
           # entirely (not included in results and not counted as failures).
           should_parse: nil,
@@ -566,7 +580,12 @@ module ContextDev
 
         sig do
           override.returns(
-            { end_: Integer, should_parse: T::Boolean, start: Integer }
+            {
+              end_: Integer,
+              ocr: T::Boolean,
+              should_parse: T::Boolean,
+              start: Integer
+            }
           )
         end
         def to_hash
