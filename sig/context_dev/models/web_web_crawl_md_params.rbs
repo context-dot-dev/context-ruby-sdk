@@ -569,12 +569,17 @@ module ContextDev
         def self?.values: -> ::Array[ContextDev::Models::WebWebCrawlMdParams::country]
       end
 
-      type pdf = { end_: Integer, should_parse: bool, start: Integer }
+      type pdf =
+        { end_: Integer, ocr: bool, should_parse: bool, start: Integer }
 
       class Pdf < ContextDev::Internal::Type::BaseModel
         attr_reader end_: Integer?
 
         def end_=: (Integer) -> Integer
+
+        attr_reader ocr: bool?
+
+        def ocr=: (bool) -> bool
 
         attr_reader should_parse: bool?
 
@@ -586,11 +591,17 @@ module ContextDev
 
         def initialize: (
           ?end_: Integer,
+          ?ocr: bool,
           ?should_parse: bool,
           ?start: Integer
         ) -> void
 
-        def to_hash: -> { end_: Integer, should_parse: bool, start: Integer }
+        def to_hash: -> {
+          end_: Integer,
+          ocr: bool,
+          should_parse: bool,
+          start: Integer
+        }
       end
     end
   end
