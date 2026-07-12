@@ -1,0 +1,159 @@
+module ContextDev
+  module Models
+    type parse_handle_response =
+      {
+        markdown: String,
+        success: ContextDev::Models::ParseHandleResponse::success,
+        type: ContextDev::Models::ParseHandleResponse::type_,
+        key_metadata: ContextDev::Models::ParseHandleResponse::KeyMetadata
+      }
+
+    class ParseHandleResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor markdown: String
+
+      attr_accessor success: ContextDev::Models::ParseHandleResponse::success
+
+      attr_accessor type: ContextDev::Models::ParseHandleResponse::type_
+
+      attr_reader key_metadata: ContextDev::Models::ParseHandleResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::ParseHandleResponse::KeyMetadata
+      ) -> ContextDev::Models::ParseHandleResponse::KeyMetadata
+
+      def initialize: (
+        markdown: String,
+        success: ContextDev::Models::ParseHandleResponse::success,
+        type: ContextDev::Models::ParseHandleResponse::type_,
+        ?key_metadata: ContextDev::Models::ParseHandleResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        markdown: String,
+        success: ContextDev::Models::ParseHandleResponse::success,
+        type: ContextDev::Models::ParseHandleResponse::type_,
+        key_metadata: ContextDev::Models::ParseHandleResponse::KeyMetadata
+      }
+
+      type success = true
+
+      module Success
+        extend ContextDev::Internal::Type::Enum
+
+        TRUE: true
+
+        def self?.values: -> ::Array[ContextDev::Models::ParseHandleResponse::success]
+      end
+
+      type type_ =
+        :html
+        | :xml
+        | :json
+        | :jsonl
+        | :text
+        | :csv
+        | :tsv
+        | :markdown
+        | :yaml
+        | :python
+        | :java
+        | :javascript
+        | :php
+        | :shell
+        | :ruby
+        | :typescript
+        | :rtf
+        | :srt
+        | :css
+        | :scss
+        | :less
+        | :stylus
+        | :sass
+        | :svg
+        | :pdf
+        | :docx
+        | :doc
+        | :xlsx
+        | :xls
+        | :pptx
+        | :ppt
+        | :jpg
+        | :png
+        | :gif
+        | :bmp
+        | :tiff
+        | :webp
+        | :ppm
+        | :pbm
+        | :pgm
+        | :pnm
+
+      module Type
+        extend ContextDev::Internal::Type::Enum
+
+        HTML: :html
+        XML: :xml
+        JSON: :json
+        JSONL: :jsonl
+        TEXT: :text
+        CSV: :csv
+        TSV: :tsv
+        MARKDOWN: :markdown
+        YAML: :yaml
+        PYTHON: :python
+        JAVA: :java
+        JAVASCRIPT: :javascript
+        PHP: :php
+        SHELL: :shell
+        RUBY: :ruby
+        TYPESCRIPT: :typescript
+        RTF: :rtf
+        SRT: :srt
+        CSS: :css
+        SCSS: :scss
+        LESS: :less
+        STYLUS: :stylus
+        SASS: :sass
+        SVG: :svg
+        PDF: :pdf
+        DOCX: :docx
+        DOC: :doc
+        XLSX: :xlsx
+        XLS: :xls
+        PPTX: :pptx
+        PPT: :ppt
+        JPG: :jpg
+        PNG: :png
+        GIF: :gif
+        BMP: :bmp
+        TIFF: :tiff
+        WEBP: :webp
+        PPM: :ppm
+        PBM: :pbm
+        PGM: :pgm
+        PNM: :pnm
+
+        def self?.values: -> ::Array[ContextDev::Models::ParseHandleResponse::type_]
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end

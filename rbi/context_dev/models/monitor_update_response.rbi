@@ -128,6 +128,26 @@ module ContextDev
       end
       attr_writer :webhook
 
+      # Present while webhook deliveries are failing consecutively; null when deliveries
+      # are healthy or no webhook is configured. Cleared on the next successful delivery
+      # and when the webhook URL changes.
+      sig do
+        returns(
+          T.nilable(ContextDev::Models::MonitorUpdateResponse::WebhookFailure)
+        )
+      end
+      attr_reader :webhook_failure
+
+      sig do
+        params(
+          webhook_failure:
+            T.nilable(
+              ContextDev::Models::MonitorUpdateResponse::WebhookFailure::OrHash
+            )
+        ).void
+      end
+      attr_writer :webhook_failure
+
       # A web monitor. `mode` is the constant `web`; behavior is described by `target`
       # (page/sitemap/extract) and `change_detection` (exact/semantic).
       sig do
@@ -169,6 +189,10 @@ module ContextDev
           webhook:
             T.nilable(
               ContextDev::Models::MonitorUpdateResponse::Webhook::OrHash
+            ),
+          webhook_failure:
+            T.nilable(
+              ContextDev::Models::MonitorUpdateResponse::WebhookFailure::OrHash
             )
         ).returns(T.attached_class)
       end
@@ -207,7 +231,11 @@ module ContextDev
         next_run_at: nil,
         # User-defined tags for grouping and filtering monitors and their changes.
         tags: nil,
-        webhook: nil
+        webhook: nil,
+        # Present while webhook deliveries are failing consecutively; null when deliveries
+        # are healthy or no webhook is configured. Cleared on the next successful delivery
+        # and when the webhook URL changes.
+        webhook_failure: nil
       )
       end
 
@@ -236,7 +264,11 @@ module ContextDev
             next_run_at: T.nilable(Time),
             tags: T::Array[String],
             webhook:
-              T.nilable(ContextDev::Models::MonitorUpdateResponse::Webhook)
+              T.nilable(ContextDev::Models::MonitorUpdateResponse::Webhook),
+            webhook_failure:
+              T.nilable(
+                ContextDev::Models::MonitorUpdateResponse::WebhookFailure
+              )
           }
         )
       end
@@ -993,9 +1025,34 @@ module ContextDev
             )
           end
 
-        # Webhook URL called when a change is detected.
+        # Webhook URL events are delivered to.
         sig { returns(String) }
         attr_accessor :url
+
+        # Events delivered to this endpoint. `change.detected` fires only when a run
+        # detects a change; `run.completed` fires on every completed run — including runs
+        # that detected no change — and embeds the change when one was detected. Defaults
+        # to `["change.detected"]` when omitted.
+        sig do
+          returns(
+            T.nilable(
+              T::Array[
+                ContextDev::Models::MonitorUpdateResponse::Webhook::Event::TaggedSymbol
+              ]
+            )
+          )
+        end
+        attr_reader :events
+
+        sig do
+          params(
+            events:
+              T::Array[
+                ContextDev::Models::MonitorUpdateResponse::Webhook::Event::OrSymbol
+              ]
+          ).void
+        end
+        attr_writer :events
 
         # Signing secret used to verify webhook authenticity. Each delivery includes an
         # `X-Context-Signature: t=<unix>,v1=<hmac>` header, where the HMAC is SHA-256 over
@@ -1008,10 +1065,24 @@ module ContextDev
         sig { params(secret: String).void }
         attr_writer :secret
 
-        sig { params(url: String, secret: String).returns(T.attached_class) }
+        sig do
+          params(
+            url: String,
+            events:
+              T::Array[
+                ContextDev::Models::MonitorUpdateResponse::Webhook::Event::OrSymbol
+              ],
+            secret: String
+          ).returns(T.attached_class)
+        end
         def self.new(
-          # Webhook URL called when a change is detected.
+          # Webhook URL events are delivered to.
           url:,
+          # Events delivered to this endpoint. `change.detected` fires only when a run
+          # detects a change; `run.completed` fires on every completed run — including runs
+          # that detected no change — and embeds the change when one was detected. Defaults
+          # to `["change.detected"]` when omitted.
+          events: nil,
           # Signing secret used to verify webhook authenticity. Each delivery includes an
           # `X-Context-Signature: t=<unix>,v1=<hmac>` header, where the HMAC is SHA-256 over
           # `"{t}.{rawRequestBody}"` keyed by this secret. Recompute it with a constant-time
@@ -1021,8 +1092,165 @@ module ContextDev
         )
         end
 
-        sig { override.returns({ url: String, secret: String }) }
+        sig do
+          override.returns(
+            {
+              url: String,
+              events:
+                T::Array[
+                  ContextDev::Models::MonitorUpdateResponse::Webhook::Event::TaggedSymbol
+                ],
+              secret: String
+            }
+          )
+        end
         def to_hash
+        end
+
+        module Event
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::Models::MonitorUpdateResponse::Webhook::Event
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          CHANGE_DETECTED =
+            T.let(
+              :"change.detected",
+              ContextDev::Models::MonitorUpdateResponse::Webhook::Event::TaggedSymbol
+            )
+          RUN_COMPLETED =
+            T.let(
+              :"run.completed",
+              ContextDev::Models::MonitorUpdateResponse::Webhook::Event::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::MonitorUpdateResponse::Webhook::Event::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
+        end
+      end
+
+      class WebhookFailure < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::MonitorUpdateResponse::WebhookFailure,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Number of consecutive delivery attempts that did not succeed.
+        sig { returns(Integer) }
+        attr_accessor :consecutive_failures
+
+        sig { returns(Time) }
+        attr_accessor :last_failed_at
+
+        # Human-readable description of the most recent failure.
+        sig { returns(String) }
+        attr_accessor :last_message
+
+        # Outcome of the most recent failed delivery. rejected means a non-2xx response;
+        # failed means no HTTP response was received; skipped_unsafe_url means the URL
+        # failed the public-endpoint safety check.
+        sig do
+          returns(
+            ContextDev::Models::MonitorUpdateResponse::WebhookFailure::LastStatus::TaggedSymbol
+          )
+        end
+        attr_accessor :last_status
+
+        # Present while webhook deliveries are failing consecutively; null when deliveries
+        # are healthy or no webhook is configured. Cleared on the next successful delivery
+        # and when the webhook URL changes.
+        sig do
+          params(
+            consecutive_failures: Integer,
+            last_failed_at: Time,
+            last_message: String,
+            last_status:
+              ContextDev::Models::MonitorUpdateResponse::WebhookFailure::LastStatus::OrSymbol
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # Number of consecutive delivery attempts that did not succeed.
+          consecutive_failures:,
+          last_failed_at:,
+          # Human-readable description of the most recent failure.
+          last_message:,
+          # Outcome of the most recent failed delivery. rejected means a non-2xx response;
+          # failed means no HTTP response was received; skipped_unsafe_url means the URL
+          # failed the public-endpoint safety check.
+          last_status:
+        )
+        end
+
+        sig do
+          override.returns(
+            {
+              consecutive_failures: Integer,
+              last_failed_at: Time,
+              last_message: String,
+              last_status:
+                ContextDev::Models::MonitorUpdateResponse::WebhookFailure::LastStatus::TaggedSymbol
+            }
+          )
+        end
+        def to_hash
+        end
+
+        # Outcome of the most recent failed delivery. rejected means a non-2xx response;
+        # failed means no HTTP response was received; skipped_unsafe_url means the URL
+        # failed the public-endpoint safety check.
+        module LastStatus
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::Models::MonitorUpdateResponse::WebhookFailure::LastStatus
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          REJECTED =
+            T.let(
+              :rejected,
+              ContextDev::Models::MonitorUpdateResponse::WebhookFailure::LastStatus::TaggedSymbol
+            )
+          FAILED =
+            T.let(
+              :failed,
+              ContextDev::Models::MonitorUpdateResponse::WebhookFailure::LastStatus::TaggedSymbol
+            )
+          SKIPPED_UNSAFE_URL =
+            T.let(
+              :skipped_unsafe_url,
+              ContextDev::Models::MonitorUpdateResponse::WebhookFailure::LastStatus::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::MonitorUpdateResponse::WebhookFailure::LastStatus::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
         end
       end
     end

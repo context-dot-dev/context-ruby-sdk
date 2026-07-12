@@ -35,7 +35,8 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         last_run_at: Time | nil,
         next_run_at: Time | nil,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
-        webhook: ContextDev::Models::MonitorCreateResponse::Webhook | nil
+        webhook: ContextDev::Models::MonitorCreateResponse::Webhook | nil,
+        webhook_failure: ContextDev::Models::MonitorCreateResponse::WebhookFailure | nil
       }
     end
   end
@@ -66,7 +67,8 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         last_run_at: Time | nil,
         next_run_at: Time | nil,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
-        webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook | nil
+        webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook | nil,
+        webhook_failure: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure | nil
       }
     end
   end
@@ -97,7 +99,8 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         last_run_at: Time | nil,
         next_run_at: Time | nil,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
-        webhook: ContextDev::Models::MonitorUpdateResponse::Webhook | nil
+        webhook: ContextDev::Models::MonitorUpdateResponse::Webhook | nil,
+        webhook_failure: ContextDev::Models::MonitorUpdateResponse::WebhookFailure | nil
       }
     end
   end
@@ -227,6 +230,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         monitor_id: String,
         run_id: String,
         summary: String,
+        tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
         target_type: ContextDev::Models::MonitorRetrieveChangeResponse::TargetType,
         title: String,
         url: String,
@@ -241,8 +245,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         matched_url_count: Integer | nil,
         matched_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
         removed_url_count: Integer | nil,
-        removed_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
-        tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil
+        removed_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil
       }
     end
   end

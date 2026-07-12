@@ -289,7 +289,7 @@ module ContextDev
       #
       # @param max_pages [Integer] Maximum number of pages to crawl. Hard cap: 500.
       #
-      # @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
+      # @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
       # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
       #
@@ -342,7 +342,7 @@ module ContextDev
       #
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
-      # @param pdf [ContextDev::Models::WebWebScrapeHTMLParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
+      # @param pdf [ContextDev::Models::WebWebScrapeHTMLParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
       # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
       #
@@ -426,7 +426,22 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebWebScrapeMdParams} for more details.
       #
-      # Scrapes the given URL into LLM usable Markdown.
+      # Scrapes the given URL into LLM usable Markdown. Inspect key_metadata on JSON
+      # responses from a recognized API key; use error_code to distinguish stable
+      # failure categories.
+      #
+      # ### Billing & errors
+      #
+      # | HTTP status | Billed?        | Meaning                                                                                  |
+      # | ----------- | -------------- | ---------------------------------------------------------------------------------------- |
+      # | 200         | Yes — 1 credit | Successful scrape, including a zero-length result when includeSelectors matched nothing  |
+      # | 400         | No             | Invalid input, skipped PDF, or the page could not be scraped                             |
+      # | 401 / 403   | No             | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code |
+      # | 404         | No             | Target page returned or fingerprinted as not found                                       |
+      # | 408         | No             | Request timed out                                                                        |
+      # | 415         | No             | Unsupported content type                                                                 |
+      # | 429         | No             | Per-minute rate limit exceeded; honor Retry-After                                        |
+      # | 500         | No             | Internal error                                                                           |
       #
       # @overload web_scrape_md(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
       #
@@ -448,7 +463,7 @@ module ContextDev
       #
       # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
       #
-      # @param pdf [ContextDev::Models::WebWebScrapeMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
+      # @param pdf [ContextDev::Models::WebWebScrapeMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
       # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before conv
       #

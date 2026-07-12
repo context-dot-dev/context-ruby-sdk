@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.3.0 (2026-07-12)
+
+Full Changelog: [v2.2.0...v2.3.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.2.0...v2.3.0)
+
+### Features
+
+* **api:** api update ([3fd9604](https://github.com/context-dot-dev/context-ruby-sdk/commit/3fd960488c341f082b6d312dda927aeee23dccff))
+* **api:** api update ([bdd3176](https://github.com/context-dot-dev/context-ruby-sdk/commit/bdd3176c7f507880adb7becae314b816c6bbe9bc))
+* **api:** api update ([d68d31d](https://github.com/context-dot-dev/context-ruby-sdk/commit/d68d31dc5aa77ad154789b6cf91e0b8558353214))
+* **api:** api update ([d4c601e](https://github.com/context-dot-dev/context-ruby-sdk/commit/d4c601ea30aa1d47ef041d0439ab8b5d976cc8e2))
+* **api:** api update ([03fa3ac](https://github.com/context-dot-dev/context-ruby-sdk/commit/03fa3ac3c7c61aba88846db890bf4d3fd22d1086))
+* **api:** api update ([626d105](https://github.com/context-dot-dev/context-ruby-sdk/commit/626d1054da9622e88469bb9c3b755f43d1d75280))
+* **api:** manual updates ([b7f6b2c](https://github.com/context-dot-dev/context-ruby-sdk/commit/b7f6b2c0a5bb91cc065bcc2ef497c9999414262c))
+
 ## 2.2.0 (2026-07-10)
 
 Full Changelog: [v2.1.0...v2.2.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.1.0...v2.2.0)

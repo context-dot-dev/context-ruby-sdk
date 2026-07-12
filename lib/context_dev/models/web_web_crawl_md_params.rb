@@ -86,8 +86,8 @@ module ContextDev
       optional :max_pages, Integer, api_name: :maxPages
 
       # @!attribute pdf
-      #   PDF parsing controls. Use start/end to limit text extraction and OCR to an
-      #   inclusive 1-based page range.
+      #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
+      #   detection/OCR to an inclusive 1-based page range.
       #
       #   @return [ContextDev::Models::WebWebCrawlMdParams::Pdf, nil]
       optional :pdf, -> { ContextDev::WebWebCrawlMdParams::Pdf }
@@ -169,7 +169,7 @@ module ContextDev
       #
       #   @param max_pages [Integer] Maximum number of pages to crawl. Hard cap: 500.
       #
-      #   @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and OCR to an inclu
+      #   @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
       #   @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
       #
@@ -410,6 +410,14 @@ module ContextDev
         #   @return [Integer, nil]
         optional :end_, Integer, api_name: :end
 
+        # @!attribute ocr
+        #   When true, detect and OCR images embedded in the selected PDF pages, inserting
+        #   recognized text at each image's position in page reading order while preserving
+        #   the PDF text layer. This is separate from automatic scanned-PDF OCR fallback.
+        #
+        #   @return [Boolean, nil]
+        optional :ocr, ContextDev::Internal::Type::Boolean
+
         # @!attribute should_parse
         #   When true, PDF pages are fetched and parsed. When false, PDF pages are skipped
         #   entirely (not included in results and not counted as failures).
@@ -423,14 +431,16 @@ module ContextDev
         #   @return [Integer, nil]
         optional :start, Integer
 
-        # @!method initialize(end_: nil, should_parse: nil, start: nil)
+        # @!method initialize(end_: nil, ocr: nil, should_parse: nil, start: nil)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebWebCrawlMdParams::Pdf} for more details.
         #
-        #   PDF parsing controls. Use start/end to limit text extraction and OCR to an
-        #   inclusive 1-based page range.
+        #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
+        #   detection/OCR to an inclusive 1-based page range.
         #
         #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
+        #
+        #   @param ocr [Boolean] When true, detect and OCR images embedded in the selected PDF pages, inserting r
         #
         #   @param should_parse [Boolean] When true, PDF pages are fetched and parsed. When false, PDF pages are skipped e
         #

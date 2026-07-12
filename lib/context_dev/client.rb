@@ -18,6 +18,9 @@ module ContextDev
     # @return [String]
     attr_reader :api_key
 
+    # @return [ContextDev::Resources::Parse]
+    attr_reader :parse
+
     # @return [ContextDev::Resources::Web]
     attr_reader :web
 
@@ -34,8 +37,9 @@ module ContextDev
     attr_reader :utility
 
     # Monitor pages, sitemaps, and extracted website data for exact or semantic
-    # changes. The change.detected webhook payload is documented by the
-    # MonitorsChangeDetectedWebhookPayload schema.
+    # changes. Webhook payloads are documented by the
+    # MonitorsChangeDetectedWebhookPayload and MonitorsRunCompletedWebhookPayload
+    # schemas.
     # @return [ContextDev::Resources::Monitors]
     attr_reader :monitors
 
@@ -100,6 +104,7 @@ module ContextDev
         headers: headers
       )
 
+      @parse = ContextDev::Resources::Parse.new(client: self)
       @web = ContextDev::Resources::Web.new(client: self)
       @ai = ContextDev::Resources::AI.new(client: self)
       @brand = ContextDev::Resources::Brand.new(client: self)

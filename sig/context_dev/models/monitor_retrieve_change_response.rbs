@@ -9,6 +9,7 @@ module ContextDev
         monitor_id: String,
         run_id: String,
         summary: String,
+        tags: ::Array[String],
         target_type: ContextDev::Models::MonitorRetrieveChangeResponse::target_type,
         title: String,
         url: String,
@@ -23,8 +24,7 @@ module ContextDev
         matched_url_count: Integer,
         matched_urls: ::Array[String],
         removed_url_count: Integer,
-        removed_urls: ::Array[String],
-        tags: ::Array[String]
+        removed_urls: ::Array[String]
       }
 
     class MonitorRetrieveChangeResponse < ContextDev::Internal::Type::BaseModel
@@ -41,6 +41,8 @@ module ContextDev
       attr_accessor run_id: String
 
       attr_accessor summary: String
+
+      attr_accessor tags: ::Array[String]
 
       attr_accessor target_type: ContextDev::Models::MonitorRetrieveChangeResponse::target_type
 
@@ -100,10 +102,6 @@ module ContextDev
 
       def removed_urls=: (::Array[String]) -> ::Array[String]
 
-      attr_reader tags: ::Array[String]?
-
-      def tags=: (::Array[String]) -> ::Array[String]
-
       def initialize: (
         id: String,
         change_detection_type: ContextDev::Models::MonitorRetrieveChangeResponse::change_detection_type,
@@ -112,6 +110,7 @@ module ContextDev
         monitor_id: String,
         run_id: String,
         summary: String,
+        tags: ::Array[String],
         target_type: ContextDev::Models::MonitorRetrieveChangeResponse::target_type,
         title: String,
         url: String,
@@ -126,8 +125,7 @@ module ContextDev
         ?matched_url_count: Integer,
         ?matched_urls: ::Array[String],
         ?removed_url_count: Integer,
-        ?removed_urls: ::Array[String],
-        ?tags: ::Array[String]
+        ?removed_urls: ::Array[String]
       ) -> void
 
       def to_hash: -> {
@@ -138,6 +136,7 @@ module ContextDev
         monitor_id: String,
         run_id: String,
         summary: String,
+        tags: ::Array[String],
         target_type: ContextDev::Models::MonitorRetrieveChangeResponse::target_type,
         title: String,
         url: String,
@@ -152,8 +151,7 @@ module ContextDev
         matched_url_count: Integer,
         matched_urls: ::Array[String],
         removed_url_count: Integer,
-        removed_urls: ::Array[String],
-        tags: ::Array[String]
+        removed_urls: ::Array[String]
       }
 
       type change_detection_type = :exact | :semantic

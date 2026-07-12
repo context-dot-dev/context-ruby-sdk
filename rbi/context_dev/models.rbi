@@ -38,6 +38,8 @@ module ContextDev
 
   MonitorUpdateParams = ContextDev::Models::MonitorUpdateParams
 
+  ParseHandleParams = ContextDev::Models::ParseHandleParams
+
   UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 
   WebExtractCompetitorsParams = ContextDev::Models::WebExtractCompetitorsParams
@@ -47,6 +49,8 @@ module ContextDev
   WebExtractParams = ContextDev::Models::WebExtractParams
 
   WebExtractStyleguideParams = ContextDev::Models::WebExtractStyleguideParams
+
+  WebhookDelivery = ContextDev::Models::WebhookDelivery
 
   WebScreenshotParams = ContextDev::Models::WebScreenshotParams
 

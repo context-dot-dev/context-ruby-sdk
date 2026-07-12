@@ -344,8 +344,8 @@ module ContextDev
         max_depth: nil,
         # Maximum number of pages to crawl. Hard cap: 500.
         max_pages: nil,
-        # PDF parsing controls. Use start/end to limit text extraction and OCR to an
-        # inclusive 1-based page range.
+        # PDF parsing controls. Use start/end to limit text extraction and embedded-image
+        # detection/OCR to an inclusive 1-based page range.
         pdf: nil,
         # When true, waits briefly for CSS and transition animations to settle before
         # extracting each crawled page. Defaults to false. This adds a bit of latency in
@@ -416,8 +416,8 @@ module ContextDev
         # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
         max_age_ms: nil,
-        # PDF parsing controls. Use start/end to limit text extraction and OCR to an
-        # inclusive 1-based page range.
+        # PDF parsing controls. Use start/end to limit text extraction and embedded-image
+        # detection/OCR to an inclusive 1-based page range.
         pdf: nil,
         # When true, waits briefly for CSS and transition animations to settle before
         # extracting HTML. Defaults to false. This adds a bit of latency in exchange for
@@ -482,7 +482,22 @@ module ContextDev
       )
       end
 
-      # Scrapes the given URL into LLM usable Markdown.
+      # Scrapes the given URL into LLM usable Markdown. Inspect key_metadata on JSON
+      # responses from a recognized API key; use error_code to distinguish stable
+      # failure categories.
+      #
+      # ### Billing & errors
+      #
+      # | HTTP status | Billed?        | Meaning                                                                                  |
+      # | ----------- | -------------- | ---------------------------------------------------------------------------------------- |
+      # | 200         | Yes — 1 credit | Successful scrape, including a zero-length result when includeSelectors matched nothing  |
+      # | 400         | No             | Invalid input, skipped PDF, or the page could not be scraped                             |
+      # | 401 / 403   | No             | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code |
+      # | 404         | No             | Target page returned or fingerprinted as not found                                       |
+      # | 408         | No             | Request timed out                                                                        |
+      # | 415         | No             | Unsupported content type                                                                 |
+      # | 429         | No             | Per-minute rate limit exceeded; honor Retry-After                                        |
+      # | 500         | No             | Internal error                                                                           |
       sig do
         params(
           url: String,
@@ -532,8 +547,8 @@ module ContextDev
         # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
         max_age_ms: nil,
-        # PDF parsing controls. Use start/end to limit text extraction and OCR to an
-        # inclusive 1-based page range.
+        # PDF parsing controls. Use start/end to limit text extraction and embedded-image
+        # detection/OCR to an inclusive 1-based page range.
         pdf: nil,
         # When true, waits briefly for CSS and transition animations to settle before
         # converting to Markdown. Defaults to false. This adds a bit of latency in
