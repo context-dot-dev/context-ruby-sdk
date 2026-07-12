@@ -3,14 +3,11 @@ module ContextDev
     class Parse
       def handle: (
         body: ContextDev::Internal::file_input,
-        ?base_url: String,
-        ?extension: String,
-        ?filename: String,
+        ?extension: ContextDev::Models::ParseHandleParams::extension,
         ?include_images: bool,
         ?include_links: bool,
         ?ocr: bool,
-        ?pdf_end: Integer,
-        ?pdf_start: Integer,
+        ?pdf: ContextDev::ParseHandleParams::Pdf,
         ?shorten_base64_images: bool,
         ?use_main_content_only: bool,
         ?request_options: ContextDev::request_opts

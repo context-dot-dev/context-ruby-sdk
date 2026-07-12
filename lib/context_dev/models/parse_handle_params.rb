@@ -12,25 +12,12 @@ module ContextDev
       #   @return [Pathname, StringIO, IO, String, ContextDev::FilePart]
       required :body, ContextDev::Internal::Type::FileInput
 
-      # @!attribute base_url
-      #   Optional HTTP(S) source document URL used to resolve relative links and image
-      #   references. Relative references remain relative when omitted.
-      #
-      #   @return [String, nil]
-      optional :base_url, String
-
       # @!attribute extension
-      #   Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
-      #   md, py, rtf, jpg, png, or txt.
+      #   Optional file extension hint. Case-insensitive; a leading dot is accepted (e.g.
+      #   ".pdf").
       #
-      #   @return [String, nil]
-      optional :extension, String
-
-      # @!attribute filename
-      #   Optional filename hint used to infer the extension when extension is omitted.
-      #
-      #   @return [String, nil]
-      optional :filename, String
+      #   @return [Symbol, ContextDev::Models::ParseHandleParams::Extension, nil]
+      optional :extension, enum: -> { ContextDev::ParseHandleParams::Extension }
 
       # @!attribute include_images
       #   Include image references in Markdown output
@@ -45,26 +32,23 @@ module ContextDev
       optional :include_links, ContextDev::Internal::Type::Boolean
 
       # @!attribute ocr
-      #   When true for PDF inputs, detect and OCR images embedded in the selected pages,
-      #   inserting recognized text at each image's position in page reading order while
-      #   preserving the PDF text layer. pdfStart/pdfEnd limit the inclusive page range.
-      #   This is separate from automatic scanned-PDF OCR fallback.
+      #   Gates all OCR. When true, PDFs get embedded-image OCR (recognized text inserted
+      #   at each image's position in page reading order, preserving the text layer;
+      #   pdf.start/pdf.end limit the page range), scanned PDFs with no text layer get
+      #   full-document OCR, and raster images get their visible text transcribed. When
+      #   false, no OCR runs: scanned PDFs may yield no content and images return only
+      #   format/dimension metadata. Calls where OCR actually runs cost 5 credits instead
+      #   of 1.
       #
       #   @return [Boolean, nil]
       optional :ocr, ContextDev::Internal::Type::Boolean
 
-      # @!attribute pdf_end
-      #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-      #   Must be greater than or equal to pdfStart when both are provided.
+      # @!attribute pdf
+      #   PDF page-range controls. Use start/end to limit parsing (and OCR when ocr=true)
+      #   to an inclusive 1-based page range.
       #
-      #   @return [Integer, nil]
-      optional :pdf_end, Integer
-
-      # @!attribute pdf_start
-      #   First 1-based PDF page to parse. When omitted, parsing starts at the first page.
-      #
-      #   @return [Integer, nil]
-      optional :pdf_start, Integer
+      #   @return [ContextDev::Models::ParseHandleParams::Pdf, nil]
+      optional :pdf, -> { ContextDev::ParseHandleParams::Pdf }
 
       # @!attribute shorten_base64_images
       #   Shorten base64-encoded image data in the Markdown output
@@ -78,33 +62,133 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :use_main_content_only, ContextDev::Internal::Type::Boolean
 
-      # @!method initialize(body:, base_url: nil, extension: nil, filename: nil, include_images: nil, include_links: nil, ocr: nil, pdf_end: nil, pdf_start: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
+      # @!method initialize(body:, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::ParseHandleParams} for more details.
       #
       #   @param body [Pathname, StringIO, IO, String, ContextDev::FilePart]
       #
-      #   @param base_url [String] Optional HTTP(S) source document URL used to resolve relative links and image re
-      #
-      #   @param extension [String] Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv, md
-      #
-      #   @param filename [String] Optional filename hint used to infer the extension when extension is omitted.
+      #   @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] Optional file extension hint. Case-insensitive; a leading dot is accepted (e.g.
       #
       #   @param include_images [Boolean] Include image references in Markdown output
       #
       #   @param include_links [Boolean] Preserve hyperlinks in Markdown output
       #
-      #   @param ocr [Boolean] When true for PDF inputs, detect and OCR images embedded in the selected pages,
+      #   @param ocr [Boolean] Gates all OCR. When true, PDFs get embedded-image OCR (recognized text inserted
       #
-      #   @param pdf_end [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
-      #
-      #   @param pdf_start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+      #   @param pdf [ContextDev::Models::ParseHandleParams::Pdf] PDF page-range controls. Use start/end to limit parsing (and OCR when ocr=true)
       #
       #   @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
       #
       #   @param use_main_content_only [Boolean] Extract only the main content from HTML-like inputs
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      # Optional file extension hint. Case-insensitive; a leading dot is accepted (e.g.
+      # ".pdf").
+      module Extension
+        extend ContextDev::Internal::Type::Enum
+
+        TXT = :txt
+        TEXT = :text
+        MD = :md
+        MARKDOWN = :markdown
+        HTML = :html
+        HTM = :htm
+        XHTML = :xhtml
+        XML = :xml
+        RSS = :rss
+        ATOM = :atom
+        CSV = :csv
+        TSV = :tsv
+        YAML = :yaml
+        YML = :yml
+        PY = :py
+        JAVA = :java
+        JS = :js
+        JSX = :jsx
+        MJS = :mjs
+        CJS = :cjs
+        JSON = :json
+        JSONL = :jsonl
+        NDJSON = :ndjson
+        PHP = :php
+        SH = :sh
+        BASH = :bash
+        ZSH = :zsh
+        FISH = :fish
+        RB = :rb
+        TS = :ts
+        TSX = :tsx
+        RTF = :rtf
+        SRT = :srt
+        CSS = :css
+        SCSS = :scss
+        LESS = :less
+        STYL = :styl
+        SASS = :sass
+        SVG = :svg
+        PDF = :pdf
+        DOCX = :docx
+        DOC = :doc
+        XLSX = :xlsx
+        XLSM = :xlsm
+        XLSB = :xlsb
+        XLTX = :xltx
+        XLTM = :xltm
+        XLS = :xls
+        PPTX = :pptx
+        PPTM = :pptm
+        PPSX = :ppsx
+        PPSM = :ppsm
+        POTX = :potx
+        POTM = :potm
+        PPT = :ppt
+        PPS = :pps
+        POT = :pot
+        JPG = :jpg
+        JPEG = :jpeg
+        JPE = :jpe
+        PNG = :png
+        GIF = :gif
+        BMP = :bmp
+        TIFF = :tiff
+        TIF = :tif
+        WEBP = :webp
+        PPM = :ppm
+        PBM = :pbm
+        PGM = :pgm
+        PNM = :pnm
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
+      end
+
+      class Pdf < ContextDev::Internal::Type::BaseModel
+        # @!attribute end_
+        #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
+        #   Must be greater than or equal to start when both are provided.
+        #
+        #   @return [Integer, nil]
+        optional :end_, Integer, api_name: :end
+
+        # @!attribute start
+        #   First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+        #
+        #   @return [Integer, nil]
+        optional :start, Integer
+
+        # @!method initialize(end_: nil, start: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::ParseHandleParams::Pdf} for more details.
+        #
+        #   PDF page-range controls. Use start/end to limit parsing (and OCR when ocr=true)
+        #   to an inclusive 1-based page range.
+        #
+        #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
+        #
+        #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+      end
     end
   end
 end

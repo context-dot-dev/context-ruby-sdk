@@ -26,7 +26,7 @@ To use this gem, install via Bundler by adding the following to your application
 <!-- x-release-please-start-version -->
 
 ```ruby
-gem "context.dev", "~> 2.3.0"
+gem "context.dev", "~> 2.4.0"
 ```
 
 <!-- x-release-please-end -->
@@ -213,25 +213,25 @@ context_dev.brand.retrieve(**params)
 Since this library does not depend on `sorbet-runtime`, it cannot provide [`T::Enum`](https://sorbet.org/docs/tenum) instances. Instead, we provide "tagged symbols" instead, which is always a primitive at runtime:
 
 ```ruby
-# :light
-puts(ContextDev::WebExtractStyleguideParams::ColorScheme::LIGHT)
+# :txt
+puts(ContextDev::ParseHandleParams::Extension::TXT)
 
-# Revealed type: `T.all(ContextDev::WebExtractStyleguideParams::ColorScheme, Symbol)`
-T.reveal_type(ContextDev::WebExtractStyleguideParams::ColorScheme::LIGHT)
+# Revealed type: `T.all(ContextDev::ParseHandleParams::Extension, Symbol)`
+T.reveal_type(ContextDev::ParseHandleParams::Extension::TXT)
 ```
 
 Enum parameters have a "relaxed" type, so you can either pass in enum constants or their literal value:
 
 ```ruby
 # Using the enum constants preserves the tagged type information:
-context_dev.web.extract_styleguide(
-  color_scheme: ContextDev::WebExtractStyleguideParams::ColorScheme::LIGHT,
+context_dev.parse.handle(
+  extension: ContextDev::ParseHandleParams::Extension::TXT,
   # …
 )
 
 # Literal values are also permissible:
-context_dev.web.extract_styleguide(
-  color_scheme: :light,
+context_dev.parse.handle(
+  extension: :txt,
   # …
 )
 ```

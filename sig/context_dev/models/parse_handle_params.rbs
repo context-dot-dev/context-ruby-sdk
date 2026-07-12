@@ -3,14 +3,11 @@ module ContextDev
     type parse_handle_params =
       {
         body: ContextDev::Internal::file_input,
-        base_url: String,
-        extension: String,
-        filename: String,
+        extension: ContextDev::Models::ParseHandleParams::extension,
         include_images: bool,
         include_links: bool,
         ocr: bool,
-        pdf_end: Integer,
-        pdf_start: Integer,
+        pdf: ContextDev::ParseHandleParams::Pdf,
         :shorten_base64_images => bool,
         use_main_content_only: bool
       }
@@ -22,17 +19,11 @@ module ContextDev
 
       attr_accessor body: ContextDev::Internal::file_input
 
-      attr_reader base_url: String?
+      attr_reader extension: ContextDev::Models::ParseHandleParams::extension?
 
-      def base_url=: (String) -> String
-
-      attr_reader extension: String?
-
-      def extension=: (String) -> String
-
-      attr_reader filename: String?
-
-      def filename=: (String) -> String
+      def extension=: (
+        ContextDev::Models::ParseHandleParams::extension
+      ) -> ContextDev::Models::ParseHandleParams::extension
 
       attr_reader include_images: bool?
 
@@ -46,13 +37,11 @@ module ContextDev
 
       def ocr=: (bool) -> bool
 
-      attr_reader pdf_end: Integer?
+      attr_reader pdf: ContextDev::ParseHandleParams::Pdf?
 
-      def pdf_end=: (Integer) -> Integer
-
-      attr_reader pdf_start: Integer?
-
-      def pdf_start=: (Integer) -> Integer
+      def pdf=: (
+        ContextDev::ParseHandleParams::Pdf
+      ) -> ContextDev::ParseHandleParams::Pdf
 
       attr_reader shorten_base64_images: bool?
 
@@ -64,14 +53,11 @@ module ContextDev
 
       def initialize: (
         body: ContextDev::Internal::file_input,
-        ?base_url: String,
-        ?extension: String,
-        ?filename: String,
+        ?extension: ContextDev::Models::ParseHandleParams::extension,
         ?include_images: bool,
         ?include_links: bool,
         ?ocr: bool,
-        ?pdf_end: Integer,
-        ?pdf_start: Integer,
+        ?pdf: ContextDev::ParseHandleParams::Pdf,
         ?shorten_base64_images: bool,
         ?use_main_content_only: bool,
         ?request_options: ContextDev::request_opts
@@ -79,18 +65,180 @@ module ContextDev
 
       def to_hash: -> {
         body: ContextDev::Internal::file_input,
-        base_url: String,
-        extension: String,
-        filename: String,
+        extension: ContextDev::Models::ParseHandleParams::extension,
         include_images: bool,
         include_links: bool,
         ocr: bool,
-        pdf_end: Integer,
-        pdf_start: Integer,
+        pdf: ContextDev::ParseHandleParams::Pdf,
         :shorten_base64_images => bool,
         use_main_content_only: bool,
         request_options: ContextDev::RequestOptions
       }
+
+      type extension =
+        :txt
+        | :text
+        | :md
+        | :markdown
+        | :html
+        | :htm
+        | :xhtml
+        | :xml
+        | :rss
+        | :atom
+        | :csv
+        | :tsv
+        | :yaml
+        | :yml
+        | :py
+        | :java
+        | :js
+        | :jsx
+        | :mjs
+        | :cjs
+        | :json
+        | :jsonl
+        | :ndjson
+        | :php
+        | :sh
+        | :bash
+        | :zsh
+        | :fish
+        | :rb
+        | :ts
+        | :tsx
+        | :rtf
+        | :srt
+        | :css
+        | :scss
+        | :less
+        | :styl
+        | :sass
+        | :svg
+        | :pdf
+        | :docx
+        | :doc
+        | :xlsx
+        | :xlsm
+        | :xlsb
+        | :xltx
+        | :xltm
+        | :xls
+        | :pptx
+        | :pptm
+        | :ppsx
+        | :ppsm
+        | :potx
+        | :potm
+        | :ppt
+        | :pps
+        | :pot
+        | :jpg
+        | :jpeg
+        | :jpe
+        | :png
+        | :gif
+        | :bmp
+        | :tiff
+        | :tif
+        | :webp
+        | :ppm
+        | :pbm
+        | :pgm
+        | :pnm
+
+      module Extension
+        extend ContextDev::Internal::Type::Enum
+
+        TXT: :txt
+        TEXT: :text
+        MD: :md
+        MARKDOWN: :markdown
+        HTML: :html
+        HTM: :htm
+        XHTML: :xhtml
+        XML: :xml
+        RSS: :rss
+        ATOM: :atom
+        CSV: :csv
+        TSV: :tsv
+        YAML: :yaml
+        YML: :yml
+        PY: :py
+        JAVA: :java
+        JS: :js
+        JSX: :jsx
+        MJS: :mjs
+        CJS: :cjs
+        JSON: :json
+        JSONL: :jsonl
+        NDJSON: :ndjson
+        PHP: :php
+        SH: :sh
+        BASH: :bash
+        ZSH: :zsh
+        FISH: :fish
+        RB: :rb
+        TS: :ts
+        TSX: :tsx
+        RTF: :rtf
+        SRT: :srt
+        CSS: :css
+        SCSS: :scss
+        LESS: :less
+        STYL: :styl
+        SASS: :sass
+        SVG: :svg
+        PDF: :pdf
+        DOCX: :docx
+        DOC: :doc
+        XLSX: :xlsx
+        XLSM: :xlsm
+        XLSB: :xlsb
+        XLTX: :xltx
+        XLTM: :xltm
+        XLS: :xls
+        PPTX: :pptx
+        PPTM: :pptm
+        PPSX: :ppsx
+        PPSM: :ppsm
+        POTX: :potx
+        POTM: :potm
+        PPT: :ppt
+        PPS: :pps
+        POT: :pot
+        JPG: :jpg
+        JPEG: :jpeg
+        JPE: :jpe
+        PNG: :png
+        GIF: :gif
+        BMP: :bmp
+        TIFF: :tiff
+        TIF: :tif
+        WEBP: :webp
+        PPM: :ppm
+        PBM: :pbm
+        PGM: :pgm
+        PNM: :pnm
+
+        def self?.values: -> ::Array[ContextDev::Models::ParseHandleParams::extension]
+      end
+
+      type pdf = { end_: Integer, start: Integer }
+
+      class Pdf < ContextDev::Internal::Type::BaseModel
+        attr_reader end_: Integer?
+
+        def end_=: (Integer) -> Integer
+
+        attr_reader start: Integer?
+
+        def start=: (Integer) -> Integer
+
+        def initialize: (?end_: Integer, ?start: Integer) -> void
+
+        def to_hash: -> { end_: Integer, start: Integer }
+      end
     end
   end
 end
