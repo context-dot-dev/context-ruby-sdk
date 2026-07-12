@@ -13,6 +13,9 @@ module ContextDev
     sig { returns(String) }
     attr_reader :api_key
 
+    sig { returns(ContextDev::Resources::Parse) }
+    attr_reader :parse
+
     sig { returns(ContextDev::Resources::Web) }
     attr_reader :web
 

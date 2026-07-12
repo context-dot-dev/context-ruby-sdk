@@ -18,6 +18,9 @@ module ContextDev
     # @return [String]
     attr_reader :api_key
 
+    # @return [ContextDev::Resources::Parse]
+    attr_reader :parse
+
     # @return [ContextDev::Resources::Web]
     attr_reader :web
 
@@ -101,6 +104,7 @@ module ContextDev
         headers: headers
       )
 
+      @parse = ContextDev::Resources::Parse.new(client: self)
       @web = ContextDev::Resources::Web.new(client: self)
       @ai = ContextDev::Resources::AI.new(client: self)
       @brand = ContextDev::Resources::Brand.new(client: self)

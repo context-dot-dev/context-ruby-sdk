@@ -1,0 +1,96 @@
+module ContextDev
+  module Models
+    type parse_handle_params =
+      {
+        body: ContextDev::Internal::file_input,
+        base_url: String,
+        extension: String,
+        filename: String,
+        include_images: bool,
+        include_links: bool,
+        ocr: bool,
+        pdf_end: Integer,
+        pdf_start: Integer,
+        :shorten_base64_images => bool,
+        use_main_content_only: bool
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class ParseHandleParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor body: ContextDev::Internal::file_input
+
+      attr_reader base_url: String?
+
+      def base_url=: (String) -> String
+
+      attr_reader extension: String?
+
+      def extension=: (String) -> String
+
+      attr_reader filename: String?
+
+      def filename=: (String) -> String
+
+      attr_reader include_images: bool?
+
+      def include_images=: (bool) -> bool
+
+      attr_reader include_links: bool?
+
+      def include_links=: (bool) -> bool
+
+      attr_reader ocr: bool?
+
+      def ocr=: (bool) -> bool
+
+      attr_reader pdf_end: Integer?
+
+      def pdf_end=: (Integer) -> Integer
+
+      attr_reader pdf_start: Integer?
+
+      def pdf_start=: (Integer) -> Integer
+
+      attr_reader shorten_base64_images: bool?
+
+      def shorten_base64_images=: (bool) -> bool
+
+      attr_reader use_main_content_only: bool?
+
+      def use_main_content_only=: (bool) -> bool
+
+      def initialize: (
+        body: ContextDev::Internal::file_input,
+        ?base_url: String,
+        ?extension: String,
+        ?filename: String,
+        ?include_images: bool,
+        ?include_links: bool,
+        ?ocr: bool,
+        ?pdf_end: Integer,
+        ?pdf_start: Integer,
+        ?shorten_base64_images: bool,
+        ?use_main_content_only: bool,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        body: ContextDev::Internal::file_input,
+        base_url: String,
+        extension: String,
+        filename: String,
+        include_images: bool,
+        include_links: bool,
+        ocr: bool,
+        pdf_end: Integer,
+        pdf_start: Integer,
+        :shorten_base64_images => bool,
+        use_main_content_only: bool,
+        request_options: ContextDev::RequestOptions
+      }
+    end
+  end
+end

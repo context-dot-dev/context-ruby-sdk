@@ -10,6 +10,8 @@ module ContextDev
 
     attr_reader api_key: String
 
+    attr_reader parse: ContextDev::Resources::Parse
+
     attr_reader web: ContextDev::Resources::Web
 
     attr_reader ai: ContextDev::Resources::AI
