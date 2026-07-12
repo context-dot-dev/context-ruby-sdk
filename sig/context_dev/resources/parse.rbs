@@ -1,0 +1,22 @@
+module ContextDev
+  module Resources
+    class Parse
+      def handle: (
+        body: ContextDev::Internal::file_input,
+        ?base_url: String,
+        ?extension: String,
+        ?filename: String,
+        ?include_images: bool,
+        ?include_links: bool,
+        ?ocr: bool,
+        ?pdf_end: Integer,
+        ?pdf_start: Integer,
+        ?shorten_base64_images: bool,
+        ?use_main_content_only: bool,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::ParseHandleResponse
+
+      def initialize: (client: ContextDev::Client) -> void
+    end
+  end
+end
