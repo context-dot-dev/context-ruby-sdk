@@ -18,6 +18,7 @@ module ContextDev
           max_pages: Integer,
           pdf: ContextDev::WebExtractParams::Pdf::OrHash,
           stop_after_ms: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
@@ -57,6 +58,10 @@ module ContextDev
         # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
         # (110s). Default: 80000 (80s).
         stop_after_ms: nil,
+        # Optional caller-defined tags for tracking this request. Tags are recorded on the
+        # request's usage log and can be used to filter usage on the dashboard usage page.
+        # Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -74,6 +79,7 @@ module ContextDev
         params(
           domain: String,
           num_competitors: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractCompetitorsResponse)
@@ -84,6 +90,10 @@ module ContextDev
         domain:,
         # Exact number of direct competitors to return. Defaults to 5.
         num_competitors: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -99,6 +109,7 @@ module ContextDev
           direct_url: String,
           domain: String,
           max_age_ms: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractFontsResponse)
@@ -117,6 +128,10 @@ module ContextDev
         # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
         # year.
         max_age_ms: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -134,6 +149,7 @@ module ContextDev
           direct_url: String,
           domain: String,
           max_age_ms: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractStyleguideResponse)
@@ -156,6 +172,10 @@ module ContextDev
         # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
         # year.
         max_age_ms: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -178,6 +198,7 @@ module ContextDev
           max_age_ms: Integer,
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           scroll_offset: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
           wait_for_ms: Integer,
@@ -224,6 +245,10 @@ module ContextDev
         # top to bottom). The final slice may be shorter than the viewport height. Takes
         # precedence over fullScreenshot. Max: 100000.
         scroll_offset: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -250,6 +275,7 @@ module ContextDev
             ContextDev::WebSearchParams::MarkdownOptions::OrHash,
           num_results: Integer,
           query_fanout: T::Boolean,
+          tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebSearchResponse)
@@ -275,6 +301,10 @@ module ContextDev
         num_results: nil,
         # Expand the query into multiple parallel variants for broader recall.
         query_fanout: nil,
+        # Optional caller-defined tags for tracking this request. Tags are recorded on the
+        # request's usage log and can be used to filter usage on the dashboard usage page.
+        # Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -302,6 +332,7 @@ module ContextDev
           settle_animations: T::Boolean,
           shorten_base64_images: T::Boolean,
           stop_after_ms: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           url_regex: String,
           use_main_content_only: T::Boolean,
@@ -358,6 +389,10 @@ module ContextDev
         # instead of continuing. Min: 10000 (10s). Max: 110000 (110s). Default: 80000
         # (80s).
         stop_after_ms: nil,
+        # Optional caller-defined tags for tracking this request. Tags are recorded on the
+        # request's usage log and can be used to filter usage on the dashboard usage page.
+        # Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -386,6 +421,7 @@ module ContextDev
           max_age_ms: Integer,
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
           settle_animations: T::Boolean,
+          tags: T::Array[String],
           timeout_ms: Integer,
           use_main_content_only: T::Boolean,
           wait_for_ms: Integer,
@@ -423,6 +459,10 @@ module ContextDev
         # extracting HTML. Defaults to false. This adds a bit of latency in exchange for
         # more stable output on animated pages.
         settle_animations: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -448,6 +488,7 @@ module ContextDev
           enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash,
           headers: T::Hash[Symbol, String],
           max_age_ms: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
@@ -471,6 +512,10 @@ module ContextDev
         # Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
         # day). Set to 0 to bypass cache. Maximum: 2592000000 (30 days).
         max_age_ms: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -512,6 +557,7 @@ module ContextDev
           pdf: ContextDev::WebWebScrapeMdParams::Pdf::OrHash,
           settle_animations: T::Boolean,
           shorten_base64_images: T::Boolean,
+          tags: T::Array[String],
           timeout_ms: Integer,
           use_main_content_only: T::Boolean,
           wait_for_ms: Integer,
@@ -556,6 +602,10 @@ module ContextDev
         settle_animations: nil,
         # Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -576,6 +626,7 @@ module ContextDev
           domain: String,
           headers: T::Hash[Symbol, String],
           max_links: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           url_regex: String,
           request_options: ContextDev::RequestOptions::OrHash
@@ -591,6 +642,10 @@ module ContextDev
         # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
         # Minimum is 1, maximum is 100,000.
         max_links: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).

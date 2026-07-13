@@ -56,13 +56,21 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :shorten_base64_images, ContextDev::Internal::Type::Boolean
 
+      # @!attribute tags
+      #   Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #   recorded on the request's usage log and can be used to filter usage on the
+      #   dashboard usage page. Up to 20 tags, each 1-50 characters.
+      #
+      #   @return [Array<String>, nil]
+      optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute use_main_content_only
       #   Extract only the main content from HTML-like inputs
       #
       #   @return [Boolean, nil]
       optional :use_main_content_only, ContextDev::Internal::Type::Boolean
 
-      # @!method initialize(body:, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
+      # @!method initialize(body:, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::ParseHandleParams} for more details.
       #
@@ -79,6 +87,8 @@ module ContextDev
       #   @param pdf [ContextDev::Models::ParseHandleParams::Pdf] PDF page-range controls. Use start/end to limit parsing (and OCR when ocr=true)
       #
       #   @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
+      #
+      #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       #   @param use_main_content_only [Boolean] Extract only the main content from HTML-like inputs
       #

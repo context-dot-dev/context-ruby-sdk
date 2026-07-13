@@ -9,6 +9,7 @@ module ContextDev
           input: String,
           max_results: Integer,
           min_results: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::IndustryRetrieveNaicsResponse)
@@ -23,6 +24,10 @@ module ContextDev
         max_results: nil,
         # Minimum number of NAICS codes to return. Must be at least 1. Defaults to 1.
         min_results: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -39,6 +44,7 @@ module ContextDev
           input: String,
           max_results: Integer,
           min_results: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           type: ContextDev::IndustryRetrieveSicParams::Type::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
@@ -53,6 +59,10 @@ module ContextDev
         max_results: nil,
         # Minimum number of SIC codes to return. Must be at least 1. Defaults to 1.
         min_results: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).

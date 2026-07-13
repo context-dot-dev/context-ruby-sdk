@@ -77,6 +77,14 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute tags
+          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   request's usage log and can be used to filter usage on the dashboard usage page.
+          #   Up to 20 tags, each 1-50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
           #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -85,7 +93,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(domain:, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil, type: :by_domain)
+          # @!method initialize(domain:, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, timeout_ms: nil, type: :by_domain)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByDomain} for more details.
           #
@@ -98,6 +106,8 @@ module ContextDev
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -275,6 +285,14 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute tags
+          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   request's usage log and can be used to filter usage on the dashboard usage page.
+          #   Up to 20 tags, each 1-50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
           #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -283,7 +301,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(name:, country_gl: nil, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil, type: :by_name)
+          # @!method initialize(name:, country_gl: nil, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, timeout_ms: nil, type: :by_name)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByName} for more details.
           #
@@ -299,6 +317,8 @@ module ContextDev
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -469,6 +489,14 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute tags
+          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   request's usage log and can be used to filter usage on the dashboard usage page.
+          #   Up to 20 tags, each 1-50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
           #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -477,7 +505,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(email:, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil, type: :by_email)
+          # @!method initialize(email:, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, timeout_ms: nil, type: :by_email)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByEmail} for more details.
           #
@@ -492,6 +520,8 @@ module ContextDev
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -662,6 +692,14 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute tags
+          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   request's usage log and can be used to filter usage on the dashboard usage page.
+          #   Up to 20 tags, each 1-50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute ticker_exchange
           #   Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
           #
@@ -676,7 +714,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(ticker:, force_language: nil, max_age_ms: nil, max_speed: nil, ticker_exchange: nil, timeout_ms: nil, type: :by_ticker)
+          # @!method initialize(ticker:, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, ticker_exchange: nil, timeout_ms: nil, type: :by_ticker)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByTicker} for more details.
           #
@@ -690,6 +728,8 @@ module ContextDev
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
           #
           #   @param ticker_exchange [String] Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
           #
@@ -842,6 +882,14 @@ module ContextDev
           #   @return [Symbol, :by_direct_url]
           required :type, const: :by_direct_url
 
+          # @!attribute tags
+          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   request's usage log and can be used to filter usage on the dashboard usage page.
+          #   Up to 20 tags, each 1-50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
           #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -850,7 +898,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(direct_url:, timeout_ms: nil, type: :by_direct_url)
+          # @!method initialize(direct_url:, tags: nil, timeout_ms: nil, type: :by_direct_url)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL} for more details.
           #
@@ -861,6 +909,8 @@ module ContextDev
           #   combined with domain, name, email, or ticker.
           #
           #   @param direct_url [String] Full http(s) URL to fetch brand data from (e.g., 'https://stripe.com/enterprise'
+          #
+          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -926,6 +976,14 @@ module ContextDev
           #   @return [Float, nil]
           optional :phone, Float
 
+          # @!attribute tags
+          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   request's usage log and can be used to filter usage on the dashboard usage page.
+          #   Up to 20 tags, each 1-50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
           #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -934,7 +992,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(transaction_info:, city: nil, country_gl: nil, force_language: nil, high_confidence_only: nil, max_speed: nil, mcc: nil, phone: nil, timeout_ms: nil, type: :by_transaction)
+          # @!method initialize(transaction_info:, city: nil, country_gl: nil, force_language: nil, high_confidence_only: nil, max_speed: nil, mcc: nil, phone: nil, tags: nil, timeout_ms: nil, type: :by_transaction)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByTransaction} for more details.
           #
@@ -956,6 +1014,8 @@ module ContextDev
           #   @param mcc [Integer] Optional Merchant Category Code (MCC) to help identify the business category or
           #
           #   @param phone [Float] Optional phone number from the transaction to help verify brand match.
+          #
+          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #

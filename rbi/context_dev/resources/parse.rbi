@@ -16,6 +16,7 @@ module ContextDev
           ocr: T::Boolean,
           pdf: ContextDev::ParseHandleParams::Pdf::OrHash,
           shorten_base64_images: T::Boolean,
+          tags: T::Array[String],
           use_main_content_only: T::Boolean,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::ParseHandleResponse)
@@ -43,6 +44,10 @@ module ContextDev
         pdf: nil,
         # Query param: Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
+        # Query param: Optional comma-separated caller-defined tags for tracking this
+        # request. Tags are recorded on the request's usage log and can be used to filter
+        # usage on the dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Query param: Extract only the main content from HTML-like inputs
         use_main_content_only: nil,
         request_options: {}

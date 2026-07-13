@@ -38,6 +38,7 @@ module ContextDev
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language,
             max_age_ms: Integer,
             max_speed: bool,
+            tags: ::Array[String],
             timeout_ms: Integer
           }
 
@@ -60,6 +61,10 @@ module ContextDev
 
           def max_speed=: (bool) -> bool
 
+          attr_reader tags: ::Array[String]?
+
+          def tags=: (::Array[String]) -> ::Array[String]
+
           attr_reader timeout_ms: Integer?
 
           def timeout_ms=: (Integer) -> Integer
@@ -69,6 +74,7 @@ module ContextDev
             ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language,
             ?max_age_ms: Integer,
             ?max_speed: bool,
+            ?tags: ::Array[String],
             ?timeout_ms: Integer,
             ?type: :by_domain
           ) -> void
@@ -79,6 +85,7 @@ module ContextDev
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language,
             max_age_ms: Integer,
             max_speed: bool,
+            tags: ::Array[String],
             timeout_ms: Integer
           }
 
@@ -340,6 +347,7 @@ module ContextDev
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language,
             max_age_ms: Integer,
             max_speed: bool,
+            tags: ::Array[String],
             timeout_ms: Integer
           }
 
@@ -366,6 +374,10 @@ module ContextDev
 
           def max_speed=: (bool) -> bool
 
+          attr_reader tags: ::Array[String]?
+
+          def tags=: (::Array[String]) -> ::Array[String]
+
           attr_reader timeout_ms: Integer?
 
           def timeout_ms=: (Integer) -> Integer
@@ -376,6 +388,7 @@ module ContextDev
             ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language,
             ?max_age_ms: Integer,
             ?max_speed: bool,
+            ?tags: ::Array[String],
             ?timeout_ms: Integer,
             ?type: :by_name
           ) -> void
@@ -387,6 +400,7 @@ module ContextDev
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language,
             max_age_ms: Integer,
             max_speed: bool,
+            tags: ::Array[String],
             timeout_ms: Integer
           }
 
@@ -647,6 +661,7 @@ module ContextDev
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language,
             max_age_ms: Integer,
             max_speed: bool,
+            tags: ::Array[String],
             timeout_ms: Integer
           }
 
@@ -669,6 +684,10 @@ module ContextDev
 
           def max_speed=: (bool) -> bool
 
+          attr_reader tags: ::Array[String]?
+
+          def tags=: (::Array[String]) -> ::Array[String]
+
           attr_reader timeout_ms: Integer?
 
           def timeout_ms=: (Integer) -> Integer
@@ -678,6 +697,7 @@ module ContextDev
             ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language,
             ?max_age_ms: Integer,
             ?max_speed: bool,
+            ?tags: ::Array[String],
             ?timeout_ms: Integer,
             ?type: :by_email
           ) -> void
@@ -688,6 +708,7 @@ module ContextDev
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language,
             max_age_ms: Integer,
             max_speed: bool,
+            tags: ::Array[String],
             timeout_ms: Integer
           }
 
@@ -948,6 +969,7 @@ module ContextDev
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language,
             max_age_ms: Integer,
             max_speed: bool,
+            tags: ::Array[String],
             ticker_exchange: String,
             timeout_ms: Integer
           }
@@ -971,6 +993,10 @@ module ContextDev
 
           def max_speed=: (bool) -> bool
 
+          attr_reader tags: ::Array[String]?
+
+          def tags=: (::Array[String]) -> ::Array[String]
+
           attr_reader ticker_exchange: String?
 
           def ticker_exchange=: (String) -> String
@@ -984,6 +1010,7 @@ module ContextDev
             ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language,
             ?max_age_ms: Integer,
             ?max_speed: bool,
+            ?tags: ::Array[String],
             ?ticker_exchange: String,
             ?timeout_ms: Integer,
             ?type: :by_ticker
@@ -995,6 +1022,7 @@ module ContextDev
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language,
             max_age_ms: Integer,
             max_speed: bool,
+            tags: ::Array[String],
             ticker_exchange: String,
             timeout_ms: Integer
           }
@@ -1250,12 +1278,21 @@ module ContextDev
         end
 
         type by_direct_url =
-          { direct_url: String, type: :by_direct_url, timeout_ms: Integer }
+          {
+            direct_url: String,
+            type: :by_direct_url,
+            tags: ::Array[String],
+            timeout_ms: Integer
+          }
 
         class ByDirectURL < ContextDev::Internal::Type::BaseModel
           attr_accessor direct_url: String
 
           attr_accessor type: :by_direct_url
+
+          attr_reader tags: ::Array[String]?
+
+          def tags=: (::Array[String]) -> ::Array[String]
 
           attr_reader timeout_ms: Integer?
 
@@ -1263,6 +1300,7 @@ module ContextDev
 
           def initialize: (
             direct_url: String,
+            ?tags: ::Array[String],
             ?timeout_ms: Integer,
             ?type: :by_direct_url
           ) -> void
@@ -1270,6 +1308,7 @@ module ContextDev
           def to_hash: -> {
             direct_url: String,
             type: :by_direct_url,
+            tags: ::Array[String],
             timeout_ms: Integer
           }
         end
@@ -1285,6 +1324,7 @@ module ContextDev
             max_speed: bool,
             mcc: Integer,
             phone: Float,
+            tags: ::Array[String],
             timeout_ms: Integer
           }
 
@@ -1323,6 +1363,10 @@ module ContextDev
 
           def phone=: (Float) -> Float
 
+          attr_reader tags: ::Array[String]?
+
+          def tags=: (::Array[String]) -> ::Array[String]
+
           attr_reader timeout_ms: Integer?
 
           def timeout_ms=: (Integer) -> Integer
@@ -1336,6 +1380,7 @@ module ContextDev
             ?max_speed: bool,
             ?mcc: Integer,
             ?phone: Float,
+            ?tags: ::Array[String],
             ?timeout_ms: Integer,
             ?type: :by_transaction
           ) -> void
@@ -1350,6 +1395,7 @@ module ContextDev
             max_speed: bool,
             mcc: Integer,
             phone: Float,
+            tags: ::Array[String],
             timeout_ms: Integer
           }
 

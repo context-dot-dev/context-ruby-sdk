@@ -11,6 +11,7 @@ module ContextDev
         max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
         scroll_offset: Integer,
+        tags: ::Array[String],
         timeout_ms: Integer,
         viewport: ContextDev::WebScreenshotParams::Viewport,
         wait_for_ms: Integer
@@ -67,6 +68,10 @@ module ContextDev
 
       def scroll_offset=: (Integer) -> Integer
 
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
       attr_reader timeout_ms: Integer?
 
       def timeout_ms=: (Integer) -> Integer
@@ -91,6 +96,7 @@ module ContextDev
         ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
         ?scroll_offset: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
         ?wait_for_ms: Integer,
@@ -107,6 +113,7 @@ module ContextDev
         max_age_ms: Integer,
         page: ContextDev::Models::WebScreenshotParams::page,
         scroll_offset: Integer,
+        tags: ::Array[String],
         timeout_ms: Integer,
         viewport: ContextDev::WebScreenshotParams::Viewport,
         wait_for_ms: Integer,

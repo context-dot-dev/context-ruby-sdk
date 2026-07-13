@@ -20,6 +20,14 @@ module ContextDev
       #   @return [Integer, nil]
       optional :num_competitors, Integer
 
+      # @!attribute tags
+      #   Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #   recorded on the request's usage log and can be used to filter usage on the
+      #   dashboard usage page. Up to 20 tags, each 1-50 characters.
+      #
+      #   @return [Array<String>, nil]
+      optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute timeout_ms
       #   Optional timeout in milliseconds for the request. If the request takes longer
       #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -28,13 +36,15 @@ module ContextDev
       #   @return [Integer, nil]
       optional :timeout_ms, Integer
 
-      # @!method initialize(domain:, num_competitors: nil, timeout_ms: nil, request_options: {})
+      # @!method initialize(domain:, num_competitors: nil, tags: nil, timeout_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractCompetitorsParams} for more details.
       #
       #   @param domain [String] Company domain to analyze, such as `stripe.com`. Full http(s) URLs are accepted
       #
       #   @param num_competitors [Integer] Exact number of direct competitors to return. Defaults to 5.
+      #
+      #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

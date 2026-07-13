@@ -94,6 +94,15 @@ module ContextDev
       sig { params(settle_animations: T::Boolean).void }
       attr_writer :settle_animations
 
+      # Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # recorded on the request's usage log and can be used to filter usage on the
+      # dashboard usage page. Up to 20 tags, each 1-50 characters.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :tags
+
+      sig { params(tags: T::Array[String]).void }
+      attr_writer :tags
+
       # Optional timeout in milliseconds for the request. If the request takes longer
       # than this value, it will be aborted with a 408 status code. Maximum allowed
       # value is 300000ms (5 minutes).
@@ -130,6 +139,7 @@ module ContextDev
           max_age_ms: Integer,
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
           settle_animations: T::Boolean,
+          tags: T::Array[String],
           timeout_ms: Integer,
           use_main_content_only: T::Boolean,
           wait_for_ms: Integer,
@@ -167,6 +177,10 @@ module ContextDev
         # extracting HTML. Defaults to false. This adds a bit of latency in exchange for
         # more stable output on animated pages.
         settle_animations: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -193,6 +207,7 @@ module ContextDev
             max_age_ms: Integer,
             pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
             settle_animations: T::Boolean,
+            tags: T::Array[String],
             timeout_ms: Integer,
             use_main_content_only: T::Boolean,
             wait_for_ms: Integer,

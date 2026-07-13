@@ -61,6 +61,14 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :query_fanout, ContextDev::Internal::Type::Boolean, api_name: :queryFanout
 
+      # @!attribute tags
+      #   Optional caller-defined tags for tracking this request. Tags are recorded on the
+      #   request's usage log and can be used to filter usage on the dashboard usage page.
+      #   Up to 20 tags, each 1-50 characters.
+      #
+      #   @return [Array<String>, nil]
+      optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute timeout_ms
       #   Optional timeout in milliseconds for the request. If the request takes longer
       #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -69,7 +77,7 @@ module ContextDev
       #   @return [Integer, nil]
       optional :timeout_ms, Integer, api_name: :timeoutMS
 
-      # @!method initialize(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, timeout_ms: nil, request_options: {})
+      # @!method initialize(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebSearchParams} for more details.
       #
@@ -88,6 +96,8 @@ module ContextDev
       #   @param num_results [Integer] Number of results to request and return (10–100). Defaults to 10.
       #
       #   @param query_fanout [Boolean] Expand the query into multiple parallel variants for broader recall.
+      #
+      #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

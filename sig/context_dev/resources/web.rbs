@@ -13,6 +13,7 @@ module ContextDev
         ?max_pages: Integer,
         ?pdf: ContextDev::WebExtractParams::Pdf,
         ?stop_after_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
@@ -21,6 +22,7 @@ module ContextDev
       def extract_competitors: (
         domain: String,
         ?num_competitors: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractCompetitorsResponse
@@ -29,6 +31,7 @@ module ContextDev
         ?direct_url: String,
         ?domain: String,
         ?max_age_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractFontsResponse
@@ -38,6 +41,7 @@ module ContextDev
         ?direct_url: String,
         ?domain: String,
         ?max_age_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractStyleguideResponse
@@ -52,6 +56,7 @@ module ContextDev
         ?max_age_ms: Integer,
         ?page: ContextDev::Models::WebScreenshotParams::page,
         ?scroll_offset: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
         ?wait_for_ms: Integer,
@@ -67,6 +72,7 @@ module ContextDev
         ?markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
         ?num_results: Integer,
         ?query_fanout: bool,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebSearchResponse
@@ -87,6 +93,7 @@ module ContextDev
         ?settle_animations: bool,
         ?shorten_base64_images: bool,
         ?stop_after_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?url_regex: String,
         ?use_main_content_only: bool,
@@ -104,6 +111,7 @@ module ContextDev
         ?max_age_ms: Integer,
         ?pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
         ?settle_animations: bool,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?use_main_content_only: bool,
         ?wait_for_ms: Integer,
@@ -116,6 +124,7 @@ module ContextDev
         ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
         ?headers: ::Hash[Symbol, String],
         ?max_age_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
@@ -134,6 +143,7 @@ module ContextDev
         ?pdf: ContextDev::WebWebScrapeMdParams::Pdf,
         ?settle_animations: bool,
         ?shorten_base64_images: bool,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?use_main_content_only: bool,
         ?wait_for_ms: Integer,
@@ -144,6 +154,7 @@ module ContextDev
         domain: String,
         ?headers: ::Hash[Symbol, String],
         ?max_links: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?url_regex: String,
         ?request_options: ContextDev::request_opts
