@@ -32,6 +32,14 @@ module ContextDev
       #   @return [Integer, nil]
       optional :max_age_ms, Integer
 
+      # @!attribute tags
+      #   Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #   recorded on the request's usage log and can be used to filter usage on the
+      #   dashboard usage page. Up to 20 tags, each 1-50 characters.
+      #
+      #   @return [Array<String>, nil]
+      optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute timeout_ms
       #   Optional timeout in milliseconds for the request. If the request takes longer
       #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -40,7 +48,7 @@ module ContextDev
       #   @return [Integer, nil]
       optional :timeout_ms, Integer
 
-      # @!method initialize(direct_url: nil, domain: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
+      # @!method initialize(direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractFontsParams} for more details.
       #
@@ -49,6 +57,8 @@ module ContextDev
       #   @param domain [String] Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The domai
       #
       #   @param max_age_ms [Integer] Maximum age in milliseconds for cached data before the API performs a hard refre
+      #
+      #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

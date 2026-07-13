@@ -7,6 +7,7 @@ module ContextDev
         enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
         headers: ::Hash[Symbol, String],
         max_age_ms: Integer,
+        tags: ::Array[String],
         timeout_ms: Integer,
         wait_for_ms: Integer
       }
@@ -36,6 +37,10 @@ module ContextDev
 
       def max_age_ms=: (Integer) -> Integer
 
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
       attr_reader timeout_ms: Integer?
 
       def timeout_ms=: (Integer) -> Integer
@@ -50,6 +55,7 @@ module ContextDev
         ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
         ?headers: ::Hash[Symbol, String],
         ?max_age_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
@@ -61,6 +67,7 @@ module ContextDev
         enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
         headers: ::Hash[Symbol, String],
         max_age_ms: Integer,
+        tags: ::Array[String],
         timeout_ms: Integer,
         wait_for_ms: Integer,
         request_options: ContextDev::RequestOptions

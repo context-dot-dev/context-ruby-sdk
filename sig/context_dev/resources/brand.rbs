@@ -9,6 +9,7 @@ module ContextDev
       def retrieve_simplified: (
         domain: String,
         ?max_age_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::BrandRetrieveSimplifiedResponse

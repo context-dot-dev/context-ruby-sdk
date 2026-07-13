@@ -9,6 +9,7 @@ module ContextDev
         ?ocr: bool,
         ?pdf: ContextDev::ParseHandleParams::Pdf,
         ?shorten_base64_images: bool,
+        ?tags: ::Array[String],
         ?use_main_content_only: bool,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::ParseHandleResponse

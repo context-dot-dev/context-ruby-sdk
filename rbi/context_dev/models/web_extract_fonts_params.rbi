@@ -42,6 +42,15 @@ module ContextDev
       sig { params(max_age_ms: Integer).void }
       attr_writer :max_age_ms
 
+      # Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # recorded on the request's usage log and can be used to filter usage on the
+      # dashboard usage page. Up to 20 tags, each 1-50 characters.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :tags
+
+      sig { params(tags: T::Array[String]).void }
+      attr_writer :tags
+
       # Optional timeout in milliseconds for the request. If the request takes longer
       # than this value, it will be aborted with a 408 status code. Maximum allowed
       # value is 300000ms (5 minutes).
@@ -56,6 +65,7 @@ module ContextDev
           direct_url: String,
           domain: String,
           max_age_ms: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
@@ -74,6 +84,10 @@ module ContextDev
         # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
         # year.
         max_age_ms: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -88,6 +102,7 @@ module ContextDev
             direct_url: String,
             domain: String,
             max_age_ms: Integer,
+            tags: T::Array[String],
             timeout_ms: Integer,
             request_options: ContextDev::RequestOptions
           }

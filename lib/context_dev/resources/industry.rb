@@ -8,13 +8,15 @@ module ContextDev
       #
       # Classify any brand into 2022 NAICS industry codes from its domain or name.
       #
-      # @overload retrieve_naics(input:, max_results: nil, min_results: nil, timeout_ms: nil, request_options: {})
+      # @overload retrieve_naics(input:, max_results: nil, min_results: nil, tags: nil, timeout_ms: nil, request_options: {})
       #
       # @param input [String] Brand domain or title to retrieve NAICS code for. If a valid domain is provided,
       #
       # @param max_results [Integer] Maximum number of NAICS codes to return. Must be between 1 and 10. Defaults to 5
       #
       # @param min_results [Integer] Minimum number of NAICS codes to return. Must be at least 1. Defaults to 1.
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -46,13 +48,15 @@ module ContextDev
       # domain or name. Choose between the original SIC system (`original_sic`) or the
       # latest SIC list maintained by the SEC (`latest_sec`).
       #
-      # @overload retrieve_sic(input:, max_results: nil, min_results: nil, timeout_ms: nil, type: nil, request_options: {})
+      # @overload retrieve_sic(input:, max_results: nil, min_results: nil, tags: nil, timeout_ms: nil, type: nil, request_options: {})
       #
       # @param input [String] Brand domain or title to retrieve SIC code for. If a valid domain is provided, i
       #
       # @param max_results [Integer] Maximum number of SIC codes to return. Must be between 1 and 10. Defaults to 5.
       #
       # @param min_results [Integer] Minimum number of SIC codes to return. Must be at least 1. Defaults to 1.
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

@@ -129,6 +129,15 @@ module ContextDev
       sig { params(scroll_offset: Integer).void }
       attr_writer :scroll_offset
 
+      # Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # recorded on the request's usage log and can be used to filter usage on the
+      # dashboard usage page. Up to 20 tags, each 1-50 characters.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :tags
+
+      sig { params(tags: T::Array[String]).void }
+      attr_writer :tags
+
       # Optional timeout in milliseconds for the request. If the request takes longer
       # than this value, it will be aborted with a 408 status code. Maximum allowed
       # value is 300000ms (5 minutes).
@@ -169,6 +178,7 @@ module ContextDev
           max_age_ms: Integer,
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           scroll_offset: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
           wait_for_ms: Integer,
@@ -215,6 +225,10 @@ module ContextDev
         # top to bottom). The final slice may be shorter than the viewport height. Takes
         # precedence over fullScreenshot. Max: 100000.
         scroll_offset: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -244,6 +258,7 @@ module ContextDev
             max_age_ms: Integer,
             page: ContextDev::WebScreenshotParams::Page::OrSymbol,
             scroll_offset: Integer,
+            tags: T::Array[String],
             timeout_ms: Integer,
             viewport: ContextDev::WebScreenshotParams::Viewport,
             wait_for_ms: Integer,

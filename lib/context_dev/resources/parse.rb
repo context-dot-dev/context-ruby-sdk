@@ -11,7 +11,7 @@ module ContextDev
       # (requires ocr=true), the entire call costs 5 credits; ocr=true requests where no
       # OCR ends up running still cost 1 credit.
       #
-      # @overload handle(body:, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
+      # @overload handle(body:, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, request_options: {})
       #
       # @param body [Pathname, StringIO, IO, String, ContextDev::FilePart] Body param
       #
@@ -26,6 +26,8 @@ module ContextDev
       # @param pdf [ContextDev::Models::ParseHandleParams::Pdf] Query param: PDF page-range controls. Use start/end to limit parsing (and OCR wh
       #
       # @param shorten_base64_images [Boolean] Query param: Shorten base64-encoded image data in the Markdown output
+      #
+      # @param tags [Array<String>] Query param: Optional comma-separated caller-defined tags for tracking this requ
       #
       # @param use_main_content_only [Boolean] Query param: Extract only the main content from HTML-like inputs
       #

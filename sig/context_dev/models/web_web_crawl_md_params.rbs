@@ -17,6 +17,7 @@ module ContextDev
         settle_animations: bool,
         :shorten_base64_images => bool,
         stop_after_ms: Integer,
+        tags: ::Array[String],
         timeout_ms: Integer,
         url_regex: String,
         use_main_content_only: bool,
@@ -90,6 +91,10 @@ module ContextDev
 
       def stop_after_ms=: (Integer) -> Integer
 
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
       attr_reader timeout_ms: Integer?
 
       def timeout_ms=: (Integer) -> Integer
@@ -122,6 +127,7 @@ module ContextDev
         ?settle_animations: bool,
         ?shorten_base64_images: bool,
         ?stop_after_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?url_regex: String,
         ?use_main_content_only: bool,
@@ -145,6 +151,7 @@ module ContextDev
         settle_animations: bool,
         :shorten_base64_images => bool,
         stop_after_ms: Integer,
+        tags: ::Array[String],
         timeout_ms: Integer,
         url_regex: String,
         use_main_content_only: bool,
