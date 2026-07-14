@@ -35,7 +35,7 @@ module ContextDev
           {
             domain: String,
             type: :by_domain,
-            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language?,
             max_age_ms: Integer,
             max_speed: bool,
             tags: ::Array[String],
@@ -47,11 +47,7 @@ module ContextDev
 
           attr_accessor type: :by_domain
 
-          attr_reader force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language?
-
-          def force_language=: (
-            ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language
-          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language
+          attr_accessor force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language?
 
           attr_reader max_age_ms: Integer?
 
@@ -71,7 +67,7 @@ module ContextDev
 
           def initialize: (
             domain: String,
-            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language,
+            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language?,
             ?max_age_ms: Integer,
             ?max_speed: bool,
             ?tags: ::Array[String],
@@ -82,7 +78,7 @@ module ContextDev
           def to_hash: -> {
             domain: String,
             type: :by_domain,
-            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language?,
             max_age_ms: Integer,
             max_speed: bool,
             tags: ::Array[String],
@@ -344,7 +340,7 @@ module ContextDev
             name: String,
             type: :by_name,
             country_gl: String,
-            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language?,
             max_age_ms: Integer,
             max_speed: bool,
             tags: ::Array[String],
@@ -360,11 +356,7 @@ module ContextDev
 
           def country_gl=: (String) -> String
 
-          attr_reader force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language?
-
-          def force_language=: (
-            ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language
-          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language
+          attr_accessor force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language?
 
           attr_reader max_age_ms: Integer?
 
@@ -385,7 +377,7 @@ module ContextDev
           def initialize: (
             name: String,
             ?country_gl: String,
-            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language,
+            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language?,
             ?max_age_ms: Integer,
             ?max_speed: bool,
             ?tags: ::Array[String],
@@ -397,7 +389,7 @@ module ContextDev
             name: String,
             type: :by_name,
             country_gl: String,
-            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language?,
             max_age_ms: Integer,
             max_speed: bool,
             tags: ::Array[String],
@@ -658,7 +650,7 @@ module ContextDev
           {
             email: String,
             type: :by_email,
-            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language?,
             max_age_ms: Integer,
             max_speed: bool,
             tags: ::Array[String],
@@ -670,11 +662,7 @@ module ContextDev
 
           attr_accessor type: :by_email
 
-          attr_reader force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language?
-
-          def force_language=: (
-            ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language
-          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language
+          attr_accessor force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language?
 
           attr_reader max_age_ms: Integer?
 
@@ -694,7 +682,7 @@ module ContextDev
 
           def initialize: (
             email: String,
-            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language,
+            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language?,
             ?max_age_ms: Integer,
             ?max_speed: bool,
             ?tags: ::Array[String],
@@ -705,7 +693,7 @@ module ContextDev
           def to_hash: -> {
             email: String,
             type: :by_email,
-            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language?,
             max_age_ms: Integer,
             max_speed: bool,
             tags: ::Array[String],
@@ -966,7 +954,7 @@ module ContextDev
           {
             ticker: String,
             type: :by_ticker,
-            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language?,
             max_age_ms: Integer,
             max_speed: bool,
             tags: ::Array[String],
@@ -979,11 +967,7 @@ module ContextDev
 
           attr_accessor type: :by_ticker
 
-          attr_reader force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language?
-
-          def force_language=: (
-            ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language
-          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language
+          attr_accessor force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language?
 
           attr_reader max_age_ms: Integer?
 
@@ -1007,7 +991,7 @@ module ContextDev
 
           def initialize: (
             ticker: String,
-            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language,
+            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language?,
             ?max_age_ms: Integer,
             ?max_speed: bool,
             ?tags: ::Array[String],
@@ -1019,7 +1003,7 @@ module ContextDev
           def to_hash: -> {
             ticker: String,
             type: :by_ticker,
-            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language?,
             max_age_ms: Integer,
             max_speed: bool,
             tags: ::Array[String],
@@ -1319,11 +1303,11 @@ module ContextDev
             type: :by_transaction,
             city: String,
             country_gl: String,
-            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language?,
             high_confidence_only: bool,
             max_speed: bool,
-            mcc: Integer,
-            phone: Float,
+            mcc: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::mcc,
+            phone: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::phone,
             tags: ::Array[String],
             timeout_ms: Integer
           }
@@ -1341,11 +1325,7 @@ module ContextDev
 
           def country_gl=: (String) -> String
 
-          attr_reader force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language?
-
-          def force_language=: (
-            ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language
-          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language
+          attr_accessor force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language?
 
           attr_reader high_confidence_only: bool?
 
@@ -1355,13 +1335,17 @@ module ContextDev
 
           def max_speed=: (bool) -> bool
 
-          attr_reader mcc: Integer?
+          attr_reader mcc: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::mcc?
 
-          def mcc=: (Integer) -> Integer
+          def mcc=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::mcc
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::mcc
 
-          attr_reader phone: Float?
+          attr_reader phone: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::phone?
 
-          def phone=: (Float) -> Float
+          def phone=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::phone
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::phone
 
           attr_reader tags: ::Array[String]?
 
@@ -1375,11 +1359,11 @@ module ContextDev
             transaction_info: String,
             ?city: String,
             ?country_gl: String,
-            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language,
+            ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language?,
             ?high_confidence_only: bool,
             ?max_speed: bool,
-            ?mcc: Integer,
-            ?phone: Float,
+            ?mcc: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::mcc,
+            ?phone: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::phone,
             ?tags: ::Array[String],
             ?timeout_ms: Integer,
             ?type: :by_transaction
@@ -1390,11 +1374,11 @@ module ContextDev
             type: :by_transaction,
             city: String,
             country_gl: String,
-            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language,
+            force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language?,
             high_confidence_only: bool,
             max_speed: bool,
-            mcc: Integer,
-            phone: Float,
+            mcc: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::mcc,
+            phone: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::phone,
             tags: ::Array[String],
             timeout_ms: Integer
           }
@@ -1646,6 +1630,22 @@ module ContextDev
             ZULU: :zulu
 
             def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language]
+          end
+
+          type mcc = String | Float
+
+          module Mcc
+            extend ContextDev::Internal::Type::Union
+
+            def self?.variants: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::mcc]
+          end
+
+          type phone = String | Float
+
+          module Phone
+            extend ContextDev::Internal::Type::Union
+
+            def self?.variants: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::phone]
           end
         end
 

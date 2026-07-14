@@ -22,10 +22,27 @@ module ContextDev
       # perceptually hashed, and only the highest-resolution copy of each duplicate
       # group is kept. Images that cannot be downloaded or hashed are kept. Default:
       # false.
-      sig { returns(T.nilable(T::Boolean)) }
+      sig do
+        returns(
+          T.nilable(
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeImagesParams::Dedupe::OrSymbol
+            )
+          )
+        )
+      end
       attr_reader :dedupe
 
-      sig { params(dedupe: T::Boolean).void }
+      sig do
+        params(
+          dedupe:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeImagesParams::Dedupe::OrSymbol
+            )
+        ).void
+      end
       attr_writer :dedupe
 
       # Optional per-image processing, sent as deep-object query params such as
@@ -37,7 +54,8 @@ module ContextDev
 
       sig do
         params(
-          enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash
+          enrichment:
+            T.nilable(ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash)
         ).void
       end
       attr_writer :enrichment
@@ -54,10 +72,7 @@ module ContextDev
       # Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
       # day). Set to 0 to bypass cache. Maximum: 2592000000 (30 days).
       sig { returns(T.nilable(Integer)) }
-      attr_reader :max_age_ms
-
-      sig { params(max_age_ms: Integer).void }
-      attr_writer :max_age_ms
+      attr_accessor :max_age_ms
 
       # Optional comma-separated caller-defined tags for tracking this request. Tags are
       # recorded on the request's usage log and can be used to filter usage on the
@@ -80,21 +95,23 @@ module ContextDev
       # Optional browser wait time in milliseconds after initial page load before
       # collecting images. Min: 0. Max: 30000 (30 seconds).
       sig { returns(T.nilable(Integer)) }
-      attr_reader :wait_for_ms
-
-      sig { params(wait_for_ms: Integer).void }
-      attr_writer :wait_for_ms
+      attr_accessor :wait_for_ms
 
       sig do
         params(
           url: String,
-          dedupe: T::Boolean,
-          enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash,
+          dedupe:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeImagesParams::Dedupe::OrSymbol
+            ),
+          enrichment:
+            T.nilable(ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash),
           headers: T::Hash[Symbol, String],
-          max_age_ms: Integer,
+          max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
           timeout_ms: Integer,
-          wait_for_ms: Integer,
+          wait_for_ms: T.nilable(Integer),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -135,18 +152,64 @@ module ContextDev
         override.returns(
           {
             url: String,
-            dedupe: T::Boolean,
-            enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
+            dedupe:
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Dedupe::OrSymbol
+              ),
+            enrichment:
+              T.nilable(ContextDev::WebWebScrapeImagesParams::Enrichment),
             headers: T::Hash[Symbol, String],
-            max_age_ms: Integer,
+            max_age_ms: T.nilable(Integer),
             tags: T::Array[String],
             timeout_ms: Integer,
-            wait_for_ms: Integer,
+            wait_for_ms: T.nilable(Integer),
             request_options: ContextDev::RequestOptions
           }
         )
       end
       def to_hash
+      end
+
+      # When true, visually duplicate images are removed: every image is loaded and
+      # perceptually hashed, and only the highest-resolution copy of each duplicate
+      # group is kept. Images that cannot be downloaded or hashed are kept. Default:
+      # false.
+      module Dedupe
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeImagesParams::Dedupe::TaggedSymbol
+            )
+          end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebWebScrapeImagesParams::Dedupe::Variants]
+          )
+        end
+        def self.variants
+        end
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::WebWebScrapeImagesParams::Dedupe)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        TRUE =
+          T.let(
+            :true,
+            ContextDev::WebWebScrapeImagesParams::Dedupe::TaggedSymbol
+          )
+        FALSE =
+          T.let(
+            :false,
+            ContextDev::WebWebScrapeImagesParams::Dedupe::TaggedSymbol
+          )
       end
 
       class Enrichment < ContextDev::Internal::Type::BaseModel
@@ -159,18 +222,52 @@ module ContextDev
           end
 
         # Classify each image by visual asset type.
-        sig { returns(T.nilable(T::Boolean)) }
+        sig do
+          returns(
+            T.nilable(
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Classification::OrSymbol
+              )
+            )
+          )
+        end
         attr_reader :classification
 
-        sig { params(classification: T::Boolean).void }
+        sig do
+          params(
+            classification:
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Classification::OrSymbol
+              )
+          ).void
+        end
         attr_writer :classification
 
         # Host materializable images on the Brand.dev CDN and return their URL and MIME
         # type.
-        sig { returns(T.nilable(T::Boolean)) }
+        sig do
+          returns(
+            T.nilable(
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::HostedURL::OrSymbol
+              )
+            )
+          )
+        end
         attr_reader :hosted_url
 
-        sig { params(hosted_url: T::Boolean).void }
+        sig do
+          params(
+            hosted_url:
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::HostedURL::OrSymbol
+              )
+          ).void
+        end
         attr_writer :hosted_url
 
         # Per-image enrichment timeout in milliseconds. Default: 30000. Maximum: 60000.
@@ -181,20 +278,49 @@ module ContextDev
         attr_writer :max_time_per_ms
 
         # Measure image width and height when possible.
-        sig { returns(T.nilable(T::Boolean)) }
+        sig do
+          returns(
+            T.nilable(
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Resolution::OrSymbol
+              )
+            )
+          )
+        end
         attr_reader :resolution
 
-        sig { params(resolution: T::Boolean).void }
+        sig do
+          params(
+            resolution:
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Resolution::OrSymbol
+              )
+          ).void
+        end
         attr_writer :resolution
 
         # Optional per-image processing, sent as deep-object query params such as
         # enrichment[resolution]=true.
         sig do
           params(
-            classification: T::Boolean,
-            hosted_url: T::Boolean,
+            classification:
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Classification::OrSymbol
+              ),
+            hosted_url:
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::HostedURL::OrSymbol
+              ),
             max_time_per_ms: Integer,
-            resolution: T::Boolean
+            resolution:
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Resolution::OrSymbol
+              )
           ).returns(T.attached_class)
         end
         def self.new(
@@ -213,14 +339,156 @@ module ContextDev
         sig do
           override.returns(
             {
-              classification: T::Boolean,
-              hosted_url: T::Boolean,
+              classification:
+                T.any(
+                  T::Boolean,
+                  ContextDev::WebWebScrapeImagesParams::Enrichment::Classification::OrSymbol
+                ),
+              hosted_url:
+                T.any(
+                  T::Boolean,
+                  ContextDev::WebWebScrapeImagesParams::Enrichment::HostedURL::OrSymbol
+                ),
               max_time_per_ms: Integer,
-              resolution: T::Boolean
+              resolution:
+                T.any(
+                  T::Boolean,
+                  ContextDev::WebWebScrapeImagesParams::Enrichment::Resolution::OrSymbol
+                )
             }
           )
         end
         def to_hash
+        end
+
+        # Classify each image by visual asset type.
+        module Classification
+          extend ContextDev::Internal::Type::Union
+
+          Variants =
+            T.type_alias do
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Classification::TaggedSymbol
+              )
+            end
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Classification::Variants
+              ]
+            )
+          end
+          def self.variants
+          end
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Classification
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          TRUE =
+            T.let(
+              :true,
+              ContextDev::WebWebScrapeImagesParams::Enrichment::Classification::TaggedSymbol
+            )
+          FALSE =
+            T.let(
+              :false,
+              ContextDev::WebWebScrapeImagesParams::Enrichment::Classification::TaggedSymbol
+            )
+        end
+
+        # Host materializable images on the Brand.dev CDN and return their URL and MIME
+        # type.
+        module HostedURL
+          extend ContextDev::Internal::Type::Union
+
+          Variants =
+            T.type_alias do
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::HostedURL::TaggedSymbol
+              )
+            end
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::WebWebScrapeImagesParams::Enrichment::HostedURL::Variants
+              ]
+            )
+          end
+          def self.variants
+          end
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::HostedURL
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          TRUE =
+            T.let(
+              :true,
+              ContextDev::WebWebScrapeImagesParams::Enrichment::HostedURL::TaggedSymbol
+            )
+          FALSE =
+            T.let(
+              :false,
+              ContextDev::WebWebScrapeImagesParams::Enrichment::HostedURL::TaggedSymbol
+            )
+        end
+
+        # Measure image width and height when possible.
+        module Resolution
+          extend ContextDev::Internal::Type::Union
+
+          Variants =
+            T.type_alias do
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Resolution::TaggedSymbol
+              )
+            end
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Resolution::Variants
+              ]
+            )
+          end
+          def self.variants
+          end
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::WebWebScrapeImagesParams::Enrichment::Resolution
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          TRUE =
+            T.let(
+              :true,
+              ContextDev::WebWebScrapeImagesParams::Enrichment::Resolution::TaggedSymbol
+            )
+          FALSE =
+            T.let(
+              :false,
+              ContextDev::WebWebScrapeImagesParams::Enrichment::Resolution::TaggedSymbol
+            )
         end
       end
     end

@@ -12,9 +12,15 @@ module ContextDev
       #   @return [Pathname, StringIO, IO, String, ContextDev::FilePart]
       required :body, ContextDev::Internal::Type::FileInput
 
+      # @!attribute client
+      #   Optional client identifier used for usage attribution.
+      #
+      #   @return [String, nil]
+      optional :client, String
+
       # @!attribute extension
-      #   Optional file extension hint. Case-insensitive; a leading dot is accepted (e.g.
-      #   ".pdf").
+      #   Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
+      #   md, py, rtf, jpg, png, or txt.
       #
       #   @return [Symbol, ContextDev::Models::ParseHandleParams::Extension, nil]
       optional :extension, enum: -> { ContextDev::ParseHandleParams::Extension }
@@ -22,30 +28,26 @@ module ContextDev
       # @!attribute include_images
       #   Include image references in Markdown output
       #
-      #   @return [Boolean, nil]
-      optional :include_images, ContextDev::Internal::Type::Boolean
+      #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeImages, nil]
+      optional :include_images, union: -> { ContextDev::ParseHandleParams::IncludeImages }
 
       # @!attribute include_links
       #   Preserve hyperlinks in Markdown output
       #
-      #   @return [Boolean, nil]
-      optional :include_links, ContextDev::Internal::Type::Boolean
+      #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeLinks, nil]
+      optional :include_links, union: -> { ContextDev::ParseHandleParams::IncludeLinks }
 
       # @!attribute ocr
-      #   Gates all OCR. When true, PDFs get embedded-image OCR (recognized text inserted
-      #   at each image's position in page reading order, preserving the text layer;
-      #   pdf.start/pdf.end limit the page range), scanned PDFs with no text layer get
-      #   full-document OCR, and raster images get their visible text transcribed. When
-      #   false, no OCR runs: scanned PDFs may yield no content and images return only
-      #   format/dimension metadata. Calls where OCR actually runs cost 5 credits instead
-      #   of 1.
+      #   When true for PDF inputs, detect and OCR images embedded in the selected pages,
+      #   inserting recognized text at each image's position in page reading order while
+      #   preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
+      #   When false, all OCR is disabled, including the automatic scanned-PDF fallback.
       #
-      #   @return [Boolean, nil]
-      optional :ocr, ContextDev::Internal::Type::Boolean
+      #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr, nil]
+      optional :ocr, union: -> { ContextDev::ParseHandleParams::Ocr }
 
       # @!attribute pdf
-      #   PDF page-range controls. Use start/end to limit parsing (and OCR when ocr=true)
-      #   to an inclusive 1-based page range.
+      #   PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
       #
       #   @return [ContextDev::Models::ParseHandleParams::Pdf, nil]
       optional :pdf, -> { ContextDev::ParseHandleParams::Pdf }
@@ -53,8 +55,8 @@ module ContextDev
       # @!attribute shorten_base64_images
       #   Shorten base64-encoded image data in the Markdown output
       #
-      #   @return [Boolean, nil]
-      optional :shorten_base64_images, ContextDev::Internal::Type::Boolean
+      #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::ShortenBase64Images, nil]
+      optional :shorten_base64_images, union: -> { ContextDev::ParseHandleParams::ShortenBase64Images }
 
       # @!attribute tags
       #   Optional comma-separated caller-defined tags for tracking this request. Tags are
@@ -67,35 +69,37 @@ module ContextDev
       # @!attribute use_main_content_only
       #   Extract only the main content from HTML-like inputs
       #
-      #   @return [Boolean, nil]
-      optional :use_main_content_only, ContextDev::Internal::Type::Boolean
+      #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::UseMainContentOnly, nil]
+      optional :use_main_content_only, union: -> { ContextDev::ParseHandleParams::UseMainContentOnly }
 
-      # @!method initialize(body:, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, request_options: {})
+      # @!method initialize(body:, client: nil, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::ParseHandleParams} for more details.
       #
       #   @param body [Pathname, StringIO, IO, String, ContextDev::FilePart]
       #
-      #   @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] Optional file extension hint. Case-insensitive; a leading dot is accepted (e.g.
+      #   @param client [String] Optional client identifier used for usage attribution.
       #
-      #   @param include_images [Boolean] Include image references in Markdown output
+      #   @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv, md
       #
-      #   @param include_links [Boolean] Preserve hyperlinks in Markdown output
+      #   @param include_images [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeImages] Include image references in Markdown output
       #
-      #   @param ocr [Boolean] Gates all OCR. When true, PDFs get embedded-image OCR (recognized text inserted
+      #   @param include_links [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeLinks] Preserve hyperlinks in Markdown output
       #
-      #   @param pdf [ContextDev::Models::ParseHandleParams::Pdf] PDF page-range controls. Use start/end to limit parsing (and OCR when ocr=true)
+      #   @param ocr [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr] When true for PDF inputs, detect and OCR images embedded in the selected pages,
       #
-      #   @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
+      #   @param pdf [ContextDev::Models::ParseHandleParams::Pdf] PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
+      #
+      #   @param shorten_base64_images [Boolean, Symbol, ContextDev::Models::ParseHandleParams::ShortenBase64Images] Shorten base64-encoded image data in the Markdown output
       #
       #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
-      #   @param use_main_content_only [Boolean] Extract only the main content from HTML-like inputs
+      #   @param use_main_content_only [Boolean, Symbol, ContextDev::Models::ParseHandleParams::UseMainContentOnly] Extract only the main content from HTML-like inputs
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Optional file extension hint. Case-insensitive; a leading dot is accepted (e.g.
-      # ".pdf").
+      # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
+      # md, py, rtf, jpg, png, or txt.
       module Extension
         extend ContextDev::Internal::Type::Enum
 
@@ -174,6 +178,84 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
+      # Include image references in Markdown output
+      module IncludeImages
+        extend ContextDev::Internal::Type::Union
+
+        variant ContextDev::Internal::Type::Boolean
+
+        variant const: -> { ContextDev::Models::ParseHandleParams::IncludeImages::TRUE }
+
+        variant const: -> { ContextDev::Models::ParseHandleParams::IncludeImages::FALSE }
+
+        # @!method self.variants
+        #   @return [Array(Boolean, Symbol)]
+
+        define_sorbet_constant!(:Variants) do
+          T.type_alias { T.any(T::Boolean, ContextDev::ParseHandleParams::IncludeImages::TaggedSymbol) }
+        end
+
+        # @!group
+
+        TRUE = :true
+        FALSE = :false
+
+        # @!endgroup
+      end
+
+      # Preserve hyperlinks in Markdown output
+      module IncludeLinks
+        extend ContextDev::Internal::Type::Union
+
+        variant ContextDev::Internal::Type::Boolean
+
+        variant const: -> { ContextDev::Models::ParseHandleParams::IncludeLinks::TRUE }
+
+        variant const: -> { ContextDev::Models::ParseHandleParams::IncludeLinks::FALSE }
+
+        # @!method self.variants
+        #   @return [Array(Boolean, Symbol)]
+
+        define_sorbet_constant!(:Variants) do
+          T.type_alias { T.any(T::Boolean, ContextDev::ParseHandleParams::IncludeLinks::TaggedSymbol) }
+        end
+
+        # @!group
+
+        TRUE = :true
+        FALSE = :false
+
+        # @!endgroup
+      end
+
+      # When true for PDF inputs, detect and OCR images embedded in the selected pages,
+      # inserting recognized text at each image's position in page reading order while
+      # preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
+      # When false, all OCR is disabled, including the automatic scanned-PDF fallback.
+      module Ocr
+        extend ContextDev::Internal::Type::Union
+
+        variant ContextDev::Internal::Type::Boolean
+
+        variant const: -> { ContextDev::Models::ParseHandleParams::Ocr::TRUE }
+
+        variant const: -> { ContextDev::Models::ParseHandleParams::Ocr::FALSE }
+
+        # @!method self.variants
+        #   @return [Array(Boolean, Symbol)]
+
+        define_sorbet_constant!(:Variants) do
+          T.type_alias { T.any(T::Boolean, ContextDev::ParseHandleParams::Ocr::TaggedSymbol) }
+        end
+
+        # @!group
+
+        TRUE = :true
+        FALSE = :false
+
+        # @!endgroup
+      end
+
       class Pdf < ContextDev::Internal::Type::BaseModel
         # @!attribute end_
         #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
@@ -192,12 +274,61 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::ParseHandleParams::Pdf} for more details.
         #
-        #   PDF page-range controls. Use start/end to limit parsing (and OCR when ocr=true)
-        #   to an inclusive 1-based page range.
+        #   PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
         #
         #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
         #
         #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+      end
+
+      # Shorten base64-encoded image data in the Markdown output
+      module ShortenBase64Images
+        extend ContextDev::Internal::Type::Union
+
+        variant ContextDev::Internal::Type::Boolean
+
+        variant const: -> { ContextDev::Models::ParseHandleParams::ShortenBase64Images::TRUE }
+
+        variant const: -> { ContextDev::Models::ParseHandleParams::ShortenBase64Images::FALSE }
+
+        # @!method self.variants
+        #   @return [Array(Boolean, Symbol)]
+
+        define_sorbet_constant!(:Variants) do
+          T.type_alias { T.any(T::Boolean, ContextDev::ParseHandleParams::ShortenBase64Images::TaggedSymbol) }
+        end
+
+        # @!group
+
+        TRUE = :true
+        FALSE = :false
+
+        # @!endgroup
+      end
+
+      # Extract only the main content from HTML-like inputs
+      module UseMainContentOnly
+        extend ContextDev::Internal::Type::Union
+
+        variant ContextDev::Internal::Type::Boolean
+
+        variant const: -> { ContextDev::Models::ParseHandleParams::UseMainContentOnly::TRUE }
+
+        variant const: -> { ContextDev::Models::ParseHandleParams::UseMainContentOnly::FALSE }
+
+        # @!method self.variants
+        #   @return [Array(Boolean, Symbol)]
+
+        define_sorbet_constant!(:Variants) do
+          T.type_alias { T.any(T::Boolean, ContextDev::ParseHandleParams::UseMainContentOnly::TaggedSymbol) }
+        end
+
+        # @!group
+
+        TRUE = :true
+        FALSE = :false
+
+        # @!endgroup
       end
     end
   end

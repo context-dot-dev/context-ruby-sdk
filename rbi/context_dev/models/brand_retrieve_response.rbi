@@ -247,8 +247,7 @@ module ContextDev
         sig { params(phone: String).void }
         attr_writer :phone
 
-        # The primary language of the brand's website content. Detected from the HTML lang
-        # tag, page content analysis, or social media descriptions.
+        # Language to force for the retrieved brand data.
         sig do
           returns(
             T.nilable(
@@ -372,8 +371,7 @@ module ContextDev
           logos: nil,
           # Company phone number
           phone: nil,
-          # The primary language of the brand's website content. Detected from the HTML lang
-          # tag, page content analysis, or social media descriptions.
+          # Language to force for the retrieved brand data.
           primary_language: nil,
           # The brand's slogan
           slogan: nil,
@@ -1280,11 +1278,6 @@ module ContextDev
                   :"Creator Economy & Influencer Platforms",
                   ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Subindustry::TaggedSymbol
                 )
-              ADVERTISING_ADTECH_MEDIA_BUYING =
-                T.let(
-                  :"Advertising, Adtech & Media Buying",
-                  ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Subindustry::TaggedSymbol
-                )
               FILM_TV_PRODUCTION_STUDIOS =
                 T.let(
                   :"Film, TV & Production Studios",
@@ -1583,6 +1576,11 @@ module ContextDev
               NEWS_PUBLISHING_JOURNALISM =
                 T.let(
                   :"News Publishing & Journalism",
+                  ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Subindustry::TaggedSymbol
+                )
+              ADVERTISING_ADTECH_MEDIA_BUYING =
+                T.let(
+                  :"Advertising, Adtech & Media Buying",
                   ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Subindustry::TaggedSymbol
                 )
               DIGITAL_MEDIA_CONTENT_PLATFORMS =
@@ -2537,8 +2535,7 @@ module ContextDev
           end
         end
 
-        # The primary language of the brand's website content. Detected from the HTML lang
-        # tag, page content analysis, or social media descriptions.
+        # Language to force for the retrieved brand data.
         module PrimaryLanguage
           extend ContextDev::Internal::Type::Enum
 

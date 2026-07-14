@@ -4,43 +4,58 @@ module ContextDev
   module Resources
     class Parse
       # Converts raw text, source code, web/data, PDF, Microsoft Office, and image bytes
-      # into LLM-usable Markdown. The base request costs 1 credit. When OCR runs
-      # (requires ocr=true), the entire call costs 5 credits; ocr=true requests where no
-      # OCR ends up running still cost 1 credit.
+      # into LLM-usable Markdown.
       sig do
         params(
           body: ContextDev::Internal::FileInput,
+          client: String,
           extension: ContextDev::ParseHandleParams::Extension::OrSymbol,
-          include_images: T::Boolean,
-          include_links: T::Boolean,
-          ocr: T::Boolean,
+          include_images:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::IncludeImages::OrSymbol
+            ),
+          include_links:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::IncludeLinks::OrSymbol
+            ),
+          ocr: T.any(T::Boolean, ContextDev::ParseHandleParams::Ocr::OrSymbol),
           pdf: ContextDev::ParseHandleParams::Pdf::OrHash,
-          shorten_base64_images: T::Boolean,
+          shorten_base64_images:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::ShortenBase64Images::OrSymbol
+            ),
           tags: T::Array[String],
-          use_main_content_only: T::Boolean,
+          use_main_content_only:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::UseMainContentOnly::OrSymbol
+            ),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::ParseHandleResponse)
       end
       def handle(
         # Body param
         body:,
-        # Query param: Optional file extension hint. Case-insensitive; a leading dot is
-        # accepted (e.g. ".pdf").
+        # Query param: Optional client identifier used for usage attribution.
+        client: nil,
+        # Query param: Optional file extension hint, such as pdf, docx, xlsx, pptx, html,
+        # json, csv, md, py, rtf, jpg, png, or txt.
         extension: nil,
         # Query param: Include image references in Markdown output
         include_images: nil,
         # Query param: Preserve hyperlinks in Markdown output
         include_links: nil,
-        # Query param: Gates all OCR. When true, PDFs get embedded-image OCR (recognized
-        # text inserted at each image's position in page reading order, preserving the
-        # text layer; pdf.start/pdf.end limit the page range), scanned PDFs with no text
-        # layer get full-document OCR, and raster images get their visible text
-        # transcribed. When false, no OCR runs: scanned PDFs may yield no content and
-        # images return only format/dimension metadata. Calls where OCR actually runs cost
-        # 5 credits instead of 1.
+        # Query param: When true for PDF inputs, detect and OCR images embedded in the
+        # selected pages, inserting recognized text at each image's position in page
+        # reading order while preserving the PDF text layer. pdf.start/pdf.end limit the
+        # inclusive page range. When false, all OCR is disabled, including the automatic
+        # scanned-PDF fallback.
         ocr: nil,
-        # Query param: PDF page-range controls. Use start/end to limit parsing (and OCR
-        # when ocr=true) to an inclusive 1-based page range.
+        # Query param: PDF page-range options as a JSON object, e.g. {"start": 2, "end":
+        # 5}.
         pdf: nil,
         # Query param: Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,

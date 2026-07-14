@@ -106,15 +106,7 @@ module ContextDev
               )
             )
           end
-          attr_reader :force_language
-
-          sig do
-            params(
-              force_language:
-                ContextDev::BrandRetrieveParams::Body::ByDomain::ForceLanguage::OrSymbol
-            ).void
-          end
-          attr_writer :force_language
+          attr_accessor :force_language
 
           # Maximum age in milliseconds for cached brand data before the API performs a hard
           # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
@@ -158,7 +150,9 @@ module ContextDev
             params(
               domain: String,
               force_language:
-                ContextDev::BrandRetrieveParams::Body::ByDomain::ForceLanguage::OrSymbol,
+                T.nilable(
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::ForceLanguage::OrSymbol
+                ),
               max_age_ms: Integer,
               max_speed: T::Boolean,
               tags: T::Array[String],
@@ -198,7 +192,9 @@ module ContextDev
                 domain: String,
                 type: Symbol,
                 force_language:
-                  ContextDev::BrandRetrieveParams::Body::ByDomain::ForceLanguage::OrSymbol,
+                  T.nilable(
+                    ContextDev::BrandRetrieveParams::Body::ByDomain::ForceLanguage::OrSymbol
+                  ),
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
                 tags: T::Array[String],
@@ -866,15 +862,7 @@ module ContextDev
               )
             )
           end
-          attr_reader :force_language
-
-          sig do
-            params(
-              force_language:
-                ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage::OrSymbol
-            ).void
-          end
-          attr_writer :force_language
+          attr_accessor :force_language
 
           # Maximum age in milliseconds for cached brand data before the API performs a hard
           # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
@@ -920,7 +908,9 @@ module ContextDev
               name: String,
               country_gl: String,
               force_language:
-                ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage::OrSymbol,
+                T.nilable(
+                  ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage::OrSymbol
+                ),
               max_age_ms: Integer,
               max_speed: T::Boolean,
               tags: T::Array[String],
@@ -964,7 +954,9 @@ module ContextDev
                 type: Symbol,
                 country_gl: String,
                 force_language:
-                  ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage::OrSymbol,
+                  T.nilable(
+                    ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage::OrSymbol
+                  ),
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
                 tags: T::Array[String],
@@ -1624,15 +1616,7 @@ module ContextDev
               )
             )
           end
-          attr_reader :force_language
-
-          sig do
-            params(
-              force_language:
-                ContextDev::BrandRetrieveParams::Body::ByEmail::ForceLanguage::OrSymbol
-            ).void
-          end
-          attr_writer :force_language
+          attr_accessor :force_language
 
           # Maximum age in milliseconds for cached brand data before the API performs a hard
           # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
@@ -1678,7 +1662,9 @@ module ContextDev
             params(
               email: String,
               force_language:
-                ContextDev::BrandRetrieveParams::Body::ByEmail::ForceLanguage::OrSymbol,
+                T.nilable(
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::ForceLanguage::OrSymbol
+                ),
               max_age_ms: Integer,
               max_speed: T::Boolean,
               tags: T::Array[String],
@@ -1718,7 +1704,9 @@ module ContextDev
                 email: String,
                 type: Symbol,
                 force_language:
-                  ContextDev::BrandRetrieveParams::Body::ByEmail::ForceLanguage::OrSymbol,
+                  T.nilable(
+                    ContextDev::BrandRetrieveParams::Body::ByEmail::ForceLanguage::OrSymbol
+                  ),
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
                 tags: T::Array[String],
@@ -2378,15 +2366,7 @@ module ContextDev
               )
             )
           end
-          attr_reader :force_language
-
-          sig do
-            params(
-              force_language:
-                ContextDev::BrandRetrieveParams::Body::ByTicker::ForceLanguage::OrSymbol
-            ).void
-          end
-          attr_writer :force_language
+          attr_accessor :force_language
 
           # Maximum age in milliseconds for cached brand data before the API performs a hard
           # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
@@ -2438,7 +2418,9 @@ module ContextDev
             params(
               ticker: String,
               force_language:
-                ContextDev::BrandRetrieveParams::Body::ByTicker::ForceLanguage::OrSymbol,
+                T.nilable(
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::ForceLanguage::OrSymbol
+                ),
               max_age_ms: Integer,
               max_speed: T::Boolean,
               tags: T::Array[String],
@@ -2481,7 +2463,9 @@ module ContextDev
                 ticker: String,
                 type: Symbol,
                 force_language:
-                  ContextDev::BrandRetrieveParams::Body::ByTicker::ForceLanguage::OrSymbol,
+                  T.nilable(
+                    ContextDev::BrandRetrieveParams::Body::ByTicker::ForceLanguage::OrSymbol
+                  ),
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
                 tags: T::Array[String],
@@ -3239,15 +3223,7 @@ module ContextDev
               )
             )
           end
-          attr_reader :force_language
-
-          sig do
-            params(
-              force_language:
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage::OrSymbol
-            ).void
-          end
-          attr_writer :force_language
+          attr_accessor :force_language
 
           # When set to true, the API performs additional verification to ensure the
           # identified brand matches the transaction with high confidence.
@@ -3268,17 +3244,39 @@ module ContextDev
 
           # Optional Merchant Category Code (MCC) to help identify the business category or
           # industry.
-          sig { returns(T.nilable(Integer)) }
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Mcc::Variants
+              )
+            )
+          end
           attr_reader :mcc
 
-          sig { params(mcc: Integer).void }
+          sig do
+            params(
+              mcc:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Mcc::Variants
+            ).void
+          end
           attr_writer :mcc
 
           # Optional phone number from the transaction to help verify brand match.
-          sig { returns(T.nilable(Float)) }
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone::Variants
+              )
+            )
+          end
           attr_reader :phone
 
-          sig { params(phone: Float).void }
+          sig do
+            params(
+              phone:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone::Variants
+            ).void
+          end
           attr_writer :phone
 
           # Optional caller-defined tags for tracking this request. Tags are recorded on the
@@ -3307,11 +3305,15 @@ module ContextDev
               city: String,
               country_gl: String,
               force_language:
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage::OrSymbol,
+                T.nilable(
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage::OrSymbol
+                ),
               high_confidence_only: T::Boolean,
               max_speed: T::Boolean,
-              mcc: Integer,
-              phone: Float,
+              mcc:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Mcc::Variants,
+              phone:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone::Variants,
               tags: T::Array[String],
               timeout_ms: Integer,
               type: Symbol
@@ -3359,11 +3361,15 @@ module ContextDev
                 city: String,
                 country_gl: String,
                 force_language:
-                  ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage::OrSymbol,
+                  T.nilable(
+                    ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage::OrSymbol
+                  ),
                 high_confidence_only: T::Boolean,
                 max_speed: T::Boolean,
-                mcc: Integer,
-                phone: Float,
+                mcc:
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::Mcc::Variants,
+                phone:
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone::Variants,
                 tags: T::Array[String],
                 timeout_ms: Integer
               }
@@ -3993,6 +3999,41 @@ module ContextDev
               )
             end
             def self.values
+            end
+          end
+
+          # Optional Merchant Category Code (MCC) to help identify the business category or
+          # industry.
+          module Mcc
+            extend ContextDev::Internal::Type::Union
+
+            Variants = T.type_alias { T.any(String, Float) }
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::Mcc::Variants
+                ]
+              )
+            end
+            def self.variants
+            end
+          end
+
+          # Optional phone number from the transaction to help verify brand match.
+          module Phone
+            extend ContextDev::Internal::Type::Union
+
+            Variants = T.type_alias { T.any(String, Float) }
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone::Variants
+                ]
+              )
+            end
+            def self.variants
             end
           end
         end

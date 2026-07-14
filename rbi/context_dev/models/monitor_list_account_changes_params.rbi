@@ -14,6 +14,7 @@ module ContextDev
           )
         end
 
+      # Filter by change detection type.
       sig do
         returns(
           T.nilable(
@@ -31,24 +32,28 @@ module ContextDev
       end
       attr_writer :change_detection_type
 
+      # Opaque pagination cursor from a previous response.
       sig { returns(T.nilable(String)) }
       attr_reader :cursor
 
       sig { params(cursor: String).void }
       attr_writer :cursor
 
+      # Maximum number of items to return per page (1-100). Defaults to 25.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
       sig { params(limit: Integer).void }
       attr_writer :limit
 
+      # Filter changes to a single monitor.
       sig { returns(T.nilable(String)) }
       attr_reader :monitor_id
 
       sig { params(monitor_id: String).void }
       attr_writer :monitor_id
 
+      # Only include items at or after this ISO 8601 timestamp.
       sig { returns(T.nilable(Time)) }
       attr_reader :since
 
@@ -62,6 +67,7 @@ module ContextDev
       sig { params(tag: String).void }
       attr_writer :tag
 
+      # Filter by target type.
       sig do
         returns(
           T.nilable(
@@ -79,6 +85,7 @@ module ContextDev
       end
       attr_writer :target_type
 
+      # Only include items before this ISO 8601 timestamp.
       sig { returns(T.nilable(Time)) }
       attr_reader :until_
 
@@ -101,14 +108,21 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Filter by change detection type.
         change_detection_type: nil,
+        # Opaque pagination cursor from a previous response.
         cursor: nil,
+        # Maximum number of items to return per page (1-100). Defaults to 25.
         limit: nil,
+        # Filter changes to a single monitor.
         monitor_id: nil,
+        # Only include items at or after this ISO 8601 timestamp.
         since: nil,
         # Filter to items that have this tag.
         tag: nil,
+        # Filter by target type.
         target_type: nil,
+        # Only include items before this ISO 8601 timestamp.
         until_: nil,
         request_options: {}
       )
@@ -134,6 +148,7 @@ module ContextDev
       def to_hash
       end
 
+      # Filter by change detection type.
       module ChangeDetectionType
         extend ContextDev::Internal::Type::Enum
 
@@ -168,6 +183,7 @@ module ContextDev
         end
       end
 
+      # Filter by target type.
       module TargetType
         extend ContextDev::Internal::Type::Enum
 

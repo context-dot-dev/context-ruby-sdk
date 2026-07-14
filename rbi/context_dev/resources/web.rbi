@@ -108,7 +108,7 @@ module ContextDev
         params(
           direct_url: String,
           domain: String,
-          max_age_ms: Integer,
+          max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
@@ -123,7 +123,7 @@ module ContextDev
         # domain will be automatically normalized and validated. You must provide either
         # 'domain' or 'directUrl', but not both.
         domain: nil,
-        # Maximum age in milliseconds for cached data before the API performs a hard
+        # Maximum age in milliseconds for cached brand data before the API performs a hard
         # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
         # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
         # year.
@@ -148,7 +148,7 @@ module ContextDev
             ContextDev::WebExtractStyleguideParams::ColorScheme::OrSymbol,
           direct_url: String,
           domain: String,
-          max_age_ms: Integer,
+          max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
@@ -167,7 +167,7 @@ module ContextDev
         # domain will be automatically normalized and validated. You must provide either
         # 'domain' or 'directUrl', but not both.
         domain: nil,
-        # Maximum age in milliseconds for cached data before the API performs a hard
+        # Maximum age in milliseconds for cached brand data before the API performs a hard
         # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
         # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
         # year.
@@ -194,14 +194,17 @@ module ContextDev
           full_screenshot:
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
           handle_cookie_popup:
-            ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol,
-          max_age_ms: Integer,
+            T.any(
+              T::Boolean,
+              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
+            ),
+          max_age_ms: T.nilable(Integer),
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
-          scroll_offset: Integer,
+          scroll_offset: T.nilable(Integer),
           tags: T::Array[String],
           timeout_ms: Integer,
           viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
-          wait_for_ms: Integer,
+          wait_for_ms: T.nilable(Integer),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebScreenshotResponse)
       end
@@ -209,8 +212,9 @@ module ContextDev
         # Optional parameter to choose the site's visual theme in the screenshot. Use
         # 'light' or 'dark' when the site offers both appearances.
         color_scheme: nil,
-        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
-        # When provided, Context.dev fetches the target page from that country.
+        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+        # residential proxy exit location. Must be one of Context.dev's supported
+        # countries. When provided, Context.dev fetches the target page from that country.
         country: nil,
         # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
         # 'https://example.com/pricing'). When provided, the screenshot is taken of this
@@ -414,25 +418,38 @@ module ContextDev
         params(
           url: String,
           country: ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol,
-          exclude_selectors: T::Array[String],
+          exclude_selectors: T.nilable(T::Array[String]),
           headers: T::Hash[Symbol, String],
-          include_frames: T::Boolean,
-          include_selectors: T::Array[String],
-          max_age_ms: Integer,
+          include_frames:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeHTMLParams::IncludeFrames::OrSymbol
+            ),
+          include_selectors: T.nilable(T::Array[String]),
+          max_age_ms: T.nilable(Integer),
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
-          settle_animations: T::Boolean,
+          settle_animations:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeHTMLParams::SettleAnimations::OrSymbol
+            ),
           tags: T::Array[String],
           timeout_ms: Integer,
-          use_main_content_only: T::Boolean,
-          wait_for_ms: Integer,
+          use_main_content_only:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeHTMLParams::UseMainContentOnly::OrSymbol
+            ),
+          wait_for_ms: T.nilable(Integer),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeHTMLResponse)
       end
       def web_scrape_html(
         # Full URL to scrape (must include http:// or https:// protocol)
         url:,
-        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
-        # When provided, Context.dev fetches the target page from that country.
+        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+        # residential proxy exit location. Must be one of Context.dev's supported
+        # countries. When provided, Context.dev fetches the target page from that country.
         country: nil,
         # CSS selectors to remove from the result. Applied after includeSelectors.
         # Exclusion takes precedence: an element matching both is removed. Examples:
@@ -484,13 +501,18 @@ module ContextDev
       sig do
         params(
           url: String,
-          dedupe: T::Boolean,
-          enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash,
+          dedupe:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeImagesParams::Dedupe::OrSymbol
+            ),
+          enrichment:
+            T.nilable(ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash),
           headers: T::Hash[Symbol, String],
-          max_age_ms: Integer,
+          max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
           timeout_ms: Integer,
-          wait_for_ms: Integer,
+          wait_for_ms: T.nilable(Integer),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeImagesResponse)
       end
@@ -547,20 +569,44 @@ module ContextDev
         params(
           url: String,
           country: ContextDev::WebWebScrapeMdParams::Country::OrSymbol,
-          exclude_selectors: T::Array[String],
+          exclude_selectors: T.nilable(T::Array[String]),
           headers: T::Hash[Symbol, String],
-          include_frames: T::Boolean,
-          include_images: T::Boolean,
-          include_links: T::Boolean,
-          include_selectors: T::Array[String],
-          max_age_ms: Integer,
+          include_frames:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::IncludeFrames::OrSymbol
+            ),
+          include_images:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::IncludeImages::OrSymbol
+            ),
+          include_links:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::IncludeLinks::OrSymbol
+            ),
+          include_selectors: T.nilable(T::Array[String]),
+          max_age_ms: T.nilable(Integer),
           pdf: ContextDev::WebWebScrapeMdParams::Pdf::OrHash,
-          settle_animations: T::Boolean,
-          shorten_base64_images: T::Boolean,
+          settle_animations:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::SettleAnimations::OrSymbol
+            ),
+          shorten_base64_images:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::ShortenBase64Images::OrSymbol
+            ),
           tags: T::Array[String],
           timeout_ms: Integer,
-          use_main_content_only: T::Boolean,
-          wait_for_ms: Integer,
+          use_main_content_only:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::UseMainContentOnly::OrSymbol
+            ),
+          wait_for_ms: T.nilable(Integer),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeMdResponse)
       end
@@ -568,8 +614,9 @@ module ContextDev
         # Full URL to scrape into LLM usable Markdown (must include http:// or https://
         # protocol)
         url:,
-        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
-        # When provided, Context.dev fetches the target page from that country.
+        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+        # residential proxy exit location. Must be one of Context.dev's supported
+        # countries. When provided, Context.dev fetches the target page from that country.
         country: nil,
         # CSS selectors to remove before conversion to Markdown. Applied after
         # includeSelectors. Exclusion takes precedence: an element matching both is
@@ -626,6 +673,7 @@ module ContextDev
           domain: String,
           headers: T::Hash[Symbol, String],
           max_links: Integer,
+          sitemap_url: String,
           tags: T::Array[String],
           timeout_ms: Integer,
           url_regex: String,
@@ -642,6 +690,9 @@ module ContextDev
         # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
         # Minimum is 1, maximum is 100,000.
         max_links: nil,
+        # Optional explicit sitemap URL. When provided, exactly this sitemap is crawled
+        # instead of discovering the domain's sitemaps.
+        sitemap_url: nil,
         # Optional comma-separated caller-defined tags for tracking this request. Tags are
         # recorded on the request's usage log and can be used to filter usage on the
         # dashboard usage page. Up to 20 tags, each 1-50 characters.

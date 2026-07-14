@@ -8,16 +8,19 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute change_detection_type
+      #   Filter by change detection type.
       #
       #   @return [Symbol, ContextDev::Models::MonitorListParams::ChangeDetectionType, nil]
       optional :change_detection_type, enum: -> { ContextDev::MonitorListParams::ChangeDetectionType }
 
       # @!attribute cursor
+      #   Opaque pagination cursor from a previous response.
       #
       #   @return [String, nil]
       optional :cursor, String
 
       # @!attribute limit
+      #   Maximum number of items to return per page (1-100). Defaults to 25.
       #
       #   @return [Integer, nil]
       optional :limit, Integer
@@ -34,7 +37,8 @@ module ContextDev
       #
       #   @return [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil]
       optional :search_by,
-               -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::MonitorListParams::SearchBy] }
+               -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::MonitorListParams::SearchBy] },
+               nil?: true
 
       # @!attribute search_type
       #   `prefix` for as-you-type prefix matching (default), `exact` for full-token
@@ -44,11 +48,7 @@ module ContextDev
       optional :search_type, enum: -> { ContextDev::MonitorListParams::SearchType }
 
       # @!attribute status
-      #   Monitor lifecycle status. `failed` means the most recent run failed (see the
-      #   monitor's `last_error`); failed monitors keep running on schedule and flip back
-      #   to `active` on the next successful run. Monitors are auto-`paused` after
-      #   repeated consecutive failures or insufficient-credit skips; resume by PATCHing
-      #   status to `active`.
+      #   Filter monitors by lifecycle status.
       #
       #   @return [Symbol, ContextDev::Models::MonitorListParams::Status, nil]
       optional :status, enum: -> { ContextDev::MonitorListParams::Status }
@@ -63,9 +63,10 @@ module ContextDev
       #   Comma-separated list of tags to filter by (matches monitors having any of them).
       #
       #   @return [Array<String>, nil]
-      optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+      optional :tags, ContextDev::Internal::Type::ArrayOf[String], nil?: true
 
       # @!attribute target_type
+      #   Filter by target type.
       #
       #   @return [Symbol, ContextDev::Models::MonitorListParams::TargetType, nil]
       optional :target_type, enum: -> { ContextDev::MonitorListParams::TargetType }
@@ -74,28 +75,29 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorListParams} for more details.
       #
-      #   @param change_detection_type [Symbol, ContextDev::Models::MonitorListParams::ChangeDetectionType]
+      #   @param change_detection_type [Symbol, ContextDev::Models::MonitorListParams::ChangeDetectionType] Filter by change detection type.
       #
-      #   @param cursor [String]
+      #   @param cursor [String] Opaque pagination cursor from a previous response.
       #
-      #   @param limit [Integer]
+      #   @param limit [Integer] Maximum number of items to return per page (1-100). Defaults to 25.
       #
       #   @param q [String] Free-text search term, matched against the fields named in `search_by`.
       #
-      #   @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>] Comma-separated fields to search with `q`. Defaults to all of them. Note `instru
+      #   @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil] Comma-separated fields to search with `q`. Defaults to all of them. Note `instru
       #
       #   @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
       #
-      #   @param status [Symbol, ContextDev::Models::MonitorListParams::Status] Monitor lifecycle status. `failed` means the most recent run failed (see the mon
+      #   @param status [Symbol, ContextDev::Models::MonitorListParams::Status] Filter monitors by lifecycle status.
       #
       #   @param tag [String] Filter to items that have this tag.
       #
-      #   @param tags [Array<String>] Comma-separated list of tags to filter by (matches monitors having any of them).
+      #   @param tags [Array<String>, nil] Comma-separated list of tags to filter by (matches monitors having any of them).
       #
-      #   @param target_type [Symbol, ContextDev::Models::MonitorListParams::TargetType]
+      #   @param target_type [Symbol, ContextDev::Models::MonitorListParams::TargetType] Filter by target type.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
+      # Filter by change detection type.
       module ChangeDetectionType
         extend ContextDev::Internal::Type::Enum
 
@@ -130,11 +132,7 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Monitor lifecycle status. `failed` means the most recent run failed (see the
-      # monitor's `last_error`); failed monitors keep running on schedule and flip back
-      # to `active` on the next successful run. Monitors are auto-`paused` after
-      # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
-      # status to `active`.
+      # Filter monitors by lifecycle status.
       module Status
         extend ContextDev::Internal::Type::Enum
 
@@ -146,6 +144,7 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
+      # Filter by target type.
       module TargetType
         extend ContextDev::Internal::Type::Enum
 

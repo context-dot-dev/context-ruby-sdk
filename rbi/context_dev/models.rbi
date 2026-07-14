@@ -50,8 +50,6 @@ module ContextDev
 
   WebExtractStyleguideParams = ContextDev::Models::WebExtractStyleguideParams
 
-  WebhookDelivery = ContextDev::Models::WebhookDelivery
-
   WebScreenshotParams = ContextDev::Models::WebScreenshotParams
 
   WebSearchParams = ContextDev::Models::WebSearchParams

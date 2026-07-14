@@ -212,7 +212,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
   def test_web_scrape_sitemap_required_params
     skip("Mock server tests are disabled")
 
-    response = @context_dev.web.web_scrape_sitemap(domain: "domain")
+    response = @context_dev.web.web_scrape_sitemap(domain: "xxx")
 
     assert_pattern do
       response => ContextDev::Models::WebWebScrapeSitemapResponse
