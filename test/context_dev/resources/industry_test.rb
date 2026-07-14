@@ -6,7 +6,7 @@ class ContextDev::Test::Resources::IndustryTest < ContextDev::Test::ResourceTest
   def test_retrieve_naics_required_params
     skip("Mock server tests are disabled")
 
-    response = @context_dev.industry.retrieve_naics(input: "input")
+    response = @context_dev.industry.retrieve_naics(input: "xxxx")
 
     assert_pattern do
       response => ContextDev::Models::IndustryRetrieveNaicsResponse
@@ -26,7 +26,7 @@ class ContextDev::Test::Resources::IndustryTest < ContextDev::Test::ResourceTest
   def test_retrieve_sic_required_params
     skip("Mock server tests are disabled")
 
-    response = @context_dev.industry.retrieve_sic(input: "input")
+    response = @context_dev.industry.retrieve_sic(input: "xxxx")
 
     assert_pattern do
       response => ContextDev::Models::IndustryRetrieveSicResponse

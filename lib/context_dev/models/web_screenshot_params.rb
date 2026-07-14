@@ -15,8 +15,9 @@ module ContextDev
       optional :color_scheme, enum: -> { ContextDev::WebScreenshotParams::ColorScheme }
 
       # @!attribute country
-      #   Two-letter ISO 3166-1 alpha-2 country code for the website request location.
-      #   When provided, Context.dev fetches the target page from that country.
+      #   Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+      #   residential proxy exit location. Must be one of Context.dev's supported
+      #   countries. When provided, Context.dev fetches the target page from that country.
       #
       #   @return [Symbol, ContextDev::Models::WebScreenshotParams::Country, nil]
       optional :country, enum: -> { ContextDev::WebScreenshotParams::Country }
@@ -50,8 +51,8 @@ module ContextDev
       #   dismiss cookie banner before capture. If 'false' or not provided, captures the
       #   page without that step.
       #
-      #   @return [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup, nil]
-      optional :handle_cookie_popup, enum: -> { ContextDev::WebScreenshotParams::HandleCookiePopup }
+      #   @return [Boolean, Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup, nil]
+      optional :handle_cookie_popup, union: -> { ContextDev::WebScreenshotParams::HandleCookiePopup }
 
       # @!attribute max_age_ms
       #   Return a cached screenshot if a prior screenshot for the same parameters exists
@@ -59,7 +60,7 @@ module ContextDev
       #   omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
       #
       #   @return [Integer, nil]
-      optional :max_age_ms, Integer
+      optional :max_age_ms, Integer, nil?: true
 
       # @!attribute page
       #   Optional parameter to specify which page type to screenshot. If provided, the
@@ -80,7 +81,7 @@ module ContextDev
       #   precedence over fullScreenshot. Max: 100000.
       #
       #   @return [Integer, nil]
-      optional :scroll_offset, Integer
+      optional :scroll_offset, Integer, nil?: true
 
       # @!attribute tags
       #   Optional comma-separated caller-defined tags for tracking this request. Tags are
@@ -110,7 +111,7 @@ module ContextDev
       #   omitted.
       #
       #   @return [Integer, nil]
-      optional :wait_for_ms, Integer
+      optional :wait_for_ms, Integer, nil?: true
 
       # @!method initialize(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
@@ -118,7 +119,7 @@ module ContextDev
       #
       #   @param color_scheme [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
       #
-      #   @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
+      #   @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
       #
       #   @param direct_url [String] A specific URL to screenshot directly, bypassing domain resolution (e.g., 'https
       #
@@ -126,13 +127,13 @@ module ContextDev
       #
       #   @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
-      #   @param handle_cookie_popup [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
+      #   @param handle_cookie_popup [Boolean, Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
       #
-      #   @param max_age_ms [Integer] Return a cached screenshot if a prior screenshot for the same parameters exists
+      #   @param max_age_ms [Integer, nil] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
       #   @param page [Symbol, ContextDev::Models::WebScreenshotParams::Page] Optional parameter to specify which page type to screenshot. If provided, the sy
       #
-      #   @param scroll_offset [Integer] Optional vertical scroll offset in pixels for capturing a long page in viewport-
+      #   @param scroll_offset [Integer, nil] Optional vertical scroll offset in pixels for capturing a long page in viewport-
       #
       #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
@@ -140,7 +141,7 @@ module ContextDev
       #
       #   @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       #
-      #   @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load before taking
+      #   @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before taking
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -156,8 +157,9 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
-      # When provided, Context.dev fetches the target page from that country.
+      # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+      # residential proxy exit location. Must be one of Context.dev's supported
+      # countries. When provided, Context.dev fetches the target page from that country.
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -387,13 +389,27 @@ module ContextDev
       # dismiss cookie banner before capture. If 'false' or not provided, captures the
       # page without that step.
       module HandleCookiePopup
-        extend ContextDev::Internal::Type::Enum
+        extend ContextDev::Internal::Type::Union
+
+        variant ContextDev::Internal::Type::Boolean
+
+        variant const: -> { ContextDev::Models::WebScreenshotParams::HandleCookiePopup::TRUE }
+
+        variant const: -> { ContextDev::Models::WebScreenshotParams::HandleCookiePopup::FALSE }
+
+        # @!method self.variants
+        #   @return [Array(Boolean, Symbol)]
+
+        define_sorbet_constant!(:Variants) do
+          T.type_alias { T.any(T::Boolean, ContextDev::WebScreenshotParams::HandleCookiePopup::TaggedSymbol) }
+        end
+
+        # @!group
 
         TRUE = :true
         FALSE = :false
 
-        # @!method self.values
-        #   @return [Array<Symbol>]
+        # @!endgroup
       end
 
       # Optional parameter to specify which page type to screenshot. If provided, the

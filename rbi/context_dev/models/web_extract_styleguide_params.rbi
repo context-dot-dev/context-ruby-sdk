@@ -52,15 +52,12 @@ module ContextDev
       sig { params(domain: String).void }
       attr_writer :domain
 
-      # Maximum age in milliseconds for cached data before the API performs a hard
+      # Maximum age in milliseconds for cached brand data before the API performs a hard
       # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
       # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
       # year.
       sig { returns(T.nilable(Integer)) }
-      attr_reader :max_age_ms
-
-      sig { params(max_age_ms: Integer).void }
-      attr_writer :max_age_ms
+      attr_accessor :max_age_ms
 
       # Optional comma-separated caller-defined tags for tracking this request. Tags are
       # recorded on the request's usage log and can be used to filter usage on the
@@ -86,7 +83,7 @@ module ContextDev
             ContextDev::WebExtractStyleguideParams::ColorScheme::OrSymbol,
           direct_url: String,
           domain: String,
-          max_age_ms: Integer,
+          max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
@@ -105,7 +102,7 @@ module ContextDev
         # domain will be automatically normalized and validated. You must provide either
         # 'domain' or 'directUrl', but not both.
         domain: nil,
-        # Maximum age in milliseconds for cached data before the API performs a hard
+        # Maximum age in milliseconds for cached brand data before the API performs a hard
         # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
         # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
         # year.
@@ -129,7 +126,7 @@ module ContextDev
               ContextDev::WebExtractStyleguideParams::ColorScheme::OrSymbol,
             direct_url: String,
             domain: String,
-            max_age_ms: Integer,
+            max_age_ms: T.nilable(Integer),
             tags: T::Array[String],
             timeout_ms: Integer,
             request_options: ContextDev::RequestOptions

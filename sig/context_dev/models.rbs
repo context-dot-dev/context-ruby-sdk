@@ -45,8 +45,6 @@ module ContextDev
 
   class WebExtractStyleguideParams = ContextDev::Models::WebExtractStyleguideParams
 
-  class WebhookDelivery = ContextDev::Models::WebhookDelivery
-
   class WebScreenshotParams = ContextDev::Models::WebScreenshotParams
 
   class WebSearchParams = ContextDev::Models::WebSearchParams

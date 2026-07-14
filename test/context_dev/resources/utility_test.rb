@@ -6,7 +6,7 @@ class ContextDev::Test::Resources::UtilityTest < ContextDev::Test::ResourceTest
   def test_prefetch_required_params
     skip("Mock server tests are disabled")
 
-    response = @context_dev.utility.prefetch(identifier: {domain: "domain"}, type: :brand)
+    response = @context_dev.utility.prefetch(identifier: {domain: "xxx"}, type: :brand)
 
     assert_pattern do
       response => ContextDev::Models::UtilityPrefetchResponse

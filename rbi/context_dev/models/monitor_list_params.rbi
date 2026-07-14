@@ -11,6 +11,7 @@ module ContextDev
           T.any(ContextDev::MonitorListParams, ContextDev::Internal::AnyHash)
         end
 
+      # Filter by change detection type.
       sig do
         returns(
           T.nilable(
@@ -28,12 +29,14 @@ module ContextDev
       end
       attr_writer :change_detection_type
 
+      # Opaque pagination cursor from a previous response.
       sig { returns(T.nilable(String)) }
       attr_reader :cursor
 
       sig { params(cursor: String).void }
       attr_writer :cursor
 
+      # Maximum number of items to return per page (1-100). Defaults to 25.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
@@ -54,14 +57,7 @@ module ContextDev
           T.nilable(T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol])
         )
       end
-      attr_reader :search_by
-
-      sig do
-        params(
-          search_by: T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol]
-        ).void
-      end
-      attr_writer :search_by
+      attr_accessor :search_by
 
       # `prefix` for as-you-type prefix matching (default), `exact` for full-token
       # matching.
@@ -77,11 +73,7 @@ module ContextDev
       end
       attr_writer :search_type
 
-      # Monitor lifecycle status. `failed` means the most recent run failed (see the
-      # monitor's `last_error`); failed monitors keep running on schedule and flip back
-      # to `active` on the next successful run. Monitors are auto-`paused` after
-      # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
-      # status to `active`.
+      # Filter monitors by lifecycle status.
       sig do
         returns(T.nilable(ContextDev::MonitorListParams::Status::OrSymbol))
       end
@@ -101,11 +93,9 @@ module ContextDev
 
       # Comma-separated list of tags to filter by (matches monitors having any of them).
       sig { returns(T.nilable(T::Array[String])) }
-      attr_reader :tags
+      attr_accessor :tags
 
-      sig { params(tags: T::Array[String]).void }
-      attr_writer :tags
-
+      # Filter by target type.
       sig do
         returns(T.nilable(ContextDev::MonitorListParams::TargetType::OrSymbol))
       end
@@ -126,18 +116,23 @@ module ContextDev
           limit: Integer,
           q: String,
           search_by:
-            T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol],
+            T.nilable(
+              T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol]
+            ),
           search_type: ContextDev::MonitorListParams::SearchType::OrSymbol,
           status: ContextDev::MonitorListParams::Status::OrSymbol,
           tag: String,
-          tags: T::Array[String],
+          tags: T.nilable(T::Array[String]),
           target_type: ContextDev::MonitorListParams::TargetType::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
       def self.new(
+        # Filter by change detection type.
         change_detection_type: nil,
+        # Opaque pagination cursor from a previous response.
         cursor: nil,
+        # Maximum number of items to return per page (1-100). Defaults to 25.
         limit: nil,
         # Free-text search term, matched against the fields named in `search_by`.
         q: nil,
@@ -147,16 +142,13 @@ module ContextDev
         # `prefix` for as-you-type prefix matching (default), `exact` for full-token
         # matching.
         search_type: nil,
-        # Monitor lifecycle status. `failed` means the most recent run failed (see the
-        # monitor's `last_error`); failed monitors keep running on schedule and flip back
-        # to `active` on the next successful run. Monitors are auto-`paused` after
-        # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
-        # status to `active`.
+        # Filter monitors by lifecycle status.
         status: nil,
         # Filter to items that have this tag.
         tag: nil,
         # Comma-separated list of tags to filter by (matches monitors having any of them).
         tags: nil,
+        # Filter by target type.
         target_type: nil,
         request_options: {}
       )
@@ -171,11 +163,13 @@ module ContextDev
             limit: Integer,
             q: String,
             search_by:
-              T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol],
+              T.nilable(
+                T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol]
+              ),
             search_type: ContextDev::MonitorListParams::SearchType::OrSymbol,
             status: ContextDev::MonitorListParams::Status::OrSymbol,
             tag: String,
-            tags: T::Array[String],
+            tags: T.nilable(T::Array[String]),
             target_type: ContextDev::MonitorListParams::TargetType::OrSymbol,
             request_options: ContextDev::RequestOptions
           }
@@ -184,6 +178,7 @@ module ContextDev
       def to_hash
       end
 
+      # Filter by change detection type.
       module ChangeDetectionType
         extend ContextDev::Internal::Type::Enum
 
@@ -272,11 +267,7 @@ module ContextDev
         end
       end
 
-      # Monitor lifecycle status. `failed` means the most recent run failed (see the
-      # monitor's `last_error`); failed monitors keep running on schedule and flip back
-      # to `active` on the next successful run. Monitors are auto-`paused` after
-      # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
-      # status to `active`.
+      # Filter monitors by lifecycle status.
       module Status
         extend ContextDev::Internal::Type::Enum
 
@@ -300,6 +291,7 @@ module ContextDev
         end
       end
 
+      # Filter by target type.
       module TargetType
         extend ContextDev::Internal::Type::Enum
 

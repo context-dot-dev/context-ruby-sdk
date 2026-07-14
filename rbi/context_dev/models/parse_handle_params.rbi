@@ -14,8 +14,15 @@ module ContextDev
       sig { returns(ContextDev::Internal::FileInput) }
       attr_accessor :body
 
-      # Optional file extension hint. Case-insensitive; a leading dot is accepted (e.g.
-      # ".pdf").
+      # Optional client identifier used for usage attribution.
+      sig { returns(T.nilable(String)) }
+      attr_reader :client
+
+      sig { params(client: String).void }
+      attr_writer :client
+
+      # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
+      # md, py, rtf, jpg, png, or txt.
       sig do
         returns(T.nilable(ContextDev::ParseHandleParams::Extension::OrSymbol))
       end
@@ -29,34 +36,74 @@ module ContextDev
       attr_writer :extension
 
       # Include image references in Markdown output
-      sig { returns(T.nilable(T::Boolean)) }
+      sig do
+        returns(
+          T.nilable(
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::IncludeImages::OrSymbol
+            )
+          )
+        )
+      end
       attr_reader :include_images
 
-      sig { params(include_images: T::Boolean).void }
+      sig do
+        params(
+          include_images:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::IncludeImages::OrSymbol
+            )
+        ).void
+      end
       attr_writer :include_images
 
       # Preserve hyperlinks in Markdown output
-      sig { returns(T.nilable(T::Boolean)) }
+      sig do
+        returns(
+          T.nilable(
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::IncludeLinks::OrSymbol
+            )
+          )
+        )
+      end
       attr_reader :include_links
 
-      sig { params(include_links: T::Boolean).void }
+      sig do
+        params(
+          include_links:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::IncludeLinks::OrSymbol
+            )
+        ).void
+      end
       attr_writer :include_links
 
-      # Gates all OCR. When true, PDFs get embedded-image OCR (recognized text inserted
-      # at each image's position in page reading order, preserving the text layer;
-      # pdf.start/pdf.end limit the page range), scanned PDFs with no text layer get
-      # full-document OCR, and raster images get their visible text transcribed. When
-      # false, no OCR runs: scanned PDFs may yield no content and images return only
-      # format/dimension metadata. Calls where OCR actually runs cost 5 credits instead
-      # of 1.
-      sig { returns(T.nilable(T::Boolean)) }
+      # When true for PDF inputs, detect and OCR images embedded in the selected pages,
+      # inserting recognized text at each image's position in page reading order while
+      # preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
+      # When false, all OCR is disabled, including the automatic scanned-PDF fallback.
+      sig do
+        returns(
+          T.nilable(
+            T.any(T::Boolean, ContextDev::ParseHandleParams::Ocr::OrSymbol)
+          )
+        )
+      end
       attr_reader :ocr
 
-      sig { params(ocr: T::Boolean).void }
+      sig do
+        params(
+          ocr: T.any(T::Boolean, ContextDev::ParseHandleParams::Ocr::OrSymbol)
+        ).void
+      end
       attr_writer :ocr
 
-      # PDF page-range controls. Use start/end to limit parsing (and OCR when ocr=true)
-      # to an inclusive 1-based page range.
+      # PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
       sig { returns(T.nilable(ContextDev::ParseHandleParams::Pdf)) }
       attr_reader :pdf
 
@@ -64,10 +111,27 @@ module ContextDev
       attr_writer :pdf
 
       # Shorten base64-encoded image data in the Markdown output
-      sig { returns(T.nilable(T::Boolean)) }
+      sig do
+        returns(
+          T.nilable(
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::ShortenBase64Images::OrSymbol
+            )
+          )
+        )
+      end
       attr_reader :shorten_base64_images
 
-      sig { params(shorten_base64_images: T::Boolean).void }
+      sig do
+        params(
+          shorten_base64_images:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::ShortenBase64Images::OrSymbol
+            )
+        ).void
+      end
       attr_writer :shorten_base64_images
 
       # Optional comma-separated caller-defined tags for tracking this request. Tags are
@@ -80,45 +144,77 @@ module ContextDev
       attr_writer :tags
 
       # Extract only the main content from HTML-like inputs
-      sig { returns(T.nilable(T::Boolean)) }
+      sig do
+        returns(
+          T.nilable(
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::UseMainContentOnly::OrSymbol
+            )
+          )
+        )
+      end
       attr_reader :use_main_content_only
 
-      sig { params(use_main_content_only: T::Boolean).void }
+      sig do
+        params(
+          use_main_content_only:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::UseMainContentOnly::OrSymbol
+            )
+        ).void
+      end
       attr_writer :use_main_content_only
 
       sig do
         params(
           body: ContextDev::Internal::FileInput,
+          client: String,
           extension: ContextDev::ParseHandleParams::Extension::OrSymbol,
-          include_images: T::Boolean,
-          include_links: T::Boolean,
-          ocr: T::Boolean,
+          include_images:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::IncludeImages::OrSymbol
+            ),
+          include_links:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::IncludeLinks::OrSymbol
+            ),
+          ocr: T.any(T::Boolean, ContextDev::ParseHandleParams::Ocr::OrSymbol),
           pdf: ContextDev::ParseHandleParams::Pdf::OrHash,
-          shorten_base64_images: T::Boolean,
+          shorten_base64_images:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::ShortenBase64Images::OrSymbol
+            ),
           tags: T::Array[String],
-          use_main_content_only: T::Boolean,
+          use_main_content_only:
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::UseMainContentOnly::OrSymbol
+            ),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
       def self.new(
         body:,
-        # Optional file extension hint. Case-insensitive; a leading dot is accepted (e.g.
-        # ".pdf").
+        # Optional client identifier used for usage attribution.
+        client: nil,
+        # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
+        # md, py, rtf, jpg, png, or txt.
         extension: nil,
         # Include image references in Markdown output
         include_images: nil,
         # Preserve hyperlinks in Markdown output
         include_links: nil,
-        # Gates all OCR. When true, PDFs get embedded-image OCR (recognized text inserted
-        # at each image's position in page reading order, preserving the text layer;
-        # pdf.start/pdf.end limit the page range), scanned PDFs with no text layer get
-        # full-document OCR, and raster images get their visible text transcribed. When
-        # false, no OCR runs: scanned PDFs may yield no content and images return only
-        # format/dimension metadata. Calls where OCR actually runs cost 5 credits instead
-        # of 1.
+        # When true for PDF inputs, detect and OCR images embedded in the selected pages,
+        # inserting recognized text at each image's position in page reading order while
+        # preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
+        # When false, all OCR is disabled, including the automatic scanned-PDF fallback.
         ocr: nil,
-        # PDF page-range controls. Use start/end to limit parsing (and OCR when ocr=true)
-        # to an inclusive 1-based page range.
+        # PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
         pdf: nil,
         # Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
@@ -136,14 +232,32 @@ module ContextDev
         override.returns(
           {
             body: ContextDev::Internal::FileInput,
+            client: String,
             extension: ContextDev::ParseHandleParams::Extension::OrSymbol,
-            include_images: T::Boolean,
-            include_links: T::Boolean,
-            ocr: T::Boolean,
+            include_images:
+              T.any(
+                T::Boolean,
+                ContextDev::ParseHandleParams::IncludeImages::OrSymbol
+              ),
+            include_links:
+              T.any(
+                T::Boolean,
+                ContextDev::ParseHandleParams::IncludeLinks::OrSymbol
+              ),
+            ocr:
+              T.any(T::Boolean, ContextDev::ParseHandleParams::Ocr::OrSymbol),
             pdf: ContextDev::ParseHandleParams::Pdf,
-            shorten_base64_images: T::Boolean,
+            shorten_base64_images:
+              T.any(
+                T::Boolean,
+                ContextDev::ParseHandleParams::ShortenBase64Images::OrSymbol
+              ),
             tags: T::Array[String],
-            use_main_content_only: T::Boolean,
+            use_main_content_only:
+              T.any(
+                T::Boolean,
+                ContextDev::ParseHandleParams::UseMainContentOnly::OrSymbol
+              ),
             request_options: ContextDev::RequestOptions
           }
         )
@@ -151,8 +265,8 @@ module ContextDev
       def to_hash
       end
 
-      # Optional file extension hint. Case-insensitive; a leading dot is accepted (e.g.
-      # ".pdf").
+      # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
+      # md, py, rtf, jpg, png, or txt.
       module Extension
         extend ContextDev::Internal::Type::Enum
 
@@ -309,6 +423,110 @@ module ContextDev
         end
       end
 
+      # Include image references in Markdown output
+      module IncludeImages
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::IncludeImages::TaggedSymbol
+            )
+          end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::ParseHandleParams::IncludeImages::Variants]
+          )
+        end
+        def self.variants
+        end
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::ParseHandleParams::IncludeImages)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        TRUE =
+          T.let(
+            :true,
+            ContextDev::ParseHandleParams::IncludeImages::TaggedSymbol
+          )
+        FALSE =
+          T.let(
+            :false,
+            ContextDev::ParseHandleParams::IncludeImages::TaggedSymbol
+          )
+      end
+
+      # Preserve hyperlinks in Markdown output
+      module IncludeLinks
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::IncludeLinks::TaggedSymbol
+            )
+          end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::ParseHandleParams::IncludeLinks::Variants]
+          )
+        end
+        def self.variants
+        end
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::ParseHandleParams::IncludeLinks)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        TRUE =
+          T.let(
+            :true,
+            ContextDev::ParseHandleParams::IncludeLinks::TaggedSymbol
+          )
+        FALSE =
+          T.let(
+            :false,
+            ContextDev::ParseHandleParams::IncludeLinks::TaggedSymbol
+          )
+      end
+
+      # When true for PDF inputs, detect and OCR images embedded in the selected pages,
+      # inserting recognized text at each image's position in page reading order while
+      # preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
+      # When false, all OCR is disabled, including the automatic scanned-PDF fallback.
+      module Ocr
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(T::Boolean, ContextDev::ParseHandleParams::Ocr::TaggedSymbol)
+          end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::ParseHandleParams::Ocr::Variants]
+          )
+        end
+        def self.variants
+        end
+
+        TaggedSymbol =
+          T.type_alias { T.all(Symbol, ContextDev::ParseHandleParams::Ocr) }
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        TRUE = T.let(:true, ContextDev::ParseHandleParams::Ocr::TaggedSymbol)
+        FALSE = T.let(:false, ContextDev::ParseHandleParams::Ocr::TaggedSymbol)
+      end
+
       class Pdf < ContextDev::Internal::Type::BaseModel
         OrHash =
           T.type_alias do
@@ -333,8 +551,7 @@ module ContextDev
         sig { params(start: Integer).void }
         attr_writer :start
 
-        # PDF page-range controls. Use start/end to limit parsing (and OCR when ocr=true)
-        # to an inclusive 1-based page range.
+        # PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
         sig { params(end_: Integer, start: Integer).returns(T.attached_class) }
         def self.new(
           # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
@@ -348,6 +565,86 @@ module ContextDev
         sig { override.returns({ end_: Integer, start: Integer }) }
         def to_hash
         end
+      end
+
+      # Shorten base64-encoded image data in the Markdown output
+      module ShortenBase64Images
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::ShortenBase64Images::TaggedSymbol
+            )
+          end
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::ParseHandleParams::ShortenBase64Images::Variants
+            ]
+          )
+        end
+        def self.variants
+        end
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::ParseHandleParams::ShortenBase64Images)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        TRUE =
+          T.let(
+            :true,
+            ContextDev::ParseHandleParams::ShortenBase64Images::TaggedSymbol
+          )
+        FALSE =
+          T.let(
+            :false,
+            ContextDev::ParseHandleParams::ShortenBase64Images::TaggedSymbol
+          )
+      end
+
+      # Extract only the main content from HTML-like inputs
+      module UseMainContentOnly
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              T::Boolean,
+              ContextDev::ParseHandleParams::UseMainContentOnly::TaggedSymbol
+            )
+          end
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::ParseHandleParams::UseMainContentOnly::Variants
+            ]
+          )
+        end
+        def self.variants
+        end
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::ParseHandleParams::UseMainContentOnly)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        TRUE =
+          T.let(
+            :true,
+            ContextDev::ParseHandleParams::UseMainContentOnly::TaggedSymbol
+          )
+        FALSE =
+          T.let(
+            :false,
+            ContextDev::ParseHandleParams::UseMainContentOnly::TaggedSymbol
+          )
       end
     end
   end

@@ -58,7 +58,9 @@ module ContextDev
           # @!attribute force_language
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage, nil]
-          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByDomain::ForceLanguage }
+          optional :force_language,
+                   enum: -> { ContextDev::BrandRetrieveParams::Body::ByDomain::ForceLanguage },
+                   nil?: true
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -101,7 +103,7 @@ module ContextDev
           #
           #   @param domain [String] Domain name to retrieve brand data for (e.g., 'stripe.com').
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage, nil]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
@@ -266,7 +268,9 @@ module ContextDev
           # @!attribute force_language
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage, nil]
-          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage }
+          optional :force_language,
+                   enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage },
+                   nil?: true
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -312,7 +316,7 @@ module ContextDev
           #
           #   @param country_gl [String] Optional country code hint (GL parameter) to specify the country when looking up
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage, nil]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
@@ -470,7 +474,9 @@ module ContextDev
           # @!attribute force_language
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage, nil]
-          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByEmail::ForceLanguage }
+          optional :force_language,
+                   enum: -> { ContextDev::BrandRetrieveParams::Body::ByEmail::ForceLanguage },
+                   nil?: true
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -515,7 +521,7 @@ module ContextDev
           #
           #   @param email [String] Email address to retrieve brand data for (e.g., 'jane@stripe.com').
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage, nil]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
@@ -673,7 +679,9 @@ module ContextDev
           # @!attribute force_language
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage, nil]
-          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTicker::ForceLanguage }
+          optional :force_language,
+                   enum: -> { ContextDev::BrandRetrieveParams::Body::ByTicker::ForceLanguage },
+                   nil?: true
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -723,7 +731,7 @@ module ContextDev
           #
           #   @param ticker [String] Stock ticker symbol to retrieve brand data for (e.g., 'AAPL').
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage, nil]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
@@ -946,7 +954,9 @@ module ContextDev
           # @!attribute force_language
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage, nil]
-          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage }
+          optional :force_language,
+                   enum: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage },
+                   nil?: true
 
           # @!attribute high_confidence_only
           #   When set to true, the API performs additional verification to ensure the
@@ -967,14 +977,14 @@ module ContextDev
           #   Optional Merchant Category Code (MCC) to help identify the business category or
           #   industry.
           #
-          #   @return [Integer, nil]
-          optional :mcc, Integer
+          #   @return [String, Float, nil]
+          optional :mcc, union: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Mcc }
 
           # @!attribute phone
           #   Optional phone number from the transaction to help verify brand match.
           #
-          #   @return [Float, nil]
-          optional :phone, Float
+          #   @return [String, Float, nil]
+          optional :phone, union: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone }
 
           # @!attribute tags
           #   Optional caller-defined tags for tracking this request. Tags are recorded on the
@@ -1005,15 +1015,15 @@ module ContextDev
           #
           #   @param country_gl [String] Optional country code hint (GL parameter) to specify the country when identifyin
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage, nil]
           #
           #   @param high_confidence_only [Boolean] When set to true, the API performs additional verification to ensure the identif
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param mcc [Integer] Optional Merchant Category Code (MCC) to help identify the business category or
+          #   @param mcc [String, Float] Optional Merchant Category Code (MCC) to help identify the business category or
           #
-          #   @param phone [Float] Optional phone number from the transaction to help verify brand match.
+          #   @param phone [String, Float] Optional phone number from the transaction to help verify brand match.
           #
           #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
           #
@@ -1148,6 +1158,35 @@ module ContextDev
 
             # @!method self.values
             #   @return [Array<Symbol>]
+          end
+
+          # Optional Merchant Category Code (MCC) to help identify the business category or
+          # industry.
+          #
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#mcc
+          module Mcc
+            extend ContextDev::Internal::Type::Union
+
+            variant String
+
+            variant Float
+
+            # @!method self.variants
+            #   @return [Array(String, Float)]
+          end
+
+          # Optional phone number from the transaction to help verify brand match.
+          #
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#phone
+          module Phone
+            extend ContextDev::Internal::Type::Union
+
+            variant String
+
+            variant Float
+
+            # @!method self.variants
+            #   @return [Array(String, Float)]
           end
         end
 

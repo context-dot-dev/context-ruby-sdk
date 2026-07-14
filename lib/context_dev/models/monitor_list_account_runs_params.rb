@@ -8,36 +8,33 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute cursor
+      #   Opaque pagination cursor from a previous response.
       #
       #   @return [String, nil]
       optional :cursor, String
 
       # @!attribute limit
+      #   Maximum number of items to return per page (1-100). Defaults to 25.
       #
       #   @return [Integer, nil]
       optional :limit, Integer
 
       # @!attribute status
-      #   Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-      #   (insufficient credits, monitor paused, or superseded by a concurrent run).
+      #   Filter runs by lifecycle status.
       #
       #   @return [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status, nil]
       optional :status, enum: -> { ContextDev::MonitorListAccountRunsParams::Status }
 
       # @!method initialize(cursor: nil, limit: nil, status: nil, request_options: {})
-      #   Some parameter documentations has been truncated, see
-      #   {ContextDev::Models::MonitorListAccountRunsParams} for more details.
+      #   @param cursor [String] Opaque pagination cursor from a previous response.
       #
-      #   @param cursor [String]
+      #   @param limit [Integer] Maximum number of items to return per page (1-100). Defaults to 25.
       #
-      #   @param limit [Integer]
-      #
-      #   @param status [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status] Lifecycle status of a run. `skipped` runs never executed — see `skip_reason` (in
+      #   @param status [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status] Filter runs by lifecycle status.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-      # (insufficient credits, monitor paused, or superseded by a concurrent run).
+      # Filter runs by lifecycle status.
       module Status
         extend ContextDev::Internal::Type::Enum
 

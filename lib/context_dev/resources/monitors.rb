@@ -115,25 +115,25 @@ module ContextDev
       #
       # @overload list(change_detection_type: nil, cursor: nil, limit: nil, q: nil, search_by: nil, search_type: nil, status: nil, tag: nil, tags: nil, target_type: nil, request_options: {})
       #
-      # @param change_detection_type [Symbol, ContextDev::Models::MonitorListParams::ChangeDetectionType]
+      # @param change_detection_type [Symbol, ContextDev::Models::MonitorListParams::ChangeDetectionType] Filter by change detection type.
       #
-      # @param cursor [String]
+      # @param cursor [String] Opaque pagination cursor from a previous response.
       #
-      # @param limit [Integer]
+      # @param limit [Integer] Maximum number of items to return per page (1-100). Defaults to 25.
       #
       # @param q [String] Free-text search term, matched against the fields named in `search_by`.
       #
-      # @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>] Comma-separated fields to search with `q`. Defaults to all of them. Note `instru
+      # @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil] Comma-separated fields to search with `q`. Defaults to all of them. Note `instru
       #
       # @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
       #
-      # @param status [Symbol, ContextDev::Models::MonitorListParams::Status] Monitor lifecycle status. `failed` means the most recent run failed (see the mon
+      # @param status [Symbol, ContextDev::Models::MonitorListParams::Status] Filter monitors by lifecycle status.
       #
       # @param tag [String] Filter to items that have this tag.
       #
-      # @param tags [Array<String>] Comma-separated list of tags to filter by (matches monitors having any of them).
+      # @param tags [Array<String>, nil] Comma-separated list of tags to filter by (matches monitors having any of them).
       #
-      # @param target_type [Symbol, ContextDev::Models::MonitorListParams::TargetType]
+      # @param target_type [Symbol, ContextDev::Models::MonitorListParams::TargetType] Filter by target type.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -175,21 +175,21 @@ module ContextDev
       #
       # @overload list_account_changes(change_detection_type: nil, cursor: nil, limit: nil, monitor_id: nil, since: nil, tag: nil, target_type: nil, until_: nil, request_options: {})
       #
-      # @param change_detection_type [Symbol, ContextDev::Models::MonitorListAccountChangesParams::ChangeDetectionType]
+      # @param change_detection_type [Symbol, ContextDev::Models::MonitorListAccountChangesParams::ChangeDetectionType] Filter by change detection type.
       #
-      # @param cursor [String]
+      # @param cursor [String] Opaque pagination cursor from a previous response.
       #
-      # @param limit [Integer]
+      # @param limit [Integer] Maximum number of items to return per page (1-100). Defaults to 25.
       #
-      # @param monitor_id [String]
+      # @param monitor_id [String] Filter changes to a single monitor.
       #
-      # @param since [Time]
+      # @param since [Time] Only include items at or after this ISO 8601 timestamp.
       #
       # @param tag [String] Filter to items that have this tag.
       #
-      # @param target_type [Symbol, ContextDev::Models::MonitorListAccountChangesParams::TargetType]
+      # @param target_type [Symbol, ContextDev::Models::MonitorListAccountChangesParams::TargetType] Filter by target type.
       #
-      # @param until_ [Time]
+      # @param until_ [Time] Only include items before this ISO 8601 timestamp.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -208,18 +208,15 @@ module ContextDev
         )
       end
 
-      # Some parameter documentations has been truncated, see
-      # {ContextDev::Models::MonitorListAccountRunsParams} for more details.
-      #
       # Returns an account-wide feed of monitor runs across all monitors.
       #
       # @overload list_account_runs(cursor: nil, limit: nil, status: nil, request_options: {})
       #
-      # @param cursor [String]
+      # @param cursor [String] Opaque pagination cursor from a previous response.
       #
-      # @param limit [Integer]
+      # @param limit [Integer] Maximum number of items to return per page (1-100). Defaults to 25.
       #
-      # @param status [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status] Lifecycle status of a run. `skipped` runs never executed — see `skip_reason` (in
+      # @param status [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status] Filter runs by lifecycle status.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -244,15 +241,15 @@ module ContextDev
       #
       # @param monitor_id [String]
       #
-      # @param cursor [String]
+      # @param cursor [String] Opaque pagination cursor from a previous response.
       #
-      # @param limit [Integer]
+      # @param limit [Integer] Maximum number of items to return per page (1-100). Defaults to 25.
       #
-      # @param since [Time]
+      # @param since [Time] Only include items at or after this ISO 8601 timestamp.
       #
       # @param tag [String] Filter to items that have this tag.
       #
-      # @param until_ [Time]
+      # @param until_ [Time] Only include items before this ISO 8601 timestamp.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -271,20 +268,17 @@ module ContextDev
         )
       end
 
-      # Some parameter documentations has been truncated, see
-      # {ContextDev::Models::MonitorListRunsParams} for more details.
-      #
       # List monitor runs
       #
       # @overload list_runs(monitor_id, cursor: nil, limit: nil, status: nil, request_options: {})
       #
       # @param monitor_id [String]
       #
-      # @param cursor [String]
+      # @param cursor [String] Opaque pagination cursor from a previous response.
       #
-      # @param limit [Integer]
+      # @param limit [Integer] Maximum number of items to return per page (1-100). Defaults to 25.
       #
-      # @param status [Symbol, ContextDev::Models::MonitorListRunsParams::Status] Lifecycle status of a run. `skipped` runs never executed — see `skip_reason` (in
+      # @param status [Symbol, ContextDev::Models::MonitorListRunsParams::Status] Filter runs by lifecycle status.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

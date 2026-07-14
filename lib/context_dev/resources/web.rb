@@ -100,7 +100,7 @@ module ContextDev
       #
       # @param domain [String] Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The domai
       #
-      # @param max_age_ms [Integer] Maximum age in milliseconds for cached data before the API performs a hard refre
+      # @param max_age_ms [Integer, nil] Maximum age in milliseconds for cached brand data before the API performs a hard
       #
       # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
@@ -141,7 +141,7 @@ module ContextDev
       #
       # @param domain [String] Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
       #
-      # @param max_age_ms [Integer] Maximum age in milliseconds for cached data before the API performs a hard refre
+      # @param max_age_ms [Integer, nil] Maximum age in milliseconds for cached brand data before the API performs a hard
       #
       # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
@@ -178,7 +178,7 @@ module ContextDev
       #
       # @param color_scheme [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
       #
-      # @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
+      # @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
       #
       # @param direct_url [String] A specific URL to screenshot directly, bypassing domain resolution (e.g., 'https
       #
@@ -186,13 +186,13 @@ module ContextDev
       #
       # @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
-      # @param handle_cookie_popup [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
+      # @param handle_cookie_popup [Boolean, Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
       #
-      # @param max_age_ms [Integer] Return a cached screenshot if a prior screenshot for the same parameters exists
+      # @param max_age_ms [Integer, nil] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
       # @param page [Symbol, ContextDev::Models::WebScreenshotParams::Page] Optional parameter to specify which page type to screenshot. If provided, the sy
       #
-      # @param scroll_offset [Integer] Optional vertical scroll offset in pixels for capturing a long page in viewport-
+      # @param scroll_offset [Integer, nil] Optional vertical scroll offset in pixels for capturing a long page in viewport-
       #
       # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
@@ -200,7 +200,7 @@ module ContextDev
       #
       # @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       #
-      # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load before taking
+      # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before taking
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -344,29 +344,29 @@ module ContextDev
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
       #
-      # @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
+      # @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
       #
-      # @param exclude_selectors [Array<String>] CSS selectors to remove from the result. Applied after includeSelectors. Exclusi
+      # @param exclude_selectors [Array<String>, nil] CSS selectors to remove from the result. Applied after includeSelectors. Exclusi
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
-      # @param include_frames [Boolean] When true, iframes are rendered inline into the returned HTML.
+      # @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebScrapeHTMLParams::IncludeFrames] When true, iframes are rendered inline into the returned HTML.
       #
-      # @param include_selectors [Array<String>] CSS selectors. When provided, only matching subtrees (and their descendants) are
+      # @param include_selectors [Array<String>, nil] CSS selectors. When provided, only matching subtrees (and their descendants) are
       #
-      # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
+      # @param max_age_ms [Integer, nil] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       # @param pdf [ContextDev::Models::WebWebScrapeHTMLParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
-      # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
+      # @param settle_animations [Boolean, Symbol, ContextDev::Models::WebWebScrapeHTMLParams::SettleAnimations] When true, waits briefly for CSS and transition animations to settle before extr
       #
       # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
-      # @param use_main_content_only [Boolean] When true, return only the page's main content in the HTML response, excluding h
+      # @param use_main_content_only [Boolean, Symbol, ContextDev::Models::WebWebScrapeHTMLParams::UseMainContentOnly] When true, return only the page's main content in the HTML response, excluding h
       #
-      # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
+      # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -406,19 +406,19 @@ module ContextDev
       #
       # @param url [String] Page URL to inspect. Must include http:// or https://.
       #
-      # @param dedupe [Boolean] When true, visually duplicate images are removed: every image is loaded and perc
+      # @param dedupe [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Dedupe] When true, visually duplicate images are removed: every image is loaded and perc
       #
-      # @param enrichment [ContextDev::Models::WebWebScrapeImagesParams::Enrichment] Optional per-image processing, sent as deep-object query params such as enrichme
+      # @param enrichment [ContextDev::Models::WebWebScrapeImagesParams::Enrichment, nil] Optional per-image processing, sent as deep-object query params such as enrichme
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
-      # @param max_age_ms [Integer] Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
+      # @param max_age_ms [Integer, nil] Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
       #
       # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
-      # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load before collec
+      # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before collec
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -465,35 +465,35 @@ module ContextDev
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
       #
-      # @param country [Symbol, ContextDev::Models::WebWebScrapeMdParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
+      # @param country [Symbol, ContextDev::Models::WebWebScrapeMdParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
       #
-      # @param exclude_selectors [Array<String>] CSS selectors to remove before conversion to Markdown. Applied after includeSele
+      # @param exclude_selectors [Array<String>, nil] CSS selectors to remove before conversion to Markdown. Applied after includeSele
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
-      # @param include_frames [Boolean] When true, the contents of iframes are rendered to Markdown.
+      # @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeFrames] When true, the contents of iframes are rendered to Markdown.
       #
-      # @param include_images [Boolean] Include image references in Markdown output
+      # @param include_images [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeImages] Include image references in Markdown output
       #
-      # @param include_links [Boolean] Preserve hyperlinks in Markdown output
+      # @param include_links [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeLinks] Preserve hyperlinks in Markdown output
       #
-      # @param include_selectors [Array<String>] CSS selectors. When provided, only matching HTML subtrees (and their descendants
+      # @param include_selectors [Array<String>, nil] CSS selectors. When provided, only matching HTML subtrees (and their descendants
       #
-      # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
+      # @param max_age_ms [Integer, nil] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       # @param pdf [ContextDev::Models::WebWebScrapeMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
-      # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before conv
+      # @param settle_animations [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::SettleAnimations] When true, waits briefly for CSS and transition animations to settle before conv
       #
-      # @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
+      # @param shorten_base64_images [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::ShortenBase64Images] Shorten base64-encoded image data in the Markdown output
       #
       # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
-      # @param use_main_content_only [Boolean] Extract only the main content of the page, excluding headers, footers, sidebars,
+      # @param use_main_content_only [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::UseMainContentOnly] Extract only the main content of the page, excluding headers, footers, sidebars,
       #
-      # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load before conver
+      # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before conver
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -529,13 +529,15 @@ module ContextDev
       #
       # Crawl an entire website's sitemap and return all discovered page URLs.
       #
-      # @overload web_scrape_sitemap(domain:, headers: nil, max_links: nil, tags: nil, timeout_ms: nil, url_regex: nil, request_options: {})
+      # @overload web_scrape_sitemap(domain:, headers: nil, max_links: nil, sitemap_url: nil, tags: nil, timeout_ms: nil, url_regex: nil, request_options: {})
       #
       # @param domain [String] Domain to build a sitemap for
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
       # @param max_links [Integer] Maximum number of links to return from the sitemap crawl. Defaults to 10,000. Mi
+      #
+      # @param sitemap_url [String] Optional explicit sitemap URL. When provided, exactly this sitemap is crawled in
       #
       # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
@@ -554,7 +556,12 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/sitemap",
-          query: query.transform_keys(max_links: "maxLinks", timeout_ms: "timeoutMS", url_regex: "urlRegex"),
+          query: query.transform_keys(
+            max_links: "maxLinks",
+            sitemap_url: "sitemapUrl",
+            timeout_ms: "timeoutMS",
+            url_regex: "urlRegex"
+          ),
           model: ContextDev::Models::WebWebScrapeSitemapResponse,
           options: options
         )
