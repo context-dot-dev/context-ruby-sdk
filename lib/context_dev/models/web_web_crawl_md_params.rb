@@ -116,9 +116,7 @@ module ContextDev
       optional :stop_after_ms, Integer, api_name: :stopAfterMs
 
       # @!attribute tags
-      #   Optional caller-defined tags for tracking this request. Tags are recorded on the
-      #   request's usage log and can be used to filter usage on the dashboard usage page.
-      #   Up to 20 tags, each 1-50 characters.
+      #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -185,7 +183,7 @@ module ContextDev
       #
       #   @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds. After each scrape, the crawler c
       #
-      #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
+      #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

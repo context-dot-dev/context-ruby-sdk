@@ -17,7 +17,7 @@ module ContextDev
       #
       # @param type [Symbol, ContextDev::Models::UtilityPrefetchParams::Type] What to prefetch. Currently only 'brand' is supported.
       #
-      # @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
+      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

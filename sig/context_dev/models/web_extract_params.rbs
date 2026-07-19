@@ -12,6 +12,7 @@ module ContextDev
         max_depth: Integer,
         max_pages: Integer,
         pdf: ContextDev::WebExtractParams::Pdf,
+        settle_animations: bool,
         stop_after_ms: Integer,
         tags: ::Array[String],
         timeout_ms: Integer,
@@ -61,6 +62,10 @@ module ContextDev
         ContextDev::WebExtractParams::Pdf
       ) -> ContextDev::WebExtractParams::Pdf
 
+      attr_reader settle_animations: bool?
+
+      def settle_animations=: (bool) -> bool
+
       attr_reader stop_after_ms: Integer?
 
       def stop_after_ms=: (Integer) -> Integer
@@ -88,6 +93,7 @@ module ContextDev
         ?max_depth: Integer,
         ?max_pages: Integer,
         ?pdf: ContextDev::WebExtractParams::Pdf,
+        ?settle_animations: bool,
         ?stop_after_ms: Integer,
         ?tags: ::Array[String],
         ?timeout_ms: Integer,
@@ -106,6 +112,7 @@ module ContextDev
         max_depth: Integer,
         max_pages: Integer,
         pdf: ContextDev::WebExtractParams::Pdf,
+        settle_animations: bool,
         stop_after_ms: Integer,
         tags: ::Array[String],
         timeout_ms: Integer,

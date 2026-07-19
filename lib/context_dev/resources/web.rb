@@ -9,7 +9,7 @@ module ContextDev
       # Crawl a website, use the provided JSON Schema and instructions to prioritize
       # relevant internal links, and extract structured data from the selected pages.
       #
-      # @overload extract(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @overload extract(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #
       # @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. TypeScript Zod users can pass a JSON S
       #
@@ -31,9 +31,11 @@ module ContextDev
       #
       # @param pdf [ContextDev::Models::WebExtractParams::Pdf]
       #
+      # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
+      #
       # @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000 (1
       #
-      # @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
+      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -251,7 +253,7 @@ module ContextDev
       #
       # @param query_fanout [Boolean] Expand the query into multiple parallel variants for broader recall.
       #
-      # @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
+      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -309,7 +311,7 @@ module ContextDev
       #
       # @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds. After each scrape, the crawler c
       #
-      # @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
+      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
