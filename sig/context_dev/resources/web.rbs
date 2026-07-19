@@ -12,6 +12,7 @@ module ContextDev
         ?max_depth: Integer,
         ?max_pages: Integer,
         ?pdf: ContextDev::WebExtractParams::Pdf,
+        ?settle_animations: bool,
         ?stop_after_ms: Integer,
         ?tags: ::Array[String],
         ?timeout_ms: Integer,

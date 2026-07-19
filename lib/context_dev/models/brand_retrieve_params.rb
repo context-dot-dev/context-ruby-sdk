@@ -80,9 +80,7 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute tags
-          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
-          #   request's usage log and can be used to filter usage on the dashboard usage page.
-          #   Up to 20 tags, each 1-50 characters.
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -109,7 +107,7 @@ module ContextDev
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -290,9 +288,7 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute tags
-          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
-          #   request's usage log and can be used to filter usage on the dashboard usage page.
-          #   Up to 20 tags, each 1-50 characters.
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -322,7 +318,7 @@ module ContextDev
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -496,9 +492,7 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute tags
-          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
-          #   request's usage log and can be used to filter usage on the dashboard usage page.
-          #   Up to 20 tags, each 1-50 characters.
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -527,7 +521,7 @@ module ContextDev
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -701,9 +695,7 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute tags
-          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
-          #   request's usage log and can be used to filter usage on the dashboard usage page.
-          #   Up to 20 tags, each 1-50 characters.
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -737,7 +729,7 @@ module ContextDev
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param ticker_exchange [String] Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
           #
@@ -891,9 +883,7 @@ module ContextDev
           required :type, const: :by_direct_url
 
           # @!attribute tags
-          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
-          #   request's usage log and can be used to filter usage on the dashboard usage page.
-          #   Up to 20 tags, each 1-50 characters.
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -918,7 +908,7 @@ module ContextDev
           #
           #   @param direct_url [String] Full http(s) URL to fetch brand data from (e.g., 'https://stripe.com/enterprise'
           #
-          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -987,9 +977,7 @@ module ContextDev
           optional :phone, union: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone }
 
           # @!attribute tags
-          #   Optional caller-defined tags for tracking this request. Tags are recorded on the
-          #   request's usage log and can be used to filter usage on the dashboard usage page.
-          #   Up to 20 tags, each 1-50 characters.
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -1025,7 +1013,7 @@ module ContextDev
           #
           #   @param phone [String, Float] Optional phone number from the transaction to help verify brand match.
           #
-          #   @param tags [Array<String>] Optional caller-defined tags for tracking this request. Tags are recorded on the
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #

@@ -17,6 +17,7 @@ module ContextDev
           max_depth: Integer,
           max_pages: Integer,
           pdf: ContextDev::WebExtractParams::Pdf::OrHash,
+          settle_animations: T::Boolean,
           stop_after_ms: Integer,
           tags: T::Array[String],
           timeout_ms: Integer,
@@ -55,12 +56,14 @@ module ContextDev
         # Maximum number of pages to analyze for extraction. Hard cap: 50. Defaults to 5.
         max_pages: nil,
         pdf: nil,
+        # When true, waits briefly for CSS and transition animations to settle before
+        # extracting each crawled page. Defaults to false. This adds a bit of latency in
+        # exchange for more stable output on animated pages.
+        settle_animations: nil,
         # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
         # (110s). Default: 80000 (80s).
         stop_after_ms: nil,
-        # Optional caller-defined tags for tracking this request. Tags are recorded on the
-        # request's usage log and can be used to filter usage on the dashboard usage page.
-        # Up to 20 tags, each 1-50 characters.
+        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -305,9 +308,7 @@ module ContextDev
         num_results: nil,
         # Expand the query into multiple parallel variants for broader recall.
         query_fanout: nil,
-        # Optional caller-defined tags for tracking this request. Tags are recorded on the
-        # request's usage log and can be used to filter usage on the dashboard usage page.
-        # Up to 20 tags, each 1-50 characters.
+        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -393,9 +394,7 @@ module ContextDev
         # instead of continuing. Min: 10000 (10s). Max: 110000 (110s). Default: 80000
         # (80s).
         stop_after_ms: nil,
-        # Optional caller-defined tags for tracking this request. Tags are recorded on the
-        # request's usage log and can be used to filter usage on the dashboard usage page.
-        # Up to 20 tags, each 1-50 characters.
+        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed

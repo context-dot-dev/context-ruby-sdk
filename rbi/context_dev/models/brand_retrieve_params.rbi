@@ -127,9 +127,7 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Optional caller-defined tags for tracking this request. Tags are recorded on the
-          # request's usage log and can be used to filter usage on the dashboard usage page.
-          # Up to 20 tags, each 1-50 characters.
+          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -173,9 +171,7 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Optional caller-defined tags for tracking this request. Tags are recorded on the
-            # request's usage log and can be used to filter usage on the dashboard usage page.
-            # Up to 20 tags, each 1-50 characters.
+            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
             tags: nil,
             # Optional timeout in milliseconds for the request. If the request takes longer
             # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -883,9 +879,7 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Optional caller-defined tags for tracking this request. Tags are recorded on the
-          # request's usage log and can be used to filter usage on the dashboard usage page.
-          # Up to 20 tags, each 1-50 characters.
+          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -934,9 +928,7 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Optional caller-defined tags for tracking this request. Tags are recorded on the
-            # request's usage log and can be used to filter usage on the dashboard usage page.
-            # Up to 20 tags, each 1-50 characters.
+            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
             tags: nil,
             # Optional timeout in milliseconds for the request. If the request takes longer
             # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -1637,9 +1629,7 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Optional caller-defined tags for tracking this request. Tags are recorded on the
-          # request's usage log and can be used to filter usage on the dashboard usage page.
-          # Up to 20 tags, each 1-50 characters.
+          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -1685,9 +1675,7 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Optional caller-defined tags for tracking this request. Tags are recorded on the
-            # request's usage log and can be used to filter usage on the dashboard usage page.
-            # Up to 20 tags, each 1-50 characters.
+            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
             tags: nil,
             # Optional timeout in milliseconds for the request. If the request takes longer
             # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -2387,9 +2375,7 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Optional caller-defined tags for tracking this request. Tags are recorded on the
-          # request's usage log and can be used to filter usage on the dashboard usage page.
-          # Up to 20 tags, each 1-50 characters.
+          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -2442,9 +2428,7 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Optional caller-defined tags for tracking this request. Tags are recorded on the
-            # request's usage log and can be used to filter usage on the dashboard usage page.
-            # Up to 20 tags, each 1-50 characters.
+            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
             tags: nil,
             # Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
             ticker_exchange: nil,
@@ -3121,9 +3105,7 @@ module ContextDev
           sig { returns(Symbol) }
           attr_accessor :type
 
-          # Optional caller-defined tags for tracking this request. Tags are recorded on the
-          # request's usage log and can be used to filter usage on the dashboard usage page.
-          # Up to 20 tags, each 1-50 characters.
+          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -3157,9 +3139,7 @@ module ContextDev
             # 'https://stripe.com/enterprise'). Only this URL is fetched — not the entire
             # internet.
             direct_url:,
-            # Optional caller-defined tags for tracking this request. Tags are recorded on the
-            # request's usage log and can be used to filter usage on the dashboard usage page.
-            # Up to 20 tags, each 1-50 characters.
+            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
             tags: nil,
             # Optional timeout in milliseconds for the request. If the request takes longer
             # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -3279,9 +3259,7 @@ module ContextDev
           end
           attr_writer :phone
 
-          # Optional caller-defined tags for tracking this request. Tags are recorded on the
-          # request's usage log and can be used to filter usage on the dashboard usage page.
-          # Up to 20 tags, each 1-50 characters.
+          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -3340,9 +3318,7 @@ module ContextDev
             mcc: nil,
             # Optional phone number from the transaction to help verify brand match.
             phone: nil,
-            # Optional caller-defined tags for tracking this request. Tags are recorded on the
-            # request's usage log and can be used to filter usage on the dashboard usage page.
-            # Up to 20 tags, each 1-50 characters.
+            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
             tags: nil,
             # Optional timeout in milliseconds for the request. If the request takes longer
             # than this value, it will be aborted with a 408 status code. Maximum allowed

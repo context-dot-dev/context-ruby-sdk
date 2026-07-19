@@ -78,9 +78,7 @@ module ContextDev
       sig { params(query_fanout: T::Boolean).void }
       attr_writer :query_fanout
 
-      # Optional caller-defined tags for tracking this request. Tags are recorded on the
-      # request's usage log and can be used to filter usage on the dashboard usage page.
-      # Up to 20 tags, each 1-50 characters.
+      # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -133,9 +131,7 @@ module ContextDev
         num_results: nil,
         # Expand the query into multiple parallel variants for broader recall.
         query_fanout: nil,
-        # Optional caller-defined tags for tracking this request. Tags are recorded on the
-        # request's usage log and can be used to filter usage on the dashboard usage page.
-        # Up to 20 tags, each 1-50 characters.
+        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
