@@ -174,6 +174,16 @@ module ContextDev
       sig { params(wait_for_ms: Integer).void }
       attr_writer :wait_for_ms
 
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      sig { returns(T.nilable(ContextDev::WebWebCrawlMdParams::Zdr::OrSymbol)) }
+      attr_reader :zdr
+
+      sig { params(zdr: ContextDev::WebWebCrawlMdParams::Zdr::OrSymbol).void }
+      attr_writer :zdr
+
       sig do
         params(
           url: String,
@@ -196,6 +206,7 @@ module ContextDev
           url_regex: String,
           use_main_content_only: T::Boolean,
           wait_for_ms: Integer,
+          zdr: ContextDev::WebWebCrawlMdParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -262,6 +273,11 @@ module ContextDev
         # Optional browser wait time in milliseconds after initial page load for each
         # crawled page. Min: 0. Max: 30000 (30 seconds).
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -289,6 +305,7 @@ module ContextDev
             url_regex: String,
             use_main_content_only: T::Boolean,
             wait_for_ms: Integer,
+            zdr: ContextDev::WebWebCrawlMdParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
           }
         )
@@ -600,6 +617,31 @@ module ContextDev
           )
         end
         def to_hash
+        end
+      end
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias { T.all(Symbol, ContextDev::WebWebCrawlMdParams::Zdr) }
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        ENABLED =
+          T.let(:enabled, ContextDev::WebWebCrawlMdParams::Zdr::TaggedSymbol)
+        DISABLED =
+          T.let(:disabled, ContextDev::WebWebCrawlMdParams::Zdr::TaggedSymbol)
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebWebCrawlMdParams::Zdr::TaggedSymbol]
+          )
+        end
+        def self.values
         end
       end
     end

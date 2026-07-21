@@ -21,7 +21,8 @@ module ContextDev
         timeout_ms: Integer,
         url_regex: String,
         use_main_content_only: bool,
-        wait_for_ms: Integer
+        wait_for_ms: Integer,
+        zdr: ContextDev::Models::WebWebCrawlMdParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -111,6 +112,12 @@ module ContextDev
 
       def wait_for_ms=: (Integer) -> Integer
 
+      attr_reader zdr: ContextDev::Models::WebWebCrawlMdParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebWebCrawlMdParams::zdr
+      ) -> ContextDev::Models::WebWebCrawlMdParams::zdr
+
       def initialize: (
         url: String,
         ?country: ContextDev::Models::WebWebCrawlMdParams::country,
@@ -132,6 +139,7 @@ module ContextDev
         ?url_regex: String,
         ?use_main_content_only: bool,
         ?wait_for_ms: Integer,
+        ?zdr: ContextDev::Models::WebWebCrawlMdParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -156,6 +164,7 @@ module ContextDev
         url_regex: String,
         use_main_content_only: bool,
         wait_for_ms: Integer,
+        zdr: ContextDev::Models::WebWebCrawlMdParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -609,6 +618,17 @@ module ContextDev
           should_parse: bool,
           start: Integer
         }
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebWebCrawlMdParams::zdr]
       end
     end
   end

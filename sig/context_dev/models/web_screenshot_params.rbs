@@ -14,7 +14,8 @@ module ContextDev
         tags: ::Array[String],
         timeout_ms: Integer,
         viewport: ContextDev::WebScreenshotParams::Viewport,
-        wait_for_ms: Integer?
+        wait_for_ms: Integer?,
+        zdr: ContextDev::Models::WebScreenshotParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -80,6 +81,12 @@ module ContextDev
 
       attr_accessor wait_for_ms: Integer?
 
+      attr_reader zdr: ContextDev::Models::WebScreenshotParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebScreenshotParams::zdr
+      ) -> ContextDev::Models::WebScreenshotParams::zdr
+
       def initialize: (
         ?color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme,
         ?country: ContextDev::Models::WebScreenshotParams::country,
@@ -94,6 +101,7 @@ module ContextDev
         ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
         ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebScreenshotParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -111,6 +119,7 @@ module ContextDev
         timeout_ms: Integer,
         viewport: ContextDev::WebScreenshotParams::Viewport,
         wait_for_ms: Integer?,
+        zdr: ContextDev::Models::WebScreenshotParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -603,6 +612,17 @@ module ContextDev
         def initialize: (?height: Integer, ?width: Integer) -> void
 
         def to_hash: -> { height: Integer, width: Integer }
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::zdr]
       end
     end
   end

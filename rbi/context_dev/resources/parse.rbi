@@ -33,6 +33,7 @@ module ContextDev
               T::Boolean,
               ContextDev::ParseHandleParams::UseMainContentOnly::OrSymbol
             ),
+          zdr: ContextDev::ParseHandleParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::ParseHandleResponse)
       end
@@ -65,6 +66,12 @@ module ContextDev
         tags: nil,
         # Query param: Extract only the main content from HTML-like inputs
         use_main_content_only: nil,
+        # Query param: Set to enabled to bypass shared caches and omit request and
+        # response content from retained usage logs. Requires zero data retention to be
+        # enabled for your organization (contact support@context.dev), otherwise the
+        # request fails with ZDR_NOT_ENABLED. Successful ZDR responses include
+        # X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end

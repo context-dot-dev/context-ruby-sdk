@@ -12,6 +12,7 @@ module ContextDev
         ?shorten_base64_images: ContextDev::Models::ParseHandleParams::shorten_base64_images,
         ?tags: ::Array[String],
         ?use_main_content_only: ContextDev::Models::ParseHandleParams::use_main_content_only,
+        ?zdr: ContextDev::Models::ParseHandleParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::ParseHandleResponse
 

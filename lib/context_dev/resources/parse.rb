@@ -9,7 +9,7 @@ module ContextDev
       # Converts raw text, source code, web/data, PDF, Microsoft Office, and image bytes
       # into LLM-usable Markdown.
       #
-      # @overload handle(body:, client: nil, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, request_options: {})
+      # @overload handle(body:, client: nil, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, zdr: nil, request_options: {})
       #
       # @param body [Pathname, StringIO, IO, String, ContextDev::FilePart] Body param
       #
@@ -30,6 +30,8 @@ module ContextDev
       # @param tags [Array<String>] Query param: Optional comma-separated caller-defined tags for tracking this requ
       #
       # @param use_main_content_only [Boolean, Symbol, ContextDev::Models::ParseHandleParams::UseMainContentOnly] Query param: Extract only the main content from HTML-like inputs
+      #
+      # @param zdr [Symbol, ContextDev::Models::ParseHandleParams::Zdr] Query param: Set to enabled to bypass shared caches and omit request and respons
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

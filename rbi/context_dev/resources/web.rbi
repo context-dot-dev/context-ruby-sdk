@@ -208,6 +208,7 @@ module ContextDev
           timeout_ms: Integer,
           viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
           wait_for_ms: T.nilable(Integer),
+          zdr: ContextDev::WebScreenshotParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebScreenshotResponse)
       end
@@ -266,6 +267,11 @@ module ContextDev
         # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
         # omitted.
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -342,6 +348,7 @@ module ContextDev
           url_regex: String,
           use_main_content_only: T::Boolean,
           wait_for_ms: Integer,
+          zdr: ContextDev::WebWebCrawlMdParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebCrawlMdResponse)
       end
@@ -408,6 +415,11 @@ module ContextDev
         # Optional browser wait time in milliseconds after initial page load for each
         # crawled page. Min: 0. Max: 30000 (30 seconds).
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -440,6 +452,7 @@ module ContextDev
               ContextDev::WebWebScrapeHTMLParams::UseMainContentOnly::OrSymbol
             ),
           wait_for_ms: T.nilable(Integer),
+          zdr: ContextDev::WebWebScrapeHTMLParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeHTMLResponse)
       end
@@ -489,6 +502,11 @@ module ContextDev
         # Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
         # 30000 (30 seconds).
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -606,6 +624,7 @@ module ContextDev
               ContextDev::WebWebScrapeMdParams::UseMainContentOnly::OrSymbol
             ),
           wait_for_ms: T.nilable(Integer),
+          zdr: ContextDev::WebWebScrapeMdParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeMdResponse)
       end
@@ -662,6 +681,11 @@ module ContextDev
         # Optional browser wait time in milliseconds after initial page load before
         # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds).
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -676,6 +700,7 @@ module ContextDev
           tags: T::Array[String],
           timeout_ms: Integer,
           url_regex: String,
+          zdr: ContextDev::WebWebScrapeSitemapParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeSitemapResponse)
       end
@@ -703,6 +728,11 @@ module ContextDev
         # Optional RE2-compatible regex pattern. Only URLs matching this pattern are
         # returned and counted against maxLinks.
         url_regex: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end

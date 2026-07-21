@@ -11,7 +11,8 @@ module ContextDev
         pdf: ContextDev::ParseHandleParams::Pdf,
         :shorten_base64_images => ContextDev::Models::ParseHandleParams::shorten_base64_images,
         tags: ::Array[String],
-        use_main_content_only: ContextDev::Models::ParseHandleParams::use_main_content_only
+        use_main_content_only: ContextDev::Models::ParseHandleParams::use_main_content_only,
+        zdr: ContextDev::Models::ParseHandleParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -71,6 +72,12 @@ module ContextDev
         ContextDev::Models::ParseHandleParams::use_main_content_only
       ) -> ContextDev::Models::ParseHandleParams::use_main_content_only
 
+      attr_reader zdr: ContextDev::Models::ParseHandleParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::ParseHandleParams::zdr
+      ) -> ContextDev::Models::ParseHandleParams::zdr
+
       def initialize: (
         body: ContextDev::Internal::file_input,
         ?client: String,
@@ -82,6 +89,7 @@ module ContextDev
         ?shorten_base64_images: ContextDev::Models::ParseHandleParams::shorten_base64_images,
         ?tags: ::Array[String],
         ?use_main_content_only: ContextDev::Models::ParseHandleParams::use_main_content_only,
+        ?zdr: ContextDev::Models::ParseHandleParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -96,6 +104,7 @@ module ContextDev
         :shorten_base64_images => ContextDev::Models::ParseHandleParams::shorten_base64_images,
         tags: ::Array[String],
         use_main_content_only: ContextDev::Models::ParseHandleParams::use_main_content_only,
+        zdr: ContextDev::Models::ParseHandleParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -317,6 +326,17 @@ module ContextDev
 
         TRUE: :true
         FALSE: :false
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::ParseHandleParams::zdr]
       end
     end
   end
