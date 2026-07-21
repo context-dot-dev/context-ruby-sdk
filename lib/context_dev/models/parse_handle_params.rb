@@ -72,7 +72,16 @@ module ContextDev
       #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::UseMainContentOnly, nil]
       optional :use_main_content_only, union: -> { ContextDev::ParseHandleParams::UseMainContentOnly }
 
-      # @!method initialize(body:, client: nil, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, request_options: {})
+      # @!attribute zdr
+      #   Set to enabled to bypass shared caches and omit request and response content
+      #   from retained usage logs. Requires zero data retention to be enabled for your
+      #   organization (contact support@context.dev), otherwise the request fails with
+      #   ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      #
+      #   @return [Symbol, ContextDev::Models::ParseHandleParams::Zdr, nil]
+      optional :zdr, enum: -> { ContextDev::ParseHandleParams::Zdr }
+
+      # @!method initialize(body:, client: nil, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::ParseHandleParams} for more details.
       #
@@ -95,6 +104,8 @@ module ContextDev
       #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       #   @param use_main_content_only [Boolean, Symbol, ContextDev::Models::ParseHandleParams::UseMainContentOnly] Extract only the main content from HTML-like inputs
+      #
+      #   @param zdr [Symbol, ContextDev::Models::ParseHandleParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -329,6 +340,20 @@ module ContextDev
         FALSE = :false
 
         # @!endgroup
+      end
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED = :enabled
+        DISABLED = :disabled
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
     end
   end

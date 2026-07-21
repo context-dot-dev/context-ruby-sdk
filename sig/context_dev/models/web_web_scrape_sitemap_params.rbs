@@ -8,7 +8,8 @@ module ContextDev
         sitemap_url: String,
         tags: ::Array[String],
         timeout_ms: Integer,
-        url_regex: String
+        url_regex: String,
+        zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -42,6 +43,12 @@ module ContextDev
 
       def url_regex=: (String) -> String
 
+      attr_reader zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebWebScrapeSitemapParams::zdr
+      ) -> ContextDev::Models::WebWebScrapeSitemapParams::zdr
+
       def initialize: (
         domain: String,
         ?headers: ::Hash[Symbol, String],
@@ -50,6 +57,7 @@ module ContextDev
         ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?url_regex: String,
+        ?zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -61,8 +69,20 @@ module ContextDev
         tags: ::Array[String],
         timeout_ms: Integer,
         url_regex: String,
+        zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr,
         request_options: ContextDev::RequestOptions
       }
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeSitemapParams::zdr]
+      end
     end
   end
 end

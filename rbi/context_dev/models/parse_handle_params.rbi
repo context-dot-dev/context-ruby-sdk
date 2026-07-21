@@ -167,6 +167,16 @@ module ContextDev
       end
       attr_writer :use_main_content_only
 
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      sig { returns(T.nilable(ContextDev::ParseHandleParams::Zdr::OrSymbol)) }
+      attr_reader :zdr
+
+      sig { params(zdr: ContextDev::ParseHandleParams::Zdr::OrSymbol).void }
+      attr_writer :zdr
+
       sig do
         params(
           body: ContextDev::Internal::FileInput,
@@ -195,6 +205,7 @@ module ContextDev
               T::Boolean,
               ContextDev::ParseHandleParams::UseMainContentOnly::OrSymbol
             ),
+          zdr: ContextDev::ParseHandleParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -224,6 +235,11 @@ module ContextDev
         tags: nil,
         # Extract only the main content from HTML-like inputs
         use_main_content_only: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -258,6 +274,7 @@ module ContextDev
                 T::Boolean,
                 ContextDev::ParseHandleParams::UseMainContentOnly::OrSymbol
               ),
+            zdr: ContextDev::ParseHandleParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
           }
         )
@@ -645,6 +662,31 @@ module ContextDev
             :false,
             ContextDev::ParseHandleParams::UseMainContentOnly::TaggedSymbol
           )
+      end
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias { T.all(Symbol, ContextDev::ParseHandleParams::Zdr) }
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        ENABLED =
+          T.let(:enabled, ContextDev::ParseHandleParams::Zdr::TaggedSymbol)
+        DISABLED =
+          T.let(:disabled, ContextDev::ParseHandleParams::Zdr::TaggedSymbol)
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::ParseHandleParams::Zdr::TaggedSymbol]
+          )
+        end
+        def self.values
+        end
       end
     end
   end

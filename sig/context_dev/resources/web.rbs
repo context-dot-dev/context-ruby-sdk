@@ -61,6 +61,7 @@ module ContextDev
         ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
         ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebScreenshotParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebScreenshotResponse
 
@@ -99,6 +100,7 @@ module ContextDev
         ?url_regex: String,
         ?use_main_content_only: bool,
         ?wait_for_ms: Integer,
+        ?zdr: ContextDev::Models::WebWebCrawlMdParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebCrawlMdResponse
 
@@ -116,6 +118,7 @@ module ContextDev
         ?timeout_ms: Integer,
         ?use_main_content_only: ContextDev::Models::WebWebScrapeHTMLParams::use_main_content_only,
         ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebWebScrapeHTMLParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeHTMLResponse
 
@@ -148,6 +151,7 @@ module ContextDev
         ?timeout_ms: Integer,
         ?use_main_content_only: ContextDev::Models::WebWebScrapeMdParams::use_main_content_only,
         ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebWebScrapeMdParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeMdResponse
 
@@ -159,6 +163,7 @@ module ContextDev
         ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?url_regex: String,
+        ?zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeSitemapResponse
 

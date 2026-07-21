@@ -113,7 +113,16 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, nil?: true
 
-      # @!method initialize(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      # @!attribute zdr
+      #   Set to enabled to bypass shared caches and omit request and response content
+      #   from retained usage logs. Requires zero data retention to be enabled for your
+      #   organization (contact support@context.dev), otherwise the request fails with
+      #   ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      #
+      #   @return [Symbol, ContextDev::Models::WebScreenshotParams::Zdr, nil]
+      optional :zdr, enum: -> { ContextDev::WebScreenshotParams::Zdr }
+
+      # @!method initialize(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScreenshotParams} for more details.
       #
@@ -142,6 +151,8 @@ module ContextDev
       #   @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       #
       #   @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before taking
+      #
+      #   @param zdr [Symbol, ContextDev::Models::WebScreenshotParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -452,6 +463,20 @@ module ContextDev
         #   @param height [Integer] Viewport height in pixels.
         #
         #   @param width [Integer] Viewport width in pixels.
+      end
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED = :enabled
+        DISABLED = :disabled
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
     end
   end

@@ -176,7 +176,7 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      # @overload screenshot(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param color_scheme [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
       #
@@ -203,6 +203,8 @@ module ContextDev
       # @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       #
       # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before taking
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebScreenshotParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -279,7 +281,7 @@ module ContextDev
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
       # and returns results for all crawled pages.
       #
-      # @overload web_crawl_md(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_crawl_md(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
       #
@@ -321,6 +323,8 @@ module ContextDev
       #
       # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load for each craw
       #
+      # @param zdr [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
       # @return [ContextDev::Models::WebWebCrawlMdResponse]
@@ -342,7 +346,7 @@ module ContextDev
       #
       # Scrapes the given URL and returns the raw HTML content of the page.
       #
-      # @overload web_scrape_html(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_html(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
       #
@@ -369,6 +373,8 @@ module ContextDev
       # @param use_main_content_only [Boolean, Symbol, ContextDev::Models::WebWebScrapeHTMLParams::UseMainContentOnly] When true, return only the page's main content in the HTML response, excluding h
       #
       # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -463,7 +469,7 @@ module ContextDev
       # | 429         | No             | Per-minute rate limit exceeded; honor Retry-After                                        |
       # | 500         | No             | Internal error                                                                           |
       #
-      # @overload web_scrape_md(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_md(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
       #
@@ -496,6 +502,8 @@ module ContextDev
       # @param use_main_content_only [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::UseMainContentOnly] Extract only the main content of the page, excluding headers, footers, sidebars,
       #
       # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before conver
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebWebScrapeMdParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -531,7 +539,7 @@ module ContextDev
       #
       # Crawl an entire website's sitemap and return all discovered page URLs.
       #
-      # @overload web_scrape_sitemap(domain:, headers: nil, max_links: nil, sitemap_url: nil, tags: nil, timeout_ms: nil, url_regex: nil, request_options: {})
+      # @overload web_scrape_sitemap(domain:, headers: nil, max_links: nil, sitemap_url: nil, tags: nil, timeout_ms: nil, url_regex: nil, zdr: nil, request_options: {})
       #
       # @param domain [String] Domain to build a sitemap for
       #
@@ -546,6 +554,8 @@ module ContextDev
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       # @param url_regex [String] Optional RE2-compatible regex pattern. Only URLs matching this pattern are retur
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebWebScrapeSitemapParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

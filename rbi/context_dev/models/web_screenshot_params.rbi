@@ -163,6 +163,16 @@ module ContextDev
       sig { returns(T.nilable(Integer)) }
       attr_accessor :wait_for_ms
 
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      sig { returns(T.nilable(ContextDev::WebScreenshotParams::Zdr::OrSymbol)) }
+      attr_reader :zdr
+
+      sig { params(zdr: ContextDev::WebScreenshotParams::Zdr::OrSymbol).void }
+      attr_writer :zdr
+
       sig do
         params(
           color_scheme: ContextDev::WebScreenshotParams::ColorScheme::OrSymbol,
@@ -183,6 +193,7 @@ module ContextDev
           timeout_ms: Integer,
           viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
           wait_for_ms: T.nilable(Integer),
+          zdr: ContextDev::WebScreenshotParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -241,6 +252,11 @@ module ContextDev
         # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
         # omitted.
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -267,6 +283,7 @@ module ContextDev
             timeout_ms: Integer,
             viewport: ContextDev::WebScreenshotParams::Viewport,
             wait_for_ms: T.nilable(Integer),
+            zdr: ContextDev::WebScreenshotParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
           }
         )
@@ -681,6 +698,31 @@ module ContextDev
 
         sig { override.returns({ height: Integer, width: Integer }) }
         def to_hash
+        end
+      end
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias { T.all(Symbol, ContextDev::WebScreenshotParams::Zdr) }
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        ENABLED =
+          T.let(:enabled, ContextDev::WebScreenshotParams::Zdr::TaggedSymbol)
+        DISABLED =
+          T.let(:disabled, ContextDev::WebScreenshotParams::Zdr::TaggedSymbol)
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebScreenshotParams::Zdr::TaggedSymbol]
+          )
+        end
+        def self.values
         end
       end
     end

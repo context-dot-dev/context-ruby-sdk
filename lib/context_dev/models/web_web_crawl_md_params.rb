@@ -149,7 +149,16 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, api_name: :waitForMs
 
-      # @!method initialize(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @!attribute zdr
+      #   Set to enabled to bypass shared caches and omit request and response content
+      #   from retained usage logs. Requires zero data retention to be enabled for your
+      #   organization (contact support@context.dev), otherwise the request fails with
+      #   ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      #
+      #   @return [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr, nil]
+      optional :zdr, enum: -> { ContextDev::WebWebCrawlMdParams::Zdr }
+
+      # @!method initialize(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
@@ -192,6 +201,8 @@ module ContextDev
       #   @param use_main_content_only [Boolean] Extract only the main content, stripping headers, footers, sidebars, and navigat
       #
       #   @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load for each craw
+      #
+      #   @param zdr [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -453,6 +464,20 @@ module ContextDev
         #   @param should_parse [Boolean] When true, PDF pages are fetched and parsed. When false, PDF pages are skipped e
         #
         #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+      end
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED = :enabled
+        DISABLED = :disabled
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
     end
   end
