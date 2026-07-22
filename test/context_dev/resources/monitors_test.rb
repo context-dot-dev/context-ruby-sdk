@@ -140,6 +140,41 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
     end
   end
 
+  def test_get_credit_usage
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.monitors.get_credit_usage
+
+    assert_pattern do
+      response => ContextDev::Models::MonitorGetCreditUsageResponse
+    end
+
+    assert_pattern do
+      response => {
+        data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorGetCreditUsageResponse::Data]),
+        total_credits: Integer
+      }
+    end
+  end
+
+  def test_get_limits
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.monitors.get_limits
+
+    assert_pattern do
+      response => ContextDev::Models::MonitorGetLimitsResponse
+    end
+
+    assert_pattern do
+      response => {
+        monitors_limit: Integer,
+        monitors_used: Integer,
+        plan: ContextDev::Models::MonitorGetLimitsResponse::Plan
+      }
+    end
+  end
+
   def test_list_account_changes
     skip("Mock server tests are disabled")
 

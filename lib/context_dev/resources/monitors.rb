@@ -171,6 +171,50 @@ module ContextDev
         )
       end
 
+      # Returns credits charged per monitor over an optional [since, until] window,
+      # newest spenders first.
+      #
+      # @overload get_credit_usage(since: nil, until_: nil, request_options: {})
+      #
+      # @param since [Time] Only include items at or after this ISO 8601 timestamp.
+      #
+      # @param until_ [Time] Only include items before this ISO 8601 timestamp.
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorGetCreditUsageResponse]
+      #
+      # @see ContextDev::Models::MonitorGetCreditUsageParams
+      def get_credit_usage(params = {})
+        parsed, options = ContextDev::MonitorGetCreditUsageParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "monitors/credit-usage",
+          query: query.transform_keys(until_: "until"),
+          model: ContextDev::Models::MonitorGetCreditUsageResponse,
+          options: options
+        )
+      end
+
+      # Returns how many monitors the account has and the maximum it allows.
+      #
+      # @overload get_limits(request_options: {})
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorGetLimitsResponse]
+      #
+      # @see ContextDev::Models::MonitorGetLimitsParams
+      def get_limits(params = {})
+        @client.request(
+          method: :get,
+          path: "monitors/limits",
+          model: ContextDev::Models::MonitorGetLimitsResponse,
+          options: params[:request_options]
+        )
+      end
+
       # Returns an account-wide feed of detected changes across monitors.
       #
       # @overload list_account_changes(change_detection_type: nil, cursor: nil, limit: nil, monitor_id: nil, since: nil, tag: nil, target_type: nil, until_: nil, request_options: {})

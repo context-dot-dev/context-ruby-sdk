@@ -48,6 +48,16 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::MonitorDeleteResponse
 
+      def get_credit_usage: (
+        ?since: Time,
+        ?until_: Time,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::MonitorGetCreditUsageResponse
+
+      def get_limits: (
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::MonitorGetLimitsResponse
+
       def list_account_changes: (
         ?change_detection_type: ContextDev::Models::MonitorListAccountChangesParams::change_detection_type,
         ?cursor: String,

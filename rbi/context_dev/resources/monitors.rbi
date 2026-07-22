@@ -165,6 +165,33 @@ module ContextDev
       def delete(monitor_id, request_options: {})
       end
 
+      # Returns credits charged per monitor over an optional [since, until] window,
+      # newest spenders first.
+      sig do
+        params(
+          since: Time,
+          until_: Time,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::MonitorGetCreditUsageResponse)
+      end
+      def get_credit_usage(
+        # Only include items at or after this ISO 8601 timestamp.
+        since: nil,
+        # Only include items before this ISO 8601 timestamp.
+        until_: nil,
+        request_options: {}
+      )
+      end
+
+      # Returns how many monitors the account has and the maximum it allows.
+      sig do
+        params(request_options: ContextDev::RequestOptions::OrHash).returns(
+          ContextDev::Models::MonitorGetLimitsResponse
+        )
+      end
+      def get_limits(request_options: {})
+      end
+
       # Returns an account-wide feed of detected changes across monitors.
       sig do
         params(
