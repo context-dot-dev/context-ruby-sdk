@@ -55,6 +55,10 @@ module ContextDev
 
   MonitorDeleteParams = ContextDev::Models::MonitorDeleteParams
 
+  MonitorGetCreditUsageParams = ContextDev::Models::MonitorGetCreditUsageParams
+
+  MonitorGetLimitsParams = ContextDev::Models::MonitorGetLimitsParams
+
   MonitorListAccountChangesParams = ContextDev::Models::MonitorListAccountChangesParams
 
   MonitorListAccountRunsParams = ContextDev::Models::MonitorListAccountRunsParams
