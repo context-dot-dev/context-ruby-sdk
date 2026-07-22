@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.5.0 (2026-07-22)
+
+Full Changelog: [v2.4.0...v2.5.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.4.0...v2.5.0)
+
+### Features
+
+* **api:** api update ([5af0d4b](https://github.com/context-dot-dev/context-ruby-sdk/commit/5af0d4b1954673356f6200967dbea5ea61685025))
+* **api:** api update ([28793d8](https://github.com/context-dot-dev/context-ruby-sdk/commit/28793d84ed93dcf457aaf3f346056f2480f37724))
+* **api:** api update ([c9c4475](https://github.com/context-dot-dev/context-ruby-sdk/commit/c9c447554772879c742d72ac88174a75fbff599a))
+* **api:** api update ([72e6d90](https://github.com/context-dot-dev/context-ruby-sdk/commit/72e6d90baaeeb9181482488e7b49e511597d2175))
+* **api:** api update ([2574f7d](https://github.com/context-dot-dev/context-ruby-sdk/commit/2574f7db809d8480db2b7ae2705fd2de6a1ce2ff))
+* **api:** api update ([8fb7d29](https://github.com/context-dot-dev/context-ruby-sdk/commit/8fb7d29835d4ffe7eb53b1619d3da20fa45df52c))
+* **api:** api update ([f5684a3](https://github.com/context-dot-dev/context-ruby-sdk/commit/f5684a355f24bf6a80aa904f09087a899f2121aa))
+* **api:** manual updates ([2a83a5f](https://github.com/context-dot-dev/context-ruby-sdk/commit/2a83a5f976bf2b75964ea56ff07f99872acd5022))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([f1c36e9](https://github.com/context-dot-dev/context-ruby-sdk/commit/f1c36e95f04eb617aa1769ba9cd21e3dad7bc5ee))
+
 ## 2.4.0 (2026-07-12)
 
 Full Changelog: [v2.3.0...v2.4.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.3.0...v2.4.0)
