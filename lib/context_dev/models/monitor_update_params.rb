@@ -38,6 +38,7 @@ module ContextDev
 
       # @!attribute tags
       #   User-defined tags for grouping and filtering monitors and their changes.
+      #   Duplicates are removed.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -68,7 +69,7 @@ module ContextDev
       #
       #   @param status [Symbol, ContextDev::Models::MonitorUpdateParams::Status]
       #
-      #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes.
+      #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes. Duplica
       #
       #   @param target [ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract] Discriminated union describing what the monitor watches.
       #
@@ -246,13 +247,13 @@ module ContextDev
           required :url, String
 
           # @!attribute exclude
-          #   URL path patterns to exclude.
+          #   URL path patterns to exclude (max 50).
           #
           #   @return [Array<String>, nil]
           optional :exclude, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute include
-          #   URL path patterns to include.
+          #   URL path patterns to include (max 50).
           #
           #   @return [Array<String>, nil]
           optional :include, ContextDev::Internal::Type::ArrayOf[String]
@@ -272,9 +273,9 @@ module ContextDev
           #
           #   @param url [String] Sitemap URL to monitor.
           #
-          #   @param exclude [Array<String>] URL path patterns to exclude.
+          #   @param exclude [Array<String>] URL path patterns to exclude (max 50).
           #
-          #   @param include [Array<String>] URL path patterns to include.
+          #   @param include [Array<String>] URL path patterns to include (max 50).
           #
           #   @param max_urls [Integer] Maximum number of sitemap URLs to track (capped at 10,000).
           #

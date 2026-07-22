@@ -26,7 +26,7 @@ module ContextDev
       #
       # @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Top-level monitor category. Always `web` today; the concrete behavior is describ
       #
-      # @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes.
+      # @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes. Duplica
       #
       # @param webhook [ContextDev::Models::MonitorCreateParams::Webhook, nil]
       #
@@ -84,7 +84,7 @@ module ContextDev
       #
       # @param status [Symbol, ContextDev::Models::MonitorUpdateParams::Status]
       #
-      # @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes.
+      # @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes. Duplica
       #
       # @param target [ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract] Discriminated union describing what the monitor watches.
       #

@@ -140,6 +140,7 @@ module ContextDev
         attr_writer :removed_url_count
 
         # User-defined tags for grouping and filtering monitors and their changes.
+        # Duplicates are removed.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :tags
 
@@ -192,6 +193,7 @@ module ContextDev
           matched_url_count: nil,
           removed_url_count: nil,
           # User-defined tags for grouping and filtering monitors and their changes.
+          # Duplicates are removed.
           tags: nil
         )
         end
