@@ -45,6 +45,7 @@ module ContextDev
 
       # @!attribute tags
       #   User-defined tags for grouping and filtering monitors and their changes.
+      #   Duplicates are removed.
       #
       #   @return [Array<String>]
       required :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -153,7 +154,7 @@ module ContextDev
       #
       #   @param summary [String]
       #
-      #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes.
+      #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes. Duplica
       #
       #   @param target_type [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::TargetType]
       #

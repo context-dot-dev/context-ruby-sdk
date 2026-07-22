@@ -44,6 +44,7 @@ module ContextDev
       attr_accessor :summary
 
       # User-defined tags for grouping and filtering monitors and their changes.
+      # Duplicates are removed.
       sig { returns(T::Array[String]) }
       attr_accessor :tags
 
@@ -213,6 +214,7 @@ module ContextDev
         run_id:,
         summary:,
         # User-defined tags for grouping and filtering monitors and their changes.
+        # Duplicates are removed.
         tags:,
         target_type:,
         title:,

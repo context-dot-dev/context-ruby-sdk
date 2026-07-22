@@ -45,6 +45,7 @@ module ContextDev
         # described by `target` and `change_detection`.
         mode: nil,
         # User-defined tags for grouping and filtering monitors and their changes.
+        # Duplicates are removed.
         tags: nil,
         webhook: nil,
         request_options: {}
@@ -97,6 +98,7 @@ module ContextDev
         schedule: nil,
         status: nil,
         # User-defined tags for grouping and filtering monitors and their changes.
+        # Duplicates are removed.
         tags: nil,
         # Discriminated union describing what the monitor watches.
         target: nil,
