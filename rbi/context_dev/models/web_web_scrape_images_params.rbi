@@ -18,6 +18,23 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
+      # Optional browser actions executed in array order after the page loads and before
+      # content is captured. Requires a paid plan. Send a JSON array in the query
+      # parameter. Maximum: 5 actions.
+      sig do
+        returns(
+          T.nilable(
+            T::Array[
+              T.any(
+                ContextDev::WebWebScrapeImagesParams::Action::Wait,
+                ContextDev::WebWebScrapeImagesParams::Action::Perform
+              )
+            ]
+          )
+        )
+      end
+      attr_accessor :actions
+
       # When true, visually duplicate images are removed: every image is loaded and
       # perceptually hashed, and only the highest-resolution copy of each duplicate
       # group is kept. Images that cannot be downloaded or hashed are kept. Default:
@@ -100,6 +117,15 @@ module ContextDev
       sig do
         params(
           url: String,
+          actions:
+            T.nilable(
+              T::Array[
+                T.any(
+                  ContextDev::WebWebScrapeImagesParams::Action::Wait::OrHash,
+                  ContextDev::WebWebScrapeImagesParams::Action::Perform::OrHash
+                )
+              ]
+            ),
           dedupe:
             T.any(
               T::Boolean,
@@ -118,6 +144,10 @@ module ContextDev
       def self.new(
         # Page URL to inspect. Must include http:// or https://.
         url:,
+        # Optional browser actions executed in array order after the page loads and before
+        # content is captured. Requires a paid plan. Send a JSON array in the query
+        # parameter. Maximum: 5 actions.
+        actions: nil,
         # When true, visually duplicate images are removed: every image is loaded and
         # perceptually hashed, and only the highest-resolution copy of each duplicate
         # group is kept. Images that cannot be downloaded or hashed are kept. Default:
@@ -152,6 +182,15 @@ module ContextDev
         override.returns(
           {
             url: String,
+            actions:
+              T.nilable(
+                T::Array[
+                  T.any(
+                    ContextDev::WebWebScrapeImagesParams::Action::Wait,
+                    ContextDev::WebWebScrapeImagesParams::Action::Perform
+                  )
+                ]
+              ),
             dedupe:
               T.any(
                 T::Boolean,
@@ -169,6 +208,80 @@ module ContextDev
         )
       end
       def to_hash
+      end
+
+      # Browser action discriminated by `do`. Each variant exposes only its applicable
+      # fields.
+      module Action
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              ContextDev::WebWebScrapeImagesParams::Action::Wait,
+              ContextDev::WebWebScrapeImagesParams::Action::Perform
+            )
+          end
+
+        class Wait < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::WebWebScrapeImagesParams::Action::Wait,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(Symbol) }
+          attr_accessor :do_
+
+          sig { returns(Integer) }
+          attr_accessor :time_ms
+
+          # Pause for a fixed number of milliseconds before continuing to the next action.
+          sig do
+            params(time_ms: Integer, do_: Symbol).returns(T.attached_class)
+          end
+          def self.new(time_ms:, do_: :wait)
+          end
+
+          sig { override.returns({ do_: Symbol, time_ms: Integer }) }
+          def to_hash
+          end
+        end
+
+        class Perform < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::WebWebScrapeImagesParams::Action::Perform,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(String) }
+          attr_accessor :action
+
+          sig { returns(Symbol) }
+          attr_accessor :do_
+
+          # Resolve and perform one natural-language browser action.
+          sig { params(action: String, do_: Symbol).returns(T.attached_class) }
+          def self.new(action:, do_: :perform)
+          end
+
+          sig { override.returns({ action: String, do_: Symbol }) }
+          def to_hash
+          end
+        end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebWebScrapeImagesParams::Action::Variants]
+          )
+        end
+        def self.variants
+        end
       end
 
       # When true, visually duplicate images are removed: every image is loaded and

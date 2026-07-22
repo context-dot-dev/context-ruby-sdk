@@ -14,6 +14,16 @@ module ContextDev
       #   @return [String]
       required :url, String
 
+      # @!attribute actions
+      #   Optional browser actions executed in array order after the page loads and before
+      #   content is captured. Requires a paid plan. Send a JSON array in the query
+      #   parameter. Maximum: 5 actions.
+      #
+      #   @return [Array<ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform>, nil]
+      optional :actions,
+               -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::WebWebScrapeMdParams::Action] },
+               nil?: true
+
       # @!attribute country
       #   Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
       #   residential proxy exit location. Must be one of Context.dev's supported
@@ -132,11 +142,13 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebWebScrapeMdParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebWebScrapeMdParams::Zdr }
 
-      # @!method initialize(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @!method initialize(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeMdParams} for more details.
       #
       #   @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
+      #
+      #   @param actions [Array<ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
       #
       #   @param country [Symbol, ContextDev::Models::WebWebScrapeMdParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
       #
@@ -171,6 +183,59 @@ module ContextDev
       #   @param zdr [Symbol, ContextDev::Models::WebWebScrapeMdParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      # Browser action discriminated by `do`. Each variant exposes only its applicable
+      # fields.
+      module Action
+        extend ContextDev::Internal::Type::Union
+
+        discriminator :do
+
+        # Pause for a fixed number of milliseconds before continuing to the next action.
+        variant :wait, -> { ContextDev::WebWebScrapeMdParams::Action::Wait }
+
+        # Resolve and perform one natural-language browser action.
+        variant :perform, -> { ContextDev::WebWebScrapeMdParams::Action::Perform }
+
+        class Wait < ContextDev::Internal::Type::BaseModel
+          # @!attribute do_
+          #
+          #   @return [Symbol, :wait]
+          required :do_, const: :wait, api_name: :do
+
+          # @!attribute time_ms
+          #
+          #   @return [Integer]
+          required :time_ms, Integer, api_name: :timeMs
+
+          # @!method initialize(time_ms:, do_: :wait)
+          #   Pause for a fixed number of milliseconds before continuing to the next action.
+          #
+          #   @param time_ms [Integer]
+          #   @param do_ [Symbol, :wait]
+        end
+
+        class Perform < ContextDev::Internal::Type::BaseModel
+          # @!attribute action
+          #
+          #   @return [String]
+          required :action, String
+
+          # @!attribute do_
+          #
+          #   @return [Symbol, :perform]
+          required :do_, const: :perform, api_name: :do
+
+          # @!method initialize(action:, do_: :perform)
+          #   Resolve and perform one natural-language browser action.
+          #
+          #   @param action [String]
+          #   @param do_ [Symbol, :perform]
+        end
+
+        # @!method self.variants
+        #   @return [Array(ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform)]
+      end
 
       # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
       # residential proxy exit location. Must be one of Context.dev's supported

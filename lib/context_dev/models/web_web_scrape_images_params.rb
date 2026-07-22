@@ -13,6 +13,18 @@ module ContextDev
       #   @return [String]
       required :url, String
 
+      # @!attribute actions
+      #   Optional browser actions executed in array order after the page loads and before
+      #   content is captured. Requires a paid plan. Send a JSON array in the query
+      #   parameter. Maximum: 5 actions.
+      #
+      #   @return [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform>, nil]
+      optional :actions,
+               -> {
+                 ContextDev::Internal::Type::ArrayOf[union: ContextDev::WebWebScrapeImagesParams::Action]
+               },
+               nil?: true
+
       # @!attribute dedupe
       #   When true, visually duplicate images are removed: every image is loaded and
       #   perceptually hashed, and only the highest-resolution copy of each duplicate
@@ -67,11 +79,13 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, nil?: true
 
-      # @!method initialize(url:, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(url:, actions: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeImagesParams} for more details.
       #
       #   @param url [String] Page URL to inspect. Must include http:// or https://.
+      #
+      #   @param actions [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
       #
       #   @param dedupe [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Dedupe] When true, visually duplicate images are removed: every image is loaded and perc
       #
@@ -88,6 +102,59 @@ module ContextDev
       #   @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before collec
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      # Browser action discriminated by `do`. Each variant exposes only its applicable
+      # fields.
+      module Action
+        extend ContextDev::Internal::Type::Union
+
+        discriminator :do
+
+        # Pause for a fixed number of milliseconds before continuing to the next action.
+        variant :wait, -> { ContextDev::WebWebScrapeImagesParams::Action::Wait }
+
+        # Resolve and perform one natural-language browser action.
+        variant :perform, -> { ContextDev::WebWebScrapeImagesParams::Action::Perform }
+
+        class Wait < ContextDev::Internal::Type::BaseModel
+          # @!attribute do_
+          #
+          #   @return [Symbol, :wait]
+          required :do_, const: :wait, api_name: :do
+
+          # @!attribute time_ms
+          #
+          #   @return [Integer]
+          required :time_ms, Integer, api_name: :timeMs
+
+          # @!method initialize(time_ms:, do_: :wait)
+          #   Pause for a fixed number of milliseconds before continuing to the next action.
+          #
+          #   @param time_ms [Integer]
+          #   @param do_ [Symbol, :wait]
+        end
+
+        class Perform < ContextDev::Internal::Type::BaseModel
+          # @!attribute action
+          #
+          #   @return [String]
+          required :action, String
+
+          # @!attribute do_
+          #
+          #   @return [Symbol, :perform]
+          required :do_, const: :perform, api_name: :do
+
+          # @!method initialize(action:, do_: :perform)
+          #   Resolve and perform one natural-language browser action.
+          #
+          #   @param action [String]
+          #   @param do_ [Symbol, :perform]
+        end
+
+        # @!method self.variants
+        #   @return [Array(ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform)]
+      end
 
       # When true, visually duplicate images are removed: every image is loaded and
       # perceptually hashed, and only the highest-resolution copy of each duplicate
