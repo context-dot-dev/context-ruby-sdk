@@ -92,6 +92,13 @@ module ContextDev
           sig { params(max_products: Integer).void }
           attr_writer :max_products
 
+          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          sig { returns(T.nilable(T::Array[String])) }
+          attr_reader :tags
+
+          sig { params(tags: T::Array[String]).void }
+          attr_writer :tags
+
           # Optional timeout in milliseconds for the request. If the request takes longer
           # than this value, it will be aborted with a 408 status code. Maximum allowed
           # value is 300000ms (5 minutes).
@@ -106,6 +113,7 @@ module ContextDev
               domain: String,
               max_age_ms: Integer,
               max_products: Integer,
+              tags: T::Array[String],
               timeout_ms: Integer
             ).returns(T.attached_class)
           end
@@ -118,6 +126,8 @@ module ContextDev
             max_age_ms: nil,
             # Maximum number of products to extract.
             max_products: nil,
+            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            tags: nil,
             # Optional timeout in milliseconds for the request. If the request takes longer
             # than this value, it will be aborted with a 408 status code. Maximum allowed
             # value is 300000ms (5 minutes).
@@ -131,6 +141,7 @@ module ContextDev
                 domain: String,
                 max_age_ms: Integer,
                 max_products: Integer,
+                tags: T::Array[String],
                 timeout_ms: Integer
               }
             )
@@ -169,6 +180,13 @@ module ContextDev
           sig { params(max_products: Integer).void }
           attr_writer :max_products
 
+          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          sig { returns(T.nilable(T::Array[String])) }
+          attr_reader :tags
+
+          sig { params(tags: T::Array[String]).void }
+          attr_writer :tags
+
           # Optional timeout in milliseconds for the request. If the request takes longer
           # than this value, it will be aborted with a 408 status code. Maximum allowed
           # value is 300000ms (5 minutes).
@@ -183,6 +201,7 @@ module ContextDev
               direct_url: String,
               max_age_ms: Integer,
               max_products: Integer,
+              tags: T::Array[String],
               timeout_ms: Integer
             ).returns(T.attached_class)
           end
@@ -196,6 +215,8 @@ module ContextDev
             max_age_ms: nil,
             # Maximum number of products to extract.
             max_products: nil,
+            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            tags: nil,
             # Optional timeout in milliseconds for the request. If the request takes longer
             # than this value, it will be aborted with a 408 status code. Maximum allowed
             # value is 300000ms (5 minutes).
@@ -209,6 +230,7 @@ module ContextDev
                 direct_url: String,
                 max_age_ms: Integer,
                 max_products: Integer,
+                tags: T::Array[String],
                 timeout_ms: Integer
               }
             )

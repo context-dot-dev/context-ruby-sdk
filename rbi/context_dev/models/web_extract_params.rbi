@@ -85,6 +85,15 @@ module ContextDev
       sig { params(pdf: ContextDev::WebExtractParams::Pdf::OrHash).void }
       attr_writer :pdf
 
+      # When true, waits briefly for CSS and transition animations to settle before
+      # extracting each crawled page. Defaults to false. This adds a bit of latency in
+      # exchange for more stable output on animated pages.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :settle_animations
+
+      sig { params(settle_animations: T::Boolean).void }
+      attr_writer :settle_animations
+
       # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
       # (110s). Default: 80000 (80s).
       sig { returns(T.nilable(Integer)) }
@@ -92,6 +101,13 @@ module ContextDev
 
       sig { params(stop_after_ms: Integer).void }
       attr_writer :stop_after_ms
+
+      # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :tags
+
+      sig { params(tags: T::Array[String]).void }
+      attr_writer :tags
 
       # Optional timeout in milliseconds for the request. If the request takes longer
       # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -122,7 +138,9 @@ module ContextDev
           max_depth: Integer,
           max_pages: Integer,
           pdf: ContextDev::WebExtractParams::Pdf::OrHash,
+          settle_animations: T::Boolean,
           stop_after_ms: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
@@ -159,9 +177,15 @@ module ContextDev
         # Maximum number of pages to analyze for extraction. Hard cap: 50. Defaults to 5.
         max_pages: nil,
         pdf: nil,
+        # When true, waits briefly for CSS and transition animations to settle before
+        # extracting each crawled page. Defaults to false. This adds a bit of latency in
+        # exchange for more stable output on animated pages.
+        settle_animations: nil,
         # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
         # (110s). Default: 80000 (80s).
         stop_after_ms: nil,
+        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -186,7 +210,9 @@ module ContextDev
             max_depth: Integer,
             max_pages: Integer,
             pdf: ContextDev::WebExtractParams::Pdf,
+            settle_animations: T::Boolean,
             stop_after_ms: Integer,
+            tags: T::Array[String],
             timeout_ms: Integer,
             wait_for_ms: Integer,
             request_options: ContextDev::RequestOptions

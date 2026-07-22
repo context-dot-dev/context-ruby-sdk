@@ -27,8 +27,9 @@ module ContextDev
       end
       attr_writer :color_scheme
 
-      # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
-      # When provided, Context.dev fetches the target page from that country.
+      # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+      # residential proxy exit location. Must be one of Context.dev's supported
+      # countries. When provided, Context.dev fetches the target page from that country.
       sig do
         returns(T.nilable(ContextDev::WebScreenshotParams::Country::OrSymbol))
       end
@@ -81,7 +82,10 @@ module ContextDev
       sig do
         returns(
           T.nilable(
-            ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
+            T.any(
+              T::Boolean,
+              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
+            )
           )
         )
       end
@@ -90,7 +94,10 @@ module ContextDev
       sig do
         params(
           handle_cookie_popup:
-            ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
+            T.any(
+              T::Boolean,
+              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
+            )
         ).void
       end
       attr_writer :handle_cookie_popup
@@ -99,10 +106,7 @@ module ContextDev
       # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
       # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
       sig { returns(T.nilable(Integer)) }
-      attr_reader :max_age_ms
-
-      sig { params(max_age_ms: Integer).void }
-      attr_writer :max_age_ms
+      attr_accessor :max_age_ms
 
       # Optional parameter to specify which page type to screenshot. If provided, the
       # system will scrape the domain's links and use heuristics to find the most
@@ -124,10 +128,16 @@ module ContextDev
       # top to bottom). The final slice may be shorter than the viewport height. Takes
       # precedence over fullScreenshot. Max: 100000.
       sig { returns(T.nilable(Integer)) }
-      attr_reader :scroll_offset
+      attr_accessor :scroll_offset
 
-      sig { params(scroll_offset: Integer).void }
-      attr_writer :scroll_offset
+      # Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # recorded on the request's usage log and can be used to filter usage on the
+      # dashboard usage page. Up to 20 tags, each 1-50 characters.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :tags
+
+      sig { params(tags: T::Array[String]).void }
+      attr_writer :tags
 
       # Optional timeout in milliseconds for the request. If the request takes longer
       # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -151,10 +161,17 @@ module ContextDev
       # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
       # omitted.
       sig { returns(T.nilable(Integer)) }
-      attr_reader :wait_for_ms
+      attr_accessor :wait_for_ms
 
-      sig { params(wait_for_ms: Integer).void }
-      attr_writer :wait_for_ms
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      sig { returns(T.nilable(ContextDev::WebScreenshotParams::Zdr::OrSymbol)) }
+      attr_reader :zdr
+
+      sig { params(zdr: ContextDev::WebScreenshotParams::Zdr::OrSymbol).void }
+      attr_writer :zdr
 
       sig do
         params(
@@ -165,13 +182,18 @@ module ContextDev
           full_screenshot:
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
           handle_cookie_popup:
-            ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol,
-          max_age_ms: Integer,
+            T.any(
+              T::Boolean,
+              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
+            ),
+          max_age_ms: T.nilable(Integer),
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
-          scroll_offset: Integer,
+          scroll_offset: T.nilable(Integer),
+          tags: T::Array[String],
           timeout_ms: Integer,
           viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
-          wait_for_ms: Integer,
+          wait_for_ms: T.nilable(Integer),
+          zdr: ContextDev::WebScreenshotParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -179,8 +201,9 @@ module ContextDev
         # Optional parameter to choose the site's visual theme in the screenshot. Use
         # 'light' or 'dark' when the site offers both appearances.
         color_scheme: nil,
-        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
-        # When provided, Context.dev fetches the target page from that country.
+        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+        # residential proxy exit location. Must be one of Context.dev's supported
+        # countries. When provided, Context.dev fetches the target page from that country.
         country: nil,
         # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
         # 'https://example.com/pricing'). When provided, the screenshot is taken of this
@@ -215,6 +238,10 @@ module ContextDev
         # top to bottom). The final slice may be shorter than the viewport height. Takes
         # precedence over fullScreenshot. Max: 100000.
         scroll_offset: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -225,6 +252,11 @@ module ContextDev
         # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
         # omitted.
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -240,13 +272,18 @@ module ContextDev
             full_screenshot:
               ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
             handle_cookie_popup:
-              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol,
-            max_age_ms: Integer,
+              T.any(
+                T::Boolean,
+                ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
+              ),
+            max_age_ms: T.nilable(Integer),
             page: ContextDev::WebScreenshotParams::Page::OrSymbol,
-            scroll_offset: Integer,
+            scroll_offset: T.nilable(Integer),
+            tags: T::Array[String],
             timeout_ms: Integer,
             viewport: ContextDev::WebScreenshotParams::Viewport,
-            wait_for_ms: Integer,
+            wait_for_ms: T.nilable(Integer),
+            zdr: ContextDev::WebScreenshotParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
           }
         )
@@ -285,8 +322,9 @@ module ContextDev
         end
       end
 
-      # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
-      # When provided, Context.dev fetches the target page from that country.
+      # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+      # residential proxy exit location. Must be one of Context.dev's supported
+      # countries. When provided, Context.dev fetches the target page from that country.
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -548,7 +586,25 @@ module ContextDev
       # dismiss cookie banner before capture. If 'false' or not provided, captures the
       # page without that step.
       module HandleCookiePopup
-        extend ContextDev::Internal::Type::Enum
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              T::Boolean,
+              ContextDev::WebScreenshotParams::HandleCookiePopup::TaggedSymbol
+            )
+          end
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::WebScreenshotParams::HandleCookiePopup::Variants
+            ]
+          )
+        end
+        def self.variants
+        end
 
         TaggedSymbol =
           T.type_alias do
@@ -566,16 +622,6 @@ module ContextDev
             :false,
             ContextDev::WebScreenshotParams::HandleCookiePopup::TaggedSymbol
           )
-
-        sig do
-          override.returns(
-            T::Array[
-              ContextDev::WebScreenshotParams::HandleCookiePopup::TaggedSymbol
-            ]
-          )
-        end
-        def self.values
-        end
       end
 
       # Optional parameter to specify which page type to screenshot. If provided, the
@@ -652,6 +698,31 @@ module ContextDev
 
         sig { override.returns({ height: Integer, width: Integer }) }
         def to_hash
+        end
+      end
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias { T.all(Symbol, ContextDev::WebScreenshotParams::Zdr) }
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        ENABLED =
+          T.let(:enabled, ContextDev::WebScreenshotParams::Zdr::TaggedSymbol)
+        DISABLED =
+          T.let(:disabled, ContextDev::WebScreenshotParams::Zdr::TaggedSymbol)
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebScreenshotParams::Zdr::TaggedSymbol]
+          )
+        end
+        def self.values
         end
       end
     end

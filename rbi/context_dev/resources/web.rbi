@@ -17,7 +17,9 @@ module ContextDev
           max_depth: Integer,
           max_pages: Integer,
           pdf: ContextDev::WebExtractParams::Pdf::OrHash,
+          settle_animations: T::Boolean,
           stop_after_ms: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
@@ -54,9 +56,15 @@ module ContextDev
         # Maximum number of pages to analyze for extraction. Hard cap: 50. Defaults to 5.
         max_pages: nil,
         pdf: nil,
+        # When true, waits briefly for CSS and transition animations to settle before
+        # extracting each crawled page. Defaults to false. This adds a bit of latency in
+        # exchange for more stable output on animated pages.
+        settle_animations: nil,
         # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
         # (110s). Default: 80000 (80s).
         stop_after_ms: nil,
+        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -74,6 +82,7 @@ module ContextDev
         params(
           domain: String,
           num_competitors: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractCompetitorsResponse)
@@ -84,6 +93,10 @@ module ContextDev
         domain:,
         # Exact number of direct competitors to return. Defaults to 5.
         num_competitors: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -98,7 +111,8 @@ module ContextDev
         params(
           direct_url: String,
           domain: String,
-          max_age_ms: Integer,
+          max_age_ms: T.nilable(Integer),
+          tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractFontsResponse)
@@ -112,11 +126,15 @@ module ContextDev
         # domain will be automatically normalized and validated. You must provide either
         # 'domain' or 'directUrl', but not both.
         domain: nil,
-        # Maximum age in milliseconds for cached data before the API performs a hard
+        # Maximum age in milliseconds for cached brand data before the API performs a hard
         # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
         # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
         # year.
         max_age_ms: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -133,7 +151,8 @@ module ContextDev
             ContextDev::WebExtractStyleguideParams::ColorScheme::OrSymbol,
           direct_url: String,
           domain: String,
-          max_age_ms: Integer,
+          max_age_ms: T.nilable(Integer),
+          tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractStyleguideResponse)
@@ -151,11 +170,15 @@ module ContextDev
         # domain will be automatically normalized and validated. You must provide either
         # 'domain' or 'directUrl', but not both.
         domain: nil,
-        # Maximum age in milliseconds for cached data before the API performs a hard
+        # Maximum age in milliseconds for cached brand data before the API performs a hard
         # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
         # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
         # year.
         max_age_ms: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -174,13 +197,18 @@ module ContextDev
           full_screenshot:
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
           handle_cookie_popup:
-            ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol,
-          max_age_ms: Integer,
+            T.any(
+              T::Boolean,
+              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
+            ),
+          max_age_ms: T.nilable(Integer),
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
-          scroll_offset: Integer,
+          scroll_offset: T.nilable(Integer),
+          tags: T::Array[String],
           timeout_ms: Integer,
           viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
-          wait_for_ms: Integer,
+          wait_for_ms: T.nilable(Integer),
+          zdr: ContextDev::WebScreenshotParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebScreenshotResponse)
       end
@@ -188,8 +216,9 @@ module ContextDev
         # Optional parameter to choose the site's visual theme in the screenshot. Use
         # 'light' or 'dark' when the site offers both appearances.
         color_scheme: nil,
-        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
-        # When provided, Context.dev fetches the target page from that country.
+        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+        # residential proxy exit location. Must be one of Context.dev's supported
+        # countries. When provided, Context.dev fetches the target page from that country.
         country: nil,
         # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
         # 'https://example.com/pricing'). When provided, the screenshot is taken of this
@@ -224,6 +253,10 @@ module ContextDev
         # top to bottom). The final slice may be shorter than the viewport height. Takes
         # precedence over fullScreenshot. Max: 100000.
         scroll_offset: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -234,6 +267,11 @@ module ContextDev
         # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
         # omitted.
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -250,6 +288,7 @@ module ContextDev
             ContextDev::WebSearchParams::MarkdownOptions::OrHash,
           num_results: Integer,
           query_fanout: T::Boolean,
+          tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebSearchResponse)
@@ -275,6 +314,8 @@ module ContextDev
         num_results: nil,
         # Expand the query into multiple parallel variants for broader recall.
         query_fanout: nil,
+        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -302,10 +343,12 @@ module ContextDev
           settle_animations: T::Boolean,
           shorten_base64_images: T::Boolean,
           stop_after_ms: Integer,
+          tags: T::Array[String],
           timeout_ms: Integer,
           url_regex: String,
           use_main_content_only: T::Boolean,
           wait_for_ms: Integer,
+          zdr: ContextDev::WebWebCrawlMdParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebCrawlMdResponse)
       end
@@ -358,6 +401,8 @@ module ContextDev
         # instead of continuing. Min: 10000 (10s). Max: 110000 (110s). Default: 80000
         # (80s).
         stop_after_ms: nil,
+        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -370,33 +415,67 @@ module ContextDev
         # Optional browser wait time in milliseconds after initial page load for each
         # crawled page. Min: 0. Max: 30000 (30 seconds).
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
 
-      # Scrapes the given URL and returns the raw HTML content of the page.
+      # Scrapes the given URL and returns the raw HTML content of the page. The base
+      # request costs 1 credit; requests with browser actions cost 2 credits.
       sig do
         params(
           url: String,
+          actions:
+            T.nilable(
+              T::Array[
+                T.any(
+                  ContextDev::WebWebScrapeHTMLParams::Action::Wait::OrHash,
+                  ContextDev::WebWebScrapeHTMLParams::Action::Perform::OrHash
+                )
+              ]
+            ),
           country: ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol,
-          exclude_selectors: T::Array[String],
+          exclude_selectors: T.nilable(T::Array[String]),
           headers: T::Hash[Symbol, String],
-          include_frames: T::Boolean,
-          include_selectors: T::Array[String],
-          max_age_ms: Integer,
+          include_frames:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeHTMLParams::IncludeFrames::OrSymbol
+            ),
+          include_selectors: T.nilable(T::Array[String]),
+          max_age_ms: T.nilable(Integer),
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
-          settle_animations: T::Boolean,
+          settle_animations:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeHTMLParams::SettleAnimations::OrSymbol
+            ),
+          tags: T::Array[String],
           timeout_ms: Integer,
-          use_main_content_only: T::Boolean,
-          wait_for_ms: Integer,
+          use_main_content_only:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeHTMLParams::UseMainContentOnly::OrSymbol
+            ),
+          wait_for_ms: T.nilable(Integer),
+          zdr: ContextDev::WebWebScrapeHTMLParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeHTMLResponse)
       end
       def web_scrape_html(
         # Full URL to scrape (must include http:// or https:// protocol)
         url:,
-        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
-        # When provided, Context.dev fetches the target page from that country.
+        # Optional browser actions executed in array order after the page loads and before
+        # content is captured. Requires a paid plan. Send a JSON array in the query
+        # parameter. Maximum: 5 actions.
+        actions: nil,
+        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+        # residential proxy exit location. Must be one of Context.dev's supported
+        # countries. When provided, Context.dev fetches the target page from that country.
         country: nil,
         # CSS selectors to remove from the result. Applied after includeSelectors.
         # Exclusion takes precedence: an element matching both is removed. Examples:
@@ -423,6 +502,10 @@ module ContextDev
         # extracting HTML. Defaults to false. This adds a bit of latency in exchange for
         # more stable output on animated pages.
         settle_animations: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -433,29 +516,54 @@ module ContextDev
         # Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
         # 30000 (30 seconds).
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
 
       # Extract image assets from a web page, including standard URLs, inline SVGs, data
       # URIs, responsive image sources, metadata, CSS backgrounds, video posters, and
-      # embeds. The base request costs 1 credit. When enrichment is enabled, the entire
-      # call costs 5 credits.
+      # embeds. The base request costs 1 credit, or 2 credits with browser actions. When
+      # enrichment is enabled, the entire call costs 5 credits, including requests that
+      # also use actions.
       sig do
         params(
           url: String,
-          dedupe: T::Boolean,
-          enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash,
+          actions:
+            T.nilable(
+              T::Array[
+                T.any(
+                  ContextDev::WebWebScrapeImagesParams::Action::Wait::OrHash,
+                  ContextDev::WebWebScrapeImagesParams::Action::Perform::OrHash
+                )
+              ]
+            ),
+          dedupe:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeImagesParams::Dedupe::OrSymbol
+            ),
+          enrichment:
+            T.nilable(ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash),
           headers: T::Hash[Symbol, String],
-          max_age_ms: Integer,
+          max_age_ms: T.nilable(Integer),
+          tags: T::Array[String],
           timeout_ms: Integer,
-          wait_for_ms: Integer,
+          wait_for_ms: T.nilable(Integer),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeImagesResponse)
       end
       def web_scrape_images(
         # Page URL to inspect. Must include http:// or https://.
         url:,
+        # Optional browser actions executed in array order after the page loads and before
+        # content is captured. Requires a paid plan. Send a JSON array in the query
+        # parameter. Maximum: 5 actions.
+        actions: nil,
         # When true, visually duplicate images are removed: every image is loaded and
         # perceptually hashed, and only the highest-resolution copy of each duplicate
         # group is kept. Images that cannot be downloaded or hashed are kept. Default:
@@ -471,6 +579,10 @@ module ContextDev
         # Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
         # day). Set to 0 to bypass cache. Maximum: 2592000000 (30 days).
         max_age_ms: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -488,33 +600,68 @@ module ContextDev
       #
       # ### Billing & errors
       #
-      # | HTTP status | Billed?        | Meaning                                                                                  |
-      # | ----------- | -------------- | ---------------------------------------------------------------------------------------- |
-      # | 200         | Yes — 1 credit | Successful scrape, including a zero-length result when includeSelectors matched nothing  |
-      # | 400         | No             | Invalid input, skipped PDF, or the page could not be scraped                             |
-      # | 401 / 403   | No             | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code |
-      # | 404         | No             | Target page returned or fingerprinted as not found                                       |
-      # | 408         | No             | Request timed out                                                                        |
-      # | 415         | No             | Unsupported content type                                                                 |
-      # | 429         | No             | Per-minute rate limit exceeded; honor Retry-After                                        |
-      # | 500         | No             | Internal error                                                                           |
+      # | HTTP status | Billed?                                   | Meaning                                                                                  |
+      # | ----------- | ----------------------------------------- | ---------------------------------------------------------------------------------------- |
+      # | 200         | Yes — 1 credit, or 2 credits with actions | Successful scrape, including a zero-length result when includeSelectors matched nothing  |
+      # | 400         | No                                        | Invalid input, skipped PDF, or the page could not be scraped                             |
+      # | 401 / 403   | No                                        | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code |
+      # | 404         | No                                        | Target page returned or fingerprinted as not found                                       |
+      # | 408         | No                                        | Request timed out                                                                        |
+      # | 415         | No                                        | Unsupported content type                                                                 |
+      # | 429         | No                                        | Per-minute rate limit exceeded; honor Retry-After                                        |
+      # | 500         | No                                        | Internal error                                                                           |
       sig do
         params(
           url: String,
+          actions:
+            T.nilable(
+              T::Array[
+                T.any(
+                  ContextDev::WebWebScrapeMdParams::Action::Wait::OrHash,
+                  ContextDev::WebWebScrapeMdParams::Action::Perform::OrHash
+                )
+              ]
+            ),
           country: ContextDev::WebWebScrapeMdParams::Country::OrSymbol,
-          exclude_selectors: T::Array[String],
+          exclude_selectors: T.nilable(T::Array[String]),
           headers: T::Hash[Symbol, String],
-          include_frames: T::Boolean,
-          include_images: T::Boolean,
-          include_links: T::Boolean,
-          include_selectors: T::Array[String],
-          max_age_ms: Integer,
+          include_frames:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::IncludeFrames::OrSymbol
+            ),
+          include_images:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::IncludeImages::OrSymbol
+            ),
+          include_links:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::IncludeLinks::OrSymbol
+            ),
+          include_selectors: T.nilable(T::Array[String]),
+          max_age_ms: T.nilable(Integer),
           pdf: ContextDev::WebWebScrapeMdParams::Pdf::OrHash,
-          settle_animations: T::Boolean,
-          shorten_base64_images: T::Boolean,
+          settle_animations:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::SettleAnimations::OrSymbol
+            ),
+          shorten_base64_images:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::ShortenBase64Images::OrSymbol
+            ),
+          tags: T::Array[String],
           timeout_ms: Integer,
-          use_main_content_only: T::Boolean,
-          wait_for_ms: Integer,
+          use_main_content_only:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::UseMainContentOnly::OrSymbol
+            ),
+          wait_for_ms: T.nilable(Integer),
+          zdr: ContextDev::WebWebScrapeMdParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeMdResponse)
       end
@@ -522,8 +669,13 @@ module ContextDev
         # Full URL to scrape into LLM usable Markdown (must include http:// or https://
         # protocol)
         url:,
-        # Two-letter ISO 3166-1 alpha-2 country code for the website request location.
-        # When provided, Context.dev fetches the target page from that country.
+        # Optional browser actions executed in array order after the page loads and before
+        # content is captured. Requires a paid plan. Send a JSON array in the query
+        # parameter. Maximum: 5 actions.
+        actions: nil,
+        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
+        # residential proxy exit location. Must be one of Context.dev's supported
+        # countries. When provided, Context.dev fetches the target page from that country.
         country: nil,
         # CSS selectors to remove before conversion to Markdown. Applied after
         # includeSelectors. Exclusion takes precedence: an element matching both is
@@ -556,6 +708,10 @@ module ContextDev
         settle_animations: nil,
         # Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -566,6 +722,11 @@ module ContextDev
         # Optional browser wait time in milliseconds after initial page load before
         # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds).
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -576,8 +737,11 @@ module ContextDev
           domain: String,
           headers: T::Hash[Symbol, String],
           max_links: Integer,
+          sitemap_url: String,
+          tags: T::Array[String],
           timeout_ms: Integer,
           url_regex: String,
+          zdr: ContextDev::WebWebScrapeSitemapParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeSitemapResponse)
       end
@@ -591,6 +755,13 @@ module ContextDev
         # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
         # Minimum is 1, maximum is 100,000.
         max_links: nil,
+        # Optional explicit sitemap URL. When provided, exactly this sitemap is crawled
+        # instead of discovering the domain's sitemaps.
+        sitemap_url: nil,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
@@ -598,6 +769,11 @@ module ContextDev
         # Optional RE2-compatible regex pattern. Only URLs matching this pattern are
         # returned and counted against maxLinks.
         url_regex: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end

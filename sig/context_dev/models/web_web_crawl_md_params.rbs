@@ -17,10 +17,12 @@ module ContextDev
         settle_animations: bool,
         :shorten_base64_images => bool,
         stop_after_ms: Integer,
+        tags: ::Array[String],
         timeout_ms: Integer,
         url_regex: String,
         use_main_content_only: bool,
-        wait_for_ms: Integer
+        wait_for_ms: Integer,
+        zdr: ContextDev::Models::WebWebCrawlMdParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -90,6 +92,10 @@ module ContextDev
 
       def stop_after_ms=: (Integer) -> Integer
 
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
       attr_reader timeout_ms: Integer?
 
       def timeout_ms=: (Integer) -> Integer
@@ -105,6 +111,12 @@ module ContextDev
       attr_reader wait_for_ms: Integer?
 
       def wait_for_ms=: (Integer) -> Integer
+
+      attr_reader zdr: ContextDev::Models::WebWebCrawlMdParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebWebCrawlMdParams::zdr
+      ) -> ContextDev::Models::WebWebCrawlMdParams::zdr
 
       def initialize: (
         url: String,
@@ -122,10 +134,12 @@ module ContextDev
         ?settle_animations: bool,
         ?shorten_base64_images: bool,
         ?stop_after_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?url_regex: String,
         ?use_main_content_only: bool,
         ?wait_for_ms: Integer,
+        ?zdr: ContextDev::Models::WebWebCrawlMdParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -145,10 +159,12 @@ module ContextDev
         settle_animations: bool,
         :shorten_base64_images => bool,
         stop_after_ms: Integer,
+        tags: ::Array[String],
         timeout_ms: Integer,
         url_regex: String,
         use_main_content_only: bool,
         wait_for_ms: Integer,
+        zdr: ContextDev::Models::WebWebCrawlMdParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -602,6 +618,17 @@ module ContextDev
           should_parse: bool,
           start: Integer
         }
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebWebCrawlMdParams::zdr]
       end
     end
   end

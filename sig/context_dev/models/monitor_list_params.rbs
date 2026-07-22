@@ -6,11 +6,11 @@ module ContextDev
         cursor: String,
         limit: Integer,
         q: String,
-        search_by: ::Array[ContextDev::Models::MonitorListParams::search_by],
+        search_by: ::Array[ContextDev::Models::MonitorListParams::search_by]?,
         search_type: ContextDev::Models::MonitorListParams::search_type,
         status: ContextDev::Models::MonitorListParams::status,
         tag: String,
-        tags: ::Array[String],
+        tags: ::Array[String]?,
         target_type: ContextDev::Models::MonitorListParams::target_type
       }
       & ContextDev::Internal::Type::request_parameters
@@ -37,11 +37,7 @@ module ContextDev
 
       def q=: (String) -> String
 
-      attr_reader search_by: ::Array[ContextDev::Models::MonitorListParams::search_by]?
-
-      def search_by=: (
-        ::Array[ContextDev::Models::MonitorListParams::search_by]
-      ) -> ::Array[ContextDev::Models::MonitorListParams::search_by]
+      attr_accessor search_by: ::Array[ContextDev::Models::MonitorListParams::search_by]?
 
       attr_reader search_type: ContextDev::Models::MonitorListParams::search_type?
 
@@ -59,9 +55,7 @@ module ContextDev
 
       def tag=: (String) -> String
 
-      attr_reader tags: ::Array[String]?
-
-      def tags=: (::Array[String]) -> ::Array[String]
+      attr_accessor tags: ::Array[String]?
 
       attr_reader target_type: ContextDev::Models::MonitorListParams::target_type?
 
@@ -74,11 +68,11 @@ module ContextDev
         ?cursor: String,
         ?limit: Integer,
         ?q: String,
-        ?search_by: ::Array[ContextDev::Models::MonitorListParams::search_by],
+        ?search_by: ::Array[ContextDev::Models::MonitorListParams::search_by]?,
         ?search_type: ContextDev::Models::MonitorListParams::search_type,
         ?status: ContextDev::Models::MonitorListParams::status,
         ?tag: String,
-        ?tags: ::Array[String],
+        ?tags: ::Array[String]?,
         ?target_type: ContextDev::Models::MonitorListParams::target_type,
         ?request_options: ContextDev::request_opts
       ) -> void
@@ -88,11 +82,11 @@ module ContextDev
         cursor: String,
         limit: Integer,
         q: String,
-        search_by: ::Array[ContextDev::Models::MonitorListParams::search_by],
+        search_by: ::Array[ContextDev::Models::MonitorListParams::search_by]?,
         search_type: ContextDev::Models::MonitorListParams::search_type,
         status: ContextDev::Models::MonitorListParams::status,
         tag: String,
-        tags: ::Array[String],
+        tags: ::Array[String]?,
         target_type: ContextDev::Models::MonitorListParams::target_type,
         request_options: ContextDev::RequestOptions
       }

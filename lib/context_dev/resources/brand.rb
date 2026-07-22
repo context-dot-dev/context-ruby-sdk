@@ -36,11 +36,15 @@ module ContextDev
       # information: domain, title, colors, logos, and backdrops. Optimized for faster
       # responses and reduced data transfer.
       #
-      # @overload retrieve_simplified(domain:, max_age_ms: nil, timeout_ms: nil, request_options: {})
+      # @overload retrieve_simplified(domain:, max_age_ms: nil, tags: nil, theme: nil, timeout_ms: nil, request_options: {})
       #
       # @param domain [String] Domain name to retrieve simplified brand data for
       #
-      # @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
+      # @param max_age_ms [Integer, nil] Maximum age in milliseconds for cached brand data before the API performs a hard
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #
+      # @param theme [Symbol, ContextDev::Models::BrandRetrieveSimplifiedParams::Theme] Optional theme preference used when selecting brand assets.
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

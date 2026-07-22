@@ -4,6 +4,7 @@ module ContextDev
       {
         identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
         type: ContextDev::Models::UtilityPrefetchParams::type_,
+        tags: ::Array[String],
         timeout_ms: Integer
       }
       & ContextDev::Internal::Type::request_parameters
@@ -16,6 +17,10 @@ module ContextDev
 
       attr_accessor type: ContextDev::Models::UtilityPrefetchParams::type_
 
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
       attr_reader timeout_ms: Integer?
 
       def timeout_ms=: (Integer) -> Integer
@@ -23,6 +28,7 @@ module ContextDev
       def initialize: (
         identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
         type: ContextDev::Models::UtilityPrefetchParams::type_,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> void
@@ -30,6 +36,7 @@ module ContextDev
       def to_hash: -> {
         identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
         type: ContextDev::Models::UtilityPrefetchParams::type_,
+        tags: ::Array[String],
         timeout_ms: Integer,
         request_options: ContextDev::RequestOptions
       }

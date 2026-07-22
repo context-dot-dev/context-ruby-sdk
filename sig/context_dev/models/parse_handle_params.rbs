@@ -3,13 +3,16 @@ module ContextDev
     type parse_handle_params =
       {
         body: ContextDev::Internal::file_input,
+        client: String,
         extension: ContextDev::Models::ParseHandleParams::extension,
-        include_images: bool,
-        include_links: bool,
-        ocr: bool,
+        include_images: ContextDev::Models::ParseHandleParams::include_images,
+        include_links: ContextDev::Models::ParseHandleParams::include_links,
+        ocr: ContextDev::Models::ParseHandleParams::ocr,
         pdf: ContextDev::ParseHandleParams::Pdf,
-        :shorten_base64_images => bool,
-        use_main_content_only: bool
+        :shorten_base64_images => ContextDev::Models::ParseHandleParams::shorten_base64_images,
+        tags: ::Array[String],
+        use_main_content_only: ContextDev::Models::ParseHandleParams::use_main_content_only,
+        zdr: ContextDev::Models::ParseHandleParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -19,23 +22,33 @@ module ContextDev
 
       attr_accessor body: ContextDev::Internal::file_input
 
+      attr_reader client: String?
+
+      def client=: (String) -> String
+
       attr_reader extension: ContextDev::Models::ParseHandleParams::extension?
 
       def extension=: (
         ContextDev::Models::ParseHandleParams::extension
       ) -> ContextDev::Models::ParseHandleParams::extension
 
-      attr_reader include_images: bool?
+      attr_reader include_images: ContextDev::Models::ParseHandleParams::include_images?
 
-      def include_images=: (bool) -> bool
+      def include_images=: (
+        ContextDev::Models::ParseHandleParams::include_images
+      ) -> ContextDev::Models::ParseHandleParams::include_images
 
-      attr_reader include_links: bool?
+      attr_reader include_links: ContextDev::Models::ParseHandleParams::include_links?
 
-      def include_links=: (bool) -> bool
+      def include_links=: (
+        ContextDev::Models::ParseHandleParams::include_links
+      ) -> ContextDev::Models::ParseHandleParams::include_links
 
-      attr_reader ocr: bool?
+      attr_reader ocr: ContextDev::Models::ParseHandleParams::ocr?
 
-      def ocr=: (bool) -> bool
+      def ocr=: (
+        ContextDev::Models::ParseHandleParams::ocr
+      ) -> ContextDev::Models::ParseHandleParams::ocr
 
       attr_reader pdf: ContextDev::ParseHandleParams::Pdf?
 
@@ -43,35 +56,55 @@ module ContextDev
         ContextDev::ParseHandleParams::Pdf
       ) -> ContextDev::ParseHandleParams::Pdf
 
-      attr_reader shorten_base64_images: bool?
+      attr_reader shorten_base64_images: ContextDev::Models::ParseHandleParams::shorten_base64_images?
 
-      def shorten_base64_images=: (bool) -> bool
+      def shorten_base64_images=: (
+        ContextDev::Models::ParseHandleParams::shorten_base64_images
+      ) -> ContextDev::Models::ParseHandleParams::shorten_base64_images
 
-      attr_reader use_main_content_only: bool?
+      attr_reader tags: ::Array[String]?
 
-      def use_main_content_only=: (bool) -> bool
+      def tags=: (::Array[String]) -> ::Array[String]
+
+      attr_reader use_main_content_only: ContextDev::Models::ParseHandleParams::use_main_content_only?
+
+      def use_main_content_only=: (
+        ContextDev::Models::ParseHandleParams::use_main_content_only
+      ) -> ContextDev::Models::ParseHandleParams::use_main_content_only
+
+      attr_reader zdr: ContextDev::Models::ParseHandleParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::ParseHandleParams::zdr
+      ) -> ContextDev::Models::ParseHandleParams::zdr
 
       def initialize: (
         body: ContextDev::Internal::file_input,
+        ?client: String,
         ?extension: ContextDev::Models::ParseHandleParams::extension,
-        ?include_images: bool,
-        ?include_links: bool,
-        ?ocr: bool,
+        ?include_images: ContextDev::Models::ParseHandleParams::include_images,
+        ?include_links: ContextDev::Models::ParseHandleParams::include_links,
+        ?ocr: ContextDev::Models::ParseHandleParams::ocr,
         ?pdf: ContextDev::ParseHandleParams::Pdf,
-        ?shorten_base64_images: bool,
-        ?use_main_content_only: bool,
+        ?shorten_base64_images: ContextDev::Models::ParseHandleParams::shorten_base64_images,
+        ?tags: ::Array[String],
+        ?use_main_content_only: ContextDev::Models::ParseHandleParams::use_main_content_only,
+        ?zdr: ContextDev::Models::ParseHandleParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
       def to_hash: -> {
         body: ContextDev::Internal::file_input,
+        client: String,
         extension: ContextDev::Models::ParseHandleParams::extension,
-        include_images: bool,
-        include_links: bool,
-        ocr: bool,
+        include_images: ContextDev::Models::ParseHandleParams::include_images,
+        include_links: ContextDev::Models::ParseHandleParams::include_links,
+        ocr: ContextDev::Models::ParseHandleParams::ocr,
         pdf: ContextDev::ParseHandleParams::Pdf,
-        :shorten_base64_images => bool,
-        use_main_content_only: bool,
+        :shorten_base64_images => ContextDev::Models::ParseHandleParams::shorten_base64_images,
+        tags: ::Array[String],
+        use_main_content_only: ContextDev::Models::ParseHandleParams::use_main_content_only,
+        zdr: ContextDev::Models::ParseHandleParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -224,6 +257,39 @@ module ContextDev
         def self?.values: -> ::Array[ContextDev::Models::ParseHandleParams::extension]
       end
 
+      type include_images = bool | :true | :false
+
+      module IncludeImages
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::ParseHandleParams::include_images]
+
+        TRUE: :true
+        FALSE: :false
+      end
+
+      type include_links = bool | :true | :false
+
+      module IncludeLinks
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::ParseHandleParams::include_links]
+
+        TRUE: :true
+        FALSE: :false
+      end
+
+      type ocr = bool | :true | :false
+
+      module Ocr
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::ParseHandleParams::ocr]
+
+        TRUE: :true
+        FALSE: :false
+      end
+
       type pdf = { end_: Integer, start: Integer }
 
       class Pdf < ContextDev::Internal::Type::BaseModel
@@ -238,6 +304,39 @@ module ContextDev
         def initialize: (?end_: Integer, ?start: Integer) -> void
 
         def to_hash: -> { end_: Integer, start: Integer }
+      end
+
+      type shorten_base64_images = bool | :true | :false
+
+      module ShortenBase64Images
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::ParseHandleParams::shorten_base64_images]
+
+        TRUE: :true
+        FALSE: :false
+      end
+
+      type use_main_content_only = bool | :true | :false
+
+      module UseMainContentOnly
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::ParseHandleParams::use_main_content_only]
+
+        TRUE: :true
+        FALSE: :false
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::ParseHandleParams::zdr]
       end
     end
   end

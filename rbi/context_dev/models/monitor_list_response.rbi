@@ -156,6 +156,7 @@ module ContextDev
         attr_accessor :next_run_at
 
         # User-defined tags for grouping and filtering monitors and their changes.
+        # Duplicates are removed.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :tags
 
@@ -285,6 +286,7 @@ module ContextDev
           # When the next scheduled run is due.
           next_run_at: nil,
           # User-defined tags for grouping and filtering monitors and their changes.
+          # Duplicates are removed.
           tags: nil,
           webhook: nil,
           # Present while webhook deliveries are failing consecutively; null when deliveries
@@ -700,14 +702,14 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :url
 
-            # URL path patterns to exclude.
+            # URL path patterns to exclude (max 50).
             sig { returns(T.nilable(T::Array[String])) }
             attr_reader :exclude
 
             sig { params(exclude: T::Array[String]).void }
             attr_writer :exclude
 
-            # URL path patterns to include.
+            # URL path patterns to include (max 50).
             sig { returns(T.nilable(T::Array[String])) }
             attr_reader :include
 
@@ -738,9 +740,9 @@ module ContextDev
             def self.new(
               # Sitemap URL to monitor.
               url:,
-              # URL path patterns to exclude.
+              # URL path patterns to exclude (max 50).
               exclude: nil,
-              # URL path patterns to include.
+              # URL path patterns to include (max 50).
               include: nil,
               # Maximum number of sitemap URLs to track (capped at 10,000).
               max_urls: nil,

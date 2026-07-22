@@ -12,7 +12,9 @@ module ContextDev
         ?max_depth: Integer,
         ?max_pages: Integer,
         ?pdf: ContextDev::WebExtractParams::Pdf,
+        ?settle_animations: bool,
         ?stop_after_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?wait_for_ms: Integer,
         ?request_options: ContextDev::request_opts
@@ -21,6 +23,7 @@ module ContextDev
       def extract_competitors: (
         domain: String,
         ?num_competitors: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractCompetitorsResponse
@@ -28,7 +31,8 @@ module ContextDev
       def extract_fonts: (
         ?direct_url: String,
         ?domain: String,
-        ?max_age_ms: Integer,
+        ?max_age_ms: Integer?,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractFontsResponse
@@ -37,7 +41,8 @@ module ContextDev
         ?color_scheme: ContextDev::Models::WebExtractStyleguideParams::color_scheme,
         ?direct_url: String,
         ?domain: String,
-        ?max_age_ms: Integer,
+        ?max_age_ms: Integer?,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractStyleguideResponse
@@ -49,12 +54,14 @@ module ContextDev
         ?domain: String,
         ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
         ?handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
-        ?max_age_ms: Integer,
+        ?max_age_ms: Integer?,
         ?page: ContextDev::Models::WebScreenshotParams::page,
-        ?scroll_offset: Integer,
+        ?scroll_offset: Integer?,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
-        ?wait_for_ms: Integer,
+        ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebScreenshotParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebScreenshotResponse
 
@@ -67,6 +74,7 @@ module ContextDev
         ?markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
         ?num_results: Integer,
         ?query_fanout: bool,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebSearchResponse
@@ -87,56 +95,66 @@ module ContextDev
         ?settle_animations: bool,
         ?shorten_base64_images: bool,
         ?stop_after_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?url_regex: String,
         ?use_main_content_only: bool,
         ?wait_for_ms: Integer,
+        ?zdr: ContextDev::Models::WebWebCrawlMdParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebCrawlMdResponse
 
       def web_scrape_html: (
         url: String,
+        ?actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?,
         ?country: ContextDev::Models::WebWebScrapeHTMLParams::country,
-        ?exclude_selectors: ::Array[String],
+        ?exclude_selectors: ::Array[String]?,
         ?headers: ::Hash[Symbol, String],
-        ?include_frames: bool,
-        ?include_selectors: ::Array[String],
-        ?max_age_ms: Integer,
+        ?include_frames: ContextDev::Models::WebWebScrapeHTMLParams::include_frames,
+        ?include_selectors: ::Array[String]?,
+        ?max_age_ms: Integer?,
         ?pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
-        ?settle_animations: bool,
+        ?settle_animations: ContextDev::Models::WebWebScrapeHTMLParams::settle_animations,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
-        ?use_main_content_only: bool,
-        ?wait_for_ms: Integer,
+        ?use_main_content_only: ContextDev::Models::WebWebScrapeHTMLParams::use_main_content_only,
+        ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebWebScrapeHTMLParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeHTMLResponse
 
       def web_scrape_images: (
         url: String,
-        ?dedupe: bool,
-        ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment,
+        ?actions: ::Array[ContextDev::Models::WebWebScrapeImagesParams::action]?,
+        ?dedupe: ContextDev::Models::WebWebScrapeImagesParams::dedupe,
+        ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment?,
         ?headers: ::Hash[Symbol, String],
-        ?max_age_ms: Integer,
+        ?max_age_ms: Integer?,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
-        ?wait_for_ms: Integer,
+        ?wait_for_ms: Integer?,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeImagesResponse
 
       def web_scrape_md: (
         url: String,
+        ?actions: ::Array[ContextDev::Models::WebWebScrapeMdParams::action]?,
         ?country: ContextDev::Models::WebWebScrapeMdParams::country,
-        ?exclude_selectors: ::Array[String],
+        ?exclude_selectors: ::Array[String]?,
         ?headers: ::Hash[Symbol, String],
-        ?include_frames: bool,
-        ?include_images: bool,
-        ?include_links: bool,
-        ?include_selectors: ::Array[String],
-        ?max_age_ms: Integer,
+        ?include_frames: ContextDev::Models::WebWebScrapeMdParams::include_frames,
+        ?include_images: ContextDev::Models::WebWebScrapeMdParams::include_images,
+        ?include_links: ContextDev::Models::WebWebScrapeMdParams::include_links,
+        ?include_selectors: ::Array[String]?,
+        ?max_age_ms: Integer?,
         ?pdf: ContextDev::WebWebScrapeMdParams::Pdf,
-        ?settle_animations: bool,
-        ?shorten_base64_images: bool,
+        ?settle_animations: ContextDev::Models::WebWebScrapeMdParams::settle_animations,
+        ?shorten_base64_images: ContextDev::Models::WebWebScrapeMdParams::shorten_base64_images,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
-        ?use_main_content_only: bool,
-        ?wait_for_ms: Integer,
+        ?use_main_content_only: ContextDev::Models::WebWebScrapeMdParams::use_main_content_only,
+        ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebWebScrapeMdParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeMdResponse
 
@@ -144,8 +162,11 @@ module ContextDev
         domain: String,
         ?headers: ::Hash[Symbol, String],
         ?max_links: Integer,
+        ?sitemap_url: String,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?url_regex: String,
+        ?zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeSitemapResponse
 

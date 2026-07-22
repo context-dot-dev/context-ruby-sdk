@@ -17,18 +17,21 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :monitor_id
 
+      # Opaque pagination cursor from a previous response.
       sig { returns(T.nilable(String)) }
       attr_reader :cursor
 
       sig { params(cursor: String).void }
       attr_writer :cursor
 
+      # Maximum number of items to return per page (1-100). Defaults to 25.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
       sig { params(limit: Integer).void }
       attr_writer :limit
 
+      # Only include items at or after this ISO 8601 timestamp.
       sig { returns(T.nilable(Time)) }
       attr_reader :since
 
@@ -42,6 +45,7 @@ module ContextDev
       sig { params(tag: String).void }
       attr_writer :tag
 
+      # Only include items before this ISO 8601 timestamp.
       sig { returns(T.nilable(Time)) }
       attr_reader :until_
 
@@ -61,11 +65,15 @@ module ContextDev
       end
       def self.new(
         monitor_id:,
+        # Opaque pagination cursor from a previous response.
         cursor: nil,
+        # Maximum number of items to return per page (1-100). Defaults to 25.
         limit: nil,
+        # Only include items at or after this ISO 8601 timestamp.
         since: nil,
         # Filter to items that have this tag.
         tag: nil,
+        # Only include items before this ISO 8601 timestamp.
         until_: nil,
         request_options: {}
       )

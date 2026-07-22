@@ -4,6 +4,7 @@ module ContextDev
       def extract_product: (
         url: String,
         ?max_age_ms: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::AIExtractProductResponse

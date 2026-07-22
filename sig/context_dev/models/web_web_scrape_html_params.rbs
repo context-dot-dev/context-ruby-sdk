@@ -3,17 +3,20 @@ module ContextDev
     type web_web_scrape_html_params =
       {
         url: String,
+        actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?,
         country: ContextDev::Models::WebWebScrapeHTMLParams::country,
-        exclude_selectors: ::Array[String],
+        exclude_selectors: ::Array[String]?,
         headers: ::Hash[Symbol, String],
-        include_frames: bool,
-        include_selectors: ::Array[String],
-        max_age_ms: Integer,
+        include_frames: ContextDev::Models::WebWebScrapeHTMLParams::include_frames,
+        include_selectors: ::Array[String]?,
+        max_age_ms: Integer?,
         pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
-        settle_animations: bool,
+        settle_animations: ContextDev::Models::WebWebScrapeHTMLParams::settle_animations,
+        tags: ::Array[String],
         timeout_ms: Integer,
-        use_main_content_only: bool,
-        wait_for_ms: Integer
+        use_main_content_only: ContextDev::Models::WebWebScrapeHTMLParams::use_main_content_only,
+        wait_for_ms: Integer?,
+        zdr: ContextDev::Models::WebWebScrapeHTMLParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -23,31 +26,29 @@ module ContextDev
 
       attr_accessor url: String
 
+      attr_accessor actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?
+
       attr_reader country: ContextDev::Models::WebWebScrapeHTMLParams::country?
 
       def country=: (
         ContextDev::Models::WebWebScrapeHTMLParams::country
       ) -> ContextDev::Models::WebWebScrapeHTMLParams::country
 
-      attr_reader exclude_selectors: ::Array[String]?
-
-      def exclude_selectors=: (::Array[String]) -> ::Array[String]
+      attr_accessor exclude_selectors: ::Array[String]?
 
       attr_reader headers: ::Hash[Symbol, String]?
 
       def headers=: (::Hash[Symbol, String]) -> ::Hash[Symbol, String]
 
-      attr_reader include_frames: bool?
+      attr_reader include_frames: ContextDev::Models::WebWebScrapeHTMLParams::include_frames?
 
-      def include_frames=: (bool) -> bool
+      def include_frames=: (
+        ContextDev::Models::WebWebScrapeHTMLParams::include_frames
+      ) -> ContextDev::Models::WebWebScrapeHTMLParams::include_frames
 
-      attr_reader include_selectors: ::Array[String]?
+      attr_accessor include_selectors: ::Array[String]?
 
-      def include_selectors=: (::Array[String]) -> ::Array[String]
-
-      attr_reader max_age_ms: Integer?
-
-      def max_age_ms=: (Integer) -> Integer
+      attr_accessor max_age_ms: Integer?
 
       attr_reader pdf: ContextDev::WebWebScrapeHTMLParams::Pdf?
 
@@ -55,53 +56,105 @@ module ContextDev
         ContextDev::WebWebScrapeHTMLParams::Pdf
       ) -> ContextDev::WebWebScrapeHTMLParams::Pdf
 
-      attr_reader settle_animations: bool?
+      attr_reader settle_animations: ContextDev::Models::WebWebScrapeHTMLParams::settle_animations?
 
-      def settle_animations=: (bool) -> bool
+      def settle_animations=: (
+        ContextDev::Models::WebWebScrapeHTMLParams::settle_animations
+      ) -> ContextDev::Models::WebWebScrapeHTMLParams::settle_animations
+
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
 
       attr_reader timeout_ms: Integer?
 
       def timeout_ms=: (Integer) -> Integer
 
-      attr_reader use_main_content_only: bool?
+      attr_reader use_main_content_only: ContextDev::Models::WebWebScrapeHTMLParams::use_main_content_only?
 
-      def use_main_content_only=: (bool) -> bool
+      def use_main_content_only=: (
+        ContextDev::Models::WebWebScrapeHTMLParams::use_main_content_only
+      ) -> ContextDev::Models::WebWebScrapeHTMLParams::use_main_content_only
 
-      attr_reader wait_for_ms: Integer?
+      attr_accessor wait_for_ms: Integer?
 
-      def wait_for_ms=: (Integer) -> Integer
+      attr_reader zdr: ContextDev::Models::WebWebScrapeHTMLParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebWebScrapeHTMLParams::zdr
+      ) -> ContextDev::Models::WebWebScrapeHTMLParams::zdr
 
       def initialize: (
         url: String,
+        ?actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?,
         ?country: ContextDev::Models::WebWebScrapeHTMLParams::country,
-        ?exclude_selectors: ::Array[String],
+        ?exclude_selectors: ::Array[String]?,
         ?headers: ::Hash[Symbol, String],
-        ?include_frames: bool,
-        ?include_selectors: ::Array[String],
-        ?max_age_ms: Integer,
+        ?include_frames: ContextDev::Models::WebWebScrapeHTMLParams::include_frames,
+        ?include_selectors: ::Array[String]?,
+        ?max_age_ms: Integer?,
         ?pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
-        ?settle_animations: bool,
+        ?settle_animations: ContextDev::Models::WebWebScrapeHTMLParams::settle_animations,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
-        ?use_main_content_only: bool,
-        ?wait_for_ms: Integer,
+        ?use_main_content_only: ContextDev::Models::WebWebScrapeHTMLParams::use_main_content_only,
+        ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebWebScrapeHTMLParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
       def to_hash: -> {
         url: String,
+        actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?,
         country: ContextDev::Models::WebWebScrapeHTMLParams::country,
-        exclude_selectors: ::Array[String],
+        exclude_selectors: ::Array[String]?,
         headers: ::Hash[Symbol, String],
-        include_frames: bool,
-        include_selectors: ::Array[String],
-        max_age_ms: Integer,
+        include_frames: ContextDev::Models::WebWebScrapeHTMLParams::include_frames,
+        include_selectors: ::Array[String]?,
+        max_age_ms: Integer?,
         pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
-        settle_animations: bool,
+        settle_animations: ContextDev::Models::WebWebScrapeHTMLParams::settle_animations,
+        tags: ::Array[String],
         timeout_ms: Integer,
-        use_main_content_only: bool,
-        wait_for_ms: Integer,
+        use_main_content_only: ContextDev::Models::WebWebScrapeHTMLParams::use_main_content_only,
+        wait_for_ms: Integer?,
+        zdr: ContextDev::Models::WebWebScrapeHTMLParams::zdr,
         request_options: ContextDev::RequestOptions
       }
+
+      type action =
+        ContextDev::WebWebScrapeHTMLParams::Action::Wait
+        | ContextDev::WebWebScrapeHTMLParams::Action::Perform
+
+      module Action
+        extend ContextDev::Internal::Type::Union
+
+        type wait = { do_: :wait, time_ms: Integer }
+
+        class Wait < ContextDev::Internal::Type::BaseModel
+          attr_accessor do_: :wait
+
+          attr_accessor time_ms: Integer
+
+          def initialize: (time_ms: Integer, ?do_: :wait) -> void
+
+          def to_hash: -> { do_: :wait, time_ms: Integer }
+        end
+
+        type perform = { action: String, do_: :perform }
+
+        class Perform < ContextDev::Internal::Type::BaseModel
+          attr_accessor action: String
+
+          attr_accessor do_: :perform
+
+          def initialize: (action: String, ?do_: :perform) -> void
+
+          def to_hash: -> { action: String, do_: :perform }
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]
+      end
 
       type country =
         :ad
@@ -520,21 +573,41 @@ module ContextDev
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::country]
       end
 
+      type include_frames = bool | :true | :false
+
+      module IncludeFrames
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::include_frames]
+
+        TRUE: :true
+        FALSE: :false
+      end
+
       type pdf =
-        { end_: Integer, ocr: bool, should_parse: bool, start: Integer }
+        {
+          end_: Integer,
+          ocr: ContextDev::Models::WebWebScrapeHTMLParams::Pdf::ocr,
+          should_parse: ContextDev::Models::WebWebScrapeHTMLParams::Pdf::should_parse,
+          start: Integer
+        }
 
       class Pdf < ContextDev::Internal::Type::BaseModel
         attr_reader end_: Integer?
 
         def end_=: (Integer) -> Integer
 
-        attr_reader ocr: bool?
+        attr_reader ocr: ContextDev::Models::WebWebScrapeHTMLParams::Pdf::ocr?
 
-        def ocr=: (bool) -> bool
+        def ocr=: (
+          ContextDev::Models::WebWebScrapeHTMLParams::Pdf::ocr
+        ) -> ContextDev::Models::WebWebScrapeHTMLParams::Pdf::ocr
 
-        attr_reader should_parse: bool?
+        attr_reader should_parse: ContextDev::Models::WebWebScrapeHTMLParams::Pdf::should_parse?
 
-        def should_parse=: (bool) -> bool
+        def should_parse=: (
+          ContextDev::Models::WebWebScrapeHTMLParams::Pdf::should_parse
+        ) -> ContextDev::Models::WebWebScrapeHTMLParams::Pdf::should_parse
 
         attr_reader start: Integer?
 
@@ -542,17 +615,72 @@ module ContextDev
 
         def initialize: (
           ?end_: Integer,
-          ?ocr: bool,
-          ?should_parse: bool,
+          ?ocr: ContextDev::Models::WebWebScrapeHTMLParams::Pdf::ocr,
+          ?should_parse: ContextDev::Models::WebWebScrapeHTMLParams::Pdf::should_parse,
           ?start: Integer
         ) -> void
 
         def to_hash: -> {
           end_: Integer,
-          ocr: bool,
-          should_parse: bool,
+          ocr: ContextDev::Models::WebWebScrapeHTMLParams::Pdf::ocr,
+          should_parse: ContextDev::Models::WebWebScrapeHTMLParams::Pdf::should_parse,
           start: Integer
         }
+
+        type ocr = bool | :true | :false
+
+        module Ocr
+          extend ContextDev::Internal::Type::Union
+
+          def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::Pdf::ocr]
+
+          TRUE: :true
+          FALSE: :false
+        end
+
+        type should_parse = bool | :true | :false
+
+        module ShouldParse
+          extend ContextDev::Internal::Type::Union
+
+          def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::Pdf::should_parse]
+
+          TRUE: :true
+          FALSE: :false
+        end
+      end
+
+      type settle_animations = bool | :true | :false
+
+      module SettleAnimations
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::settle_animations]
+
+        TRUE: :true
+        FALSE: :false
+      end
+
+      type use_main_content_only = bool | :true | :false
+
+      module UseMainContentOnly
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::use_main_content_only]
+
+        TRUE: :true
+        FALSE: :false
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::zdr]
       end
     end
   end

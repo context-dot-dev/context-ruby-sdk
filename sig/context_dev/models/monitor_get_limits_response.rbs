@@ -1,0 +1,43 @@
+module ContextDev
+  module Models
+    type monitor_get_limits_response =
+      {
+        monitors_limit: Integer,
+        monitors_used: Integer,
+        plan: ContextDev::Models::MonitorGetLimitsResponse::plan
+      }
+
+    class MonitorGetLimitsResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor monitors_limit: Integer
+
+      attr_accessor monitors_used: Integer
+
+      attr_accessor plan: ContextDev::Models::MonitorGetLimitsResponse::plan
+
+      def initialize: (
+        monitors_limit: Integer,
+        monitors_used: Integer,
+        plan: ContextDev::Models::MonitorGetLimitsResponse::plan
+      ) -> void
+
+      def to_hash: -> {
+        monitors_limit: Integer,
+        monitors_used: Integer,
+        plan: ContextDev::Models::MonitorGetLimitsResponse::plan
+      }
+
+      type plan = :free | :starter | :pro | :scale
+
+      module Plan
+        extend ContextDev::Internal::Type::Enum
+
+        FREE: :free
+        STARTER: :starter
+        PRO: :pro
+        SCALE: :scale
+
+        def self?.values: -> ::Array[ContextDev::Models::MonitorGetLimitsResponse::plan]
+      end
+    end
+  end
+end

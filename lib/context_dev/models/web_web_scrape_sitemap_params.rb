@@ -28,6 +28,21 @@ module ContextDev
       #   @return [Integer, nil]
       optional :max_links, Integer
 
+      # @!attribute sitemap_url
+      #   Optional explicit sitemap URL. When provided, exactly this sitemap is crawled
+      #   instead of discovering the domain's sitemaps.
+      #
+      #   @return [String, nil]
+      optional :sitemap_url, String
+
+      # @!attribute tags
+      #   Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #   recorded on the request's usage log and can be used to filter usage on the
+      #   dashboard usage page. Up to 20 tags, each 1-50 characters.
+      #
+      #   @return [Array<String>, nil]
+      optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute timeout_ms
       #   Optional timeout in milliseconds for the request. If the request takes longer
       #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -43,7 +58,16 @@ module ContextDev
       #   @return [String, nil]
       optional :url_regex, String
 
-      # @!method initialize(domain:, headers: nil, max_links: nil, timeout_ms: nil, url_regex: nil, request_options: {})
+      # @!attribute zdr
+      #   Set to enabled to bypass shared caches and omit request and response content
+      #   from retained usage logs. Requires zero data retention to be enabled for your
+      #   organization (contact support@context.dev), otherwise the request fails with
+      #   ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      #
+      #   @return [Symbol, ContextDev::Models::WebWebScrapeSitemapParams::Zdr, nil]
+      optional :zdr, enum: -> { ContextDev::WebWebScrapeSitemapParams::Zdr }
+
+      # @!method initialize(domain:, headers: nil, max_links: nil, sitemap_url: nil, tags: nil, timeout_ms: nil, url_regex: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeSitemapParams} for more details.
       #
@@ -53,11 +77,31 @@ module ContextDev
       #
       #   @param max_links [Integer] Maximum number of links to return from the sitemap crawl. Defaults to 10,000. Mi
       #
+      #   @param sitemap_url [String] Optional explicit sitemap URL. When provided, exactly this sitemap is crawled in
+      #
+      #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       #   @param url_regex [String] Optional RE2-compatible regex pattern. Only URLs matching this pattern are retur
       #
+      #   @param zdr [Symbol, ContextDev::Models::WebWebScrapeSitemapParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Requires zero data retention to be enabled for your
+      # organization (contact support@context.dev), otherwise the request fails with
+      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED = :enabled
+        DISABLED = :disabled
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
+      end
     end
   end
 end

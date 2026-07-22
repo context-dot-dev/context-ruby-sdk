@@ -5,8 +5,11 @@ module ContextDev
         domain: String,
         headers: ::Hash[Symbol, String],
         max_links: Integer,
+        sitemap_url: String,
+        tags: ::Array[String],
         timeout_ms: Integer,
-        url_regex: String
+        url_regex: String,
+        zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -24,6 +27,14 @@ module ContextDev
 
       def max_links=: (Integer) -> Integer
 
+      attr_reader sitemap_url: String?
+
+      def sitemap_url=: (String) -> String
+
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
       attr_reader timeout_ms: Integer?
 
       def timeout_ms=: (Integer) -> Integer
@@ -32,12 +43,21 @@ module ContextDev
 
       def url_regex=: (String) -> String
 
+      attr_reader zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebWebScrapeSitemapParams::zdr
+      ) -> ContextDev::Models::WebWebScrapeSitemapParams::zdr
+
       def initialize: (
         domain: String,
         ?headers: ::Hash[Symbol, String],
         ?max_links: Integer,
+        ?sitemap_url: String,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?url_regex: String,
+        ?zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -45,10 +65,24 @@ module ContextDev
         domain: String,
         headers: ::Hash[Symbol, String],
         max_links: Integer,
+        sitemap_url: String,
+        tags: ::Array[String],
         timeout_ms: Integer,
         url_regex: String,
+        zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr,
         request_options: ContextDev::RequestOptions
       }
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeSitemapParams::zdr]
+      end
     end
   end
 end

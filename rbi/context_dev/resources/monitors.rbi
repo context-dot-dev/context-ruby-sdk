@@ -45,6 +45,7 @@ module ContextDev
         # described by `target` and `change_detection`.
         mode: nil,
         # User-defined tags for grouping and filtering monitors and their changes.
+        # Duplicates are removed.
         tags: nil,
         webhook: nil,
         request_options: {}
@@ -97,6 +98,7 @@ module ContextDev
         schedule: nil,
         status: nil,
         # User-defined tags for grouping and filtering monitors and their changes.
+        # Duplicates are removed.
         tags: nil,
         # Discriminated union describing what the monitor watches.
         target: nil,
@@ -117,18 +119,23 @@ module ContextDev
           limit: Integer,
           q: String,
           search_by:
-            T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol],
+            T.nilable(
+              T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol]
+            ),
           search_type: ContextDev::MonitorListParams::SearchType::OrSymbol,
           status: ContextDev::MonitorListParams::Status::OrSymbol,
           tag: String,
-          tags: T::Array[String],
+          tags: T.nilable(T::Array[String]),
           target_type: ContextDev::MonitorListParams::TargetType::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::MonitorListResponse)
       end
       def list(
+        # Filter by change detection type.
         change_detection_type: nil,
+        # Opaque pagination cursor from a previous response.
         cursor: nil,
+        # Maximum number of items to return per page (1-100). Defaults to 25.
         limit: nil,
         # Free-text search term, matched against the fields named in `search_by`.
         q: nil,
@@ -138,16 +145,13 @@ module ContextDev
         # `prefix` for as-you-type prefix matching (default), `exact` for full-token
         # matching.
         search_type: nil,
-        # Monitor lifecycle status. `failed` means the most recent run failed (see the
-        # monitor's `last_error`); failed monitors keep running on schedule and flip back
-        # to `active` on the next successful run. Monitors are auto-`paused` after
-        # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
-        # status to `active`.
+        # Filter monitors by lifecycle status.
         status: nil,
         # Filter to items that have this tag.
         tag: nil,
         # Comma-separated list of tags to filter by (matches monitors having any of them).
         tags: nil,
+        # Filter by target type.
         target_type: nil,
         request_options: {}
       )
@@ -161,6 +165,33 @@ module ContextDev
         ).returns(ContextDev::Models::MonitorDeleteResponse)
       end
       def delete(monitor_id, request_options: {})
+      end
+
+      # Returns credits charged per monitor over an optional [since, until] window,
+      # newest spenders first.
+      sig do
+        params(
+          since: Time,
+          until_: Time,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::MonitorGetCreditUsageResponse)
+      end
+      def get_credit_usage(
+        # Only include items at or after this ISO 8601 timestamp.
+        since: nil,
+        # Only include items before this ISO 8601 timestamp.
+        until_: nil,
+        request_options: {}
+      )
+      end
+
+      # Returns how many monitors the account has and the maximum it allows.
+      sig do
+        params(request_options: ContextDev::RequestOptions::OrHash).returns(
+          ContextDev::Models::MonitorGetLimitsResponse
+        )
+      end
+      def get_limits(request_options: {})
       end
 
       # Returns an account-wide feed of detected changes across monitors.
@@ -180,14 +211,21 @@ module ContextDev
         ).returns(ContextDev::Models::MonitorListAccountChangesResponse)
       end
       def list_account_changes(
+        # Filter by change detection type.
         change_detection_type: nil,
+        # Opaque pagination cursor from a previous response.
         cursor: nil,
+        # Maximum number of items to return per page (1-100). Defaults to 25.
         limit: nil,
+        # Filter changes to a single monitor.
         monitor_id: nil,
+        # Only include items at or after this ISO 8601 timestamp.
         since: nil,
         # Filter to items that have this tag.
         tag: nil,
+        # Filter by target type.
         target_type: nil,
+        # Only include items before this ISO 8601 timestamp.
         until_: nil,
         request_options: {}
       )
@@ -203,10 +241,11 @@ module ContextDev
         ).returns(ContextDev::Models::MonitorListAccountRunsResponse)
       end
       def list_account_runs(
+        # Opaque pagination cursor from a previous response.
         cursor: nil,
+        # Maximum number of items to return per page (1-100). Defaults to 25.
         limit: nil,
-        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-        # (insufficient credits, monitor paused, or superseded by a concurrent run).
+        # Filter runs by lifecycle status.
         status: nil,
         request_options: {}
       )
@@ -226,11 +265,15 @@ module ContextDev
       end
       def list_changes(
         monitor_id,
+        # Opaque pagination cursor from a previous response.
         cursor: nil,
+        # Maximum number of items to return per page (1-100). Defaults to 25.
         limit: nil,
+        # Only include items at or after this ISO 8601 timestamp.
         since: nil,
         # Filter to items that have this tag.
         tag: nil,
+        # Only include items before this ISO 8601 timestamp.
         until_: nil,
         request_options: {}
       )
@@ -248,10 +291,11 @@ module ContextDev
       end
       def list_runs(
         monitor_id,
+        # Opaque pagination cursor from a previous response.
         cursor: nil,
+        # Maximum number of items to return per page (1-100). Defaults to 25.
         limit: nil,
-        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-        # (insufficient credits, monitor paused, or superseded by a concurrent run).
+        # Filter runs by lifecycle status.
         status: nil,
         request_options: {}
       )

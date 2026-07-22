@@ -19,6 +19,12 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::UtilityPrefetchParams::Type]
       required :type, enum: -> { ContextDev::UtilityPrefetchParams::Type }
 
+      # @!attribute tags
+      #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #
+      #   @return [Array<String>, nil]
+      optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute timeout_ms
       #   Optional timeout in milliseconds for the request. If the request takes longer
       #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -27,13 +33,15 @@ module ContextDev
       #   @return [Integer, nil]
       optional :timeout_ms, Integer, api_name: :timeoutMS
 
-      # @!method initialize(identifier:, type:, timeout_ms: nil, request_options: {})
+      # @!method initialize(identifier:, type:, tags: nil, timeout_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::UtilityPrefetchParams} for more details.
       #
       #   @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier] Identifier of the brand to prefetch. Provide exactly one of domain or email.
       #
       #   @param type [Symbol, ContextDev::Models::UtilityPrefetchParams::Type] What to prefetch. Currently only 'brand' is supported.
+      #
+      #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

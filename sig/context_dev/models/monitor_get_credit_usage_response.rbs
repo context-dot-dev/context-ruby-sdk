@@ -1,0 +1,52 @@
+module ContextDev
+  module Models
+    type monitor_get_credit_usage_response =
+      {
+        data: ::Array[ContextDev::Models::MonitorGetCreditUsageResponse::Data],
+        total_credits: Integer
+      }
+
+    class MonitorGetCreditUsageResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor data: ::Array[ContextDev::Models::MonitorGetCreditUsageResponse::Data]
+
+      attr_accessor total_credits: Integer
+
+      def initialize: (
+        data: ::Array[ContextDev::Models::MonitorGetCreditUsageResponse::Data],
+        total_credits: Integer
+      ) -> void
+
+      def to_hash: -> {
+        data: ::Array[ContextDev::Models::MonitorGetCreditUsageResponse::Data],
+        total_credits: Integer
+      }
+
+      type data =
+        { credits: Integer, monitor_id: String, name: String, runs: Integer }
+
+      class Data < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits: Integer
+
+        attr_accessor monitor_id: String
+
+        attr_accessor name: String
+
+        attr_accessor runs: Integer
+
+        def initialize: (
+          credits: Integer,
+          monitor_id: String,
+          name: String,
+          runs: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits: Integer,
+          monitor_id: String,
+          name: String,
+          runs: Integer
+        }
+      end
+    end
+  end
+end

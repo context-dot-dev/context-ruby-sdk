@@ -49,7 +49,8 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # Public URL of the uploaded screenshot image
+      # Public image URL for standard requests, or an in-memory data URL when ZDR is
+      # enabled.
       sig { returns(T.nilable(String)) }
       attr_reader :screenshot
 
@@ -112,7 +113,8 @@ module ContextDev
         # Metadata about the API key used for the request. Included in every response
         # whenever a valid API key is provided, even when the response status is not 200.
         key_metadata: nil,
-        # Public URL of the uploaded screenshot image
+        # Public image URL for standard requests, or an in-memory data URL when ZDR is
+        # enabled.
         screenshot: nil,
         # Type of screenshot that was captured
         screenshot_type: nil,

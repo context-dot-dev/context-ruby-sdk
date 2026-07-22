@@ -58,7 +58,9 @@ module ContextDev
           # @!attribute force_language
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage, nil]
-          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByDomain::ForceLanguage }
+          optional :force_language,
+                   enum: -> { ContextDev::BrandRetrieveParams::Body::ByDomain::ForceLanguage },
+                   nil?: true
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -77,6 +79,12 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute tags
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
           #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -85,7 +93,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(domain:, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil, type: :by_domain)
+          # @!method initialize(domain:, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, timeout_ms: nil, type: :by_domain)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByDomain} for more details.
           #
@@ -93,11 +101,13 @@ module ContextDev
           #
           #   @param domain [String] Domain name to retrieve brand data for (e.g., 'stripe.com').
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage, nil]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -256,7 +266,9 @@ module ContextDev
           # @!attribute force_language
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage, nil]
-          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage }
+          optional :force_language,
+                   enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage },
+                   nil?: true
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -275,6 +287,12 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute tags
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
           #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -283,7 +301,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(name:, country_gl: nil, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil, type: :by_name)
+          # @!method initialize(name:, country_gl: nil, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, timeout_ms: nil, type: :by_name)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByName} for more details.
           #
@@ -294,11 +312,13 @@ module ContextDev
           #
           #   @param country_gl [String] Optional country code hint (GL parameter) to specify the country when looking up
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage, nil]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -450,7 +470,9 @@ module ContextDev
           # @!attribute force_language
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage, nil]
-          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByEmail::ForceLanguage }
+          optional :force_language,
+                   enum: -> { ContextDev::BrandRetrieveParams::Body::ByEmail::ForceLanguage },
+                   nil?: true
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -469,6 +491,12 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute tags
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
           #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -477,7 +505,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(email:, force_language: nil, max_age_ms: nil, max_speed: nil, timeout_ms: nil, type: :by_email)
+          # @!method initialize(email:, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, timeout_ms: nil, type: :by_email)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByEmail} for more details.
           #
@@ -487,11 +515,13 @@ module ContextDev
           #
           #   @param email [String] Email address to retrieve brand data for (e.g., 'jane@stripe.com').
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage, nil]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -643,7 +673,9 @@ module ContextDev
           # @!attribute force_language
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage, nil]
-          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTicker::ForceLanguage }
+          optional :force_language,
+                   enum: -> { ContextDev::BrandRetrieveParams::Body::ByTicker::ForceLanguage },
+                   nil?: true
 
           # @!attribute max_age_ms
           #   Maximum age in milliseconds for cached brand data before the API performs a hard
@@ -662,6 +694,12 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute tags
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute ticker_exchange
           #   Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
           #
@@ -676,7 +714,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(ticker:, force_language: nil, max_age_ms: nil, max_speed: nil, ticker_exchange: nil, timeout_ms: nil, type: :by_ticker)
+          # @!method initialize(ticker:, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, ticker_exchange: nil, timeout_ms: nil, type: :by_ticker)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByTicker} for more details.
           #
@@ -685,11 +723,13 @@ module ContextDev
           #
           #   @param ticker [String] Stock ticker symbol to retrieve brand data for (e.g., 'AAPL').
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage, nil]
           #
           #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param ticker_exchange [String] Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
           #
@@ -842,6 +882,12 @@ module ContextDev
           #   @return [Symbol, :by_direct_url]
           required :type, const: :by_direct_url
 
+          # @!attribute tags
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
           #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -850,7 +896,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(direct_url:, timeout_ms: nil, type: :by_direct_url)
+          # @!method initialize(direct_url:, tags: nil, timeout_ms: nil, type: :by_direct_url)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL} for more details.
           #
@@ -861,6 +907,8 @@ module ContextDev
           #   combined with domain, name, email, or ticker.
           #
           #   @param direct_url [String] Full http(s) URL to fetch brand data from (e.g., 'https://stripe.com/enterprise'
+          #
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -896,7 +944,9 @@ module ContextDev
           # @!attribute force_language
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage, nil]
-          optional :force_language, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage }
+          optional :force_language,
+                   enum: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage },
+                   nil?: true
 
           # @!attribute high_confidence_only
           #   When set to true, the API performs additional verification to ensure the
@@ -917,14 +967,20 @@ module ContextDev
           #   Optional Merchant Category Code (MCC) to help identify the business category or
           #   industry.
           #
-          #   @return [Integer, nil]
-          optional :mcc, Integer
+          #   @return [String, Float, nil]
+          optional :mcc, union: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Mcc }
 
           # @!attribute phone
           #   Optional phone number from the transaction to help verify brand match.
           #
-          #   @return [Float, nil]
-          optional :phone, Float
+          #   @return [String, Float, nil]
+          optional :phone, union: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone }
+
+          # @!attribute tags
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
@@ -934,7 +990,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(transaction_info:, city: nil, country_gl: nil, force_language: nil, high_confidence_only: nil, max_speed: nil, mcc: nil, phone: nil, timeout_ms: nil, type: :by_transaction)
+          # @!method initialize(transaction_info:, city: nil, country_gl: nil, force_language: nil, high_confidence_only: nil, max_speed: nil, mcc: nil, phone: nil, tags: nil, timeout_ms: nil, type: :by_transaction)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByTransaction} for more details.
           #
@@ -947,15 +1003,17 @@ module ContextDev
           #
           #   @param country_gl [String] Optional country code hint (GL parameter) to specify the country when identifyin
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage, nil]
           #
           #   @param high_confidence_only [Boolean] When set to true, the API performs additional verification to ensure the identif
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param mcc [Integer] Optional Merchant Category Code (MCC) to help identify the business category or
+          #   @param mcc [String, Float] Optional Merchant Category Code (MCC) to help identify the business category or
           #
-          #   @param phone [Float] Optional phone number from the transaction to help verify brand match.
+          #   @param phone [String, Float] Optional phone number from the transaction to help verify brand match.
+          #
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
           #
@@ -1088,6 +1146,35 @@ module ContextDev
 
             # @!method self.values
             #   @return [Array<Symbol>]
+          end
+
+          # Optional Merchant Category Code (MCC) to help identify the business category or
+          # industry.
+          #
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#mcc
+          module Mcc
+            extend ContextDev::Internal::Type::Union
+
+            variant String
+
+            variant Float
+
+            # @!method self.variants
+            #   @return [Array(String, Float)]
+          end
+
+          # Optional phone number from the transaction to help verify brand match.
+          #
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#phone
+          module Phone
+            extend ContextDev::Internal::Type::Union
+
+            variant String
+
+            variant Float
+
+            # @!method self.variants
+            #   @return [Array(String, Float)]
           end
         end
 

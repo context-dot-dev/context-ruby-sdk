@@ -7,27 +7,31 @@ module ContextDev
       # {ContextDev::Models::ParseHandleParams} for more details.
       #
       # Converts raw text, source code, web/data, PDF, Microsoft Office, and image bytes
-      # into LLM-usable Markdown. The base request costs 1 credit. When OCR runs
-      # (requires ocr=true), the entire call costs 5 credits; ocr=true requests where no
-      # OCR ends up running still cost 1 credit.
+      # into LLM-usable Markdown.
       #
-      # @overload handle(body:, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, use_main_content_only: nil, request_options: {})
+      # @overload handle(body:, client: nil, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, zdr: nil, request_options: {})
       #
       # @param body [Pathname, StringIO, IO, String, ContextDev::FilePart] Body param
       #
-      # @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] Query param: Optional file extension hint. Case-insensitive; a leading dot is ac
+      # @param client [String] Query param: Optional client identifier used for usage attribution.
       #
-      # @param include_images [Boolean] Query param: Include image references in Markdown output
+      # @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] Query param: Optional file extension hint, such as pdf, docx, xlsx, pptx, html,
       #
-      # @param include_links [Boolean] Query param: Preserve hyperlinks in Markdown output
+      # @param include_images [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeImages] Query param: Include image references in Markdown output
       #
-      # @param ocr [Boolean] Query param: Gates all OCR. When true, PDFs get embedded-image OCR (recognized t
+      # @param include_links [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeLinks] Query param: Preserve hyperlinks in Markdown output
       #
-      # @param pdf [ContextDev::Models::ParseHandleParams::Pdf] Query param: PDF page-range controls. Use start/end to limit parsing (and OCR wh
+      # @param ocr [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr] Query param: When true for PDF inputs, detect and OCR images embedded in the sel
       #
-      # @param shorten_base64_images [Boolean] Query param: Shorten base64-encoded image data in the Markdown output
+      # @param pdf [ContextDev::Models::ParseHandleParams::Pdf] Query param: PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5
       #
-      # @param use_main_content_only [Boolean] Query param: Extract only the main content from HTML-like inputs
+      # @param shorten_base64_images [Boolean, Symbol, ContextDev::Models::ParseHandleParams::ShortenBase64Images] Query param: Shorten base64-encoded image data in the Markdown output
+      #
+      # @param tags [Array<String>] Query param: Optional comma-separated caller-defined tags for tracking this requ
+      #
+      # @param use_main_content_only [Boolean, Symbol, ContextDev::Models::ParseHandleParams::UseMainContentOnly] Query param: Extract only the main content from HTML-like inputs
+      #
+      # @param zdr [Symbol, ContextDev::Models::ParseHandleParams::Zdr] Query param: Set to enabled to bypass shared caches and omit request and respons
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

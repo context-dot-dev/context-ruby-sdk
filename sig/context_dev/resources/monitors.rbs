@@ -34,11 +34,11 @@ module ContextDev
         ?cursor: String,
         ?limit: Integer,
         ?q: String,
-        ?search_by: ::Array[ContextDev::Models::MonitorListParams::search_by],
+        ?search_by: ::Array[ContextDev::Models::MonitorListParams::search_by]?,
         ?search_type: ContextDev::Models::MonitorListParams::search_type,
         ?status: ContextDev::Models::MonitorListParams::status,
         ?tag: String,
-        ?tags: ::Array[String],
+        ?tags: ::Array[String]?,
         ?target_type: ContextDev::Models::MonitorListParams::target_type,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::MonitorListResponse
@@ -47,6 +47,16 @@ module ContextDev
         String monitor_id,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::MonitorDeleteResponse
+
+      def get_credit_usage: (
+        ?since: Time,
+        ?until_: Time,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::MonitorGetCreditUsageResponse
+
+      def get_limits: (
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::MonitorGetLimitsResponse
 
       def list_account_changes: (
         ?change_detection_type: ContextDev::Models::MonitorListAccountChangesParams::change_detection_type,

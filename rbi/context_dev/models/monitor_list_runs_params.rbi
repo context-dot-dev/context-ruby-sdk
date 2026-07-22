@@ -17,20 +17,21 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :monitor_id
 
+      # Opaque pagination cursor from a previous response.
       sig { returns(T.nilable(String)) }
       attr_reader :cursor
 
       sig { params(cursor: String).void }
       attr_writer :cursor
 
+      # Maximum number of items to return per page (1-100). Defaults to 25.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
       sig { params(limit: Integer).void }
       attr_writer :limit
 
-      # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-      # (insufficient credits, monitor paused, or superseded by a concurrent run).
+      # Filter runs by lifecycle status.
       sig do
         returns(T.nilable(ContextDev::MonitorListRunsParams::Status::OrSymbol))
       end
@@ -52,10 +53,11 @@ module ContextDev
       end
       def self.new(
         monitor_id:,
+        # Opaque pagination cursor from a previous response.
         cursor: nil,
+        # Maximum number of items to return per page (1-100). Defaults to 25.
         limit: nil,
-        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-        # (insufficient credits, monitor paused, or superseded by a concurrent run).
+        # Filter runs by lifecycle status.
         status: nil,
         request_options: {}
       )
@@ -75,8 +77,7 @@ module ContextDev
       def to_hash
       end
 
-      # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-      # (insufficient credits, monitor paused, or superseded by a concurrent run).
+      # Filter runs by lifecycle status.
       module Status
         extend ContextDev::Internal::Type::Enum
 

@@ -77,12 +77,26 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractParams::Pdf, nil]
       optional :pdf, -> { ContextDev::WebExtractParams::Pdf }
 
+      # @!attribute settle_animations
+      #   When true, waits briefly for CSS and transition animations to settle before
+      #   extracting each crawled page. Defaults to false. This adds a bit of latency in
+      #   exchange for more stable output on animated pages.
+      #
+      #   @return [Boolean, nil]
+      optional :settle_animations, ContextDev::Internal::Type::Boolean, api_name: :settleAnimations
+
       # @!attribute stop_after_ms
       #   Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
       #   (110s). Default: 80000 (80s).
       #
       #   @return [Integer, nil]
       optional :stop_after_ms, Integer, api_name: :stopAfterMs
+
+      # @!attribute tags
+      #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #
+      #   @return [Array<String>, nil]
+      optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timeout_ms
       #   Optional timeout in milliseconds for the request. If the request takes longer
@@ -99,7 +113,7 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, api_name: :waitForMs
 
-      # @!method initialize(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, stop_after_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractParams} for more details.
       #
@@ -123,7 +137,11 @@ module ContextDev
       #
       #   @param pdf [ContextDev::Models::WebExtractParams::Pdf]
       #
+      #   @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
+      #
       #   @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000 (1
+      #
+      #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

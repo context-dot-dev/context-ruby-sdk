@@ -5,6 +5,7 @@ module ContextDev
         input: String,
         ?max_results: Integer,
         ?min_results: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::IndustryRetrieveNaicsResponse
@@ -13,6 +14,7 @@ module ContextDev
         input: String,
         ?max_results: Integer,
         ?min_results: Integer,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?type: ContextDev::Models::IndustryRetrieveSicParams::type_,
         ?request_options: ContextDev::request_opts

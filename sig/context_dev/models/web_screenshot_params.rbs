@@ -8,12 +8,14 @@ module ContextDev
         domain: String,
         full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
         handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
-        max_age_ms: Integer,
+        max_age_ms: Integer?,
         page: ContextDev::Models::WebScreenshotParams::page,
-        scroll_offset: Integer,
+        scroll_offset: Integer?,
+        tags: ::Array[String],
         timeout_ms: Integer,
         viewport: ContextDev::WebScreenshotParams::Viewport,
-        wait_for_ms: Integer
+        wait_for_ms: Integer?,
+        zdr: ContextDev::Models::WebScreenshotParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -53,9 +55,7 @@ module ContextDev
         ContextDev::Models::WebScreenshotParams::handle_cookie_popup
       ) -> ContextDev::Models::WebScreenshotParams::handle_cookie_popup
 
-      attr_reader max_age_ms: Integer?
-
-      def max_age_ms=: (Integer) -> Integer
+      attr_accessor max_age_ms: Integer?
 
       attr_reader page: ContextDev::Models::WebScreenshotParams::page?
 
@@ -63,9 +63,11 @@ module ContextDev
         ContextDev::Models::WebScreenshotParams::page
       ) -> ContextDev::Models::WebScreenshotParams::page
 
-      attr_reader scroll_offset: Integer?
+      attr_accessor scroll_offset: Integer?
 
-      def scroll_offset=: (Integer) -> Integer
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
 
       attr_reader timeout_ms: Integer?
 
@@ -77,9 +79,13 @@ module ContextDev
         ContextDev::WebScreenshotParams::Viewport
       ) -> ContextDev::WebScreenshotParams::Viewport
 
-      attr_reader wait_for_ms: Integer?
+      attr_accessor wait_for_ms: Integer?
 
-      def wait_for_ms=: (Integer) -> Integer
+      attr_reader zdr: ContextDev::Models::WebScreenshotParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebScreenshotParams::zdr
+      ) -> ContextDev::Models::WebScreenshotParams::zdr
 
       def initialize: (
         ?color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme,
@@ -88,12 +94,14 @@ module ContextDev
         ?domain: String,
         ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
         ?handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
-        ?max_age_ms: Integer,
+        ?max_age_ms: Integer?,
         ?page: ContextDev::Models::WebScreenshotParams::page,
-        ?scroll_offset: Integer,
+        ?scroll_offset: Integer?,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
-        ?wait_for_ms: Integer,
+        ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebScreenshotParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -104,12 +112,14 @@ module ContextDev
         domain: String,
         full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
         handle_cookie_popup: ContextDev::Models::WebScreenshotParams::handle_cookie_popup,
-        max_age_ms: Integer,
+        max_age_ms: Integer?,
         page: ContextDev::Models::WebScreenshotParams::page,
-        scroll_offset: Integer,
+        scroll_offset: Integer?,
+        tags: ::Array[String],
         timeout_ms: Integer,
         viewport: ContextDev::WebScreenshotParams::Viewport,
-        wait_for_ms: Integer,
+        wait_for_ms: Integer?,
+        zdr: ContextDev::Models::WebScreenshotParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -552,15 +562,15 @@ module ContextDev
         def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::full_screenshot]
       end
 
-      type handle_cookie_popup = :true | :false
+      type handle_cookie_popup = bool | :true | :false
 
       module HandleCookiePopup
-        extend ContextDev::Internal::Type::Enum
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::WebScreenshotParams::handle_cookie_popup]
 
         TRUE: :true
         FALSE: :false
-
-        def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::handle_cookie_popup]
       end
 
       type page =
@@ -602,6 +612,17 @@ module ContextDev
         def initialize: (?height: Integer, ?width: Integer) -> void
 
         def to_hash: -> { height: Integer, width: Integer }
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::zdr]
       end
     end
   end

@@ -10,6 +10,7 @@ module ContextDev
         markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
         num_results: Integer,
         query_fanout: bool,
+        tags: ::Array[String],
         timeout_ms: Integer
       }
       & ContextDev::Internal::Type::request_parameters
@@ -54,6 +55,10 @@ module ContextDev
 
       def query_fanout=: (bool) -> bool
 
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
       attr_reader timeout_ms: Integer?
 
       def timeout_ms=: (Integer) -> Integer
@@ -67,6 +72,7 @@ module ContextDev
         ?markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
         ?num_results: Integer,
         ?query_fanout: bool,
+        ?tags: ::Array[String],
         ?timeout_ms: Integer,
         ?request_options: ContextDev::request_opts
       ) -> void
@@ -80,6 +86,7 @@ module ContextDev
         markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
         num_results: Integer,
         query_fanout: bool,
+        tags: ::Array[String],
         timeout_ms: Integer,
         request_options: ContextDev::RequestOptions
       }

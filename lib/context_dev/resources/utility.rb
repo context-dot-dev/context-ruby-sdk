@@ -11,11 +11,13 @@ module ContextDev
       # one lookup key: a domain, or an email whose domain is extracted and validated
       # (free email providers and disposable email addresses are not allowed).
       #
-      # @overload prefetch(identifier:, type:, timeout_ms: nil, request_options: {})
+      # @overload prefetch(identifier:, type:, tags: nil, timeout_ms: nil, request_options: {})
       #
       # @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier] Identifier of the brand to prefetch. Provide exactly one of domain or email.
       #
       # @param type [Symbol, ContextDev::Models::UtilityPrefetchParams::Type] What to prefetch. Currently only 'brand' is supported.
+      #
+      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

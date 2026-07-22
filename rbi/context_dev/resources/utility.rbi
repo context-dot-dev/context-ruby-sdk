@@ -15,6 +15,7 @@ module ContextDev
               ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier::OrHash
             ),
           type: ContextDev::UtilityPrefetchParams::Type::OrSymbol,
+          tags: T::Array[String],
           timeout_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::UtilityPrefetchResponse)
@@ -24,6 +25,8 @@ module ContextDev
         identifier:,
         # What to prefetch. Currently only 'brand' is supported.
         type:,
+        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).

@@ -44,6 +44,12 @@ module ContextDev
           #   @return [Integer, nil]
           optional :max_products, Integer, api_name: :maxProducts
 
+          # @!attribute tags
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
           #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -52,7 +58,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(domain:, max_age_ms: nil, max_products: nil, timeout_ms: nil)
+          # @!method initialize(domain:, max_age_ms: nil, max_products: nil, tags: nil, timeout_ms: nil)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::AIExtractProductsParams::Body::ByDomain} for more details.
           #
@@ -61,6 +67,8 @@ module ContextDev
           #   @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
           #
           #   @param max_products [Integer] Maximum number of products to extract.
+          #
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
         end
@@ -87,6 +95,12 @@ module ContextDev
           #   @return [Integer, nil]
           optional :max_products, Integer, api_name: :maxProducts
 
+          # @!attribute tags
+          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #
+          #   @return [Array<String>, nil]
+          optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute timeout_ms
           #   Optional timeout in milliseconds for the request. If the request takes longer
           #   than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -95,7 +109,7 @@ module ContextDev
           #   @return [Integer, nil]
           optional :timeout_ms, Integer, api_name: :timeoutMS
 
-          # @!method initialize(direct_url:, max_age_ms: nil, max_products: nil, timeout_ms: nil)
+          # @!method initialize(direct_url:, max_age_ms: nil, max_products: nil, tags: nil, timeout_ms: nil)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::AIExtractProductsParams::Body::ByDirectURL} for more
           #   details.
@@ -105,6 +119,8 @@ module ContextDev
           #   @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
           #
           #   @param max_products [Integer] Maximum number of products to extract.
+          #
+          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           #
           #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
         end

@@ -9,7 +9,7 @@ module ContextDev
       # Crawl a website, use the provided JSON Schema and instructions to prioritize
       # relevant internal links, and extract structured data from the selected pages.
       #
-      # @overload extract(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, stop_after_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @overload extract(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #
       # @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. TypeScript Zod users can pass a JSON S
       #
@@ -31,7 +31,11 @@ module ContextDev
       #
       # @param pdf [ContextDev::Models::WebExtractParams::Pdf]
       #
+      # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
+      #
       # @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000 (1
+      #
+      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -59,11 +63,13 @@ module ContextDev
       # Analyze a company's landing page and web search evidence to return direct
       # competitors for the same product or market.
       #
-      # @overload extract_competitors(domain:, num_competitors: nil, timeout_ms: nil, request_options: {})
+      # @overload extract_competitors(domain:, num_competitors: nil, tags: nil, timeout_ms: nil, request_options: {})
       #
       # @param domain [String] Company domain to analyze, such as `stripe.com`. Full http(s) URLs are accepted
       #
       # @param num_competitors [Integer] Exact number of direct competitors to return. Defaults to 5.
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -90,13 +96,15 @@ module ContextDev
       # Scrape font information from a website including font families, usage
       # statistics, fallbacks, and element/word counts.
       #
-      # @overload extract_fonts(direct_url: nil, domain: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
+      # @overload extract_fonts(direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_ms: nil, request_options: {})
       #
       # @param direct_url [String] A specific URL to fetch fonts from directly, bypassing domain resolution (e.g.,
       #
       # @param domain [String] Domain name to extract fonts from (e.g., 'example.com', 'google.com'). The domai
       #
-      # @param max_age_ms [Integer] Maximum age in milliseconds for cached data before the API performs a hard refre
+      # @param max_age_ms [Integer, nil] Maximum age in milliseconds for cached brand data before the API performs a hard
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -127,7 +135,7 @@ module ContextDev
       # Extract a comprehensive design system from a website including colors,
       # typography, spacing, shadows, and UI components.
       #
-      # @overload extract_styleguide(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, timeout_ms: nil, request_options: {})
+      # @overload extract_styleguide(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_ms: nil, request_options: {})
       #
       # @param color_scheme [Symbol, ContextDev::Models::WebExtractStyleguideParams::ColorScheme] Optional browser color scheme to emulate for websites that respond to prefers-co
       #
@@ -135,7 +143,9 @@ module ContextDev
       #
       # @param domain [String] Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
       #
-      # @param max_age_ms [Integer] Maximum age in milliseconds for cached data before the API performs a hard refre
+      # @param max_age_ms [Integer, nil] Maximum age in milliseconds for cached brand data before the API performs a hard
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -166,11 +176,11 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, request_options: {})
+      # @overload screenshot(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param color_scheme [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
       #
-      # @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
+      # @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
       #
       # @param direct_url [String] A specific URL to screenshot directly, bypassing domain resolution (e.g., 'https
       #
@@ -178,19 +188,23 @@ module ContextDev
       #
       # @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
-      # @param handle_cookie_popup [Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
+      # @param handle_cookie_popup [Boolean, Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
       #
-      # @param max_age_ms [Integer] Return a cached screenshot if a prior screenshot for the same parameters exists
+      # @param max_age_ms [Integer, nil] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
       # @param page [Symbol, ContextDev::Models::WebScreenshotParams::Page] Optional parameter to specify which page type to screenshot. If provided, the sy
       #
-      # @param scroll_offset [Integer] Optional vertical scroll offset in pixels for capturing a long page in viewport-
+      # @param scroll_offset [Integer, nil] Optional vertical scroll offset in pixels for capturing a long page in viewport-
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       # @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       #
-      # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load before taking
+      # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before taking
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebScreenshotParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -223,7 +237,7 @@ module ContextDev
       #
       # Search the web and optionally scrape each result to Markdown in one round-trip.
       #
-      # @overload search(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, timeout_ms: nil, request_options: {})
+      # @overload search(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_ms: nil, request_options: {})
       #
       # @param query [String] Search query. Accepts natural language as well as Google-style search operators
       #
@@ -240,6 +254,8 @@ module ContextDev
       # @param num_results [Integer] Number of results to request and return (10–100). Defaults to 10.
       #
       # @param query_fanout [Boolean] Expand the query into multiple parallel variants for broader recall.
+      #
+      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -265,7 +281,7 @@ module ContextDev
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
       # and returns results for all crawled pages.
       #
-      # @overload web_crawl_md(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, stop_after_ms: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_crawl_md(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
       #
@@ -297,6 +313,8 @@ module ContextDev
       #
       # @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds. After each scrape, the crawler c
       #
+      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       # @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped.
@@ -304,6 +322,8 @@ module ContextDev
       # @param use_main_content_only [Boolean] Extract only the main content, stripping headers, footers, sidebars, and navigat
       #
       # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load for each craw
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -324,33 +344,40 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebWebScrapeHTMLParams} for more details.
       #
-      # Scrapes the given URL and returns the raw HTML content of the page.
+      # Scrapes the given URL and returns the raw HTML content of the page. The base
+      # request costs 1 credit; requests with browser actions cost 2 credits.
       #
-      # @overload web_scrape_html(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_html(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
       #
-      # @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
+      # @param actions [Array<ContextDev::Models::WebWebScrapeHTMLParams::Action::Wait, ContextDev::Models::WebWebScrapeHTMLParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
       #
-      # @param exclude_selectors [Array<String>] CSS selectors to remove from the result. Applied after includeSelectors. Exclusi
+      # @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
+      #
+      # @param exclude_selectors [Array<String>, nil] CSS selectors to remove from the result. Applied after includeSelectors. Exclusi
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
-      # @param include_frames [Boolean] When true, iframes are rendered inline into the returned HTML.
+      # @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebScrapeHTMLParams::IncludeFrames] When true, iframes are rendered inline into the returned HTML.
       #
-      # @param include_selectors [Array<String>] CSS selectors. When provided, only matching subtrees (and their descendants) are
+      # @param include_selectors [Array<String>, nil] CSS selectors. When provided, only matching subtrees (and their descendants) are
       #
-      # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
+      # @param max_age_ms [Integer, nil] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       # @param pdf [ContextDev::Models::WebWebScrapeHTMLParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
-      # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
+      # @param settle_animations [Boolean, Symbol, ContextDev::Models::WebWebScrapeHTMLParams::SettleAnimations] When true, waits briefly for CSS and transition animations to settle before extr
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
-      # @param use_main_content_only [Boolean] When true, return only the page's main content in the HTML response, excluding h
+      # @param use_main_content_only [Boolean, Symbol, ContextDev::Models::WebWebScrapeHTMLParams::UseMainContentOnly] When true, return only the page's main content in the HTML response, excluding h
       #
-      # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
+      # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -383,24 +410,29 @@ module ContextDev
       #
       # Extract image assets from a web page, including standard URLs, inline SVGs, data
       # URIs, responsive image sources, metadata, CSS backgrounds, video posters, and
-      # embeds. The base request costs 1 credit. When enrichment is enabled, the entire
-      # call costs 5 credits.
+      # embeds. The base request costs 1 credit, or 2 credits with browser actions. When
+      # enrichment is enabled, the entire call costs 5 credits, including requests that
+      # also use actions.
       #
-      # @overload web_scrape_images(url:, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_images(url:, actions: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] Page URL to inspect. Must include http:// or https://.
       #
-      # @param dedupe [Boolean] When true, visually duplicate images are removed: every image is loaded and perc
+      # @param actions [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
       #
-      # @param enrichment [ContextDev::Models::WebWebScrapeImagesParams::Enrichment] Optional per-image processing, sent as deep-object query params such as enrichme
+      # @param dedupe [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Dedupe] When true, visually duplicate images are removed: every image is loaded and perc
+      #
+      # @param enrichment [ContextDev::Models::WebWebScrapeImagesParams::Enrichment, nil] Optional per-image processing, sent as deep-object query params such as enrichme
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
-      # @param max_age_ms [Integer] Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
+      # @param max_age_ms [Integer, nil] Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
-      # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load before collec
+      # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before collec
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -432,48 +464,54 @@ module ContextDev
       #
       # ### Billing & errors
       #
-      # | HTTP status | Billed?        | Meaning                                                                                  |
-      # | ----------- | -------------- | ---------------------------------------------------------------------------------------- |
-      # | 200         | Yes — 1 credit | Successful scrape, including a zero-length result when includeSelectors matched nothing  |
-      # | 400         | No             | Invalid input, skipped PDF, or the page could not be scraped                             |
-      # | 401 / 403   | No             | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code |
-      # | 404         | No             | Target page returned or fingerprinted as not found                                       |
-      # | 408         | No             | Request timed out                                                                        |
-      # | 415         | No             | Unsupported content type                                                                 |
-      # | 429         | No             | Per-minute rate limit exceeded; honor Retry-After                                        |
-      # | 500         | No             | Internal error                                                                           |
+      # | HTTP status | Billed?                                   | Meaning                                                                                  |
+      # | ----------- | ----------------------------------------- | ---------------------------------------------------------------------------------------- |
+      # | 200         | Yes — 1 credit, or 2 credits with actions | Successful scrape, including a zero-length result when includeSelectors matched nothing  |
+      # | 400         | No                                        | Invalid input, skipped PDF, or the page could not be scraped                             |
+      # | 401 / 403   | No                                        | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code |
+      # | 404         | No                                        | Target page returned or fingerprinted as not found                                       |
+      # | 408         | No                                        | Request timed out                                                                        |
+      # | 415         | No                                        | Unsupported content type                                                                 |
+      # | 429         | No                                        | Per-minute rate limit exceeded; honor Retry-After                                        |
+      # | 500         | No                                        | Internal error                                                                           |
       #
-      # @overload web_scrape_md(url:, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_md(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
       #
-      # @param country [Symbol, ContextDev::Models::WebWebScrapeMdParams::Country] Two-letter ISO 3166-1 alpha-2 country code for the website request location. Whe
+      # @param actions [Array<ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
       #
-      # @param exclude_selectors [Array<String>] CSS selectors to remove before conversion to Markdown. Applied after includeSele
+      # @param country [Symbol, ContextDev::Models::WebWebScrapeMdParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
+      #
+      # @param exclude_selectors [Array<String>, nil] CSS selectors to remove before conversion to Markdown. Applied after includeSele
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
-      # @param include_frames [Boolean] When true, the contents of iframes are rendered to Markdown.
+      # @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeFrames] When true, the contents of iframes are rendered to Markdown.
       #
-      # @param include_images [Boolean] Include image references in Markdown output
+      # @param include_images [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeImages] Include image references in Markdown output
       #
-      # @param include_links [Boolean] Preserve hyperlinks in Markdown output
+      # @param include_links [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeLinks] Preserve hyperlinks in Markdown output
       #
-      # @param include_selectors [Array<String>] CSS selectors. When provided, only matching HTML subtrees (and their descendants
+      # @param include_selectors [Array<String>, nil] CSS selectors. When provided, only matching HTML subtrees (and their descendants
       #
-      # @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
+      # @param max_age_ms [Integer, nil] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       # @param pdf [ContextDev::Models::WebWebScrapeMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
-      # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before conv
+      # @param settle_animations [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::SettleAnimations] When true, waits briefly for CSS and transition animations to settle before conv
       #
-      # @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
+      # @param shorten_base64_images [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::ShortenBase64Images] Shorten base64-encoded image data in the Markdown output
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
-      # @param use_main_content_only [Boolean] Extract only the main content of the page, excluding headers, footers, sidebars,
+      # @param use_main_content_only [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::UseMainContentOnly] Extract only the main content of the page, excluding headers, footers, sidebars,
       #
-      # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load before conver
+      # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before conver
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebWebScrapeMdParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -509,7 +547,7 @@ module ContextDev
       #
       # Crawl an entire website's sitemap and return all discovered page URLs.
       #
-      # @overload web_scrape_sitemap(domain:, headers: nil, max_links: nil, timeout_ms: nil, url_regex: nil, request_options: {})
+      # @overload web_scrape_sitemap(domain:, headers: nil, max_links: nil, sitemap_url: nil, tags: nil, timeout_ms: nil, url_regex: nil, zdr: nil, request_options: {})
       #
       # @param domain [String] Domain to build a sitemap for
       #
@@ -517,9 +555,15 @@ module ContextDev
       #
       # @param max_links [Integer] Maximum number of links to return from the sitemap crawl. Defaults to 10,000. Mi
       #
+      # @param sitemap_url [String] Optional explicit sitemap URL. When provided, exactly this sitemap is crawled in
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
       # @param url_regex [String] Optional RE2-compatible regex pattern. Only URLs matching this pattern are retur
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebWebScrapeSitemapParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -532,7 +576,12 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/sitemap",
-          query: query.transform_keys(max_links: "maxLinks", timeout_ms: "timeoutMS", url_regex: "urlRegex"),
+          query: query.transform_keys(
+            max_links: "maxLinks",
+            sitemap_url: "sitemapUrl",
+            timeout_ms: "timeoutMS",
+            url_regex: "urlRegex"
+          ),
           model: ContextDev::Models::WebWebScrapeSitemapResponse,
           options: options
         )
