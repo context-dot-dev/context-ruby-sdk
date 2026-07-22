@@ -424,10 +424,20 @@ module ContextDev
       )
       end
 
-      # Scrapes the given URL and returns the raw HTML content of the page.
+      # Scrapes the given URL and returns the raw HTML content of the page. The base
+      # request costs 1 credit; requests with browser actions cost 2 credits.
       sig do
         params(
           url: String,
+          actions:
+            T.nilable(
+              T::Array[
+                T.any(
+                  ContextDev::WebWebScrapeHTMLParams::Action::Wait::OrHash,
+                  ContextDev::WebWebScrapeHTMLParams::Action::Perform::OrHash
+                )
+              ]
+            ),
           country: ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol,
           exclude_selectors: T.nilable(T::Array[String]),
           headers: T::Hash[Symbol, String],
@@ -459,6 +469,10 @@ module ContextDev
       def web_scrape_html(
         # Full URL to scrape (must include http:// or https:// protocol)
         url:,
+        # Optional browser actions executed in array order after the page loads and before
+        # content is captured. Requires a paid plan. Send a JSON array in the query
+        # parameter. Maximum: 5 actions.
+        actions: nil,
         # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
         # residential proxy exit location. Must be one of Context.dev's supported
         # countries. When provided, Context.dev fetches the target page from that country.
@@ -513,11 +527,21 @@ module ContextDev
 
       # Extract image assets from a web page, including standard URLs, inline SVGs, data
       # URIs, responsive image sources, metadata, CSS backgrounds, video posters, and
-      # embeds. The base request costs 1 credit. When enrichment is enabled, the entire
-      # call costs 5 credits.
+      # embeds. The base request costs 1 credit, or 2 credits with browser actions. When
+      # enrichment is enabled, the entire call costs 5 credits, including requests that
+      # also use actions.
       sig do
         params(
           url: String,
+          actions:
+            T.nilable(
+              T::Array[
+                T.any(
+                  ContextDev::WebWebScrapeImagesParams::Action::Wait::OrHash,
+                  ContextDev::WebWebScrapeImagesParams::Action::Perform::OrHash
+                )
+              ]
+            ),
           dedupe:
             T.any(
               T::Boolean,
@@ -536,6 +560,10 @@ module ContextDev
       def web_scrape_images(
         # Page URL to inspect. Must include http:// or https://.
         url:,
+        # Optional browser actions executed in array order after the page loads and before
+        # content is captured. Requires a paid plan. Send a JSON array in the query
+        # parameter. Maximum: 5 actions.
+        actions: nil,
         # When true, visually duplicate images are removed: every image is loaded and
         # perceptually hashed, and only the highest-resolution copy of each duplicate
         # group is kept. Images that cannot be downloaded or hashed are kept. Default:
@@ -572,19 +600,28 @@ module ContextDev
       #
       # ### Billing & errors
       #
-      # | HTTP status | Billed?        | Meaning                                                                                  |
-      # | ----------- | -------------- | ---------------------------------------------------------------------------------------- |
-      # | 200         | Yes — 1 credit | Successful scrape, including a zero-length result when includeSelectors matched nothing  |
-      # | 400         | No             | Invalid input, skipped PDF, or the page could not be scraped                             |
-      # | 401 / 403   | No             | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code |
-      # | 404         | No             | Target page returned or fingerprinted as not found                                       |
-      # | 408         | No             | Request timed out                                                                        |
-      # | 415         | No             | Unsupported content type                                                                 |
-      # | 429         | No             | Per-minute rate limit exceeded; honor Retry-After                                        |
-      # | 500         | No             | Internal error                                                                           |
+      # | HTTP status | Billed?                                   | Meaning                                                                                  |
+      # | ----------- | ----------------------------------------- | ---------------------------------------------------------------------------------------- |
+      # | 200         | Yes — 1 credit, or 2 credits with actions | Successful scrape, including a zero-length result when includeSelectors matched nothing  |
+      # | 400         | No                                        | Invalid input, skipped PDF, or the page could not be scraped                             |
+      # | 401 / 403   | No                                        | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code |
+      # | 404         | No                                        | Target page returned or fingerprinted as not found                                       |
+      # | 408         | No                                        | Request timed out                                                                        |
+      # | 415         | No                                        | Unsupported content type                                                                 |
+      # | 429         | No                                        | Per-minute rate limit exceeded; honor Retry-After                                        |
+      # | 500         | No                                        | Internal error                                                                           |
       sig do
         params(
           url: String,
+          actions:
+            T.nilable(
+              T::Array[
+                T.any(
+                  ContextDev::WebWebScrapeMdParams::Action::Wait::OrHash,
+                  ContextDev::WebWebScrapeMdParams::Action::Perform::OrHash
+                )
+              ]
+            ),
           country: ContextDev::WebWebScrapeMdParams::Country::OrSymbol,
           exclude_selectors: T.nilable(T::Array[String]),
           headers: T::Hash[Symbol, String],
@@ -632,6 +669,10 @@ module ContextDev
         # Full URL to scrape into LLM usable Markdown (must include http:// or https://
         # protocol)
         url:,
+        # Optional browser actions executed in array order after the page loads and before
+        # content is captured. Requires a paid plan. Send a JSON array in the query
+        # parameter. Maximum: 5 actions.
+        actions: nil,
         # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
         # residential proxy exit location. Must be one of Context.dev's supported
         # countries. When provided, Context.dev fetches the target page from that country.
