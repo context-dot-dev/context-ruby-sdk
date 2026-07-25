@@ -8,9 +8,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
 
     response =
       @context_dev.monitors.create(
-        change_detection: {type: :exact},
         name: "Acme pricing page",
-        schedule: {frequency: 6, type: :interval, unit: :hours},
         target: {type: :page, url: "https://acme.com/pricing"}
       )
 
@@ -23,6 +21,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         id: String,
         change_detection: ContextDev::Models::MonitorCreateResponse::ChangeDetection,
         created_at: Time,
+        initial_run_id: String | nil,
         mode: ContextDev::Models::MonitorCreateResponse::Mode,
         name: String,
         schedule: ContextDev::Models::MonitorCreateResponse::Schedule,

@@ -14,17 +14,17 @@ module ContextDev
       # detection combinations. The monitor runs immediately after creation to create
       # its initial baseline.
       #
-      # @overload create(change_detection:, name:, schedule:, target:, mode: nil, tags: nil, webhook: nil, request_options: {})
-      #
-      # @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] Discriminated union describing how changes are detected.
+      # @overload create(name:, target:, change_detection: nil, mode: nil, schedule: nil, tags: nil, webhook: nil, request_options: {})
       #
       # @param name [String]
       #
-      # @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
-      #
       # @param target [ContextDev::Models::MonitorCreateParams::Target::Page, ContextDev::Models::MonitorCreateParams::Target::Sitemap, ContextDev::Models::MonitorCreateParams::Target::Extract] Discriminated union describing what the monitor watches.
       #
+      # @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] Discriminated union describing how changes are detected.
+      #
       # @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Top-level monitor category. Always `web` today; the concrete behavior is describ
+      #
+      # @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #
       # @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes. Duplica
       #

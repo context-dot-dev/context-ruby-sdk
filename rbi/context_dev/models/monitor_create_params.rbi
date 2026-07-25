@@ -11,30 +11,8 @@ module ContextDev
           T.any(ContextDev::MonitorCreateParams, ContextDev::Internal::AnyHash)
         end
 
-      # Discriminated union describing how changes are detected.
-      sig do
-        returns(
-          T.any(
-            ContextDev::MonitorCreateParams::ChangeDetection::Exact,
-            ContextDev::MonitorCreateParams::ChangeDetection::Semantic
-          )
-        )
-      end
-      attr_accessor :change_detection
-
       sig { returns(String) }
       attr_accessor :name
-
-      # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-      # every 6 hours or every 2 days. The total interval (frequency × unit) must be
-      # between 10 minutes and 1 year.
-      sig { returns(ContextDev::MonitorCreateParams::Schedule) }
-      attr_reader :schedule
-
-      sig do
-        params(schedule: ContextDev::MonitorCreateParams::Schedule::OrHash).void
-      end
-      attr_writer :schedule
 
       # Discriminated union describing what the monitor watches.
       sig do
@@ -48,6 +26,30 @@ module ContextDev
       end
       attr_accessor :target
 
+      # Discriminated union describing how changes are detected.
+      sig do
+        returns(
+          T.nilable(
+            T.any(
+              ContextDev::MonitorCreateParams::ChangeDetection::Exact,
+              ContextDev::MonitorCreateParams::ChangeDetection::Semantic
+            )
+          )
+        )
+      end
+      attr_reader :change_detection
+
+      sig do
+        params(
+          change_detection:
+            T.any(
+              ContextDev::MonitorCreateParams::ChangeDetection::Exact::OrHash,
+              ContextDev::MonitorCreateParams::ChangeDetection::Semantic::OrHash
+            )
+        ).void
+      end
+      attr_writer :change_detection
+
       # Top-level monitor category. Always `web` today; the concrete behavior is
       # described by `target` and `change_detection`.
       sig do
@@ -57,6 +59,17 @@ module ContextDev
 
       sig { params(mode: ContextDev::MonitorCreateParams::Mode::OrSymbol).void }
       attr_writer :mode
+
+      # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
+      # every 6 hours or every 2 days. The total interval (frequency × unit) must be
+      # between 10 minutes and 1 year.
+      sig { returns(T.nilable(ContextDev::MonitorCreateParams::Schedule)) }
+      attr_reader :schedule
+
+      sig do
+        params(schedule: ContextDev::MonitorCreateParams::Schedule::OrHash).void
+      end
+      attr_writer :schedule
 
       # User-defined tags for grouping and filtering monitors and their changes.
       # Duplicates are removed.
@@ -78,38 +91,38 @@ module ContextDev
 
       sig do
         params(
-          change_detection:
-            T.any(
-              ContextDev::MonitorCreateParams::ChangeDetection::Exact::OrHash,
-              ContextDev::MonitorCreateParams::ChangeDetection::Semantic::OrHash
-            ),
           name: String,
-          schedule: ContextDev::MonitorCreateParams::Schedule::OrHash,
           target:
             T.any(
               ContextDev::MonitorCreateParams::Target::Page::OrHash,
               ContextDev::MonitorCreateParams::Target::Sitemap::OrHash,
               ContextDev::MonitorCreateParams::Target::Extract::OrHash
             ),
+          change_detection:
+            T.any(
+              ContextDev::MonitorCreateParams::ChangeDetection::Exact::OrHash,
+              ContextDev::MonitorCreateParams::ChangeDetection::Semantic::OrHash
+            ),
           mode: ContextDev::MonitorCreateParams::Mode::OrSymbol,
+          schedule: ContextDev::MonitorCreateParams::Schedule::OrHash,
           tags: T::Array[String],
           webhook: T.nilable(ContextDev::MonitorCreateParams::Webhook::OrHash),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
       def self.new(
-        # Discriminated union describing how changes are detected.
-        change_detection:,
         name:,
-        # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-        # every 6 hours or every 2 days. The total interval (frequency × unit) must be
-        # between 10 minutes and 1 year.
-        schedule:,
         # Discriminated union describing what the monitor watches.
         target:,
+        # Discriminated union describing how changes are detected.
+        change_detection: nil,
         # Top-level monitor category. Always `web` today; the concrete behavior is
         # described by `target` and `change_detection`.
         mode: nil,
+        # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
+        # every 6 hours or every 2 days. The total interval (frequency × unit) must be
+        # between 10 minutes and 1 year.
+        schedule: nil,
         # User-defined tags for grouping and filtering monitors and their changes.
         # Duplicates are removed.
         tags: nil,
@@ -121,20 +134,20 @@ module ContextDev
       sig do
         override.returns(
           {
-            change_detection:
-              T.any(
-                ContextDev::MonitorCreateParams::ChangeDetection::Exact,
-                ContextDev::MonitorCreateParams::ChangeDetection::Semantic
-              ),
             name: String,
-            schedule: ContextDev::MonitorCreateParams::Schedule,
             target:
               T.any(
                 ContextDev::MonitorCreateParams::Target::Page,
                 ContextDev::MonitorCreateParams::Target::Sitemap,
                 ContextDev::MonitorCreateParams::Target::Extract
               ),
+            change_detection:
+              T.any(
+                ContextDev::MonitorCreateParams::ChangeDetection::Exact,
+                ContextDev::MonitorCreateParams::ChangeDetection::Semantic
+              ),
             mode: ContextDev::MonitorCreateParams::Mode::OrSymbol,
+            schedule: ContextDev::MonitorCreateParams::Schedule,
             tags: T::Array[String],
             webhook: T.nilable(ContextDev::MonitorCreateParams::Webhook),
             request_options: ContextDev::RequestOptions
@@ -142,206 +155,6 @@ module ContextDev
         )
       end
       def to_hash
-      end
-
-      # Discriminated union describing how changes are detected.
-      module ChangeDetection
-        extend ContextDev::Internal::Type::Union
-
-        Variants =
-          T.type_alias do
-            T.any(
-              ContextDev::MonitorCreateParams::ChangeDetection::Exact,
-              ContextDev::MonitorCreateParams::ChangeDetection::Semantic
-            )
-          end
-
-        class Exact < ContextDev::Internal::Type::BaseModel
-          OrHash =
-            T.type_alias do
-              T.any(
-                ContextDev::MonitorCreateParams::ChangeDetection::Exact,
-                ContextDev::Internal::AnyHash
-              )
-            end
-
-          sig { returns(Symbol) }
-          attr_accessor :type
-
-          # Detect exact changes. For page targets, this means visible text diffs. For
-          # sitemap targets, this means URL additions and removals.
-          sig { params(type: Symbol).returns(T.attached_class) }
-          def self.new(type: :exact)
-          end
-
-          sig { override.returns({ type: Symbol }) }
-          def to_hash
-          end
-        end
-
-        class Semantic < ContextDev::Internal::Type::BaseModel
-          OrHash =
-            T.type_alias do
-              T.any(
-                ContextDev::MonitorCreateParams::ChangeDetection::Semantic,
-                ContextDev::Internal::AnyHash
-              )
-            end
-
-          sig { returns(Symbol) }
-          attr_accessor :type
-
-          sig { returns(T.nilable(Float)) }
-          attr_reader :confidence_threshold
-
-          sig { params(confidence_threshold: Float).void }
-          attr_writer :confidence_threshold
-
-          # Detect meaning-level changes to tracked page content, ignoring cosmetic or
-          # paraphrase-only differences. Which changes are meaningful is judged against the
-          # extract target's `instructions` (and `schema`, when provided).
-          sig do
-            params(confidence_threshold: Float, type: Symbol).returns(
-              T.attached_class
-            )
-          end
-          def self.new(confidence_threshold: nil, type: :semantic)
-          end
-
-          sig do
-            override.returns({ type: Symbol, confidence_threshold: Float })
-          end
-          def to_hash
-          end
-        end
-
-        sig do
-          override.returns(
-            T::Array[ContextDev::MonitorCreateParams::ChangeDetection::Variants]
-          )
-        end
-        def self.variants
-        end
-      end
-
-      class Schedule < ContextDev::Internal::Type::BaseModel
-        OrHash =
-          T.type_alias do
-            T.any(
-              ContextDev::MonitorCreateParams::Schedule,
-              ContextDev::Internal::AnyHash
-            )
-          end
-
-        # Number of units between runs. The resulting interval (frequency × unit) must be
-        # at least 10 minutes and at most 1 year (e.g. minimum 10 when unit is minutes;
-        # maximum 365 when unit is days).
-        sig { returns(Integer) }
-        attr_accessor :frequency
-
-        sig do
-          returns(ContextDev::MonitorCreateParams::Schedule::Type::OrSymbol)
-        end
-        attr_accessor :type
-
-        sig do
-          returns(ContextDev::MonitorCreateParams::Schedule::Unit::OrSymbol)
-        end
-        attr_accessor :unit
-
-        # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-        # every 6 hours or every 2 days. The total interval (frequency × unit) must be
-        # between 10 minutes and 1 year.
-        sig do
-          params(
-            frequency: Integer,
-            type: ContextDev::MonitorCreateParams::Schedule::Type::OrSymbol,
-            unit: ContextDev::MonitorCreateParams::Schedule::Unit::OrSymbol
-          ).returns(T.attached_class)
-        end
-        def self.new(
-          # Number of units between runs. The resulting interval (frequency × unit) must be
-          # at least 10 minutes and at most 1 year (e.g. minimum 10 when unit is minutes;
-          # maximum 365 when unit is days).
-          frequency:,
-          type:,
-          unit:
-        )
-        end
-
-        sig do
-          override.returns(
-            {
-              frequency: Integer,
-              type: ContextDev::MonitorCreateParams::Schedule::Type::OrSymbol,
-              unit: ContextDev::MonitorCreateParams::Schedule::Unit::OrSymbol
-            }
-          )
-        end
-        def to_hash
-        end
-
-        module Type
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(Symbol, ContextDev::MonitorCreateParams::Schedule::Type)
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          INTERVAL =
-            T.let(
-              :interval,
-              ContextDev::MonitorCreateParams::Schedule::Type::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::MonitorCreateParams::Schedule::Type::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
-
-        module Unit
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(Symbol, ContextDev::MonitorCreateParams::Schedule::Unit)
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          MINUTES =
-            T.let(
-              :minutes,
-              ContextDev::MonitorCreateParams::Schedule::Unit::TaggedSymbol
-            )
-          HOURS =
-            T.let(
-              :hours,
-              ContextDev::MonitorCreateParams::Schedule::Unit::TaggedSymbol
-            )
-          DAYS =
-            T.let(
-              :days,
-              ContextDev::MonitorCreateParams::Schedule::Unit::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::MonitorCreateParams::Schedule::Unit::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
       end
 
       # Discriminated union describing what the monitor watches.
@@ -604,6 +417,86 @@ module ContextDev
         end
       end
 
+      # Discriminated union describing how changes are detected.
+      module ChangeDetection
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              ContextDev::MonitorCreateParams::ChangeDetection::Exact,
+              ContextDev::MonitorCreateParams::ChangeDetection::Semantic
+            )
+          end
+
+        class Exact < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::MonitorCreateParams::ChangeDetection::Exact,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(Symbol) }
+          attr_accessor :type
+
+          # Detect exact changes. For page targets, this means visible text diffs. For
+          # sitemap targets, this means URL additions and removals.
+          sig { params(type: Symbol).returns(T.attached_class) }
+          def self.new(type: :exact)
+          end
+
+          sig { override.returns({ type: Symbol }) }
+          def to_hash
+          end
+        end
+
+        class Semantic < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::MonitorCreateParams::ChangeDetection::Semantic,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(Symbol) }
+          attr_accessor :type
+
+          sig { returns(T.nilable(Float)) }
+          attr_reader :confidence_threshold
+
+          sig { params(confidence_threshold: Float).void }
+          attr_writer :confidence_threshold
+
+          # Detect meaning-level changes to tracked page content, ignoring cosmetic or
+          # paraphrase-only differences. Which changes are meaningful is judged against the
+          # extract target's `instructions` (and `schema`, when provided).
+          sig do
+            params(confidence_threshold: Float, type: Symbol).returns(
+              T.attached_class
+            )
+          end
+          def self.new(confidence_threshold: nil, type: :semantic)
+          end
+
+          sig do
+            override.returns({ type: Symbol, confidence_threshold: Float })
+          end
+          def to_hash
+          end
+        end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::MonitorCreateParams::ChangeDetection::Variants]
+          )
+        end
+        def self.variants
+        end
+      end
+
       # Top-level monitor category. Always `web` today; the concrete behavior is
       # described by `target` and `change_detection`.
       module Mode
@@ -621,6 +514,126 @@ module ContextDev
           )
         end
         def self.values
+        end
+      end
+
+      class Schedule < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::MonitorCreateParams::Schedule,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Number of units between runs. The resulting interval (frequency × unit) must be
+        # at least 10 minutes and at most 1 year (e.g. minimum 10 when unit is minutes;
+        # maximum 365 when unit is days).
+        sig { returns(Integer) }
+        attr_accessor :frequency
+
+        sig do
+          returns(ContextDev::MonitorCreateParams::Schedule::Type::OrSymbol)
+        end
+        attr_accessor :type
+
+        sig do
+          returns(ContextDev::MonitorCreateParams::Schedule::Unit::OrSymbol)
+        end
+        attr_accessor :unit
+
+        # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
+        # every 6 hours or every 2 days. The total interval (frequency × unit) must be
+        # between 10 minutes and 1 year.
+        sig do
+          params(
+            frequency: Integer,
+            type: ContextDev::MonitorCreateParams::Schedule::Type::OrSymbol,
+            unit: ContextDev::MonitorCreateParams::Schedule::Unit::OrSymbol
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # Number of units between runs. The resulting interval (frequency × unit) must be
+          # at least 10 minutes and at most 1 year (e.g. minimum 10 when unit is minutes;
+          # maximum 365 when unit is days).
+          frequency:,
+          type:,
+          unit:
+        )
+        end
+
+        sig do
+          override.returns(
+            {
+              frequency: Integer,
+              type: ContextDev::MonitorCreateParams::Schedule::Type::OrSymbol,
+              unit: ContextDev::MonitorCreateParams::Schedule::Unit::OrSymbol
+            }
+          )
+        end
+        def to_hash
+        end
+
+        module Type
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(Symbol, ContextDev::MonitorCreateParams::Schedule::Type)
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          INTERVAL =
+            T.let(
+              :interval,
+              ContextDev::MonitorCreateParams::Schedule::Type::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::MonitorCreateParams::Schedule::Type::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
+        end
+
+        module Unit
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(Symbol, ContextDev::MonitorCreateParams::Schedule::Unit)
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          MINUTES =
+            T.let(
+              :minutes,
+              ContextDev::MonitorCreateParams::Schedule::Unit::TaggedSymbol
+            )
+          HOURS =
+            T.let(
+              :hours,
+              ContextDev::MonitorCreateParams::Schedule::Unit::TaggedSymbol
+            )
+          DAYS =
+            T.let(
+              :days,
+              ContextDev::MonitorCreateParams::Schedule::Unit::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::MonitorCreateParams::Schedule::Unit::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
         end
       end
 

@@ -7,24 +7,10 @@ module ContextDev
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
-      # @!attribute change_detection
-      #   Discriminated union describing how changes are detected.
-      #
-      #   @return [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic]
-      required :change_detection, union: -> { ContextDev::MonitorCreateParams::ChangeDetection }
-
       # @!attribute name
       #
       #   @return [String]
       required :name, String
-
-      # @!attribute schedule
-      #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-      #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
-      #   between 10 minutes and 1 year.
-      #
-      #   @return [ContextDev::Models::MonitorCreateParams::Schedule]
-      required :schedule, -> { ContextDev::MonitorCreateParams::Schedule }
 
       # @!attribute target
       #   Discriminated union describing what the monitor watches.
@@ -32,12 +18,26 @@ module ContextDev
       #   @return [ContextDev::Models::MonitorCreateParams::Target::Page, ContextDev::Models::MonitorCreateParams::Target::Sitemap, ContextDev::Models::MonitorCreateParams::Target::Extract]
       required :target, union: -> { ContextDev::MonitorCreateParams::Target }
 
+      # @!attribute change_detection
+      #   Discriminated union describing how changes are detected.
+      #
+      #   @return [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic, nil]
+      optional :change_detection, union: -> { ContextDev::MonitorCreateParams::ChangeDetection }
+
       # @!attribute mode
       #   Top-level monitor category. Always `web` today; the concrete behavior is
       #   described by `target` and `change_detection`.
       #
       #   @return [Symbol, ContextDev::Models::MonitorCreateParams::Mode, nil]
       optional :mode, enum: -> { ContextDev::MonitorCreateParams::Mode }
+
+      # @!attribute schedule
+      #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
+      #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
+      #   between 10 minutes and 1 year.
+      #
+      #   @return [ContextDev::Models::MonitorCreateParams::Schedule, nil]
+      optional :schedule, -> { ContextDev::MonitorCreateParams::Schedule }
 
       # @!attribute tags
       #   User-defined tags for grouping and filtering monitors and their changes.
@@ -51,130 +51,25 @@ module ContextDev
       #   @return [ContextDev::Models::MonitorCreateParams::Webhook, nil]
       optional :webhook, -> { ContextDev::MonitorCreateParams::Webhook }, nil?: true
 
-      # @!method initialize(change_detection:, name:, schedule:, target:, mode: nil, tags: nil, webhook: nil, request_options: {})
+      # @!method initialize(name:, target:, change_detection: nil, mode: nil, schedule: nil, tags: nil, webhook: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorCreateParams} for more details.
       #
-      #   @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] Discriminated union describing how changes are detected.
-      #
       #   @param name [String]
-      #
-      #   @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #
       #   @param target [ContextDev::Models::MonitorCreateParams::Target::Page, ContextDev::Models::MonitorCreateParams::Target::Sitemap, ContextDev::Models::MonitorCreateParams::Target::Extract] Discriminated union describing what the monitor watches.
       #
+      #   @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] Discriminated union describing how changes are detected.
+      #
       #   @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Top-level monitor category. Always `web` today; the concrete behavior is describ
+      #
+      #   @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #
       #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes. Duplica
       #
       #   @param webhook [ContextDev::Models::MonitorCreateParams::Webhook, nil]
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
-
-      # Discriminated union describing how changes are detected.
-      module ChangeDetection
-        extend ContextDev::Internal::Type::Union
-
-        discriminator :type
-
-        # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals.
-        variant :exact, -> { ContextDev::MonitorCreateParams::ChangeDetection::Exact }
-
-        # Detect meaning-level changes to tracked page content, ignoring cosmetic or paraphrase-only differences. Which changes are meaningful is judged against the extract target's `instructions` (and `schema`, when provided).
-        variant :semantic, -> { ContextDev::MonitorCreateParams::ChangeDetection::Semantic }
-
-        class Exact < ContextDev::Internal::Type::BaseModel
-          # @!attribute type
-          #
-          #   @return [Symbol, :exact]
-          required :type, const: :exact
-
-          # @!method initialize(type: :exact)
-          #   Detect exact changes. For page targets, this means visible text diffs. For
-          #   sitemap targets, this means URL additions and removals.
-          #
-          #   @param type [Symbol, :exact]
-        end
-
-        class Semantic < ContextDev::Internal::Type::BaseModel
-          # @!attribute type
-          #
-          #   @return [Symbol, :semantic]
-          required :type, const: :semantic
-
-          # @!attribute confidence_threshold
-          #
-          #   @return [Float, nil]
-          optional :confidence_threshold, Float
-
-          # @!method initialize(confidence_threshold: nil, type: :semantic)
-          #   Detect meaning-level changes to tracked page content, ignoring cosmetic or
-          #   paraphrase-only differences. Which changes are meaningful is judged against the
-          #   extract target's `instructions` (and `schema`, when provided).
-          #
-          #   @param confidence_threshold [Float]
-          #   @param type [Symbol, :semantic]
-        end
-
-        # @!method self.variants
-        #   @return [Array(ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic)]
-      end
-
-      class Schedule < ContextDev::Internal::Type::BaseModel
-        # @!attribute frequency
-        #   Number of units between runs. The resulting interval (frequency × unit) must be
-        #   at least 10 minutes and at most 1 year (e.g. minimum 10 when unit is minutes;
-        #   maximum 365 when unit is days).
-        #
-        #   @return [Integer]
-        required :frequency, Integer
-
-        # @!attribute type
-        #
-        #   @return [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Type]
-        required :type, enum: -> { ContextDev::MonitorCreateParams::Schedule::Type }
-
-        # @!attribute unit
-        #
-        #   @return [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Unit]
-        required :unit, enum: -> { ContextDev::MonitorCreateParams::Schedule::Unit }
-
-        # @!method initialize(frequency:, type:, unit:)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::MonitorCreateParams::Schedule} for more details.
-        #
-        #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-        #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
-        #   between 10 minutes and 1 year.
-        #
-        #   @param frequency [Integer] Number of units between runs. The resulting interval (frequency × unit) must be
-        #
-        #   @param type [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Type]
-        #
-        #   @param unit [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Unit]
-
-        # @see ContextDev::Models::MonitorCreateParams::Schedule#type
-        module Type
-          extend ContextDev::Internal::Type::Enum
-
-          INTERVAL = :interval
-
-          # @!method self.values
-          #   @return [Array<Symbol>]
-        end
-
-        # @see ContextDev::Models::MonitorCreateParams::Schedule#unit
-        module Unit
-          extend ContextDev::Internal::Type::Enum
-
-          MINUTES = :minutes
-          HOURS = :hours
-          DAYS = :days
-
-          # @!method self.values
-          #   @return [Array<Symbol>]
-        end
-      end
 
       # Discriminated union describing what the monitor watches.
       module Target
@@ -344,6 +239,55 @@ module ContextDev
         #   @return [Array(ContextDev::Models::MonitorCreateParams::Target::Page, ContextDev::Models::MonitorCreateParams::Target::Sitemap, ContextDev::Models::MonitorCreateParams::Target::Extract)]
       end
 
+      # Discriminated union describing how changes are detected.
+      module ChangeDetection
+        extend ContextDev::Internal::Type::Union
+
+        discriminator :type
+
+        # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals.
+        variant :exact, -> { ContextDev::MonitorCreateParams::ChangeDetection::Exact }
+
+        # Detect meaning-level changes to tracked page content, ignoring cosmetic or paraphrase-only differences. Which changes are meaningful is judged against the extract target's `instructions` (and `schema`, when provided).
+        variant :semantic, -> { ContextDev::MonitorCreateParams::ChangeDetection::Semantic }
+
+        class Exact < ContextDev::Internal::Type::BaseModel
+          # @!attribute type
+          #
+          #   @return [Symbol, :exact]
+          required :type, const: :exact
+
+          # @!method initialize(type: :exact)
+          #   Detect exact changes. For page targets, this means visible text diffs. For
+          #   sitemap targets, this means URL additions and removals.
+          #
+          #   @param type [Symbol, :exact]
+        end
+
+        class Semantic < ContextDev::Internal::Type::BaseModel
+          # @!attribute type
+          #
+          #   @return [Symbol, :semantic]
+          required :type, const: :semantic
+
+          # @!attribute confidence_threshold
+          #
+          #   @return [Float, nil]
+          optional :confidence_threshold, Float
+
+          # @!method initialize(confidence_threshold: nil, type: :semantic)
+          #   Detect meaning-level changes to tracked page content, ignoring cosmetic or
+          #   paraphrase-only differences. Which changes are meaningful is judged against the
+          #   extract target's `instructions` (and `schema`, when provided).
+          #
+          #   @param confidence_threshold [Float]
+          #   @param type [Symbol, :semantic]
+        end
+
+        # @!method self.variants
+        #   @return [Array(ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic)]
+      end
+
       # Top-level monitor category. Always `web` today; the concrete behavior is
       # described by `target` and `change_detection`.
       module Mode
@@ -353,6 +297,62 @@ module ContextDev
 
         # @!method self.values
         #   @return [Array<Symbol>]
+      end
+
+      class Schedule < ContextDev::Internal::Type::BaseModel
+        # @!attribute frequency
+        #   Number of units between runs. The resulting interval (frequency × unit) must be
+        #   at least 10 minutes and at most 1 year (e.g. minimum 10 when unit is minutes;
+        #   maximum 365 when unit is days).
+        #
+        #   @return [Integer]
+        required :frequency, Integer
+
+        # @!attribute type
+        #
+        #   @return [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Type]
+        required :type, enum: -> { ContextDev::MonitorCreateParams::Schedule::Type }
+
+        # @!attribute unit
+        #
+        #   @return [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Unit]
+        required :unit, enum: -> { ContextDev::MonitorCreateParams::Schedule::Unit }
+
+        # @!method initialize(frequency:, type:, unit:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::MonitorCreateParams::Schedule} for more details.
+        #
+        #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
+        #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
+        #   between 10 minutes and 1 year.
+        #
+        #   @param frequency [Integer] Number of units between runs. The resulting interval (frequency × unit) must be
+        #
+        #   @param type [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Type]
+        #
+        #   @param unit [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Unit]
+
+        # @see ContextDev::Models::MonitorCreateParams::Schedule#type
+        module Type
+          extend ContextDev::Internal::Type::Enum
+
+          INTERVAL = :interval
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+
+        # @see ContextDev::Models::MonitorCreateParams::Schedule#unit
+        module Unit
+          extend ContextDev::Internal::Type::Enum
+
+          MINUTES = :minutes
+          HOURS = :hours
+          DAYS = :days
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
       end
 
       class Webhook < ContextDev::Internal::Type::BaseModel

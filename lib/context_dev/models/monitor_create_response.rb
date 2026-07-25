@@ -20,6 +20,14 @@ module ContextDev
       #   @return [Time]
       required :created_at, Time
 
+      # @!attribute initial_run_id
+      #   The baseline run queued by this create call, or null if it could not be queued
+      #   immediately (in which case the baseline runs on the next scheduled tick). Poll
+      #   GET /monitors/{monitor_id}/runs/{run_id}.
+      #
+      #   @return [String, nil]
+      required :initial_run_id, String, nil?: true
+
       # @!attribute mode
       #   Top-level monitor category. Always `web` today; the concrete behavior is
       #   described by `target` and `change_detection`.
@@ -112,18 +120,20 @@ module ContextDev
       #   @return [ContextDev::Models::MonitorCreateResponse::WebhookFailure, nil]
       optional :webhook_failure, -> { ContextDev::Models::MonitorCreateResponse::WebhookFailure }, nil?: true
 
-      # @!method initialize(id:, change_detection:, created_at:, mode:, name:, schedule:, status:, target:, updated_at:, baseline: nil, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, tags: nil, webhook: nil, webhook_failure: nil)
+      # @!method initialize(id:, change_detection:, created_at:, initial_run_id:, mode:, name:, schedule:, status:, target:, updated_at:, baseline: nil, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, tags: nil, webhook: nil, webhook_failure: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorCreateResponse} for more details.
       #
-      #   A web monitor. `mode` is the constant `web`; behavior is described by `target`
-      #   (page/sitemap/extract) and `change_detection` (exact/semantic).
+      #   A newly created monitor plus `initial_run_id`, the id of the baseline run queued
+      #   at creation.
       #
       #   @param id [String]
       #
       #   @param change_detection [ContextDev::Models::MonitorCreateResponse::ChangeDetection::Exact, ContextDev::Models::MonitorCreateResponse::ChangeDetection::Semantic] Discriminated union describing how changes are detected.
       #
       #   @param created_at [Time]
+      #
+      #   @param initial_run_id [String, nil] The baseline run queued by this create call, or null if it could not be queued i
       #
       #   @param mode [Symbol, ContextDev::Models::MonitorCreateResponse::Mode] Top-level monitor category. Always `web` today; the concrete behavior is describ
       #
