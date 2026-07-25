@@ -25,6 +25,12 @@ module ContextDev
       sig { returns(Time) }
       attr_accessor :created_at
 
+      # The baseline run queued by this create call, or null if it could not be queued
+      # immediately (in which case the baseline runs on the next scheduled tick). Poll
+      # GET /monitors/{monitor_id}/runs/{run_id}.
+      sig { returns(T.nilable(String)) }
+      attr_accessor :initial_run_id
+
       # Top-level monitor category. Always `web` today; the concrete behavior is
       # described by `target` and `change_detection`.
       sig do
@@ -149,8 +155,8 @@ module ContextDev
       end
       attr_writer :webhook_failure
 
-      # A web monitor. `mode` is the constant `web`; behavior is described by `target`
-      # (page/sitemap/extract) and `change_detection` (exact/semantic).
+      # A newly created monitor plus `initial_run_id`, the id of the baseline run queued
+      # at creation.
       sig do
         params(
           id: String,
@@ -160,6 +166,7 @@ module ContextDev
               ContextDev::Models::MonitorCreateResponse::ChangeDetection::Semantic::OrHash
             ),
           created_at: Time,
+          initial_run_id: T.nilable(String),
           mode: ContextDev::Models::MonitorCreateResponse::Mode::OrSymbol,
           name: String,
           schedule: ContextDev::Models::MonitorCreateResponse::Schedule::OrHash,
@@ -202,6 +209,10 @@ module ContextDev
         # Discriminated union describing how changes are detected.
         change_detection:,
         created_at:,
+        # The baseline run queued by this create call, or null if it could not be queued
+        # immediately (in which case the baseline runs on the next scheduled tick). Poll
+        # GET /monitors/{monitor_id}/runs/{run_id}.
+        initial_run_id:,
         # Top-level monitor category. Always `web` today; the concrete behavior is
         # described by `target` and `change_detection`.
         mode:,
@@ -248,6 +259,7 @@ module ContextDev
             change_detection:
               ContextDev::Models::MonitorCreateResponse::ChangeDetection::Variants,
             created_at: Time,
+            initial_run_id: T.nilable(String),
             mode: ContextDev::Models::MonitorCreateResponse::Mode::TaggedSymbol,
             name: String,
             schedule: ContextDev::Models::MonitorCreateResponse::Schedule,
