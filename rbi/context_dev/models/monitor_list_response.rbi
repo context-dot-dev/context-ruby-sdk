@@ -391,9 +391,10 @@ module ContextDev
             sig { params(confidence_threshold: Float).void }
             attr_writer :confidence_threshold
 
-            # Detect meaning-level changes to tracked page content, ignoring cosmetic or
-            # paraphrase-only differences. Which changes are meaningful is judged against the
-            # extract target's `instructions` (and `schema`, when provided).
+            # Detect meaning-level changes to page content, ignoring cosmetic or
+            # instruction-irrelevant differences. Which changes are meaningful is judged
+            # against the page or extract target's `instructions` (and an extract target's
+            # `schema`, when provided).
             sig do
               params(confidence_threshold: Float, type: Symbol).returns(
                 T.attached_class
@@ -654,6 +655,14 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :url
 
+            # Plain-language goal describing which page changes matter. When provided without
+            # change_detection, semantic detection is inferred.
+            sig { returns(T.nilable(String)) }
+            attr_reader :instructions
+
+            sig { params(instructions: String).void }
+            attr_writer :instructions
+
             # Normalize whitespace before comparing or analyzing text.
             sig { returns(T.nilable(T::Boolean)) }
             attr_reader :normalize_whitespace
@@ -661,16 +670,21 @@ module ContextDev
             sig { params(normalize_whitespace: T::Boolean).void }
             attr_writer :normalize_whitespace
 
-            # Watch a single web page.
+            # Watch a single web page. Exact detection reports visible-text diffs; semantic
+            # detection judges confirmed stable diffs against `instructions`.
             sig do
               params(
                 url: String,
+                instructions: String,
                 normalize_whitespace: T::Boolean,
                 type: Symbol
               ).returns(T.attached_class)
             end
             def self.new(
               url:,
+              # Plain-language goal describing which page changes matter. When provided without
+              # change_detection, semantic detection is inferred.
+              instructions: nil,
               # Normalize whitespace before comparing or analyzing text.
               normalize_whitespace: nil,
               type: :page
@@ -679,7 +693,12 @@ module ContextDev
 
             sig do
               override.returns(
-                { type: Symbol, url: String, normalize_whitespace: T::Boolean }
+                {
+                  type: Symbol,
+                  url: String,
+                  instructions: String,
+                  normalize_whitespace: T::Boolean
+                }
               )
             end
             def to_hash

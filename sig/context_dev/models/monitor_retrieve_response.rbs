@@ -214,12 +214,22 @@ module ContextDev
       module Target
         extend ContextDev::Internal::Type::Union
 
-        type page = { type: :page, url: String, normalize_whitespace: bool }
+        type page =
+          {
+            type: :page,
+            url: String,
+            instructions: String,
+            normalize_whitespace: bool
+          }
 
         class Page < ContextDev::Internal::Type::BaseModel
           attr_accessor type: :page
 
           attr_accessor url: String
+
+          attr_reader instructions: String?
+
+          def instructions=: (String) -> String
 
           attr_reader normalize_whitespace: bool?
 
@@ -227,6 +237,7 @@ module ContextDev
 
           def initialize: (
             url: String,
+            ?instructions: String,
             ?normalize_whitespace: bool,
             ?type: :page
           ) -> void
@@ -234,6 +245,7 @@ module ContextDev
           def to_hash: -> {
             type: :page,
             url: String,
+            instructions: String,
             normalize_whitespace: bool
           }
         end

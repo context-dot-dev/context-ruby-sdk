@@ -174,7 +174,7 @@ module ContextDev
         # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals.
         variant :exact, -> { ContextDev::Models::MonitorCreateResponse::ChangeDetection::Exact }
 
-        # Detect meaning-level changes to tracked page content, ignoring cosmetic or paraphrase-only differences. Which changes are meaningful is judged against the extract target's `instructions` (and `schema`, when provided).
+        # Detect meaning-level changes to page content, ignoring cosmetic or instruction-irrelevant differences. Which changes are meaningful is judged against the page or extract target's `instructions` (and an extract target's `schema`, when provided).
         variant :semantic, -> { ContextDev::Models::MonitorCreateResponse::ChangeDetection::Semantic }
 
         class Exact < ContextDev::Internal::Type::BaseModel
@@ -202,9 +202,10 @@ module ContextDev
           optional :confidence_threshold, Float
 
           # @!method initialize(confidence_threshold: nil, type: :semantic)
-          #   Detect meaning-level changes to tracked page content, ignoring cosmetic or
-          #   paraphrase-only differences. Which changes are meaningful is judged against the
-          #   extract target's `instructions` (and `schema`, when provided).
+          #   Detect meaning-level changes to page content, ignoring cosmetic or
+          #   instruction-irrelevant differences. Which changes are meaningful is judged
+          #   against the page or extract target's `instructions` (and an extract target's
+          #   `schema`, when provided).
           #
           #   @param confidence_threshold [Float]
           #   @param type [Symbol, :semantic]
@@ -310,7 +311,7 @@ module ContextDev
 
         discriminator :type
 
-        # Watch a single web page.
+        # Watch a single web page. Exact detection reports visible-text diffs; semantic detection judges confirmed stable diffs against `instructions`.
         variant :page, -> { ContextDev::Models::MonitorCreateResponse::Target::Page }
 
         # Watch a sitemap for URL additions and removals. Crawled URLs are normalized (lowercased host, no trailing slash/fragment) and scoped to the monitored site and its subdomains before comparison. On a detected difference the sitemap is re-fetched within the same run and only URLs both observations agree on are reported, suppressing transient crawl flaps.
@@ -330,16 +331,29 @@ module ContextDev
           #   @return [String]
           required :url, String
 
+          # @!attribute instructions
+          #   Plain-language goal describing which page changes matter. When provided without
+          #   change_detection, semantic detection is inferred.
+          #
+          #   @return [String, nil]
+          optional :instructions, String
+
           # @!attribute normalize_whitespace
           #   Normalize whitespace before comparing or analyzing text.
           #
           #   @return [Boolean, nil]
           optional :normalize_whitespace, ContextDev::Internal::Type::Boolean
 
-          # @!method initialize(url:, normalize_whitespace: nil, type: :page)
-          #   Watch a single web page.
+          # @!method initialize(url:, instructions: nil, normalize_whitespace: nil, type: :page)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::MonitorCreateResponse::Target::Page} for more details.
+          #
+          #   Watch a single web page. Exact detection reports visible-text diffs; semantic
+          #   detection judges confirmed stable diffs against `instructions`.
           #
           #   @param url [String]
+          #
+          #   @param instructions [String] Plain-language goal describing which page changes matter. When provided without
           #
           #   @param normalize_whitespace [Boolean] Normalize whitespace before comparing or analyzing text.
           #
