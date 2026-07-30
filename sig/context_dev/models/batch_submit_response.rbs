@@ -1,0 +1,542 @@
+module ContextDev
+  module Models
+    type batch_submit_response =
+      {
+        code: ContextDev::Models::BatchSubmitResponse::code,
+        metadata: ContextDev::Models::BatchSubmitResponse::Metadata,
+        person: ContextDev::Models::BatchSubmitResponse::Person,
+        status: ContextDev::Models::BatchSubmitResponse::status,
+        key_metadata: ContextDev::Models::BatchSubmitResponse::KeyMetadata
+      }
+
+    class BatchSubmitResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor code: ContextDev::Models::BatchSubmitResponse::code
+
+      attr_accessor metadata: ContextDev::Models::BatchSubmitResponse::Metadata
+
+      attr_accessor person: ContextDev::Models::BatchSubmitResponse::Person
+
+      attr_accessor status: ContextDev::Models::BatchSubmitResponse::status
+
+      attr_reader key_metadata: ContextDev::Models::BatchSubmitResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::BatchSubmitResponse::KeyMetadata
+      ) -> ContextDev::Models::BatchSubmitResponse::KeyMetadata
+
+      def initialize: (
+        code: ContextDev::Models::BatchSubmitResponse::code,
+        metadata: ContextDev::Models::BatchSubmitResponse::Metadata,
+        person: ContextDev::Models::BatchSubmitResponse::Person,
+        status: ContextDev::Models::BatchSubmitResponse::status,
+        ?key_metadata: ContextDev::Models::BatchSubmitResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        code: ContextDev::Models::BatchSubmitResponse::code,
+        metadata: ContextDev::Models::BatchSubmitResponse::Metadata,
+        person: ContextDev::Models::BatchSubmitResponse::Person,
+        status: ContextDev::Models::BatchSubmitResponse::status,
+        key_metadata: ContextDev::Models::BatchSubmitResponse::KeyMetadata
+      }
+
+      type code = 200
+
+      module Code
+        extend ContextDev::Internal::Type::Enum
+
+        CODE_200: 200
+
+        def self?.values: -> ::Array[ContextDev::Models::BatchSubmitResponse::code]
+      end
+
+      type metadata =
+        {
+          identifiers: ContextDev::Models::BatchSubmitResponse::Metadata::Identifiers,
+          sources_attempted: ::Array[ContextDev::Models::BatchSubmitResponse::Metadata::sources_attempted],
+          sources_succeeded: ::Array[ContextDev::Models::BatchSubmitResponse::Metadata::sources_succeeded],
+          urls_analyzed: ::Array[String],
+          personal_website_url: String
+        }
+
+      class Metadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor identifiers: ContextDev::Models::BatchSubmitResponse::Metadata::Identifiers
+
+        attr_accessor sources_attempted: ::Array[ContextDev::Models::BatchSubmitResponse::Metadata::sources_attempted]
+
+        attr_accessor sources_succeeded: ::Array[ContextDev::Models::BatchSubmitResponse::Metadata::sources_succeeded]
+
+        attr_accessor urls_analyzed: ::Array[String]
+
+        attr_reader personal_website_url: String?
+
+        def personal_website_url=: (String) -> String
+
+        def initialize: (
+          identifiers: ContextDev::Models::BatchSubmitResponse::Metadata::Identifiers,
+          sources_attempted: ::Array[ContextDev::Models::BatchSubmitResponse::Metadata::sources_attempted],
+          sources_succeeded: ::Array[ContextDev::Models::BatchSubmitResponse::Metadata::sources_succeeded],
+          urls_analyzed: ::Array[String],
+          ?personal_website_url: String
+        ) -> void
+
+        def to_hash: -> {
+          identifiers: ContextDev::Models::BatchSubmitResponse::Metadata::Identifiers,
+          sources_attempted: ::Array[ContextDev::Models::BatchSubmitResponse::Metadata::sources_attempted],
+          sources_succeeded: ::Array[ContextDev::Models::BatchSubmitResponse::Metadata::sources_succeeded],
+          urls_analyzed: ::Array[String],
+          personal_website_url: String
+        }
+
+        type identifiers = { linkedin_url: String }
+
+        class Identifiers < ContextDev::Internal::Type::BaseModel
+          attr_reader linkedin_url: String?
+
+          def linkedin_url=: (String) -> String
+
+          def initialize: (?linkedin_url: String) -> void
+
+          def to_hash: -> { linkedin_url: String }
+        end
+
+        type sources_attempted = :linkedin | :cv | :manual | :github | :other
+
+        module SourcesAttempted
+          extend ContextDev::Internal::Type::Enum
+
+          LINKEDIN: :linkedin
+          CV: :cv
+          MANUAL: :manual
+          GITHUB: :github
+          OTHER: :other
+
+          def self?.values: -> ::Array[ContextDev::Models::BatchSubmitResponse::Metadata::sources_attempted]
+        end
+
+        type sources_succeeded = :linkedin | :cv | :manual | :github | :other
+
+        module SourcesSucceeded
+          extend ContextDev::Internal::Type::Enum
+
+          LINKEDIN: :linkedin
+          CV: :cv
+          MANUAL: :manual
+          GITHUB: :github
+          OTHER: :other
+
+          def self?.values: -> ::Array[ContextDev::Models::BatchSubmitResponse::Metadata::sources_succeeded]
+        end
+      end
+
+      type person =
+        {
+          education: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Education],
+          experience: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Experience],
+          profile: ContextDev::Models::BatchSubmitResponse::Person::Profile,
+          skills: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Skill]
+        }
+
+      class Person < ContextDev::Internal::Type::BaseModel
+        attr_accessor education: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Education]
+
+        attr_accessor experience: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Experience]
+
+        attr_accessor profile: ContextDev::Models::BatchSubmitResponse::Person::Profile
+
+        attr_accessor skills: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Skill]
+
+        def initialize: (
+          education: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Education],
+          experience: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Experience],
+          profile: ContextDev::Models::BatchSubmitResponse::Person::Profile,
+          skills: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Skill]
+        ) -> void
+
+        def to_hash: -> {
+          education: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Education],
+          experience: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Experience],
+          profile: ContextDev::Models::BatchSubmitResponse::Person::Profile,
+          skills: ::Array[ContextDev::Models::BatchSubmitResponse::Person::Skill]
+        }
+
+        type education =
+          {
+            institution: ContextDev::Models::BatchSubmitResponse::Person::Education::Institution,
+            dates: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates,
+            description: String,
+            field_of_study: String,
+            qualification: String
+          }
+
+        class Education < ContextDev::Internal::Type::BaseModel
+          attr_accessor institution: ContextDev::Models::BatchSubmitResponse::Person::Education::Institution
+
+          attr_reader dates: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates?
+
+          def dates=: (
+            ContextDev::Models::BatchSubmitResponse::Person::Education::Dates
+          ) -> ContextDev::Models::BatchSubmitResponse::Person::Education::Dates
+
+          attr_reader description: String?
+
+          def description=: (String) -> String
+
+          attr_reader field_of_study: String?
+
+          def field_of_study=: (String) -> String
+
+          attr_reader qualification: String?
+
+          def qualification=: (String) -> String
+
+          def initialize: (
+            institution: ContextDev::Models::BatchSubmitResponse::Person::Education::Institution,
+            ?dates: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates,
+            ?description: String,
+            ?field_of_study: String,
+            ?qualification: String
+          ) -> void
+
+          def to_hash: -> {
+            institution: ContextDev::Models::BatchSubmitResponse::Person::Education::Institution,
+            dates: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates,
+            description: String,
+            field_of_study: String,
+            qualification: String
+          }
+
+          type institution = { display_: String, normalized: String }
+
+          class Institution < ContextDev::Internal::Type::BaseModel
+            attr_accessor display_: String
+
+            attr_reader normalized: String?
+
+            def normalized=: (String) -> String
+
+            def initialize: (display_: String, ?normalized: String) -> void
+
+            def to_hash: -> { display_: String, normalized: String }
+          end
+
+          type dates =
+            {
+              end_date: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::EndDate,
+              is_current: bool,
+              start_date: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::StartDate
+            }
+
+          class Dates < ContextDev::Internal::Type::BaseModel
+            attr_reader end_date: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::EndDate?
+
+            def end_date=: (
+              ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::EndDate
+            ) -> ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::EndDate
+
+            attr_reader is_current: bool?
+
+            def is_current=: (bool) -> bool
+
+            attr_reader start_date: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::StartDate?
+
+            def start_date=: (
+              ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::StartDate
+            ) -> ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::StartDate
+
+            def initialize: (
+              ?end_date: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::EndDate,
+              ?is_current: bool,
+              ?start_date: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::StartDate
+            ) -> void
+
+            def to_hash: -> {
+              end_date: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::EndDate,
+              is_current: bool,
+              start_date: ContextDev::Models::BatchSubmitResponse::Person::Education::Dates::StartDate
+            }
+
+            type end_date = { year: Integer, day: Integer, month: Integer }
+
+            class EndDate < ContextDev::Internal::Type::BaseModel
+              attr_accessor year: Integer
+
+              attr_reader day: Integer?
+
+              def day=: (Integer) -> Integer
+
+              attr_reader month: Integer?
+
+              def month=: (Integer) -> Integer
+
+              def initialize: (
+                year: Integer,
+                ?day: Integer,
+                ?month: Integer
+              ) -> void
+
+              def to_hash: -> { year: Integer, day: Integer, month: Integer }
+            end
+
+            type start_date = { year: Integer, day: Integer, month: Integer }
+
+            class StartDate < ContextDev::Internal::Type::BaseModel
+              attr_accessor year: Integer
+
+              attr_reader day: Integer?
+
+              def day=: (Integer) -> Integer
+
+              attr_reader month: Integer?
+
+              def month=: (Integer) -> Integer
+
+              def initialize: (
+                year: Integer,
+                ?day: Integer,
+                ?month: Integer
+              ) -> void
+
+              def to_hash: -> { year: Integer, day: Integer, month: Integer }
+            end
+          end
+        end
+
+        type experience =
+          {
+            company: ContextDev::Models::BatchSubmitResponse::Person::Experience::Company,
+            title: String,
+            dates: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates,
+            description: String
+          }
+
+        class Experience < ContextDev::Internal::Type::BaseModel
+          attr_accessor company: ContextDev::Models::BatchSubmitResponse::Person::Experience::Company
+
+          attr_accessor title: String
+
+          attr_reader dates: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates?
+
+          def dates=: (
+            ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates
+          ) -> ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates
+
+          attr_reader description: String?
+
+          def description=: (String) -> String
+
+          def initialize: (
+            company: ContextDev::Models::BatchSubmitResponse::Person::Experience::Company,
+            title: String,
+            ?dates: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates,
+            ?description: String
+          ) -> void
+
+          def to_hash: -> {
+            company: ContextDev::Models::BatchSubmitResponse::Person::Experience::Company,
+            title: String,
+            dates: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates,
+            description: String
+          }
+
+          type company = { display_: String, normalized: String }
+
+          class Company < ContextDev::Internal::Type::BaseModel
+            attr_accessor display_: String
+
+            attr_reader normalized: String?
+
+            def normalized=: (String) -> String
+
+            def initialize: (display_: String, ?normalized: String) -> void
+
+            def to_hash: -> { display_: String, normalized: String }
+          end
+
+          type dates =
+            {
+              end_date: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::EndDate,
+              is_current: bool,
+              start_date: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::StartDate
+            }
+
+          class Dates < ContextDev::Internal::Type::BaseModel
+            attr_reader end_date: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::EndDate?
+
+            def end_date=: (
+              ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::EndDate
+            ) -> ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::EndDate
+
+            attr_reader is_current: bool?
+
+            def is_current=: (bool) -> bool
+
+            attr_reader start_date: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::StartDate?
+
+            def start_date=: (
+              ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::StartDate
+            ) -> ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::StartDate
+
+            def initialize: (
+              ?end_date: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::EndDate,
+              ?is_current: bool,
+              ?start_date: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::StartDate
+            ) -> void
+
+            def to_hash: -> {
+              end_date: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::EndDate,
+              is_current: bool,
+              start_date: ContextDev::Models::BatchSubmitResponse::Person::Experience::Dates::StartDate
+            }
+
+            type end_date = { year: Integer, day: Integer, month: Integer }
+
+            class EndDate < ContextDev::Internal::Type::BaseModel
+              attr_accessor year: Integer
+
+              attr_reader day: Integer?
+
+              def day=: (Integer) -> Integer
+
+              attr_reader month: Integer?
+
+              def month=: (Integer) -> Integer
+
+              def initialize: (
+                year: Integer,
+                ?day: Integer,
+                ?month: Integer
+              ) -> void
+
+              def to_hash: -> { year: Integer, day: Integer, month: Integer }
+            end
+
+            type start_date = { year: Integer, day: Integer, month: Integer }
+
+            class StartDate < ContextDev::Internal::Type::BaseModel
+              attr_accessor year: Integer
+
+              attr_reader day: Integer?
+
+              def day=: (Integer) -> Integer
+
+              attr_reader month: Integer?
+
+              def month=: (Integer) -> Integer
+
+              def initialize: (
+                year: Integer,
+                ?day: Integer,
+                ?month: Integer
+              ) -> void
+
+              def to_hash: -> { year: Integer, day: Integer, month: Integer }
+            end
+          end
+        end
+
+        type profile =
+          {
+            full_name: String,
+            headline: String,
+            location: String,
+            profile_picture_url: String,
+            summary: String
+          }
+
+        class Profile < ContextDev::Internal::Type::BaseModel
+          attr_reader full_name: String?
+
+          def full_name=: (String) -> String
+
+          attr_reader headline: String?
+
+          def headline=: (String) -> String
+
+          attr_reader location: String?
+
+          def location=: (String) -> String
+
+          attr_reader profile_picture_url: String?
+
+          def profile_picture_url=: (String) -> String
+
+          attr_reader summary: String?
+
+          def summary=: (String) -> String
+
+          def initialize: (
+            ?full_name: String,
+            ?headline: String,
+            ?location: String,
+            ?profile_picture_url: String,
+            ?summary: String
+          ) -> void
+
+          def to_hash: -> {
+            full_name: String,
+            headline: String,
+            location: String,
+            profile_picture_url: String,
+            summary: String
+          }
+        end
+
+        type skill = { name: String, normalized: String, proficiency: String }
+
+        class Skill < ContextDev::Internal::Type::BaseModel
+          attr_accessor name: String
+
+          attr_reader normalized: String?
+
+          def normalized=: (String) -> String
+
+          attr_reader proficiency: String?
+
+          def proficiency=: (String) -> String
+
+          def initialize: (
+            name: String,
+            ?normalized: String,
+            ?proficiency: String
+          ) -> void
+
+          def to_hash: -> {
+            name: String,
+            normalized: String,
+            proficiency: String
+          }
+        end
+      end
+
+      type status = :ok
+
+      module Status
+        extend ContextDev::Internal::Type::Enum
+
+        OK: :ok
+
+        def self?.values: -> ::Array[ContextDev::Models::BatchSubmitResponse::status]
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end
