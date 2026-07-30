@@ -98,6 +98,12 @@ module ContextDev
         #   @return [Symbol, ContextDev::Models::BatchListResponse::Data::Status]
         required :status, enum: -> { ContextDev::Models::BatchListResponse::Data::Status }
 
+        # @!attribute tags
+        #   Tags stored on the batch at submission.
+        #
+        #   @return [Array<String>]
+        required :tags, ContextDev::Internal::Type::ArrayOf[String]
+
         # @!attribute timing
         #
         #   @return [ContextDev::Models::BatchListResponse::Data::Timing]
@@ -109,7 +115,7 @@ module ContextDev
         #   @return [Symbol, ContextDev::Models::BatchListResponse::Data::Type]
         required :type, enum: -> { ContextDev::Models::BatchListResponse::Data::Type }
 
-        # @!method initialize(id:, credits:, error:, errors:, input:, mode:, progress:, results:, status:, timing:, type:)
+        # @!method initialize(id:, credits:, error:, errors:, input:, mode:, progress:, results:, status:, tags:, timing:, type:)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::BatchListResponse::Data} for more details.
         #
@@ -132,6 +138,8 @@ module ContextDev
         #   @param results [ContextDev::Models::BatchListResponse::Data::Results, nil] Download links available when the batch finishes. GET /batch/{batch_id}/results
         #
         #   @param status [Symbol, ContextDev::Models::BatchListResponse::Data::Status] Current state. `completed`, `cancelled`, and `failed` are final.
+        #
+        #   @param tags [Array<String>] Tags stored on the batch at submission.
         #
         #   @param timing [ContextDev::Models::BatchListResponse::Data::Timing]
         #

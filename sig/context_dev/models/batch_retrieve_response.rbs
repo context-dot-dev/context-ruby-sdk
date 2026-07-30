@@ -12,6 +12,7 @@ module ContextDev
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
         results: ContextDev::Models::BatchRetrieveResponse::Results?,
         status: ContextDev::Models::BatchRetrieveResponse::status,
+        tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
         type: ContextDev::Models::BatchRetrieveResponse::type_,
         key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
@@ -39,6 +40,8 @@ module ContextDev
 
       attr_accessor status: ContextDev::Models::BatchRetrieveResponse::status
 
+      attr_accessor tags: ::Array[String]
+
       attr_accessor timing: ContextDev::Models::BatchRetrieveResponse::Timing
 
       attr_accessor type: ContextDev::Models::BatchRetrieveResponse::type_
@@ -64,6 +67,7 @@ module ContextDev
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
         results: ContextDev::Models::BatchRetrieveResponse::Results?,
         status: ContextDev::Models::BatchRetrieveResponse::status,
+        tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
         type: ContextDev::Models::BatchRetrieveResponse::type_,
         ?key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
@@ -81,6 +85,7 @@ module ContextDev
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
         results: ContextDev::Models::BatchRetrieveResponse::Results?,
         status: ContextDev::Models::BatchRetrieveResponse::status,
+        tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
         type: ContextDev::Models::BatchRetrieveResponse::type_,
         key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,

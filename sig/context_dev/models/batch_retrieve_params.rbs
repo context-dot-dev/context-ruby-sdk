@@ -1,8 +1,7 @@
 module ContextDev
   module Models
     type batch_retrieve_params =
-      { batch_id: String, tags: ::Array[String] }
-      & ContextDev::Internal::Type::request_parameters
+      { batch_id: String } & ContextDev::Internal::Type::request_parameters
 
     class BatchRetrieveParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
@@ -10,19 +9,13 @@ module ContextDev
 
       attr_accessor batch_id: String
 
-      attr_reader tags: ::Array[String]?
-
-      def tags=: (::Array[String]) -> ::Array[String]
-
       def initialize: (
         batch_id: String,
-        ?tags: ::Array[String],
         ?request_options: ContextDev::request_opts
       ) -> void
 
       def to_hash: -> {
         batch_id: String,
-        tags: ::Array[String],
         request_options: ContextDev::RequestOptions
       }
     end

@@ -192,6 +192,10 @@ module ContextDev
         end
         attr_accessor :status
 
+        # Tags stored on the batch at submission.
+        sig { returns(T::Array[String]) }
+        attr_accessor :tags
+
         sig { returns(ContextDev::Models::BatchListResponse::Data::Timing) }
         attr_reader :timing
 
@@ -234,6 +238,7 @@ module ContextDev
               ),
             status:
               ContextDev::Models::BatchListResponse::Data::Status::OrSymbol,
+            tags: T::Array[String],
             timing: ContextDev::Models::BatchListResponse::Data::Timing::OrHash,
             type: ContextDev::Models::BatchListResponse::Data::Type::OrSymbol
           ).returns(T.attached_class)
@@ -258,6 +263,8 @@ module ContextDev
           results:,
           # Current state. `completed`, `cancelled`, and `failed` are final.
           status:,
+          # Tags stored on the batch at submission.
+          tags:,
           timing:,
           # Output format.
           type:
@@ -281,6 +288,7 @@ module ContextDev
                 T.nilable(ContextDev::Models::BatchListResponse::Data::Results),
               status:
                 ContextDev::Models::BatchListResponse::Data::Status::TaggedSymbol,
+              tags: T::Array[String],
               timing: ContextDev::Models::BatchListResponse::Data::Timing,
               type:
                 ContextDev::Models::BatchListResponse::Data::Type::TaggedSymbol

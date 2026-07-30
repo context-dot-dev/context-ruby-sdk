@@ -60,6 +60,12 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::BatchCancelResponse::Status]
       required :status, enum: -> { ContextDev::Models::BatchCancelResponse::Status }
 
+      # @!attribute tags
+      #   Tags stored on the batch at submission.
+      #
+      #   @return [Array<String>]
+      required :tags, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute timing
       #
       #   @return [ContextDev::Models::BatchCancelResponse::Timing]
@@ -77,7 +83,7 @@ module ContextDev
       #   @return [ContextDev::Models::BatchCancelResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::BatchCancelResponse::KeyMetadata }
 
-      # @!method initialize(id:, credits:, error:, errors:, input:, mode:, progress:, results:, status:, timing:, type:, key_metadata: nil)
+      # @!method initialize(id:, credits:, error:, errors:, input:, mode:, progress:, results:, status:, tags:, timing:, type:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchCancelResponse} for more details.
       #
@@ -98,6 +104,8 @@ module ContextDev
       #   @param results [ContextDev::Models::BatchCancelResponse::Results, nil] Download links available when the batch finishes. GET /batch/{batch_id}/results
       #
       #   @param status [Symbol, ContextDev::Models::BatchCancelResponse::Status] Current state. `completed`, `cancelled`, and `failed` are final.
+      #
+      #   @param tags [Array<String>] Tags stored on the batch at submission.
       #
       #   @param timing [ContextDev::Models::BatchCancelResponse::Timing]
       #

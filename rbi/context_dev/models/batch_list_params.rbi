@@ -25,6 +25,28 @@ module ContextDev
       sig { params(limit: Integer).void }
       attr_writer :limit
 
+      # Free-text search term, matched against the batch id, crawl source (start URL or
+      # sitemap domain), and tags.
+      sig { returns(T.nilable(String)) }
+      attr_reader :q
+
+      sig { params(q: String).void }
+      attr_writer :q
+
+      # `prefix` for as-you-type prefix matching (default), `exact` for full-token
+      # matching.
+      sig do
+        returns(T.nilable(ContextDev::BatchListParams::SearchType::OrSymbol))
+      end
+      attr_reader :search_type
+
+      sig do
+        params(
+          search_type: ContextDev::BatchListParams::SearchType::OrSymbol
+        ).void
+      end
+      attr_writer :search_type
+
       # Filter by status.
       sig { returns(T.nilable(ContextDev::BatchListParams::Status::OrSymbol)) }
       attr_reader :status
@@ -32,21 +54,21 @@ module ContextDev
       sig { params(status: ContextDev::BatchListParams::Status::OrSymbol).void }
       attr_writer :status
 
-      # Optional comma-separated caller-defined tags for tracking this request. Tags are
-      # recorded on the request's usage log and can be used to filter usage on the
-      # dashboard usage page. Up to 20 tags, each 1-50 characters.
-      sig { returns(T.nilable(T::Array[String])) }
+      # Comma-separated list of tags to filter by (matches batches having any of them).
+      sig { returns(T.nilable(String)) }
       attr_reader :tags
 
-      sig { params(tags: T::Array[String]).void }
+      sig { params(tags: String).void }
       attr_writer :tags
 
       sig do
         params(
           cursor: String,
           limit: Integer,
+          q: String,
+          search_type: ContextDev::BatchListParams::SearchType::OrSymbol,
           status: ContextDev::BatchListParams::Status::OrSymbol,
-          tags: T::Array[String],
+          tags: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -55,11 +77,15 @@ module ContextDev
         cursor: nil,
         # Batches per page. Defaults to 25.
         limit: nil,
+        # Free-text search term, matched against the batch id, crawl source (start URL or
+        # sitemap domain), and tags.
+        q: nil,
+        # `prefix` for as-you-type prefix matching (default), `exact` for full-token
+        # matching.
+        search_type: nil,
         # Filter by status.
         status: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated list of tags to filter by (matches batches having any of them).
         tags: nil,
         request_options: {}
       )
@@ -70,13 +96,40 @@ module ContextDev
           {
             cursor: String,
             limit: Integer,
+            q: String,
+            search_type: ContextDev::BatchListParams::SearchType::OrSymbol,
             status: ContextDev::BatchListParams::Status::OrSymbol,
-            tags: T::Array[String],
+            tags: String,
             request_options: ContextDev::RequestOptions
           }
         )
       end
       def to_hash
+      end
+
+      # `prefix` for as-you-type prefix matching (default), `exact` for full-token
+      # matching.
+      module SearchType
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::BatchListParams::SearchType)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        EXACT =
+          T.let(:exact, ContextDev::BatchListParams::SearchType::TaggedSymbol)
+        PREFIX =
+          T.let(:prefix, ContextDev::BatchListParams::SearchType::TaggedSymbol)
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::BatchListParams::SearchType::TaggedSymbol]
+          )
+        end
+        def self.values
+        end
       end
 
       # Filter by status.

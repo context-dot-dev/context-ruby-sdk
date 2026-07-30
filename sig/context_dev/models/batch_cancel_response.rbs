@@ -11,6 +11,7 @@ module ContextDev
         progress: ContextDev::Models::BatchCancelResponse::Progress,
         results: ContextDev::Models::BatchCancelResponse::Results?,
         status: ContextDev::Models::BatchCancelResponse::status,
+        tags: ::Array[String],
         timing: ContextDev::Models::BatchCancelResponse::Timing,
         type: ContextDev::Models::BatchCancelResponse::type_,
         key_metadata: ContextDev::Models::BatchCancelResponse::KeyMetadata
@@ -35,6 +36,8 @@ module ContextDev
 
       attr_accessor status: ContextDev::Models::BatchCancelResponse::status
 
+      attr_accessor tags: ::Array[String]
+
       attr_accessor timing: ContextDev::Models::BatchCancelResponse::Timing
 
       attr_accessor type: ContextDev::Models::BatchCancelResponse::type_
@@ -55,6 +58,7 @@ module ContextDev
         progress: ContextDev::Models::BatchCancelResponse::Progress,
         results: ContextDev::Models::BatchCancelResponse::Results?,
         status: ContextDev::Models::BatchCancelResponse::status,
+        tags: ::Array[String],
         timing: ContextDev::Models::BatchCancelResponse::Timing,
         type: ContextDev::Models::BatchCancelResponse::type_,
         ?key_metadata: ContextDev::Models::BatchCancelResponse::KeyMetadata
@@ -70,6 +74,7 @@ module ContextDev
         progress: ContextDev::Models::BatchCancelResponse::Progress,
         results: ContextDev::Models::BatchCancelResponse::Results?,
         status: ContextDev::Models::BatchCancelResponse::status,
+        tags: ::Array[String],
         timing: ContextDev::Models::BatchCancelResponse::Timing,
         type: ContextDev::Models::BatchCancelResponse::type_,
         key_metadata: ContextDev::Models::BatchCancelResponse::KeyMetadata

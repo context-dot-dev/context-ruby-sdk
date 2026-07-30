@@ -4,8 +4,10 @@ module ContextDev
       {
         cursor: String,
         limit: Integer,
+        q: String,
+        search_type: ContextDev::Models::BatchListParams::search_type,
         status: ContextDev::Models::BatchListParams::status,
-        tags: ::Array[String]
+        tags: String
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -21,31 +23,56 @@ module ContextDev
 
       def limit=: (Integer) -> Integer
 
+      attr_reader q: String?
+
+      def q=: (String) -> String
+
+      attr_reader search_type: ContextDev::Models::BatchListParams::search_type?
+
+      def search_type=: (
+        ContextDev::Models::BatchListParams::search_type
+      ) -> ContextDev::Models::BatchListParams::search_type
+
       attr_reader status: ContextDev::Models::BatchListParams::status?
 
       def status=: (
         ContextDev::Models::BatchListParams::status
       ) -> ContextDev::Models::BatchListParams::status
 
-      attr_reader tags: ::Array[String]?
+      attr_reader tags: String?
 
-      def tags=: (::Array[String]) -> ::Array[String]
+      def tags=: (String) -> String
 
       def initialize: (
         ?cursor: String,
         ?limit: Integer,
+        ?q: String,
+        ?search_type: ContextDev::Models::BatchListParams::search_type,
         ?status: ContextDev::Models::BatchListParams::status,
-        ?tags: ::Array[String],
+        ?tags: String,
         ?request_options: ContextDev::request_opts
       ) -> void
 
       def to_hash: -> {
         cursor: String,
         limit: Integer,
+        q: String,
+        search_type: ContextDev::Models::BatchListParams::search_type,
         status: ContextDev::Models::BatchListParams::status,
-        tags: ::Array[String],
+        tags: String,
         request_options: ContextDev::RequestOptions
       }
+
+      type search_type = :exact | :prefix
+
+      module SearchType
+        extend ContextDev::Internal::Type::Enum
+
+        EXACT: :exact
+        PREFIX: :prefix
+
+        def self?.values: -> ::Array[ContextDev::Models::BatchListParams::search_type]
+      end
 
       type status =
         :queued | :running | :cancelling | :completed | :cancelled | :failed
