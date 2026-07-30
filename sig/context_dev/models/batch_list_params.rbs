@@ -1,0 +1,67 @@
+module ContextDev
+  module Models
+    type batch_list_params =
+      {
+        cursor: String,
+        limit: Integer,
+        status: ContextDev::Models::BatchListParams::status,
+        tags: ::Array[String]
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class BatchListParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_reader cursor: String?
+
+      def cursor=: (String) -> String
+
+      attr_reader limit: Integer?
+
+      def limit=: (Integer) -> Integer
+
+      attr_reader status: ContextDev::Models::BatchListParams::status?
+
+      def status=: (
+        ContextDev::Models::BatchListParams::status
+      ) -> ContextDev::Models::BatchListParams::status
+
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
+      def initialize: (
+        ?cursor: String,
+        ?limit: Integer,
+        ?status: ContextDev::Models::BatchListParams::status,
+        ?tags: ::Array[String],
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        cursor: String,
+        limit: Integer,
+        status: ContextDev::Models::BatchListParams::status,
+        tags: ::Array[String],
+        request_options: ContextDev::RequestOptions
+      }
+
+      type status =
+        :queued | :running | :cancelling | :completed | :cancelled | :failed
+
+      module Status
+        extend ContextDev::Internal::Type::Enum
+
+        QUEUED: :queued
+        RUNNING: :running
+        CANCELLING: :cancelling
+        COMPLETED: :completed
+        CANCELLED: :cancelled
+        FAILED: :failed
+
+        def self?.values: -> ::Array[ContextDev::Models::BatchListParams::status]
+      end
+    end
+  end
+end
