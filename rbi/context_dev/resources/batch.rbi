@@ -9,17 +9,12 @@ module ContextDev
       sig do
         params(
           batch_id: String,
-          tags: T::Array[String],
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::BatchRetrieveResponse)
       end
       def retrieve(
         # ID of the batch to retrieve or cancel.
         batch_id,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
-        tags: nil,
         request_options: {}
       )
       end
@@ -30,8 +25,10 @@ module ContextDev
         params(
           cursor: String,
           limit: Integer,
+          q: String,
+          search_type: ContextDev::BatchListParams::SearchType::OrSymbol,
           status: ContextDev::BatchListParams::Status::OrSymbol,
-          tags: T::Array[String],
+          tags: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::BatchListResponse)
       end
@@ -40,11 +37,15 @@ module ContextDev
         cursor: nil,
         # Batches per page. Defaults to 25.
         limit: nil,
+        # Free-text search term, matched against the batch id, crawl source (start URL or
+        # sitemap domain), and tags.
+        q: nil,
+        # `prefix` for as-you-type prefix matching (default), `exact` for full-token
+        # matching.
+        search_type: nil,
         # Filter by status.
         status: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated list of tags to filter by (matches batches having any of them).
         tags: nil,
         request_options: {}
       )
@@ -55,17 +56,12 @@ module ContextDev
       sig do
         params(
           batch_id: String,
-          tags: T::Array[String],
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::BatchCancelResponse)
       end
       def cancel(
         # ID of the batch to retrieve or cancel.
         batch_id,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
-        tags: nil,
         request_options: {}
       )
       end
@@ -78,7 +74,6 @@ module ContextDev
           batch_id: String,
           cursor: String,
           limit: Integer,
-          tags: T::Array[String],
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::BatchGetResultsResponse)
       end
@@ -90,10 +85,6 @@ module ContextDev
         # Records per page. Defaults to 25. A page can close early so its payload stays
         # under ~8 MB; rely on next_cursor rather than counting records.
         limit: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
-        tags: nil,
         request_options: {}
       )
       end

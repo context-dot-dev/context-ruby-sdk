@@ -3,18 +3,13 @@
 module ContextDev
   module Resources
     class Batch
-      # Some parameter documentations has been truncated, see
-      # {ContextDev::Models::BatchRetrieveParams} for more details.
-      #
       # Check progress and get download links when the batch finishes. Also returns the
       # rejected-URL list and webhook signing secret from submission, so nothing is lost
       # if the submit response was dropped.
       #
-      # @overload retrieve(batch_id, tags: nil, request_options: {})
+      # @overload retrieve(batch_id, request_options: {})
       #
       # @param batch_id [String] ID of the batch to retrieve or cancel.
-      #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -22,14 +17,11 @@ module ContextDev
       #
       # @see ContextDev::Models::BatchRetrieveParams
       def retrieve(batch_id, params = {})
-        parsed, options = ContextDev::BatchRetrieveParams.dump_request(params)
-        query = ContextDev::Internal::Util.encode_query_params(parsed)
         @client.request(
           method: :get,
           path: ["batch/%1$s", batch_id],
-          query: query,
           model: ContextDev::Models::BatchRetrieveResponse,
-          options: options
+          options: params[:request_options]
         )
       end
 
@@ -39,15 +31,19 @@ module ContextDev
       # List your batches from newest to oldest. Filter by status or continue with a
       # cursor.
       #
-      # @overload list(cursor: nil, limit: nil, status: nil, tags: nil, request_options: {})
+      # @overload list(cursor: nil, limit: nil, q: nil, search_type: nil, status: nil, tags: nil, request_options: {})
       #
       # @param cursor [String] Cursor from the previous page.
       #
       # @param limit [Integer] Batches per page. Defaults to 25.
       #
+      # @param q [String] Free-text search term, matched against the batch id, crawl source (start URL or
+      #
+      # @param search_type [Symbol, ContextDev::Models::BatchListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
+      #
       # @param status [Symbol, ContextDev::Models::BatchListParams::Status] Filter by status.
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [String] Comma-separated list of tags to filter by (matches batches having any of them).
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -66,17 +62,12 @@ module ContextDev
         )
       end
 
-      # Some parameter documentations has been truncated, see
-      # {ContextDev::Models::BatchCancelParams} for more details.
-      #
       # Stop a batch from starting new pages. In-progress pages finish, and unused
       # credits are refunded.
       #
-      # @overload cancel(batch_id, tags: nil, request_options: {})
+      # @overload cancel(batch_id, request_options: {})
       #
       # @param batch_id [String] ID of the batch to retrieve or cancel.
-      #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -84,14 +75,11 @@ module ContextDev
       #
       # @see ContextDev::Models::BatchCancelParams
       def cancel(batch_id, params = {})
-        parsed, options = ContextDev::BatchCancelParams.dump_request(params)
-        query = ContextDev::Internal::Util.encode_query_params(parsed)
         @client.request(
           method: :post,
           path: ["batch/%1$s/cancel", batch_id],
-          query: query,
           model: ContextDev::Models::BatchCancelResponse,
-          options: options
+          options: params[:request_options]
         )
       end
 
@@ -102,15 +90,13 @@ module ContextDev
       # as the downloadable result files. Use this instead of downloading and parsing
       # the NDJSON files yourself.
       #
-      # @overload get_results(batch_id, cursor: nil, limit: nil, tags: nil, request_options: {})
+      # @overload get_results(batch_id, cursor: nil, limit: nil, request_options: {})
       #
       # @param batch_id [String] ID of the batch to retrieve or cancel.
       #
       # @param cursor [String] next_cursor from the previous page.
       #
       # @param limit [Integer] Records per page. Defaults to 25. A page can close early so its payload stays un
-      #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

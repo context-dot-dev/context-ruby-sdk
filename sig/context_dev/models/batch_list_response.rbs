@@ -52,6 +52,7 @@ module ContextDev
           progress: ContextDev::Models::BatchListResponse::Data::Progress,
           results: ContextDev::Models::BatchListResponse::Data::Results?,
           status: ContextDev::Models::BatchListResponse::Data::status,
+          tags: ::Array[String],
           timing: ContextDev::Models::BatchListResponse::Data::Timing,
           type: ContextDev::Models::BatchListResponse::Data::type_
         }
@@ -75,6 +76,8 @@ module ContextDev
 
         attr_accessor status: ContextDev::Models::BatchListResponse::Data::status
 
+        attr_accessor tags: ::Array[String]
+
         attr_accessor timing: ContextDev::Models::BatchListResponse::Data::Timing
 
         attr_accessor type: ContextDev::Models::BatchListResponse::Data::type_
@@ -89,6 +92,7 @@ module ContextDev
           progress: ContextDev::Models::BatchListResponse::Data::Progress,
           results: ContextDev::Models::BatchListResponse::Data::Results?,
           status: ContextDev::Models::BatchListResponse::Data::status,
+          tags: ::Array[String],
           timing: ContextDev::Models::BatchListResponse::Data::Timing,
           type: ContextDev::Models::BatchListResponse::Data::type_
         ) -> void
@@ -103,6 +107,7 @@ module ContextDev
           progress: ContextDev::Models::BatchListResponse::Data::Progress,
           results: ContextDev::Models::BatchListResponse::Data::Results?,
           status: ContextDev::Models::BatchListResponse::Data::status,
+          tags: ::Array[String],
           timing: ContextDev::Models::BatchListResponse::Data::Timing,
           type: ContextDev::Models::BatchListResponse::Data::type_
         }

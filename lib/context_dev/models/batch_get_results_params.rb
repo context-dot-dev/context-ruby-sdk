@@ -26,15 +26,7 @@ module ContextDev
       #   @return [Integer, nil]
       optional :limit, Integer
 
-      # @!attribute tags
-      #   Optional comma-separated caller-defined tags for tracking this request. Tags are
-      #   recorded on the request's usage log and can be used to filter usage on the
-      #   dashboard usage page. Up to 20 tags, each 1-50 characters.
-      #
-      #   @return [Array<String>, nil]
-      optional :tags, ContextDev::Internal::Type::ArrayOf[String]
-
-      # @!method initialize(batch_id:, cursor: nil, limit: nil, tags: nil, request_options: {})
+      # @!method initialize(batch_id:, cursor: nil, limit: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchGetResultsParams} for more details.
       #
@@ -43,8 +35,6 @@ module ContextDev
       #   @param cursor [String] next_cursor from the previous page.
       #
       #   @param limit [Integer] Records per page. Defaults to 25. A page can close early so its payload stays un
-      #
-      #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
     end

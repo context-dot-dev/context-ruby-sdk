@@ -24,6 +24,7 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
         results: ContextDev::Models::BatchRetrieveResponse::Results | nil,
         status: ContextDev::Models::BatchRetrieveResponse::Status,
+        tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
         type: ContextDev::Models::BatchRetrieveResponse::Type,
         key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata | nil,
@@ -71,6 +72,7 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
         progress: ContextDev::Models::BatchCancelResponse::Progress,
         results: ContextDev::Models::BatchCancelResponse::Results | nil,
         status: ContextDev::Models::BatchCancelResponse::Status,
+        tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
         timing: ContextDev::Models::BatchCancelResponse::Timing,
         type: ContextDev::Models::BatchCancelResponse::Type,
         key_metadata: ContextDev::Models::BatchCancelResponse::KeyMetadata | nil

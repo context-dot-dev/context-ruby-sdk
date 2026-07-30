@@ -19,6 +19,20 @@ module ContextDev
       #   @return [Integer, nil]
       optional :limit, Integer
 
+      # @!attribute q
+      #   Free-text search term, matched against the batch id, crawl source (start URL or
+      #   sitemap domain), and tags.
+      #
+      #   @return [String, nil]
+      optional :q, String
+
+      # @!attribute search_type
+      #   `prefix` for as-you-type prefix matching (default), `exact` for full-token
+      #   matching.
+      #
+      #   @return [Symbol, ContextDev::Models::BatchListParams::SearchType, nil]
+      optional :search_type, enum: -> { ContextDev::BatchListParams::SearchType }
+
       # @!attribute status
       #   Filter by status.
       #
@@ -26,14 +40,12 @@ module ContextDev
       optional :status, enum: -> { ContextDev::BatchListParams::Status }
 
       # @!attribute tags
-      #   Optional comma-separated caller-defined tags for tracking this request. Tags are
-      #   recorded on the request's usage log and can be used to filter usage on the
-      #   dashboard usage page. Up to 20 tags, each 1-50 characters.
+      #   Comma-separated list of tags to filter by (matches batches having any of them).
       #
-      #   @return [Array<String>, nil]
-      optional :tags, ContextDev::Internal::Type::ArrayOf[String]
+      #   @return [String, nil]
+      optional :tags, String
 
-      # @!method initialize(cursor: nil, limit: nil, status: nil, tags: nil, request_options: {})
+      # @!method initialize(cursor: nil, limit: nil, q: nil, search_type: nil, status: nil, tags: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchListParams} for more details.
       #
@@ -41,11 +53,27 @@ module ContextDev
       #
       #   @param limit [Integer] Batches per page. Defaults to 25.
       #
+      #   @param q [String] Free-text search term, matched against the batch id, crawl source (start URL or
+      #
+      #   @param search_type [Symbol, ContextDev::Models::BatchListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
+      #
       #   @param status [Symbol, ContextDev::Models::BatchListParams::Status] Filter by status.
       #
-      #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #   @param tags [String] Comma-separated list of tags to filter by (matches batches having any of them).
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      # `prefix` for as-you-type prefix matching (default), `exact` for full-token
+      # matching.
+      module SearchType
+        extend ContextDev::Internal::Type::Enum
+
+        EXACT = :exact
+        PREFIX = :prefix
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
+      end
 
       # Filter by status.
       module Status

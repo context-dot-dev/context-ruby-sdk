@@ -1,12 +1,7 @@
 module ContextDev
   module Models
     type batch_get_results_params =
-      {
-        batch_id: String,
-        cursor: String,
-        limit: Integer,
-        tags: ::Array[String]
-      }
+      { batch_id: String, cursor: String, limit: Integer }
       & ContextDev::Internal::Type::request_parameters
 
     class BatchGetResultsParams < ContextDev::Internal::Type::BaseModel
@@ -23,15 +18,10 @@ module ContextDev
 
       def limit=: (Integer) -> Integer
 
-      attr_reader tags: ::Array[String]?
-
-      def tags=: (::Array[String]) -> ::Array[String]
-
       def initialize: (
         batch_id: String,
         ?cursor: String,
         ?limit: Integer,
-        ?tags: ::Array[String],
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -39,7 +29,6 @@ module ContextDev
         batch_id: String,
         cursor: String,
         limit: Integer,
-        tags: ::Array[String],
         request_options: ContextDev::RequestOptions
       }
     end
