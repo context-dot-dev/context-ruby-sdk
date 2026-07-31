@@ -12,38 +12,38 @@ module ContextDev
       # its initial baseline.
       sig do
         params(
-          change_detection:
-            T.any(
-              ContextDev::MonitorCreateParams::ChangeDetection::Exact::OrHash,
-              ContextDev::MonitorCreateParams::ChangeDetection::Semantic::OrHash
-            ),
           name: String,
-          schedule: ContextDev::MonitorCreateParams::Schedule::OrHash,
           target:
             T.any(
               ContextDev::MonitorCreateParams::Target::Page::OrHash,
               ContextDev::MonitorCreateParams::Target::Sitemap::OrHash,
               ContextDev::MonitorCreateParams::Target::Extract::OrHash
             ),
+          change_detection:
+            T.any(
+              ContextDev::MonitorCreateParams::ChangeDetection::Exact::OrHash,
+              ContextDev::MonitorCreateParams::ChangeDetection::Semantic::OrHash
+            ),
           mode: ContextDev::MonitorCreateParams::Mode::OrSymbol,
+          schedule: ContextDev::MonitorCreateParams::Schedule::OrHash,
           tags: T::Array[String],
           webhook: T.nilable(ContextDev::MonitorCreateParams::Webhook::OrHash),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::MonitorCreateResponse)
       end
       def create(
-        # Discriminated union describing how changes are detected.
-        change_detection:,
         name:,
-        # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-        # every 6 hours or every 2 days. The total interval (frequency × unit) must be
-        # between 10 minutes and 1 year.
-        schedule:,
         # Discriminated union describing what the monitor watches.
         target:,
+        # Discriminated union describing how changes are detected.
+        change_detection: nil,
         # Top-level monitor category. Always `web` today; the concrete behavior is
         # described by `target` and `change_detection`.
         mode: nil,
+        # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
+        # every 6 hours or every 2 days. The total interval (frequency × unit) must be
+        # between 10 minutes and 1 year.
+        schedule: nil,
         # User-defined tags for grouping and filtering monitors and their changes.
         # Duplicates are removed.
         tags: nil,

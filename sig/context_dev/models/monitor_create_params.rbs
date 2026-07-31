@@ -2,11 +2,11 @@ module ContextDev
   module Models
     type monitor_create_params =
       {
-        change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
         name: String,
-        schedule: ContextDev::MonitorCreateParams::Schedule,
         target: ContextDev::Models::MonitorCreateParams::target,
+        change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
         mode: ContextDev::Models::MonitorCreateParams::mode,
+        schedule: ContextDev::MonitorCreateParams::Schedule,
         tags: ::Array[String],
         webhook: ContextDev::MonitorCreateParams::Webhook?
       }
@@ -16,19 +16,27 @@ module ContextDev
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
-      attr_accessor change_detection: ContextDev::Models::MonitorCreateParams::change_detection
-
       attr_accessor name: String
 
-      attr_accessor schedule: ContextDev::MonitorCreateParams::Schedule
-
       attr_accessor target: ContextDev::Models::MonitorCreateParams::target
+
+      attr_reader change_detection: ContextDev::Models::MonitorCreateParams::change_detection?
+
+      def change_detection=: (
+        ContextDev::Models::MonitorCreateParams::change_detection
+      ) -> ContextDev::Models::MonitorCreateParams::change_detection
 
       attr_reader mode: ContextDev::Models::MonitorCreateParams::mode?
 
       def mode=: (
         ContextDev::Models::MonitorCreateParams::mode
       ) -> ContextDev::Models::MonitorCreateParams::mode
+
+      attr_reader schedule: ContextDev::MonitorCreateParams::Schedule?
+
+      def schedule=: (
+        ContextDev::MonitorCreateParams::Schedule
+      ) -> ContextDev::MonitorCreateParams::Schedule
 
       attr_reader tags: ::Array[String]?
 
@@ -37,112 +45,26 @@ module ContextDev
       attr_accessor webhook: ContextDev::MonitorCreateParams::Webhook?
 
       def initialize: (
-        change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
         name: String,
-        schedule: ContextDev::MonitorCreateParams::Schedule,
         target: ContextDev::Models::MonitorCreateParams::target,
+        ?change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
         ?mode: ContextDev::Models::MonitorCreateParams::mode,
+        ?schedule: ContextDev::MonitorCreateParams::Schedule,
         ?tags: ::Array[String],
         ?webhook: ContextDev::MonitorCreateParams::Webhook?,
         ?request_options: ContextDev::request_opts
       ) -> void
 
       def to_hash: -> {
-        change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
         name: String,
-        schedule: ContextDev::MonitorCreateParams::Schedule,
         target: ContextDev::Models::MonitorCreateParams::target,
+        change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
         mode: ContextDev::Models::MonitorCreateParams::mode,
+        schedule: ContextDev::MonitorCreateParams::Schedule,
         tags: ::Array[String],
         webhook: ContextDev::MonitorCreateParams::Webhook?,
         request_options: ContextDev::RequestOptions
       }
-
-      type change_detection =
-        ContextDev::MonitorCreateParams::ChangeDetection::Exact
-        | ContextDev::MonitorCreateParams::ChangeDetection::Semantic
-
-      module ChangeDetection
-        extend ContextDev::Internal::Type::Union
-
-        type exact = { type: :exact }
-
-        class Exact < ContextDev::Internal::Type::BaseModel
-          attr_accessor type: :exact
-
-          def initialize: (?type: :exact) -> void
-
-          def to_hash: -> { type: :exact }
-        end
-
-        type semantic = { type: :semantic, confidence_threshold: Float }
-
-        class Semantic < ContextDev::Internal::Type::BaseModel
-          attr_accessor type: :semantic
-
-          attr_reader confidence_threshold: Float?
-
-          def confidence_threshold=: (Float) -> Float
-
-          def initialize: (
-            ?confidence_threshold: Float,
-            ?type: :semantic
-          ) -> void
-
-          def to_hash: -> { type: :semantic, confidence_threshold: Float }
-        end
-
-        def self?.variants: -> ::Array[ContextDev::Models::MonitorCreateParams::change_detection]
-      end
-
-      type schedule =
-        {
-          frequency: Integer,
-          type: ContextDev::Models::MonitorCreateParams::Schedule::type_,
-          unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
-        }
-
-      class Schedule < ContextDev::Internal::Type::BaseModel
-        attr_accessor frequency: Integer
-
-        attr_accessor type: ContextDev::Models::MonitorCreateParams::Schedule::type_
-
-        attr_accessor unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
-
-        def initialize: (
-          frequency: Integer,
-          type: ContextDev::Models::MonitorCreateParams::Schedule::type_,
-          unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
-        ) -> void
-
-        def to_hash: -> {
-          frequency: Integer,
-          type: ContextDev::Models::MonitorCreateParams::Schedule::type_,
-          unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
-        }
-
-        type type_ = :interval
-
-        module Type
-          extend ContextDev::Internal::Type::Enum
-
-          INTERVAL: :interval
-
-          def self?.values: -> ::Array[ContextDev::Models::MonitorCreateParams::Schedule::type_]
-        end
-
-        type unit = :minutes | :hours | :days
-
-        module Unit
-          extend ContextDev::Internal::Type::Enum
-
-          MINUTES: :minutes
-          HOURS: :hours
-          DAYS: :days
-
-          def self?.values: -> ::Array[ContextDev::Models::MonitorCreateParams::Schedule::unit]
-        end
-      end
 
       type target =
         ContextDev::MonitorCreateParams::Target::Page
@@ -152,12 +74,22 @@ module ContextDev
       module Target
         extend ContextDev::Internal::Type::Union
 
-        type page = { type: :page, url: String, normalize_whitespace: bool }
+        type page =
+          {
+            type: :page,
+            url: String,
+            instructions: String,
+            normalize_whitespace: bool
+          }
 
         class Page < ContextDev::Internal::Type::BaseModel
           attr_accessor type: :page
 
           attr_accessor url: String
+
+          attr_reader instructions: String?
+
+          def instructions=: (String) -> String
 
           attr_reader normalize_whitespace: bool?
 
@@ -165,6 +97,7 @@ module ContextDev
 
           def initialize: (
             url: String,
+            ?instructions: String,
             ?normalize_whitespace: bool,
             ?type: :page
           ) -> void
@@ -172,6 +105,7 @@ module ContextDev
           def to_hash: -> {
             type: :page,
             url: String,
+            instructions: String,
             normalize_whitespace: bool
           }
         end
@@ -277,6 +211,43 @@ module ContextDev
         def self?.variants: -> ::Array[ContextDev::Models::MonitorCreateParams::target]
       end
 
+      type change_detection =
+        ContextDev::MonitorCreateParams::ChangeDetection::Exact
+        | ContextDev::MonitorCreateParams::ChangeDetection::Semantic
+
+      module ChangeDetection
+        extend ContextDev::Internal::Type::Union
+
+        type exact = { type: :exact }
+
+        class Exact < ContextDev::Internal::Type::BaseModel
+          attr_accessor type: :exact
+
+          def initialize: (?type: :exact) -> void
+
+          def to_hash: -> { type: :exact }
+        end
+
+        type semantic = { type: :semantic, confidence_threshold: Float }
+
+        class Semantic < ContextDev::Internal::Type::BaseModel
+          attr_accessor type: :semantic
+
+          attr_reader confidence_threshold: Float?
+
+          def confidence_threshold=: (Float) -> Float
+
+          def initialize: (
+            ?confidence_threshold: Float,
+            ?type: :semantic
+          ) -> void
+
+          def to_hash: -> { type: :semantic, confidence_threshold: Float }
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::MonitorCreateParams::change_detection]
+      end
+
       type mode = :web
 
       module Mode
@@ -285,6 +256,55 @@ module ContextDev
         WEB: :web
 
         def self?.values: -> ::Array[ContextDev::Models::MonitorCreateParams::mode]
+      end
+
+      type schedule =
+        {
+          frequency: Integer,
+          type: ContextDev::Models::MonitorCreateParams::Schedule::type_,
+          unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
+        }
+
+      class Schedule < ContextDev::Internal::Type::BaseModel
+        attr_accessor frequency: Integer
+
+        attr_accessor type: ContextDev::Models::MonitorCreateParams::Schedule::type_
+
+        attr_accessor unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
+
+        def initialize: (
+          frequency: Integer,
+          type: ContextDev::Models::MonitorCreateParams::Schedule::type_,
+          unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
+        ) -> void
+
+        def to_hash: -> {
+          frequency: Integer,
+          type: ContextDev::Models::MonitorCreateParams::Schedule::type_,
+          unit: ContextDev::Models::MonitorCreateParams::Schedule::unit
+        }
+
+        type type_ = :interval
+
+        module Type
+          extend ContextDev::Internal::Type::Enum
+
+          INTERVAL: :interval
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorCreateParams::Schedule::type_]
+        end
+
+        type unit = :minutes | :hours | :days
+
+        module Unit
+          extend ContextDev::Internal::Type::Enum
+
+          MINUTES: :minutes
+          HOURS: :hours
+          DAYS: :days
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorCreateParams::Schedule::unit]
+        end
       end
 
       type webhook =

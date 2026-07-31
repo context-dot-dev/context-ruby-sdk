@@ -1,0 +1,36 @@
+module ContextDev
+  module Models
+    type batch_get_results_params =
+      { batch_id: String, cursor: String, limit: Integer }
+      & ContextDev::Internal::Type::request_parameters
+
+    class BatchGetResultsParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor batch_id: String
+
+      attr_reader cursor: String?
+
+      def cursor=: (String) -> String
+
+      attr_reader limit: Integer?
+
+      def limit=: (Integer) -> Integer
+
+      def initialize: (
+        batch_id: String,
+        ?cursor: String,
+        ?limit: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        batch_id: String,
+        cursor: String,
+        limit: Integer,
+        request_options: ContextDev::RequestOptions
+      }
+    end
+  end
+end

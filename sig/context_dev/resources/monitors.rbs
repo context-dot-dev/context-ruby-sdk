@@ -2,11 +2,11 @@ module ContextDev
   module Resources
     class Monitors
       def create: (
-        change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
         name: String,
-        schedule: ContextDev::MonitorCreateParams::Schedule,
         target: ContextDev::Models::MonitorCreateParams::target,
+        ?change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
         ?mode: ContextDev::Models::MonitorCreateParams::mode,
+        ?schedule: ContextDev::MonitorCreateParams::Schedule,
         ?tags: ::Array[String],
         ?webhook: ContextDev::MonitorCreateParams::Webhook?,
         ?request_options: ContextDev::request_opts

@@ -1,0 +1,304 @@
+module ContextDev
+  module Models
+    type batch_list_response =
+      {
+        data: ::Array[ContextDev::Models::BatchListResponse::Data],
+        has_more: bool,
+        key_metadata: ContextDev::Models::BatchListResponse::KeyMetadata,
+        next_cursor: String?
+      }
+
+    class BatchListResponse < ContextDev::Internal::Type::BaseModel
+      attr_reader data: ::Array[ContextDev::Models::BatchListResponse::Data]?
+
+      def data=: (
+        ::Array[ContextDev::Models::BatchListResponse::Data]
+      ) -> ::Array[ContextDev::Models::BatchListResponse::Data]
+
+      attr_reader has_more: bool?
+
+      def has_more=: (bool) -> bool
+
+      attr_reader key_metadata: ContextDev::Models::BatchListResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::BatchListResponse::KeyMetadata
+      ) -> ContextDev::Models::BatchListResponse::KeyMetadata
+
+      attr_accessor next_cursor: String?
+
+      def initialize: (
+        ?data: ::Array[ContextDev::Models::BatchListResponse::Data],
+        ?has_more: bool,
+        ?key_metadata: ContextDev::Models::BatchListResponse::KeyMetadata,
+        ?next_cursor: String?
+      ) -> void
+
+      def to_hash: -> {
+        data: ::Array[ContextDev::Models::BatchListResponse::Data],
+        has_more: bool,
+        key_metadata: ContextDev::Models::BatchListResponse::KeyMetadata,
+        next_cursor: String?
+      }
+
+      type data =
+        {
+          id: String,
+          credits: ContextDev::Models::BatchListResponse::Data::Credits,
+          error: ContextDev::Error?,
+          errors: ::Array[ContextDev::ErrorCount],
+          input: ContextDev::Models::BatchListResponse::Data::Input,
+          mode: ContextDev::Models::BatchListResponse::Data::mode,
+          progress: ContextDev::Models::BatchListResponse::Data::Progress,
+          results: ContextDev::Models::BatchListResponse::Data::Results?,
+          status: ContextDev::Models::BatchListResponse::Data::status,
+          tags: ::Array[String],
+          timing: ContextDev::Models::BatchListResponse::Data::Timing,
+          type: ContextDev::Models::BatchListResponse::Data::type_
+        }
+
+      class Data < ContextDev::Internal::Type::BaseModel
+        attr_accessor id: String
+
+        attr_accessor credits: ContextDev::Models::BatchListResponse::Data::Credits
+
+        attr_accessor error: ContextDev::Error?
+
+        attr_accessor errors: ::Array[ContextDev::ErrorCount]
+
+        attr_accessor input: ContextDev::Models::BatchListResponse::Data::Input
+
+        attr_accessor mode: ContextDev::Models::BatchListResponse::Data::mode
+
+        attr_accessor progress: ContextDev::Models::BatchListResponse::Data::Progress
+
+        attr_accessor results: ContextDev::Models::BatchListResponse::Data::Results?
+
+        attr_accessor status: ContextDev::Models::BatchListResponse::Data::status
+
+        attr_accessor tags: ::Array[String]
+
+        attr_accessor timing: ContextDev::Models::BatchListResponse::Data::Timing
+
+        attr_accessor type: ContextDev::Models::BatchListResponse::Data::type_
+
+        def initialize: (
+          id: String,
+          credits: ContextDev::Models::BatchListResponse::Data::Credits,
+          error: ContextDev::Error?,
+          errors: ::Array[ContextDev::ErrorCount],
+          input: ContextDev::Models::BatchListResponse::Data::Input,
+          mode: ContextDev::Models::BatchListResponse::Data::mode,
+          progress: ContextDev::Models::BatchListResponse::Data::Progress,
+          results: ContextDev::Models::BatchListResponse::Data::Results?,
+          status: ContextDev::Models::BatchListResponse::Data::status,
+          tags: ::Array[String],
+          timing: ContextDev::Models::BatchListResponse::Data::Timing,
+          type: ContextDev::Models::BatchListResponse::Data::type_
+        ) -> void
+
+        def to_hash: -> {
+          id: String,
+          credits: ContextDev::Models::BatchListResponse::Data::Credits,
+          error: ContextDev::Error?,
+          errors: ::Array[ContextDev::ErrorCount],
+          input: ContextDev::Models::BatchListResponse::Data::Input,
+          mode: ContextDev::Models::BatchListResponse::Data::mode,
+          progress: ContextDev::Models::BatchListResponse::Data::Progress,
+          results: ContextDev::Models::BatchListResponse::Data::Results?,
+          status: ContextDev::Models::BatchListResponse::Data::status,
+          tags: ::Array[String],
+          timing: ContextDev::Models::BatchListResponse::Data::Timing,
+          type: ContextDev::Models::BatchListResponse::Data::type_
+        }
+
+        type credits = { charged: Integer, estimated: Integer }
+
+        class Credits < ContextDev::Internal::Type::BaseModel
+          attr_accessor charged: Integer
+
+          attr_accessor estimated: Integer
+
+          def initialize: (charged: Integer, estimated: Integer) -> void
+
+          def to_hash: -> { charged: Integer, estimated: Integer }
+        end
+
+        type input =
+          {
+            accepted: Integer,
+            duplicates: Integer,
+            invalid: Integer,
+            submitted: Integer
+          }
+
+        class Input < ContextDev::Internal::Type::BaseModel
+          attr_accessor accepted: Integer
+
+          attr_accessor duplicates: Integer
+
+          attr_accessor invalid: Integer
+
+          attr_accessor submitted: Integer
+
+          def initialize: (
+            accepted: Integer,
+            duplicates: Integer,
+            invalid: Integer,
+            submitted: Integer
+          ) -> void
+
+          def to_hash: -> {
+            accepted: Integer,
+            duplicates: Integer,
+            invalid: Integer,
+            submitted: Integer
+          }
+        end
+
+        type mode = :scrape | :crawl
+
+        module Mode
+          extend ContextDev::Internal::Type::Enum
+
+          SCRAPE: :scrape
+          CRAWL: :crawl
+
+          def self?.values: -> ::Array[ContextDev::Models::BatchListResponse::Data::mode]
+        end
+
+        type progress =
+          { failed: Integer, pending: Integer, succeeded: Integer }
+
+        class Progress < ContextDev::Internal::Type::BaseModel
+          attr_accessor failed: Integer
+
+          attr_accessor pending: Integer
+
+          attr_accessor succeeded: Integer
+
+          def initialize: (
+            failed: Integer,
+            pending: Integer,
+            succeeded: Integer
+          ) -> void
+
+          def to_hash: -> {
+            failed: Integer,
+            pending: Integer,
+            succeeded: Integer
+          }
+        end
+
+        type results =
+          {
+            expires_at: String,
+            files: ::Array[ContextDev::Models::BatchListResponse::Data::Results::File]
+          }
+
+        class Results < ContextDev::Internal::Type::BaseModel
+          attr_accessor expires_at: String
+
+          attr_accessor files: ::Array[ContextDev::Models::BatchListResponse::Data::Results::File]
+
+          def initialize: (
+            expires_at: String,
+            files: ::Array[ContextDev::Models::BatchListResponse::Data::Results::File]
+          ) -> void
+
+          def to_hash: -> {
+            expires_at: String,
+            files: ::Array[ContextDev::Models::BatchListResponse::Data::Results::File]
+          }
+
+          type file = { bytes: Integer, items: Integer, url: String }
+
+          class File < ContextDev::Internal::Type::BaseModel
+            attr_accessor bytes: Integer
+
+            attr_accessor items: Integer
+
+            attr_accessor url: String
+
+            def initialize: (
+              bytes: Integer,
+              items: Integer,
+              url: String
+            ) -> void
+
+            def to_hash: -> { bytes: Integer, items: Integer, url: String }
+          end
+        end
+
+        type status =
+          :queued | :running | :cancelling | :completed | :cancelled | :failed
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          QUEUED: :queued
+          RUNNING: :running
+          CANCELLING: :cancelling
+          COMPLETED: :completed
+          CANCELLED: :cancelled
+          FAILED: :failed
+
+          def self?.values: -> ::Array[ContextDev::Models::BatchListResponse::Data::status]
+        end
+
+        type timing =
+          { completed_at: String?, created_at: String, started_at: String? }
+
+        class Timing < ContextDev::Internal::Type::BaseModel
+          attr_accessor completed_at: String?
+
+          attr_accessor created_at: String
+
+          attr_accessor started_at: String?
+
+          def initialize: (
+            completed_at: String?,
+            created_at: String,
+            started_at: String?
+          ) -> void
+
+          def to_hash: -> {
+            completed_at: String?,
+            created_at: String,
+            started_at: String?
+          }
+        end
+
+        type type_ = :markdown | :html
+
+        module Type
+          extend ContextDev::Internal::Type::Enum
+
+          MARKDOWN: :markdown
+          HTML: :html
+
+          def self?.values: -> ::Array[ContextDev::Models::BatchListResponse::Data::type_]
+        end
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end

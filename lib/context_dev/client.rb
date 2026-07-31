@@ -43,6 +43,9 @@ module ContextDev
     # @return [ContextDev::Resources::Monitors]
     attr_reader :monitors
 
+    # @return [ContextDev::Resources::Batch]
+    attr_reader :batch
+
     # @api private
     #
     # @return [Hash{String=>String}]
@@ -111,6 +114,7 @@ module ContextDev
       @industry = ContextDev::Resources::Industry.new(client: self)
       @utility = ContextDev::Resources::Utility.new(client: self)
       @monitors = ContextDev::Resources::Monitors.new(client: self)
+      @batch = ContextDev::Resources::Batch.new(client: self)
     end
   end
 end

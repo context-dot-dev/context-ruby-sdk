@@ -43,9 +43,23 @@ module ContextDev
 
   AIExtractProductsParams = ContextDev::Models::AIExtractProductsParams
 
+  BatchCancelParams = ContextDev::Models::BatchCancelParams
+
+  BatchGetResultsParams = ContextDev::Models::BatchGetResultsParams
+
+  BatchListParams = ContextDev::Models::BatchListParams
+
+  BatchRetrieveParams = ContextDev::Models::BatchRetrieveParams
+
+  BatchSubmitParams = ContextDev::Models::BatchSubmitParams
+
   BrandRetrieveParams = ContextDev::Models::BrandRetrieveParams
 
   BrandRetrieveSimplifiedParams = ContextDev::Models::BrandRetrieveSimplifiedParams
+
+  Error = ContextDev::Models::Error
+
+  ErrorCount = ContextDev::Models::ErrorCount
 
   IndustryRetrieveNaicsParams = ContextDev::Models::IndustryRetrieveNaicsParams
 

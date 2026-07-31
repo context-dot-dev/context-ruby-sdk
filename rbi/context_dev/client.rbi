@@ -38,6 +38,9 @@ module ContextDev
     sig { returns(ContextDev::Resources::Monitors) }
     attr_reader :monitors
 
+    sig { returns(ContextDev::Resources::Batch) }
+    attr_reader :batch
+
     # @api private
     sig { override.returns(T::Hash[String, String]) }
     private def auth_headers

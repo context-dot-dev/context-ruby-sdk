@@ -1,0 +1,41 @@
+module ContextDev
+  module Resources
+    class Batch
+      def retrieve: (
+        String batch_id,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BatchRetrieveResponse
+
+      def list: (
+        ?cursor: String,
+        ?limit: Integer,
+        ?q: String,
+        ?search_type: ContextDev::Models::BatchListParams::search_type,
+        ?status: ContextDev::Models::BatchListParams::status,
+        ?tags: String,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BatchListResponse
+
+      def cancel: (
+        String batch_id,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BatchCancelResponse
+
+      def get_results: (
+        String batch_id,
+        ?cursor: String,
+        ?limit: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BatchGetResultsResponse
+
+      def submit: (
+        identifiers: ContextDev::BatchSubmitParams::Identifiers,
+        ?tags: ::Array[String],
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BatchSubmitResponse
+
+      def initialize: (client: ContextDev::Client) -> void
+    end
+  end
+end
