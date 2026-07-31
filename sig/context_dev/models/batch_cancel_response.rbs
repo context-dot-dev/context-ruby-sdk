@@ -5,13 +5,11 @@ module ContextDev
         id: String,
         crawl: ContextDev::CrawlControls?,
         credits: ContextDev::Models::BatchCancelResponse::Credits,
-        failure: ContextDev::Failure?,
         format_: ContextDev::Models::BatchCancelResponse::format_,
         input: ContextDev::Intake,
         mode: ContextDev::Models::BatchCancelResponse::mode,
         page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchCancelResponse::Progress,
-        results: ContextDev::Models::BatchCancelResponse::Results?,
         status: ContextDev::Models::BatchCancelResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchCancelResponse::Timing,
@@ -25,8 +23,6 @@ module ContextDev
 
       attr_accessor credits: ContextDev::Models::BatchCancelResponse::Credits
 
-      attr_accessor failure: ContextDev::Failure?
-
       attr_accessor format_: ContextDev::Models::BatchCancelResponse::format_
 
       attr_accessor input: ContextDev::Intake
@@ -36,8 +32,6 @@ module ContextDev
       attr_accessor page_errors: ::Array[ContextDev::PageErrorCount]
 
       attr_accessor progress: ContextDev::Models::BatchCancelResponse::Progress
-
-      attr_accessor results: ContextDev::Models::BatchCancelResponse::Results?
 
       attr_accessor status: ContextDev::Models::BatchCancelResponse::status
 
@@ -55,13 +49,11 @@ module ContextDev
         id: String,
         crawl: ContextDev::CrawlControls?,
         credits: ContextDev::Models::BatchCancelResponse::Credits,
-        failure: ContextDev::Failure?,
         format_: ContextDev::Models::BatchCancelResponse::format_,
         input: ContextDev::Intake,
         mode: ContextDev::Models::BatchCancelResponse::mode,
         page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchCancelResponse::Progress,
-        results: ContextDev::Models::BatchCancelResponse::Results?,
         status: ContextDev::Models::BatchCancelResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchCancelResponse::Timing,
@@ -72,35 +64,25 @@ module ContextDev
         id: String,
         crawl: ContextDev::CrawlControls?,
         credits: ContextDev::Models::BatchCancelResponse::Credits,
-        failure: ContextDev::Failure?,
         format_: ContextDev::Models::BatchCancelResponse::format_,
         input: ContextDev::Intake,
         mode: ContextDev::Models::BatchCancelResponse::mode,
         page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchCancelResponse::Progress,
-        results: ContextDev::Models::BatchCancelResponse::Results?,
         status: ContextDev::Models::BatchCancelResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchCancelResponse::Timing,
         key_metadata: ContextDev::Models::BatchCancelResponse::KeyMetadata
       }
 
-      type credits = { net: Integer, refunded: Integer, reserved: Integer }
+      type credits = { reserved: Integer }
 
       class Credits < ContextDev::Internal::Type::BaseModel
-        attr_accessor net: Integer
-
-        attr_accessor refunded: Integer
-
         attr_accessor reserved: Integer
 
-        def initialize: (
-          net: Integer,
-          refunded: Integer,
-          reserved: Integer
-        ) -> void
+        def initialize: (reserved: Integer) -> void
 
-        def to_hash: -> { net: Integer, refunded: Integer, reserved: Integer }
+        def to_hash: -> { reserved: Integer }
       end
 
       type format_ = :markdown | :html
@@ -147,79 +129,26 @@ module ContextDev
         }
       end
 
-      type results =
-        {
-          expires_at: String,
-          files: ::Array[ContextDev::Models::BatchCancelResponse::Results::File]
-        }
-
-      class Results < ContextDev::Internal::Type::BaseModel
-        attr_accessor expires_at: String
-
-        attr_accessor files: ::Array[ContextDev::Models::BatchCancelResponse::Results::File]
-
-        def initialize: (
-          expires_at: String,
-          files: ::Array[ContextDev::Models::BatchCancelResponse::Results::File]
-        ) -> void
-
-        def to_hash: -> {
-          expires_at: String,
-          files: ::Array[ContextDev::Models::BatchCancelResponse::Results::File]
-        }
-
-        type file = { bytes: Integer, items: Integer, url: String }
-
-        class File < ContextDev::Internal::Type::BaseModel
-          attr_accessor bytes: Integer
-
-          attr_accessor items: Integer
-
-          attr_accessor url: String
-
-          def initialize: (bytes: Integer, items: Integer, url: String) -> void
-
-          def to_hash: -> { bytes: Integer, items: Integer, url: String }
-        end
-      end
-
-      type status =
-        :queued | :running | :cancelling | :completed | :cancelled | :failed
+      type status = :cancelling
 
       module Status
         extend ContextDev::Internal::Type::Enum
 
-        QUEUED: :queued
-        RUNNING: :running
         CANCELLING: :cancelling
-        COMPLETED: :completed
-        CANCELLED: :cancelled
-        FAILED: :failed
 
         def self?.values: -> ::Array[ContextDev::Models::BatchCancelResponse::status]
       end
 
-      type timing =
-        { completed_at: String?, created_at: String, started_at: String? }
+      type timing = { created_at: String, started_at: String? }
 
       class Timing < ContextDev::Internal::Type::BaseModel
-        attr_accessor completed_at: String?
-
         attr_accessor created_at: String
 
         attr_accessor started_at: String?
 
-        def initialize: (
-          completed_at: String?,
-          created_at: String,
-          started_at: String?
-        ) -> void
+        def initialize: (created_at: String, started_at: String?) -> void
 
-        def to_hash: -> {
-          completed_at: String?,
-          created_at: String,
-          started_at: String?
-        }
+        def to_hash: -> { created_at: String, started_at: String? }
       end
 
       type key_metadata =
