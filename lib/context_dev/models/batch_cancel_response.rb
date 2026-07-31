@@ -17,17 +17,16 @@ module ContextDev
       required :credits, -> { ContextDev::Models::BatchCancelResponse::Credits }
 
       # @!attribute error
-      #   Batch-level error. Null unless `status` is `failed`.
+      #   Why the batch failed.
       #
-      #   @return [ContextDev::Models::BatchCancelResponse::Error, nil]
-      required :error, -> { ContextDev::Models::BatchCancelResponse::Error }, nil?: true
+      #   @return [ContextDev::Models::Error, nil]
+      required :error, -> { ContextDev::Error }, nil?: true
 
       # @!attribute errors
       #   Page failures grouped by error code.
       #
-      #   @return [Array<ContextDev::Models::BatchCancelResponse::Error>]
-      required :errors,
-               -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchCancelResponse::Error] }
+      #   @return [Array<ContextDev::Models::ErrorCount>]
+      required :errors, -> { ContextDev::Internal::Type::ArrayOf[ContextDev::ErrorCount] }
 
       # @!attribute input
       #   Submission counts.
@@ -91,9 +90,9 @@ module ContextDev
       #
       #   @param credits [ContextDev::Models::BatchCancelResponse::Credits] Reserved and used credits.
       #
-      #   @param error [ContextDev::Models::BatchCancelResponse::Error, nil] Batch-level error. Null unless `status` is `failed`.
+      #   @param error [ContextDev::Models::Error, nil] Why the batch failed.
       #
-      #   @param errors [Array<ContextDev::Models::BatchCancelResponse::Error>] Page failures grouped by error code.
+      #   @param errors [Array<ContextDev::Models::ErrorCount>] Page failures grouped by error code.
       #
       #   @param input [ContextDev::Models::BatchCancelResponse::Input] Submission counts.
       #
@@ -133,28 +132,6 @@ module ContextDev
         #   @param charged [Integer] Credits used by successful pages.
         #
         #   @param estimated [Integer] Credits reserved when the batch was accepted.
-      end
-
-      # @see ContextDev::Models::BatchCancelResponse#error
-      class Error < ContextDev::Internal::Type::BaseModel
-        # @!attribute code
-        #   Batch error code.
-        #
-        #   @return [String]
-        required :code, String
-
-        # @!attribute message
-        #   Batch error message.
-        #
-        #   @return [String]
-        required :message, String
-
-        # @!method initialize(code:, message:)
-        #   Batch-level error. Null unless `status` is `failed`.
-        #
-        #   @param code [String] Batch error code.
-        #
-        #   @param message [String] Batch error message.
       end
 
       # @see ContextDev::Models::BatchCancelResponse#input

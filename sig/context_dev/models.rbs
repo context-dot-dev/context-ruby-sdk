@@ -17,6 +17,10 @@ module ContextDev
 
   class BrandRetrieveSimplifiedParams = ContextDev::Models::BrandRetrieveSimplifiedParams
 
+  class Error = ContextDev::Models::Error
+
+  class ErrorCount = ContextDev::Models::ErrorCount
+
   class IndustryRetrieveNaicsParams = ContextDev::Models::IndustryRetrieveNaicsParams
 
   class IndustryRetrieveSicParams = ContextDev::Models::IndustryRetrieveSicParams

@@ -16,8 +16,8 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
       response => {
         id: String,
         credits: ContextDev::Models::BatchRetrieveResponse::Credits,
-        error: ContextDev::Models::BatchRetrieveResponse::Error | nil,
-        errors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchRetrieveResponse::Error]),
+        error: ContextDev::Error | nil,
+        errors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::ErrorCount]),
         input: ContextDev::Models::BatchRetrieveResponse::Input,
         invalid_urls: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchRetrieveResponse::InvalidURL]),
         mode: ContextDev::Models::BatchRetrieveResponse::Mode,
@@ -65,8 +65,8 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
       response => {
         id: String,
         credits: ContextDev::Models::BatchCancelResponse::Credits,
-        error: ContextDev::Models::BatchCancelResponse::Error | nil,
-        errors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchCancelResponse::Error]),
+        error: ContextDev::Error | nil,
+        errors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::ErrorCount]),
         input: ContextDev::Models::BatchCancelResponse::Input,
         mode: ContextDev::Models::BatchCancelResponse::Mode,
         progress: ContextDev::Models::BatchCancelResponse::Progress,

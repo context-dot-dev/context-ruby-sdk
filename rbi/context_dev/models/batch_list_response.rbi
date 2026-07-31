@@ -112,26 +112,15 @@ module ContextDev
         end
         attr_writer :credits
 
-        # Batch-level error. Null unless `status` is `failed`.
-        sig do
-          returns(T.nilable(ContextDev::Models::BatchListResponse::Data::Error))
-        end
+        # Why the batch failed.
+        sig { returns(T.nilable(ContextDev::Error)) }
         attr_reader :error
 
-        sig do
-          params(
-            error:
-              T.nilable(
-                ContextDev::Models::BatchListResponse::Data::Error::OrHash
-              )
-          ).void
-        end
+        sig { params(error: T.nilable(ContextDev::Error::OrHash)).void }
         attr_writer :error
 
         # Page failures grouped by error code.
-        sig do
-          returns(T::Array[ContextDev::Models::BatchListResponse::Data::Error])
-        end
+        sig { returns(T::Array[ContextDev::ErrorCount]) }
         attr_accessor :errors
 
         # Submission counts.
@@ -220,14 +209,8 @@ module ContextDev
             id: String,
             credits:
               ContextDev::Models::BatchListResponse::Data::Credits::OrHash,
-            error:
-              T.nilable(
-                ContextDev::Models::BatchListResponse::Data::Error::OrHash
-              ),
-            errors:
-              T::Array[
-                ContextDev::Models::BatchListResponse::Data::Error::OrHash
-              ],
+            error: T.nilable(ContextDev::Error::OrHash),
+            errors: T::Array[ContextDev::ErrorCount::OrHash],
             input: ContextDev::Models::BatchListResponse::Data::Input::OrHash,
             mode: ContextDev::Models::BatchListResponse::Data::Mode::OrSymbol,
             progress:
@@ -248,7 +231,7 @@ module ContextDev
           id:,
           # Reserved and used credits.
           credits:,
-          # Batch-level error. Null unless `status` is `failed`.
+          # Why the batch failed.
           error:,
           # Page failures grouped by error code.
           errors:,
@@ -276,10 +259,8 @@ module ContextDev
             {
               id: String,
               credits: ContextDev::Models::BatchListResponse::Data::Credits,
-              error:
-                T.nilable(ContextDev::Models::BatchListResponse::Data::Error),
-              errors:
-                T::Array[ContextDev::Models::BatchListResponse::Data::Error],
+              error: T.nilable(ContextDev::Error),
+              errors: T::Array[ContextDev::ErrorCount],
               input: ContextDev::Models::BatchListResponse::Data::Input,
               mode:
                 ContextDev::Models::BatchListResponse::Data::Mode::TaggedSymbol,
@@ -330,40 +311,6 @@ module ContextDev
           end
 
           sig { override.returns({ charged: Integer, estimated: Integer }) }
-          def to_hash
-          end
-        end
-
-        class Error < ContextDev::Internal::Type::BaseModel
-          OrHash =
-            T.type_alias do
-              T.any(
-                ContextDev::Models::BatchListResponse::Data::Error,
-                ContextDev::Internal::AnyHash
-              )
-            end
-
-          # Batch error code.
-          sig { returns(String) }
-          attr_accessor :code
-
-          # Batch error message.
-          sig { returns(String) }
-          attr_accessor :message
-
-          # Batch-level error. Null unless `status` is `failed`.
-          sig do
-            params(code: String, message: String).returns(T.attached_class)
-          end
-          def self.new(
-            # Batch error code.
-            code:,
-            # Batch error message.
-            message:
-          )
-          end
-
-          sig { override.returns({ code: String, message: String }) }
           def to_hash
           end
         end

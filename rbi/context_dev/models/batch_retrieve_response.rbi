@@ -26,24 +26,15 @@ module ContextDev
       end
       attr_writer :credits
 
-      # Batch-level error. Null unless `status` is `failed`.
-      sig do
-        returns(T.nilable(ContextDev::Models::BatchRetrieveResponse::Error))
-      end
+      # Why the batch failed.
+      sig { returns(T.nilable(ContextDev::Error)) }
       attr_reader :error
 
-      sig do
-        params(
-          error:
-            T.nilable(ContextDev::Models::BatchRetrieveResponse::Error::OrHash)
-        ).void
-      end
+      sig { params(error: T.nilable(ContextDev::Error::OrHash)).void }
       attr_writer :error
 
       # Page failures grouped by error code.
-      sig do
-        returns(T::Array[ContextDev::Models::BatchRetrieveResponse::Error])
-      end
+      sig { returns(T::Array[ContextDev::ErrorCount]) }
       attr_accessor :errors
 
       # Submission counts.
@@ -150,10 +141,8 @@ module ContextDev
         params(
           id: String,
           credits: ContextDev::Models::BatchRetrieveResponse::Credits::OrHash,
-          error:
-            T.nilable(ContextDev::Models::BatchRetrieveResponse::Error::OrHash),
-          errors:
-            T::Array[ContextDev::Models::BatchRetrieveResponse::Error::OrHash],
+          error: T.nilable(ContextDev::Error::OrHash),
+          errors: T::Array[ContextDev::ErrorCount::OrHash],
           input: ContextDev::Models::BatchRetrieveResponse::Input::OrHash,
           invalid_urls:
             T::Array[
@@ -179,7 +168,7 @@ module ContextDev
         id:,
         # Reserved and used credits.
         credits:,
-        # Batch-level error. Null unless `status` is `failed`.
+        # Why the batch failed.
         error:,
         # Page failures grouped by error code.
         errors:,
@@ -213,8 +202,8 @@ module ContextDev
           {
             id: String,
             credits: ContextDev::Models::BatchRetrieveResponse::Credits,
-            error: T.nilable(ContextDev::Models::BatchRetrieveResponse::Error),
-            errors: T::Array[ContextDev::Models::BatchRetrieveResponse::Error],
+            error: T.nilable(ContextDev::Error),
+            errors: T::Array[ContextDev::ErrorCount],
             input: ContextDev::Models::BatchRetrieveResponse::Input,
             invalid_urls:
               T::Array[ContextDev::Models::BatchRetrieveResponse::InvalidURL],
@@ -266,38 +255,6 @@ module ContextDev
         end
 
         sig { override.returns({ charged: Integer, estimated: Integer }) }
-        def to_hash
-        end
-      end
-
-      class Error < ContextDev::Internal::Type::BaseModel
-        OrHash =
-          T.type_alias do
-            T.any(
-              ContextDev::Models::BatchRetrieveResponse::Error,
-              ContextDev::Internal::AnyHash
-            )
-          end
-
-        # Batch error code.
-        sig { returns(String) }
-        attr_accessor :code
-
-        # Batch error message.
-        sig { returns(String) }
-        attr_accessor :message
-
-        # Batch-level error. Null unless `status` is `failed`.
-        sig { params(code: String, message: String).returns(T.attached_class) }
-        def self.new(
-          # Batch error code.
-          code:,
-          # Batch error message.
-          message:
-        )
-        end
-
-        sig { override.returns({ code: String, message: String }) }
         def to_hash
         end
       end
