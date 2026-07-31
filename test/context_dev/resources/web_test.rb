@@ -164,6 +164,8 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         success: ContextDev::Models::WebWebScrapeHTMLResponse::Success,
         type: ContextDev::Models::WebWebScrapeHTMLResponse::Type,
         url: String,
+        actions_applied: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied]) | nil,
+        actions_html_stale: ContextDev::Internal::Type::Boolean | nil,
         key_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata | nil
       }
     end
@@ -204,6 +206,8 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         metadata: ContextDev::Models::WebWebScrapeMdResponse::Metadata,
         success: ContextDev::Models::WebWebScrapeMdResponse::Success,
         url: String,
+        actions_applied: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied]) | nil,
+        actions_html_stale: ContextDev::Internal::Type::Boolean | nil,
         key_metadata: ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata | nil
       }
     end

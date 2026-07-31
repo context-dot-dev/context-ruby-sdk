@@ -7,6 +7,8 @@ module ContextDev
         metadata: ContextDev::Models::WebWebScrapeMdResponse::Metadata,
         success: ContextDev::Models::WebWebScrapeMdResponse::success,
         url: String,
+        actions_applied: ::Array[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied],
+        actions_html_stale: bool,
         key_metadata: ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata
       }
 
@@ -21,6 +23,16 @@ module ContextDev
 
       attr_accessor url: String
 
+      attr_reader actions_applied: ::Array[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied]?
+
+      def actions_applied=: (
+        ::Array[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied]
+      ) -> ::Array[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied]
+
+      attr_reader actions_html_stale: bool?
+
+      def actions_html_stale=: (bool) -> bool
+
       attr_reader key_metadata: ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata?
 
       def key_metadata=: (
@@ -33,6 +45,8 @@ module ContextDev
         metadata: ContextDev::Models::WebWebScrapeMdResponse::Metadata,
         success: ContextDev::Models::WebWebScrapeMdResponse::success,
         url: String,
+        ?actions_applied: ::Array[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied],
+        ?actions_html_stale: bool,
         ?key_metadata: ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata
       ) -> void
 
@@ -42,6 +56,8 @@ module ContextDev
         metadata: ContextDev::Models::WebWebScrapeMdResponse::Metadata,
         success: ContextDev::Models::WebWebScrapeMdResponse::success,
         url: String,
+        actions_applied: ::Array[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied],
+        actions_html_stale: bool,
         key_metadata: ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata
       }
 
@@ -267,6 +283,75 @@ module ContextDev
         TRUE: true
 
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeMdResponse::success]
+      end
+
+      type actions_applied =
+        {
+          instruction: String,
+          status: ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::status,
+          completion_evidence: String,
+          duration_ms: Float,
+          error: String,
+          method_: String,
+          target_description: String
+        }
+
+      class ActionsApplied < ContextDev::Internal::Type::BaseModel
+        attr_accessor instruction: String
+
+        attr_accessor status: ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::status
+
+        attr_reader completion_evidence: String?
+
+        def completion_evidence=: (String) -> String
+
+        attr_reader duration_ms: Float?
+
+        def duration_ms=: (Float) -> Float
+
+        attr_reader error: String?
+
+        def error=: (String) -> String
+
+        attr_reader method_: String?
+
+        def method_=: (String) -> String
+
+        attr_reader target_description: String?
+
+        def target_description=: (String) -> String
+
+        def initialize: (
+          instruction: String,
+          status: ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::status,
+          ?completion_evidence: String,
+          ?duration_ms: Float,
+          ?error: String,
+          ?method_: String,
+          ?target_description: String
+        ) -> void
+
+        def to_hash: -> {
+          instruction: String,
+          status: ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::status,
+          completion_evidence: String,
+          duration_ms: Float,
+          error: String,
+          method_: String,
+          target_description: String
+        }
+
+        type status = :applied | :failed | :skipped
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          APPLIED: :applied
+          FAILED: :failed
+          SKIPPED: :skipped
+
+          def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::status]
+        end
       end
 
       type key_metadata =
