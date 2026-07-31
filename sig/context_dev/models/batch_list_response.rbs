@@ -45,8 +45,8 @@ module ContextDev
         {
           id: String,
           credits: ContextDev::Models::BatchListResponse::Data::Credits,
-          error: ContextDev::Models::BatchListResponse::Data::Error?,
-          errors: ::Array[ContextDev::Models::BatchListResponse::Data::Error],
+          error: ContextDev::Error?,
+          errors: ::Array[ContextDev::ErrorCount],
           input: ContextDev::Models::BatchListResponse::Data::Input,
           mode: ContextDev::Models::BatchListResponse::Data::mode,
           progress: ContextDev::Models::BatchListResponse::Data::Progress,
@@ -62,9 +62,9 @@ module ContextDev
 
         attr_accessor credits: ContextDev::Models::BatchListResponse::Data::Credits
 
-        attr_accessor error: ContextDev::Models::BatchListResponse::Data::Error?
+        attr_accessor error: ContextDev::Error?
 
-        attr_accessor errors: ::Array[ContextDev::Models::BatchListResponse::Data::Error]
+        attr_accessor errors: ::Array[ContextDev::ErrorCount]
 
         attr_accessor input: ContextDev::Models::BatchListResponse::Data::Input
 
@@ -85,8 +85,8 @@ module ContextDev
         def initialize: (
           id: String,
           credits: ContextDev::Models::BatchListResponse::Data::Credits,
-          error: ContextDev::Models::BatchListResponse::Data::Error?,
-          errors: ::Array[ContextDev::Models::BatchListResponse::Data::Error],
+          error: ContextDev::Error?,
+          errors: ::Array[ContextDev::ErrorCount],
           input: ContextDev::Models::BatchListResponse::Data::Input,
           mode: ContextDev::Models::BatchListResponse::Data::mode,
           progress: ContextDev::Models::BatchListResponse::Data::Progress,
@@ -100,8 +100,8 @@ module ContextDev
         def to_hash: -> {
           id: String,
           credits: ContextDev::Models::BatchListResponse::Data::Credits,
-          error: ContextDev::Models::BatchListResponse::Data::Error?,
-          errors: ::Array[ContextDev::Models::BatchListResponse::Data::Error],
+          error: ContextDev::Error?,
+          errors: ::Array[ContextDev::ErrorCount],
           input: ContextDev::Models::BatchListResponse::Data::Input,
           mode: ContextDev::Models::BatchListResponse::Data::mode,
           progress: ContextDev::Models::BatchListResponse::Data::Progress,
@@ -122,18 +122,6 @@ module ContextDev
           def initialize: (charged: Integer, estimated: Integer) -> void
 
           def to_hash: -> { charged: Integer, estimated: Integer }
-        end
-
-        type error = { code: String, message: String }
-
-        class Error < ContextDev::Internal::Type::BaseModel
-          attr_accessor code: String
-
-          attr_accessor message: String
-
-          def initialize: (code: String, message: String) -> void
-
-          def to_hash: -> { code: String, message: String }
         end
 
         type input =
