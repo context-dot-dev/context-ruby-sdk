@@ -7,6 +7,8 @@ module ContextDev
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
         type: ContextDev::Models::WebWebScrapeHTMLResponse::type_,
         url: String,
+        actions_applied: ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied],
+        actions_html_stale: bool,
         key_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata
       }
 
@@ -21,6 +23,16 @@ module ContextDev
 
       attr_accessor url: String
 
+      attr_reader actions_applied: ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied]?
+
+      def actions_applied=: (
+        ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied]
+      ) -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied]
+
+      attr_reader actions_html_stale: bool?
+
+      def actions_html_stale=: (bool) -> bool
+
       attr_reader key_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata?
 
       def key_metadata=: (
@@ -33,6 +45,8 @@ module ContextDev
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
         type: ContextDev::Models::WebWebScrapeHTMLResponse::type_,
         url: String,
+        ?actions_applied: ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied],
+        ?actions_html_stale: bool,
         ?key_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata
       ) -> void
 
@@ -42,6 +56,8 @@ module ContextDev
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
         type: ContextDev::Models::WebWebScrapeHTMLResponse::type_,
         url: String,
+        actions_applied: ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied],
+        actions_html_stale: bool,
         key_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata
       }
 
@@ -304,6 +320,75 @@ module ContextDev
         PPT: :ppt
 
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::type_]
+      end
+
+      type actions_applied =
+        {
+          instruction: String,
+          status: ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied::status,
+          completion_evidence: String,
+          duration_ms: Float,
+          error: String,
+          method_: String,
+          target_description: String
+        }
+
+      class ActionsApplied < ContextDev::Internal::Type::BaseModel
+        attr_accessor instruction: String
+
+        attr_accessor status: ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied::status
+
+        attr_reader completion_evidence: String?
+
+        def completion_evidence=: (String) -> String
+
+        attr_reader duration_ms: Float?
+
+        def duration_ms=: (Float) -> Float
+
+        attr_reader error: String?
+
+        def error=: (String) -> String
+
+        attr_reader method_: String?
+
+        def method_=: (String) -> String
+
+        attr_reader target_description: String?
+
+        def target_description=: (String) -> String
+
+        def initialize: (
+          instruction: String,
+          status: ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied::status,
+          ?completion_evidence: String,
+          ?duration_ms: Float,
+          ?error: String,
+          ?method_: String,
+          ?target_description: String
+        ) -> void
+
+        def to_hash: -> {
+          instruction: String,
+          status: ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied::status,
+          completion_evidence: String,
+          duration_ms: Float,
+          error: String,
+          method_: String,
+          target_description: String
+        }
+
+        type status = :applied | :failed | :skipped
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          APPLIED: :applied
+          FAILED: :failed
+          SKIPPED: :skipped
+
+          def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied::status]
+        end
       end
 
       type key_metadata =

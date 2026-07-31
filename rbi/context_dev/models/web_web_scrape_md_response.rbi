@@ -44,6 +44,34 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
+      # One verified outcome per requested browser action, in request order.
+      sig do
+        returns(
+          T.nilable(
+            T::Array[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied]
+          )
+        )
+      end
+      attr_reader :actions_applied
+
+      sig do
+        params(
+          actions_applied:
+            T::Array[
+              ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::OrHash
+            ]
+        ).void
+      end
+      attr_writer :actions_applied
+
+      # True when an action was applied but the returned content could not be refreshed
+      # afterward.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :actions_html_stale
+
+      sig { params(actions_html_stale: T::Boolean).void }
+      attr_writer :actions_html_stale
+
       # Metadata about the API key used for the request. Included in every response
       # whenever a valid API key is provided, even when the response status is not 200.
       sig do
@@ -70,6 +98,11 @@ module ContextDev
           success:
             ContextDev::Models::WebWebScrapeMdResponse::Success::OrBoolean,
           url: String,
+          actions_applied:
+            T::Array[
+              ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::OrHash
+            ],
+          actions_html_stale: T::Boolean,
           key_metadata:
             ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata::OrHash
         ).returns(T.attached_class)
@@ -87,6 +120,11 @@ module ContextDev
         success:,
         # The URL that was scraped
         url:,
+        # One verified outcome per requested browser action, in request order.
+        actions_applied: nil,
+        # True when an action was applied but the returned content could not be refreshed
+        # afterward.
+        actions_html_stale: nil,
         # Metadata about the API key used for the request. Included in every response
         # whenever a valid API key is provided, even when the response status is not 200.
         key_metadata: nil
@@ -102,6 +140,11 @@ module ContextDev
             success:
               ContextDev::Models::WebWebScrapeMdResponse::Success::TaggedBoolean,
             url: String,
+            actions_applied:
+              T::Array[
+                ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied
+              ],
+            actions_html_stale: T::Boolean,
             key_metadata:
               ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata
           }
@@ -595,6 +638,143 @@ module ContextDev
           )
         end
         def self.values
+        end
+      end
+
+      class ActionsApplied < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        sig { returns(String) }
+        attr_accessor :instruction
+
+        # Applied means the requested page state was visibly verified. Failed means it was
+        # not verified. Skipped means it was not attempted.
+        sig do
+          returns(
+            ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::Status::TaggedSymbol
+          )
+        end
+        attr_accessor :status
+
+        # Visible page evidence used to verify an applied action.
+        sig { returns(T.nilable(String)) }
+        attr_reader :completion_evidence
+
+        sig { params(completion_evidence: String).void }
+        attr_writer :completion_evidence
+
+        sig { returns(T.nilable(Float)) }
+        attr_reader :duration_ms
+
+        sig { params(duration_ms: Float).void }
+        attr_writer :duration_ms
+
+        sig { returns(T.nilable(String)) }
+        attr_reader :error
+
+        sig { params(error: String).void }
+        attr_writer :error
+
+        sig { returns(T.nilable(String)) }
+        attr_reader :method_
+
+        sig { params(method_: String).void }
+        attr_writer :method_
+
+        sig { returns(T.nilable(String)) }
+        attr_reader :target_description
+
+        sig { params(target_description: String).void }
+        attr_writer :target_description
+
+        sig do
+          params(
+            instruction: String,
+            status:
+              ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::Status::OrSymbol,
+            completion_evidence: String,
+            duration_ms: Float,
+            error: String,
+            method_: String,
+            target_description: String
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          instruction:,
+          # Applied means the requested page state was visibly verified. Failed means it was
+          # not verified. Skipped means it was not attempted.
+          status:,
+          # Visible page evidence used to verify an applied action.
+          completion_evidence: nil,
+          duration_ms: nil,
+          error: nil,
+          method_: nil,
+          target_description: nil
+        )
+        end
+
+        sig do
+          override.returns(
+            {
+              instruction: String,
+              status:
+                ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::Status::TaggedSymbol,
+              completion_evidence: String,
+              duration_ms: Float,
+              error: String,
+              method_: String,
+              target_description: String
+            }
+          )
+        end
+        def to_hash
+        end
+
+        # Applied means the requested page state was visibly verified. Failed means it was
+        # not verified. Skipped means it was not attempted.
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::Status
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          APPLIED =
+            T.let(
+              :applied,
+              ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::Status::TaggedSymbol
+            )
+          FAILED =
+            T.let(
+              :failed,
+              ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::Status::TaggedSymbol
+            )
+          SKIPPED =
+            T.let(
+              :skipped,
+              ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::Status::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::Status::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
         end
       end
 

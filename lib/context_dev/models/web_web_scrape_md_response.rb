@@ -36,6 +36,21 @@ module ContextDev
       #   @return [String]
       required :url, String
 
+      # @!attribute actions_applied
+      #   One verified outcome per requested browser action, in request order.
+      #
+      #   @return [Array<ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied>, nil]
+      optional :actions_applied,
+               -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied] },
+               api_name: :actionsApplied
+
+      # @!attribute actions_html_stale
+      #   True when an action was applied but the returned content could not be refreshed
+      #   afterward.
+      #
+      #   @return [Boolean, nil]
+      optional :actions_html_stale, ContextDev::Internal::Type::Boolean, api_name: :actionsHtmlStale
+
       # @!attribute key_metadata
       #   Metadata about the API key used for the request. Included in every response
       #   whenever a valid API key is provided, even when the response status is not 200.
@@ -43,7 +58,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata }
 
-      # @!method initialize(content_length:, markdown:, metadata:, success:, url:, key_metadata: nil)
+      # @!method initialize(content_length:, markdown:, metadata:, success:, url:, actions_applied: nil, actions_html_stale: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeMdResponse} for more details.
       #
@@ -56,6 +71,10 @@ module ContextDev
       #   @param success [Boolean, ContextDev::Models::WebWebScrapeMdResponse::Success] Indicates success
       #
       #   @param url [String] The URL that was scraped
+      #
+      #   @param actions_applied [Array<ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied>] One verified outcome per requested browser action, in request order.
+      #
+      #   @param actions_html_stale [Boolean] True when an action was applied but the returned content could not be refreshed
       #
       #   @param key_metadata [ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
 
@@ -316,6 +335,79 @@ module ContextDev
 
         # @!method self.values
         #   @return [Array<Boolean>]
+      end
+
+      class ActionsApplied < ContextDev::Internal::Type::BaseModel
+        # @!attribute instruction
+        #
+        #   @return [String]
+        required :instruction, String
+
+        # @!attribute status
+        #   Applied means the requested page state was visibly verified. Failed means it was
+        #   not verified. Skipped means it was not attempted.
+        #
+        #   @return [Symbol, ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::Status]
+        required :status, enum: -> { ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::Status }
+
+        # @!attribute completion_evidence
+        #   Visible page evidence used to verify an applied action.
+        #
+        #   @return [String, nil]
+        optional :completion_evidence, String, api_name: :completionEvidence
+
+        # @!attribute duration_ms
+        #
+        #   @return [Float, nil]
+        optional :duration_ms, Float, api_name: :durationMs
+
+        # @!attribute error
+        #
+        #   @return [String, nil]
+        optional :error, String
+
+        # @!attribute method_
+        #
+        #   @return [String, nil]
+        optional :method_, String, api_name: :method
+
+        # @!attribute target_description
+        #
+        #   @return [String, nil]
+        optional :target_description, String, api_name: :targetDescription
+
+        # @!method initialize(instruction:, status:, completion_evidence: nil, duration_ms: nil, error: nil, method_: nil, target_description: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied} for more details.
+        #
+        #   @param instruction [String]
+        #
+        #   @param status [Symbol, ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied::Status] Applied means the requested page state was visibly verified. Failed means it was
+        #
+        #   @param completion_evidence [String] Visible page evidence used to verify an applied action.
+        #
+        #   @param duration_ms [Float]
+        #
+        #   @param error [String]
+        #
+        #   @param method_ [String]
+        #
+        #   @param target_description [String]
+
+        # Applied means the requested page state was visibly verified. Failed means it was
+        # not verified. Skipped means it was not attempted.
+        #
+        # @see ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          APPLIED = :applied
+          FAILED = :failed
+          SKIPPED = :skipped
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
       end
 
       # @see ContextDev::Models::WebWebScrapeMdResponse#key_metadata
