@@ -44,31 +44,36 @@ module ContextDev
       type data =
         {
           id: String,
+          crawl: ContextDev::CrawlControls?,
           credits: ContextDev::Models::BatchListResponse::Data::Credits,
-          error: ContextDev::Error?,
-          errors: ::Array[ContextDev::ErrorCount],
-          input: ContextDev::Models::BatchListResponse::Data::Input,
+          failure: ContextDev::Failure?,
+          format_: ContextDev::Models::BatchListResponse::Data::format_,
+          input: ContextDev::Intake,
           mode: ContextDev::Models::BatchListResponse::Data::mode,
+          page_errors: ::Array[ContextDev::PageErrorCount],
           progress: ContextDev::Models::BatchListResponse::Data::Progress,
           results: ContextDev::Models::BatchListResponse::Data::Results?,
           status: ContextDev::Models::BatchListResponse::Data::status,
           tags: ::Array[String],
-          timing: ContextDev::Models::BatchListResponse::Data::Timing,
-          type: ContextDev::Models::BatchListResponse::Data::type_
+          timing: ContextDev::Models::BatchListResponse::Data::Timing
         }
 
       class Data < ContextDev::Internal::Type::BaseModel
         attr_accessor id: String
 
+        attr_accessor crawl: ContextDev::CrawlControls?
+
         attr_accessor credits: ContextDev::Models::BatchListResponse::Data::Credits
 
-        attr_accessor error: ContextDev::Error?
+        attr_accessor failure: ContextDev::Failure?
 
-        attr_accessor errors: ::Array[ContextDev::ErrorCount]
+        attr_accessor format_: ContextDev::Models::BatchListResponse::Data::format_
 
-        attr_accessor input: ContextDev::Models::BatchListResponse::Data::Input
+        attr_accessor input: ContextDev::Intake
 
         attr_accessor mode: ContextDev::Models::BatchListResponse::Data::mode
+
+        attr_accessor page_errors: ::Array[ContextDev::PageErrorCount]
 
         attr_accessor progress: ContextDev::Models::BatchListResponse::Data::Progress
 
@@ -80,80 +85,65 @@ module ContextDev
 
         attr_accessor timing: ContextDev::Models::BatchListResponse::Data::Timing
 
-        attr_accessor type: ContextDev::Models::BatchListResponse::Data::type_
-
         def initialize: (
           id: String,
+          crawl: ContextDev::CrawlControls?,
           credits: ContextDev::Models::BatchListResponse::Data::Credits,
-          error: ContextDev::Error?,
-          errors: ::Array[ContextDev::ErrorCount],
-          input: ContextDev::Models::BatchListResponse::Data::Input,
+          failure: ContextDev::Failure?,
+          format_: ContextDev::Models::BatchListResponse::Data::format_,
+          input: ContextDev::Intake,
           mode: ContextDev::Models::BatchListResponse::Data::mode,
+          page_errors: ::Array[ContextDev::PageErrorCount],
           progress: ContextDev::Models::BatchListResponse::Data::Progress,
           results: ContextDev::Models::BatchListResponse::Data::Results?,
           status: ContextDev::Models::BatchListResponse::Data::status,
           tags: ::Array[String],
-          timing: ContextDev::Models::BatchListResponse::Data::Timing,
-          type: ContextDev::Models::BatchListResponse::Data::type_
+          timing: ContextDev::Models::BatchListResponse::Data::Timing
         ) -> void
 
         def to_hash: -> {
           id: String,
+          crawl: ContextDev::CrawlControls?,
           credits: ContextDev::Models::BatchListResponse::Data::Credits,
-          error: ContextDev::Error?,
-          errors: ::Array[ContextDev::ErrorCount],
-          input: ContextDev::Models::BatchListResponse::Data::Input,
+          failure: ContextDev::Failure?,
+          format_: ContextDev::Models::BatchListResponse::Data::format_,
+          input: ContextDev::Intake,
           mode: ContextDev::Models::BatchListResponse::Data::mode,
+          page_errors: ::Array[ContextDev::PageErrorCount],
           progress: ContextDev::Models::BatchListResponse::Data::Progress,
           results: ContextDev::Models::BatchListResponse::Data::Results?,
           status: ContextDev::Models::BatchListResponse::Data::status,
           tags: ::Array[String],
-          timing: ContextDev::Models::BatchListResponse::Data::Timing,
-          type: ContextDev::Models::BatchListResponse::Data::type_
+          timing: ContextDev::Models::BatchListResponse::Data::Timing
         }
 
-        type credits = { charged: Integer, estimated: Integer }
+        type credits = { net: Integer, refunded: Integer, reserved: Integer }
 
         class Credits < ContextDev::Internal::Type::BaseModel
-          attr_accessor charged: Integer
+          attr_accessor net: Integer
 
-          attr_accessor estimated: Integer
+          attr_accessor refunded: Integer
 
-          def initialize: (charged: Integer, estimated: Integer) -> void
-
-          def to_hash: -> { charged: Integer, estimated: Integer }
-        end
-
-        type input =
-          {
-            accepted: Integer,
-            duplicates: Integer,
-            invalid: Integer,
-            submitted: Integer
-          }
-
-        class Input < ContextDev::Internal::Type::BaseModel
-          attr_accessor accepted: Integer
-
-          attr_accessor duplicates: Integer
-
-          attr_accessor invalid: Integer
-
-          attr_accessor submitted: Integer
+          attr_accessor reserved: Integer
 
           def initialize: (
-            accepted: Integer,
-            duplicates: Integer,
-            invalid: Integer,
-            submitted: Integer
+            net: Integer,
+            refunded: Integer,
+            reserved: Integer
           ) -> void
 
-          def to_hash: -> {
-            accepted: Integer,
-            duplicates: Integer,
-            invalid: Integer,
-            submitted: Integer
-          }
+          def to_hash: -> { net: Integer, refunded: Integer, reserved: Integer }
+        end
+
+        type format_ = :markdown | :html
+
+        module Format
+          extend ContextDev::Internal::Type::Enum
+
+          MARKDOWN: :markdown
+          HTML: :html
+
+          def self?.values: -> ::Array[ContextDev::Models::BatchListResponse::Data::format_]
         end
 
         type mode = :scrape | :crawl
@@ -267,17 +257,6 @@ module ContextDev
             created_at: String,
             started_at: String?
           }
-        end
-
-        type type_ = :markdown | :html
-
-        module Type
-          extend ContextDev::Internal::Type::Enum
-
-          MARKDOWN: :markdown
-          HTML: :html
-
-          def self?.values: -> ::Array[ContextDev::Models::BatchListResponse::Data::type_]
         end
       end
 
