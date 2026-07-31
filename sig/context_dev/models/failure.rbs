@@ -1,8 +1,8 @@
 module ContextDev
   module Models
-    type error = { code: String, message: String }
+    type failure = { code: String, message: String }
 
-    class Error < ContextDev::Internal::Type::BaseModel
+    class Failure < ContextDev::Internal::Type::BaseModel
       attr_accessor code: String
 
       attr_accessor message: String

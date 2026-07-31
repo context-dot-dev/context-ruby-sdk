@@ -100,7 +100,15 @@ module ContextDev
         sig { returns(String) }
         attr_accessor :id
 
-        # Reserved and used credits.
+        # The crawl controls as submitted, so the limits requested can be compared against
+        # what the crawl reached.
+        sig { returns(T.nilable(ContextDev::CrawlControls)) }
+        attr_reader :crawl
+
+        sig { params(crawl: T.nilable(ContextDev::CrawlControls::OrHash)).void }
+        attr_writer :crawl
+
+        # What this batch has done to your credit balance.
         sig { returns(ContextDev::Models::BatchListResponse::Data::Credits) }
         attr_reader :credits
 
@@ -112,29 +120,31 @@ module ContextDev
         end
         attr_writer :credits
 
-        # Why the batch failed.
-        sig { returns(T.nilable(ContextDev::Error)) }
-        attr_reader :error
+        # A failure of the batch as a whole, distinct from the per-page failures in
+        # `page_errors`.
+        sig { returns(T.nilable(ContextDev::Failure)) }
+        attr_reader :failure
 
-        sig { params(error: T.nilable(ContextDev::Error::OrHash)).void }
-        attr_writer :error
+        sig { params(failure: T.nilable(ContextDev::Failure::OrHash)).void }
+        attr_writer :failure
 
-        # Page failures grouped by error code.
-        sig { returns(T::Array[ContextDev::ErrorCount]) }
-        attr_accessor :errors
+        # What each page is returned as. Matches `input.data.format` on the submit
+        # request.
+        sig do
+          returns(
+            ContextDev::Models::BatchListResponse::Data::Format::TaggedSymbol
+          )
+        end
+        attr_accessor :format_
 
-        # Submission counts.
-        sig { returns(ContextDev::Models::BatchListResponse::Data::Input) }
+        # What submission took in, and what it charged for.
+        sig { returns(ContextDev::Intake) }
         attr_reader :input
 
-        sig do
-          params(
-            input: ContextDev::Models::BatchListResponse::Data::Input::OrHash
-          ).void
-        end
+        sig { params(input: ContextDev::Intake::OrHash).void }
         attr_writer :input
 
-        # How pages are selected.
+        # How pages were selected. Matches `input.mode` on the submit request.
         sig do
           returns(
             ContextDev::Models::BatchListResponse::Data::Mode::TaggedSymbol
@@ -142,7 +152,12 @@ module ContextDev
         end
         attr_accessor :mode
 
-        # Current processing counts. Use `status` to check completion.
+        # Individual page failures grouped by error code, sorted by count. Unrelated to
+        # `failure`, which is the batch itself failing.
+        sig { returns(T::Array[ContextDev::PageErrorCount]) }
+        attr_accessor :page_errors
+
+        # Pages attempted so far. Use `status` to check completion.
         sig { returns(ContextDev::Models::BatchListResponse::Data::Progress) }
         attr_reader :progress
 
@@ -154,8 +169,8 @@ module ContextDev
         end
         attr_writer :progress
 
-        # Download links available when the batch finishes. GET /batch/{batch_id}/results
-        # serves the same records as paginated JSON.
+        # Download links, available once the batch reaches a final status and null before
+        # then. GET /batch/{batch_id}/results serves the same records as paginated JSON.
         sig do
           returns(
             T.nilable(ContextDev::Models::BatchListResponse::Data::Results)
@@ -195,24 +210,19 @@ module ContextDev
         end
         attr_writer :timing
 
-        # Output format.
-        sig do
-          returns(
-            ContextDev::Models::BatchListResponse::Data::Type::TaggedSymbol
-          )
-        end
-        attr_accessor :type
-
         # An asynchronous web scraping job.
         sig do
           params(
             id: String,
+            crawl: T.nilable(ContextDev::CrawlControls::OrHash),
             credits:
               ContextDev::Models::BatchListResponse::Data::Credits::OrHash,
-            error: T.nilable(ContextDev::Error::OrHash),
-            errors: T::Array[ContextDev::ErrorCount::OrHash],
-            input: ContextDev::Models::BatchListResponse::Data::Input::OrHash,
+            failure: T.nilable(ContextDev::Failure::OrHash),
+            format_:
+              ContextDev::Models::BatchListResponse::Data::Format::OrSymbol,
+            input: ContextDev::Intake::OrHash,
             mode: ContextDev::Models::BatchListResponse::Data::Mode::OrSymbol,
+            page_errors: T::Array[ContextDev::PageErrorCount::OrHash],
             progress:
               ContextDev::Models::BatchListResponse::Data::Progress::OrHash,
             results:
@@ -222,35 +232,40 @@ module ContextDev
             status:
               ContextDev::Models::BatchListResponse::Data::Status::OrSymbol,
             tags: T::Array[String],
-            timing: ContextDev::Models::BatchListResponse::Data::Timing::OrHash,
-            type: ContextDev::Models::BatchListResponse::Data::Type::OrSymbol
+            timing: ContextDev::Models::BatchListResponse::Data::Timing::OrHash
           ).returns(T.attached_class)
         end
         def self.new(
           # Batch ID used to retrieve or cancel the job.
           id:,
-          # Reserved and used credits.
+          # The crawl controls as submitted, so the limits requested can be compared against
+          # what the crawl reached.
+          crawl:,
+          # What this batch has done to your credit balance.
           credits:,
-          # Why the batch failed.
-          error:,
-          # Page failures grouped by error code.
-          errors:,
-          # Submission counts.
+          # A failure of the batch as a whole, distinct from the per-page failures in
+          # `page_errors`.
+          failure:,
+          # What each page is returned as. Matches `input.data.format` on the submit
+          # request.
+          format_:,
+          # What submission took in, and what it charged for.
           input:,
-          # How pages are selected.
+          # How pages were selected. Matches `input.mode` on the submit request.
           mode:,
-          # Current processing counts. Use `status` to check completion.
+          # Individual page failures grouped by error code, sorted by count. Unrelated to
+          # `failure`, which is the batch itself failing.
+          page_errors:,
+          # Pages attempted so far. Use `status` to check completion.
           progress:,
-          # Download links available when the batch finishes. GET /batch/{batch_id}/results
-          # serves the same records as paginated JSON.
+          # Download links, available once the batch reaches a final status and null before
+          # then. GET /batch/{batch_id}/results serves the same records as paginated JSON.
           results:,
           # Current state. `completed`, `cancelled`, and `failed` are final.
           status:,
           # Tags stored on the batch at submission.
           tags:,
-          timing:,
-          # Output format.
-          type:
+          timing:
         )
         end
 
@@ -258,21 +273,22 @@ module ContextDev
           override.returns(
             {
               id: String,
+              crawl: T.nilable(ContextDev::CrawlControls),
               credits: ContextDev::Models::BatchListResponse::Data::Credits,
-              error: T.nilable(ContextDev::Error),
-              errors: T::Array[ContextDev::ErrorCount],
-              input: ContextDev::Models::BatchListResponse::Data::Input,
+              failure: T.nilable(ContextDev::Failure),
+              format_:
+                ContextDev::Models::BatchListResponse::Data::Format::TaggedSymbol,
+              input: ContextDev::Intake,
               mode:
                 ContextDev::Models::BatchListResponse::Data::Mode::TaggedSymbol,
+              page_errors: T::Array[ContextDev::PageErrorCount],
               progress: ContextDev::Models::BatchListResponse::Data::Progress,
               results:
                 T.nilable(ContextDev::Models::BatchListResponse::Data::Results),
               status:
                 ContextDev::Models::BatchListResponse::Data::Status::TaggedSymbol,
               tags: T::Array[String],
-              timing: ContextDev::Models::BatchListResponse::Data::Timing,
-              type:
-                ContextDev::Models::BatchListResponse::Data::Type::TaggedSymbol
+              timing: ContextDev::Models::BatchListResponse::Data::Timing
             }
           )
         end
@@ -288,94 +304,83 @@ module ContextDev
               )
             end
 
-          # Credits used by successful pages.
+          # `reserved` minus `refunded` — what the batch has cost so far. Equal to
+          # `reserved` until the batch settles.
           sig { returns(Integer) }
-          attr_accessor :charged
+          attr_accessor :net
 
-          # Credits reserved when the batch was accepted.
+          # Credits returned for pages that did not succeed. Stays 0 until the batch reaches
+          # a final status, then settles in one movement.
           sig { returns(Integer) }
-          attr_accessor :estimated
+          attr_accessor :refunded
 
-          # Reserved and used credits.
+          # Credits debited from your balance the moment the batch was accepted. This is a
+          # charge, not a forecast — the whole amount leaves the balance up front.
+          sig { returns(Integer) }
+          attr_accessor :reserved
+
+          # What this batch has done to your credit balance.
           sig do
-            params(charged: Integer, estimated: Integer).returns(
+            params(net: Integer, refunded: Integer, reserved: Integer).returns(
               T.attached_class
             )
           end
           def self.new(
-            # Credits used by successful pages.
-            charged:,
-            # Credits reserved when the batch was accepted.
-            estimated:
-          )
-          end
-
-          sig { override.returns({ charged: Integer, estimated: Integer }) }
-          def to_hash
-          end
-        end
-
-        class Input < ContextDev::Internal::Type::BaseModel
-          OrHash =
-            T.type_alias do
-              T.any(
-                ContextDev::Models::BatchListResponse::Data::Input,
-                ContextDev::Internal::AnyHash
-              )
-            end
-
-          # Pages accepted, or the crawl page limit. Credits are reserved for this count.
-          sig { returns(Integer) }
-          attr_accessor :accepted
-
-          # Duplicate URL and `itemId` pairs skipped. Always 0 for crawls.
-          sig { returns(Integer) }
-          attr_accessor :duplicates
-
-          # Pages rejected during validation.
-          sig { returns(Integer) }
-          attr_accessor :invalid
-
-          # Pages submitted before validation. For a crawl, the page limit.
-          sig { returns(Integer) }
-          attr_accessor :submitted
-
-          # Submission counts.
-          sig do
-            params(
-              accepted: Integer,
-              duplicates: Integer,
-              invalid: Integer,
-              submitted: Integer
-            ).returns(T.attached_class)
-          end
-          def self.new(
-            # Pages accepted, or the crawl page limit. Credits are reserved for this count.
-            accepted:,
-            # Duplicate URL and `itemId` pairs skipped. Always 0 for crawls.
-            duplicates:,
-            # Pages rejected during validation.
-            invalid:,
-            # Pages submitted before validation. For a crawl, the page limit.
-            submitted:
+            # `reserved` minus `refunded` — what the batch has cost so far. Equal to
+            # `reserved` until the batch settles.
+            net:,
+            # Credits returned for pages that did not succeed. Stays 0 until the batch reaches
+            # a final status, then settles in one movement.
+            refunded:,
+            # Credits debited from your balance the moment the batch was accepted. This is a
+            # charge, not a forecast — the whole amount leaves the balance up front.
+            reserved:
           )
           end
 
           sig do
             override.returns(
-              {
-                accepted: Integer,
-                duplicates: Integer,
-                invalid: Integer,
-                submitted: Integer
-              }
+              { net: Integer, refunded: Integer, reserved: Integer }
             )
           end
           def to_hash
           end
         end
 
-        # How pages are selected.
+        # What each page is returned as. Matches `input.data.format` on the submit
+        # request.
+        module Format
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(Symbol, ContextDev::Models::BatchListResponse::Data::Format)
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          MARKDOWN =
+            T.let(
+              :markdown,
+              ContextDev::Models::BatchListResponse::Data::Format::TaggedSymbol
+            )
+          HTML =
+            T.let(
+              :html,
+              ContextDev::Models::BatchListResponse::Data::Format::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::BatchListResponse::Data::Format::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
+        end
+
+        # How pages were selected. Matches `input.mode` on the submit request.
         module Mode
           extend ContextDev::Internal::Type::Enum
 
@@ -420,8 +425,9 @@ module ContextDev
           sig { returns(Integer) }
           attr_accessor :failed
 
-          # Accepted pages not yet attempted. Always 0 once the batch completes; a crawl can
-          # finish under its page limit when the site has no more reachable pages.
+          # Reserved pages not yet attempted. A cancelled batch keeps reporting the URLs it
+          # never reached; a crawl whose `input.reserved_is_ceiling` is true reports 0 once
+          # final, because its unspent budget was never real pages.
           sig { returns(Integer) }
           attr_accessor :pending
 
@@ -429,7 +435,7 @@ module ContextDev
           sig { returns(Integer) }
           attr_accessor :succeeded
 
-          # Current processing counts. Use `status` to check completion.
+          # Pages attempted so far. Use `status` to check completion.
           sig do
             params(
               failed: Integer,
@@ -440,8 +446,9 @@ module ContextDev
           def self.new(
             # Pages that could not be scraped.
             failed:,
-            # Accepted pages not yet attempted. Always 0 once the batch completes; a crawl can
-            # finish under its page limit when the site has no more reachable pages.
+            # Reserved pages not yet attempted. A cancelled batch keeps reporting the URLs it
+            # never reached; a crawl whose `input.reserved_is_ceiling` is true reports 0 once
+            # final, because its unspent budget was never real pages.
             pending:,
             # Pages scraped successfully.
             succeeded:
@@ -480,8 +487,8 @@ module ContextDev
           end
           attr_accessor :files
 
-          # Download links available when the batch finishes. GET /batch/{batch_id}/results
-          # serves the same records as paginated JSON.
+          # Download links, available once the batch reaches a final status and null before
+          # then. GET /batch/{batch_id}/results serves the same records as paginated JSON.
           sig do
             params(
               expires_at: String,
@@ -657,38 +664,6 @@ module ContextDev
             )
           end
           def to_hash
-          end
-        end
-
-        # Output format.
-        module Type
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(Symbol, ContextDev::Models::BatchListResponse::Data::Type)
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          MARKDOWN =
-            T.let(
-              :markdown,
-              ContextDev::Models::BatchListResponse::Data::Type::TaggedSymbol
-            )
-          HTML =
-            T.let(
-              :html,
-              ContextDev::Models::BatchListResponse::Data::Type::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::BatchListResponse::Data::Type::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
           end
         end
       end

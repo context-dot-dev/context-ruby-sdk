@@ -2,10 +2,10 @@
 
 module ContextDev
   module Models
-    class ErrorCount < ContextDev::Internal::Type::BaseModel
+    class PageErrorCount < ContextDev::Internal::Type::BaseModel
       OrHash =
         T.type_alias do
-          T.any(ContextDev::ErrorCount, ContextDev::Internal::AnyHash)
+          T.any(ContextDev::PageErrorCount, ContextDev::Internal::AnyHash)
         end
 
       # Error code for these failures.

@@ -3,36 +3,40 @@ module ContextDev
     type batch_retrieve_response =
       {
         id: String,
+        crawl: ContextDev::CrawlControls?,
         credits: ContextDev::Models::BatchRetrieveResponse::Credits,
-        error: ContextDev::Error?,
-        errors: ::Array[ContextDev::ErrorCount],
-        input: ContextDev::Models::BatchRetrieveResponse::Input,
+        failure: ContextDev::Failure?,
+        format_: ContextDev::Models::BatchRetrieveResponse::format_,
+        input: ContextDev::Intake,
         invalid_urls: ::Array[ContextDev::Models::BatchRetrieveResponse::InvalidURL],
         mode: ContextDev::Models::BatchRetrieveResponse::mode,
+        page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
         results: ContextDev::Models::BatchRetrieveResponse::Results?,
         status: ContextDev::Models::BatchRetrieveResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
-        type: ContextDev::Models::BatchRetrieveResponse::type_,
-        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
-        webhook_secret: String
+        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata
       }
 
     class BatchRetrieveResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor id: String
 
+      attr_accessor crawl: ContextDev::CrawlControls?
+
       attr_accessor credits: ContextDev::Models::BatchRetrieveResponse::Credits
 
-      attr_accessor error: ContextDev::Error?
+      attr_accessor failure: ContextDev::Failure?
 
-      attr_accessor errors: ::Array[ContextDev::ErrorCount]
+      attr_accessor format_: ContextDev::Models::BatchRetrieveResponse::format_
 
-      attr_accessor input: ContextDev::Models::BatchRetrieveResponse::Input
+      attr_accessor input: ContextDev::Intake
 
       attr_accessor invalid_urls: ::Array[ContextDev::Models::BatchRetrieveResponse::InvalidURL]
 
       attr_accessor mode: ContextDev::Models::BatchRetrieveResponse::mode
+
+      attr_accessor page_errors: ::Array[ContextDev::PageErrorCount]
 
       attr_accessor progress: ContextDev::Models::BatchRetrieveResponse::Progress
 
@@ -44,96 +48,75 @@ module ContextDev
 
       attr_accessor timing: ContextDev::Models::BatchRetrieveResponse::Timing
 
-      attr_accessor type: ContextDev::Models::BatchRetrieveResponse::type_
-
       attr_reader key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata?
 
       def key_metadata=: (
         ContextDev::Models::BatchRetrieveResponse::KeyMetadata
       ) -> ContextDev::Models::BatchRetrieveResponse::KeyMetadata
 
-      attr_reader webhook_secret: String?
-
-      def webhook_secret=: (String) -> String
-
       def initialize: (
         id: String,
+        crawl: ContextDev::CrawlControls?,
         credits: ContextDev::Models::BatchRetrieveResponse::Credits,
-        error: ContextDev::Error?,
-        errors: ::Array[ContextDev::ErrorCount],
-        input: ContextDev::Models::BatchRetrieveResponse::Input,
+        failure: ContextDev::Failure?,
+        format_: ContextDev::Models::BatchRetrieveResponse::format_,
+        input: ContextDev::Intake,
         invalid_urls: ::Array[ContextDev::Models::BatchRetrieveResponse::InvalidURL],
         mode: ContextDev::Models::BatchRetrieveResponse::mode,
+        page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
         results: ContextDev::Models::BatchRetrieveResponse::Results?,
         status: ContextDev::Models::BatchRetrieveResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
-        type: ContextDev::Models::BatchRetrieveResponse::type_,
-        ?key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
-        ?webhook_secret: String
+        ?key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata
       ) -> void
 
       def to_hash: -> {
         id: String,
+        crawl: ContextDev::CrawlControls?,
         credits: ContextDev::Models::BatchRetrieveResponse::Credits,
-        error: ContextDev::Error?,
-        errors: ::Array[ContextDev::ErrorCount],
-        input: ContextDev::Models::BatchRetrieveResponse::Input,
+        failure: ContextDev::Failure?,
+        format_: ContextDev::Models::BatchRetrieveResponse::format_,
+        input: ContextDev::Intake,
         invalid_urls: ::Array[ContextDev::Models::BatchRetrieveResponse::InvalidURL],
         mode: ContextDev::Models::BatchRetrieveResponse::mode,
+        page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
         results: ContextDev::Models::BatchRetrieveResponse::Results?,
         status: ContextDev::Models::BatchRetrieveResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
-        type: ContextDev::Models::BatchRetrieveResponse::type_,
-        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
-        webhook_secret: String
+        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata
       }
 
-      type credits = { charged: Integer, estimated: Integer }
+      type credits = { net: Integer, refunded: Integer, reserved: Integer }
 
       class Credits < ContextDev::Internal::Type::BaseModel
-        attr_accessor charged: Integer
+        attr_accessor net: Integer
 
-        attr_accessor estimated: Integer
+        attr_accessor refunded: Integer
 
-        def initialize: (charged: Integer, estimated: Integer) -> void
-
-        def to_hash: -> { charged: Integer, estimated: Integer }
-      end
-
-      type input =
-        {
-          accepted: Integer,
-          duplicates: Integer,
-          invalid: Integer,
-          submitted: Integer
-        }
-
-      class Input < ContextDev::Internal::Type::BaseModel
-        attr_accessor accepted: Integer
-
-        attr_accessor duplicates: Integer
-
-        attr_accessor invalid: Integer
-
-        attr_accessor submitted: Integer
+        attr_accessor reserved: Integer
 
         def initialize: (
-          accepted: Integer,
-          duplicates: Integer,
-          invalid: Integer,
-          submitted: Integer
+          net: Integer,
+          refunded: Integer,
+          reserved: Integer
         ) -> void
 
-        def to_hash: -> {
-          accepted: Integer,
-          duplicates: Integer,
-          invalid: Integer,
-          submitted: Integer
-        }
+        def to_hash: -> { net: Integer, refunded: Integer, reserved: Integer }
+      end
+
+      type format_ = :markdown | :html
+
+      module Format
+        extend ContextDev::Internal::Type::Enum
+
+        MARKDOWN: :markdown
+        HTML: :html
+
+        def self?.values: -> ::Array[ContextDev::Models::BatchRetrieveResponse::format_]
       end
 
       type invalid_url = { reason: String, url: String }
@@ -254,17 +237,6 @@ module ContextDev
           created_at: String,
           started_at: String?
         }
-      end
-
-      type type_ = :markdown | :html
-
-      module Type
-        extend ContextDev::Internal::Type::Enum
-
-        MARKDOWN: :markdown
-        HTML: :html
-
-        def self?.values: -> ::Array[ContextDev::Models::BatchRetrieveResponse::type_]
       end
 
       type key_metadata =

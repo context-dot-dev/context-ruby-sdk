@@ -17,13 +17,15 @@ module ContextDev
 
   class BrandRetrieveSimplifiedParams = ContextDev::Models::BrandRetrieveSimplifiedParams
 
-  class Error = ContextDev::Models::Error
+  class CrawlControls = ContextDev::Models::CrawlControls
 
-  class ErrorCount = ContextDev::Models::ErrorCount
+  class Failure = ContextDev::Models::Failure
 
   class IndustryRetrieveNaicsParams = ContextDev::Models::IndustryRetrieveNaicsParams
 
   class IndustryRetrieveSicParams = ContextDev::Models::IndustryRetrieveSicParams
+
+  class Intake = ContextDev::Models::Intake
 
   class MonitorCreateParams = ContextDev::Models::MonitorCreateParams
 
@@ -50,6 +52,8 @@ module ContextDev
   class MonitorRunParams = ContextDev::Models::MonitorRunParams
 
   class MonitorUpdateParams = ContextDev::Models::MonitorUpdateParams
+
+  class PageErrorCount = ContextDev::Models::PageErrorCount
 
   class ParseHandleParams = ContextDev::Models::ParseHandleParams
 
