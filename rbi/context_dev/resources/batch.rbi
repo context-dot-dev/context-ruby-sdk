@@ -3,9 +3,7 @@
 module ContextDev
   module Resources
     class Batch
-      # Check progress and get download links when the batch finishes. Also returns the
-      # rejected-URL list from submission. The webhook signing secret is not repeated
-      # here — it is returned once, by the submit response.
+      # Check progress, and get download links once the batch finishes.
       sig do
         params(
           batch_id: String,
@@ -66,9 +64,8 @@ module ContextDev
       )
       end
 
-      # Page through the result records of a finished batch as JSON, in the same order
-      # as the downloadable result files. Use this instead of downloading and parsing
-      # the NDJSON files yourself.
+      # Page through a finished batch's results as JSON instead of downloading the
+      # NDJSON files.
       sig do
         params(
           batch_id: String,

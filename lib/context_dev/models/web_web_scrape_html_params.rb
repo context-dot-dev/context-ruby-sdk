@@ -24,9 +24,8 @@ module ContextDev
                nil?: true
 
       # @!attribute country
-      #   Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-      #   residential proxy exit location. Must be one of Context.dev's supported
-      #   countries. When provided, Context.dev fetches the target page from that country.
+      #   Fetch the target page through a residential proxy in this country (ISO 3166-1
+      #   alpha-2).
       #
       #   @return [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country, nil]
       optional :country, enum: -> { ContextDev::WebWebScrapeHTMLParams::Country }
@@ -131,7 +130,7 @@ module ContextDev
       #
       #   @param actions [Array<ContextDev::Models::WebWebScrapeHTMLParams::Action::Wait, ContextDev::Models::WebWebScrapeHTMLParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
       #
-      #   @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
+      #   @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       #   @param exclude_selectors [Array<String>, nil] CSS selectors to remove from the result. Applied after includeSelectors. Exclusi
       #
@@ -212,9 +211,8 @@ module ContextDev
         #   @return [Array(ContextDev::Models::WebWebScrapeHTMLParams::Action::Wait, ContextDev::Models::WebWebScrapeHTMLParams::Action::Perform)]
       end
 
-      # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-      # residential proxy exit location. Must be one of Context.dev's supported
-      # countries. When provided, Context.dev fetches the target page from that country.
+      # Fetch the target page through a residential proxy in this country (ISO 3166-1
+      # alpha-2).
       module Country
         extend ContextDev::Internal::Type::Enum
 

@@ -180,7 +180,7 @@ module ContextDev
       #
       # @param color_scheme [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
       #
-      # @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
+      # @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       # @param direct_url [String] A specific URL to screenshot directly, bypassing domain resolution (e.g., 'https
       #
@@ -285,7 +285,7 @@ module ContextDev
       #
       # @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
       #
-      # @param country [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
+      # @param country [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       # @param exclude_selectors [Array<String>] CSS selectors to remove before each crawled page is converted to Markdown. Appli
       #
@@ -353,7 +353,7 @@ module ContextDev
       #
       # @param actions [Array<ContextDev::Models::WebWebScrapeHTMLParams::Action::Wait, ContextDev::Models::WebWebScrapeHTMLParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
       #
-      # @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
+      # @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       # @param exclude_selectors [Array<String>, nil] CSS selectors to remove from the result. Applied after includeSelectors. Exclusi
       #
@@ -481,7 +481,7 @@ module ContextDev
       #
       # @param actions [Array<ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
       #
-      # @param country [Symbol, ContextDev::Models::WebWebScrapeMdParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
+      # @param country [Symbol, ContextDev::Models::WebWebScrapeMdParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       # @param exclude_selectors [Array<String>, nil] CSS selectors to remove before conversion to Markdown. Applied after includeSele
       #

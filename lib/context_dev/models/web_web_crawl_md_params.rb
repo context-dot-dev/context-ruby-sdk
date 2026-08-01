@@ -14,9 +14,8 @@ module ContextDev
       required :url, String
 
       # @!attribute country
-      #   Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-      #   residential proxy exit location. Must be one of Context.dev's supported
-      #   countries. When provided, Context.dev fetches the target page from that country.
+      #   Fetch the target page through a residential proxy in this country (ISO 3166-1
+      #   alpha-2).
       #
       #   @return [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country, nil]
       optional :country, enum: -> { ContextDev::WebWebCrawlMdParams::Country }
@@ -164,7 +163,7 @@ module ContextDev
       #
       #   @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
       #
-      #   @param country [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country] Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev r
+      #   @param country [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       #   @param exclude_selectors [Array<String>] CSS selectors to remove before each crawled page is converted to Markdown. Appli
       #
@@ -206,9 +205,8 @@ module ContextDev
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-      # residential proxy exit location. Must be one of Context.dev's supported
-      # countries. When provided, Context.dev fetches the target page from that country.
+      # Fetch the target page through a residential proxy in this country (ISO 3166-1
+      # alpha-2).
       module Country
         extend ContextDev::Internal::Type::Enum
 
