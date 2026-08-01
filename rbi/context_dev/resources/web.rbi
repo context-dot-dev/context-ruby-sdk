@@ -216,9 +216,8 @@ module ContextDev
         # Optional parameter to choose the site's visual theme in the screenshot. Use
         # 'light' or 'dark' when the site offers both appearances.
         color_scheme: nil,
-        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-        # residential proxy exit location. Must be one of Context.dev's supported
-        # countries. When provided, Context.dev fetches the target page from that country.
+        # Fetch the target page through a residential proxy in this country (ISO 3166-1
+        # alpha-2).
         country: nil,
         # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
         # 'https://example.com/pricing'). When provided, the screenshot is taken of this
@@ -355,9 +354,8 @@ module ContextDev
       def web_crawl_md(
         # The starting URL for the crawl (must include http:// or https:// protocol)
         url:,
-        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-        # residential proxy exit location. Must be one of Context.dev's supported
-        # countries. When provided, Context.dev fetches the target page from that country.
+        # Fetch the target page through a residential proxy in this country (ISO 3166-1
+        # alpha-2).
         country: nil,
         # CSS selectors to remove before each crawled page is converted to Markdown.
         # Applied after includeSelectors. Exclusion takes precedence: an element matching
@@ -473,9 +471,8 @@ module ContextDev
         # content is captured. Requires a paid plan. Send a JSON array in the query
         # parameter. Maximum: 5 actions.
         actions: nil,
-        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-        # residential proxy exit location. Must be one of Context.dev's supported
-        # countries. When provided, Context.dev fetches the target page from that country.
+        # Fetch the target page through a residential proxy in this country (ISO 3166-1
+        # alpha-2).
         country: nil,
         # CSS selectors to remove from the result. Applied after includeSelectors.
         # Exclusion takes precedence: an element matching both is removed. Examples:
@@ -673,9 +670,8 @@ module ContextDev
         # content is captured. Requires a paid plan. Send a JSON array in the query
         # parameter. Maximum: 5 actions.
         actions: nil,
-        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-        # residential proxy exit location. Must be one of Context.dev's supported
-        # countries. When provided, Context.dev fetches the target page from that country.
+        # Fetch the target page through a residential proxy in this country (ISO 3166-1
+        # alpha-2).
         country: nil,
         # CSS selectors to remove before conversion to Markdown. Applied after
         # includeSelectors. Exclusion takes precedence: an element matching both is

@@ -15,20 +15,20 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         id: String,
+        crawl: ContextDev::CrawlControls | nil,
         credits: ContextDev::Models::BatchRetrieveResponse::Credits,
-        error: ContextDev::Error | nil,
-        errors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::ErrorCount]),
-        input: ContextDev::Models::BatchRetrieveResponse::Input,
+        failure: ContextDev::Failure | nil,
+        format_: ContextDev::Models::BatchRetrieveResponse::Format,
+        input: ContextDev::Intake,
         invalid_urls: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchRetrieveResponse::InvalidURL]),
         mode: ContextDev::Models::BatchRetrieveResponse::Mode,
+        page_errors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::PageErrorCount]),
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
         results: ContextDev::Models::BatchRetrieveResponse::Results | nil,
         status: ContextDev::Models::BatchRetrieveResponse::Status,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
-        type: ContextDev::Models::BatchRetrieveResponse::Type,
-        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata | nil,
-        webhook_secret: String | nil
+        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata | nil
       }
     end
   end
@@ -64,17 +64,16 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         id: String,
+        crawl: ContextDev::CrawlControls | nil,
         credits: ContextDev::Models::BatchCancelResponse::Credits,
-        error: ContextDev::Error | nil,
-        errors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::ErrorCount]),
-        input: ContextDev::Models::BatchCancelResponse::Input,
+        format_: ContextDev::Models::BatchCancelResponse::Format,
+        input: ContextDev::Intake,
         mode: ContextDev::Models::BatchCancelResponse::Mode,
+        page_errors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::PageErrorCount]),
         progress: ContextDev::Models::BatchCancelResponse::Progress,
-        results: ContextDev::Models::BatchCancelResponse::Results | nil,
         status: ContextDev::Models::BatchCancelResponse::Status,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
         timing: ContextDev::Models::BatchCancelResponse::Timing,
-        type: ContextDev::Models::BatchCancelResponse::Type,
         key_metadata: ContextDev::Models::BatchCancelResponse::KeyMetadata | nil
       }
     end

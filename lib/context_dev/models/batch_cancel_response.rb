@@ -5,56 +5,57 @@ module ContextDev
     # @see ContextDev::Resources::Batch#cancel
     class BatchCancelResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute id
-      #   Batch ID used to retrieve or cancel the job.
+      #   Batch ID.
       #
       #   @return [String]
       required :id, String
 
+      # @!attribute crawl
+      #   The crawl controls as submitted, so the limits requested can be compared against
+      #   what the crawl reached.
+      #
+      #   @return [ContextDev::Models::CrawlControls, nil]
+      required :crawl, -> { ContextDev::CrawlControls }, nil?: true
+
       # @!attribute credits
-      #   Reserved and used credits.
+      #   What this batch cost so far.
       #
       #   @return [ContextDev::Models::BatchCancelResponse::Credits]
       required :credits, -> { ContextDev::Models::BatchCancelResponse::Credits }
 
-      # @!attribute error
-      #   Why the batch failed.
+      # @!attribute format_
+      #   What each page is returned as.
       #
-      #   @return [ContextDev::Models::Error, nil]
-      required :error, -> { ContextDev::Error }, nil?: true
-
-      # @!attribute errors
-      #   Page failures grouped by error code.
-      #
-      #   @return [Array<ContextDev::Models::ErrorCount>]
-      required :errors, -> { ContextDev::Internal::Type::ArrayOf[ContextDev::ErrorCount] }
+      #   @return [Symbol, ContextDev::Models::BatchCancelResponse::Format]
+      required :format_, enum: -> { ContextDev::Models::BatchCancelResponse::Format }, api_name: :format
 
       # @!attribute input
-      #   Submission counts.
+      #   What submission took in, and what it charged for.
       #
-      #   @return [ContextDev::Models::BatchCancelResponse::Input]
-      required :input, -> { ContextDev::Models::BatchCancelResponse::Input }
+      #   @return [ContextDev::Models::Intake]
+      required :input, -> { ContextDev::Intake }
 
       # @!attribute mode
-      #   How pages are selected.
+      #   How pages were selected.
       #
       #   @return [Symbol, ContextDev::Models::BatchCancelResponse::Mode]
       required :mode, enum: -> { ContextDev::Models::BatchCancelResponse::Mode }
 
+      # @!attribute page_errors
+      #   Page failures so far, grouped by error code and sorted by count.
+      #
+      #   @return [Array<ContextDev::Models::PageErrorCount>]
+      required :page_errors, -> { ContextDev::Internal::Type::ArrayOf[ContextDev::PageErrorCount] }
+
       # @!attribute progress
-      #   Current processing counts. Use `status` to check completion.
+      #   How far the batch got before cancellation.
       #
       #   @return [ContextDev::Models::BatchCancelResponse::Progress]
       required :progress, -> { ContextDev::Models::BatchCancelResponse::Progress }
 
-      # @!attribute results
-      #   Download links available when the batch finishes. GET /batch/{batch_id}/results
-      #   serves the same records as paginated JSON.
-      #
-      #   @return [ContextDev::Models::BatchCancelResponse::Results, nil]
-      required :results, -> { ContextDev::Models::BatchCancelResponse::Results }, nil?: true
-
       # @!attribute status
-      #   Current state. `completed`, `cancelled`, and `failed` are final.
+      #   Always `cancelling`. Work already in flight finishes; the batch reaches
+      #   `cancelled` shortly after.
       #
       #   @return [Symbol, ContextDev::Models::BatchCancelResponse::Status]
       required :status, enum: -> { ContextDev::Models::BatchCancelResponse::Status }
@@ -66,15 +67,10 @@ module ContextDev
       required :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timing
+      #   There is no finish time yet — the batch is still winding down.
       #
       #   @return [ContextDev::Models::BatchCancelResponse::Timing]
       required :timing, -> { ContextDev::Models::BatchCancelResponse::Timing }
-
-      # @!attribute type
-      #   Output format.
-      #
-      #   @return [Symbol, ContextDev::Models::BatchCancelResponse::Type]
-      required :type, enum: -> { ContextDev::Models::BatchCancelResponse::Type }
 
       # @!attribute key_metadata
       #   API key usage for this request.
@@ -82,97 +78,66 @@ module ContextDev
       #   @return [ContextDev::Models::BatchCancelResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::BatchCancelResponse::KeyMetadata }
 
-      # @!method initialize(id:, credits:, error:, errors:, input:, mode:, progress:, results:, status:, tags:, timing:, type:, key_metadata: nil)
+      # @!method initialize(id:, crawl:, credits:, format_:, input:, mode:, page_errors:, progress:, status:, tags:, timing:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchCancelResponse} for more details.
       #
-      #   @param id [String] Batch ID used to retrieve or cancel the job.
+      #   @param id [String] Batch ID.
       #
-      #   @param credits [ContextDev::Models::BatchCancelResponse::Credits] Reserved and used credits.
+      #   @param crawl [ContextDev::Models::CrawlControls, nil] The crawl controls as submitted, so the limits requested can be compared against
       #
-      #   @param error [ContextDev::Models::Error, nil] Why the batch failed.
+      #   @param credits [ContextDev::Models::BatchCancelResponse::Credits] What this batch cost so far.
       #
-      #   @param errors [Array<ContextDev::Models::ErrorCount>] Page failures grouped by error code.
+      #   @param format_ [Symbol, ContextDev::Models::BatchCancelResponse::Format] What each page is returned as.
       #
-      #   @param input [ContextDev::Models::BatchCancelResponse::Input] Submission counts.
+      #   @param input [ContextDev::Models::Intake] What submission took in, and what it charged for.
       #
-      #   @param mode [Symbol, ContextDev::Models::BatchCancelResponse::Mode] How pages are selected.
+      #   @param mode [Symbol, ContextDev::Models::BatchCancelResponse::Mode] How pages were selected.
       #
-      #   @param progress [ContextDev::Models::BatchCancelResponse::Progress] Current processing counts. Use `status` to check completion.
+      #   @param page_errors [Array<ContextDev::Models::PageErrorCount>] Page failures so far, grouped by error code and sorted by count.
       #
-      #   @param results [ContextDev::Models::BatchCancelResponse::Results, nil] Download links available when the batch finishes. GET /batch/{batch_id}/results
+      #   @param progress [ContextDev::Models::BatchCancelResponse::Progress] How far the batch got before cancellation.
       #
-      #   @param status [Symbol, ContextDev::Models::BatchCancelResponse::Status] Current state. `completed`, `cancelled`, and `failed` are final.
+      #   @param status [Symbol, ContextDev::Models::BatchCancelResponse::Status] Always `cancelling`. Work already in flight finishes; the batch reaches `cancell
       #
       #   @param tags [Array<String>] Tags stored on the batch at submission.
       #
-      #   @param timing [ContextDev::Models::BatchCancelResponse::Timing]
-      #
-      #   @param type [Symbol, ContextDev::Models::BatchCancelResponse::Type] Output format.
+      #   @param timing [ContextDev::Models::BatchCancelResponse::Timing] There is no finish time yet — the batch is still winding down.
       #
       #   @param key_metadata [ContextDev::Models::BatchCancelResponse::KeyMetadata] API key usage for this request.
 
       # @see ContextDev::Models::BatchCancelResponse#credits
       class Credits < ContextDev::Internal::Type::BaseModel
-        # @!attribute charged
-        #   Credits used by successful pages.
+        # @!attribute reserved
+        #   Credits debited at submission. The unspent remainder is refunded once the batch
+        #   settles — read `credits.refunded` from GET /batch/{batch_id} then.
         #
         #   @return [Integer]
-        required :charged, Integer
+        required :reserved, Integer
 
-        # @!attribute estimated
-        #   Credits reserved when the batch was accepted.
+        # @!method initialize(reserved:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::BatchCancelResponse::Credits} for more details.
         #
-        #   @return [Integer]
-        required :estimated, Integer
-
-        # @!method initialize(charged:, estimated:)
-        #   Reserved and used credits.
+        #   What this batch cost so far.
         #
-        #   @param charged [Integer] Credits used by successful pages.
-        #
-        #   @param estimated [Integer] Credits reserved when the batch was accepted.
+        #   @param reserved [Integer] Credits debited at submission. The unspent remainder is refunded once the batch
       end
 
-      # @see ContextDev::Models::BatchCancelResponse#input
-      class Input < ContextDev::Internal::Type::BaseModel
-        # @!attribute accepted
-        #   Pages accepted, or the crawl page limit. Credits are reserved for this count.
-        #
-        #   @return [Integer]
-        required :accepted, Integer
+      # What each page is returned as.
+      #
+      # @see ContextDev::Models::BatchCancelResponse#format_
+      module Format
+        extend ContextDev::Internal::Type::Enum
 
-        # @!attribute duplicates
-        #   Duplicate URL and `itemId` pairs skipped. Always 0 for crawls.
-        #
-        #   @return [Integer]
-        required :duplicates, Integer
+        MARKDOWN = :markdown
+        HTML = :html
 
-        # @!attribute invalid
-        #   Pages rejected during validation.
-        #
-        #   @return [Integer]
-        required :invalid, Integer
-
-        # @!attribute submitted
-        #   Pages submitted before validation. For a crawl, the page limit.
-        #
-        #   @return [Integer]
-        required :submitted, Integer
-
-        # @!method initialize(accepted:, duplicates:, invalid:, submitted:)
-        #   Submission counts.
-        #
-        #   @param accepted [Integer] Pages accepted, or the crawl page limit. Credits are reserved for this count.
-        #
-        #   @param duplicates [Integer] Duplicate URL and `itemId` pairs skipped. Always 0 for crawls.
-        #
-        #   @param invalid [Integer] Pages rejected during validation.
-        #
-        #   @param submitted [Integer] Pages submitted before validation. For a crawl, the page limit.
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
 
-      # How pages are selected.
+      # How pages were selected.
       #
       # @see ContextDev::Models::BatchCancelResponse#mode
       module Mode
@@ -188,100 +153,41 @@ module ContextDev
       # @see ContextDev::Models::BatchCancelResponse#progress
       class Progress < ContextDev::Internal::Type::BaseModel
         # @!attribute failed
-        #   Pages that could not be scraped.
+        #   Pages that could not be scraped before the request landed.
         #
         #   @return [Integer]
         required :failed, Integer
 
         # @!attribute pending
-        #   Accepted pages not yet attempted. Always 0 once the batch completes; a crawl can
-        #   finish under its page limit when the site has no more reachable pages.
+        #   Reserved pages that will now be skipped, and refunded when the batch settles.
         #
         #   @return [Integer]
         required :pending, Integer
 
         # @!attribute succeeded
-        #   Pages scraped successfully.
+        #   Pages scraped successfully before the request landed.
         #
         #   @return [Integer]
         required :succeeded, Integer
 
         # @!method initialize(failed:, pending:, succeeded:)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::BatchCancelResponse::Progress} for more details.
+        #   How far the batch got before cancellation.
         #
-        #   Current processing counts. Use `status` to check completion.
+        #   @param failed [Integer] Pages that could not be scraped before the request landed.
         #
-        #   @param failed [Integer] Pages that could not be scraped.
+        #   @param pending [Integer] Reserved pages that will now be skipped, and refunded when the batch settles.
         #
-        #   @param pending [Integer] Accepted pages not yet attempted. Always 0 once the batch completes; a crawl can
-        #
-        #   @param succeeded [Integer] Pages scraped successfully.
+        #   @param succeeded [Integer] Pages scraped successfully before the request landed.
       end
 
-      # @see ContextDev::Models::BatchCancelResponse#results
-      class Results < ContextDev::Internal::Type::BaseModel
-        # @!attribute expires_at
-        #   When the download URLs expire.
-        #
-        #   @return [String]
-        required :expires_at, String
-
-        # @!attribute files
-        #   Result files. Order is not guaranteed.
-        #
-        #   @return [Array<ContextDev::Models::BatchCancelResponse::Results::File>]
-        required :files,
-                 -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchCancelResponse::Results::File] }
-
-        # @!method initialize(expires_at:, files:)
-        #   Download links available when the batch finishes. GET /batch/{batch_id}/results
-        #   serves the same records as paginated JSON.
-        #
-        #   @param expires_at [String] When the download URLs expire.
-        #
-        #   @param files [Array<ContextDev::Models::BatchCancelResponse::Results::File>] Result files. Order is not guaranteed.
-
-        class File < ContextDev::Internal::Type::BaseModel
-          # @!attribute bytes
-          #   Compressed file size in bytes.
-          #
-          #   @return [Integer]
-          required :bytes, Integer
-
-          # @!attribute items
-          #   Results in this file.
-          #
-          #   @return [Integer]
-          required :items, Integer
-
-          # @!attribute url
-          #   Temporary URL for a gzipped NDJSON file.
-          #
-          #   @return [String]
-          required :url, String
-
-          # @!method initialize(bytes:, items:, url:)
-          #   @param bytes [Integer] Compressed file size in bytes.
-          #
-          #   @param items [Integer] Results in this file.
-          #
-          #   @param url [String] Temporary URL for a gzipped NDJSON file.
-        end
-      end
-
-      # Current state. `completed`, `cancelled`, and `failed` are final.
+      # Always `cancelling`. Work already in flight finishes; the batch reaches
+      # `cancelled` shortly after.
       #
       # @see ContextDev::Models::BatchCancelResponse#status
       module Status
         extend ContextDev::Internal::Type::Enum
 
-        QUEUED = :queued
-        RUNNING = :running
         CANCELLING = :cancelling
-        COMPLETED = :completed
-        CANCELLED = :cancelled
-        FAILED = :failed
 
         # @!method self.values
         #   @return [Array<Symbol>]
@@ -289,12 +195,6 @@ module ContextDev
 
       # @see ContextDev::Models::BatchCancelResponse#timing
       class Timing < ContextDev::Internal::Type::BaseModel
-        # @!attribute completed_at
-        #   When processing finished. Null while active.
-        #
-        #   @return [String, nil]
-        required :completed_at, String, nil?: true
-
         # @!attribute created_at
         #   When the batch was created.
         #
@@ -302,30 +202,17 @@ module ContextDev
         required :created_at, String
 
         # @!attribute started_at
-        #   When processing started. Null while queued.
+        #   When processing started. Null if it was cancelled while still queued.
         #
         #   @return [String, nil]
         required :started_at, String, nil?: true
 
-        # @!method initialize(completed_at:, created_at:, started_at:)
-        #   @param completed_at [String, nil] When processing finished. Null while active.
+        # @!method initialize(created_at:, started_at:)
+        #   There is no finish time yet — the batch is still winding down.
         #
         #   @param created_at [String] When the batch was created.
         #
-        #   @param started_at [String, nil] When processing started. Null while queued.
-      end
-
-      # Output format.
-      #
-      # @see ContextDev::Models::BatchCancelResponse#type
-      module Type
-        extend ContextDev::Internal::Type::Enum
-
-        MARKDOWN = :markdown
-        HTML = :html
-
-        # @!method self.values
-        #   @return [Array<Symbol>]
+        #   @param started_at [String, nil] When processing started. Null if it was cancelled while still queued.
       end
 
       # @see ContextDev::Models::BatchCancelResponse#key_metadata

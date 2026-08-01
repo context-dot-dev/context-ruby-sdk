@@ -2,7 +2,7 @@
 
 module ContextDev
   module Models
-    class ErrorCount < ContextDev::Internal::Type::BaseModel
+    class PageErrorCount < ContextDev::Internal::Type::BaseModel
       # @!attribute code
       #   Error code for these failures.
       #

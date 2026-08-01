@@ -15,9 +15,8 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
-      # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-      # residential proxy exit location. Must be one of Context.dev's supported
-      # countries. When provided, Context.dev fetches the target page from that country.
+      # Fetch the target page through a residential proxy in this country (ISO 3166-1
+      # alpha-2).
       sig do
         returns(T.nilable(ContextDev::WebWebCrawlMdParams::Country::OrSymbol))
       end
@@ -213,9 +212,8 @@ module ContextDev
       def self.new(
         # The starting URL for the crawl (must include http:// or https:// protocol)
         url:,
-        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-        # residential proxy exit location. Must be one of Context.dev's supported
-        # countries. When provided, Context.dev fetches the target page from that country.
+        # Fetch the target page through a residential proxy in this country (ISO 3166-1
+        # alpha-2).
         country: nil,
         # CSS selectors to remove before each crawled page is converted to Markdown.
         # Applied after includeSelectors. Exclusion takes precedence: an element matching
@@ -313,9 +311,8 @@ module ContextDev
       def to_hash
       end
 
-      # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-      # residential proxy exit location. Must be one of Context.dev's supported
-      # countries. When provided, Context.dev fetches the target page from that country.
+      # Fetch the target page through a residential proxy in this country (ISO 3166-1
+      # alpha-2).
       module Country
         extend ContextDev::Internal::Type::Enum
 

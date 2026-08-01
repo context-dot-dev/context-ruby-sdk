@@ -35,9 +35,8 @@ module ContextDev
       end
       attr_accessor :actions
 
-      # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-      # residential proxy exit location. Must be one of Context.dev's supported
-      # countries. When provided, Context.dev fetches the target page from that country.
+      # Fetch the target page through a residential proxy in this country (ISO 3166-1
+      # alpha-2).
       sig do
         returns(
           T.nilable(ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol)
@@ -246,9 +245,8 @@ module ContextDev
         # content is captured. Requires a paid plan. Send a JSON array in the query
         # parameter. Maximum: 5 actions.
         actions: nil,
-        # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-        # residential proxy exit location. Must be one of Context.dev's supported
-        # countries. When provided, Context.dev fetches the target page from that country.
+        # Fetch the target page through a residential proxy in this country (ISO 3166-1
+        # alpha-2).
         country: nil,
         # CSS selectors to remove from the result. Applied after includeSelectors.
         # Exclusion takes precedence: an element matching both is removed. Examples:
@@ -417,9 +415,8 @@ module ContextDev
         end
       end
 
-      # Two-letter ISO 3166-1 alpha-2 country code identifying a supported Context.dev
-      # residential proxy exit location. Must be one of Context.dev's supported
-      # countries. When provided, Context.dev fetches the target page from that country.
+      # Fetch the target page through a residential proxy in this country (ISO 3166-1
+      # alpha-2).
       module Country
         extend ContextDev::Internal::Type::Enum
 
