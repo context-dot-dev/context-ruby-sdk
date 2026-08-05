@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.8.0 (2026-08-05)
+
+Full Changelog: [v2.7.0...v2.8.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.7.0...v2.8.0)
+
+### Features
+
+* **api:** manual updates ([054713e](https://github.com/context-dot-dev/context-ruby-sdk/commit/054713ecd7a6c12c29a2aaf0df0ea0eeb0ff61fc))
+
 ## 2.7.0 (2026-08-01)
 
 Full Changelog: [v2.6.0...v2.7.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.6.0...v2.7.0)
