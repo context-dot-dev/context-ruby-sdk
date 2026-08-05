@@ -40,4 +40,21 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
       }
     end
   end
+
+  def test_search_required_params
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.brand.search(query: "x")
+
+    assert_pattern do
+      response => ContextDev::Models::BrandSearchResponse
+    end
+
+    assert_pattern do
+      response => {
+        results: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BrandSearchResponse::Result]),
+        key_metadata: ContextDev::Models::BrandSearchResponse::KeyMetadata | nil
+      }
+    end
+  end
 end

@@ -20,6 +20,8 @@ module ContextDev
   BrandRetrieveSimplifiedParams =
     ContextDev::Models::BrandRetrieveSimplifiedParams
 
+  BrandSearchParams = ContextDev::Models::BrandSearchParams
+
   CrawlControls = ContextDev::Models::CrawlControls
 
   Failure = ContextDev::Models::Failure
