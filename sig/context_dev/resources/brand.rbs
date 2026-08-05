@@ -15,6 +15,12 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::BrandRetrieveSimplifiedResponse
 
+      def search: (
+        query: String,
+        ?tags: ::Array[String],
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BrandSearchResponse
+
       def initialize: (client: ContextDev::Client) -> void
     end
   end

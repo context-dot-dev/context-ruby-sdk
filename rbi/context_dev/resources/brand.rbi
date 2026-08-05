@@ -64,6 +64,32 @@ module ContextDev
       )
       end
 
+      # Search brands by name or domain and get back up to 10 lightweight matches
+      # (domain, name, logo), most popular first: by Tranco rank, then market cap for
+      # brands outside the Tranco list, with text relevance breaking ties. Matching is
+      # prefix-based with no typo tolerance, so it is suited to autocomplete. Only
+      # brands already in the Context.dev index are returned — use /brand/retrieve to
+      # fetch (and index) a specific domain. Free on Pro and Scale plans; costs 1 credit
+      # per request on the Free and Starter plans.
+      sig do
+        params(
+          query: String,
+          tags: T::Array[String],
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::BrandSearchResponse)
+      end
+      def search(
+        # Search term, matched against brand names and domains by prefix (e.g. 'nike',
+        # 'nike.com', 'nik').
+        query:,
+        # Optional comma-separated caller-defined tags for tracking this request. Tags are
+        # recorded on the request's usage log and can be used to filter usage on the
+        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        tags: nil,
+        request_options: {}
+      )
+      end
+
       # @api private
       sig { params(client: ContextDev::Client).returns(T.attached_class) }
       def self.new(client:)
