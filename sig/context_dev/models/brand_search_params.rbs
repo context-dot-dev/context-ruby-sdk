@@ -1,0 +1,30 @@
+module ContextDev
+  module Models
+    type brand_search_params =
+      { query: String, tags: ::Array[String] }
+      & ContextDev::Internal::Type::request_parameters
+
+    class BrandSearchParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor query: String
+
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
+      def initialize: (
+        query: String,
+        ?tags: ::Array[String],
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        query: String,
+        tags: ::Array[String],
+        request_options: ContextDev::RequestOptions
+      }
+    end
+  end
+end

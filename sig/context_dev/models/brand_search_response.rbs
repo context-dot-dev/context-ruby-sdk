@@ -1,0 +1,62 @@
+module ContextDev
+  module Models
+    type brand_search_response =
+      {
+        results: ::Array[ContextDev::Models::BrandSearchResponse::Result],
+        key_metadata: ContextDev::Models::BrandSearchResponse::KeyMetadata
+      }
+
+    class BrandSearchResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor results: ::Array[ContextDev::Models::BrandSearchResponse::Result]
+
+      attr_reader key_metadata: ContextDev::Models::BrandSearchResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::BrandSearchResponse::KeyMetadata
+      ) -> ContextDev::Models::BrandSearchResponse::KeyMetadata
+
+      def initialize: (
+        results: ::Array[ContextDev::Models::BrandSearchResponse::Result],
+        ?key_metadata: ContextDev::Models::BrandSearchResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        results: ::Array[ContextDev::Models::BrandSearchResponse::Result],
+        key_metadata: ContextDev::Models::BrandSearchResponse::KeyMetadata
+      }
+
+      type result = { domain: String, logo: String, name: String }
+
+      class Result < ContextDev::Internal::Type::BaseModel
+        attr_accessor domain: String
+
+        attr_accessor logo: String
+
+        attr_accessor name: String
+
+        def initialize: (domain: String, logo: String, name: String) -> void
+
+        def to_hash: -> { domain: String, logo: String, name: String }
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end

@@ -65,6 +65,40 @@ module ContextDev
         )
       end
 
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::BrandSearchParams} for more details.
+      #
+      # Search brands by name or domain and get back up to 10 lightweight matches
+      # (domain, name, logo), most popular first: by Tranco rank, then market cap for
+      # brands outside the Tranco list, with text relevance breaking ties. Matching is
+      # prefix-based with no typo tolerance, so it is suited to autocomplete. Only
+      # brands already in the Context.dev index are returned — use /brand/retrieve to
+      # fetch (and index) a specific domain. Free on Pro and Scale plans; costs 1 credit
+      # per request on the Free and Starter plans.
+      #
+      # @overload search(query:, tags: nil, request_options: {})
+      #
+      # @param query [String] Search term, matched against brand names and domains by prefix (e.g. 'nike', 'ni
+      #
+      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::BrandSearchResponse]
+      #
+      # @see ContextDev::Models::BrandSearchParams
+      def search(params)
+        parsed, options = ContextDev::BrandSearchParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "brand/search",
+          query: query,
+          model: ContextDev::Models::BrandSearchResponse,
+          options: options
+        )
+      end
+
       # @api private
       #
       # @param client [ContextDev::Client]
