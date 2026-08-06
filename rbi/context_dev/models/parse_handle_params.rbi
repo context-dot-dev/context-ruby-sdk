@@ -86,7 +86,7 @@ module ContextDev
       # When true for PDF inputs, detect and OCR images embedded in the selected pages,
       # inserting recognized text at each image's position in page reading order while
       # preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
-      # When false, all OCR is disabled, including the automatic scanned-PDF fallback.
+      # When false, no OCR runs.
       sig do
         returns(
           T.nilable(
@@ -223,7 +223,7 @@ module ContextDev
         # When true for PDF inputs, detect and OCR images embedded in the selected pages,
         # inserting recognized text at each image's position in page reading order while
         # preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
-        # When false, all OCR is disabled, including the automatic scanned-PDF fallback.
+        # When false, no OCR runs.
         ocr: nil,
         # PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
         pdf: nil,
@@ -519,7 +519,7 @@ module ContextDev
       # When true for PDF inputs, detect and OCR images embedded in the selected pages,
       # inserting recognized text at each image's position in page reading order while
       # preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
-      # When false, all OCR is disabled, including the automatic scanned-PDF fallback.
+      # When false, no OCR runs.
       module Ocr
         extend ContextDev::Internal::Type::Union
 

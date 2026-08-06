@@ -536,7 +536,7 @@ module ContextDev
         # @!attribute ocr
         #   When true, detect and OCR images embedded in the selected PDF pages, inserting
         #   recognized text at each image's position in page reading order while preserving
-        #   the PDF text layer. This is separate from automatic scanned-PDF OCR fallback.
+        #   the PDF text layer. When false, no OCR runs.
         #
         #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::Pdf::Ocr, nil]
         optional :ocr, union: -> { ContextDev::WebWebScrapeMdParams::Pdf::Ocr }
@@ -573,7 +573,7 @@ module ContextDev
 
         # When true, detect and OCR images embedded in the selected PDF pages, inserting
         # recognized text at each image's position in page reading order while preserving
-        # the PDF text layer. This is separate from automatic scanned-PDF OCR fallback.
+        # the PDF text layer. When false, no OCR runs.
         #
         # @see ContextDev::Models::WebWebScrapeMdParams::Pdf#ocr
         module Ocr

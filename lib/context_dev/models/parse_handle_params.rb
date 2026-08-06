@@ -41,7 +41,7 @@ module ContextDev
       #   When true for PDF inputs, detect and OCR images embedded in the selected pages,
       #   inserting recognized text at each image's position in page reading order while
       #   preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
-      #   When false, all OCR is disabled, including the automatic scanned-PDF fallback.
+      #   When false, no OCR runs.
       #
       #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr, nil]
       optional :ocr, union: -> { ContextDev::ParseHandleParams::Ocr }
@@ -242,7 +242,7 @@ module ContextDev
       # When true for PDF inputs, detect and OCR images embedded in the selected pages,
       # inserting recognized text at each image's position in page reading order while
       # preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
-      # When false, all OCR is disabled, including the automatic scanned-PDF fallback.
+      # When false, no OCR runs.
       module Ocr
         extend ContextDev::Internal::Type::Union
 
