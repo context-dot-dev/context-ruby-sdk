@@ -5,7 +5,8 @@ module ContextDev
     # @see ContextDev::Resources::Brand#search
     class BrandSearchResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute results
-      #   Up to 10 matching brands, most popular first. Empty when nothing matches.
+      #   Up to 10 matching brands, name matches first, then domain matches, most popular
+      #   first within each group. Empty when nothing matches.
       #
       #   @return [Array<ContextDev::Models::BrandSearchResponse::Result>]
       required :results,
@@ -22,7 +23,7 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BrandSearchResponse} for more details.
       #
-      #   @param results [Array<ContextDev::Models::BrandSearchResponse::Result>] Up to 10 matching brands, most popular first. Empty when nothing matches.
+      #   @param results [Array<ContextDev::Models::BrandSearchResponse::Result>] Up to 10 matching brands, name matches first, then domain matches, most popular
       #
       #   @param key_metadata [ContextDev::Models::BrandSearchResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
 
