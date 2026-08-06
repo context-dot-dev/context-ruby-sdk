@@ -224,6 +224,11 @@ module ContextDev
                 :TIMEOUT,
                 ContextDev::Models::WebSearchResponse::Result::Markdown::Code::TaggedSymbol
               )
+            CONTENT_TOO_LARGE =
+              T.let(
+                :CONTENT_TOO_LARGE,
+                ContextDev::Models::WebSearchResponse::Result::Markdown::Code::TaggedSymbol
+              )
             WEBSITE_ACCESS_ERROR =
               T.let(
                 :WEBSITE_ACCESS_ERROR,
