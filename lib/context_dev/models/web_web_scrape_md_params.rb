@@ -543,7 +543,7 @@ module ContextDev
 
         # @!attribute should_parse
         #   When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-        #   a 400 WEBSITE_ACCESS_ERROR is returned.
+        #   a 400 PDF_SKIPPED is returned.
         #
         #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::Pdf::ShouldParse, nil]
         optional :should_parse,
@@ -601,7 +601,7 @@ module ContextDev
         end
 
         # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-        # a 400 WEBSITE_ACCESS_ERROR is returned.
+        # a 400 PDF_SKIPPED is returned.
         #
         # @see ContextDev::Models::WebWebScrapeMdParams::Pdf#should_parse
         module ShouldParse
