@@ -137,11 +137,18 @@ module ContextDev
       # @see ContextDev::Models::BatchRetrieveResponse#credits
       class Credits < ContextDev::Internal::Type::BaseModel
         # @!attribute net
-        #   `reserved` minus `refunded` — what the batch has cost so far. Equal to
-        #   `reserved` until the batch settles.
+        #   `reserved` minus `refunded` plus `ocr_charged` — what the batch has cost so far.
+        #   Equal to `reserved` until the batch settles.
         #
         #   @return [Integer]
         required :net, Integer
+
+        # @!attribute ocr_charged
+        #   Credits charged for PDF pages recovered by OCR (pdf.ocr=true), 1 per recovered
+        #   page, on top of `reserved`. Stays 0 until the batch settles.
+        #
+        #   @return [Integer]
+        required :ocr_charged, Integer
 
         # @!attribute refunded
         #   Credits returned for pages that did not succeed. Stays 0 until the batch reaches
@@ -157,13 +164,15 @@ module ContextDev
         #   @return [Integer]
         required :reserved, Integer
 
-        # @!method initialize(net:, refunded:, reserved:)
+        # @!method initialize(net:, ocr_charged:, refunded:, reserved:)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::BatchRetrieveResponse::Credits} for more details.
         #
         #   What this batch has done to your credit balance.
         #
-        #   @param net [Integer] `reserved` minus `refunded` — what the batch has cost so far. Equal to `reserved
+        #   @param net [Integer] `reserved` minus `refunded` plus `ocr_charged` — what the batch has cost so far.
+        #
+        #   @param ocr_charged [Integer] Credits charged for PDF pages recovered by OCR (pdf.ocr=true), 1 per recovered p
         #
         #   @param refunded [Integer] Credits returned for pages that did not succeed. Stays 0 until the batch reaches
         #

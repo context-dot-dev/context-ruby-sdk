@@ -21,7 +21,7 @@ module ContextDev
       #
       # @param include_links [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeLinks] Query param: Preserve hyperlinks in Markdown output
       #
-      # @param ocr [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr] Query param: When true for PDF inputs, detect and OCR images embedded in the sel
+      # @param ocr [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr] Query param: When true for PDF inputs, OCR the selected pages that have no usabl
       #
       # @param pdf [ContextDev::Models::ParseHandleParams::Pdf] Query param: PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5
       #

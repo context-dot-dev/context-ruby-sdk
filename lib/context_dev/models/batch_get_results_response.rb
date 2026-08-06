@@ -109,7 +109,17 @@ module ContextDev
           #   @return [Hash{Symbol=>Object}, nil]
           optional :meta, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
 
-          # @!method initialize(final_url:, http_status:, metadata:, url:, html: nil, item_id: nil, markdown: nil, meta: nil, status: :ok)
+          # @!attribute ocr_pages
+          #   PDF pages of this document recovered by OCR (pdf.ocr=true). Each recovered page
+          #   bills 1 credit on top of the page base credit; absent when no OCR ran.
+          #
+          #   @return [Integer, nil]
+          optional :ocr_pages, Integer
+
+          # @!method initialize(final_url:, http_status:, metadata:, url:, html: nil, item_id: nil, markdown: nil, meta: nil, ocr_pages: nil, status: :ok)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::BatchGetResultsResponse::Data::Ok} for more details.
+          #
           #   A page the batch fetched successfully.
           #
           #   @param final_url [String] URL the content was read from, after redirects.
@@ -127,6 +137,8 @@ module ContextDev
           #   @param markdown [String] Page content as Markdown. Present on markdown batches.
           #
           #   @param meta [Hash{Symbol=>Object}] Caller-supplied metadata echoed from submission.
+          #
+          #   @param ocr_pages [Integer] PDF pages of this document recovered by OCR (pdf.ocr=true). Each recovered page
           #
           #   @param status [Symbol, :ok] The page was scraped.
 
