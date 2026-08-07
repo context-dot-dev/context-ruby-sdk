@@ -39,8 +39,8 @@ module ContextDev
           max_pages: Integer,
           source:
             T.any(
-              ContextDev::CrawlControls::Source::UnionMember0::OrHash,
-              ContextDev::CrawlControls::Source::UnionMember1::OrHash
+              ContextDev::CrawlControls::Source::StartURL::OrHash,
+              ContextDev::CrawlControls::Source::Sitemap::OrHash
             ),
           url_pattern: T.nilable(String)
         ).returns(T.attached_class)
@@ -82,23 +82,23 @@ module ContextDev
         Variants =
           T.type_alias do
             T.any(
-              ContextDev::CrawlControls::Source::UnionMember0,
-              ContextDev::CrawlControls::Source::UnionMember1
+              ContextDev::CrawlControls::Source::StartURL,
+              ContextDev::CrawlControls::Source::Sitemap
             )
           end
 
-        class UnionMember0 < ContextDev::Internal::Type::BaseModel
+        class StartURL < ContextDev::Internal::Type::BaseModel
           OrHash =
             T.type_alias do
               T.any(
-                ContextDev::CrawlControls::Source::UnionMember0,
+                ContextDev::CrawlControls::Source::StartURL,
                 ContextDev::Internal::AnyHash
               )
             end
 
           sig do
             returns(
-              ContextDev::CrawlControls::Source::UnionMember0::Type::TaggedSymbol
+              ContextDev::CrawlControls::Source::StartURL::Type::TaggedSymbol
             )
           end
           attr_accessor :type
@@ -107,10 +107,10 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :url
 
+          # The crawl discovered pages by following links from one URL.
           sig do
             params(
-              type:
-                ContextDev::CrawlControls::Source::UnionMember0::Type::OrSymbol,
+              type: ContextDev::CrawlControls::Source::StartURL::Type::OrSymbol,
               url: String
             ).returns(T.attached_class)
           end
@@ -125,7 +125,7 @@ module ContextDev
             override.returns(
               {
                 type:
-                  ContextDev::CrawlControls::Source::UnionMember0::Type::TaggedSymbol,
+                  ContextDev::CrawlControls::Source::StartURL::Type::TaggedSymbol,
                 url: String
               }
             )
@@ -138,23 +138,20 @@ module ContextDev
 
             TaggedSymbol =
               T.type_alias do
-                T.all(
-                  Symbol,
-                  ContextDev::CrawlControls::Source::UnionMember0::Type
-                )
+                T.all(Symbol, ContextDev::CrawlControls::Source::StartURL::Type)
               end
             OrSymbol = T.type_alias { T.any(Symbol, String) }
 
             START_URL =
               T.let(
                 :start_url,
-                ContextDev::CrawlControls::Source::UnionMember0::Type::TaggedSymbol
+                ContextDev::CrawlControls::Source::StartURL::Type::TaggedSymbol
               )
 
             sig do
               override.returns(
                 T::Array[
-                  ContextDev::CrawlControls::Source::UnionMember0::Type::TaggedSymbol
+                  ContextDev::CrawlControls::Source::StartURL::Type::TaggedSymbol
                 ]
               )
             end
@@ -163,11 +160,11 @@ module ContextDev
           end
         end
 
-        class UnionMember1 < ContextDev::Internal::Type::BaseModel
+        class Sitemap < ContextDev::Internal::Type::BaseModel
           OrHash =
             T.type_alias do
               T.any(
-                ContextDev::CrawlControls::Source::UnionMember1,
+                ContextDev::CrawlControls::Source::Sitemap,
                 ContextDev::Internal::AnyHash
               )
             end
@@ -178,16 +175,16 @@ module ContextDev
 
           sig do
             returns(
-              ContextDev::CrawlControls::Source::UnionMember1::Type::TaggedSymbol
+              ContextDev::CrawlControls::Source::Sitemap::Type::TaggedSymbol
             )
           end
           attr_accessor :type
 
+          # The crawl scraped the pages listed in the domain's sitemap.
           sig do
             params(
               domain: String,
-              type:
-                ContextDev::CrawlControls::Source::UnionMember1::Type::OrSymbol
+              type: ContextDev::CrawlControls::Source::Sitemap::Type::OrSymbol
             ).returns(T.attached_class)
           end
           def self.new(
@@ -202,7 +199,7 @@ module ContextDev
               {
                 domain: String,
                 type:
-                  ContextDev::CrawlControls::Source::UnionMember1::Type::TaggedSymbol
+                  ContextDev::CrawlControls::Source::Sitemap::Type::TaggedSymbol
               }
             )
           end
@@ -214,23 +211,20 @@ module ContextDev
 
             TaggedSymbol =
               T.type_alias do
-                T.all(
-                  Symbol,
-                  ContextDev::CrawlControls::Source::UnionMember1::Type
-                )
+                T.all(Symbol, ContextDev::CrawlControls::Source::Sitemap::Type)
               end
             OrSymbol = T.type_alias { T.any(Symbol, String) }
 
             SITEMAP =
               T.let(
                 :sitemap,
-                ContextDev::CrawlControls::Source::UnionMember1::Type::TaggedSymbol
+                ContextDev::CrawlControls::Source::Sitemap::Type::TaggedSymbol
               )
 
             sig do
               override.returns(
                 T::Array[
-                  ContextDev::CrawlControls::Source::UnionMember1::Type::TaggedSymbol
+                  ContextDev::CrawlControls::Source::Sitemap::Type::TaggedSymbol
                 ]
               )
             end
