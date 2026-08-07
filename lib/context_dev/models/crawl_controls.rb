@@ -26,7 +26,7 @@ module ContextDev
       # @!attribute source
       #   Where the crawl started.
       #
-      #   @return [ContextDev::Models::CrawlControls::Source::UnionMember0, ContextDev::Models::CrawlControls::Source::UnionMember1]
+      #   @return [ContextDev::Models::CrawlControls::Source::StartURL, ContextDev::Models::CrawlControls::Source::Sitemap]
       required :source, union: -> { ContextDev::CrawlControls::Source }
 
       # @!attribute url_pattern
@@ -48,7 +48,7 @@ module ContextDev
       #
       #   @param max_pages [Integer] The `maxUrls` submitted with the crawl. A sitemap crawl scrapes only the URLs it
       #
-      #   @param source [ContextDev::Models::CrawlControls::Source::UnionMember0, ContextDev::Models::CrawlControls::Source::UnionMember1] Where the crawl started.
+      #   @param source [ContextDev::Models::CrawlControls::Source::StartURL, ContextDev::Models::CrawlControls::Source::Sitemap] Where the crawl started.
       #
       #   @param url_pattern [String, nil] RE2 pattern URLs had to match to be crawled. Null when the crawl set none.
 
@@ -58,15 +58,17 @@ module ContextDev
       module Source
         extend ContextDev::Internal::Type::Union
 
-        variant -> { ContextDev::CrawlControls::Source::UnionMember0 }
+        # The crawl discovered pages by following links from one URL.
+        variant -> { ContextDev::CrawlControls::Source::StartURL }
 
-        variant -> { ContextDev::CrawlControls::Source::UnionMember1 }
+        # The crawl scraped the pages listed in the domain's sitemap.
+        variant -> { ContextDev::CrawlControls::Source::Sitemap }
 
-        class UnionMember0 < ContextDev::Internal::Type::BaseModel
+        class StartURL < ContextDev::Internal::Type::BaseModel
           # @!attribute type
           #
-          #   @return [Symbol, ContextDev::Models::CrawlControls::Source::UnionMember0::Type]
-          required :type, enum: -> { ContextDev::CrawlControls::Source::UnionMember0::Type }
+          #   @return [Symbol, ContextDev::Models::CrawlControls::Source::StartURL::Type]
+          required :type, enum: -> { ContextDev::CrawlControls::Source::StartURL::Type }
 
           # @!attribute url
           #   Page the crawl started from.
@@ -75,11 +77,13 @@ module ContextDev
           required :url, String
 
           # @!method initialize(type:, url:)
-          #   @param type [Symbol, ContextDev::Models::CrawlControls::Source::UnionMember0::Type]
+          #   The crawl discovered pages by following links from one URL.
+          #
+          #   @param type [Symbol, ContextDev::Models::CrawlControls::Source::StartURL::Type]
           #
           #   @param url [String] Page the crawl started from.
 
-          # @see ContextDev::Models::CrawlControls::Source::UnionMember0#type
+          # @see ContextDev::Models::CrawlControls::Source::StartURL#type
           module Type
             extend ContextDev::Internal::Type::Enum
 
@@ -90,7 +94,7 @@ module ContextDev
           end
         end
 
-        class UnionMember1 < ContextDev::Internal::Type::BaseModel
+        class Sitemap < ContextDev::Internal::Type::BaseModel
           # @!attribute domain
           #   Domain whose sitemap supplied the pages.
           #
@@ -99,15 +103,17 @@ module ContextDev
 
           # @!attribute type
           #
-          #   @return [Symbol, ContextDev::Models::CrawlControls::Source::UnionMember1::Type]
-          required :type, enum: -> { ContextDev::CrawlControls::Source::UnionMember1::Type }
+          #   @return [Symbol, ContextDev::Models::CrawlControls::Source::Sitemap::Type]
+          required :type, enum: -> { ContextDev::CrawlControls::Source::Sitemap::Type }
 
           # @!method initialize(domain:, type:)
+          #   The crawl scraped the pages listed in the domain's sitemap.
+          #
           #   @param domain [String] Domain whose sitemap supplied the pages.
           #
-          #   @param type [Symbol, ContextDev::Models::CrawlControls::Source::UnionMember1::Type]
+          #   @param type [Symbol, ContextDev::Models::CrawlControls::Source::Sitemap::Type]
 
-          # @see ContextDev::Models::CrawlControls::Source::UnionMember1#type
+          # @see ContextDev::Models::CrawlControls::Source::Sitemap#type
           module Type
             extend ContextDev::Internal::Type::Enum
 
@@ -119,7 +125,7 @@ module ContextDev
         end
 
         # @!method self.variants
-        #   @return [Array(ContextDev::Models::CrawlControls::Source::UnionMember0, ContextDev::Models::CrawlControls::Source::UnionMember1)]
+        #   @return [Array(ContextDev::Models::CrawlControls::Source::StartURL, ContextDev::Models::CrawlControls::Source::Sitemap)]
       end
     end
   end

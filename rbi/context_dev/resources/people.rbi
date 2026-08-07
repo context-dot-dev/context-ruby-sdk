@@ -4,9 +4,9 @@ module ContextDev
   module Resources
     class People
       # Finds and normalizes the best available person candidate from additive identity
-      # clues, then assigns an identity match score from 0 to 100. Available on Pro and
-      # Scale plans. Successful requests cost 20 credits. Disposable and free email
-      # addresses (like gmail.com, yahoo.com) will throw a 422 error.
+      # clues, then assigns an identity match score from 0 to 100. Available on all paid
+      # plans. Successful requests cost 20 credits. Disposable and free email addresses
+      # (like gmail.com, yahoo.com) will throw a 422 error.
       sig do
         params(
           company: ContextDev::PersonEnrichParams::Company::OrHash,
