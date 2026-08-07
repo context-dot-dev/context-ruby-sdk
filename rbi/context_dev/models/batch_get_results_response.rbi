@@ -190,6 +190,14 @@ module ContextDev
           sig { params(meta: T::Hash[Symbol, T.anything]).void }
           attr_writer :meta
 
+          # PDF pages of this document recovered by OCR (pdf.ocr=true). Each recovered page
+          # bills 1 credit on top of the page base credit; absent when no OCR ran.
+          sig { returns(T.nilable(Integer)) }
+          attr_reader :ocr_pages
+
+          sig { params(ocr_pages: Integer).void }
+          attr_writer :ocr_pages
+
           # A page the batch fetched successfully.
           sig do
             params(
@@ -202,6 +210,7 @@ module ContextDev
               item_id: String,
               markdown: String,
               meta: T::Hash[Symbol, T.anything],
+              ocr_pages: Integer,
               status: Symbol
             ).returns(T.attached_class)
           end
@@ -222,6 +231,9 @@ module ContextDev
             markdown: nil,
             # Caller-supplied metadata echoed from submission.
             meta: nil,
+            # PDF pages of this document recovered by OCR (pdf.ocr=true). Each recovered page
+            # bills 1 credit on top of the page base credit; absent when no OCR ran.
+            ocr_pages: nil,
             # The page was scraped.
             status: :ok
           )
@@ -239,7 +251,8 @@ module ContextDev
                 html: String,
                 item_id: String,
                 markdown: String,
-                meta: T::Hash[Symbol, T.anything]
+                meta: T::Hash[Symbol, T.anything],
+                ocr_pages: Integer
               }
             )
           end

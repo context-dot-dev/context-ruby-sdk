@@ -109,6 +109,7 @@ module ContextDev
             SUCCESS = :SUCCESS
             NOT_REQUESTED = :NOT_REQUESTED
             TIMEOUT = :TIMEOUT
+            CONTENT_TOO_LARGE = :CONTENT_TOO_LARGE
             WEBSITE_ACCESS_ERROR = :WEBSITE_ACCESS_ERROR
             ERROR = :ERROR
 

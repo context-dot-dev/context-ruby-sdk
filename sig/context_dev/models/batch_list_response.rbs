@@ -117,10 +117,18 @@ module ContextDev
           timing: ContextDev::Models::BatchListResponse::Data::Timing
         }
 
-        type credits = { net: Integer, refunded: Integer, reserved: Integer }
+        type credits =
+          {
+            net: Integer,
+            ocr_charged: Integer,
+            refunded: Integer,
+            reserved: Integer
+          }
 
         class Credits < ContextDev::Internal::Type::BaseModel
           attr_accessor net: Integer
+
+          attr_accessor ocr_charged: Integer
 
           attr_accessor refunded: Integer
 
@@ -128,11 +136,17 @@ module ContextDev
 
           def initialize: (
             net: Integer,
+            ocr_charged: Integer,
             refunded: Integer,
             reserved: Integer
           ) -> void
 
-          def to_hash: -> { net: Integer, refunded: Integer, reserved: Integer }
+          def to_hash: -> {
+            net: Integer,
+            ocr_charged: Integer,
+            refunded: Integer,
+            reserved: Integer
+          }
         end
 
         type format_ = :markdown | :html

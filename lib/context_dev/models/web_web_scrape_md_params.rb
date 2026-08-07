@@ -534,16 +534,17 @@ module ContextDev
         optional :end_, Integer, api_name: :end
 
         # @!attribute ocr
-        #   When true, detect and OCR images embedded in the selected PDF pages, inserting
-        #   recognized text at each image's position in page reading order while preserving
-        #   the PDF text layer. This is separate from automatic scanned-PDF OCR fallback.
+        #   When true, OCR the selected PDF pages that have no usable text layer (scans),
+        #   replacing each recovered page's text with the OCR result while pages with a real
+        #   text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
+        #   of the base request cost. When false, no OCR runs.
         #
         #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::Pdf::Ocr, nil]
         optional :ocr, union: -> { ContextDev::WebWebScrapeMdParams::Pdf::Ocr }
 
         # @!attribute should_parse
         #   When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-        #   a 400 WEBSITE_ACCESS_ERROR is returned.
+        #   a 400 PDF_SKIPPED is returned.
         #
         #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::Pdf::ShouldParse, nil]
         optional :should_parse,
@@ -565,15 +566,16 @@ module ContextDev
         #
         #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
         #
-        #   @param ocr [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::Pdf::Ocr] When true, detect and OCR images embedded in the selected PDF pages, inserting r
+        #   @param ocr [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::Pdf::Ocr] When true, OCR the selected PDF pages that have no usable text layer (scans), re
         #
         #   @param should_parse [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::Pdf::ShouldParse] When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
         #
         #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
 
-        # When true, detect and OCR images embedded in the selected PDF pages, inserting
-        # recognized text at each image's position in page reading order while preserving
-        # the PDF text layer. This is separate from automatic scanned-PDF OCR fallback.
+        # When true, OCR the selected PDF pages that have no usable text layer (scans),
+        # replacing each recovered page's text with the OCR result while pages with a real
+        # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
+        # of the base request cost. When false, no OCR runs.
         #
         # @see ContextDev::Models::WebWebScrapeMdParams::Pdf#ocr
         module Ocr
@@ -601,7 +603,7 @@ module ContextDev
         end
 
         # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-        # a 400 WEBSITE_ACCESS_ERROR is returned.
+        # a 400 PDF_SKIPPED is returned.
         #
         # @see ContextDev::Models::WebWebScrapeMdParams::Pdf#should_parse
         module ShouldParse

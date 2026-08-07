@@ -38,10 +38,11 @@ module ContextDev
       optional :include_links, union: -> { ContextDev::ParseHandleParams::IncludeLinks }
 
       # @!attribute ocr
-      #   When true for PDF inputs, detect and OCR images embedded in the selected pages,
-      #   inserting recognized text at each image's position in page reading order while
-      #   preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
-      #   When false, all OCR is disabled, including the automatic scanned-PDF fallback.
+      #   When true for PDF inputs, OCR the selected pages that have no usable text layer
+      #   (scans), replacing each recovered page's text with the OCR result while pages
+      #   with a real text layer keep it. pdf.start/pdf.end limit the inclusive page
+      #   range. Billed at 1 credit per page OCR actually recovered, on top of the base
+      #   request cost. When false, no OCR runs.
       #
       #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr, nil]
       optional :ocr, union: -> { ContextDev::ParseHandleParams::Ocr }
@@ -95,7 +96,7 @@ module ContextDev
       #
       #   @param include_links [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeLinks] Preserve hyperlinks in Markdown output
       #
-      #   @param ocr [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr] When true for PDF inputs, detect and OCR images embedded in the selected pages,
+      #   @param ocr [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr] When true for PDF inputs, OCR the selected pages that have no usable text layer
       #
       #   @param pdf [ContextDev::Models::ParseHandleParams::Pdf] PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
       #
@@ -239,10 +240,11 @@ module ContextDev
         # @!endgroup
       end
 
-      # When true for PDF inputs, detect and OCR images embedded in the selected pages,
-      # inserting recognized text at each image's position in page reading order while
-      # preserving the PDF text layer. pdf.start/pdf.end limit the inclusive page range.
-      # When false, all OCR is disabled, including the automatic scanned-PDF fallback.
+      # When true for PDF inputs, OCR the selected pages that have no usable text layer
+      # (scans), replacing each recovered page's text with the OCR result while pages
+      # with a real text layer keep it. pdf.start/pdf.end limit the inclusive page
+      # range. Billed at 1 credit per page OCR actually recovered, on top of the base
+      # request cost. When false, no OCR runs.
       module Ocr
         extend ContextDev::Internal::Type::Union
 

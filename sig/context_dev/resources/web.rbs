@@ -162,6 +162,7 @@ module ContextDev
         domain: String,
         ?headers: ::Hash[Symbol, String],
         ?max_links: Integer,
+        ?search: String,
         ?sitemap_url: String,
         ?tags: ::Array[String],
         ?timeout_ms: Integer,

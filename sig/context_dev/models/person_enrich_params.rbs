@@ -1,0 +1,199 @@
+module ContextDev
+  module Models
+    type person_enrich_params =
+      {
+        company: ContextDev::PersonEnrichParams::Company,
+        education: ::Array[ContextDev::PersonEnrichParams::Education],
+        email: String,
+        location: ContextDev::PersonEnrichParams::Location,
+        name: ContextDev::PersonEnrichParams::Name,
+        social_urls: ::Array[String],
+        tags: ::Array[String],
+        timeout_ms: Integer
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class PersonEnrichParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_reader company: ContextDev::PersonEnrichParams::Company?
+
+      def company=: (
+        ContextDev::PersonEnrichParams::Company
+      ) -> ContextDev::PersonEnrichParams::Company
+
+      attr_reader education: ::Array[ContextDev::PersonEnrichParams::Education]?
+
+      def education=: (
+        ::Array[ContextDev::PersonEnrichParams::Education]
+      ) -> ::Array[ContextDev::PersonEnrichParams::Education]
+
+      attr_reader email: String?
+
+      def email=: (String) -> String
+
+      attr_reader location: ContextDev::PersonEnrichParams::Location?
+
+      def location=: (
+        ContextDev::PersonEnrichParams::Location
+      ) -> ContextDev::PersonEnrichParams::Location
+
+      attr_reader name: ContextDev::PersonEnrichParams::Name?
+
+      def name=: (
+        ContextDev::PersonEnrichParams::Name
+      ) -> ContextDev::PersonEnrichParams::Name
+
+      attr_reader social_urls: ::Array[String]?
+
+      def social_urls=: (::Array[String]) -> ::Array[String]
+
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
+      attr_reader timeout_ms: Integer?
+
+      def timeout_ms=: (Integer) -> Integer
+
+      def initialize: (
+        ?company: ContextDev::PersonEnrichParams::Company,
+        ?education: ::Array[ContextDev::PersonEnrichParams::Education],
+        ?email: String,
+        ?location: ContextDev::PersonEnrichParams::Location,
+        ?name: ContextDev::PersonEnrichParams::Name,
+        ?social_urls: ::Array[String],
+        ?tags: ::Array[String],
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        company: ContextDev::PersonEnrichParams::Company,
+        education: ::Array[ContextDev::PersonEnrichParams::Education],
+        email: String,
+        location: ContextDev::PersonEnrichParams::Location,
+        name: ContextDev::PersonEnrichParams::Name,
+        social_urls: ::Array[String],
+        tags: ::Array[String],
+        timeout_ms: Integer,
+        request_options: ContextDev::RequestOptions
+      }
+
+      type company = { domain: String, name: String }
+
+      class Company < ContextDev::Internal::Type::BaseModel
+        attr_reader domain: String?
+
+        def domain=: (String) -> String
+
+        attr_reader name: String?
+
+        def name=: (String) -> String
+
+        def initialize: (?domain: String, ?name: String) -> void
+
+        def to_hash: -> { domain: String, name: String }
+      end
+
+      type education =
+        {
+          degree: String,
+          field_of_study: String,
+          graduation_year: Integer,
+          institution: ContextDev::PersonEnrichParams::Education::Institution
+        }
+
+      class Education < ContextDev::Internal::Type::BaseModel
+        attr_reader degree: String?
+
+        def degree=: (String) -> String
+
+        attr_reader field_of_study: String?
+
+        def field_of_study=: (String) -> String
+
+        attr_reader graduation_year: Integer?
+
+        def graduation_year=: (Integer) -> Integer
+
+        attr_reader institution: ContextDev::PersonEnrichParams::Education::Institution?
+
+        def institution=: (
+          ContextDev::PersonEnrichParams::Education::Institution
+        ) -> ContextDev::PersonEnrichParams::Education::Institution
+
+        def initialize: (
+          ?degree: String,
+          ?field_of_study: String,
+          ?graduation_year: Integer,
+          ?institution: ContextDev::PersonEnrichParams::Education::Institution
+        ) -> void
+
+        def to_hash: -> {
+          degree: String,
+          field_of_study: String,
+          graduation_year: Integer,
+          institution: ContextDev::PersonEnrichParams::Education::Institution
+        }
+
+        type institution = { domain: String, name: String }
+
+        class Institution < ContextDev::Internal::Type::BaseModel
+          attr_reader domain: String?
+
+          def domain=: (String) -> String
+
+          attr_reader name: String?
+
+          def name=: (String) -> String
+
+          def initialize: (?domain: String, ?name: String) -> void
+
+          def to_hash: -> { domain: String, name: String }
+        end
+      end
+
+      type location = { city: String, country: String, region: String }
+
+      class Location < ContextDev::Internal::Type::BaseModel
+        attr_reader city: String?
+
+        def city=: (String) -> String
+
+        attr_reader country: String?
+
+        def country=: (String) -> String
+
+        attr_reader region: String?
+
+        def region=: (String) -> String
+
+        def initialize: (
+          ?city: String,
+          ?country: String,
+          ?region: String
+        ) -> void
+
+        def to_hash: -> { city: String, country: String, region: String }
+      end
+
+      type name_ = { first: String, last: String }
+
+      class Name < ContextDev::Internal::Type::BaseModel
+        attr_reader first: String?
+
+        def first=: (String) -> String
+
+        attr_reader last: String?
+
+        def last=: (String) -> String
+
+        def initialize: (?first: String, ?last: String) -> void
+
+        def to_hash: -> { first: String, last: String }
+      end
+    end
+  end
+end

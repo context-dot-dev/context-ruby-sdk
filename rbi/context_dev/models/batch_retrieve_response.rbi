@@ -238,10 +238,15 @@ module ContextDev
             )
           end
 
-        # `reserved` minus `refunded` — what the batch has cost so far. Equal to
-        # `reserved` until the batch settles.
+        # `reserved` minus `refunded` plus `ocr_charged` — what the batch has cost so far.
+        # Equal to `reserved` until the batch settles.
         sig { returns(Integer) }
         attr_accessor :net
+
+        # Credits charged for PDF pages recovered by OCR (pdf.ocr=true), 1 per recovered
+        # page, on top of `reserved`. Stays 0 until the batch settles.
+        sig { returns(Integer) }
+        attr_accessor :ocr_charged
 
         # Credits returned for pages that did not succeed. Stays 0 until the batch reaches
         # a final status, then settles in one movement.
@@ -255,14 +260,20 @@ module ContextDev
 
         # What this batch has done to your credit balance.
         sig do
-          params(net: Integer, refunded: Integer, reserved: Integer).returns(
-            T.attached_class
-          )
+          params(
+            net: Integer,
+            ocr_charged: Integer,
+            refunded: Integer,
+            reserved: Integer
+          ).returns(T.attached_class)
         end
         def self.new(
-          # `reserved` minus `refunded` — what the batch has cost so far. Equal to
-          # `reserved` until the batch settles.
+          # `reserved` minus `refunded` plus `ocr_charged` — what the batch has cost so far.
+          # Equal to `reserved` until the batch settles.
           net:,
+          # Credits charged for PDF pages recovered by OCR (pdf.ocr=true), 1 per recovered
+          # page, on top of `reserved`. Stays 0 until the batch settles.
+          ocr_charged:,
           # Credits returned for pages that did not succeed. Stays 0 until the batch reaches
           # a final status, then settles in one movement.
           refunded:,
@@ -274,7 +285,12 @@ module ContextDev
 
         sig do
           override.returns(
-            { net: Integer, refunded: Integer, reserved: Integer }
+            {
+              net: Integer,
+              ocr_charged: Integer,
+              refunded: Integer,
+              reserved: Integer
+            }
           )
         end
         def to_hash

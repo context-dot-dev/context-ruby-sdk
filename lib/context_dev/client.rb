@@ -43,8 +43,12 @@ module ContextDev
     # @return [ContextDev::Resources::Monitors]
     attr_reader :monitors
 
+    # Scrape many pages or crawl a site asynchronously.
     # @return [ContextDev::Resources::Batch]
     attr_reader :batch
+
+    # @return [ContextDev::Resources::People]
+    attr_reader :people
 
     # @api private
     #
@@ -115,6 +119,7 @@ module ContextDev
       @utility = ContextDev::Resources::Utility.new(client: self)
       @monitors = ContextDev::Resources::Monitors.new(client: self)
       @batch = ContextDev::Resources::Batch.new(client: self)
+      @people = ContextDev::Resources::People.new(client: self)
     end
   end
 end

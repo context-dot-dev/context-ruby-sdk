@@ -11,7 +11,8 @@ module ContextDev
           )
         end
 
-      # Up to 10 matching brands, most popular first. Empty when nothing matches.
+      # Up to 10 matching brands, name matches first, then domain matches, most popular
+      # first within each group. Empty when nothing matches.
       sig { returns(T::Array[ContextDev::Models::BrandSearchResponse::Result]) }
       attr_accessor :results
 
@@ -39,7 +40,8 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Up to 10 matching brands, most popular first. Empty when nothing matches.
+        # Up to 10 matching brands, name matches first, then domain matches, most popular
+        # first within each group. Empty when nothing matches.
         results:,
         # Metadata about the API key used for the request. Included in every response
         # whenever a valid API key is provided, even when the response status is not 200.

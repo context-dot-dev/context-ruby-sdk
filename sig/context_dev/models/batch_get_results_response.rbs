@@ -58,7 +58,8 @@ module ContextDev
             html: String,
             item_id: String,
             markdown: String,
-            meta: ::Hash[Symbol, top]
+            meta: ::Hash[Symbol, top],
+            ocr_pages: Integer
           }
 
         class Ok < ContextDev::Internal::Type::BaseModel
@@ -88,6 +89,10 @@ module ContextDev
 
           def meta=: (::Hash[Symbol, top]) -> ::Hash[Symbol, top]
 
+          attr_reader ocr_pages: Integer?
+
+          def ocr_pages=: (Integer) -> Integer
+
           def initialize: (
             final_url: String,
             http_status: Integer?,
@@ -97,6 +102,7 @@ module ContextDev
             ?item_id: String,
             ?markdown: String,
             ?meta: ::Hash[Symbol, top],
+            ?ocr_pages: Integer,
             ?status: :ok
           ) -> void
 
@@ -109,7 +115,8 @@ module ContextDev
             html: String,
             item_id: String,
             markdown: String,
-            meta: ::Hash[Symbol, top]
+            meta: ::Hash[Symbol, top],
+            ocr_pages: Integer
           }
 
           type metadata =

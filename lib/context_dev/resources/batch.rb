@@ -2,6 +2,7 @@
 
 module ContextDev
   module Resources
+    # Scrape many pages or crawl a site asynchronously.
     class Batch
       # Check progress, and get download links once the batch finishes.
       #
@@ -60,6 +61,27 @@ module ContextDev
         )
       end
 
+      # Permanently delete a finished batch and its stored results. Active batches must
+      # settle first.
+      #
+      # @overload delete(batch_id, request_options: {})
+      #
+      # @param batch_id [String] ID of the batch to retrieve or cancel.
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::BatchDeleteResponse]
+      #
+      # @see ContextDev::Models::BatchDeleteParams
+      def delete(batch_id, params = {})
+        @client.request(
+          method: :delete,
+          path: ["batch/%1$s", batch_id],
+          model: ContextDev::Models::BatchDeleteResponse,
+          options: params[:request_options]
+        )
+      end
+
       # Stop a batch from starting new pages. In-progress pages finish, and unused
       # credits are refunded.
       #
@@ -115,15 +137,17 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::BatchSubmitParams} for more details.
       #
-      # Retrieve and normalize a person profile from identifiers.
+      # Scrape 25K URLs or crawl large websites asynchronously.
       #
-      # @overload submit(identifiers:, tags: nil, timeout_ms: nil, request_options: {})
+      # @overload submit(input:, tags: nil, webhook_url: nil, idempotency_key: nil, request_options: {})
       #
-      # @param identifiers [ContextDev::Models::BatchSubmitParams::Identifiers] Known identifiers for the person. At least one identifier is required.
+      # @param input [ContextDev::Models::BatchSubmitParams::Input::Scrape, ContextDev::Models::BatchSubmitParams::Input::Crawl] Body param: Choose a URL list or a site crawl.
       #
-      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      # @param tags [Array<String>] Body param: Tags stored on the batch. Filter the batch list by them later.
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param webhook_url [String] Body param: URL notified when the batch finishes.
+      #
+      # @param idempotency_key [String] Header param: Any string unique to this submission. Retries with the same key re
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -132,10 +156,12 @@ module ContextDev
       # @see ContextDev::Models::BatchSubmitParams
       def submit(params)
         parsed, options = ContextDev::BatchSubmitParams.dump_request(params)
+        header_params = {idempotency_key: "idempotency-key"}
         @client.request(
           method: :post,
-          path: "people/retrieve",
-          body: parsed,
+          path: "batch/submit",
+          headers: parsed.slice(*header_params.keys).transform_keys(header_params),
+          body: parsed.except(*header_params.keys),
           model: ContextDev::Models::BatchSubmitResponse,
           options: options
         )
