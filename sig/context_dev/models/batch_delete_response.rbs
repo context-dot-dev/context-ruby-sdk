@@ -1,0 +1,57 @@
+module ContextDev
+  module Models
+    type batch_delete_response =
+      {
+        id: String,
+        deleted: bool,
+        key_metadata: ContextDev::Models::BatchDeleteResponse::KeyMetadata
+      }
+
+    class BatchDeleteResponse < ContextDev::Internal::Type::BaseModel
+      attr_reader id: String?
+
+      def id=: (String) -> String
+
+      attr_reader deleted: bool?
+
+      def deleted=: (bool) -> bool
+
+      attr_reader key_metadata: ContextDev::Models::BatchDeleteResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::BatchDeleteResponse::KeyMetadata
+      ) -> ContextDev::Models::BatchDeleteResponse::KeyMetadata
+
+      def initialize: (
+        ?id: String,
+        ?deleted: bool,
+        ?key_metadata: ContextDev::Models::BatchDeleteResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        id: String,
+        deleted: bool,
+        key_metadata: ContextDev::Models::BatchDeleteResponse::KeyMetadata
+      }
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end

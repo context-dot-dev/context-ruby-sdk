@@ -38,8 +38,12 @@ module ContextDev
     sig { returns(ContextDev::Resources::Monitors) }
     attr_reader :monitors
 
+    # Scrape many pages or crawl a site asynchronously.
     sig { returns(ContextDev::Resources::Batch) }
     attr_reader :batch
+
+    sig { returns(ContextDev::Resources::People) }
+    attr_reader :people
 
     # @api private
     sig { override.returns(T::Hash[String, String]) }

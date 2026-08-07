@@ -26,6 +26,8 @@ module ContextDev
 
     attr_reader batch: ContextDev::Resources::Batch
 
+    attr_reader people: ContextDev::Resources::People
+
     private def auth_headers: -> ::Hash[String, String]
 
     def initialize: (

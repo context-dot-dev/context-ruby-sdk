@@ -2,6 +2,7 @@
 
 module ContextDev
   module Resources
+    # Scrape many pages or crawl a site asynchronously.
     class Batch
       # Check progress, and get download links once the batch finishes.
       sig do
@@ -49,6 +50,21 @@ module ContextDev
       )
       end
 
+      # Permanently delete a finished batch and its stored results. Active batches must
+      # settle first.
+      sig do
+        params(
+          batch_id: String,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::BatchDeleteResponse)
+      end
+      def delete(
+        # ID of the batch to retrieve or cancel.
+        batch_id,
+        request_options: {}
+      )
+      end
+
       # Stop a batch from starting new pages. In-progress pages finish, and unused
       # credits are refunded.
       sig do
@@ -86,24 +102,30 @@ module ContextDev
       )
       end
 
-      # Retrieve and normalize a person profile from identifiers.
+      # Scrape 25K URLs or crawl large websites asynchronously.
       sig do
         params(
-          identifiers: ContextDev::BatchSubmitParams::Identifiers::OrHash,
+          input:
+            T.any(
+              ContextDev::BatchSubmitParams::Input::Scrape::OrHash,
+              ContextDev::BatchSubmitParams::Input::Crawl::OrHash
+            ),
           tags: T::Array[String],
-          timeout_ms: Integer,
+          webhook_url: String,
+          idempotency_key: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::BatchSubmitResponse)
       end
       def submit(
-        # Known identifiers for the person. At least one identifier is required.
-        identifiers:,
-        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        # Body param: Choose a URL list or a site crawl.
+        input:,
+        # Body param: Tags stored on the batch. Filter the batch list by them later.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Body param: URL notified when the batch finishes.
+        webhook_url: nil,
+        # Header param: Any string unique to this submission. Retries with the same key
+        # return the original batch.
+        idempotency_key: nil,
         request_options: {}
       )
       end
