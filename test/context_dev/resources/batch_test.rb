@@ -52,6 +52,24 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
     end
   end
 
+  def test_delete
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.batch.delete("batch_9f2c8a")
+
+    assert_pattern do
+      response => ContextDev::Models::BatchDeleteResponse
+    end
+
+    assert_pattern do
+      response => {
+        id: String | nil,
+        deleted: ContextDev::Internal::Type::Boolean | nil,
+        key_metadata: ContextDev::Models::BatchDeleteResponse::KeyMetadata | nil
+      }
+    end
+  end
+
   def test_cancel
     skip("Mock server tests are disabled")
 
@@ -101,7 +119,16 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
   def test_submit_required_params
     skip("Mock server tests are disabled")
 
-    response = @context_dev.batch.submit(identifiers: {})
+    response =
+      @context_dev.batch.submit(
+        input: {
+          data: {
+            format: :markdown,
+            urls: [{url: "https://example.com/products/anvil"}, {url: "https://example.com/products/hammer"}]
+          },
+          mode: :scrape
+        }
+      )
 
     assert_pattern do
       response => ContextDev::Models::BatchSubmitResponse
@@ -109,11 +136,18 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
-        code: ContextDev::Models::BatchSubmitResponse::Code,
-        metadata: ContextDev::Models::BatchSubmitResponse::Metadata,
-        person: ContextDev::Models::BatchSubmitResponse::Person,
+        id: String,
+        crawl: ContextDev::CrawlControls | nil,
+        created_at: String,
+        credits: ContextDev::Models::BatchSubmitResponse::Credits,
+        format_: ContextDev::Models::BatchSubmitResponse::Format,
+        input: ContextDev::Intake,
+        invalid_urls: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchSubmitResponse::InvalidURL]),
+        mode: ContextDev::Models::BatchSubmitResponse::Mode,
         status: ContextDev::Models::BatchSubmitResponse::Status,
-        key_metadata: ContextDev::Models::BatchSubmitResponse::KeyMetadata | nil
+        tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
+        key_metadata: ContextDev::Models::BatchSubmitResponse::KeyMetadata | nil,
+        webhook_secret: String | nil
       }
     end
   end

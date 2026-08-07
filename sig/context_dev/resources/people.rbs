@@ -1,0 +1,19 @@
+module ContextDev
+  module Resources
+    class People
+      def enrich: (
+        ?company: ContextDev::PersonEnrichParams::Company,
+        ?education: ::Array[ContextDev::PersonEnrichParams::Education],
+        ?email: String,
+        ?location: ContextDev::PersonEnrichParams::Location,
+        ?name: ContextDev::PersonEnrichParams::Name,
+        ?social_urls: ::Array[String],
+        ?tags: ::Array[String],
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::PersonEnrichResponse
+
+      def initialize: (client: ContextDev::Client) -> void
+    end
+  end
+end

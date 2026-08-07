@@ -16,6 +16,11 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::BatchListResponse
 
+      def delete: (
+        String batch_id,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::BatchDeleteResponse
+
       def cancel: (
         String batch_id,
         ?request_options: ContextDev::request_opts
@@ -29,9 +34,10 @@ module ContextDev
       ) -> ContextDev::Models::BatchGetResultsResponse
 
       def submit: (
-        identifiers: ContextDev::BatchSubmitParams::Identifiers,
+        input: ContextDev::Models::BatchSubmitParams::input,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?webhook_url: String,
+        ?idempotency_key: String,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::BatchSubmitResponse
 

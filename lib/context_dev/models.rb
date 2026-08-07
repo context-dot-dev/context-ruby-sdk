@@ -45,6 +45,8 @@ module ContextDev
 
   BatchCancelParams = ContextDev::Models::BatchCancelParams
 
+  BatchDeleteParams = ContextDev::Models::BatchDeleteParams
+
   BatchGetResultsParams = ContextDev::Models::BatchGetResultsParams
 
   BatchListParams = ContextDev::Models::BatchListParams
@@ -98,6 +100,8 @@ module ContextDev
   PageErrorCount = ContextDev::Models::PageErrorCount
 
   ParseHandleParams = ContextDev::Models::ParseHandleParams
+
+  PersonEnrichParams = ContextDev::Models::PersonEnrichParams
 
   UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 

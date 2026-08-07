@@ -1,0 +1,23 @@
+module ContextDev
+  module Models
+    type batch_delete_params =
+      { batch_id: String } & ContextDev::Internal::Type::request_parameters
+
+    class BatchDeleteParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor batch_id: String
+
+      def initialize: (
+        batch_id: String,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        batch_id: String,
+        request_options: ContextDev::RequestOptions
+      }
+    end
+  end
+end

@@ -1,0 +1,607 @@
+module ContextDev
+  module Models
+    type person_enrich_response =
+      {
+        match: ContextDev::Models::PersonEnrichResponse::match,
+        key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata
+      }
+
+    class PersonEnrichResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor match: ContextDev::Models::PersonEnrichResponse::match
+
+      attr_reader key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::PersonEnrichResponse::KeyMetadata
+      ) -> ContextDev::Models::PersonEnrichResponse::KeyMetadata
+
+      def initialize: (
+        match: ContextDev::Models::PersonEnrichResponse::match,
+        ?key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        match: ContextDev::Models::PersonEnrichResponse::match,
+        key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata
+      }
+
+      type match =
+        ContextDev::Models::PersonEnrichResponse::Match::Candidate
+        | ContextDev::Models::PersonEnrichResponse::Match::NotFound
+
+      module Match
+        extend ContextDev::Internal::Type::Union
+
+        type candidate =
+          {
+            person: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person,
+            score: Integer,
+            status: :candidate
+          }
+
+        class Candidate < ContextDev::Internal::Type::BaseModel
+          attr_accessor person: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person
+
+          attr_accessor score: Integer
+
+          attr_accessor status: :candidate
+
+          def initialize: (
+            person: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person,
+            score: Integer,
+            ?status: :candidate
+          ) -> void
+
+          def to_hash: -> {
+            person: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person,
+            score: Integer,
+            status: :candidate
+          }
+
+          type person =
+            {
+              education: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education],
+              experience: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience],
+              skills: ::Array[String],
+              social_urls: ::Array[String],
+              website_urls: ::Array[String],
+              avatar_url: String,
+              bio: String,
+              current_role: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole,
+              email: String,
+              location: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location,
+              name: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name
+            }
+
+          class Person < ContextDev::Internal::Type::BaseModel
+            attr_accessor education: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education]
+
+            attr_accessor experience: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience]
+
+            attr_accessor skills: ::Array[String]
+
+            attr_accessor social_urls: ::Array[String]
+
+            attr_accessor website_urls: ::Array[String]
+
+            attr_reader avatar_url: String?
+
+            def avatar_url=: (String) -> String
+
+            attr_reader bio: String?
+
+            def bio=: (String) -> String
+
+            attr_reader current_role: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole?
+
+            def current_role=: (
+              ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole
+            ) -> ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole
+
+            attr_reader email: String?
+
+            def email=: (String) -> String
+
+            attr_reader location: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location?
+
+            def location=: (
+              ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location
+            ) -> ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location
+
+            attr_reader name: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name?
+
+            def name=: (
+              ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name
+            ) -> ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name
+
+            def initialize: (
+              education: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education],
+              experience: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience],
+              skills: ::Array[String],
+              social_urls: ::Array[String],
+              website_urls: ::Array[String],
+              ?avatar_url: String,
+              ?bio: String,
+              ?current_role: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole,
+              ?email: String,
+              ?location: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location,
+              ?name: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name
+            ) -> void
+
+            def to_hash: -> {
+              education: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education],
+              experience: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience],
+              skills: ::Array[String],
+              social_urls: ::Array[String],
+              website_urls: ::Array[String],
+              avatar_url: String,
+              bio: String,
+              current_role: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole,
+              email: String,
+              location: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location,
+              name: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name
+            }
+
+            type education =
+              {
+                institution: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::Institution,
+                degree: String,
+                description: String,
+                end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::EndDate,
+                field_of_study: String,
+                start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::StartDate
+              }
+
+            class Education < ContextDev::Internal::Type::BaseModel
+              attr_accessor institution: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::Institution
+
+              attr_reader degree: String?
+
+              def degree=: (String) -> String
+
+              attr_reader description: String?
+
+              def description=: (String) -> String
+
+              attr_reader end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::EndDate?
+
+              def end_date=: (
+                ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::EndDate
+              ) -> ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::EndDate
+
+              attr_reader field_of_study: String?
+
+              def field_of_study=: (String) -> String
+
+              attr_reader start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::StartDate?
+
+              def start_date=: (
+                ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::StartDate
+              ) -> ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::StartDate
+
+              def initialize: (
+                institution: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::Institution,
+                ?degree: String,
+                ?description: String,
+                ?end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::EndDate,
+                ?field_of_study: String,
+                ?start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::StartDate
+              ) -> void
+
+              def to_hash: -> {
+                institution: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::Institution,
+                degree: String,
+                description: String,
+                end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::EndDate,
+                field_of_study: String,
+                start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::StartDate
+              }
+
+              type institution = { name: String, domain: String }
+
+              class Institution < ContextDev::Internal::Type::BaseModel
+                attr_accessor name: String
+
+                attr_reader domain: String?
+
+                def domain=: (String) -> String
+
+                def initialize: (name: String, ?domain: String) -> void
+
+                def to_hash: -> { name: String, domain: String }
+              end
+
+              type end_date = { year: Integer, day: Integer, month: Integer }
+
+              class EndDate < ContextDev::Internal::Type::BaseModel
+                attr_accessor year: Integer
+
+                attr_reader day: Integer?
+
+                def day=: (Integer) -> Integer
+
+                attr_reader month: Integer?
+
+                def month=: (Integer) -> Integer
+
+                def initialize: (
+                  year: Integer,
+                  ?day: Integer,
+                  ?month: Integer
+                ) -> void
+
+                def to_hash: -> { year: Integer, day: Integer, month: Integer }
+              end
+
+              type start_date = { year: Integer, day: Integer, month: Integer }
+
+              class StartDate < ContextDev::Internal::Type::BaseModel
+                attr_accessor year: Integer
+
+                attr_reader day: Integer?
+
+                def day=: (Integer) -> Integer
+
+                attr_reader month: Integer?
+
+                def month=: (Integer) -> Integer
+
+                def initialize: (
+                  year: Integer,
+                  ?day: Integer,
+                  ?month: Integer
+                ) -> void
+
+                def to_hash: -> { year: Integer, day: Integer, month: Integer }
+              end
+            end
+
+            type experience =
+              {
+                organization: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::Organization,
+                title: String,
+                description: String,
+                end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::EndDate,
+                is_current: bool,
+                location: String,
+                start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::StartDate
+              }
+
+            class Experience < ContextDev::Internal::Type::BaseModel
+              attr_accessor organization: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::Organization
+
+              attr_accessor title: String
+
+              attr_reader description: String?
+
+              def description=: (String) -> String
+
+              attr_reader end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::EndDate?
+
+              def end_date=: (
+                ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::EndDate
+              ) -> ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::EndDate
+
+              attr_reader is_current: bool?
+
+              def is_current=: (bool) -> bool
+
+              attr_reader location: String?
+
+              def location=: (String) -> String
+
+              attr_reader start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::StartDate?
+
+              def start_date=: (
+                ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::StartDate
+              ) -> ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::StartDate
+
+              def initialize: (
+                organization: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::Organization,
+                title: String,
+                ?description: String,
+                ?end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::EndDate,
+                ?is_current: bool,
+                ?location: String,
+                ?start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::StartDate
+              ) -> void
+
+              def to_hash: -> {
+                organization: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::Organization,
+                title: String,
+                description: String,
+                end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::EndDate,
+                is_current: bool,
+                location: String,
+                start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience::StartDate
+              }
+
+              type organization = { name: String, domain: String }
+
+              class Organization < ContextDev::Internal::Type::BaseModel
+                attr_accessor name: String
+
+                attr_reader domain: String?
+
+                def domain=: (String) -> String
+
+                def initialize: (name: String, ?domain: String) -> void
+
+                def to_hash: -> { name: String, domain: String }
+              end
+
+              type end_date = { year: Integer, day: Integer, month: Integer }
+
+              class EndDate < ContextDev::Internal::Type::BaseModel
+                attr_accessor year: Integer
+
+                attr_reader day: Integer?
+
+                def day=: (Integer) -> Integer
+
+                attr_reader month: Integer?
+
+                def month=: (Integer) -> Integer
+
+                def initialize: (
+                  year: Integer,
+                  ?day: Integer,
+                  ?month: Integer
+                ) -> void
+
+                def to_hash: -> { year: Integer, day: Integer, month: Integer }
+              end
+
+              type start_date = { year: Integer, day: Integer, month: Integer }
+
+              class StartDate < ContextDev::Internal::Type::BaseModel
+                attr_accessor year: Integer
+
+                attr_reader day: Integer?
+
+                def day=: (Integer) -> Integer
+
+                attr_reader month: Integer?
+
+                def month=: (Integer) -> Integer
+
+                def initialize: (
+                  year: Integer,
+                  ?day: Integer,
+                  ?month: Integer
+                ) -> void
+
+                def to_hash: -> { year: Integer, day: Integer, month: Integer }
+              end
+            end
+
+            type current_role =
+              {
+                organization: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::Organization,
+                title: String,
+                description: String,
+                end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::EndDate,
+                is_current: bool,
+                location: String,
+                start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::StartDate
+              }
+
+            class CurrentRole < ContextDev::Internal::Type::BaseModel
+              attr_accessor organization: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::Organization
+
+              attr_accessor title: String
+
+              attr_reader description: String?
+
+              def description=: (String) -> String
+
+              attr_reader end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::EndDate?
+
+              def end_date=: (
+                ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::EndDate
+              ) -> ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::EndDate
+
+              attr_reader is_current: bool?
+
+              def is_current=: (bool) -> bool
+
+              attr_reader location: String?
+
+              def location=: (String) -> String
+
+              attr_reader start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::StartDate?
+
+              def start_date=: (
+                ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::StartDate
+              ) -> ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::StartDate
+
+              def initialize: (
+                organization: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::Organization,
+                title: String,
+                ?description: String,
+                ?end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::EndDate,
+                ?is_current: bool,
+                ?location: String,
+                ?start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::StartDate
+              ) -> void
+
+              def to_hash: -> {
+                organization: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::Organization,
+                title: String,
+                description: String,
+                end_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::EndDate,
+                is_current: bool,
+                location: String,
+                start_date: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::StartDate
+              }
+
+              type organization = { name: String, domain: String }
+
+              class Organization < ContextDev::Internal::Type::BaseModel
+                attr_accessor name: String
+
+                attr_reader domain: String?
+
+                def domain=: (String) -> String
+
+                def initialize: (name: String, ?domain: String) -> void
+
+                def to_hash: -> { name: String, domain: String }
+              end
+
+              type end_date = { year: Integer, day: Integer, month: Integer }
+
+              class EndDate < ContextDev::Internal::Type::BaseModel
+                attr_accessor year: Integer
+
+                attr_reader day: Integer?
+
+                def day=: (Integer) -> Integer
+
+                attr_reader month: Integer?
+
+                def month=: (Integer) -> Integer
+
+                def initialize: (
+                  year: Integer,
+                  ?day: Integer,
+                  ?month: Integer
+                ) -> void
+
+                def to_hash: -> { year: Integer, day: Integer, month: Integer }
+              end
+
+              type start_date = { year: Integer, day: Integer, month: Integer }
+
+              class StartDate < ContextDev::Internal::Type::BaseModel
+                attr_accessor year: Integer
+
+                attr_reader day: Integer?
+
+                def day=: (Integer) -> Integer
+
+                attr_reader month: Integer?
+
+                def month=: (Integer) -> Integer
+
+                def initialize: (
+                  year: Integer,
+                  ?day: Integer,
+                  ?month: Integer
+                ) -> void
+
+                def to_hash: -> { year: Integer, day: Integer, month: Integer }
+              end
+            end
+
+            type location =
+              {
+                city: String,
+                country: String,
+                country_code: String,
+                display_: String,
+                region: String
+              }
+
+            class Location < ContextDev::Internal::Type::BaseModel
+              attr_reader city: String?
+
+              def city=: (String) -> String
+
+              attr_reader country: String?
+
+              def country=: (String) -> String
+
+              attr_reader country_code: String?
+
+              def country_code=: (String) -> String
+
+              attr_reader display_: String?
+
+              def display_=: (String) -> String
+
+              attr_reader region: String?
+
+              def region=: (String) -> String
+
+              def initialize: (
+                ?city: String,
+                ?country: String,
+                ?country_code: String,
+                ?display_: String,
+                ?region: String
+              ) -> void
+
+              def to_hash: -> {
+                city: String,
+                country: String,
+                country_code: String,
+                display_: String,
+                region: String
+              }
+            end
+
+            type name_ = { first: String, full: String, last: String }
+
+            class Name < ContextDev::Internal::Type::BaseModel
+              attr_reader first: String?
+
+              def first=: (String) -> String
+
+              attr_reader full: String?
+
+              def full=: (String) -> String
+
+              attr_reader last: String?
+
+              def last=: (String) -> String
+
+              def initialize: (
+                ?first: String,
+                ?full: String,
+                ?last: String
+              ) -> void
+
+              def to_hash: -> { first: String, full: String, last: String }
+            end
+          end
+        end
+
+        type not_found = { person: nil, score: nil, status: :not_found }
+
+        class NotFound < ContextDev::Internal::Type::BaseModel
+          attr_accessor person: nil
+
+          attr_accessor score: nil
+
+          attr_accessor status: :not_found
+
+          def initialize: (person: nil, score: nil, ?status: :not_found) -> void
+
+          def to_hash: -> { person: nil, score: nil, status: :not_found }
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::PersonEnrichResponse::match]
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end
