@@ -196,6 +196,14 @@ module ContextDev
             #   @return [String, nil]
             optional :favicon, String
 
+            # @!attribute headings
+            #   Page headings (h1–h6) in document order, extracted from the unfiltered document.
+            #   Capped at the first 500 headings. Omitted when the page has none.
+            #
+            #   @return [Array<ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata::Heading>, nil]
+            optional :headings,
+                     -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata::Heading] }
+
             # @!attribute image
             #   Primary resolved preview image from Open Graph, Twitter, or image metadata.
             #
@@ -267,7 +275,7 @@ module ContextDev
             optional :twitter,
                      -> { ContextDev::Internal::Type::HashOf[union: ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata::Twitter] }
 
-            # @!method initialize(final_url:, source_url:, additional_meta: nil, alternates: nil, author: nil, canonical_url: nil, description: nil, favicon: nil, image: nil, json_ld: nil, keywords: nil, language: nil, modified_time: nil, open_graph: nil, published_time: nil, robots: nil, site_name: nil, title: nil, twitter: nil)
+            # @!method initialize(final_url:, source_url:, additional_meta: nil, alternates: nil, author: nil, canonical_url: nil, description: nil, favicon: nil, headings: nil, image: nil, json_ld: nil, keywords: nil, language: nil, modified_time: nil, open_graph: nil, published_time: nil, robots: nil, site_name: nil, title: nil, twitter: nil)
             #   Some parameter documentations has been truncated, see
             #   {ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata} for more
             #   details.
@@ -289,6 +297,8 @@ module ContextDev
             #   @param description [String] Best description extracted from standard, Open Graph, or Twitter metadata.
             #
             #   @param favicon [String] Resolved favicon URL, when present.
+            #
+            #   @param headings [Array<ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata::Heading>] Page headings (h1–h6) in document order, extracted from the unfiltered document.
             #
             #   @param image [String] Primary resolved preview image from Open Graph, Twitter, or image metadata.
             #
@@ -359,6 +369,25 @@ module ContextDev
               #   @param title [String] Alternate resource title, when present.
               #
               #   @param type [String] Alternate resource MIME type, when present.
+            end
+
+            class Heading < ContextDev::Internal::Type::BaseModel
+              # @!attribute level
+              #   Heading level, 1–6 (from h1–h6).
+              #
+              #   @return [Integer]
+              required :level, Integer
+
+              # @!attribute text
+              #   Heading text with whitespace collapsed, truncated to 1000 characters.
+              #
+              #   @return [String]
+              required :text, String
+
+              # @!method initialize(level:, text:)
+              #   @param level [Integer] Heading level, 1–6 (from h1–h6).
+              #
+              #   @param text [String] Heading text with whitespace collapsed, truncated to 1000 characters.
             end
 
             module OpenGraph
