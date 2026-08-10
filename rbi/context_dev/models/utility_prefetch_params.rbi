@@ -14,7 +14,7 @@ module ContextDev
           )
         end
 
-      # Identifier of the brand to prefetch. Provide exactly one of domain or email.
+      # Identifier of the target to prefetch. Provide exactly one of domain or email.
       sig do
         returns(
           T.any(
@@ -25,7 +25,8 @@ module ContextDev
       end
       attr_accessor :identifier
 
-      # What to prefetch. Currently only 'brand' is supported.
+      # What to prefetch: 'brand' warms the brand data cache, 'styleguide' warms the
+      # styleguide cache.
       sig { returns(ContextDev::UtilityPrefetchParams::Type::OrSymbol) }
       attr_accessor :type
 
@@ -59,9 +60,10 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Identifier of the brand to prefetch. Provide exactly one of domain or email.
+        # Identifier of the target to prefetch. Provide exactly one of domain or email.
         identifier:,
-        # What to prefetch. Currently only 'brand' is supported.
+        # What to prefetch: 'brand' warms the brand data cache, 'styleguide' warms the
+        # styleguide cache.
         type:,
         # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
@@ -91,7 +93,7 @@ module ContextDev
       def to_hash
       end
 
-      # Identifier of the brand to prefetch. Provide exactly one of domain or email.
+      # Identifier of the target to prefetch. Provide exactly one of domain or email.
       module Identifier
         extend ContextDev::Internal::Type::Union
 
@@ -112,14 +114,14 @@ module ContextDev
               )
             end
 
-          # Domain name to prefetch brand data for
+          # Domain name to prefetch data for
           sig { returns(String) }
           attr_accessor :domain
 
-          # Prefetch brand data by domain.
+          # Prefetch by domain.
           sig { params(domain: String).returns(T.attached_class) }
           def self.new(
-            # Domain name to prefetch brand data for
+            # Domain name to prefetch data for
             domain:
           )
           end
@@ -138,18 +140,18 @@ module ContextDev
               )
             end
 
-          # Email address to prefetch brand data for. The domain will be extracted from the
-          # email. Free email providers (gmail.com, yahoo.com, etc.) and disposable email
-          # addresses are not allowed.
+          # Email address to prefetch data for. The domain will be extracted from the email.
+          # Free email providers (gmail.com, yahoo.com, etc.) and disposable email addresses
+          # are not allowed.
           sig { returns(String) }
           attr_accessor :email
 
-          # Prefetch brand data by email. The domain will be extracted and validated.
+          # Prefetch by email. The domain will be extracted and validated.
           sig { params(email: String).returns(T.attached_class) }
           def self.new(
-            # Email address to prefetch brand data for. The domain will be extracted from the
-            # email. Free email providers (gmail.com, yahoo.com, etc.) and disposable email
-            # addresses are not allowed.
+            # Email address to prefetch data for. The domain will be extracted from the email.
+            # Free email providers (gmail.com, yahoo.com, etc.) and disposable email addresses
+            # are not allowed.
             email:
           )
           end
@@ -168,7 +170,8 @@ module ContextDev
         end
       end
 
-      # What to prefetch. Currently only 'brand' is supported.
+      # What to prefetch: 'brand' warms the brand data cache, 'styleguide' warms the
+      # styleguide cache.
       module Type
         extend ContextDev::Internal::Type::Enum
 
@@ -180,6 +183,11 @@ module ContextDev
 
         BRAND =
           T.let(:brand, ContextDev::UtilityPrefetchParams::Type::TaggedSymbol)
+        STYLEGUIDE =
+          T.let(
+            :styleguide,
+            ContextDev::UtilityPrefetchParams::Type::TaggedSymbol
+          )
 
         sig do
           override.returns(

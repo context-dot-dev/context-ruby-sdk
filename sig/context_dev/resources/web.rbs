@@ -143,6 +143,7 @@ module ContextDev
         ?exclude_selectors: ::Array[String]?,
         ?headers: ::Hash[Symbol, String],
         ?include_frames: ContextDev::Models::WebWebScrapeMdParams::include_frames,
+        ?include_html: ContextDev::Models::WebWebScrapeMdParams::include_html,
         ?include_images: ContextDev::Models::WebWebScrapeMdParams::include_images,
         ?include_links: ContextDev::Models::WebWebScrapeMdParams::include_links,
         ?include_selectors: ::Array[String]?,

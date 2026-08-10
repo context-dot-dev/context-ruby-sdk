@@ -49,8 +49,7 @@ module ContextDev
       sig { params(status: String).void }
       attr_writer :status
 
-      # The type of prefetch that was queued, echoed from the request (currently always
-      # 'brand')
+      # The type of prefetch that was queued, echoed from the request
       sig do
         returns(
           T.nilable(
@@ -87,8 +86,7 @@ module ContextDev
         message: nil,
         # Status of the response, e.g., 'ok'
         status: nil,
-        # The type of prefetch that was queued, echoed from the request (currently always
-        # 'brand')
+        # The type of prefetch that was queued, echoed from the request
         type: nil
       )
       end
@@ -150,8 +148,7 @@ module ContextDev
         end
       end
 
-      # The type of prefetch that was queued, echoed from the request (currently always
-      # 'brand')
+      # The type of prefetch that was queued, echoed from the request
       module Type
         extend ContextDev::Internal::Type::Enum
 
@@ -164,6 +161,11 @@ module ContextDev
         BRAND =
           T.let(
             :brand,
+            ContextDev::Models::UtilityPrefetchResponse::Type::TaggedSymbol
+          )
+        STYLEGUIDE =
+          T.let(
+            :styleguide,
             ContextDev::Models::UtilityPrefetchResponse::Type::TaggedSymbol
           )
 

@@ -162,7 +162,8 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :url
 
-          # Raw page HTML. Present on html batches.
+          # Page HTML. Present on html batches, and on markdown batches submitted with
+          # `options.includeHTML`.
           sig { returns(T.nilable(String)) }
           attr_reader :html
 
@@ -223,7 +224,8 @@ module ContextDev
             metadata:,
             # URL as submitted, or as discovered by the crawl.
             url:,
-            # Raw page HTML. Present on html batches.
+            # Page HTML. Present on html batches, and on markdown batches submitted with
+            # `options.includeHTML`.
             html: nil,
             # Caller-supplied identifier echoed from submission.
             item_id: nil,

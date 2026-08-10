@@ -175,6 +175,13 @@ module ContextDev
                          api_name: :excludeSelectors,
                          nil?: true
 
+                # @!attribute include_html
+                #   Also include each page's HTML in its result record, as an `html` field alongside
+                #   the Markdown.
+                #
+                #   @return [Boolean, nil]
+                optional :include_html, ContextDev::Internal::Type::Boolean, api_name: :includeHTML
+
                 # @!attribute include_images
                 #   Include image references in the Markdown.
                 #
@@ -241,7 +248,7 @@ module ContextDev
                 #   @return [Integer, nil]
                 optional :wait_for_ms, Integer, api_name: :waitForMs
 
-                # @!method initialize(country: nil, exclude_selectors: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, use_main_content_only: nil, wait_for_ms: nil)
+                # @!method initialize(country: nil, exclude_selectors: nil, include_html: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, use_main_content_only: nil, wait_for_ms: nil)
                 #   Some parameter documentations has been truncated, see
                 #   {ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options}
                 #   for more details.
@@ -251,6 +258,8 @@ module ContextDev
                 #   @param country [Symbol, ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
                 #
                 #   @param exclude_selectors [Array<String>, nil] Remove elements matching these CSS selectors. Applied after `includeSelectors`,
+                #
+                #   @param include_html [Boolean] Also include each page's HTML in its result record, as an `html` field alongside
                 #
                 #   @param include_images [Boolean] Include image references in the Markdown.
                 #
@@ -1333,6 +1342,13 @@ module ContextDev
                          api_name: :excludeSelectors,
                          nil?: true
 
+                # @!attribute include_html
+                #   Also include each page's HTML in its result record, as an `html` field alongside
+                #   the Markdown.
+                #
+                #   @return [Boolean, nil]
+                optional :include_html, ContextDev::Internal::Type::Boolean, api_name: :includeHTML
+
                 # @!attribute include_images
                 #   Include image references in the Markdown.
                 #
@@ -1399,7 +1415,7 @@ module ContextDev
                 #   @return [Integer, nil]
                 optional :wait_for_ms, Integer, api_name: :waitForMs
 
-                # @!method initialize(country: nil, exclude_selectors: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, use_main_content_only: nil, wait_for_ms: nil)
+                # @!method initialize(country: nil, exclude_selectors: nil, include_html: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, use_main_content_only: nil, wait_for_ms: nil)
                 #   Some parameter documentations has been truncated, see
                 #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options}
                 #   for more details.
@@ -1409,6 +1425,8 @@ module ContextDev
                 #   @param country [Symbol, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
                 #
                 #   @param exclude_selectors [Array<String>, nil] Remove elements matching these CSS selectors. Applied after `includeSelectors`,
+                #
+                #   @param include_html [Boolean] Also include each page's HTML in its result record, as an `html` field alongside
                 #
                 #   @param include_images [Boolean] Include image references in the Markdown.
                 #

@@ -53,6 +53,14 @@ module ContextDev
       #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeFrames, nil]
       optional :include_frames, union: -> { ContextDev::WebWebScrapeMdParams::IncludeFrames }
 
+      # @!attribute include_html
+      #   When true, the response also includes an `html` field with the page HTML the
+      #   Markdown was converted from — the same body the Scrape HTML endpoint returns for
+      #   the equivalent request.
+      #
+      #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeHTML, nil]
+      optional :include_html, union: -> { ContextDev::WebWebScrapeMdParams::IncludeHTML }
+
       # @!attribute include_images
       #   Include image references in Markdown output
       #
@@ -141,7 +149,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebWebScrapeMdParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebWebScrapeMdParams::Zdr }
 
-      # @!method initialize(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @!method initialize(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_html: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeMdParams} for more details.
       #
@@ -156,6 +164,8 @@ module ContextDev
       #   @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
       #   @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeFrames] When true, the contents of iframes are rendered to Markdown.
+      #
+      #   @param include_html [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeHTML] When true, the response also includes an `html` field with the page HTML the Mar
       #
       #   @param include_images [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeImages] Include image references in Markdown output
       #
@@ -465,6 +475,33 @@ module ContextDev
 
         define_sorbet_constant!(:Variants) do
           T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeMdParams::IncludeFrames::TaggedSymbol) }
+        end
+
+        # @!group
+
+        TRUE = :true
+        FALSE = :false
+
+        # @!endgroup
+      end
+
+      # When true, the response also includes an `html` field with the page HTML the
+      # Markdown was converted from — the same body the Scrape HTML endpoint returns for
+      # the equivalent request.
+      module IncludeHTML
+        extend ContextDev::Internal::Type::Union
+
+        variant ContextDev::Internal::Type::Boolean
+
+        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::IncludeHTML::TRUE }
+
+        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::IncludeHTML::FALSE }
+
+        # @!method self.variants
+        #   @return [Array(Boolean, Symbol)]
+
+        define_sorbet_constant!(:Variants) do
+          T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeMdParams::IncludeHTML::TaggedSymbol) }
         end
 
         # @!group

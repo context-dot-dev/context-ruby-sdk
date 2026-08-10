@@ -51,6 +51,14 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :actions_html_stale, ContextDev::Internal::Type::Boolean, api_name: :actionsHtmlStale
 
+      # @!attribute html
+      #   Only present when includeHTML=true: the page HTML the Markdown was converted
+      #   from — the same body the Scrape HTML endpoint returns for the equivalent
+      #   request.
+      #
+      #   @return [String, nil]
+      optional :html, String
+
       # @!attribute key_metadata
       #   Metadata about the API key used for the request. Included in every response
       #   whenever a valid API key is provided, even when the response status is not 200.
@@ -58,7 +66,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata }
 
-      # @!method initialize(content_length:, markdown:, metadata:, success:, url:, actions_applied: nil, actions_html_stale: nil, key_metadata: nil)
+      # @!method initialize(content_length:, markdown:, metadata:, success:, url:, actions_applied: nil, actions_html_stale: nil, html: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeMdResponse} for more details.
       #
@@ -75,6 +83,8 @@ module ContextDev
       #   @param actions_applied [Array<ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied>] One verified outcome per requested browser action, in request order.
       #
       #   @param actions_html_stale [Boolean] True when an action was applied but the returned content could not be refreshed
+      #
+      #   @param html [String] Only present when includeHTML=true: the page HTML the Markdown was converted fro
       #
       #   @param key_metadata [ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
 

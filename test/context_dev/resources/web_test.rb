@@ -208,6 +208,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         url: String,
         actions_applied: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied]) | nil,
         actions_html_stale: ContextDev::Internal::Type::Boolean | nil,
+        html: String | nil,
         key_metadata: ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata | nil
       }
     end

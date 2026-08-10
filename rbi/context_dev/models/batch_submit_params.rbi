@@ -343,6 +343,14 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :exclude_selectors
 
+                # Also include each page's HTML in its result record, as an `html` field alongside
+                # the Markdown.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :include_html
+
+                sig { params(include_html: T::Boolean).void }
+                attr_writer :include_html
+
                 # Include image references in the Markdown.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :include_images
@@ -422,6 +430,7 @@ module ContextDev
                     country:
                       ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Country::OrSymbol,
                     exclude_selectors: T.nilable(T::Array[String]),
+                    include_html: T::Boolean,
                     include_images: T::Boolean,
                     include_links: T::Boolean,
                     include_selectors: T.nilable(T::Array[String]),
@@ -441,6 +450,9 @@ module ContextDev
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
                   exclude_selectors: nil,
+                  # Also include each page's HTML in its result record, as an `html` field alongside
+                  # the Markdown.
+                  include_html: nil,
                   # Include image references in the Markdown.
                   include_images: nil,
                   # Include links in the Markdown.
@@ -473,6 +485,7 @@ module ContextDev
                       country:
                         ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Country::OrSymbol,
                       exclude_selectors: T.nilable(T::Array[String]),
+                      include_html: T::Boolean,
                       include_images: T::Boolean,
                       include_links: T::Boolean,
                       include_selectors: T.nilable(T::Array[String]),
@@ -3794,6 +3807,14 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :exclude_selectors
 
+                # Also include each page's HTML in its result record, as an `html` field alongside
+                # the Markdown.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :include_html
+
+                sig { params(include_html: T::Boolean).void }
+                attr_writer :include_html
+
                 # Include image references in the Markdown.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :include_images
@@ -3873,6 +3894,7 @@ module ContextDev
                     country:
                       ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Country::OrSymbol,
                     exclude_selectors: T.nilable(T::Array[String]),
+                    include_html: T::Boolean,
                     include_images: T::Boolean,
                     include_links: T::Boolean,
                     include_selectors: T.nilable(T::Array[String]),
@@ -3892,6 +3914,9 @@ module ContextDev
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
                   exclude_selectors: nil,
+                  # Also include each page's HTML in its result record, as an `html` field alongside
+                  # the Markdown.
+                  include_html: nil,
                   # Include image references in the Markdown.
                   include_images: nil,
                   # Include links in the Markdown.
@@ -3924,6 +3949,7 @@ module ContextDev
                       country:
                         ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Country::OrSymbol,
                       exclude_selectors: T.nilable(T::Array[String]),
+                      include_html: T::Boolean,
                       include_images: T::Boolean,
                       include_links: T::Boolean,
                       include_selectors: T.nilable(T::Array[String]),
