@@ -8,6 +8,7 @@ module ContextDev
         exclude_selectors: ::Array[String]?,
         headers: ::Hash[Symbol, String],
         include_frames: ContextDev::Models::WebWebScrapeMdParams::include_frames,
+        include_html: ContextDev::Models::WebWebScrapeMdParams::include_html,
         include_images: ContextDev::Models::WebWebScrapeMdParams::include_images,
         include_links: ContextDev::Models::WebWebScrapeMdParams::include_links,
         include_selectors: ::Array[String]?,
@@ -48,6 +49,12 @@ module ContextDev
       def include_frames=: (
         ContextDev::Models::WebWebScrapeMdParams::include_frames
       ) -> ContextDev::Models::WebWebScrapeMdParams::include_frames
+
+      attr_reader include_html: ContextDev::Models::WebWebScrapeMdParams::include_html?
+
+      def include_html=: (
+        ContextDev::Models::WebWebScrapeMdParams::include_html
+      ) -> ContextDev::Models::WebWebScrapeMdParams::include_html
 
       attr_reader include_images: ContextDev::Models::WebWebScrapeMdParams::include_images?
 
@@ -112,6 +119,7 @@ module ContextDev
         ?exclude_selectors: ::Array[String]?,
         ?headers: ::Hash[Symbol, String],
         ?include_frames: ContextDev::Models::WebWebScrapeMdParams::include_frames,
+        ?include_html: ContextDev::Models::WebWebScrapeMdParams::include_html,
         ?include_images: ContextDev::Models::WebWebScrapeMdParams::include_images,
         ?include_links: ContextDev::Models::WebWebScrapeMdParams::include_links,
         ?include_selectors: ::Array[String]?,
@@ -134,6 +142,7 @@ module ContextDev
         exclude_selectors: ::Array[String]?,
         headers: ::Hash[Symbol, String],
         include_frames: ContextDev::Models::WebWebScrapeMdParams::include_frames,
+        include_html: ContextDev::Models::WebWebScrapeMdParams::include_html,
         include_images: ContextDev::Models::WebWebScrapeMdParams::include_images,
         include_links: ContextDev::Models::WebWebScrapeMdParams::include_links,
         include_selectors: ::Array[String]?,
@@ -606,6 +615,17 @@ module ContextDev
         extend ContextDev::Internal::Type::Union
 
         def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::include_frames]
+
+        TRUE: :true
+        FALSE: :false
+      end
+
+      type include_html = bool | :true | :false
+
+      module IncludeHTML
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::include_html]
 
         TRUE: :true
         FALSE: :false

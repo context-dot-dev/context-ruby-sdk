@@ -71,12 +71,13 @@ module ContextDev
         def self?.variants: -> ::Array[ContextDev::Models::UtilityPrefetchParams::identifier]
       end
 
-      type type_ = :brand
+      type type_ = :brand | :styleguide
 
       module Type
         extend ContextDev::Internal::Type::Enum
 
         BRAND: :brand
+        STYLEGUIDE: :styleguide
 
         def self?.values: -> ::Array[ContextDev::Models::UtilityPrefetchParams::type_]
       end

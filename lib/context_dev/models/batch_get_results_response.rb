@@ -86,7 +86,8 @@ module ContextDev
           required :url, String
 
           # @!attribute html
-          #   Raw page HTML. Present on html batches.
+          #   Page HTML. Present on html batches, and on markdown batches submitted with
+          #   `options.includeHTML`.
           #
           #   @return [String, nil]
           optional :html, String
@@ -130,7 +131,7 @@ module ContextDev
           #
           #   @param url [String] URL as submitted, or as discovered by the crawl.
           #
-          #   @param html [String] Raw page HTML. Present on html batches.
+          #   @param html [String] Page HTML. Present on html batches, and on markdown batches submitted with `opti
           #
           #   @param item_id [String] Caller-supplied identifier echoed from submission.
           #

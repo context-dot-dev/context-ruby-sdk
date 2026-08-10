@@ -139,6 +139,7 @@ module ContextDev
                 {
                   country: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::country,
                   exclude_selectors: ::Array[String]?,
+                  include_html: bool,
                   include_images: bool,
                   include_links: bool,
                   include_selectors: ::Array[String]?,
@@ -158,6 +159,10 @@ module ContextDev
                 ) -> ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::country
 
                 attr_accessor exclude_selectors: ::Array[String]?
+
+                attr_reader include_html: bool?
+
+                def include_html=: (bool) -> bool
 
                 attr_reader include_images: bool?
 
@@ -196,6 +201,7 @@ module ContextDev
                 def initialize: (
                   ?country: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::country,
                   ?exclude_selectors: ::Array[String]?,
+                  ?include_html: bool,
                   ?include_images: bool,
                   ?include_links: bool,
                   ?include_selectors: ::Array[String]?,
@@ -210,6 +216,7 @@ module ContextDev
                 def to_hash: -> {
                   country: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::country,
                   exclude_selectors: ::Array[String]?,
+                  include_html: bool,
                   include_images: bool,
                   include_links: bool,
                   include_selectors: ::Array[String]?,
@@ -1507,6 +1514,7 @@ module ContextDev
                 {
                   country: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::country,
                   exclude_selectors: ::Array[String]?,
+                  include_html: bool,
                   include_images: bool,
                   include_links: bool,
                   include_selectors: ::Array[String]?,
@@ -1526,6 +1534,10 @@ module ContextDev
                 ) -> ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::country
 
                 attr_accessor exclude_selectors: ::Array[String]?
+
+                attr_reader include_html: bool?
+
+                def include_html=: (bool) -> bool
 
                 attr_reader include_images: bool?
 
@@ -1564,6 +1576,7 @@ module ContextDev
                 def initialize: (
                   ?country: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::country,
                   ?exclude_selectors: ::Array[String]?,
+                  ?include_html: bool,
                   ?include_images: bool,
                   ?include_links: bool,
                   ?include_selectors: ::Array[String]?,
@@ -1578,6 +1591,7 @@ module ContextDev
                 def to_hash: -> {
                   country: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::country,
                   exclude_selectors: ::Array[String]?,
+                  include_html: bool,
                   include_images: bool,
                   include_links: bool,
                   include_selectors: ::Array[String]?,

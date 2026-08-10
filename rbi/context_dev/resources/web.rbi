@@ -640,6 +640,11 @@ module ContextDev
               T::Boolean,
               ContextDev::WebWebScrapeMdParams::IncludeFrames::OrSymbol
             ),
+          include_html:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebScrapeMdParams::IncludeHTML::OrSymbol
+            ),
           include_images:
             T.any(
               T::Boolean,
@@ -696,6 +701,10 @@ module ContextDev
         headers: nil,
         # When true, the contents of iframes are rendered to Markdown.
         include_frames: nil,
+        # When true, the response also includes an `html` field with the page HTML the
+        # Markdown was converted from — the same body the Scrape HTML endpoint returns for
+        # the equivalent request.
+        include_html: nil,
         # Include image references in Markdown output
         include_images: nil,
         # Preserve hyperlinks in Markdown output
