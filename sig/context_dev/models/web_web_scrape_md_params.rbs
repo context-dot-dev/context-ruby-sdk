@@ -7,18 +7,18 @@ module ContextDev
         country: ContextDev::Models::WebWebScrapeMdParams::country,
         exclude_selectors: ::Array[String]?,
         headers: ::Hash[Symbol, String],
-        include_frames: ContextDev::Models::WebWebScrapeMdParams::include_frames,
-        include_html: ContextDev::Models::WebWebScrapeMdParams::include_html,
-        include_images: ContextDev::Models::WebWebScrapeMdParams::include_images,
-        include_links: ContextDev::Models::WebWebScrapeMdParams::include_links,
+        include_frames: bool,
+        include_html: bool,
+        include_images: bool,
+        include_links: bool,
         include_selectors: ::Array[String]?,
         max_age_ms: Integer?,
         pdf: ContextDev::WebWebScrapeMdParams::Pdf,
-        settle_animations: ContextDev::Models::WebWebScrapeMdParams::settle_animations,
-        :shorten_base64_images => ContextDev::Models::WebWebScrapeMdParams::shorten_base64_images,
+        settle_animations: bool,
+        :shorten_base64_images => bool,
         tags: ::Array[String],
         timeout_ms: Integer,
-        use_main_content_only: ContextDev::Models::WebWebScrapeMdParams::use_main_content_only,
+        use_main_content_only: bool,
         wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebWebScrapeMdParams::zdr
       }
@@ -44,29 +44,21 @@ module ContextDev
 
       def headers=: (::Hash[Symbol, String]) -> ::Hash[Symbol, String]
 
-      attr_reader include_frames: ContextDev::Models::WebWebScrapeMdParams::include_frames?
+      attr_reader include_frames: bool?
 
-      def include_frames=: (
-        ContextDev::Models::WebWebScrapeMdParams::include_frames
-      ) -> ContextDev::Models::WebWebScrapeMdParams::include_frames
+      def include_frames=: (bool) -> bool
 
-      attr_reader include_html: ContextDev::Models::WebWebScrapeMdParams::include_html?
+      attr_reader include_html: bool?
 
-      def include_html=: (
-        ContextDev::Models::WebWebScrapeMdParams::include_html
-      ) -> ContextDev::Models::WebWebScrapeMdParams::include_html
+      def include_html=: (bool) -> bool
 
-      attr_reader include_images: ContextDev::Models::WebWebScrapeMdParams::include_images?
+      attr_reader include_images: bool?
 
-      def include_images=: (
-        ContextDev::Models::WebWebScrapeMdParams::include_images
-      ) -> ContextDev::Models::WebWebScrapeMdParams::include_images
+      def include_images=: (bool) -> bool
 
-      attr_reader include_links: ContextDev::Models::WebWebScrapeMdParams::include_links?
+      attr_reader include_links: bool?
 
-      def include_links=: (
-        ContextDev::Models::WebWebScrapeMdParams::include_links
-      ) -> ContextDev::Models::WebWebScrapeMdParams::include_links
+      def include_links=: (bool) -> bool
 
       attr_accessor include_selectors: ::Array[String]?
 
@@ -78,17 +70,13 @@ module ContextDev
         ContextDev::WebWebScrapeMdParams::Pdf
       ) -> ContextDev::WebWebScrapeMdParams::Pdf
 
-      attr_reader settle_animations: ContextDev::Models::WebWebScrapeMdParams::settle_animations?
+      attr_reader settle_animations: bool?
 
-      def settle_animations=: (
-        ContextDev::Models::WebWebScrapeMdParams::settle_animations
-      ) -> ContextDev::Models::WebWebScrapeMdParams::settle_animations
+      def settle_animations=: (bool) -> bool
 
-      attr_reader shorten_base64_images: ContextDev::Models::WebWebScrapeMdParams::shorten_base64_images?
+      attr_reader shorten_base64_images: bool?
 
-      def shorten_base64_images=: (
-        ContextDev::Models::WebWebScrapeMdParams::shorten_base64_images
-      ) -> ContextDev::Models::WebWebScrapeMdParams::shorten_base64_images
+      def shorten_base64_images=: (bool) -> bool
 
       attr_reader tags: ::Array[String]?
 
@@ -98,11 +86,9 @@ module ContextDev
 
       def timeout_ms=: (Integer) -> Integer
 
-      attr_reader use_main_content_only: ContextDev::Models::WebWebScrapeMdParams::use_main_content_only?
+      attr_reader use_main_content_only: bool?
 
-      def use_main_content_only=: (
-        ContextDev::Models::WebWebScrapeMdParams::use_main_content_only
-      ) -> ContextDev::Models::WebWebScrapeMdParams::use_main_content_only
+      def use_main_content_only=: (bool) -> bool
 
       attr_accessor wait_for_ms: Integer?
 
@@ -118,18 +104,18 @@ module ContextDev
         ?country: ContextDev::Models::WebWebScrapeMdParams::country,
         ?exclude_selectors: ::Array[String]?,
         ?headers: ::Hash[Symbol, String],
-        ?include_frames: ContextDev::Models::WebWebScrapeMdParams::include_frames,
-        ?include_html: ContextDev::Models::WebWebScrapeMdParams::include_html,
-        ?include_images: ContextDev::Models::WebWebScrapeMdParams::include_images,
-        ?include_links: ContextDev::Models::WebWebScrapeMdParams::include_links,
+        ?include_frames: bool,
+        ?include_html: bool,
+        ?include_images: bool,
+        ?include_links: bool,
         ?include_selectors: ::Array[String]?,
         ?max_age_ms: Integer?,
         ?pdf: ContextDev::WebWebScrapeMdParams::Pdf,
-        ?settle_animations: ContextDev::Models::WebWebScrapeMdParams::settle_animations,
-        ?shorten_base64_images: ContextDev::Models::WebWebScrapeMdParams::shorten_base64_images,
+        ?settle_animations: bool,
+        ?shorten_base64_images: bool,
         ?tags: ::Array[String],
         ?timeout_ms: Integer,
-        ?use_main_content_only: ContextDev::Models::WebWebScrapeMdParams::use_main_content_only,
+        ?use_main_content_only: bool,
         ?wait_for_ms: Integer?,
         ?zdr: ContextDev::Models::WebWebScrapeMdParams::zdr,
         ?request_options: ContextDev::request_opts
@@ -141,18 +127,18 @@ module ContextDev
         country: ContextDev::Models::WebWebScrapeMdParams::country,
         exclude_selectors: ::Array[String]?,
         headers: ::Hash[Symbol, String],
-        include_frames: ContextDev::Models::WebWebScrapeMdParams::include_frames,
-        include_html: ContextDev::Models::WebWebScrapeMdParams::include_html,
-        include_images: ContextDev::Models::WebWebScrapeMdParams::include_images,
-        include_links: ContextDev::Models::WebWebScrapeMdParams::include_links,
+        include_frames: bool,
+        include_html: bool,
+        include_images: bool,
+        include_links: bool,
         include_selectors: ::Array[String]?,
         max_age_ms: Integer?,
         pdf: ContextDev::WebWebScrapeMdParams::Pdf,
-        settle_animations: ContextDev::Models::WebWebScrapeMdParams::settle_animations,
-        :shorten_base64_images => ContextDev::Models::WebWebScrapeMdParams::shorten_base64_images,
+        settle_animations: bool,
+        :shorten_base64_images => bool,
         tags: ::Array[String],
         timeout_ms: Integer,
-        use_main_content_only: ContextDev::Models::WebWebScrapeMdParams::use_main_content_only,
+        use_main_content_only: bool,
         wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebWebScrapeMdParams::zdr,
         request_options: ContextDev::RequestOptions
@@ -609,74 +595,21 @@ module ContextDev
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::country]
       end
 
-      type include_frames = bool | :true | :false
-
-      module IncludeFrames
-        extend ContextDev::Internal::Type::Union
-
-        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::include_frames]
-
-        TRUE: :true
-        FALSE: :false
-      end
-
-      type include_html = bool | :true | :false
-
-      module IncludeHTML
-        extend ContextDev::Internal::Type::Union
-
-        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::include_html]
-
-        TRUE: :true
-        FALSE: :false
-      end
-
-      type include_images = bool | :true | :false
-
-      module IncludeImages
-        extend ContextDev::Internal::Type::Union
-
-        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::include_images]
-
-        TRUE: :true
-        FALSE: :false
-      end
-
-      type include_links = bool | :true | :false
-
-      module IncludeLinks
-        extend ContextDev::Internal::Type::Union
-
-        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::include_links]
-
-        TRUE: :true
-        FALSE: :false
-      end
-
       type pdf =
-        {
-          end_: Integer,
-          ocr: ContextDev::Models::WebWebScrapeMdParams::Pdf::ocr,
-          should_parse: ContextDev::Models::WebWebScrapeMdParams::Pdf::should_parse,
-          start: Integer
-        }
+        { end_: Integer, ocr: bool, should_parse: bool, start: Integer }
 
       class Pdf < ContextDev::Internal::Type::BaseModel
         attr_reader end_: Integer?
 
         def end_=: (Integer) -> Integer
 
-        attr_reader ocr: ContextDev::Models::WebWebScrapeMdParams::Pdf::ocr?
+        attr_reader ocr: bool?
 
-        def ocr=: (
-          ContextDev::Models::WebWebScrapeMdParams::Pdf::ocr
-        ) -> ContextDev::Models::WebWebScrapeMdParams::Pdf::ocr
+        def ocr=: (bool) -> bool
 
-        attr_reader should_parse: ContextDev::Models::WebWebScrapeMdParams::Pdf::should_parse?
+        attr_reader should_parse: bool?
 
-        def should_parse=: (
-          ContextDev::Models::WebWebScrapeMdParams::Pdf::should_parse
-        ) -> ContextDev::Models::WebWebScrapeMdParams::Pdf::should_parse
+        def should_parse=: (bool) -> bool
 
         attr_reader start: Integer?
 
@@ -684,72 +617,17 @@ module ContextDev
 
         def initialize: (
           ?end_: Integer,
-          ?ocr: ContextDev::Models::WebWebScrapeMdParams::Pdf::ocr,
-          ?should_parse: ContextDev::Models::WebWebScrapeMdParams::Pdf::should_parse,
+          ?ocr: bool,
+          ?should_parse: bool,
           ?start: Integer
         ) -> void
 
         def to_hash: -> {
           end_: Integer,
-          ocr: ContextDev::Models::WebWebScrapeMdParams::Pdf::ocr,
-          should_parse: ContextDev::Models::WebWebScrapeMdParams::Pdf::should_parse,
+          ocr: bool,
+          should_parse: bool,
           start: Integer
         }
-
-        type ocr = bool | :true | :false
-
-        module Ocr
-          extend ContextDev::Internal::Type::Union
-
-          def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::Pdf::ocr]
-
-          TRUE: :true
-          FALSE: :false
-        end
-
-        type should_parse = bool | :true | :false
-
-        module ShouldParse
-          extend ContextDev::Internal::Type::Union
-
-          def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::Pdf::should_parse]
-
-          TRUE: :true
-          FALSE: :false
-        end
-      end
-
-      type settle_animations = bool | :true | :false
-
-      module SettleAnimations
-        extend ContextDev::Internal::Type::Union
-
-        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::settle_animations]
-
-        TRUE: :true
-        FALSE: :false
-      end
-
-      type shorten_base64_images = bool | :true | :false
-
-      module ShortenBase64Images
-        extend ContextDev::Internal::Type::Union
-
-        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::shorten_base64_images]
-
-        TRUE: :true
-        FALSE: :false
-      end
-
-      type use_main_content_only = bool | :true | :false
-
-      module UseMainContentOnly
-        extend ContextDev::Internal::Type::Union
-
-        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeMdParams::use_main_content_only]
-
-        TRUE: :true
-        FALSE: :false
       end
 
       type zdr = :enabled | :disabled

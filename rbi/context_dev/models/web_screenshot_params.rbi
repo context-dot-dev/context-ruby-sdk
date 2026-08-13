@@ -78,27 +78,10 @@ module ContextDev
       # Optional parameter to control cookie/consent popup handling. If 'true', we
       # dismiss cookie banner before capture. If 'false' or not provided, captures the
       # page without that step.
-      sig do
-        returns(
-          T.nilable(
-            T.any(
-              T::Boolean,
-              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
-            )
-          )
-        )
-      end
+      sig { returns(T.nilable(T::Boolean)) }
       attr_reader :handle_cookie_popup
 
-      sig do
-        params(
-          handle_cookie_popup:
-            T.any(
-              T::Boolean,
-              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
-            )
-        ).void
-      end
+      sig { params(handle_cookie_popup: T::Boolean).void }
       attr_writer :handle_cookie_popup
 
       # Return a cached screenshot if a prior screenshot for the same parameters exists
@@ -180,11 +163,7 @@ module ContextDev
           domain: String,
           full_screenshot:
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
-          handle_cookie_popup:
-            T.any(
-              T::Boolean,
-              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
-            ),
+          handle_cookie_popup: T::Boolean,
           max_age_ms: T.nilable(Integer),
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           scroll_offset: T.nilable(Integer),
@@ -269,11 +248,7 @@ module ContextDev
             domain: String,
             full_screenshot:
               ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
-            handle_cookie_popup:
-              T.any(
-                T::Boolean,
-                ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
-              ),
+            handle_cookie_popup: T::Boolean,
             max_age_ms: T.nilable(Integer),
             page: ContextDev::WebScreenshotParams::Page::OrSymbol,
             scroll_offset: T.nilable(Integer),
@@ -577,48 +552,6 @@ module ContextDev
         end
         def self.values
         end
-      end
-
-      # Optional parameter to control cookie/consent popup handling. If 'true', we
-      # dismiss cookie banner before capture. If 'false' or not provided, captures the
-      # page without that step.
-      module HandleCookiePopup
-        extend ContextDev::Internal::Type::Union
-
-        Variants =
-          T.type_alias do
-            T.any(
-              T::Boolean,
-              ContextDev::WebScreenshotParams::HandleCookiePopup::TaggedSymbol
-            )
-          end
-
-        sig do
-          override.returns(
-            T::Array[
-              ContextDev::WebScreenshotParams::HandleCookiePopup::Variants
-            ]
-          )
-        end
-        def self.variants
-        end
-
-        TaggedSymbol =
-          T.type_alias do
-            T.all(Symbol, ContextDev::WebScreenshotParams::HandleCookiePopup)
-          end
-        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-        TRUE =
-          T.let(
-            :true,
-            ContextDev::WebScreenshotParams::HandleCookiePopup::TaggedSymbol
-          )
-        FALSE =
-          T.let(
-            :false,
-            ContextDev::WebScreenshotParams::HandleCookiePopup::TaggedSymbol
-          )
       end
 
       # Optional parameter to specify which page type to screenshot. If provided, the

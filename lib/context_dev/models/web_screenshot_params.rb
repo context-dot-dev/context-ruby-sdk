@@ -50,8 +50,8 @@ module ContextDev
       #   dismiss cookie banner before capture. If 'false' or not provided, captures the
       #   page without that step.
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup, nil]
-      optional :handle_cookie_popup, union: -> { ContextDev::WebScreenshotParams::HandleCookiePopup }
+      #   @return [Boolean, nil]
+      optional :handle_cookie_popup, ContextDev::Internal::Type::Boolean
 
       # @!attribute max_age_ms
       #   Return a cached screenshot if a prior screenshot for the same parameters exists
@@ -135,7 +135,7 @@ module ContextDev
       #
       #   @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
-      #   @param handle_cookie_popup [Boolean, Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
+      #   @param handle_cookie_popup [Boolean] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
       #
       #   @param max_age_ms [Integer, nil] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
@@ -392,33 +392,6 @@ module ContextDev
 
         # @!method self.values
         #   @return [Array<Symbol>]
-      end
-
-      # Optional parameter to control cookie/consent popup handling. If 'true', we
-      # dismiss cookie banner before capture. If 'false' or not provided, captures the
-      # page without that step.
-      module HandleCookiePopup
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::WebScreenshotParams::HandleCookiePopup::TRUE }
-
-        variant const: -> { ContextDev::Models::WebScreenshotParams::HandleCookiePopup::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::WebScreenshotParams::HandleCookiePopup::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
       end
 
       # Optional parameter to specify which page type to screenshot. If provided, the
