@@ -28,14 +28,14 @@ module ContextDev
       # @!attribute include_images
       #   Include image references in Markdown output
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeImages, nil]
-      optional :include_images, union: -> { ContextDev::ParseHandleParams::IncludeImages }
+      #   @return [Boolean, nil]
+      optional :include_images, ContextDev::Internal::Type::Boolean
 
       # @!attribute include_links
       #   Preserve hyperlinks in Markdown output
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeLinks, nil]
-      optional :include_links, union: -> { ContextDev::ParseHandleParams::IncludeLinks }
+      #   @return [Boolean, nil]
+      optional :include_links, ContextDev::Internal::Type::Boolean
 
       # @!attribute ocr
       #   When true for PDF inputs, OCR the selected pages that have no usable text layer
@@ -44,8 +44,8 @@ module ContextDev
       #   range. Billed at 1 credit per page OCR actually recovered, on top of the base
       #   request cost. When false, no OCR runs.
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr, nil]
-      optional :ocr, union: -> { ContextDev::ParseHandleParams::Ocr }
+      #   @return [Boolean, nil]
+      optional :ocr, ContextDev::Internal::Type::Boolean
 
       # @!attribute pdf
       #   PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
@@ -56,8 +56,8 @@ module ContextDev
       # @!attribute shorten_base64_images
       #   Shorten base64-encoded image data in the Markdown output
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::ShortenBase64Images, nil]
-      optional :shorten_base64_images, union: -> { ContextDev::ParseHandleParams::ShortenBase64Images }
+      #   @return [Boolean, nil]
+      optional :shorten_base64_images, ContextDev::Internal::Type::Boolean
 
       # @!attribute tags
       #   Optional comma-separated caller-defined tags for tracking this request. Tags are
@@ -70,8 +70,8 @@ module ContextDev
       # @!attribute use_main_content_only
       #   Extract only the main content from HTML-like inputs
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::ParseHandleParams::UseMainContentOnly, nil]
-      optional :use_main_content_only, union: -> { ContextDev::ParseHandleParams::UseMainContentOnly }
+      #   @return [Boolean, nil]
+      optional :use_main_content_only, ContextDev::Internal::Type::Boolean
 
       # @!attribute zdr
       #   Set to enabled to bypass shared caches and omit request and response content
@@ -92,19 +92,19 @@ module ContextDev
       #
       #   @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv, md
       #
-      #   @param include_images [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeImages] Include image references in Markdown output
+      #   @param include_images [Boolean] Include image references in Markdown output
       #
-      #   @param include_links [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeLinks] Preserve hyperlinks in Markdown output
+      #   @param include_links [Boolean] Preserve hyperlinks in Markdown output
       #
-      #   @param ocr [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr] When true for PDF inputs, OCR the selected pages that have no usable text layer
+      #   @param ocr [Boolean] When true for PDF inputs, OCR the selected pages that have no usable text layer
       #
       #   @param pdf [ContextDev::Models::ParseHandleParams::Pdf] PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
       #
-      #   @param shorten_base64_images [Boolean, Symbol, ContextDev::Models::ParseHandleParams::ShortenBase64Images] Shorten base64-encoded image data in the Markdown output
+      #   @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
       #
       #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
-      #   @param use_main_content_only [Boolean, Symbol, ContextDev::Models::ParseHandleParams::UseMainContentOnly] Extract only the main content from HTML-like inputs
+      #   @param use_main_content_only [Boolean] Extract only the main content from HTML-like inputs
       #
       #   @param zdr [Symbol, ContextDev::Models::ParseHandleParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
@@ -190,85 +190,6 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Include image references in Markdown output
-      module IncludeImages
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::ParseHandleParams::IncludeImages::TRUE }
-
-        variant const: -> { ContextDev::Models::ParseHandleParams::IncludeImages::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::ParseHandleParams::IncludeImages::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
-      end
-
-      # Preserve hyperlinks in Markdown output
-      module IncludeLinks
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::ParseHandleParams::IncludeLinks::TRUE }
-
-        variant const: -> { ContextDev::Models::ParseHandleParams::IncludeLinks::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::ParseHandleParams::IncludeLinks::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
-      end
-
-      # When true for PDF inputs, OCR the selected pages that have no usable text layer
-      # (scans), replacing each recovered page's text with the OCR result while pages
-      # with a real text layer keep it. pdf.start/pdf.end limit the inclusive page
-      # range. Billed at 1 credit per page OCR actually recovered, on top of the base
-      # request cost. When false, no OCR runs.
-      module Ocr
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::ParseHandleParams::Ocr::TRUE }
-
-        variant const: -> { ContextDev::Models::ParseHandleParams::Ocr::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::ParseHandleParams::Ocr::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
-      end
-
       class Pdf < ContextDev::Internal::Type::BaseModel
         # @!attribute end_
         #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
@@ -292,56 +213,6 @@ module ContextDev
         #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
         #
         #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
-      end
-
-      # Shorten base64-encoded image data in the Markdown output
-      module ShortenBase64Images
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::ParseHandleParams::ShortenBase64Images::TRUE }
-
-        variant const: -> { ContextDev::Models::ParseHandleParams::ShortenBase64Images::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::ParseHandleParams::ShortenBase64Images::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
-      end
-
-      # Extract only the main content from HTML-like inputs
-      module UseMainContentOnly
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::ParseHandleParams::UseMainContentOnly::TRUE }
-
-        variant const: -> { ContextDev::Models::ParseHandleParams::UseMainContentOnly::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::ParseHandleParams::UseMainContentOnly::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
       end
 
       # Set to enabled to bypass shared caches and omit request and response content

@@ -196,11 +196,7 @@ module ContextDev
           domain: String,
           full_screenshot:
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
-          handle_cookie_popup:
-            T.any(
-              T::Boolean,
-              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
-            ),
+          handle_cookie_popup: T::Boolean,
           max_age_ms: T.nilable(Integer),
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           scroll_offset: T.nilable(Integer),
@@ -439,26 +435,14 @@ module ContextDev
           country: ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol,
           exclude_selectors: T.nilable(T::Array[String]),
           headers: T::Hash[Symbol, String],
-          include_frames:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeHTMLParams::IncludeFrames::OrSymbol
-            ),
+          include_frames: T::Boolean,
           include_selectors: T.nilable(T::Array[String]),
           max_age_ms: T.nilable(Integer),
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
-          settle_animations:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeHTMLParams::SettleAnimations::OrSymbol
-            ),
+          settle_animations: T::Boolean,
           tags: T::Array[String],
           timeout_ms: Integer,
-          use_main_content_only:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeHTMLParams::UseMainContentOnly::OrSymbol
-            ),
+          use_main_content_only: T::Boolean,
           wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeHTMLParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
@@ -539,11 +523,7 @@ module ContextDev
                 )
               ]
             ),
-          dedupe:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeImagesParams::Dedupe::OrSymbol
-            ),
+          dedupe: T::Boolean,
           enrichment:
             T.nilable(ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash),
           headers: T::Hash[Symbol, String],
@@ -635,46 +615,18 @@ module ContextDev
           country: ContextDev::WebWebScrapeMdParams::Country::OrSymbol,
           exclude_selectors: T.nilable(T::Array[String]),
           headers: T::Hash[Symbol, String],
-          include_frames:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeFrames::OrSymbol
-            ),
-          include_html:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeHTML::OrSymbol
-            ),
-          include_images:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeImages::OrSymbol
-            ),
-          include_links:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeLinks::OrSymbol
-            ),
+          include_frames: T::Boolean,
+          include_html: T::Boolean,
+          include_images: T::Boolean,
+          include_links: T::Boolean,
           include_selectors: T.nilable(T::Array[String]),
           max_age_ms: T.nilable(Integer),
           pdf: ContextDev::WebWebScrapeMdParams::Pdf::OrHash,
-          settle_animations:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::SettleAnimations::OrSymbol
-            ),
-          shorten_base64_images:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::ShortenBase64Images::OrSymbol
-            ),
+          settle_animations: T::Boolean,
+          shorten_base64_images: T::Boolean,
           tags: T::Array[String],
           timeout_ms: Integer,
-          use_main_content_only:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::UseMainContentOnly::OrSymbol
-            ),
+          use_main_content_only: T::Boolean,
           wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeMdParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash

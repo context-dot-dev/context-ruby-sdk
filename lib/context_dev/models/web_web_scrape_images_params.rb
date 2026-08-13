@@ -31,8 +31,8 @@ module ContextDev
       #   group is kept. Images that cannot be downloaded or hashed are kept. Default:
       #   false.
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Dedupe, nil]
-      optional :dedupe, union: -> { ContextDev::WebWebScrapeImagesParams::Dedupe }
+      #   @return [Boolean, nil]
+      optional :dedupe, ContextDev::Internal::Type::Boolean
 
       # @!attribute enrichment
       #   Optional per-image processing, sent as deep-object query params such as
@@ -87,7 +87,7 @@ module ContextDev
       #
       #   @param actions [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
       #
-      #   @param dedupe [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Dedupe] When true, visually duplicate images are removed: every image is loaded and perc
+      #   @param dedupe [Boolean] When true, visually duplicate images are removed: every image is loaded and perc
       #
       #   @param enrichment [ContextDev::Models::WebWebScrapeImagesParams::Enrichment, nil] Optional per-image processing, sent as deep-object query params such as enrichme
       #
@@ -156,49 +156,19 @@ module ContextDev
         #   @return [Array(ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform)]
       end
 
-      # When true, visually duplicate images are removed: every image is loaded and
-      # perceptually hashed, and only the highest-resolution copy of each duplicate
-      # group is kept. Images that cannot be downloaded or hashed are kept. Default:
-      # false.
-      module Dedupe
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::WebWebScrapeImagesParams::Dedupe::TRUE }
-
-        variant const: -> { ContextDev::Models::WebWebScrapeImagesParams::Dedupe::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeImagesParams::Dedupe::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
-      end
-
       class Enrichment < ContextDev::Internal::Type::BaseModel
         # @!attribute classification
         #   Classify each image by visual asset type.
         #
-        #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Enrichment::Classification, nil]
-        optional :classification, union: -> { ContextDev::WebWebScrapeImagesParams::Enrichment::Classification }
+        #   @return [Boolean, nil]
+        optional :classification, ContextDev::Internal::Type::Boolean
 
         # @!attribute hosted_url
         #   Host materializable images on the Brand.dev CDN and return their URL and MIME
         #   type.
         #
-        #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Enrichment::HostedURL, nil]
-        optional :hosted_url,
-                 union: -> { ContextDev::WebWebScrapeImagesParams::Enrichment::HostedURL },
-                 api_name: :hostedUrl
+        #   @return [Boolean, nil]
+        optional :hosted_url, ContextDev::Internal::Type::Boolean, api_name: :hostedUrl
 
         # @!attribute max_time_per_ms
         #   Per-image enrichment timeout in milliseconds. Default: 30000. Maximum: 60000.
@@ -209,8 +179,8 @@ module ContextDev
         # @!attribute resolution
         #   Measure image width and height when possible.
         #
-        #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Enrichment::Resolution, nil]
-        optional :resolution, union: -> { ContextDev::WebWebScrapeImagesParams::Enrichment::Resolution }
+        #   @return [Boolean, nil]
+        optional :resolution, ContextDev::Internal::Type::Boolean
 
         # @!method initialize(classification: nil, hosted_url: nil, max_time_per_ms: nil, resolution: nil)
         #   Some parameter documentations has been truncated, see
@@ -219,95 +189,13 @@ module ContextDev
         #   Optional per-image processing, sent as deep-object query params such as
         #   enrichment[resolution]=true.
         #
-        #   @param classification [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Enrichment::Classification] Classify each image by visual asset type.
+        #   @param classification [Boolean] Classify each image by visual asset type.
         #
-        #   @param hosted_url [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Enrichment::HostedURL] Host materializable images on the Brand.dev CDN and return their URL and MIME ty
+        #   @param hosted_url [Boolean] Host materializable images on the Brand.dev CDN and return their URL and MIME ty
         #
         #   @param max_time_per_ms [Integer] Per-image enrichment timeout in milliseconds. Default: 30000. Maximum: 60000.
         #
-        #   @param resolution [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Enrichment::Resolution] Measure image width and height when possible.
-
-        # Classify each image by visual asset type.
-        #
-        # @see ContextDev::Models::WebWebScrapeImagesParams::Enrichment#classification
-        module Classification
-          extend ContextDev::Internal::Type::Union
-
-          variant ContextDev::Internal::Type::Boolean
-
-          variant const: -> { ContextDev::Models::WebWebScrapeImagesParams::Enrichment::Classification::TRUE }
-
-          variant const: -> { ContextDev::Models::WebWebScrapeImagesParams::Enrichment::Classification::FALSE }
-
-          # @!method self.variants
-          #   @return [Array(Boolean, Symbol)]
-
-          define_sorbet_constant!(:Variants) do
-            T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeImagesParams::Enrichment::Classification::TaggedSymbol) }
-          end
-
-          # @!group
-
-          TRUE = :true
-          FALSE = :false
-
-          # @!endgroup
-        end
-
-        # Host materializable images on the Brand.dev CDN and return their URL and MIME
-        # type.
-        #
-        # @see ContextDev::Models::WebWebScrapeImagesParams::Enrichment#hosted_url
-        module HostedURL
-          extend ContextDev::Internal::Type::Union
-
-          variant ContextDev::Internal::Type::Boolean
-
-          variant const: -> { ContextDev::Models::WebWebScrapeImagesParams::Enrichment::HostedURL::TRUE }
-
-          variant const: -> { ContextDev::Models::WebWebScrapeImagesParams::Enrichment::HostedURL::FALSE }
-
-          # @!method self.variants
-          #   @return [Array(Boolean, Symbol)]
-
-          define_sorbet_constant!(:Variants) do
-            T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeImagesParams::Enrichment::HostedURL::TaggedSymbol) }
-          end
-
-          # @!group
-
-          TRUE = :true
-          FALSE = :false
-
-          # @!endgroup
-        end
-
-        # Measure image width and height when possible.
-        #
-        # @see ContextDev::Models::WebWebScrapeImagesParams::Enrichment#resolution
-        module Resolution
-          extend ContextDev::Internal::Type::Union
-
-          variant ContextDev::Internal::Type::Boolean
-
-          variant const: -> { ContextDev::Models::WebWebScrapeImagesParams::Enrichment::Resolution::TRUE }
-
-          variant const: -> { ContextDev::Models::WebWebScrapeImagesParams::Enrichment::Resolution::FALSE }
-
-          # @!method self.variants
-          #   @return [Array(Boolean, Symbol)]
-
-          define_sorbet_constant!(:Variants) do
-            T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeImagesParams::Enrichment::Resolution::TaggedSymbol) }
-          end
-
-          # @!group
-
-          TRUE = :true
-          FALSE = :false
-
-          # @!endgroup
-        end
+        #   @param resolution [Boolean] Measure image width and height when possible.
       end
     end
   end

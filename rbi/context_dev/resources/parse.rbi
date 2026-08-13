@@ -10,29 +10,13 @@ module ContextDev
           body: ContextDev::Internal::FileInput,
           client: String,
           extension: ContextDev::ParseHandleParams::Extension::OrSymbol,
-          include_images:
-            T.any(
-              T::Boolean,
-              ContextDev::ParseHandleParams::IncludeImages::OrSymbol
-            ),
-          include_links:
-            T.any(
-              T::Boolean,
-              ContextDev::ParseHandleParams::IncludeLinks::OrSymbol
-            ),
-          ocr: T.any(T::Boolean, ContextDev::ParseHandleParams::Ocr::OrSymbol),
+          include_images: T::Boolean,
+          include_links: T::Boolean,
+          ocr: T::Boolean,
           pdf: ContextDev::ParseHandleParams::Pdf::OrHash,
-          shorten_base64_images:
-            T.any(
-              T::Boolean,
-              ContextDev::ParseHandleParams::ShortenBase64Images::OrSymbol
-            ),
+          shorten_base64_images: T::Boolean,
           tags: T::Array[String],
-          use_main_content_only:
-            T.any(
-              T::Boolean,
-              ContextDev::ParseHandleParams::UseMainContentOnly::OrSymbol
-            ),
+          use_main_content_only: T::Boolean,
           zdr: ContextDev::ParseHandleParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::ParseHandleResponse)

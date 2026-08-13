@@ -648,8 +648,8 @@ module ContextDev
                 type pdf =
                   {
                     end_: Integer,
-                    ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ocr,
-                    should_parse: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::should_parse,
+                    ocr: bool,
+                    should_parse: bool,
                     start: Integer
                   }
 
@@ -658,17 +658,13 @@ module ContextDev
 
                   def end_=: (Integer) -> Integer
 
-                  attr_reader ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ocr?
+                  attr_reader ocr: bool?
 
-                  def ocr=: (
-                    ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ocr
-                  ) -> ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ocr
+                  def ocr=: (bool) -> bool
 
-                  attr_reader should_parse: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::should_parse?
+                  attr_reader should_parse: bool?
 
-                  def should_parse=: (
-                    ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::should_parse
-                  ) -> ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::should_parse
+                  def should_parse=: (bool) -> bool
 
                   attr_reader start: Integer?
 
@@ -676,39 +672,17 @@ module ContextDev
 
                   def initialize: (
                     ?end_: Integer,
-                    ?ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ocr,
-                    ?should_parse: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::should_parse,
+                    ?ocr: bool,
+                    ?should_parse: bool,
                     ?start: Integer
                   ) -> void
 
                   def to_hash: -> {
                     end_: Integer,
-                    ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ocr,
-                    should_parse: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::should_parse,
+                    ocr: bool,
+                    should_parse: bool,
                     start: Integer
                   }
-
-                  type ocr = bool | :true | :false
-
-                  module Ocr
-                    extend ContextDev::Internal::Type::Union
-
-                    def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ocr]
-
-                    TRUE: :true
-                    FALSE: :false
-                  end
-
-                  type should_parse = bool | :true | :false
-
-                  module ShouldParse
-                    extend ContextDev::Internal::Type::Union
-
-                    def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::should_parse]
-
-                    TRUE: :true
-                    FALSE: :false
-                  end
                 end
               end
             end
@@ -1255,8 +1229,8 @@ module ContextDev
                 type pdf =
                   {
                     end_: Integer,
-                    ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ocr,
-                    should_parse: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::should_parse,
+                    ocr: bool,
+                    should_parse: bool,
                     start: Integer
                   }
 
@@ -1265,17 +1239,13 @@ module ContextDev
 
                   def end_=: (Integer) -> Integer
 
-                  attr_reader ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ocr?
+                  attr_reader ocr: bool?
 
-                  def ocr=: (
-                    ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ocr
-                  ) -> ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ocr
+                  def ocr=: (bool) -> bool
 
-                  attr_reader should_parse: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::should_parse?
+                  attr_reader should_parse: bool?
 
-                  def should_parse=: (
-                    ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::should_parse
-                  ) -> ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::should_parse
+                  def should_parse=: (bool) -> bool
 
                   attr_reader start: Integer?
 
@@ -1283,39 +1253,17 @@ module ContextDev
 
                   def initialize: (
                     ?end_: Integer,
-                    ?ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ocr,
-                    ?should_parse: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::should_parse,
+                    ?ocr: bool,
+                    ?should_parse: bool,
                     ?start: Integer
                   ) -> void
 
                   def to_hash: -> {
                     end_: Integer,
-                    ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ocr,
-                    should_parse: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::should_parse,
+                    ocr: bool,
+                    should_parse: bool,
                     start: Integer
                   }
-
-                  type ocr = bool | :true | :false
-
-                  module Ocr
-                    extend ContextDev::Internal::Type::Union
-
-                    def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ocr]
-
-                    TRUE: :true
-                    FALSE: :false
-                  end
-
-                  type should_parse = bool | :true | :false
-
-                  module ShouldParse
-                    extend ContextDev::Internal::Type::Union
-
-                    def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::should_parse]
-
-                    TRUE: :true
-                    FALSE: :false
-                  end
                 end
               end
             end
@@ -2023,8 +1971,8 @@ module ContextDev
                 type pdf =
                   {
                     end_: Integer,
-                    ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ocr,
-                    should_parse: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::should_parse,
+                    ocr: bool,
+                    should_parse: bool,
                     start: Integer
                   }
 
@@ -2033,17 +1981,13 @@ module ContextDev
 
                   def end_=: (Integer) -> Integer
 
-                  attr_reader ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ocr?
+                  attr_reader ocr: bool?
 
-                  def ocr=: (
-                    ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ocr
-                  ) -> ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ocr
+                  def ocr=: (bool) -> bool
 
-                  attr_reader should_parse: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::should_parse?
+                  attr_reader should_parse: bool?
 
-                  def should_parse=: (
-                    ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::should_parse
-                  ) -> ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::should_parse
+                  def should_parse=: (bool) -> bool
 
                   attr_reader start: Integer?
 
@@ -2051,39 +1995,17 @@ module ContextDev
 
                   def initialize: (
                     ?end_: Integer,
-                    ?ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ocr,
-                    ?should_parse: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::should_parse,
+                    ?ocr: bool,
+                    ?should_parse: bool,
                     ?start: Integer
                   ) -> void
 
                   def to_hash: -> {
                     end_: Integer,
-                    ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ocr,
-                    should_parse: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::should_parse,
+                    ocr: bool,
+                    should_parse: bool,
                     start: Integer
                   }
-
-                  type ocr = bool | :true | :false
-
-                  module Ocr
-                    extend ContextDev::Internal::Type::Union
-
-                    def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ocr]
-
-                    TRUE: :true
-                    FALSE: :false
-                  end
-
-                  type should_parse = bool | :true | :false
-
-                  module ShouldParse
-                    extend ContextDev::Internal::Type::Union
-
-                    def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::should_parse]
-
-                    TRUE: :true
-                    FALSE: :false
-                  end
                 end
               end
             end
@@ -2731,8 +2653,8 @@ module ContextDev
                 type pdf =
                   {
                     end_: Integer,
-                    ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ocr,
-                    should_parse: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::should_parse,
+                    ocr: bool,
+                    should_parse: bool,
                     start: Integer
                   }
 
@@ -2741,17 +2663,13 @@ module ContextDev
 
                   def end_=: (Integer) -> Integer
 
-                  attr_reader ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ocr?
+                  attr_reader ocr: bool?
 
-                  def ocr=: (
-                    ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ocr
-                  ) -> ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ocr
+                  def ocr=: (bool) -> bool
 
-                  attr_reader should_parse: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::should_parse?
+                  attr_reader should_parse: bool?
 
-                  def should_parse=: (
-                    ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::should_parse
-                  ) -> ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::should_parse
+                  def should_parse=: (bool) -> bool
 
                   attr_reader start: Integer?
 
@@ -2759,39 +2677,17 @@ module ContextDev
 
                   def initialize: (
                     ?end_: Integer,
-                    ?ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ocr,
-                    ?should_parse: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::should_parse,
+                    ?ocr: bool,
+                    ?should_parse: bool,
                     ?start: Integer
                   ) -> void
 
                   def to_hash: -> {
                     end_: Integer,
-                    ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ocr,
-                    should_parse: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::should_parse,
+                    ocr: bool,
+                    should_parse: bool,
                     start: Integer
                   }
-
-                  type ocr = bool | :true | :false
-
-                  module Ocr
-                    extend ContextDev::Internal::Type::Union
-
-                    def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ocr]
-
-                    TRUE: :true
-                    FALSE: :false
-                  end
-
-                  type should_parse = bool | :true | :false
-
-                  module ShouldParse
-                    extend ContextDev::Internal::Type::Union
-
-                    def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::should_parse]
-
-                    TRUE: :true
-                    FALSE: :false
-                  end
                 end
               end
             end
