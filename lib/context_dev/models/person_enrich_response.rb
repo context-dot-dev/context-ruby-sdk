@@ -64,6 +64,16 @@ module ContextDev
 
           # @see ContextDev::Models::PersonEnrichResponse::Match::Candidate#person
           class Person < ContextDev::Internal::Type::BaseModel
+            # @!attribute current_role_status
+            #   Whether the person's current role is known. `present` — current_role is
+            #   populated. `none` — the work history explicitly shows every role has ended.
+            #   `unknown` — our data sources could not confirm either way; treat a missing
+            #   current_role as unverified rather than vacant.
+            #
+            #   @return [Symbol, ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRoleStatus]
+            required :current_role_status,
+                     enum: -> { ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRoleStatus }
+
             # @!attribute education
             #
             #   @return [Array<ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education>]
@@ -101,6 +111,12 @@ module ContextDev
             #   @return [String, nil]
             optional :bio, String
 
+            # @!attribute checked_at
+            #   When we last refreshed this profile from our data sources (ISO 8601).
+            #
+            #   @return [String, nil]
+            optional :checked_at, String
+
             # @!attribute current_role
             #
             #   @return [ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole, nil]
@@ -112,6 +128,13 @@ module ContextDev
             #   @return [String, nil]
             optional :email, String
 
+            # @!attribute last_updated
+            #   When the underlying profile data last changed in our data sources (ISO 8601).
+            #   Omitted when unknown.
+            #
+            #   @return [String, nil]
+            optional :last_updated, String
+
             # @!attribute location
             #
             #   @return [ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location, nil]
@@ -122,18 +145,55 @@ module ContextDev
             #   @return [ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name, nil]
             optional :name, -> { ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name }
 
-            # @!method initialize(education:, experience:, skills:, social_urls:, website_urls:, avatar_url: nil, bio: nil, current_role: nil, email: nil, location: nil, name: nil)
+            # @!method initialize(current_role_status:, education:, experience:, skills:, social_urls:, website_urls:, avatar_url: nil, bio: nil, checked_at: nil, current_role: nil, email: nil, last_updated: nil, location: nil, name: nil)
+            #   Some parameter documentations has been truncated, see
+            #   {ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person} for more
+            #   details.
+            #
+            #   @param current_role_status [Symbol, ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRoleStatus] Whether the person's current role is known. `present` — current_role is populate
+            #
             #   @param education [Array<ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education>]
+            #
             #   @param experience [Array<ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience>]
+            #
             #   @param skills [Array<String>]
+            #
             #   @param social_urls [Array<String>]
+            #
             #   @param website_urls [Array<String>]
+            #
             #   @param avatar_url [String]
+            #
             #   @param bio [String]
+            #
+            #   @param checked_at [String] When we last refreshed this profile from our data sources (ISO 8601).
+            #
             #   @param current_role [ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole]
+            #
             #   @param email [String]
+            #
+            #   @param last_updated [String] When the underlying profile data last changed in our data sources (ISO 8601). Om
+            #
             #   @param location [ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location]
+            #
             #   @param name [ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name]
+
+            # Whether the person's current role is known. `present` — current_role is
+            # populated. `none` — the work history explicitly shows every role has ended.
+            # `unknown` — our data sources could not confirm either way; treat a missing
+            # current_role as unverified rather than vacant.
+            #
+            # @see ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person#current_role_status
+            module CurrentRoleStatus
+              extend ContextDev::Internal::Type::Enum
+
+              PRESENT = :present
+              NONE = :none
+              UNKNOWN = :unknown
+
+              # @!method self.values
+              #   @return [Array<Symbol>]
+            end
 
             class Education < ContextDev::Internal::Type::BaseModel
               # @!attribute institution

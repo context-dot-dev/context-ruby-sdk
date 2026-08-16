@@ -139,6 +139,17 @@ module ContextDev
                 )
               end
 
+            # Whether the person's current role is known. `present` — current_role is
+            # populated. `none` — the work history explicitly shows every role has ended.
+            # `unknown` — our data sources could not confirm either way; treat a missing
+            # current_role as unverified rather than vacant.
+            sig do
+              returns(
+                ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRoleStatus::TaggedSymbol
+              )
+            end
+            attr_accessor :current_role_status
+
             sig do
               returns(
                 T::Array[
@@ -178,6 +189,13 @@ module ContextDev
             sig { params(bio: String).void }
             attr_writer :bio
 
+            # When we last refreshed this profile from our data sources (ISO 8601).
+            sig { returns(T.nilable(String)) }
+            attr_reader :checked_at
+
+            sig { params(checked_at: String).void }
+            attr_writer :checked_at
+
             sig do
               returns(
                 T.nilable(
@@ -200,6 +218,14 @@ module ContextDev
 
             sig { params(email: String).void }
             attr_writer :email
+
+            # When the underlying profile data last changed in our data sources (ISO 8601).
+            # Omitted when unknown.
+            sig { returns(T.nilable(String)) }
+            attr_reader :last_updated
+
+            sig { params(last_updated: String).void }
+            attr_writer :last_updated
 
             sig do
               returns(
@@ -237,6 +263,8 @@ module ContextDev
 
             sig do
               params(
+                current_role_status:
+                  ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRoleStatus::OrSymbol,
                 education:
                   T::Array[
                     ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education::OrHash
@@ -250,9 +278,11 @@ module ContextDev
                 website_urls: T::Array[String],
                 avatar_url: String,
                 bio: String,
+                checked_at: String,
                 current_role:
                   ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole::OrHash,
                 email: String,
+                last_updated: String,
                 location:
                   ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location::OrHash,
                 name:
@@ -260,6 +290,11 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
+              # Whether the person's current role is known. `present` — current_role is
+              # populated. `none` — the work history explicitly shows every role has ended.
+              # `unknown` — our data sources could not confirm either way; treat a missing
+              # current_role as unverified rather than vacant.
+              current_role_status:,
               education:,
               experience:,
               skills:,
@@ -267,8 +302,13 @@ module ContextDev
               website_urls:,
               avatar_url: nil,
               bio: nil,
+              # When we last refreshed this profile from our data sources (ISO 8601).
+              checked_at: nil,
               current_role: nil,
               email: nil,
+              # When the underlying profile data last changed in our data sources (ISO 8601).
+              # Omitted when unknown.
+              last_updated: nil,
               location: nil,
               name: nil
             )
@@ -277,6 +317,8 @@ module ContextDev
             sig do
               override.returns(
                 {
+                  current_role_status:
+                    ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRoleStatus::TaggedSymbol,
                   education:
                     T::Array[
                       ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education
@@ -290,9 +332,11 @@ module ContextDev
                   website_urls: T::Array[String],
                   avatar_url: String,
                   bio: String,
+                  checked_at: String,
                   current_role:
                     ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole,
                   email: String,
+                  last_updated: String,
                   location:
                     ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location,
                   name:
@@ -301,6 +345,49 @@ module ContextDev
               )
             end
             def to_hash
+            end
+
+            # Whether the person's current role is known. `present` — current_role is
+            # populated. `none` — the work history explicitly shows every role has ended.
+            # `unknown` — our data sources could not confirm either way; treat a missing
+            # current_role as unverified rather than vacant.
+            module CurrentRoleStatus
+              extend ContextDev::Internal::Type::Enum
+
+              TaggedSymbol =
+                T.type_alias do
+                  T.all(
+                    Symbol,
+                    ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRoleStatus
+                  )
+                end
+              OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+              PRESENT =
+                T.let(
+                  :present,
+                  ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRoleStatus::TaggedSymbol
+                )
+              NONE =
+                T.let(
+                  :none,
+                  ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRoleStatus::TaggedSymbol
+                )
+              UNKNOWN =
+                T.let(
+                  :unknown,
+                  ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRoleStatus::TaggedSymbol
+                )
+
+              sig do
+                override.returns(
+                  T::Array[
+                    ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRoleStatus::TaggedSymbol
+                  ]
+                )
+              end
+              def self.values
+              end
             end
 
             class Education < ContextDev::Internal::Type::BaseModel

@@ -60,6 +60,7 @@ module ContextDev
 
           type person =
             {
+              current_role_status: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::current_role_status,
               education: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education],
               experience: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience],
               skills: ::Array[String],
@@ -67,13 +68,17 @@ module ContextDev
               website_urls: ::Array[String],
               avatar_url: String,
               bio: String,
+              checked_at: String,
               current_role: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole,
               email: String,
+              last_updated: String,
               location: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location,
               name: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name
             }
 
           class Person < ContextDev::Internal::Type::BaseModel
+            attr_accessor current_role_status: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::current_role_status
+
             attr_accessor education: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education]
 
             attr_accessor experience: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience]
@@ -92,6 +97,10 @@ module ContextDev
 
             def bio=: (String) -> String
 
+            attr_reader checked_at: String?
+
+            def checked_at=: (String) -> String
+
             attr_reader current_role: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole?
 
             def current_role=: (
@@ -101,6 +110,10 @@ module ContextDev
             attr_reader email: String?
 
             def email=: (String) -> String
+
+            attr_reader last_updated: String?
+
+            def last_updated=: (String) -> String
 
             attr_reader location: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location?
 
@@ -115,6 +128,7 @@ module ContextDev
             ) -> ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name
 
             def initialize: (
+              current_role_status: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::current_role_status,
               education: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education],
               experience: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience],
               skills: ::Array[String],
@@ -122,13 +136,16 @@ module ContextDev
               website_urls: ::Array[String],
               ?avatar_url: String,
               ?bio: String,
+              ?checked_at: String,
               ?current_role: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole,
               ?email: String,
+              ?last_updated: String,
               ?location: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location,
               ?name: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name
             ) -> void
 
             def to_hash: -> {
+              current_role_status: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::current_role_status,
               education: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Education],
               experience: ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Experience],
               skills: ::Array[String],
@@ -136,11 +153,25 @@ module ContextDev
               website_urls: ::Array[String],
               avatar_url: String,
               bio: String,
+              checked_at: String,
               current_role: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::CurrentRole,
               email: String,
+              last_updated: String,
               location: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Location,
               name: ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::Name
             }
+
+            type current_role_status = :present | :none | :unknown
+
+            module CurrentRoleStatus
+              extend ContextDev::Internal::Type::Enum
+
+              PRESENT: :present
+              NONE: :none
+              UNKNOWN: :unknown
+
+              def self?.values: -> ::Array[ContextDev::Models::PersonEnrichResponse::Match::Candidate::Person::current_role_status]
+            end
 
             type education =
               {
