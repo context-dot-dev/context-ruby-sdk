@@ -68,20 +68,19 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::BrandSearchParams} for more details.
       #
-      # Search brands by name or domain and get back up to 10 lightweight matches
-      # (domain, name, logo). Name matches rank ahead of domain matches; within each
-      # group the most popular brands come first: by Tranco rank, then market cap for
-      # brands outside the Tranco list, with text relevance breaking ties. Matching is
-      # prefix-based with no typo tolerance, so it is suited to autocomplete. Only
-      # brands already in the Context.dev index are returned — use /brand/retrieve to
-      # fetch (and index) a specific domain. Free on Pro and Scale plans; costs 1 credit
-      # per request on the Free and Starter plans.
+      # Search indexed brands by name or domain
       #
-      # @overload search(query:, tags: nil, request_options: {})
+      # @overload search(query:, autocomplete: nil, query_by: nil, tags: nil, typo_tolerance: nil, request_options: {})
       #
-      # @param query [String] Search term, matched against brand names and domains by prefix (e.g. 'nike', 'ni
+      # @param query [String] Search term, matched against the fields selected by queryBy (e.g. 'nike', 'nike.
+      #
+      # @param autocomplete [Boolean] Whether the search term matches by prefix, so partial words match as they are ty
+      #
+      # @param query_by [Array<Symbol, ContextDev::Models::BrandSearchParams::QueryBy>] Fields to match the search term against, as a comma-separated list or repeated p
       #
       # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #
+      # @param typo_tolerance [Integer] Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -94,7 +93,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "brand/search",
-          query: query,
+          query: query.transform_keys(query_by: "queryBy", typo_tolerance: "typoTolerance"),
           model: ContextDev::Models::BrandSearchResponse,
           options: options
         )
