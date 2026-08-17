@@ -64,29 +64,34 @@ module ContextDev
       )
       end
 
-      # Search brands by name or domain and get back up to 10 lightweight matches
-      # (domain, name, logo). Name matches rank ahead of domain matches; within each
-      # group the most popular brands come first: by Tranco rank, then market cap for
-      # brands outside the Tranco list, with text relevance breaking ties. Matching is
-      # prefix-based with no typo tolerance, so it is suited to autocomplete. Only
-      # brands already in the Context.dev index are returned — use /brand/retrieve to
-      # fetch (and index) a specific domain. Free on Pro and Scale plans; costs 1 credit
-      # per request on the Free and Starter plans.
+      # Search indexed brands by name or domain
       sig do
         params(
           query: String,
+          autocomplete: T::Boolean,
+          query_by: T::Array[ContextDev::BrandSearchParams::QueryBy::OrSymbol],
           tags: T::Array[String],
+          typo_tolerance: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::BrandSearchResponse)
       end
       def search(
-        # Search term, matched against brand names and domains by prefix (e.g. 'nike',
+        # Search term, matched against the fields selected by queryBy (e.g. 'nike',
         # 'nike.com', 'nik').
         query:,
+        # Whether the search term matches by prefix, so partial words match as they are
+        # typed (e.g. 'nik' matches Nike). Set to false to match whole words only.
+        autocomplete: nil,
+        # Fields to match the search term against, as a comma-separated list or repeated
+        # parameter: 'name', 'domain', or both. Defaults to both.
+        query_by: nil,
         # Optional comma-separated caller-defined tags for tracking this request. Tags are
         # recorded on the request's usage log and can be used to filter usage on the
         # dashboard usage page. Up to 20 tags, each 1-50 characters.
         tags: nil,
+        # Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
+        # typo tolerance).
+        typo_tolerance: nil,
         request_options: {}
       )
       end
