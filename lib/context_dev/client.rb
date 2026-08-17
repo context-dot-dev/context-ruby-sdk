@@ -50,6 +50,10 @@ module ContextDev
     # @return [ContextDev::Resources::People]
     attr_reader :people
 
+    # Search live first-party RSS and free historical news data by company identity.
+    # @return [ContextDev::Resources::News]
+    attr_reader :news
+
     # @api private
     #
     # @return [Hash{String=>String}]
@@ -120,6 +124,7 @@ module ContextDev
       @monitors = ContextDev::Resources::Monitors.new(client: self)
       @batch = ContextDev::Resources::Batch.new(client: self)
       @people = ContextDev::Resources::People.new(client: self)
+      @news = ContextDev::Resources::News.new(client: self)
     end
   end
 end
