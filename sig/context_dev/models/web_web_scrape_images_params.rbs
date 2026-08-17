@@ -4,7 +4,7 @@ module ContextDev
       {
         url: String,
         actions: ::Array[ContextDev::Models::WebWebScrapeImagesParams::action]?,
-        dedupe: ContextDev::Models::WebWebScrapeImagesParams::dedupe,
+        dedupe: bool,
         enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment?,
         headers: ::Hash[Symbol, String],
         max_age_ms: Integer?,
@@ -22,11 +22,9 @@ module ContextDev
 
       attr_accessor actions: ::Array[ContextDev::Models::WebWebScrapeImagesParams::action]?
 
-      attr_reader dedupe: ContextDev::Models::WebWebScrapeImagesParams::dedupe?
+      attr_reader dedupe: bool?
 
-      def dedupe=: (
-        ContextDev::Models::WebWebScrapeImagesParams::dedupe
-      ) -> ContextDev::Models::WebWebScrapeImagesParams::dedupe
+      def dedupe=: (bool) -> bool
 
       attr_accessor enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment?
 
@@ -49,7 +47,7 @@ module ContextDev
       def initialize: (
         url: String,
         ?actions: ::Array[ContextDev::Models::WebWebScrapeImagesParams::action]?,
-        ?dedupe: ContextDev::Models::WebWebScrapeImagesParams::dedupe,
+        ?dedupe: bool,
         ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment?,
         ?headers: ::Hash[Symbol, String],
         ?max_age_ms: Integer?,
@@ -62,7 +60,7 @@ module ContextDev
       def to_hash: -> {
         url: String,
         actions: ::Array[ContextDev::Models::WebWebScrapeImagesParams::action]?,
-        dedupe: ContextDev::Models::WebWebScrapeImagesParams::dedupe,
+        dedupe: bool,
         enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment?,
         headers: ::Hash[Symbol, String],
         max_age_ms: Integer?,
@@ -106,94 +104,44 @@ module ContextDev
         def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeImagesParams::action]
       end
 
-      type dedupe = bool | :true | :false
-
-      module Dedupe
-        extend ContextDev::Internal::Type::Union
-
-        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeImagesParams::dedupe]
-
-        TRUE: :true
-        FALSE: :false
-      end
-
       type enrichment =
         {
-          classification: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::classification,
-          hosted_url: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::hosted_url,
+          classification: bool,
+          hosted_url: bool,
           max_time_per_ms: Integer,
-          resolution: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::resolution
+          resolution: bool
         }
 
       class Enrichment < ContextDev::Internal::Type::BaseModel
-        attr_reader classification: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::classification?
+        attr_reader classification: bool?
 
-        def classification=: (
-          ContextDev::Models::WebWebScrapeImagesParams::Enrichment::classification
-        ) -> ContextDev::Models::WebWebScrapeImagesParams::Enrichment::classification
+        def classification=: (bool) -> bool
 
-        attr_reader hosted_url: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::hosted_url?
+        attr_reader hosted_url: bool?
 
-        def hosted_url=: (
-          ContextDev::Models::WebWebScrapeImagesParams::Enrichment::hosted_url
-        ) -> ContextDev::Models::WebWebScrapeImagesParams::Enrichment::hosted_url
+        def hosted_url=: (bool) -> bool
 
         attr_reader max_time_per_ms: Integer?
 
         def max_time_per_ms=: (Integer) -> Integer
 
-        attr_reader resolution: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::resolution?
+        attr_reader resolution: bool?
 
-        def resolution=: (
-          ContextDev::Models::WebWebScrapeImagesParams::Enrichment::resolution
-        ) -> ContextDev::Models::WebWebScrapeImagesParams::Enrichment::resolution
+        def resolution=: (bool) -> bool
 
         def initialize: (
-          ?classification: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::classification,
-          ?hosted_url: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::hosted_url,
+          ?classification: bool,
+          ?hosted_url: bool,
           ?max_time_per_ms: Integer,
-          ?resolution: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::resolution
+          ?resolution: bool
         ) -> void
 
         def to_hash: -> {
-          classification: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::classification,
-          hosted_url: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::hosted_url,
+          classification: bool,
+          hosted_url: bool,
           max_time_per_ms: Integer,
-          resolution: ContextDev::Models::WebWebScrapeImagesParams::Enrichment::resolution
+          resolution: bool
         }
-
-        type classification = bool | :true | :false
-
-        module Classification
-          extend ContextDev::Internal::Type::Union
-
-          def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeImagesParams::Enrichment::classification]
-
-          TRUE: :true
-          FALSE: :false
-        end
-
-        type hosted_url = bool | :true | :false
-
-        module HostedURL
-          extend ContextDev::Internal::Type::Union
-
-          def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeImagesParams::Enrichment::hosted_url]
-
-          TRUE: :true
-          FALSE: :false
-        end
-
-        type resolution = bool | :true | :false
-
-        module Resolution
-          extend ContextDev::Internal::Type::Union
-
-          def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeImagesParams::Enrichment::resolution]
-
-          TRUE: :true
-          FALSE: :false
-        end
       end
     end
   end

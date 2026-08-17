@@ -162,7 +162,8 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :url
 
-          # Raw page HTML. Present on html batches.
+          # Page HTML. Present on html batches, and on markdown batches submitted with
+          # `options.includeHTML`.
           sig { returns(T.nilable(String)) }
           attr_reader :html
 
@@ -223,7 +224,8 @@ module ContextDev
             metadata:,
             # URL as submitted, or as discovered by the crawl.
             url:,
-            # Raw page HTML. Present on html batches.
+            # Page HTML. Present on html batches, and on markdown batches submitted with
+            # `options.includeHTML`.
             html: nil,
             # Caller-supplied identifier echoed from submission.
             item_id: nil,
@@ -350,6 +352,29 @@ module ContextDev
 
             sig { params(favicon: String).void }
             attr_writer :favicon
+
+            # Page headings (h1–h6) in document order, extracted from the unfiltered document.
+            # Capped at the first 500 headings. Omitted when the page has none.
+            sig do
+              returns(
+                T.nilable(
+                  T::Array[
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata::Heading
+                  ]
+                )
+              )
+            end
+            attr_reader :headings
+
+            sig do
+              params(
+                headings:
+                  T::Array[
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata::Heading::OrHash
+                  ]
+              ).void
+            end
+            attr_writer :headings
 
             # Primary resolved preview image from Open Graph, Twitter, or image metadata.
             sig { returns(T.nilable(String)) }
@@ -480,6 +505,10 @@ module ContextDev
                 canonical_url: String,
                 description: String,
                 favicon: String,
+                headings:
+                  T::Array[
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata::Heading::OrHash
+                  ],
                 image: String,
                 json_ld: T::Array[T::Hash[Symbol, T.anything]],
                 keywords: T::Array[String],
@@ -519,6 +548,9 @@ module ContextDev
               description: nil,
               # Resolved favicon URL, when present.
               favicon: nil,
+              # Page headings (h1–h6) in document order, extracted from the unfiltered document.
+              # Capped at the first 500 headings. Omitted when the page has none.
+              headings: nil,
               # Primary resolved preview image from Open Graph, Twitter, or image metadata.
               image: nil,
               # JSON-LD structured data blocks parsed from the page.
@@ -562,6 +594,10 @@ module ContextDev
                   canonical_url: String,
                   description: String,
                   favicon: String,
+                  headings:
+                    T::Array[
+                      ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata::Heading
+                    ],
                   image: String,
                   json_ld: T::Array[T::Hash[Symbol, T.anything]],
                   keywords: T::Array[String],
@@ -673,6 +709,39 @@ module ContextDev
                   }
                 )
               end
+              def to_hash
+              end
+            end
+
+            class Heading < ContextDev::Internal::Type::BaseModel
+              OrHash =
+                T.type_alias do
+                  T.any(
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata::Heading,
+                    ContextDev::Internal::AnyHash
+                  )
+                end
+
+              # Heading level, 1–6 (from h1–h6).
+              sig { returns(Integer) }
+              attr_accessor :level
+
+              # Heading text with whitespace collapsed, truncated to 1000 characters.
+              sig { returns(String) }
+              attr_accessor :text
+
+              sig do
+                params(level: Integer, text: String).returns(T.attached_class)
+              end
+              def self.new(
+                # Heading level, 1–6 (from h1–h6).
+                level:,
+                # Heading text with whitespace collapsed, truncated to 1000 characters.
+                text:
+              )
+              end
+
+              sig { override.returns({ level: Integer, text: String }) }
               def to_hash
               end
             end

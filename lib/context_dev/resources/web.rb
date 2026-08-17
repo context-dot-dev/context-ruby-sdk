@@ -188,7 +188,7 @@ module ContextDev
       #
       # @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
-      # @param handle_cookie_popup [Boolean, Symbol, ContextDev::Models::WebScreenshotParams::HandleCookiePopup] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
+      # @param handle_cookie_popup [Boolean] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
       #
       # @param max_age_ms [Integer, nil] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
@@ -359,7 +359,7 @@ module ContextDev
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
-      # @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebScrapeHTMLParams::IncludeFrames] When true, iframes are rendered inline into the returned HTML.
+      # @param include_frames [Boolean] When true, iframes are rendered inline into the returned HTML.
       #
       # @param include_selectors [Array<String>, nil] CSS selectors. When provided, only matching subtrees (and their descendants) are
       #
@@ -367,13 +367,13 @@ module ContextDev
       #
       # @param pdf [ContextDev::Models::WebWebScrapeHTMLParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
-      # @param settle_animations [Boolean, Symbol, ContextDev::Models::WebWebScrapeHTMLParams::SettleAnimations] When true, waits briefly for CSS and transition animations to settle before extr
+      # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
       #
       # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
-      # @param use_main_content_only [Boolean, Symbol, ContextDev::Models::WebWebScrapeHTMLParams::UseMainContentOnly] When true, return only the page's main content in the HTML response, excluding h
+      # @param use_main_content_only [Boolean] When true, return only the page's main content in the HTML response, excluding h
       #
       # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
       #
@@ -420,7 +420,7 @@ module ContextDev
       #
       # @param actions [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
       #
-      # @param dedupe [Boolean, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Dedupe] When true, visually duplicate images are removed: every image is loaded and perc
+      # @param dedupe [Boolean] When true, visually duplicate images are removed: every image is loaded and perc
       #
       # @param enrichment [ContextDev::Models::WebWebScrapeImagesParams::Enrichment, nil] Optional per-image processing, sent as deep-object query params such as enrichme
       #
@@ -476,19 +476,19 @@ module ContextDev
       #
       # ### Billing & errors
       #
-      # | HTTP status | Billed?                                   | Meaning                                                                                  |
-      # | ----------- | ----------------------------------------- | ---------------------------------------------------------------------------------------- |
-      # | 200         | Yes — 1 credit, or 2 credits with actions | Successful scrape, including a zero-length result when includeSelectors matched nothing  |
-      # | 400         | No                                        | Invalid input, skipped PDF, or the page could not be scraped                             |
-      # | 401 / 403   | No                                        | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code |
-      # | 404         | No                                        | Target page returned or fingerprinted as not found                                       |
-      # | 408         | No                                        | Request timed out                                                                        |
-      # | 413         | No                                        | Target content exceeds the maximum supported size (20 MB)                                |
-      # | 415         | No                                        | Unsupported content type                                                                 |
-      # | 429         | No                                        | Per-minute rate limit exceeded; honor Retry-After                                        |
-      # | 500         | No                                        | Internal error                                                                           |
+      # | HTTP status | Billed?                                   | Meaning                                                                                                                                                                                                                                                                                                       |
+      # | ----------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+      # | 200         | Yes — 1 credit, or 2 credits with actions | Successful scrape, including a zero-length result when includeSelectors matched nothing                                                                                                                                                                                                                       |
+      # | 400         | No                                        | Invalid input, skipped PDF, or the page could not be scraped. error_code WEBSITE_BLOCKED specifically means the site answered with an anti-bot challenge, CAPTCHA wall, or login shell instead of the page (even when the site returned HTTP 200) — retrying later or from another country sometimes succeeds |
+      # | 401 / 403   | No                                        | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code                                                                                                                                                                                                                      |
+      # | 404         | No                                        | Target page returned or fingerprinted as not found                                                                                                                                                                                                                                                            |
+      # | 408         | No                                        | Request timed out                                                                                                                                                                                                                                                                                             |
+      # | 413         | No                                        | Target content exceeds the maximum supported size (20 MB)                                                                                                                                                                                                                                                     |
+      # | 415         | No                                        | Unsupported content type                                                                                                                                                                                                                                                                                      |
+      # | 429         | No                                        | Per-minute rate limit exceeded; honor Retry-After                                                                                                                                                                                                                                                             |
+      # | 500         | No                                        | Internal error                                                                                                                                                                                                                                                                                                |
       #
-      # @overload web_scrape_md(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_md(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_html: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
       #
@@ -500,11 +500,13 @@ module ContextDev
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
-      # @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeFrames] When true, the contents of iframes are rendered to Markdown.
+      # @param include_frames [Boolean] When true, the contents of iframes are rendered to Markdown.
       #
-      # @param include_images [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeImages] Include image references in Markdown output
+      # @param include_html [Boolean] When true, the response also includes an `html` field with the page HTML the Mar
       #
-      # @param include_links [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeLinks] Preserve hyperlinks in Markdown output
+      # @param include_images [Boolean] Include image references in Markdown output
+      #
+      # @param include_links [Boolean] Preserve hyperlinks in Markdown output
       #
       # @param include_selectors [Array<String>, nil] CSS selectors. When provided, only matching HTML subtrees (and their descendants
       #
@@ -512,15 +514,15 @@ module ContextDev
       #
       # @param pdf [ContextDev::Models::WebWebScrapeMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
-      # @param settle_animations [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::SettleAnimations] When true, waits briefly for CSS and transition animations to settle before conv
+      # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before conv
       #
-      # @param shorten_base64_images [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::ShortenBase64Images] Shorten base64-encoded image data in the Markdown output
+      # @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
       #
       # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
-      # @param use_main_content_only [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::UseMainContentOnly] Extract only the main content of the page, excluding headers, footers, sidebars,
+      # @param use_main_content_only [Boolean] Extract only the main content of the page, excluding headers, footers, sidebars,
       #
       # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before conver
       #
@@ -540,6 +542,7 @@ module ContextDev
           query: query.transform_keys(
             exclude_selectors: "excludeSelectors",
             include_frames: "includeFrames",
+            include_html: "includeHTML",
             include_images: "includeImages",
             include_links: "includeLinks",
             include_selectors: "includeSelectors",

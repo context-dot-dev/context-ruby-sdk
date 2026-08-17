@@ -63,75 +63,33 @@ module ContextDev
       attr_writer :headers
 
       # When true, the contents of iframes are rendered to Markdown.
-      sig do
-        returns(
-          T.nilable(
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeFrames::OrSymbol
-            )
-          )
-        )
-      end
+      sig { returns(T.nilable(T::Boolean)) }
       attr_reader :include_frames
 
-      sig do
-        params(
-          include_frames:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeFrames::OrSymbol
-            )
-        ).void
-      end
+      sig { params(include_frames: T::Boolean).void }
       attr_writer :include_frames
 
+      # When true, the response also includes an `html` field with the page HTML the
+      # Markdown was converted from — the same body the Scrape HTML endpoint returns for
+      # the equivalent request.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :include_html
+
+      sig { params(include_html: T::Boolean).void }
+      attr_writer :include_html
+
       # Include image references in Markdown output
-      sig do
-        returns(
-          T.nilable(
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeImages::OrSymbol
-            )
-          )
-        )
-      end
+      sig { returns(T.nilable(T::Boolean)) }
       attr_reader :include_images
 
-      sig do
-        params(
-          include_images:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeImages::OrSymbol
-            )
-        ).void
-      end
+      sig { params(include_images: T::Boolean).void }
       attr_writer :include_images
 
       # Preserve hyperlinks in Markdown output
-      sig do
-        returns(
-          T.nilable(
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeLinks::OrSymbol
-            )
-          )
-        )
-      end
+      sig { returns(T.nilable(T::Boolean)) }
       attr_reader :include_links
 
-      sig do
-        params(
-          include_links:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeLinks::OrSymbol
-            )
-        ).void
-      end
+      sig { params(include_links: T::Boolean).void }
       attr_writer :include_links
 
       # CSS selectors. When provided, only matching HTML subtrees (and their
@@ -157,51 +115,17 @@ module ContextDev
       # When true, waits briefly for CSS and transition animations to settle before
       # converting to Markdown. Defaults to false. This adds a bit of latency in
       # exchange for more stable output on animated pages.
-      sig do
-        returns(
-          T.nilable(
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::SettleAnimations::OrSymbol
-            )
-          )
-        )
-      end
+      sig { returns(T.nilable(T::Boolean)) }
       attr_reader :settle_animations
 
-      sig do
-        params(
-          settle_animations:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::SettleAnimations::OrSymbol
-            )
-        ).void
-      end
+      sig { params(settle_animations: T::Boolean).void }
       attr_writer :settle_animations
 
       # Shorten base64-encoded image data in the Markdown output
-      sig do
-        returns(
-          T.nilable(
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::ShortenBase64Images::OrSymbol
-            )
-          )
-        )
-      end
+      sig { returns(T.nilable(T::Boolean)) }
       attr_reader :shorten_base64_images
 
-      sig do
-        params(
-          shorten_base64_images:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::ShortenBase64Images::OrSymbol
-            )
-        ).void
-      end
+      sig { params(shorten_base64_images: T::Boolean).void }
       attr_writer :shorten_base64_images
 
       # Optional comma-separated caller-defined tags for tracking this request. Tags are
@@ -224,27 +148,10 @@ module ContextDev
 
       # Extract only the main content of the page, excluding headers, footers, sidebars,
       # and navigation
-      sig do
-        returns(
-          T.nilable(
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::UseMainContentOnly::OrSymbol
-            )
-          )
-        )
-      end
+      sig { returns(T.nilable(T::Boolean)) }
       attr_reader :use_main_content_only
 
-      sig do
-        params(
-          use_main_content_only:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::UseMainContentOnly::OrSymbol
-            )
-        ).void
-      end
+      sig { params(use_main_content_only: T::Boolean).void }
       attr_writer :use_main_content_only
 
       # Optional browser wait time in milliseconds after initial page load before
@@ -279,41 +186,18 @@ module ContextDev
           country: ContextDev::WebWebScrapeMdParams::Country::OrSymbol,
           exclude_selectors: T.nilable(T::Array[String]),
           headers: T::Hash[Symbol, String],
-          include_frames:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeFrames::OrSymbol
-            ),
-          include_images:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeImages::OrSymbol
-            ),
-          include_links:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeLinks::OrSymbol
-            ),
+          include_frames: T::Boolean,
+          include_html: T::Boolean,
+          include_images: T::Boolean,
+          include_links: T::Boolean,
           include_selectors: T.nilable(T::Array[String]),
           max_age_ms: T.nilable(Integer),
           pdf: ContextDev::WebWebScrapeMdParams::Pdf::OrHash,
-          settle_animations:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::SettleAnimations::OrSymbol
-            ),
-          shorten_base64_images:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::ShortenBase64Images::OrSymbol
-            ),
+          settle_animations: T::Boolean,
+          shorten_base64_images: T::Boolean,
           tags: T::Array[String],
           timeout_ms: Integer,
-          use_main_content_only:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::UseMainContentOnly::OrSymbol
-            ),
+          use_main_content_only: T::Boolean,
           wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeMdParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
@@ -340,6 +224,10 @@ module ContextDev
         headers: nil,
         # When true, the contents of iframes are rendered to Markdown.
         include_frames: nil,
+        # When true, the response also includes an `html` field with the page HTML the
+        # Markdown was converted from — the same body the Scrape HTML endpoint returns for
+        # the equivalent request.
+        include_html: nil,
         # Include image references in Markdown output
         include_images: nil,
         # Preserve hyperlinks in Markdown output
@@ -400,41 +288,18 @@ module ContextDev
             country: ContextDev::WebWebScrapeMdParams::Country::OrSymbol,
             exclude_selectors: T.nilable(T::Array[String]),
             headers: T::Hash[Symbol, String],
-            include_frames:
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::IncludeFrames::OrSymbol
-              ),
-            include_images:
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::IncludeImages::OrSymbol
-              ),
-            include_links:
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::IncludeLinks::OrSymbol
-              ),
+            include_frames: T::Boolean,
+            include_html: T::Boolean,
+            include_images: T::Boolean,
+            include_links: T::Boolean,
             include_selectors: T.nilable(T::Array[String]),
             max_age_ms: T.nilable(Integer),
             pdf: ContextDev::WebWebScrapeMdParams::Pdf,
-            settle_animations:
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::SettleAnimations::OrSymbol
-              ),
-            shorten_base64_images:
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::ShortenBase64Images::OrSymbol
-              ),
+            settle_animations: T::Boolean,
+            shorten_base64_images: T::Boolean,
             tags: T::Array[String],
             timeout_ms: Integer,
-            use_main_content_only:
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::UseMainContentOnly::OrSymbol
-              ),
+            use_main_content_only: T::Boolean,
             wait_for_ms: T.nilable(Integer),
             zdr: ContextDev::WebWebScrapeMdParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
@@ -743,120 +608,6 @@ module ContextDev
         end
       end
 
-      # When true, the contents of iframes are rendered to Markdown.
-      module IncludeFrames
-        extend ContextDev::Internal::Type::Union
-
-        Variants =
-          T.type_alias do
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeFrames::TaggedSymbol
-            )
-          end
-
-        sig do
-          override.returns(
-            T::Array[ContextDev::WebWebScrapeMdParams::IncludeFrames::Variants]
-          )
-        end
-        def self.variants
-        end
-
-        TaggedSymbol =
-          T.type_alias do
-            T.all(Symbol, ContextDev::WebWebScrapeMdParams::IncludeFrames)
-          end
-        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-        TRUE =
-          T.let(
-            :true,
-            ContextDev::WebWebScrapeMdParams::IncludeFrames::TaggedSymbol
-          )
-        FALSE =
-          T.let(
-            :false,
-            ContextDev::WebWebScrapeMdParams::IncludeFrames::TaggedSymbol
-          )
-      end
-
-      # Include image references in Markdown output
-      module IncludeImages
-        extend ContextDev::Internal::Type::Union
-
-        Variants =
-          T.type_alias do
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeImages::TaggedSymbol
-            )
-          end
-
-        sig do
-          override.returns(
-            T::Array[ContextDev::WebWebScrapeMdParams::IncludeImages::Variants]
-          )
-        end
-        def self.variants
-        end
-
-        TaggedSymbol =
-          T.type_alias do
-            T.all(Symbol, ContextDev::WebWebScrapeMdParams::IncludeImages)
-          end
-        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-        TRUE =
-          T.let(
-            :true,
-            ContextDev::WebWebScrapeMdParams::IncludeImages::TaggedSymbol
-          )
-        FALSE =
-          T.let(
-            :false,
-            ContextDev::WebWebScrapeMdParams::IncludeImages::TaggedSymbol
-          )
-      end
-
-      # Preserve hyperlinks in Markdown output
-      module IncludeLinks
-        extend ContextDev::Internal::Type::Union
-
-        Variants =
-          T.type_alias do
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeLinks::TaggedSymbol
-            )
-          end
-
-        sig do
-          override.returns(
-            T::Array[ContextDev::WebWebScrapeMdParams::IncludeLinks::Variants]
-          )
-        end
-        def self.variants
-        end
-
-        TaggedSymbol =
-          T.type_alias do
-            T.all(Symbol, ContextDev::WebWebScrapeMdParams::IncludeLinks)
-          end
-        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-        TRUE =
-          T.let(
-            :true,
-            ContextDev::WebWebScrapeMdParams::IncludeLinks::TaggedSymbol
-          )
-        FALSE =
-          T.let(
-            :false,
-            ContextDev::WebWebScrapeMdParams::IncludeLinks::TaggedSymbol
-          )
-      end
-
       class Pdf < ContextDev::Internal::Type::BaseModel
         OrHash =
           T.type_alias do
@@ -878,52 +629,18 @@ module ContextDev
         # replacing each recovered page's text with the OCR result while pages with a real
         # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
         # of the base request cost. When false, no OCR runs.
-        sig do
-          returns(
-            T.nilable(
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::Pdf::Ocr::OrSymbol
-              )
-            )
-          )
-        end
+        sig { returns(T.nilable(T::Boolean)) }
         attr_reader :ocr
 
-        sig do
-          params(
-            ocr:
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::Pdf::Ocr::OrSymbol
-              )
-          ).void
-        end
+        sig { params(ocr: T::Boolean).void }
         attr_writer :ocr
 
         # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
         # a 400 PDF_SKIPPED is returned.
-        sig do
-          returns(
-            T.nilable(
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::Pdf::ShouldParse::OrSymbol
-              )
-            )
-          )
-        end
+        sig { returns(T.nilable(T::Boolean)) }
         attr_reader :should_parse
 
-        sig do
-          params(
-            should_parse:
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::Pdf::ShouldParse::OrSymbol
-              )
-          ).void
-        end
+        sig { params(should_parse: T::Boolean).void }
         attr_writer :should_parse
 
         # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
@@ -938,16 +655,8 @@ module ContextDev
         sig do
           params(
             end_: Integer,
-            ocr:
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::Pdf::Ocr::OrSymbol
-              ),
-            should_parse:
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::Pdf::ShouldParse::OrSymbol
-              ),
+            ocr: T::Boolean,
+            should_parse: T::Boolean,
             start: Integer
           ).returns(T.attached_class)
         end
@@ -972,227 +681,14 @@ module ContextDev
           override.returns(
             {
               end_: Integer,
-              ocr:
-                T.any(
-                  T::Boolean,
-                  ContextDev::WebWebScrapeMdParams::Pdf::Ocr::OrSymbol
-                ),
-              should_parse:
-                T.any(
-                  T::Boolean,
-                  ContextDev::WebWebScrapeMdParams::Pdf::ShouldParse::OrSymbol
-                ),
+              ocr: T::Boolean,
+              should_parse: T::Boolean,
               start: Integer
             }
           )
         end
         def to_hash
         end
-
-        # When true, OCR the selected PDF pages that have no usable text layer (scans),
-        # replacing each recovered page's text with the OCR result while pages with a real
-        # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-        # of the base request cost. When false, no OCR runs.
-        module Ocr
-          extend ContextDev::Internal::Type::Union
-
-          Variants =
-            T.type_alias do
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::Pdf::Ocr::TaggedSymbol
-              )
-            end
-
-          sig do
-            override.returns(
-              T::Array[ContextDev::WebWebScrapeMdParams::Pdf::Ocr::Variants]
-            )
-          end
-          def self.variants
-          end
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(Symbol, ContextDev::WebWebScrapeMdParams::Pdf::Ocr)
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          TRUE =
-            T.let(
-              :true,
-              ContextDev::WebWebScrapeMdParams::Pdf::Ocr::TaggedSymbol
-            )
-          FALSE =
-            T.let(
-              :false,
-              ContextDev::WebWebScrapeMdParams::Pdf::Ocr::TaggedSymbol
-            )
-        end
-
-        # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-        # a 400 PDF_SKIPPED is returned.
-        module ShouldParse
-          extend ContextDev::Internal::Type::Union
-
-          Variants =
-            T.type_alias do
-              T.any(
-                T::Boolean,
-                ContextDev::WebWebScrapeMdParams::Pdf::ShouldParse::TaggedSymbol
-              )
-            end
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::WebWebScrapeMdParams::Pdf::ShouldParse::Variants
-              ]
-            )
-          end
-          def self.variants
-          end
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(Symbol, ContextDev::WebWebScrapeMdParams::Pdf::ShouldParse)
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          TRUE =
-            T.let(
-              :true,
-              ContextDev::WebWebScrapeMdParams::Pdf::ShouldParse::TaggedSymbol
-            )
-          FALSE =
-            T.let(
-              :false,
-              ContextDev::WebWebScrapeMdParams::Pdf::ShouldParse::TaggedSymbol
-            )
-        end
-      end
-
-      # When true, waits briefly for CSS and transition animations to settle before
-      # converting to Markdown. Defaults to false. This adds a bit of latency in
-      # exchange for more stable output on animated pages.
-      module SettleAnimations
-        extend ContextDev::Internal::Type::Union
-
-        Variants =
-          T.type_alias do
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::SettleAnimations::TaggedSymbol
-            )
-          end
-
-        sig do
-          override.returns(
-            T::Array[
-              ContextDev::WebWebScrapeMdParams::SettleAnimations::Variants
-            ]
-          )
-        end
-        def self.variants
-        end
-
-        TaggedSymbol =
-          T.type_alias do
-            T.all(Symbol, ContextDev::WebWebScrapeMdParams::SettleAnimations)
-          end
-        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-        TRUE =
-          T.let(
-            :true,
-            ContextDev::WebWebScrapeMdParams::SettleAnimations::TaggedSymbol
-          )
-        FALSE =
-          T.let(
-            :false,
-            ContextDev::WebWebScrapeMdParams::SettleAnimations::TaggedSymbol
-          )
-      end
-
-      # Shorten base64-encoded image data in the Markdown output
-      module ShortenBase64Images
-        extend ContextDev::Internal::Type::Union
-
-        Variants =
-          T.type_alias do
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::ShortenBase64Images::TaggedSymbol
-            )
-          end
-
-        sig do
-          override.returns(
-            T::Array[
-              ContextDev::WebWebScrapeMdParams::ShortenBase64Images::Variants
-            ]
-          )
-        end
-        def self.variants
-        end
-
-        TaggedSymbol =
-          T.type_alias do
-            T.all(Symbol, ContextDev::WebWebScrapeMdParams::ShortenBase64Images)
-          end
-        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-        TRUE =
-          T.let(
-            :true,
-            ContextDev::WebWebScrapeMdParams::ShortenBase64Images::TaggedSymbol
-          )
-        FALSE =
-          T.let(
-            :false,
-            ContextDev::WebWebScrapeMdParams::ShortenBase64Images::TaggedSymbol
-          )
-      end
-
-      # Extract only the main content of the page, excluding headers, footers, sidebars,
-      # and navigation
-      module UseMainContentOnly
-        extend ContextDev::Internal::Type::Union
-
-        Variants =
-          T.type_alias do
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::UseMainContentOnly::TaggedSymbol
-            )
-          end
-
-        sig do
-          override.returns(
-            T::Array[
-              ContextDev::WebWebScrapeMdParams::UseMainContentOnly::Variants
-            ]
-          )
-        end
-        def self.variants
-        end
-
-        TaggedSymbol =
-          T.type_alias do
-            T.all(Symbol, ContextDev::WebWebScrapeMdParams::UseMainContentOnly)
-          end
-        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-        TRUE =
-          T.let(
-            :true,
-            ContextDev::WebWebScrapeMdParams::UseMainContentOnly::TaggedSymbol
-          )
-        FALSE =
-          T.let(
-            :false,
-            ContextDev::WebWebScrapeMdParams::UseMainContentOnly::TaggedSymbol
-          )
       end
 
       # Set to enabled to bypass shared caches and omit request and response content

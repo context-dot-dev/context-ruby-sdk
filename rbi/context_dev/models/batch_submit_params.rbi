@@ -343,6 +343,14 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :exclude_selectors
 
+                # Also include each page's HTML in its result record, as an `html` field alongside
+                # the Markdown.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :include_html
+
+                sig { params(include_html: T::Boolean).void }
+                attr_writer :include_html
+
                 # Include image references in the Markdown.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :include_images
@@ -422,6 +430,7 @@ module ContextDev
                     country:
                       ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Country::OrSymbol,
                     exclude_selectors: T.nilable(T::Array[String]),
+                    include_html: T::Boolean,
                     include_images: T::Boolean,
                     include_links: T::Boolean,
                     include_selectors: T.nilable(T::Array[String]),
@@ -441,6 +450,9 @@ module ContextDev
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
                   exclude_selectors: nil,
+                  # Also include each page's HTML in its result record, as an `html` field alongside
+                  # the Markdown.
+                  include_html: nil,
                   # Include image references in the Markdown.
                   include_images: nil,
                   # Include links in the Markdown.
@@ -473,6 +485,7 @@ module ContextDev
                       country:
                         ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Country::OrSymbol,
                       exclude_selectors: T.nilable(T::Array[String]),
+                      include_html: T::Boolean,
                       include_images: T::Boolean,
                       include_links: T::Boolean,
                       include_selectors: T.nilable(T::Array[String]),
@@ -1556,52 +1569,18 @@ module ContextDev
                   # replacing each recovered page's text with the OCR result while pages with a real
                   # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
                   # of the base request cost. When false, no OCR runs.
-                  sig do
-                    returns(
-                      T.nilable(
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::Ocr::OrSymbol
-                        )
-                      )
-                    )
-                  end
+                  sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
-                  sig do
-                    params(
-                      ocr:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::Ocr::OrSymbol
-                        )
-                    ).void
-                  end
+                  sig { params(ocr: T::Boolean).void }
                   attr_writer :ocr
 
                   # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
                   # a 400 PDF_SKIPPED is returned.
-                  sig do
-                    returns(
-                      T.nilable(
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ShouldParse::OrSymbol
-                        )
-                      )
-                    )
-                  end
+                  sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :should_parse
 
-                  sig do
-                    params(
-                      should_parse:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ShouldParse::OrSymbol
-                        )
-                    ).void
-                  end
+                  sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
                   # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
@@ -1616,16 +1595,8 @@ module ContextDev
                   sig do
                     params(
                       end_: Integer,
-                      ocr:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::Ocr::OrSymbol
-                        ),
-                      should_parse:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ShouldParse::OrSymbol
-                        ),
+                      ocr: T::Boolean,
+                      should_parse: T::Boolean,
                       start: Integer
                     ).returns(T.attached_class)
                   end
@@ -1650,111 +1621,13 @@ module ContextDev
                     override.returns(
                       {
                         end_: Integer,
-                        ocr:
-                          T.any(
-                            T::Boolean,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::Ocr::OrSymbol
-                          ),
-                        should_parse:
-                          T.any(
-                            T::Boolean,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ShouldParse::OrSymbol
-                          ),
+                        ocr: T::Boolean,
+                        should_parse: T::Boolean,
                         start: Integer
                       }
                     )
                   end
                   def to_hash
-                  end
-
-                  # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                  # replacing each recovered page's text with the OCR result while pages with a real
-                  # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                  # of the base request cost. When false, no OCR runs.
-                  module Ocr
-                    extend ContextDev::Internal::Type::Union
-
-                    Variants =
-                      T.type_alias do
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::Ocr::TaggedSymbol
-                        )
-                      end
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::Ocr::Variants
-                        ]
-                      )
-                    end
-                    def self.variants
-                    end
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::Ocr
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    TRUE =
-                      T.let(
-                        :true,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::Ocr::TaggedSymbol
-                      )
-                    FALSE =
-                      T.let(
-                        :false,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::Ocr::TaggedSymbol
-                      )
-                  end
-
-                  # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                  # a 400 PDF_SKIPPED is returned.
-                  module ShouldParse
-                    extend ContextDev::Internal::Type::Union
-
-                    Variants =
-                      T.type_alias do
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ShouldParse::TaggedSymbol
-                        )
-                      end
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ShouldParse::Variants
-                        ]
-                      )
-                    end
-                    def self.variants
-                    end
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ShouldParse
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    TRUE =
-                      T.let(
-                        :true,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ShouldParse::TaggedSymbol
-                      )
-                    FALSE =
-                      T.let(
-                        :false,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf::ShouldParse::TaggedSymbol
-                      )
                   end
                 end
               end
@@ -3112,52 +2985,18 @@ module ContextDev
                   # replacing each recovered page's text with the OCR result while pages with a real
                   # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
                   # of the base request cost. When false, no OCR runs.
-                  sig do
-                    returns(
-                      T.nilable(
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::Ocr::OrSymbol
-                        )
-                      )
-                    )
-                  end
+                  sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
-                  sig do
-                    params(
-                      ocr:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::Ocr::OrSymbol
-                        )
-                    ).void
-                  end
+                  sig { params(ocr: T::Boolean).void }
                   attr_writer :ocr
 
                   # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
                   # a 400 PDF_SKIPPED is returned.
-                  sig do
-                    returns(
-                      T.nilable(
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ShouldParse::OrSymbol
-                        )
-                      )
-                    )
-                  end
+                  sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :should_parse
 
-                  sig do
-                    params(
-                      should_parse:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ShouldParse::OrSymbol
-                        )
-                    ).void
-                  end
+                  sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
                   # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
@@ -3172,16 +3011,8 @@ module ContextDev
                   sig do
                     params(
                       end_: Integer,
-                      ocr:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::Ocr::OrSymbol
-                        ),
-                      should_parse:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ShouldParse::OrSymbol
-                        ),
+                      ocr: T::Boolean,
+                      should_parse: T::Boolean,
                       start: Integer
                     ).returns(T.attached_class)
                   end
@@ -3206,111 +3037,13 @@ module ContextDev
                     override.returns(
                       {
                         end_: Integer,
-                        ocr:
-                          T.any(
-                            T::Boolean,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::Ocr::OrSymbol
-                          ),
-                        should_parse:
-                          T.any(
-                            T::Boolean,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ShouldParse::OrSymbol
-                          ),
+                        ocr: T::Boolean,
+                        should_parse: T::Boolean,
                         start: Integer
                       }
                     )
                   end
                   def to_hash
-                  end
-
-                  # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                  # replacing each recovered page's text with the OCR result while pages with a real
-                  # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                  # of the base request cost. When false, no OCR runs.
-                  module Ocr
-                    extend ContextDev::Internal::Type::Union
-
-                    Variants =
-                      T.type_alias do
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::Ocr::TaggedSymbol
-                        )
-                      end
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::Ocr::Variants
-                        ]
-                      )
-                    end
-                    def self.variants
-                    end
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::Ocr
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    TRUE =
-                      T.let(
-                        :true,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::Ocr::TaggedSymbol
-                      )
-                    FALSE =
-                      T.let(
-                        :false,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::Ocr::TaggedSymbol
-                      )
-                  end
-
-                  # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                  # a 400 PDF_SKIPPED is returned.
-                  module ShouldParse
-                    extend ContextDev::Internal::Type::Union
-
-                    Variants =
-                      T.type_alias do
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ShouldParse::TaggedSymbol
-                        )
-                      end
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ShouldParse::Variants
-                        ]
-                      )
-                    end
-                    def self.variants
-                    end
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ShouldParse
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    TRUE =
-                      T.let(
-                        :true,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ShouldParse::TaggedSymbol
-                      )
-                    FALSE =
-                      T.let(
-                        :false,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf::ShouldParse::TaggedSymbol
-                      )
                   end
                 end
               end
@@ -3794,6 +3527,14 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :exclude_selectors
 
+                # Also include each page's HTML in its result record, as an `html` field alongside
+                # the Markdown.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :include_html
+
+                sig { params(include_html: T::Boolean).void }
+                attr_writer :include_html
+
                 # Include image references in the Markdown.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :include_images
@@ -3873,6 +3614,7 @@ module ContextDev
                     country:
                       ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Country::OrSymbol,
                     exclude_selectors: T.nilable(T::Array[String]),
+                    include_html: T::Boolean,
                     include_images: T::Boolean,
                     include_links: T::Boolean,
                     include_selectors: T.nilable(T::Array[String]),
@@ -3892,6 +3634,9 @@ module ContextDev
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
                   exclude_selectors: nil,
+                  # Also include each page's HTML in its result record, as an `html` field alongside
+                  # the Markdown.
+                  include_html: nil,
                   # Include image references in the Markdown.
                   include_images: nil,
                   # Include links in the Markdown.
@@ -3924,6 +3669,7 @@ module ContextDev
                       country:
                         ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Country::OrSymbol,
                       exclude_selectors: T.nilable(T::Array[String]),
+                      include_html: T::Boolean,
                       include_images: T::Boolean,
                       include_links: T::Boolean,
                       include_selectors: T.nilable(T::Array[String]),
@@ -5007,52 +4753,18 @@ module ContextDev
                   # replacing each recovered page's text with the OCR result while pages with a real
                   # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
                   # of the base request cost. When false, no OCR runs.
-                  sig do
-                    returns(
-                      T.nilable(
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::Ocr::OrSymbol
-                        )
-                      )
-                    )
-                  end
+                  sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
-                  sig do
-                    params(
-                      ocr:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::Ocr::OrSymbol
-                        )
-                    ).void
-                  end
+                  sig { params(ocr: T::Boolean).void }
                   attr_writer :ocr
 
                   # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
                   # a 400 PDF_SKIPPED is returned.
-                  sig do
-                    returns(
-                      T.nilable(
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ShouldParse::OrSymbol
-                        )
-                      )
-                    )
-                  end
+                  sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :should_parse
 
-                  sig do
-                    params(
-                      should_parse:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ShouldParse::OrSymbol
-                        )
-                    ).void
-                  end
+                  sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
                   # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
@@ -5067,16 +4779,8 @@ module ContextDev
                   sig do
                     params(
                       end_: Integer,
-                      ocr:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::Ocr::OrSymbol
-                        ),
-                      should_parse:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ShouldParse::OrSymbol
-                        ),
+                      ocr: T::Boolean,
+                      should_parse: T::Boolean,
                       start: Integer
                     ).returns(T.attached_class)
                   end
@@ -5101,111 +4805,13 @@ module ContextDev
                     override.returns(
                       {
                         end_: Integer,
-                        ocr:
-                          T.any(
-                            T::Boolean,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::Ocr::OrSymbol
-                          ),
-                        should_parse:
-                          T.any(
-                            T::Boolean,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ShouldParse::OrSymbol
-                          ),
+                        ocr: T::Boolean,
+                        should_parse: T::Boolean,
                         start: Integer
                       }
                     )
                   end
                   def to_hash
-                  end
-
-                  # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                  # replacing each recovered page's text with the OCR result while pages with a real
-                  # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                  # of the base request cost. When false, no OCR runs.
-                  module Ocr
-                    extend ContextDev::Internal::Type::Union
-
-                    Variants =
-                      T.type_alias do
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::Ocr::TaggedSymbol
-                        )
-                      end
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::Ocr::Variants
-                        ]
-                      )
-                    end
-                    def self.variants
-                    end
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::Ocr
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    TRUE =
-                      T.let(
-                        :true,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::Ocr::TaggedSymbol
-                      )
-                    FALSE =
-                      T.let(
-                        :false,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::Ocr::TaggedSymbol
-                      )
-                  end
-
-                  # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                  # a 400 PDF_SKIPPED is returned.
-                  module ShouldParse
-                    extend ContextDev::Internal::Type::Union
-
-                    Variants =
-                      T.type_alias do
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ShouldParse::TaggedSymbol
-                        )
-                      end
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ShouldParse::Variants
-                        ]
-                      )
-                    end
-                    def self.variants
-                    end
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ShouldParse
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    TRUE =
-                      T.let(
-                        :true,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ShouldParse::TaggedSymbol
-                      )
-                    FALSE =
-                      T.let(
-                        :false,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf::ShouldParse::TaggedSymbol
-                      )
                   end
                 end
               end
@@ -6787,52 +6393,18 @@ module ContextDev
                   # replacing each recovered page's text with the OCR result while pages with a real
                   # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
                   # of the base request cost. When false, no OCR runs.
-                  sig do
-                    returns(
-                      T.nilable(
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::Ocr::OrSymbol
-                        )
-                      )
-                    )
-                  end
+                  sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
-                  sig do
-                    params(
-                      ocr:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::Ocr::OrSymbol
-                        )
-                    ).void
-                  end
+                  sig { params(ocr: T::Boolean).void }
                   attr_writer :ocr
 
                   # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
                   # a 400 PDF_SKIPPED is returned.
-                  sig do
-                    returns(
-                      T.nilable(
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ShouldParse::OrSymbol
-                        )
-                      )
-                    )
-                  end
+                  sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :should_parse
 
-                  sig do
-                    params(
-                      should_parse:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ShouldParse::OrSymbol
-                        )
-                    ).void
-                  end
+                  sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
                   # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
@@ -6847,16 +6419,8 @@ module ContextDev
                   sig do
                     params(
                       end_: Integer,
-                      ocr:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::Ocr::OrSymbol
-                        ),
-                      should_parse:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ShouldParse::OrSymbol
-                        ),
+                      ocr: T::Boolean,
+                      should_parse: T::Boolean,
                       start: Integer
                     ).returns(T.attached_class)
                   end
@@ -6881,111 +6445,13 @@ module ContextDev
                     override.returns(
                       {
                         end_: Integer,
-                        ocr:
-                          T.any(
-                            T::Boolean,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::Ocr::OrSymbol
-                          ),
-                        should_parse:
-                          T.any(
-                            T::Boolean,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ShouldParse::OrSymbol
-                          ),
+                        ocr: T::Boolean,
+                        should_parse: T::Boolean,
                         start: Integer
                       }
                     )
                   end
                   def to_hash
-                  end
-
-                  # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                  # replacing each recovered page's text with the OCR result while pages with a real
-                  # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                  # of the base request cost. When false, no OCR runs.
-                  module Ocr
-                    extend ContextDev::Internal::Type::Union
-
-                    Variants =
-                      T.type_alias do
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::Ocr::TaggedSymbol
-                        )
-                      end
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::Ocr::Variants
-                        ]
-                      )
-                    end
-                    def self.variants
-                    end
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::Ocr
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    TRUE =
-                      T.let(
-                        :true,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::Ocr::TaggedSymbol
-                      )
-                    FALSE =
-                      T.let(
-                        :false,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::Ocr::TaggedSymbol
-                      )
-                  end
-
-                  # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                  # a 400 PDF_SKIPPED is returned.
-                  module ShouldParse
-                    extend ContextDev::Internal::Type::Union
-
-                    Variants =
-                      T.type_alias do
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ShouldParse::TaggedSymbol
-                        )
-                      end
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ShouldParse::Variants
-                        ]
-                      )
-                    end
-                    def self.variants
-                    end
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ShouldParse
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    TRUE =
-                      T.let(
-                        :true,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ShouldParse::TaggedSymbol
-                      )
-                    FALSE =
-                      T.let(
-                        :false,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf::ShouldParse::TaggedSymbol
-                      )
                   end
                 end
               end

@@ -103,6 +103,7 @@ module ContextDev
             canonical_url: String,
             description: String,
             favicon: String,
+            headings: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading],
             image: String,
             json_ld: ::Array[::Hash[Symbol, top]],
             keywords: ::Array[String],
@@ -157,6 +158,12 @@ module ContextDev
           attr_reader favicon: String?
 
           def favicon=: (String) -> String
+
+          attr_reader headings: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading]?
+
+          def headings=: (
+            ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading]
+          ) -> ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading]
 
           attr_reader image: String?
 
@@ -218,6 +225,7 @@ module ContextDev
             ?canonical_url: String,
             ?description: String,
             ?favicon: String,
+            ?headings: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading],
             ?image: String,
             ?json_ld: ::Array[::Hash[Symbol, top]],
             ?keywords: ::Array[String],
@@ -244,6 +252,7 @@ module ContextDev
             canonical_url: String,
             description: String,
             favicon: String,
+            headings: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading],
             image: String,
             json_ld: ::Array[::Hash[Symbol, top]],
             keywords: ::Array[String],
@@ -297,6 +306,18 @@ module ContextDev
               title: String,
               type: String
             }
+          end
+
+          type heading = { level: Integer, text: String }
+
+          class Heading < ContextDev::Internal::Type::BaseModel
+            attr_accessor level: Integer
+
+            attr_accessor text: String
+
+            def initialize: (level: Integer, text: String) -> void
+
+            def to_hash: -> { level: Integer, text: String }
           end
 
           type open_graph = String | ::Array[String]

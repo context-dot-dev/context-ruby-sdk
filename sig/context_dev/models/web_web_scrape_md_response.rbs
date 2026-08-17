@@ -9,6 +9,7 @@ module ContextDev
         url: String,
         actions_applied: ::Array[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied],
         actions_html_stale: bool,
+        html: String,
         key_metadata: ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata
       }
 
@@ -33,6 +34,10 @@ module ContextDev
 
       def actions_html_stale=: (bool) -> bool
 
+      attr_reader html: String?
+
+      def html=: (String) -> String
+
       attr_reader key_metadata: ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata?
 
       def key_metadata=: (
@@ -47,6 +52,7 @@ module ContextDev
         url: String,
         ?actions_applied: ::Array[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied],
         ?actions_html_stale: bool,
+        ?html: String,
         ?key_metadata: ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata
       ) -> void
 
@@ -58,6 +64,7 @@ module ContextDev
         url: String,
         actions_applied: ::Array[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied],
         actions_html_stale: bool,
+        html: String,
         key_metadata: ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata
       }
 
@@ -71,6 +78,7 @@ module ContextDev
           canonical_url: String,
           description: String,
           favicon: String,
+          headings: ::Array[ContextDev::Models::WebWebScrapeMdResponse::Metadata::Heading],
           image: String,
           json_ld: ::Array[::Hash[Symbol, top]],
           keywords: ::Array[String],
@@ -116,6 +124,12 @@ module ContextDev
         attr_reader favicon: String?
 
         def favicon=: (String) -> String
+
+        attr_reader headings: ::Array[ContextDev::Models::WebWebScrapeMdResponse::Metadata::Heading]?
+
+        def headings=: (
+          ::Array[ContextDev::Models::WebWebScrapeMdResponse::Metadata::Heading]
+        ) -> ::Array[ContextDev::Models::WebWebScrapeMdResponse::Metadata::Heading]
 
         attr_reader image: String?
 
@@ -176,6 +190,7 @@ module ContextDev
           ?canonical_url: String,
           ?description: String,
           ?favicon: String,
+          ?headings: ::Array[ContextDev::Models::WebWebScrapeMdResponse::Metadata::Heading],
           ?image: String,
           ?json_ld: ::Array[::Hash[Symbol, top]],
           ?keywords: ::Array[String],
@@ -198,6 +213,7 @@ module ContextDev
           canonical_url: String,
           description: String,
           favicon: String,
+          headings: ::Array[ContextDev::Models::WebWebScrapeMdResponse::Metadata::Heading],
           image: String,
           json_ld: ::Array[::Hash[Symbol, top]],
           keywords: ::Array[String],
@@ -252,6 +268,18 @@ module ContextDev
             title: String,
             type: String
           }
+        end
+
+        type heading = { level: Integer, text: String }
+
+        class Heading < ContextDev::Internal::Type::BaseModel
+          attr_accessor level: Integer
+
+          attr_accessor text: String
+
+          def initialize: (level: Integer, text: String) -> void
+
+          def to_hash: -> { level: Integer, text: String }
         end
 
         type open_graph = String | ::Array[String]

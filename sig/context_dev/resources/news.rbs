@@ -1,0 +1,17 @@
+module ContextDev
+  module Resources
+    class News
+      def search: (
+        search_by: ContextDev::NewsSearchParams::SearchBy,
+        ?cursor: String?,
+        ?filter_by: ContextDev::NewsSearchParams::FilterBy,
+        ?limit: Integer,
+        ?sort_by: ContextDev::NewsSearchParams::SortBy,
+        ?tags: ::Array[String],
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::NewsSearchResponse
+
+      def initialize: (client: ContextDev::Client) -> void
+    end
+  end
+end

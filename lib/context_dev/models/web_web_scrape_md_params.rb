@@ -50,20 +50,28 @@ module ContextDev
       # @!attribute include_frames
       #   When true, the contents of iframes are rendered to Markdown.
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeFrames, nil]
-      optional :include_frames, union: -> { ContextDev::WebWebScrapeMdParams::IncludeFrames }
+      #   @return [Boolean, nil]
+      optional :include_frames, ContextDev::Internal::Type::Boolean
+
+      # @!attribute include_html
+      #   When true, the response also includes an `html` field with the page HTML the
+      #   Markdown was converted from — the same body the Scrape HTML endpoint returns for
+      #   the equivalent request.
+      #
+      #   @return [Boolean, nil]
+      optional :include_html, ContextDev::Internal::Type::Boolean
 
       # @!attribute include_images
       #   Include image references in Markdown output
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeImages, nil]
-      optional :include_images, union: -> { ContextDev::WebWebScrapeMdParams::IncludeImages }
+      #   @return [Boolean, nil]
+      optional :include_images, ContextDev::Internal::Type::Boolean
 
       # @!attribute include_links
       #   Preserve hyperlinks in Markdown output
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeLinks, nil]
-      optional :include_links, union: -> { ContextDev::WebWebScrapeMdParams::IncludeLinks }
+      #   @return [Boolean, nil]
+      optional :include_links, ContextDev::Internal::Type::Boolean
 
       # @!attribute include_selectors
       #   CSS selectors. When provided, only matching HTML subtrees (and their
@@ -93,14 +101,14 @@ module ContextDev
       #   converting to Markdown. Defaults to false. This adds a bit of latency in
       #   exchange for more stable output on animated pages.
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::SettleAnimations, nil]
-      optional :settle_animations, union: -> { ContextDev::WebWebScrapeMdParams::SettleAnimations }
+      #   @return [Boolean, nil]
+      optional :settle_animations, ContextDev::Internal::Type::Boolean
 
       # @!attribute shorten_base64_images
       #   Shorten base64-encoded image data in the Markdown output
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::ShortenBase64Images, nil]
-      optional :shorten_base64_images, union: -> { ContextDev::WebWebScrapeMdParams::ShortenBase64Images }
+      #   @return [Boolean, nil]
+      optional :shorten_base64_images, ContextDev::Internal::Type::Boolean
 
       # @!attribute tags
       #   Optional comma-separated caller-defined tags for tracking this request. Tags are
@@ -122,8 +130,8 @@ module ContextDev
       #   Extract only the main content of the page, excluding headers, footers, sidebars,
       #   and navigation
       #
-      #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::UseMainContentOnly, nil]
-      optional :use_main_content_only, union: -> { ContextDev::WebWebScrapeMdParams::UseMainContentOnly }
+      #   @return [Boolean, nil]
+      optional :use_main_content_only, ContextDev::Internal::Type::Boolean
 
       # @!attribute wait_for_ms
       #   Optional browser wait time in milliseconds after initial page load before
@@ -141,7 +149,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebWebScrapeMdParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebWebScrapeMdParams::Zdr }
 
-      # @!method initialize(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @!method initialize(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_html: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeMdParams} for more details.
       #
@@ -155,11 +163,13 @@ module ContextDev
       #
       #   @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
-      #   @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeFrames] When true, the contents of iframes are rendered to Markdown.
+      #   @param include_frames [Boolean] When true, the contents of iframes are rendered to Markdown.
       #
-      #   @param include_images [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeImages] Include image references in Markdown output
+      #   @param include_html [Boolean] When true, the response also includes an `html` field with the page HTML the Mar
       #
-      #   @param include_links [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::IncludeLinks] Preserve hyperlinks in Markdown output
+      #   @param include_images [Boolean] Include image references in Markdown output
+      #
+      #   @param include_links [Boolean] Preserve hyperlinks in Markdown output
       #
       #   @param include_selectors [Array<String>, nil] CSS selectors. When provided, only matching HTML subtrees (and their descendants
       #
@@ -167,15 +177,15 @@ module ContextDev
       #
       #   @param pdf [ContextDev::Models::WebWebScrapeMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
       #
-      #   @param settle_animations [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::SettleAnimations] When true, waits briefly for CSS and transition animations to settle before conv
+      #   @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before conv
       #
-      #   @param shorten_base64_images [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::ShortenBase64Images] Shorten base64-encoded image data in the Markdown output
+      #   @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
       #
       #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
-      #   @param use_main_content_only [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::UseMainContentOnly] Extract only the main content of the page, excluding headers, footers, sidebars,
+      #   @param use_main_content_only [Boolean] Extract only the main content of the page, excluding headers, footers, sidebars,
       #
       #   @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before conver
       #
@@ -450,81 +460,6 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # When true, the contents of iframes are rendered to Markdown.
-      module IncludeFrames
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::IncludeFrames::TRUE }
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::IncludeFrames::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeMdParams::IncludeFrames::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
-      end
-
-      # Include image references in Markdown output
-      module IncludeImages
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::IncludeImages::TRUE }
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::IncludeImages::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeMdParams::IncludeImages::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
-      end
-
-      # Preserve hyperlinks in Markdown output
-      module IncludeLinks
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::IncludeLinks::TRUE }
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::IncludeLinks::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeMdParams::IncludeLinks::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
-      end
-
       class Pdf < ContextDev::Internal::Type::BaseModel
         # @!attribute end_
         #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
@@ -539,17 +474,15 @@ module ContextDev
         #   text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
         #   of the base request cost. When false, no OCR runs.
         #
-        #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::Pdf::Ocr, nil]
-        optional :ocr, union: -> { ContextDev::WebWebScrapeMdParams::Pdf::Ocr }
+        #   @return [Boolean, nil]
+        optional :ocr, ContextDev::Internal::Type::Boolean
 
         # @!attribute should_parse
         #   When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
         #   a 400 PDF_SKIPPED is returned.
         #
-        #   @return [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::Pdf::ShouldParse, nil]
-        optional :should_parse,
-                 union: -> { ContextDev::WebWebScrapeMdParams::Pdf::ShouldParse },
-                 api_name: :shouldParse
+        #   @return [Boolean, nil]
+        optional :should_parse, ContextDev::Internal::Type::Boolean, api_name: :shouldParse
 
         # @!attribute start
         #   First 1-based PDF page to parse. When omitted, parsing starts at the first page.
@@ -566,147 +499,11 @@ module ContextDev
         #
         #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
         #
-        #   @param ocr [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::Pdf::Ocr] When true, OCR the selected PDF pages that have no usable text layer (scans), re
+        #   @param ocr [Boolean] When true, OCR the selected PDF pages that have no usable text layer (scans), re
         #
-        #   @param should_parse [Boolean, Symbol, ContextDev::Models::WebWebScrapeMdParams::Pdf::ShouldParse] When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
+        #   @param should_parse [Boolean] When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
         #
         #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
-
-        # When true, OCR the selected PDF pages that have no usable text layer (scans),
-        # replacing each recovered page's text with the OCR result while pages with a real
-        # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-        # of the base request cost. When false, no OCR runs.
-        #
-        # @see ContextDev::Models::WebWebScrapeMdParams::Pdf#ocr
-        module Ocr
-          extend ContextDev::Internal::Type::Union
-
-          variant ContextDev::Internal::Type::Boolean
-
-          variant const: -> { ContextDev::Models::WebWebScrapeMdParams::Pdf::Ocr::TRUE }
-
-          variant const: -> { ContextDev::Models::WebWebScrapeMdParams::Pdf::Ocr::FALSE }
-
-          # @!method self.variants
-          #   @return [Array(Boolean, Symbol)]
-
-          define_sorbet_constant!(:Variants) do
-            T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeMdParams::Pdf::Ocr::TaggedSymbol) }
-          end
-
-          # @!group
-
-          TRUE = :true
-          FALSE = :false
-
-          # @!endgroup
-        end
-
-        # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-        # a 400 PDF_SKIPPED is returned.
-        #
-        # @see ContextDev::Models::WebWebScrapeMdParams::Pdf#should_parse
-        module ShouldParse
-          extend ContextDev::Internal::Type::Union
-
-          variant ContextDev::Internal::Type::Boolean
-
-          variant const: -> { ContextDev::Models::WebWebScrapeMdParams::Pdf::ShouldParse::TRUE }
-
-          variant const: -> { ContextDev::Models::WebWebScrapeMdParams::Pdf::ShouldParse::FALSE }
-
-          # @!method self.variants
-          #   @return [Array(Boolean, Symbol)]
-
-          define_sorbet_constant!(:Variants) do
-            T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeMdParams::Pdf::ShouldParse::TaggedSymbol) }
-          end
-
-          # @!group
-
-          TRUE = :true
-          FALSE = :false
-
-          # @!endgroup
-        end
-      end
-
-      # When true, waits briefly for CSS and transition animations to settle before
-      # converting to Markdown. Defaults to false. This adds a bit of latency in
-      # exchange for more stable output on animated pages.
-      module SettleAnimations
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::SettleAnimations::TRUE }
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::SettleAnimations::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeMdParams::SettleAnimations::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
-      end
-
-      # Shorten base64-encoded image data in the Markdown output
-      module ShortenBase64Images
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::ShortenBase64Images::TRUE }
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::ShortenBase64Images::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeMdParams::ShortenBase64Images::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
-      end
-
-      # Extract only the main content of the page, excluding headers, footers, sidebars,
-      # and navigation
-      module UseMainContentOnly
-        extend ContextDev::Internal::Type::Union
-
-        variant ContextDev::Internal::Type::Boolean
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::UseMainContentOnly::TRUE }
-
-        variant const: -> { ContextDev::Models::WebWebScrapeMdParams::UseMainContentOnly::FALSE }
-
-        # @!method self.variants
-        #   @return [Array(Boolean, Symbol)]
-
-        define_sorbet_constant!(:Variants) do
-          T.type_alias { T.any(T::Boolean, ContextDev::WebWebScrapeMdParams::UseMainContentOnly::TaggedSymbol) }
-        end
-
-        # @!group
-
-        TRUE = :true
-        FALSE = :false
-
-        # @!endgroup
       end
 
       # Set to enabled to bypass shared caches and omit request and response content

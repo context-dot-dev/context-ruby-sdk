@@ -28,6 +28,8 @@ module ContextDev
 
     attr_reader people: ContextDev::Resources::People
 
+    attr_reader news: ContextDev::Resources::News
+
     private def auth_headers: -> ::Hash[String, String]
 
     def initialize: (

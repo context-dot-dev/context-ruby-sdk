@@ -51,6 +51,14 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :actions_html_stale, ContextDev::Internal::Type::Boolean, api_name: :actionsHtmlStale
 
+      # @!attribute html
+      #   Only present when includeHTML=true: the page HTML the Markdown was converted
+      #   from — the same body the Scrape HTML endpoint returns for the equivalent
+      #   request.
+      #
+      #   @return [String, nil]
+      optional :html, String
+
       # @!attribute key_metadata
       #   Metadata about the API key used for the request. Included in every response
       #   whenever a valid API key is provided, even when the response status is not 200.
@@ -58,7 +66,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata }
 
-      # @!method initialize(content_length:, markdown:, metadata:, success:, url:, actions_applied: nil, actions_html_stale: nil, key_metadata: nil)
+      # @!method initialize(content_length:, markdown:, metadata:, success:, url:, actions_applied: nil, actions_html_stale: nil, html: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeMdResponse} for more details.
       #
@@ -75,6 +83,8 @@ module ContextDev
       #   @param actions_applied [Array<ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied>] One verified outcome per requested browser action, in request order.
       #
       #   @param actions_html_stale [Boolean] True when an action was applied but the returned content could not be refreshed
+      #
+      #   @param html [String] Only present when includeHTML=true: the page HTML the Markdown was converted fro
       #
       #   @param key_metadata [ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
 
@@ -131,6 +141,14 @@ module ContextDev
         #
         #   @return [String, nil]
         optional :favicon, String
+
+        # @!attribute headings
+        #   Page headings (h1–h6) in document order, extracted from the unfiltered document.
+        #   Capped at the first 500 headings. Omitted when the page has none.
+        #
+        #   @return [Array<ContextDev::Models::WebWebScrapeMdResponse::Metadata::Heading>, nil]
+        optional :headings,
+                 -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeMdResponse::Metadata::Heading] }
 
         # @!attribute image
         #   Primary resolved preview image from Open Graph, Twitter, or image metadata.
@@ -203,7 +221,7 @@ module ContextDev
         optional :twitter,
                  -> { ContextDev::Internal::Type::HashOf[union: ContextDev::Models::WebWebScrapeMdResponse::Metadata::Twitter] }
 
-        # @!method initialize(final_url:, source_url:, additional_meta: nil, alternates: nil, author: nil, canonical_url: nil, description: nil, favicon: nil, image: nil, json_ld: nil, keywords: nil, language: nil, modified_time: nil, open_graph: nil, published_time: nil, robots: nil, site_name: nil, title: nil, twitter: nil)
+        # @!method initialize(final_url:, source_url:, additional_meta: nil, alternates: nil, author: nil, canonical_url: nil, description: nil, favicon: nil, headings: nil, image: nil, json_ld: nil, keywords: nil, language: nil, modified_time: nil, open_graph: nil, published_time: nil, robots: nil, site_name: nil, title: nil, twitter: nil)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebWebScrapeMdResponse::Metadata} for more details.
         #
@@ -224,6 +242,8 @@ module ContextDev
         #   @param description [String] Best description extracted from standard, Open Graph, or Twitter metadata.
         #
         #   @param favicon [String] Resolved favicon URL, when present.
+        #
+        #   @param headings [Array<ContextDev::Models::WebWebScrapeMdResponse::Metadata::Heading>] Page headings (h1–h6) in document order, extracted from the unfiltered document.
         #
         #   @param image [String] Primary resolved preview image from Open Graph, Twitter, or image metadata.
         #
@@ -294,6 +314,25 @@ module ContextDev
           #   @param title [String] Alternate resource title, when present.
           #
           #   @param type [String] Alternate resource MIME type, when present.
+        end
+
+        class Heading < ContextDev::Internal::Type::BaseModel
+          # @!attribute level
+          #   Heading level, 1–6 (from h1–h6).
+          #
+          #   @return [Integer]
+          required :level, Integer
+
+          # @!attribute text
+          #   Heading text with whitespace collapsed, truncated to 1000 characters.
+          #
+          #   @return [String]
+          required :text, String
+
+          # @!method initialize(level:, text:)
+          #   @param level [Integer] Heading level, 1–6 (from h1–h6).
+          #
+          #   @param text [String] Heading text with whitespace collapsed, truncated to 1000 characters.
         end
 
         module OpenGraph

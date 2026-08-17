@@ -5,13 +5,13 @@ module ContextDev
         body: ContextDev::Internal::file_input,
         ?client: String,
         ?extension: ContextDev::Models::ParseHandleParams::extension,
-        ?include_images: ContextDev::Models::ParseHandleParams::include_images,
-        ?include_links: ContextDev::Models::ParseHandleParams::include_links,
-        ?ocr: ContextDev::Models::ParseHandleParams::ocr,
+        ?include_images: bool,
+        ?include_links: bool,
+        ?ocr: bool,
         ?pdf: ContextDev::ParseHandleParams::Pdf,
-        ?shorten_base64_images: ContextDev::Models::ParseHandleParams::shorten_base64_images,
+        ?shorten_base64_images: bool,
         ?tags: ::Array[String],
-        ?use_main_content_only: ContextDev::Models::ParseHandleParams::use_main_content_only,
+        ?use_main_content_only: bool,
         ?zdr: ContextDev::Models::ParseHandleParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::ParseHandleResponse

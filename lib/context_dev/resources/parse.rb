@@ -17,19 +17,19 @@ module ContextDev
       #
       # @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] Query param: Optional file extension hint, such as pdf, docx, xlsx, pptx, html,
       #
-      # @param include_images [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeImages] Query param: Include image references in Markdown output
+      # @param include_images [Boolean] Query param: Include image references in Markdown output
       #
-      # @param include_links [Boolean, Symbol, ContextDev::Models::ParseHandleParams::IncludeLinks] Query param: Preserve hyperlinks in Markdown output
+      # @param include_links [Boolean] Query param: Preserve hyperlinks in Markdown output
       #
-      # @param ocr [Boolean, Symbol, ContextDev::Models::ParseHandleParams::Ocr] Query param: When true for PDF inputs, OCR the selected pages that have no usabl
+      # @param ocr [Boolean] Query param: When true for PDF inputs, OCR the selected pages that have no usabl
       #
       # @param pdf [ContextDev::Models::ParseHandleParams::Pdf] Query param: PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5
       #
-      # @param shorten_base64_images [Boolean, Symbol, ContextDev::Models::ParseHandleParams::ShortenBase64Images] Query param: Shorten base64-encoded image data in the Markdown output
+      # @param shorten_base64_images [Boolean] Query param: Shorten base64-encoded image data in the Markdown output
       #
       # @param tags [Array<String>] Query param: Optional comma-separated caller-defined tags for tracking this requ
       #
-      # @param use_main_content_only [Boolean, Symbol, ContextDev::Models::ParseHandleParams::UseMainContentOnly] Query param: Extract only the main content from HTML-like inputs
+      # @param use_main_content_only [Boolean] Query param: Extract only the main content from HTML-like inputs
       #
       # @param zdr [Symbol, ContextDev::Models::ParseHandleParams::Zdr] Query param: Set to enabled to bypass shared caches and omit request and respons
       #

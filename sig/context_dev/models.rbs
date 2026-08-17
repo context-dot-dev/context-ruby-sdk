@@ -57,6 +57,8 @@ module ContextDev
 
   class MonitorUpdateParams = ContextDev::Models::MonitorUpdateParams
 
+  class NewsSearchParams = ContextDev::Models::NewsSearchParams
+
   class PageErrorCount = ContextDev::Models::PageErrorCount
 
   class ParseHandleParams = ContextDev::Models::ParseHandleParams

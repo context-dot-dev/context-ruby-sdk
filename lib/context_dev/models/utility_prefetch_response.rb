@@ -30,8 +30,7 @@ module ContextDev
       optional :status, String
 
       # @!attribute type
-      #   The type of prefetch that was queued, echoed from the request (currently always
-      #   'brand')
+      #   The type of prefetch that was queued, echoed from the request
       #
       #   @return [Symbol, ContextDev::Models::UtilityPrefetchResponse::Type, nil]
       optional :type, enum: -> { ContextDev::Models::UtilityPrefetchResponse::Type }
@@ -48,7 +47,7 @@ module ContextDev
       #
       #   @param status [String] Status of the response, e.g., 'ok'
       #
-      #   @param type [Symbol, ContextDev::Models::UtilityPrefetchResponse::Type] The type of prefetch that was queued, echoed from the request (currently always
+      #   @param type [Symbol, ContextDev::Models::UtilityPrefetchResponse::Type] The type of prefetch that was queued, echoed from the request
 
       # @see ContextDev::Models::UtilityPrefetchResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
@@ -73,14 +72,14 @@ module ContextDev
         #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
       end
 
-      # The type of prefetch that was queued, echoed from the request (currently always
-      # 'brand')
+      # The type of prefetch that was queued, echoed from the request
       #
       # @see ContextDev::Models::UtilityPrefetchResponse#type
       module Type
         extend ContextDev::Internal::Type::Enum
 
         BRAND = :brand
+        STYLEGUIDE = :styleguide
 
         # @!method self.values
         #   @return [Array<Symbol>]

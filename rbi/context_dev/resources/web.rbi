@@ -196,11 +196,7 @@ module ContextDev
           domain: String,
           full_screenshot:
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
-          handle_cookie_popup:
-            T.any(
-              T::Boolean,
-              ContextDev::WebScreenshotParams::HandleCookiePopup::OrSymbol
-            ),
+          handle_cookie_popup: T::Boolean,
           max_age_ms: T.nilable(Integer),
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           scroll_offset: T.nilable(Integer),
@@ -439,26 +435,14 @@ module ContextDev
           country: ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol,
           exclude_selectors: T.nilable(T::Array[String]),
           headers: T::Hash[Symbol, String],
-          include_frames:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeHTMLParams::IncludeFrames::OrSymbol
-            ),
+          include_frames: T::Boolean,
           include_selectors: T.nilable(T::Array[String]),
           max_age_ms: T.nilable(Integer),
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
-          settle_animations:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeHTMLParams::SettleAnimations::OrSymbol
-            ),
+          settle_animations: T::Boolean,
           tags: T::Array[String],
           timeout_ms: Integer,
-          use_main_content_only:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeHTMLParams::UseMainContentOnly::OrSymbol
-            ),
+          use_main_content_only: T::Boolean,
           wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeHTMLParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
@@ -539,11 +523,7 @@ module ContextDev
                 )
               ]
             ),
-          dedupe:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeImagesParams::Dedupe::OrSymbol
-            ),
+          dedupe: T::Boolean,
           enrichment:
             T.nilable(ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash),
           headers: T::Hash[Symbol, String],
@@ -609,17 +589,17 @@ module ContextDev
       #
       # ### Billing & errors
       #
-      # | HTTP status | Billed?                                   | Meaning                                                                                  |
-      # | ----------- | ----------------------------------------- | ---------------------------------------------------------------------------------------- |
-      # | 200         | Yes — 1 credit, or 2 credits with actions | Successful scrape, including a zero-length result when includeSelectors matched nothing  |
-      # | 400         | No                                        | Invalid input, skipped PDF, or the page could not be scraped                             |
-      # | 401 / 403   | No                                        | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code |
-      # | 404         | No                                        | Target page returned or fingerprinted as not found                                       |
-      # | 408         | No                                        | Request timed out                                                                        |
-      # | 413         | No                                        | Target content exceeds the maximum supported size (20 MB)                                |
-      # | 415         | No                                        | Unsupported content type                                                                 |
-      # | 429         | No                                        | Per-minute rate limit exceeded; honor Retry-After                                        |
-      # | 500         | No                                        | Internal error                                                                           |
+      # | HTTP status | Billed?                                   | Meaning                                                                                                                                                                                                                                                                                                       |
+      # | ----------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+      # | 200         | Yes — 1 credit, or 2 credits with actions | Successful scrape, including a zero-length result when includeSelectors matched nothing                                                                                                                                                                                                                       |
+      # | 400         | No                                        | Invalid input, skipped PDF, or the page could not be scraped. error_code WEBSITE_BLOCKED specifically means the site answered with an anti-bot challenge, CAPTCHA wall, or login shell instead of the page (even when the site returned HTTP 200) — retrying later or from another country sometimes succeeds |
+      # | 401 / 403   | No                                        | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code                                                                                                                                                                                                                      |
+      # | 404         | No                                        | Target page returned or fingerprinted as not found                                                                                                                                                                                                                                                            |
+      # | 408         | No                                        | Request timed out                                                                                                                                                                                                                                                                                             |
+      # | 413         | No                                        | Target content exceeds the maximum supported size (20 MB)                                                                                                                                                                                                                                                     |
+      # | 415         | No                                        | Unsupported content type                                                                                                                                                                                                                                                                                      |
+      # | 429         | No                                        | Per-minute rate limit exceeded; honor Retry-After                                                                                                                                                                                                                                                             |
+      # | 500         | No                                        | Internal error                                                                                                                                                                                                                                                                                                |
       sig do
         params(
           url: String,
@@ -635,41 +615,18 @@ module ContextDev
           country: ContextDev::WebWebScrapeMdParams::Country::OrSymbol,
           exclude_selectors: T.nilable(T::Array[String]),
           headers: T::Hash[Symbol, String],
-          include_frames:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeFrames::OrSymbol
-            ),
-          include_images:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeImages::OrSymbol
-            ),
-          include_links:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::IncludeLinks::OrSymbol
-            ),
+          include_frames: T::Boolean,
+          include_html: T::Boolean,
+          include_images: T::Boolean,
+          include_links: T::Boolean,
           include_selectors: T.nilable(T::Array[String]),
           max_age_ms: T.nilable(Integer),
           pdf: ContextDev::WebWebScrapeMdParams::Pdf::OrHash,
-          settle_animations:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::SettleAnimations::OrSymbol
-            ),
-          shorten_base64_images:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::ShortenBase64Images::OrSymbol
-            ),
+          settle_animations: T::Boolean,
+          shorten_base64_images: T::Boolean,
           tags: T::Array[String],
           timeout_ms: Integer,
-          use_main_content_only:
-            T.any(
-              T::Boolean,
-              ContextDev::WebWebScrapeMdParams::UseMainContentOnly::OrSymbol
-            ),
+          use_main_content_only: T::Boolean,
           wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeMdParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
@@ -696,6 +653,10 @@ module ContextDev
         headers: nil,
         # When true, the contents of iframes are rendered to Markdown.
         include_frames: nil,
+        # When true, the response also includes an `html` field with the page HTML the
+        # Markdown was converted from — the same body the Scrape HTML endpoint returns for
+        # the equivalent request.
+        include_html: nil,
         # Include image references in Markdown output
         include_images: nil,
         # Preserve hyperlinks in Markdown output
