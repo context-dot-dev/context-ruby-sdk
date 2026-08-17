@@ -180,10 +180,39 @@ module ContextDev
           #   @return [String, nil]
           optional :name, String
 
-          # @!method initialize(hex: nil, name: nil)
+          # @!attribute source
+          #   Where the color was observed: 'site' colors come from the website's own theme
+          #   signals (rendered page colors, manifest, theme-color meta), 'logo' colors from
+          #   logo image pixels.
+          #
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color::Source, nil]
+          optional :source, enum: -> { ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color::Source }
+
+          # @!method initialize(hex: nil, name: nil, source: nil)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color} for more
+          #   details.
+          #
           #   @param hex [String] Color in hexadecimal format
           #
           #   @param name [String] Name of the color
+          #
+          #   @param source [Symbol, ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color::Source] Where the color was observed: 'site' colors come from the website's own theme si
+
+          # Where the color was observed: 'site' colors come from the website's own theme
+          # signals (rendered page colors, manifest, theme-color meta), 'logo' colors from
+          # logo image pixels.
+          #
+          # @see ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color#source
+          module Source
+            extend ContextDev::Internal::Type::Enum
+
+            SITE = :site
+            LOGO = :logo
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
         end
 
         class Logo < ContextDev::Internal::Type::BaseModel
