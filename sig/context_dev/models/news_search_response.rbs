@@ -1,0 +1,206 @@
+module ContextDev
+  module Models
+    type news_search_response =
+      {
+        data: ::Array[ContextDev::Models::NewsSearchResponse::Data],
+        has_more: bool,
+        meta: ContextDev::Models::NewsSearchResponse::Meta,
+        next_cursor: String?,
+        key_metadata: ContextDev::Models::NewsSearchResponse::KeyMetadata
+      }
+
+    class NewsSearchResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor data: ::Array[ContextDev::Models::NewsSearchResponse::Data]
+
+      attr_accessor has_more: bool
+
+      attr_accessor meta: ContextDev::Models::NewsSearchResponse::Meta
+
+      attr_accessor next_cursor: String?
+
+      attr_reader key_metadata: ContextDev::Models::NewsSearchResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::NewsSearchResponse::KeyMetadata
+      ) -> ContextDev::Models::NewsSearchResponse::KeyMetadata
+
+      def initialize: (
+        data: ::Array[ContextDev::Models::NewsSearchResponse::Data],
+        has_more: bool,
+        meta: ContextDev::Models::NewsSearchResponse::Meta,
+        next_cursor: String?,
+        ?key_metadata: ContextDev::Models::NewsSearchResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        data: ::Array[ContextDev::Models::NewsSearchResponse::Data],
+        has_more: bool,
+        meta: ContextDev::Models::NewsSearchResponse::Meta,
+        next_cursor: String?,
+        key_metadata: ContextDev::Models::NewsSearchResponse::KeyMetadata
+      }
+
+      type data =
+        {
+          id: String,
+          authors: ::Array[String],
+          description: String?,
+          image_url: String?,
+          language: String?,
+          match: ContextDev::Models::NewsSearchResponse::Data::Match,
+          published_at: Time?,
+          source: ContextDev::Models::NewsSearchResponse::Data::Source,
+          story_id: String,
+          title: String,
+          type: ContextDev::Models::NewsSearchResponse::Data::type_,
+          url: String
+        }
+
+      class Data < ContextDev::Internal::Type::BaseModel
+        attr_accessor id: String
+
+        attr_accessor authors: ::Array[String]
+
+        attr_accessor description: String?
+
+        attr_accessor image_url: String?
+
+        attr_accessor language: String?
+
+        attr_accessor match: ContextDev::Models::NewsSearchResponse::Data::Match
+
+        attr_accessor published_at: Time?
+
+        attr_accessor source: ContextDev::Models::NewsSearchResponse::Data::Source
+
+        attr_accessor story_id: String
+
+        attr_accessor title: String
+
+        attr_accessor type: ContextDev::Models::NewsSearchResponse::Data::type_
+
+        attr_accessor url: String
+
+        def initialize: (
+          id: String,
+          authors: ::Array[String],
+          description: String?,
+          image_url: String?,
+          language: String?,
+          match: ContextDev::Models::NewsSearchResponse::Data::Match,
+          published_at: Time?,
+          source: ContextDev::Models::NewsSearchResponse::Data::Source,
+          story_id: String,
+          title: String,
+          type: ContextDev::Models::NewsSearchResponse::Data::type_,
+          url: String
+        ) -> void
+
+        def to_hash: -> {
+          id: String,
+          authors: ::Array[String],
+          description: String?,
+          image_url: String?,
+          language: String?,
+          match: ContextDev::Models::NewsSearchResponse::Data::Match,
+          published_at: Time?,
+          source: ContextDev::Models::NewsSearchResponse::Data::Source,
+          story_id: String,
+          title: String,
+          type: ContextDev::Models::NewsSearchResponse::Data::type_,
+          url: String
+        }
+
+        type match =
+          {
+            confidence: Float?,
+            level: ContextDev::Models::NewsSearchResponse::Data::Match::level
+          }
+
+        class Match < ContextDev::Internal::Type::BaseModel
+          attr_accessor confidence: Float?
+
+          attr_accessor level: ContextDev::Models::NewsSearchResponse::Data::Match::level
+
+          def initialize: (
+            confidence: Float?,
+            level: ContextDev::Models::NewsSearchResponse::Data::Match::level
+          ) -> void
+
+          def to_hash: -> {
+            confidence: Float?,
+            level: ContextDev::Models::NewsSearchResponse::Data::Match::level
+          }
+
+          type level = :primary | :secondary
+
+          module Level
+            extend ContextDev::Internal::Type::Enum
+
+            PRIMARY: :primary
+            SECONDARY: :secondary
+
+            def self?.values: -> ::Array[ContextDev::Models::NewsSearchResponse::Data::Match::level]
+          end
+        end
+
+        type source = { direct: bool, domain: String, name: String }
+
+        class Source < ContextDev::Internal::Type::BaseModel
+          attr_accessor direct: bool
+
+          attr_accessor domain: String
+
+          attr_accessor name: String
+
+          def initialize: (direct: bool, domain: String, name: String) -> void
+
+          def to_hash: -> { direct: bool, domain: String, name: String }
+        end
+
+        type type_ =
+          :editorial | :press_release | :regulatory_filing | :advisory
+
+        module Type
+          extend ContextDev::Internal::Type::Enum
+
+          EDITORIAL: :editorial
+          PRESS_RELEASE: :press_release
+          REGULATORY_FILING: :regulatory_filing
+          ADVISORY: :advisory
+
+          def self?.values: -> ::Array[ContextDev::Models::NewsSearchResponse::Data::type_]
+        end
+      end
+
+      type meta = { count: Integer }
+
+      class Meta < ContextDev::Internal::Type::BaseModel
+        attr_accessor count: Integer
+
+        def initialize: (count: Integer) -> void
+
+        def to_hash: -> { count: Integer }
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end

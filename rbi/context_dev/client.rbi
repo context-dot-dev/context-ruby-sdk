@@ -45,6 +45,10 @@ module ContextDev
     sig { returns(ContextDev::Resources::People) }
     attr_reader :people
 
+    # Search live first-party RSS and free historical news data by company identity.
+    sig { returns(ContextDev::Resources::News) }
+    attr_reader :news
+
     # @api private
     sig { override.returns(T::Hash[String, String]) }
     private def auth_headers
