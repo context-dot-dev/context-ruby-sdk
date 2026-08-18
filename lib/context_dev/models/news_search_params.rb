@@ -413,6 +413,7 @@ module ContextDev
           CG = :cg
           CH = :ch
           CL = :cl
+          CZ = :cz
           DE = :de
           FI = :fi
           FR = :fr
