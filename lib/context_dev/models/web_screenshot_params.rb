@@ -7,6 +7,16 @@ module ContextDev
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
 
+      # @!attribute clear_popups
+      #   Optional parameter for comprehensive popup cleanup. If 'true', the browser
+      #   dismisses detected cookie/consent UI and clears other detected obstructive
+      #   popups and overlays before capture. If 'false' or not provided, this parameter
+      #   requests no cleanup; handleCookiePopup can still request cookie/consent handling
+      #   independently.
+      #
+      #   @return [Boolean, nil]
+      optional :clear_popups, ContextDev::Internal::Type::Boolean
+
       # @!attribute color_scheme
       #   Optional parameter to choose the site's visual theme in the screenshot. Use
       #   'light' or 'dark' when the site offers both appearances.
@@ -121,9 +131,11 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebScreenshotParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebScreenshotParams::Zdr }
 
-      # @!method initialize(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @!method initialize(clear_popups: nil, color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScreenshotParams} for more details.
+      #
+      #   @param clear_popups [Boolean] Optional parameter for comprehensive popup cleanup. If 'true', the browser dismi
       #
       #   @param color_scheme [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
       #
