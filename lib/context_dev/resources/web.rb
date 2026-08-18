@@ -176,7 +176,9 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload screenshot(clear_popups: nil, color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      #
+      # @param clear_popups [Boolean] Optional parameter for comprehensive popup cleanup. If 'true', the browser dismi
       #
       # @param color_scheme [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
       #
@@ -218,6 +220,7 @@ module ContextDev
           method: :get,
           path: "web/screenshot",
           query: query.transform_keys(
+            clear_popups: "clearPopups",
             color_scheme: "colorScheme",
             direct_url: "directUrl",
             full_screenshot: "fullScreenshot",

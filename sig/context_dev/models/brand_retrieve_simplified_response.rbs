@@ -177,7 +177,12 @@ module ContextDev
           end
         end
 
-        type color = { hex: String, name: String }
+        type color =
+          {
+            hex: String,
+            name: String,
+            source: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color::source
+          }
 
         class Color < ContextDev::Internal::Type::BaseModel
           attr_reader hex: String?
@@ -188,9 +193,34 @@ module ContextDev
 
           def name=: (String) -> String
 
-          def initialize: (?hex: String, ?name: String) -> void
+          attr_reader source: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color::source?
 
-          def to_hash: -> { hex: String, name: String }
+          def source=: (
+            ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color::source
+          ) -> ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color::source
+
+          def initialize: (
+            ?hex: String,
+            ?name: String,
+            ?source: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color::source
+          ) -> void
+
+          def to_hash: -> {
+            hex: String,
+            name: String,
+            source: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color::source
+          }
+
+          type source = :site | :logo
+
+          module Source
+            extend ContextDev::Internal::Type::Enum
+
+            SITE: :site
+            LOGO: :logo
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Color::source]
+          end
         end
 
         type logo =

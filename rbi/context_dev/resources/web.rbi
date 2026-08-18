@@ -190,6 +190,7 @@ module ContextDev
       # Capture a screenshot of a website.
       sig do
         params(
+          clear_popups: T::Boolean,
           color_scheme: ContextDev::WebScreenshotParams::ColorScheme::OrSymbol,
           country: ContextDev::WebScreenshotParams::Country::OrSymbol,
           direct_url: String,
@@ -209,6 +210,12 @@ module ContextDev
         ).returns(ContextDev::Models::WebScreenshotResponse)
       end
       def screenshot(
+        # Optional parameter for comprehensive popup cleanup. If 'true', the browser
+        # dismisses detected cookie/consent UI and clears other detected obstructive
+        # popups and overlays before capture. If 'false' or not provided, this parameter
+        # requests no cleanup; handleCookiePopup can still request cookie/consent handling
+        # independently.
+        clear_popups: nil,
         # Optional parameter to choose the site's visual theme in the screenshot. Use
         # 'light' or 'dark' when the site offers both appearances.
         color_scheme: nil,

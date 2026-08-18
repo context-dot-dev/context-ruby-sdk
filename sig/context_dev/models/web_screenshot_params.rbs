@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type web_screenshot_params =
       {
+        clear_popups: bool,
         color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme,
         country: ContextDev::Models::WebScreenshotParams::country,
         direct_url: String,
@@ -22,6 +23,10 @@ module ContextDev
     class WebScreenshotParams < ContextDev::Internal::Type::BaseModel
       extend ContextDev::Internal::Type::RequestParameters::Converter
       include ContextDev::Internal::Type::RequestParameters
+
+      attr_reader clear_popups: bool?
+
+      def clear_popups=: (bool) -> bool
 
       attr_reader color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme?
 
@@ -86,6 +91,7 @@ module ContextDev
       ) -> ContextDev::Models::WebScreenshotParams::zdr
 
       def initialize: (
+        ?clear_popups: bool,
         ?color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme,
         ?country: ContextDev::Models::WebScreenshotParams::country,
         ?direct_url: String,
@@ -104,6 +110,7 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        clear_popups: bool,
         color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme,
         country: ContextDev::Models::WebScreenshotParams::country,
         direct_url: String,
