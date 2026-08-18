@@ -11,6 +11,17 @@ module ContextDev
           T.any(ContextDev::WebScreenshotParams, ContextDev::Internal::AnyHash)
         end
 
+      # Optional parameter for comprehensive popup cleanup. If 'true', the browser
+      # dismisses detected cookie/consent UI and clears other detected obstructive
+      # popups and overlays before capture. If 'false' or not provided, this parameter
+      # requests no cleanup; handleCookiePopup can still request cookie/consent handling
+      # independently.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :clear_popups
+
+      sig { params(clear_popups: T::Boolean).void }
+      attr_writer :clear_popups
+
       # Optional parameter to choose the site's visual theme in the screenshot. Use
       # 'light' or 'dark' when the site offers both appearances.
       sig do
@@ -157,6 +168,7 @@ module ContextDev
 
       sig do
         params(
+          clear_popups: T::Boolean,
           color_scheme: ContextDev::WebScreenshotParams::ColorScheme::OrSymbol,
           country: ContextDev::WebScreenshotParams::Country::OrSymbol,
           direct_url: String,
@@ -176,6 +188,12 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Optional parameter for comprehensive popup cleanup. If 'true', the browser
+        # dismisses detected cookie/consent UI and clears other detected obstructive
+        # popups and overlays before capture. If 'false' or not provided, this parameter
+        # requests no cleanup; handleCookiePopup can still request cookie/consent handling
+        # independently.
+        clear_popups: nil,
         # Optional parameter to choose the site's visual theme in the screenshot. Use
         # 'light' or 'dark' when the site offers both appearances.
         color_scheme: nil,
@@ -241,6 +259,7 @@ module ContextDev
       sig do
         override.returns(
           {
+            clear_popups: T::Boolean,
             color_scheme:
               ContextDev::WebScreenshotParams::ColorScheme::OrSymbol,
             country: ContextDev::WebScreenshotParams::Country::OrSymbol,
