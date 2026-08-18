@@ -1123,6 +1123,11 @@ module ContextDev
               :cl,
               ContextDev::NewsSearchParams::FilterBy::SourceCountry::TaggedSymbol
             )
+          CZ =
+            T.let(
+              :cz,
+              ContextDev::NewsSearchParams::FilterBy::SourceCountry::TaggedSymbol
+            )
           DE =
             T.let(
               :de,
