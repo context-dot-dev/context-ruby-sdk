@@ -320,11 +320,11 @@ module ContextDev
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
-      # @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped.
+      # @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped. An
       #
       # @param use_main_content_only [Boolean] Extract only the main content, stripping headers, footers, sidebars, and navigat
       #
-      # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load for each craw
+      # @param wait_for_ms [Integer] Browser wait time in milliseconds after initial page load for each crawled page.
       #
       # @param zdr [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
