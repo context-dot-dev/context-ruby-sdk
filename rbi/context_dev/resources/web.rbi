@@ -408,13 +408,15 @@ module ContextDev
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
         timeout_ms: nil,
-        # Regex pattern. Only URLs matching this pattern will be followed and scraped.
+        # Regex pattern. Only URLs matching this pattern will be followed and scraped. An
+        # automatic prefix scope in the form ^<starting URL> follows a redirect of the
+        # starting page.
         url_regex: nil,
         # Extract only the main content, stripping headers, footers, sidebars, and
         # navigation
         use_main_content_only: nil,
-        # Optional browser wait time in milliseconds after initial page load for each
-        # crawled page. Min: 0. Max: 30000 (30 seconds).
+        # Browser wait time in milliseconds after initial page load for each crawled page.
+        # Defaults to 3500 (3.5 seconds). Min: 0. Max: 30000 (30 seconds).
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Requires zero data retention to be enabled for your
