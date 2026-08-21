@@ -9,11 +9,13 @@ module ContextDev
       # Crawl a website, use the provided JSON Schema and instructions to prioritize
       # relevant internal links, and extract structured data from the selected pages.
       #
-      # @overload extract(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @overload extract(schema:, url:, actions: nil, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #
-      # @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. TypeScript Zod users can pass a JSON S
+      # @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. Image fields such as `image_urls` or `
       #
       # @param url [String] The starting website URL to crawl and extract from. Must include http:// or http
+      #
+      # @param actions [Array<ContextDev::Models::WebExtractParams::Action::Wait, ContextDev::Models::WebExtractParams::Action::Perform>] Optional browser actions executed in order on the requested page after it loads
       #
       # @param fact_check [Boolean] When true, every returned value must be grounded in facts stated on the page; fi
       #

@@ -4,6 +4,7 @@ module ContextDev
       {
         schema: ::Hash[Symbol, top],
         url: String,
+        actions: ::Array[ContextDev::Models::WebExtractParams::action],
         fact_check: bool,
         follow_subdomains: bool,
         include_frames: bool,
@@ -27,6 +28,12 @@ module ContextDev
       attr_accessor schema: ::Hash[Symbol, top]
 
       attr_accessor url: String
+
+      attr_reader actions: ::Array[ContextDev::Models::WebExtractParams::action]?
+
+      def actions=: (
+        ::Array[ContextDev::Models::WebExtractParams::action]
+      ) -> ::Array[ContextDev::Models::WebExtractParams::action]
 
       attr_reader fact_check: bool?
 
@@ -85,6 +92,7 @@ module ContextDev
       def initialize: (
         schema: ::Hash[Symbol, top],
         url: String,
+        ?actions: ::Array[ContextDev::Models::WebExtractParams::action],
         ?fact_check: bool,
         ?follow_subdomains: bool,
         ?include_frames: bool,
@@ -104,6 +112,7 @@ module ContextDev
       def to_hash: -> {
         schema: ::Hash[Symbol, top],
         url: String,
+        actions: ::Array[ContextDev::Models::WebExtractParams::action],
         fact_check: bool,
         follow_subdomains: bool,
         include_frames: bool,
@@ -119,6 +128,40 @@ module ContextDev
         wait_for_ms: Integer,
         request_options: ContextDev::RequestOptions
       }
+
+      type action =
+        ContextDev::WebExtractParams::Action::Wait
+        | ContextDev::WebExtractParams::Action::Perform
+
+      module Action
+        extend ContextDev::Internal::Type::Union
+
+        type wait = { do_: :wait, time_ms: Integer }
+
+        class Wait < ContextDev::Internal::Type::BaseModel
+          attr_accessor do_: :wait
+
+          attr_accessor time_ms: Integer
+
+          def initialize: (time_ms: Integer, ?do_: :wait) -> void
+
+          def to_hash: -> { do_: :wait, time_ms: Integer }
+        end
+
+        type perform = { action: String, do_: :perform }
+
+        class Perform < ContextDev::Internal::Type::BaseModel
+          attr_accessor action: String
+
+          attr_accessor do_: :perform
+
+          def initialize: (action: String, ?do_: :perform) -> void
+
+          def to_hash: -> { action: String, do_: :perform }
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::WebExtractParams::action]
+      end
 
       type pdf = { end_: Integer, should_parse: bool, start: Integer }
 
