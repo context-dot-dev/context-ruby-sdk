@@ -4,6 +4,7 @@ module ContextDev
       def extract: (
         schema: ::Hash[Symbol, top],
         url: String,
+        ?actions: ::Array[ContextDev::Models::WebExtractParams::action],
         ?fact_check: bool,
         ?follow_subdomains: bool,
         ?include_frames: bool,

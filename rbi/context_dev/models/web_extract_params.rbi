@@ -11,9 +11,11 @@ module ContextDev
           T.any(ContextDev::WebExtractParams, ContextDev::Internal::AnyHash)
         end
 
-      # JSON Schema for the returned data object. TypeScript Zod users can pass a JSON
-      # Schema generated from a Zod object; Python users can pass the equivalent JSON
-      # Schema object.
+      # JSON Schema for the returned data object. Image fields such as `image_urls` or
+      # `product_photos` automatically make page image references available to
+      # extraction, so product data and photos can be returned in one call. TypeScript
+      # Zod users can pass a JSON Schema generated from a Zod object; Python users can
+      # pass the equivalent JSON Schema object.
       sig { returns(T::Hash[Symbol, T.anything]) }
       attr_accessor :schema
 
@@ -21,6 +23,36 @@ module ContextDev
       # https://.
       sig { returns(String) }
       attr_accessor :url
+
+      # Optional browser actions executed in order on the requested page after it loads
+      # and before extraction. Requires a paid plan. When actions are provided and
+      # stopAfterMs is omitted, the crawl budget defaults to 110000 ms.
+      sig do
+        returns(
+          T.nilable(
+            T::Array[
+              T.any(
+                ContextDev::WebExtractParams::Action::Wait,
+                ContextDev::WebExtractParams::Action::Perform
+              )
+            ]
+          )
+        )
+      end
+      attr_reader :actions
+
+      sig do
+        params(
+          actions:
+            T::Array[
+              T.any(
+                ContextDev::WebExtractParams::Action::Wait::OrHash,
+                ContextDev::WebExtractParams::Action::Perform::OrHash
+              )
+            ]
+        ).void
+      end
+      attr_writer :actions
 
       # When true, every returned value must be grounded in facts stated on the page;
       # fields that cannot be supported by the page are returned as null/empty. When
@@ -95,7 +127,8 @@ module ContextDev
       attr_writer :settle_animations
 
       # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
-      # (110s). Default: 80000 (80s).
+      # (110s). Defaults to 80000 (80s), or 110000 (110s) when browser actions are
+      # provided.
       sig { returns(T.nilable(Integer)) }
       attr_reader :stop_after_ms
 
@@ -130,6 +163,13 @@ module ContextDev
         params(
           schema: T::Hash[Symbol, T.anything],
           url: String,
+          actions:
+            T::Array[
+              T.any(
+                ContextDev::WebExtractParams::Action::Wait::OrHash,
+                ContextDev::WebExtractParams::Action::Perform::OrHash
+              )
+            ],
           fact_check: T::Boolean,
           follow_subdomains: T::Boolean,
           include_frames: T::Boolean,
@@ -147,13 +187,19 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # JSON Schema for the returned data object. TypeScript Zod users can pass a JSON
-        # Schema generated from a Zod object; Python users can pass the equivalent JSON
-        # Schema object.
+        # JSON Schema for the returned data object. Image fields such as `image_urls` or
+        # `product_photos` automatically make page image references available to
+        # extraction, so product data and photos can be returned in one call. TypeScript
+        # Zod users can pass a JSON Schema generated from a Zod object; Python users can
+        # pass the equivalent JSON Schema object.
         schema:,
         # The starting website URL to crawl and extract from. Must include http:// or
         # https://.
         url:,
+        # Optional browser actions executed in order on the requested page after it loads
+        # and before extraction. Requires a paid plan. When actions are provided and
+        # stopAfterMs is omitted, the crawl budget defaults to 110000 ms.
+        actions: nil,
         # When true, every returned value must be grounded in facts stated on the page;
         # fields that cannot be supported by the page are returned as null/empty. When
         # false (default), the model may make reasonable inferences and derivations from
@@ -182,7 +228,8 @@ module ContextDev
         # exchange for more stable output on animated pages.
         settle_animations: nil,
         # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
-        # (110s). Default: 80000 (80s).
+        # (110s). Defaults to 80000 (80s), or 110000 (110s) when browser actions are
+        # provided.
         stop_after_ms: nil,
         # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
@@ -202,6 +249,13 @@ module ContextDev
           {
             schema: T::Hash[Symbol, T.anything],
             url: String,
+            actions:
+              T::Array[
+                T.any(
+                  ContextDev::WebExtractParams::Action::Wait,
+                  ContextDev::WebExtractParams::Action::Perform
+                )
+              ],
             fact_check: T::Boolean,
             follow_subdomains: T::Boolean,
             include_frames: T::Boolean,
@@ -220,6 +274,80 @@ module ContextDev
         )
       end
       def to_hash
+      end
+
+      # Browser action discriminated by `do`. Each variant exposes only its applicable
+      # fields.
+      module Action
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              ContextDev::WebExtractParams::Action::Wait,
+              ContextDev::WebExtractParams::Action::Perform
+            )
+          end
+
+        class Wait < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::WebExtractParams::Action::Wait,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(Symbol) }
+          attr_accessor :do_
+
+          sig { returns(Integer) }
+          attr_accessor :time_ms
+
+          # Pause for a fixed number of milliseconds before continuing to the next action.
+          sig do
+            params(time_ms: Integer, do_: Symbol).returns(T.attached_class)
+          end
+          def self.new(time_ms:, do_: :wait)
+          end
+
+          sig { override.returns({ do_: Symbol, time_ms: Integer }) }
+          def to_hash
+          end
+        end
+
+        class Perform < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::WebExtractParams::Action::Perform,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(String) }
+          attr_accessor :action
+
+          sig { returns(Symbol) }
+          attr_accessor :do_
+
+          # Resolve and perform one natural-language browser action.
+          sig { params(action: String, do_: Symbol).returns(T.attached_class) }
+          def self.new(action:, do_: :perform)
+          end
+
+          sig { override.returns({ action: String, do_: Symbol }) }
+          def to_hash
+          end
+        end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebExtractParams::Action::Variants]
+          )
+        end
+        def self.variants
+        end
       end
 
       class Pdf < ContextDev::Internal::Type::BaseModel

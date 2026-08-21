@@ -123,6 +123,28 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :num_urls
 
+        # One verified outcome per requested browser action, in request order.
+        sig do
+          returns(
+            T.nilable(
+              T::Array[
+                ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied
+              ]
+            )
+          )
+        end
+        attr_reader :actions_applied
+
+        sig do
+          params(
+            actions_applied:
+              T::Array[
+                ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::OrHash
+              ]
+          ).void
+        end
+        attr_writer :actions_applied
+
         sig do
           params(
             max_crawl_depth: Integer,
@@ -130,7 +152,11 @@ module ContextDev
             num_failed: Integer,
             num_skipped: Integer,
             num_succeeded: Integer,
-            num_urls: Integer
+            num_urls: Integer,
+            actions_applied:
+              T::Array[
+                ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::OrHash
+              ]
           ).returns(T.attached_class)
         end
         def self.new(
@@ -141,7 +167,9 @@ module ContextDev
           num_failed:,
           num_skipped:,
           num_succeeded:,
-          num_urls:
+          num_urls:,
+          # One verified outcome per requested browser action, in request order.
+          actions_applied: nil
         )
         end
 
@@ -153,11 +181,152 @@ module ContextDev
               num_failed: Integer,
               num_skipped: Integer,
               num_succeeded: Integer,
-              num_urls: Integer
+              num_urls: Integer,
+              actions_applied:
+                T::Array[
+                  ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied
+                ]
             }
           )
         end
         def to_hash
+        end
+
+        class ActionsApplied < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(String) }
+          attr_accessor :instruction
+
+          # Applied means the requested page state was visibly verified. Failed means it was
+          # not verified. Skipped means it was not attempted.
+          sig do
+            returns(
+              ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::Status::TaggedSymbol
+            )
+          end
+          attr_accessor :status
+
+          # Visible page evidence used to verify an applied action.
+          sig { returns(T.nilable(String)) }
+          attr_reader :completion_evidence
+
+          sig { params(completion_evidence: String).void }
+          attr_writer :completion_evidence
+
+          sig { returns(T.nilable(Float)) }
+          attr_reader :duration_ms
+
+          sig { params(duration_ms: Float).void }
+          attr_writer :duration_ms
+
+          sig { returns(T.nilable(String)) }
+          attr_reader :error
+
+          sig { params(error: String).void }
+          attr_writer :error
+
+          sig { returns(T.nilable(String)) }
+          attr_reader :method_
+
+          sig { params(method_: String).void }
+          attr_writer :method_
+
+          sig { returns(T.nilable(String)) }
+          attr_reader :target_description
+
+          sig { params(target_description: String).void }
+          attr_writer :target_description
+
+          sig do
+            params(
+              instruction: String,
+              status:
+                ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::Status::OrSymbol,
+              completion_evidence: String,
+              duration_ms: Float,
+              error: String,
+              method_: String,
+              target_description: String
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            instruction:,
+            # Applied means the requested page state was visibly verified. Failed means it was
+            # not verified. Skipped means it was not attempted.
+            status:,
+            # Visible page evidence used to verify an applied action.
+            completion_evidence: nil,
+            duration_ms: nil,
+            error: nil,
+            method_: nil,
+            target_description: nil
+          )
+          end
+
+          sig do
+            override.returns(
+              {
+                instruction: String,
+                status:
+                  ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::Status::TaggedSymbol,
+                completion_evidence: String,
+                duration_ms: Float,
+                error: String,
+                method_: String,
+                target_description: String
+              }
+            )
+          end
+          def to_hash
+          end
+
+          # Applied means the requested page state was visibly verified. Failed means it was
+          # not verified. Skipped means it was not attempted.
+          module Status
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::Status
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            APPLIED =
+              T.let(
+                :applied,
+                ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::Status::TaggedSymbol
+              )
+            FAILED =
+              T.let(
+                :failed,
+                ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::Status::TaggedSymbol
+              )
+            SKIPPED =
+              T.let(
+                :skipped,
+                ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::Status::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::Status::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
+          end
         end
       end
 
