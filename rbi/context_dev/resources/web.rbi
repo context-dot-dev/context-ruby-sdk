@@ -13,7 +13,8 @@ module ContextDev
             T::Array[
               T.any(
                 ContextDev::WebExtractParams::Action::Wait::OrHash,
-                ContextDev::WebExtractParams::Action::Perform::OrHash
+                ContextDev::WebExtractParams::Action::Perform::OrHash,
+                ContextDev::WebExtractParams::Action::Scroll::OrHash
               )
             ],
           fact_check: T::Boolean,
@@ -42,9 +43,10 @@ module ContextDev
         # The starting website URL to crawl and extract from. Must include http:// or
         # https://.
         url:,
-        # Optional browser actions executed in order on the requested page after it loads
-        # and before extraction. Requires a paid plan. When actions are provided and
-        # stopAfterMs is omitted, the crawl budget defaults to 110000 ms.
+        # Optional browser actions executed in order on the requested page after it loads,
+        # before links are discovered or additional pages are crawled. Requires a paid
+        # plan. When actions are provided and stopAfterMs is omitted, the crawl budget
+        # defaults to 110000 ms.
         actions: nil,
         # When true, every returned value must be grounded in facts stated on the page;
         # fields that cannot be supported by the page are returned as null/empty. When
@@ -451,7 +453,8 @@ module ContextDev
               T::Array[
                 T.any(
                   ContextDev::WebWebScrapeHTMLParams::Action::Wait::OrHash,
-                  ContextDev::WebWebScrapeHTMLParams::Action::Perform::OrHash
+                  ContextDev::WebWebScrapeHTMLParams::Action::Perform::OrHash,
+                  ContextDev::WebWebScrapeHTMLParams::Action::Scroll::OrHash
                 )
               ]
             ),
@@ -542,7 +545,8 @@ module ContextDev
               T::Array[
                 T.any(
                   ContextDev::WebWebScrapeImagesParams::Action::Wait::OrHash,
-                  ContextDev::WebWebScrapeImagesParams::Action::Perform::OrHash
+                  ContextDev::WebWebScrapeImagesParams::Action::Perform::OrHash,
+                  ContextDev::WebWebScrapeImagesParams::Action::Scroll::OrHash
                 )
               ]
             ),
@@ -631,7 +635,8 @@ module ContextDev
               T::Array[
                 T.any(
                   ContextDev::WebWebScrapeMdParams::Action::Wait::OrHash,
-                  ContextDev::WebWebScrapeMdParams::Action::Perform::OrHash
+                  ContextDev::WebWebScrapeMdParams::Action::Perform::OrHash,
+                  ContextDev::WebWebScrapeMdParams::Action::Scroll::OrHash
                 )
               ]
             ),

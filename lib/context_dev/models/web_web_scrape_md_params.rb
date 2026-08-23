@@ -19,7 +19,7 @@ module ContextDev
       #   content is captured. Requires a paid plan. Send a JSON array in the query
       #   parameter. Maximum: 5 actions.
       #
-      #   @return [Array<ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform>, nil]
+      #   @return [Array<ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform, ContextDev::Models::WebWebScrapeMdParams::Action::Scroll>, nil]
       optional :actions,
                -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::WebWebScrapeMdParams::Action] },
                nil?: true
@@ -155,7 +155,7 @@ module ContextDev
       #
       #   @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
       #
-      #   @param actions [Array<ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
+      #   @param actions [Array<ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform, ContextDev::Models::WebWebScrapeMdParams::Action::Scroll>, nil] Optional browser actions executed in array order after the page loads and before
       #
       #   @param country [Symbol, ContextDev::Models::WebWebScrapeMdParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
@@ -206,6 +206,9 @@ module ContextDev
         # Resolve and perform one natural-language browser action.
         variant :perform, -> { ContextDev::WebWebScrapeMdParams::Action::Perform }
 
+        # Scroll the page or a selected scrollable container, waiting adaptively for content and dimensions to settle after each iteration.
+        variant :scroll, -> { ContextDev::WebWebScrapeMdParams::Action::Scroll }
+
         class Wait < ContextDev::Internal::Type::BaseModel
           # @!attribute do_
           #
@@ -242,8 +245,101 @@ module ContextDev
           #   @param do_ [Symbol, :perform]
         end
 
+        class Scroll < ContextDev::Internal::Type::BaseModel
+          # @!attribute do_
+          #
+          #   @return [Symbol, :scroll]
+          required :do_, const: :scroll, api_name: :do
+
+          # @!attribute amount
+          #   Pixels per scroll, one visible viewport, or the current scroll boundary.
+          #   Defaults to viewport.
+          #
+          #   @return [Integer, Symbol, ContextDev::Models::WebWebScrapeMdParams::Action::Scroll::Amount, nil]
+          optional :amount, union: -> { ContextDev::WebWebScrapeMdParams::Action::Scroll::Amount }
+
+          # @!attribute container
+          #   CSS selector for the first matching scroll container. Defaults to the page.
+          #
+          #   @return [String, nil]
+          optional :container, String
+
+          # @!attribute direction
+          #   Direction to scroll. Defaults to down.
+          #
+          #   @return [Symbol, ContextDev::Models::WebWebScrapeMdParams::Action::Scroll::Direction, nil]
+          optional :direction, enum: -> { ContextDev::WebWebScrapeMdParams::Action::Scroll::Direction }
+
+          # @!attribute max_scrolls
+          #   Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+          #   changing. Defaults to 1.
+          #
+          #   @return [Integer, nil]
+          optional :max_scrolls, Integer, api_name: :maxScrolls
+
+          # @!method initialize(amount: nil, container: nil, direction: nil, max_scrolls: nil, do_: :scroll)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::WebWebScrapeMdParams::Action::Scroll} for more details.
+          #
+          #   Scroll the page or a selected scrollable container, waiting adaptively for
+          #   content and dimensions to settle after each iteration.
+          #
+          #   @param amount [Integer, Symbol, ContextDev::Models::WebWebScrapeMdParams::Action::Scroll::Amount] Pixels per scroll, one visible viewport, or the current scroll boundary. Default
+          #
+          #   @param container [String] CSS selector for the first matching scroll container. Defaults to the page.
+          #
+          #   @param direction [Symbol, ContextDev::Models::WebWebScrapeMdParams::Action::Scroll::Direction] Direction to scroll. Defaults to down.
+          #
+          #   @param max_scrolls [Integer] Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+          #
+          #   @param do_ [Symbol, :scroll]
+
+          # Pixels per scroll, one visible viewport, or the current scroll boundary.
+          # Defaults to viewport.
+          #
+          # @see ContextDev::Models::WebWebScrapeMdParams::Action::Scroll#amount
+          module Amount
+            extend ContextDev::Internal::Type::Union
+
+            variant Integer
+
+            variant const: -> { ContextDev::Models::WebWebScrapeMdParams::Action::Scroll::Amount::VIEWPORT }
+
+            variant const: -> { ContextDev::Models::WebWebScrapeMdParams::Action::Scroll::Amount::MAX }
+
+            # @!method self.variants
+            #   @return [Array(Integer, Symbol)]
+
+            define_sorbet_constant!(:Variants) do
+              T.type_alias { T.any(Integer, ContextDev::WebWebScrapeMdParams::Action::Scroll::Amount::TaggedSymbol) }
+            end
+
+            # @!group
+
+            VIEWPORT = :viewport
+            MAX = :max
+
+            # @!endgroup
+          end
+
+          # Direction to scroll. Defaults to down.
+          #
+          # @see ContextDev::Models::WebWebScrapeMdParams::Action::Scroll#direction
+          module Direction
+            extend ContextDev::Internal::Type::Enum
+
+            UP = :up
+            DOWN = :down
+            LEFT = :left
+            RIGHT = :right
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
+        end
+
         # @!method self.variants
-        #   @return [Array(ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform)]
+        #   @return [Array(ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform, ContextDev::Models::WebWebScrapeMdParams::Action::Scroll)]
       end
 
       # Fetch the target page through a residential proxy in this country (ISO 3166-1

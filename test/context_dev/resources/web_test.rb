@@ -185,6 +185,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         images: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeImagesResponse::Image]),
         success: ContextDev::Models::WebWebScrapeImagesResponse::Success,
         url: String,
+        actions_applied: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied]) | nil,
         key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata | nil
       }
     end
