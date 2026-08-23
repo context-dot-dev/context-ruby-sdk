@@ -25,11 +25,12 @@ module ContextDev
       required :url, String
 
       # @!attribute actions
-      #   Optional browser actions executed in order on the requested page after it loads
-      #   and before extraction. Requires a paid plan. When actions are provided and
-      #   stopAfterMs is omitted, the crawl budget defaults to 110000 ms.
+      #   Optional browser actions executed in order on the requested page after it loads,
+      #   before links are discovered or additional pages are crawled. Requires a paid
+      #   plan. When actions are provided and stopAfterMs is omitted, the crawl budget
+      #   defaults to 110000 ms.
       #
-      #   @return [Array<ContextDev::Models::WebExtractParams::Action::Wait, ContextDev::Models::WebExtractParams::Action::Perform>, nil]
+      #   @return [Array<ContextDev::Models::WebExtractParams::Action::Wait, ContextDev::Models::WebExtractParams::Action::Perform, ContextDev::Models::WebExtractParams::Action::Scroll>, nil]
       optional :actions, -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::WebExtractParams::Action] }
 
       # @!attribute fact_check
@@ -132,7 +133,7 @@ module ContextDev
       #
       #   @param url [String] The starting website URL to crawl and extract from. Must include http:// or http
       #
-      #   @param actions [Array<ContextDev::Models::WebExtractParams::Action::Wait, ContextDev::Models::WebExtractParams::Action::Perform>] Optional browser actions executed in order on the requested page after it loads
+      #   @param actions [Array<ContextDev::Models::WebExtractParams::Action::Wait, ContextDev::Models::WebExtractParams::Action::Perform, ContextDev::Models::WebExtractParams::Action::Scroll>] Optional browser actions executed in order on the requested page after it loads,
       #
       #   @param fact_check [Boolean] When true, every returned value must be grounded in facts stated on the page; fi
       #
@@ -175,6 +176,9 @@ module ContextDev
         # Resolve and perform one natural-language browser action.
         variant :perform, -> { ContextDev::WebExtractParams::Action::Perform }
 
+        # Scroll the page or a selected scrollable container, waiting adaptively for content and dimensions to settle after each iteration.
+        variant :scroll, -> { ContextDev::WebExtractParams::Action::Scroll }
+
         class Wait < ContextDev::Internal::Type::BaseModel
           # @!attribute do_
           #
@@ -211,8 +215,101 @@ module ContextDev
           #   @param do_ [Symbol, :perform]
         end
 
+        class Scroll < ContextDev::Internal::Type::BaseModel
+          # @!attribute do_
+          #
+          #   @return [Symbol, :scroll]
+          required :do_, const: :scroll, api_name: :do
+
+          # @!attribute amount
+          #   Pixels per scroll, one visible viewport, or the current scroll boundary.
+          #   Defaults to viewport.
+          #
+          #   @return [Integer, Symbol, ContextDev::Models::WebExtractParams::Action::Scroll::Amount, nil]
+          optional :amount, union: -> { ContextDev::WebExtractParams::Action::Scroll::Amount }
+
+          # @!attribute container
+          #   CSS selector for the first matching scroll container. Defaults to the page.
+          #
+          #   @return [String, nil]
+          optional :container, String
+
+          # @!attribute direction
+          #   Direction to scroll. Defaults to down.
+          #
+          #   @return [Symbol, ContextDev::Models::WebExtractParams::Action::Scroll::Direction, nil]
+          optional :direction, enum: -> { ContextDev::WebExtractParams::Action::Scroll::Direction }
+
+          # @!attribute max_scrolls
+          #   Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+          #   changing. Defaults to 1.
+          #
+          #   @return [Integer, nil]
+          optional :max_scrolls, Integer, api_name: :maxScrolls
+
+          # @!method initialize(amount: nil, container: nil, direction: nil, max_scrolls: nil, do_: :scroll)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::WebExtractParams::Action::Scroll} for more details.
+          #
+          #   Scroll the page or a selected scrollable container, waiting adaptively for
+          #   content and dimensions to settle after each iteration.
+          #
+          #   @param amount [Integer, Symbol, ContextDev::Models::WebExtractParams::Action::Scroll::Amount] Pixels per scroll, one visible viewport, or the current scroll boundary. Default
+          #
+          #   @param container [String] CSS selector for the first matching scroll container. Defaults to the page.
+          #
+          #   @param direction [Symbol, ContextDev::Models::WebExtractParams::Action::Scroll::Direction] Direction to scroll. Defaults to down.
+          #
+          #   @param max_scrolls [Integer] Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+          #
+          #   @param do_ [Symbol, :scroll]
+
+          # Pixels per scroll, one visible viewport, or the current scroll boundary.
+          # Defaults to viewport.
+          #
+          # @see ContextDev::Models::WebExtractParams::Action::Scroll#amount
+          module Amount
+            extend ContextDev::Internal::Type::Union
+
+            variant Integer
+
+            variant const: -> { ContextDev::Models::WebExtractParams::Action::Scroll::Amount::VIEWPORT }
+
+            variant const: -> { ContextDev::Models::WebExtractParams::Action::Scroll::Amount::MAX }
+
+            # @!method self.variants
+            #   @return [Array(Integer, Symbol)]
+
+            define_sorbet_constant!(:Variants) do
+              T.type_alias { T.any(Integer, ContextDev::WebExtractParams::Action::Scroll::Amount::TaggedSymbol) }
+            end
+
+            # @!group
+
+            VIEWPORT = :viewport
+            MAX = :max
+
+            # @!endgroup
+          end
+
+          # Direction to scroll. Defaults to down.
+          #
+          # @see ContextDev::Models::WebExtractParams::Action::Scroll#direction
+          module Direction
+            extend ContextDev::Internal::Type::Enum
+
+            UP = :up
+            DOWN = :down
+            LEFT = :left
+            RIGHT = :right
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
+        end
+
         # @!method self.variants
-        #   @return [Array(ContextDev::Models::WebExtractParams::Action::Wait, ContextDev::Models::WebExtractParams::Action::Perform)]
+        #   @return [Array(ContextDev::Models::WebExtractParams::Action::Wait, ContextDev::Models::WebExtractParams::Action::Perform, ContextDev::Models::WebExtractParams::Action::Scroll)]
       end
 
       class Pdf < ContextDev::Internal::Type::BaseModel
