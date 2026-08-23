@@ -8,9 +8,11 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute schema
-      #   JSON Schema for the returned data object. TypeScript Zod users can pass a JSON
-      #   Schema generated from a Zod object; Python users can pass the equivalent JSON
-      #   Schema object.
+      #   JSON Schema for the returned data object. Image fields such as `image_urls` or
+      #   `product_photos` automatically make page image references available to
+      #   extraction, so product data and photos can be returned in one call. TypeScript
+      #   Zod users can pass a JSON Schema generated from a Zod object; Python users can
+      #   pass the equivalent JSON Schema object.
       #
       #   @return [Hash{Symbol=>Object}]
       required :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
@@ -21,6 +23,15 @@ module ContextDev
       #
       #   @return [String]
       required :url, String
+
+      # @!attribute actions
+      #   Optional browser actions executed in order on the requested page after it loads,
+      #   before links are discovered or additional pages are crawled. Requires a paid
+      #   plan. When actions are provided and stopAfterMs is omitted, the crawl budget
+      #   defaults to 110000 ms.
+      #
+      #   @return [Array<ContextDev::Models::WebExtractParams::Action::Wait, ContextDev::Models::WebExtractParams::Action::Perform, ContextDev::Models::WebExtractParams::Action::Scroll>, nil]
+      optional :actions, -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::WebExtractParams::Action] }
 
       # @!attribute fact_check
       #   When true, every returned value must be grounded in facts stated on the page;
@@ -87,7 +98,8 @@ module ContextDev
 
       # @!attribute stop_after_ms
       #   Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
-      #   (110s). Default: 80000 (80s).
+      #   (110s). Defaults to 80000 (80s), or 110000 (110s) when browser actions are
+      #   provided.
       #
       #   @return [Integer, nil]
       optional :stop_after_ms, Integer, api_name: :stopAfterMs
@@ -113,13 +125,15 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, api_name: :waitForMs
 
-      # @!method initialize(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(schema:, url:, actions: nil, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractParams} for more details.
       #
-      #   @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. TypeScript Zod users can pass a JSON S
+      #   @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. Image fields such as `image_urls` or `
       #
       #   @param url [String] The starting website URL to crawl and extract from. Must include http:// or http
+      #
+      #   @param actions [Array<ContextDev::Models::WebExtractParams::Action::Wait, ContextDev::Models::WebExtractParams::Action::Perform, ContextDev::Models::WebExtractParams::Action::Scroll>] Optional browser actions executed in order on the requested page after it loads,
       #
       #   @param fact_check [Boolean] When true, every returned value must be grounded in facts stated on the page; fi
       #
@@ -148,6 +162,155 @@ module ContextDev
       #   @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load for each craw
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      # Browser action discriminated by `do`. Each variant exposes only its applicable
+      # fields.
+      module Action
+        extend ContextDev::Internal::Type::Union
+
+        discriminator :do
+
+        # Pause for a fixed number of milliseconds before continuing to the next action.
+        variant :wait, -> { ContextDev::WebExtractParams::Action::Wait }
+
+        # Resolve and perform one natural-language browser action.
+        variant :perform, -> { ContextDev::WebExtractParams::Action::Perform }
+
+        # Scroll the page or a selected scrollable container, waiting adaptively for content and dimensions to settle after each iteration.
+        variant :scroll, -> { ContextDev::WebExtractParams::Action::Scroll }
+
+        class Wait < ContextDev::Internal::Type::BaseModel
+          # @!attribute do_
+          #
+          #   @return [Symbol, :wait]
+          required :do_, const: :wait, api_name: :do
+
+          # @!attribute time_ms
+          #
+          #   @return [Integer]
+          required :time_ms, Integer, api_name: :timeMs
+
+          # @!method initialize(time_ms:, do_: :wait)
+          #   Pause for a fixed number of milliseconds before continuing to the next action.
+          #
+          #   @param time_ms [Integer]
+          #   @param do_ [Symbol, :wait]
+        end
+
+        class Perform < ContextDev::Internal::Type::BaseModel
+          # @!attribute action
+          #
+          #   @return [String]
+          required :action, String
+
+          # @!attribute do_
+          #
+          #   @return [Symbol, :perform]
+          required :do_, const: :perform, api_name: :do
+
+          # @!method initialize(action:, do_: :perform)
+          #   Resolve and perform one natural-language browser action.
+          #
+          #   @param action [String]
+          #   @param do_ [Symbol, :perform]
+        end
+
+        class Scroll < ContextDev::Internal::Type::BaseModel
+          # @!attribute do_
+          #
+          #   @return [Symbol, :scroll]
+          required :do_, const: :scroll, api_name: :do
+
+          # @!attribute amount
+          #   Pixels per scroll, one visible viewport, or the current scroll boundary.
+          #   Defaults to viewport.
+          #
+          #   @return [Integer, Symbol, ContextDev::Models::WebExtractParams::Action::Scroll::Amount, nil]
+          optional :amount, union: -> { ContextDev::WebExtractParams::Action::Scroll::Amount }
+
+          # @!attribute container
+          #   CSS selector for the first matching scroll container. Defaults to the page.
+          #
+          #   @return [String, nil]
+          optional :container, String
+
+          # @!attribute direction
+          #   Direction to scroll. Defaults to down.
+          #
+          #   @return [Symbol, ContextDev::Models::WebExtractParams::Action::Scroll::Direction, nil]
+          optional :direction, enum: -> { ContextDev::WebExtractParams::Action::Scroll::Direction }
+
+          # @!attribute max_scrolls
+          #   Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+          #   changing. Defaults to 1.
+          #
+          #   @return [Integer, nil]
+          optional :max_scrolls, Integer, api_name: :maxScrolls
+
+          # @!method initialize(amount: nil, container: nil, direction: nil, max_scrolls: nil, do_: :scroll)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::WebExtractParams::Action::Scroll} for more details.
+          #
+          #   Scroll the page or a selected scrollable container, waiting adaptively for
+          #   content and dimensions to settle after each iteration.
+          #
+          #   @param amount [Integer, Symbol, ContextDev::Models::WebExtractParams::Action::Scroll::Amount] Pixels per scroll, one visible viewport, or the current scroll boundary. Default
+          #
+          #   @param container [String] CSS selector for the first matching scroll container. Defaults to the page.
+          #
+          #   @param direction [Symbol, ContextDev::Models::WebExtractParams::Action::Scroll::Direction] Direction to scroll. Defaults to down.
+          #
+          #   @param max_scrolls [Integer] Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+          #
+          #   @param do_ [Symbol, :scroll]
+
+          # Pixels per scroll, one visible viewport, or the current scroll boundary.
+          # Defaults to viewport.
+          #
+          # @see ContextDev::Models::WebExtractParams::Action::Scroll#amount
+          module Amount
+            extend ContextDev::Internal::Type::Union
+
+            variant Integer
+
+            variant const: -> { ContextDev::Models::WebExtractParams::Action::Scroll::Amount::VIEWPORT }
+
+            variant const: -> { ContextDev::Models::WebExtractParams::Action::Scroll::Amount::MAX }
+
+            # @!method self.variants
+            #   @return [Array(Integer, Symbol)]
+
+            define_sorbet_constant!(:Variants) do
+              T.type_alias { T.any(Integer, ContextDev::WebExtractParams::Action::Scroll::Amount::TaggedSymbol) }
+            end
+
+            # @!group
+
+            VIEWPORT = :viewport
+            MAX = :max
+
+            # @!endgroup
+          end
+
+          # Direction to scroll. Defaults to down.
+          #
+          # @see ContextDev::Models::WebExtractParams::Action::Scroll#direction
+          module Direction
+            extend ContextDev::Internal::Type::Enum
+
+            UP = :up
+            DOWN = :down
+            LEFT = :left
+            RIGHT = :right
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
+        end
+
+        # @!method self.variants
+        #   @return [Array(ContextDev::Models::WebExtractParams::Action::Wait, ContextDev::Models::WebExtractParams::Action::Perform, ContextDev::Models::WebExtractParams::Action::Scroll)]
+      end
 
       class Pdf < ContextDev::Internal::Type::BaseModel
         # @!attribute end_

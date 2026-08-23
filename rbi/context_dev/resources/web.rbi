@@ -9,6 +9,14 @@ module ContextDev
         params(
           schema: T::Hash[Symbol, T.anything],
           url: String,
+          actions:
+            T::Array[
+              T.any(
+                ContextDev::WebExtractParams::Action::Wait::OrHash,
+                ContextDev::WebExtractParams::Action::Perform::OrHash,
+                ContextDev::WebExtractParams::Action::Scroll::OrHash
+              )
+            ],
           fact_check: T::Boolean,
           follow_subdomains: T::Boolean,
           include_frames: T::Boolean,
@@ -26,13 +34,20 @@ module ContextDev
         ).returns(ContextDev::Models::WebExtractResponse)
       end
       def extract(
-        # JSON Schema for the returned data object. TypeScript Zod users can pass a JSON
-        # Schema generated from a Zod object; Python users can pass the equivalent JSON
-        # Schema object.
+        # JSON Schema for the returned data object. Image fields such as `image_urls` or
+        # `product_photos` automatically make page image references available to
+        # extraction, so product data and photos can be returned in one call. TypeScript
+        # Zod users can pass a JSON Schema generated from a Zod object; Python users can
+        # pass the equivalent JSON Schema object.
         schema:,
         # The starting website URL to crawl and extract from. Must include http:// or
         # https://.
         url:,
+        # Optional browser actions executed in order on the requested page after it loads,
+        # before links are discovered or additional pages are crawled. Requires a paid
+        # plan. When actions are provided and stopAfterMs is omitted, the crawl budget
+        # defaults to 110000 ms.
+        actions: nil,
         # When true, every returned value must be grounded in facts stated on the page;
         # fields that cannot be supported by the page are returned as null/empty. When
         # false (default), the model may make reasonable inferences and derivations from
@@ -61,7 +76,8 @@ module ContextDev
         # exchange for more stable output on animated pages.
         settle_animations: nil,
         # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
-        # (110s). Default: 80000 (80s).
+        # (110s). Defaults to 80000 (80s), or 110000 (110s) when browser actions are
+        # provided.
         stop_after_ms: nil,
         # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
@@ -408,13 +424,15 @@ module ContextDev
         # than this value, it will be aborted with a 408 status code. Maximum allowed
         # value is 300000ms (5 minutes).
         timeout_ms: nil,
-        # Regex pattern. Only URLs matching this pattern will be followed and scraped.
+        # Regex pattern. Only URLs matching this pattern will be followed and scraped. An
+        # automatic prefix scope in the form ^<starting URL> follows a redirect of the
+        # starting page.
         url_regex: nil,
         # Extract only the main content, stripping headers, footers, sidebars, and
         # navigation
         use_main_content_only: nil,
-        # Optional browser wait time in milliseconds after initial page load for each
-        # crawled page. Min: 0. Max: 30000 (30 seconds).
+        # Browser wait time in milliseconds after initial page load for each crawled page.
+        # Defaults to 3500 (3.5 seconds). Min: 0. Max: 30000 (30 seconds).
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Requires zero data retention to be enabled for your
@@ -435,7 +453,8 @@ module ContextDev
               T::Array[
                 T.any(
                   ContextDev::WebWebScrapeHTMLParams::Action::Wait::OrHash,
-                  ContextDev::WebWebScrapeHTMLParams::Action::Perform::OrHash
+                  ContextDev::WebWebScrapeHTMLParams::Action::Perform::OrHash,
+                  ContextDev::WebWebScrapeHTMLParams::Action::Scroll::OrHash
                 )
               ]
             ),
@@ -526,7 +545,8 @@ module ContextDev
               T::Array[
                 T.any(
                   ContextDev::WebWebScrapeImagesParams::Action::Wait::OrHash,
-                  ContextDev::WebWebScrapeImagesParams::Action::Perform::OrHash
+                  ContextDev::WebWebScrapeImagesParams::Action::Perform::OrHash,
+                  ContextDev::WebWebScrapeImagesParams::Action::Scroll::OrHash
                 )
               ]
             ),
@@ -615,7 +635,8 @@ module ContextDev
               T::Array[
                 T.any(
                   ContextDev::WebWebScrapeMdParams::Action::Wait::OrHash,
-                  ContextDev::WebWebScrapeMdParams::Action::Perform::OrHash
+                  ContextDev::WebWebScrapeMdParams::Action::Perform::OrHash,
+                  ContextDev::WebWebScrapeMdParams::Action::Scroll::OrHash
                 )
               ]
             ),

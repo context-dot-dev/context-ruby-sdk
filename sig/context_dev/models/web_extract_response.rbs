@@ -52,7 +52,8 @@ module ContextDev
           num_failed: Integer,
           num_skipped: Integer,
           num_succeeded: Integer,
-          num_urls: Integer
+          num_urls: Integer,
+          actions_applied: ::Array[ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied]
         }
 
       class Metadata < ContextDev::Internal::Type::BaseModel
@@ -68,13 +69,20 @@ module ContextDev
 
         attr_accessor num_urls: Integer
 
+        attr_reader actions_applied: ::Array[ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied]?
+
+        def actions_applied=: (
+          ::Array[ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied]
+        ) -> ::Array[ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied]
+
         def initialize: (
           max_crawl_depth: Integer,
           num_blocked: Integer,
           num_failed: Integer,
           num_skipped: Integer,
           num_succeeded: Integer,
-          num_urls: Integer
+          num_urls: Integer,
+          ?actions_applied: ::Array[ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied]
         ) -> void
 
         def to_hash: -> {
@@ -83,8 +91,78 @@ module ContextDev
           num_failed: Integer,
           num_skipped: Integer,
           num_succeeded: Integer,
-          num_urls: Integer
+          num_urls: Integer,
+          actions_applied: ::Array[ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied]
         }
+
+        type actions_applied =
+          {
+            instruction: String,
+            status: ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::status,
+            completion_evidence: String,
+            duration_ms: Float,
+            error: String,
+            method_: String,
+            target_description: String
+          }
+
+        class ActionsApplied < ContextDev::Internal::Type::BaseModel
+          attr_accessor instruction: String
+
+          attr_accessor status: ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::status
+
+          attr_reader completion_evidence: String?
+
+          def completion_evidence=: (String) -> String
+
+          attr_reader duration_ms: Float?
+
+          def duration_ms=: (Float) -> Float
+
+          attr_reader error: String?
+
+          def error=: (String) -> String
+
+          attr_reader method_: String?
+
+          def method_=: (String) -> String
+
+          attr_reader target_description: String?
+
+          def target_description=: (String) -> String
+
+          def initialize: (
+            instruction: String,
+            status: ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::status,
+            ?completion_evidence: String,
+            ?duration_ms: Float,
+            ?error: String,
+            ?method_: String,
+            ?target_description: String
+          ) -> void
+
+          def to_hash: -> {
+            instruction: String,
+            status: ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::status,
+            completion_evidence: String,
+            duration_ms: Float,
+            error: String,
+            method_: String,
+            target_description: String
+          }
+
+          type status = :applied | :failed | :skipped
+
+          module Status
+            extend ContextDev::Internal::Type::Enum
+
+            APPLIED: :applied
+            FAILED: :failed
+            SKIPPED: :skipped
+
+            def self?.values: -> ::Array[ContextDev::Models::WebExtractResponse::Metadata::ActionsApplied::status]
+          end
+        end
       end
 
       type key_metadata =

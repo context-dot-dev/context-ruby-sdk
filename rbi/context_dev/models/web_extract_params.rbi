@@ -11,9 +11,11 @@ module ContextDev
           T.any(ContextDev::WebExtractParams, ContextDev::Internal::AnyHash)
         end
 
-      # JSON Schema for the returned data object. TypeScript Zod users can pass a JSON
-      # Schema generated from a Zod object; Python users can pass the equivalent JSON
-      # Schema object.
+      # JSON Schema for the returned data object. Image fields such as `image_urls` or
+      # `product_photos` automatically make page image references available to
+      # extraction, so product data and photos can be returned in one call. TypeScript
+      # Zod users can pass a JSON Schema generated from a Zod object; Python users can
+      # pass the equivalent JSON Schema object.
       sig { returns(T::Hash[Symbol, T.anything]) }
       attr_accessor :schema
 
@@ -21,6 +23,39 @@ module ContextDev
       # https://.
       sig { returns(String) }
       attr_accessor :url
+
+      # Optional browser actions executed in order on the requested page after it loads,
+      # before links are discovered or additional pages are crawled. Requires a paid
+      # plan. When actions are provided and stopAfterMs is omitted, the crawl budget
+      # defaults to 110000 ms.
+      sig do
+        returns(
+          T.nilable(
+            T::Array[
+              T.any(
+                ContextDev::WebExtractParams::Action::Wait,
+                ContextDev::WebExtractParams::Action::Perform,
+                ContextDev::WebExtractParams::Action::Scroll
+              )
+            ]
+          )
+        )
+      end
+      attr_reader :actions
+
+      sig do
+        params(
+          actions:
+            T::Array[
+              T.any(
+                ContextDev::WebExtractParams::Action::Wait::OrHash,
+                ContextDev::WebExtractParams::Action::Perform::OrHash,
+                ContextDev::WebExtractParams::Action::Scroll::OrHash
+              )
+            ]
+        ).void
+      end
+      attr_writer :actions
 
       # When true, every returned value must be grounded in facts stated on the page;
       # fields that cannot be supported by the page are returned as null/empty. When
@@ -95,7 +130,8 @@ module ContextDev
       attr_writer :settle_animations
 
       # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
-      # (110s). Default: 80000 (80s).
+      # (110s). Defaults to 80000 (80s), or 110000 (110s) when browser actions are
+      # provided.
       sig { returns(T.nilable(Integer)) }
       attr_reader :stop_after_ms
 
@@ -130,6 +166,14 @@ module ContextDev
         params(
           schema: T::Hash[Symbol, T.anything],
           url: String,
+          actions:
+            T::Array[
+              T.any(
+                ContextDev::WebExtractParams::Action::Wait::OrHash,
+                ContextDev::WebExtractParams::Action::Perform::OrHash,
+                ContextDev::WebExtractParams::Action::Scroll::OrHash
+              )
+            ],
           fact_check: T::Boolean,
           follow_subdomains: T::Boolean,
           include_frames: T::Boolean,
@@ -147,13 +191,20 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # JSON Schema for the returned data object. TypeScript Zod users can pass a JSON
-        # Schema generated from a Zod object; Python users can pass the equivalent JSON
-        # Schema object.
+        # JSON Schema for the returned data object. Image fields such as `image_urls` or
+        # `product_photos` automatically make page image references available to
+        # extraction, so product data and photos can be returned in one call. TypeScript
+        # Zod users can pass a JSON Schema generated from a Zod object; Python users can
+        # pass the equivalent JSON Schema object.
         schema:,
         # The starting website URL to crawl and extract from. Must include http:// or
         # https://.
         url:,
+        # Optional browser actions executed in order on the requested page after it loads,
+        # before links are discovered or additional pages are crawled. Requires a paid
+        # plan. When actions are provided and stopAfterMs is omitted, the crawl budget
+        # defaults to 110000 ms.
+        actions: nil,
         # When true, every returned value must be grounded in facts stated on the page;
         # fields that cannot be supported by the page are returned as null/empty. When
         # false (default), the model may make reasonable inferences and derivations from
@@ -182,7 +233,8 @@ module ContextDev
         # exchange for more stable output on animated pages.
         settle_animations: nil,
         # Soft time budget for the crawl in milliseconds. Min: 10000 (10s). Max: 110000
-        # (110s). Default: 80000 (80s).
+        # (110s). Defaults to 80000 (80s), or 110000 (110s) when browser actions are
+        # provided.
         stop_after_ms: nil,
         # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
@@ -202,6 +254,14 @@ module ContextDev
           {
             schema: T::Hash[Symbol, T.anything],
             url: String,
+            actions:
+              T::Array[
+                T.any(
+                  ContextDev::WebExtractParams::Action::Wait,
+                  ContextDev::WebExtractParams::Action::Perform,
+                  ContextDev::WebExtractParams::Action::Scroll
+                )
+              ],
             fact_check: T::Boolean,
             follow_subdomains: T::Boolean,
             include_frames: T::Boolean,
@@ -220,6 +280,291 @@ module ContextDev
         )
       end
       def to_hash
+      end
+
+      # Browser action discriminated by `do`. Each variant exposes only its applicable
+      # fields.
+      module Action
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              ContextDev::WebExtractParams::Action::Wait,
+              ContextDev::WebExtractParams::Action::Perform,
+              ContextDev::WebExtractParams::Action::Scroll
+            )
+          end
+
+        class Wait < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::WebExtractParams::Action::Wait,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(Symbol) }
+          attr_accessor :do_
+
+          sig { returns(Integer) }
+          attr_accessor :time_ms
+
+          # Pause for a fixed number of milliseconds before continuing to the next action.
+          sig do
+            params(time_ms: Integer, do_: Symbol).returns(T.attached_class)
+          end
+          def self.new(time_ms:, do_: :wait)
+          end
+
+          sig { override.returns({ do_: Symbol, time_ms: Integer }) }
+          def to_hash
+          end
+        end
+
+        class Perform < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::WebExtractParams::Action::Perform,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(String) }
+          attr_accessor :action
+
+          sig { returns(Symbol) }
+          attr_accessor :do_
+
+          # Resolve and perform one natural-language browser action.
+          sig { params(action: String, do_: Symbol).returns(T.attached_class) }
+          def self.new(action:, do_: :perform)
+          end
+
+          sig { override.returns({ action: String, do_: Symbol }) }
+          def to_hash
+          end
+        end
+
+        class Scroll < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::WebExtractParams::Action::Scroll,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(Symbol) }
+          attr_accessor :do_
+
+          # Pixels per scroll, one visible viewport, or the current scroll boundary.
+          # Defaults to viewport.
+          sig do
+            returns(
+              T.nilable(
+                T.any(
+                  Integer,
+                  ContextDev::WebExtractParams::Action::Scroll::Amount::OrSymbol
+                )
+              )
+            )
+          end
+          attr_reader :amount
+
+          sig do
+            params(
+              amount:
+                T.any(
+                  Integer,
+                  ContextDev::WebExtractParams::Action::Scroll::Amount::OrSymbol
+                )
+            ).void
+          end
+          attr_writer :amount
+
+          # CSS selector for the first matching scroll container. Defaults to the page.
+          sig { returns(T.nilable(String)) }
+          attr_reader :container
+
+          sig { params(container: String).void }
+          attr_writer :container
+
+          # Direction to scroll. Defaults to down.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::WebExtractParams::Action::Scroll::Direction::OrSymbol
+              )
+            )
+          end
+          attr_reader :direction
+
+          sig do
+            params(
+              direction:
+                ContextDev::WebExtractParams::Action::Scroll::Direction::OrSymbol
+            ).void
+          end
+          attr_writer :direction
+
+          # Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+          # changing. Defaults to 1.
+          sig { returns(T.nilable(Integer)) }
+          attr_reader :max_scrolls
+
+          sig { params(max_scrolls: Integer).void }
+          attr_writer :max_scrolls
+
+          # Scroll the page or a selected scrollable container, waiting adaptively for
+          # content and dimensions to settle after each iteration.
+          sig do
+            params(
+              amount:
+                T.any(
+                  Integer,
+                  ContextDev::WebExtractParams::Action::Scroll::Amount::OrSymbol
+                ),
+              container: String,
+              direction:
+                ContextDev::WebExtractParams::Action::Scroll::Direction::OrSymbol,
+              max_scrolls: Integer,
+              do_: Symbol
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            # Pixels per scroll, one visible viewport, or the current scroll boundary.
+            # Defaults to viewport.
+            amount: nil,
+            # CSS selector for the first matching scroll container. Defaults to the page.
+            container: nil,
+            # Direction to scroll. Defaults to down.
+            direction: nil,
+            # Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+            # changing. Defaults to 1.
+            max_scrolls: nil,
+            do_: :scroll
+          )
+          end
+
+          sig do
+            override.returns(
+              {
+                do_: Symbol,
+                amount:
+                  T.any(
+                    Integer,
+                    ContextDev::WebExtractParams::Action::Scroll::Amount::OrSymbol
+                  ),
+                container: String,
+                direction:
+                  ContextDev::WebExtractParams::Action::Scroll::Direction::OrSymbol,
+                max_scrolls: Integer
+              }
+            )
+          end
+          def to_hash
+          end
+
+          # Pixels per scroll, one visible viewport, or the current scroll boundary.
+          # Defaults to viewport.
+          module Amount
+            extend ContextDev::Internal::Type::Union
+
+            Variants =
+              T.type_alias do
+                T.any(
+                  Integer,
+                  ContextDev::WebExtractParams::Action::Scroll::Amount::TaggedSymbol
+                )
+              end
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::WebExtractParams::Action::Scroll::Amount::Variants
+                ]
+              )
+            end
+            def self.variants
+            end
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::WebExtractParams::Action::Scroll::Amount
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            VIEWPORT =
+              T.let(
+                :viewport,
+                ContextDev::WebExtractParams::Action::Scroll::Amount::TaggedSymbol
+              )
+            MAX =
+              T.let(
+                :max,
+                ContextDev::WebExtractParams::Action::Scroll::Amount::TaggedSymbol
+              )
+          end
+
+          # Direction to scroll. Defaults to down.
+          module Direction
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::WebExtractParams::Action::Scroll::Direction
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            UP =
+              T.let(
+                :up,
+                ContextDev::WebExtractParams::Action::Scroll::Direction::TaggedSymbol
+              )
+            DOWN =
+              T.let(
+                :down,
+                ContextDev::WebExtractParams::Action::Scroll::Direction::TaggedSymbol
+              )
+            LEFT =
+              T.let(
+                :left,
+                ContextDev::WebExtractParams::Action::Scroll::Direction::TaggedSymbol
+              )
+            RIGHT =
+              T.let(
+                :right,
+                ContextDev::WebExtractParams::Action::Scroll::Direction::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::WebExtractParams::Action::Scroll::Direction::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
+          end
+        end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebExtractParams::Action::Variants]
+          )
+        end
+        def self.variants
+        end
       end
 
       class Pdf < ContextDev::Internal::Type::BaseModel

@@ -9,11 +9,13 @@ module ContextDev
       # Crawl a website, use the provided JSON Schema and instructions to prioritize
       # relevant internal links, and extract structured data from the selected pages.
       #
-      # @overload extract(schema:, url:, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @overload extract(schema:, url:, actions: nil, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
       #
-      # @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. TypeScript Zod users can pass a JSON S
+      # @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. Image fields such as `image_urls` or `
       #
       # @param url [String] The starting website URL to crawl and extract from. Must include http:// or http
+      #
+      # @param actions [Array<ContextDev::Models::WebExtractParams::Action::Wait, ContextDev::Models::WebExtractParams::Action::Perform, ContextDev::Models::WebExtractParams::Action::Scroll>] Optional browser actions executed in order on the requested page after it loads,
       #
       # @param fact_check [Boolean] When true, every returned value must be grounded in facts stated on the page; fi
       #
@@ -320,11 +322,11 @@ module ContextDev
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
-      # @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped.
+      # @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped. An
       #
       # @param use_main_content_only [Boolean] Extract only the main content, stripping headers, footers, sidebars, and navigat
       #
-      # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load for each craw
+      # @param wait_for_ms [Integer] Browser wait time in milliseconds after initial page load for each crawled page.
       #
       # @param zdr [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
@@ -354,7 +356,7 @@ module ContextDev
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
       #
-      # @param actions [Array<ContextDev::Models::WebWebScrapeHTMLParams::Action::Wait, ContextDev::Models::WebWebScrapeHTMLParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
+      # @param actions [Array<ContextDev::Models::WebWebScrapeHTMLParams::Action::Wait, ContextDev::Models::WebWebScrapeHTMLParams::Action::Perform, ContextDev::Models::WebWebScrapeHTMLParams::Action::Scroll>, nil] Optional browser actions executed in array order after the page loads and before
       #
       # @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
@@ -421,7 +423,7 @@ module ContextDev
       #
       # @param url [String] Page URL to inspect. Must include http:// or https://.
       #
-      # @param actions [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
+      # @param actions [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll>, nil] Optional browser actions executed in array order after the page loads and before
       #
       # @param dedupe [Boolean] When true, visually duplicate images are removed: every image is loaded and perc
       #
@@ -495,7 +497,7 @@ module ContextDev
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
       #
-      # @param actions [Array<ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
+      # @param actions [Array<ContextDev::Models::WebWebScrapeMdParams::Action::Wait, ContextDev::Models::WebWebScrapeMdParams::Action::Perform, ContextDev::Models::WebWebScrapeMdParams::Action::Scroll>, nil] Optional browser actions executed in array order after the page loads and before
       #
       # @param country [Symbol, ContextDev::Models::WebWebScrapeMdParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #

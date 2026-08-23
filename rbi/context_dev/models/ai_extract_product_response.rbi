@@ -232,6 +232,16 @@ module ContextDev
         sig { returns(T::Array[String]) }
         attr_accessor :target_audience
 
+        # Normalized stock or ordering availability
+        sig do
+          returns(
+            T.nilable(
+              ContextDev::Models::AIExtractProductResponse::Product::Availability::TaggedSymbol
+            )
+          )
+        end
+        attr_accessor :availability
+
         # Billing frequency for the product
         sig do
           returns(
@@ -249,6 +259,13 @@ module ContextDev
         # Currency code for the price (e.g., USD, EUR)
         sig { returns(T.nilable(String)) }
         attr_accessor :currency
+
+        # Dimension statements shown for the product, preserving labels, values, and units
+        sig { returns(T.nilable(T::Array[String])) }
+        attr_reader :dimensions
+
+        sig { params(dimensions: T::Array[String]).void }
+        attr_writer :dimensions
 
         # URL to the product image
         sig { returns(T.nilable(String)) }
@@ -268,6 +285,10 @@ module ContextDev
         end
         attr_accessor :pricing_model
 
+        # Original or regular price before a displayed discount
+        sig { returns(T.nilable(Float)) }
+        attr_accessor :regular_price
+
         # URL to the product page
         sig { returns(T.nilable(String)) }
         attr_accessor :url
@@ -282,18 +303,24 @@ module ContextDev
             sku: T.nilable(String),
             tags: T::Array[String],
             target_audience: T::Array[String],
+            availability:
+              T.nilable(
+                ContextDev::Models::AIExtractProductResponse::Product::Availability::OrSymbol
+              ),
             billing_frequency:
               T.nilable(
                 ContextDev::Models::AIExtractProductResponse::Product::BillingFrequency::OrSymbol
               ),
             category: T.nilable(String),
             currency: T.nilable(String),
+            dimensions: T::Array[String],
             image_url: T.nilable(String),
             price: T.nilable(Float),
             pricing_model:
               T.nilable(
                 ContextDev::Models::AIExtractProductResponse::Product::PricingModel::OrSymbol
               ),
+            regular_price: T.nilable(Float),
             url: T.nilable(String)
           ).returns(T.attached_class)
         end
@@ -312,18 +339,24 @@ module ContextDev
           tags:,
           # Target audience for the product (array of strings)
           target_audience:,
+          # Normalized stock or ordering availability
+          availability: nil,
           # Billing frequency for the product
           billing_frequency: nil,
           # Category of the product
           category: nil,
           # Currency code for the price (e.g., USD, EUR)
           currency: nil,
+          # Dimension statements shown for the product, preserving labels, values, and units
+          dimensions: nil,
           # URL to the product image
           image_url: nil,
           # Price of the product
           price: nil,
           # Pricing model for the product
           pricing_model: nil,
+          # Original or regular price before a displayed discount
+          regular_price: nil,
           # URL to the product page
           url: nil
         )
@@ -339,23 +372,89 @@ module ContextDev
               sku: T.nilable(String),
               tags: T::Array[String],
               target_audience: T::Array[String],
+              availability:
+                T.nilable(
+                  ContextDev::Models::AIExtractProductResponse::Product::Availability::TaggedSymbol
+                ),
               billing_frequency:
                 T.nilable(
                   ContextDev::Models::AIExtractProductResponse::Product::BillingFrequency::TaggedSymbol
                 ),
               category: T.nilable(String),
               currency: T.nilable(String),
+              dimensions: T::Array[String],
               image_url: T.nilable(String),
               price: T.nilable(Float),
               pricing_model:
                 T.nilable(
                   ContextDev::Models::AIExtractProductResponse::Product::PricingModel::TaggedSymbol
                 ),
+              regular_price: T.nilable(Float),
               url: T.nilable(String)
             }
           )
         end
         def to_hash
+        end
+
+        # Normalized stock or ordering availability
+        module Availability
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::Models::AIExtractProductResponse::Product::Availability
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          IN_STOCK =
+            T.let(
+              :in_stock,
+              ContextDev::Models::AIExtractProductResponse::Product::Availability::TaggedSymbol
+            )
+          OUT_OF_STOCK =
+            T.let(
+              :out_of_stock,
+              ContextDev::Models::AIExtractProductResponse::Product::Availability::TaggedSymbol
+            )
+          LIMITED_AVAILABILITY =
+            T.let(
+              :limited_availability,
+              ContextDev::Models::AIExtractProductResponse::Product::Availability::TaggedSymbol
+            )
+          PREORDER =
+            T.let(
+              :preorder,
+              ContextDev::Models::AIExtractProductResponse::Product::Availability::TaggedSymbol
+            )
+          BACKORDER =
+            T.let(
+              :backorder,
+              ContextDev::Models::AIExtractProductResponse::Product::Availability::TaggedSymbol
+            )
+          MADE_TO_ORDER =
+            T.let(
+              :made_to_order,
+              ContextDev::Models::AIExtractProductResponse::Product::Availability::TaggedSymbol
+            )
+          DISCONTINUED =
+            T.let(
+              :discontinued,
+              ContextDev::Models::AIExtractProductResponse::Product::Availability::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::AIExtractProductResponse::Product::Availability::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
         end
 
         # Billing frequency for the product

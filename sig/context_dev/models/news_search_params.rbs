@@ -450,6 +450,7 @@ module ContextDev
           | :cg
           | :ch
           | :cl
+          | :cz
           | :de
           | :fi
           | :fr
@@ -479,6 +480,7 @@ module ContextDev
           CG: :cg
           CH: :ch
           CL: :cl
+          CZ: :cz
           DE: :de
           FI: :fi
           FR: :fr

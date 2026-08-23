@@ -5,6 +5,7 @@ module ContextDev
         images: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image],
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
         url: String,
+        actions_applied: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied],
         key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
       }
 
@@ -14,6 +15,12 @@ module ContextDev
       attr_accessor success: ContextDev::Models::WebWebScrapeImagesResponse::success
 
       attr_accessor url: String
+
+      attr_reader actions_applied: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied]?
+
+      def actions_applied=: (
+        ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied]
+      ) -> ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied]
 
       attr_reader key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata?
 
@@ -25,6 +32,7 @@ module ContextDev
         images: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image],
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
         url: String,
+        ?actions_applied: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied],
         ?key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
       ) -> void
 
@@ -32,6 +40,7 @@ module ContextDev
         images: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image],
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
         url: String,
+        actions_applied: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied],
         key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
       }
 
@@ -197,6 +206,75 @@ module ContextDev
         TRUE: true
 
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeImagesResponse::success]
+      end
+
+      type actions_applied =
+        {
+          instruction: String,
+          status: ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied::status,
+          completion_evidence: String,
+          duration_ms: Float,
+          error: String,
+          method_: String,
+          target_description: String
+        }
+
+      class ActionsApplied < ContextDev::Internal::Type::BaseModel
+        attr_accessor instruction: String
+
+        attr_accessor status: ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied::status
+
+        attr_reader completion_evidence: String?
+
+        def completion_evidence=: (String) -> String
+
+        attr_reader duration_ms: Float?
+
+        def duration_ms=: (Float) -> Float
+
+        attr_reader error: String?
+
+        def error=: (String) -> String
+
+        attr_reader method_: String?
+
+        def method_=: (String) -> String
+
+        attr_reader target_description: String?
+
+        def target_description=: (String) -> String
+
+        def initialize: (
+          instruction: String,
+          status: ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied::status,
+          ?completion_evidence: String,
+          ?duration_ms: Float,
+          ?error: String,
+          ?method_: String,
+          ?target_description: String
+        ) -> void
+
+        def to_hash: -> {
+          instruction: String,
+          status: ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied::status,
+          completion_evidence: String,
+          duration_ms: Float,
+          error: String,
+          method_: String,
+          target_description: String
+        }
+
+        type status = :applied | :failed | :skipped
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          APPLIED: :applied
+          FAILED: :failed
+          SKIPPED: :skipped
+
+          def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied::status]
+        end
       end
 
       type key_metadata =

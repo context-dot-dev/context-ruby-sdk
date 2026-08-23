@@ -23,6 +23,14 @@ module ContextDev
       #   @return [String]
       required :url, String
 
+      # @!attribute actions_applied
+      #   One verified outcome per requested browser action, in request order.
+      #
+      #   @return [Array<ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied>, nil]
+      optional :actions_applied,
+               -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied] },
+               api_name: :actionsApplied
+
       # @!attribute key_metadata
       #   Metadata about the API key used for the request. Included in every response
       #   whenever a valid API key is provided, even when the response status is not 200.
@@ -30,7 +38,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata }
 
-      # @!method initialize(images:, success:, url:, key_metadata: nil)
+      # @!method initialize(images:, success:, url:, actions_applied: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeImagesResponse} for more details.
       #
@@ -39,6 +47,8 @@ module ContextDev
       #   @param success [Boolean, ContextDev::Models::WebWebScrapeImagesResponse::Success] Always true on success.
       #
       #   @param url [String] Page URL that was scraped.
+      #
+      #   @param actions_applied [Array<ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied>] One verified outcome per requested browser action, in request order.
       #
       #   @param key_metadata [ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
 
@@ -194,6 +204,80 @@ module ContextDev
 
         # @!method self.values
         #   @return [Array<Boolean>]
+      end
+
+      class ActionsApplied < ContextDev::Internal::Type::BaseModel
+        # @!attribute instruction
+        #
+        #   @return [String]
+        required :instruction, String
+
+        # @!attribute status
+        #   Applied means the requested page state was visibly verified. Failed means it was
+        #   not verified. Skipped means it was not attempted.
+        #
+        #   @return [Symbol, ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied::Status]
+        required :status, enum: -> { ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied::Status }
+
+        # @!attribute completion_evidence
+        #   Visible page evidence used to verify an applied action.
+        #
+        #   @return [String, nil]
+        optional :completion_evidence, String, api_name: :completionEvidence
+
+        # @!attribute duration_ms
+        #
+        #   @return [Float, nil]
+        optional :duration_ms, Float, api_name: :durationMs
+
+        # @!attribute error
+        #
+        #   @return [String, nil]
+        optional :error, String
+
+        # @!attribute method_
+        #
+        #   @return [String, nil]
+        optional :method_, String, api_name: :method
+
+        # @!attribute target_description
+        #
+        #   @return [String, nil]
+        optional :target_description, String, api_name: :targetDescription
+
+        # @!method initialize(instruction:, status:, completion_evidence: nil, duration_ms: nil, error: nil, method_: nil, target_description: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied} for more
+        #   details.
+        #
+        #   @param instruction [String]
+        #
+        #   @param status [Symbol, ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied::Status] Applied means the requested page state was visibly verified. Failed means it was
+        #
+        #   @param completion_evidence [String] Visible page evidence used to verify an applied action.
+        #
+        #   @param duration_ms [Float]
+        #
+        #   @param error [String]
+        #
+        #   @param method_ [String]
+        #
+        #   @param target_description [String]
+
+        # Applied means the requested page state was visibly verified. Failed means it was
+        # not verified. Skipped means it was not attempted.
+        #
+        # @see ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          APPLIED = :applied
+          FAILED = :failed
+          SKIPPED = :skipped
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
       end
 
       # @see ContextDev::Models::WebWebScrapeImagesResponse#key_metadata

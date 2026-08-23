@@ -18,7 +18,7 @@ module ContextDev
       #   content is captured. Requires a paid plan. Send a JSON array in the query
       #   parameter. Maximum: 5 actions.
       #
-      #   @return [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform>, nil]
+      #   @return [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll>, nil]
       optional :actions,
                -> {
                  ContextDev::Internal::Type::ArrayOf[union: ContextDev::WebWebScrapeImagesParams::Action]
@@ -85,7 +85,7 @@ module ContextDev
       #
       #   @param url [String] Page URL to inspect. Must include http:// or https://.
       #
-      #   @param actions [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform>, nil] Optional browser actions executed in array order after the page loads and before
+      #   @param actions [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll>, nil] Optional browser actions executed in array order after the page loads and before
       #
       #   @param dedupe [Boolean] When true, visually duplicate images are removed: every image is loaded and perc
       #
@@ -115,6 +115,9 @@ module ContextDev
 
         # Resolve and perform one natural-language browser action.
         variant :perform, -> { ContextDev::WebWebScrapeImagesParams::Action::Perform }
+
+        # Scroll the page or a selected scrollable container, waiting adaptively for content and dimensions to settle after each iteration.
+        variant :scroll, -> { ContextDev::WebWebScrapeImagesParams::Action::Scroll }
 
         class Wait < ContextDev::Internal::Type::BaseModel
           # @!attribute do_
@@ -152,8 +155,101 @@ module ContextDev
           #   @param do_ [Symbol, :perform]
         end
 
+        class Scroll < ContextDev::Internal::Type::BaseModel
+          # @!attribute do_
+          #
+          #   @return [Symbol, :scroll]
+          required :do_, const: :scroll, api_name: :do
+
+          # @!attribute amount
+          #   Pixels per scroll, one visible viewport, or the current scroll boundary.
+          #   Defaults to viewport.
+          #
+          #   @return [Integer, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll::Amount, nil]
+          optional :amount, union: -> { ContextDev::WebWebScrapeImagesParams::Action::Scroll::Amount }
+
+          # @!attribute container
+          #   CSS selector for the first matching scroll container. Defaults to the page.
+          #
+          #   @return [String, nil]
+          optional :container, String
+
+          # @!attribute direction
+          #   Direction to scroll. Defaults to down.
+          #
+          #   @return [Symbol, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll::Direction, nil]
+          optional :direction, enum: -> { ContextDev::WebWebScrapeImagesParams::Action::Scroll::Direction }
+
+          # @!attribute max_scrolls
+          #   Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+          #   changing. Defaults to 1.
+          #
+          #   @return [Integer, nil]
+          optional :max_scrolls, Integer, api_name: :maxScrolls
+
+          # @!method initialize(amount: nil, container: nil, direction: nil, max_scrolls: nil, do_: :scroll)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll} for more details.
+          #
+          #   Scroll the page or a selected scrollable container, waiting adaptively for
+          #   content and dimensions to settle after each iteration.
+          #
+          #   @param amount [Integer, Symbol, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll::Amount] Pixels per scroll, one visible viewport, or the current scroll boundary. Default
+          #
+          #   @param container [String] CSS selector for the first matching scroll container. Defaults to the page.
+          #
+          #   @param direction [Symbol, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll::Direction] Direction to scroll. Defaults to down.
+          #
+          #   @param max_scrolls [Integer] Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+          #
+          #   @param do_ [Symbol, :scroll]
+
+          # Pixels per scroll, one visible viewport, or the current scroll boundary.
+          # Defaults to viewport.
+          #
+          # @see ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll#amount
+          module Amount
+            extend ContextDev::Internal::Type::Union
+
+            variant Integer
+
+            variant const: -> { ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll::Amount::VIEWPORT }
+
+            variant const: -> { ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll::Amount::MAX }
+
+            # @!method self.variants
+            #   @return [Array(Integer, Symbol)]
+
+            define_sorbet_constant!(:Variants) do
+              T.type_alias { T.any(Integer, ContextDev::WebWebScrapeImagesParams::Action::Scroll::Amount::TaggedSymbol) }
+            end
+
+            # @!group
+
+            VIEWPORT = :viewport
+            MAX = :max
+
+            # @!endgroup
+          end
+
+          # Direction to scroll. Defaults to down.
+          #
+          # @see ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll#direction
+          module Direction
+            extend ContextDev::Internal::Type::Enum
+
+            UP = :up
+            DOWN = :down
+            LEFT = :left
+            RIGHT = :right
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
+        end
+
         # @!method self.variants
-        #   @return [Array(ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform)]
+        #   @return [Array(ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll)]
       end
 
       class Enrichment < ContextDev::Internal::Type::BaseModel
