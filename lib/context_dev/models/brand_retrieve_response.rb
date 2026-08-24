@@ -106,7 +106,9 @@ module ContextDev
         optional :links, -> { ContextDev::Models::BrandRetrieveResponse::Brand::Links }
 
         # @!attribute logos
-        #   An array of logos associated with the brand
+        #   An array of logos associated with the brand. When a similarly shaped SVG variant
+        #   exists, it is returned ahead of its raster equivalent; otherwise relevance order
+        #   is preserved
         #
         #   @return [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Logo>, nil]
         optional :logos,
@@ -178,7 +180,7 @@ module ContextDev
         #
         #   @param links [ContextDev::Models::BrandRetrieveResponse::Brand::Links] Important website links for the brand
         #
-        #   @param logos [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Logo>] An array of logos associated with the brand
+        #   @param logos [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Logo>] An array of logos associated with the brand. When a similarly shaped SVG variant
         #
         #   @param phone [String] Company phone number
         #

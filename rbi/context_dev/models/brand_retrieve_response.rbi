@@ -238,7 +238,9 @@ module ContextDev
         end
         attr_writer :links
 
-        # An array of logos associated with the brand
+        # An array of logos associated with the brand. When a similarly shaped SVG variant
+        # exists, it is returned ahead of its raster equivalent; otherwise relevance order
+        # is preserved
         sig do
           returns(
             T.nilable(
@@ -389,7 +391,9 @@ module ContextDev
           is_nsfw: nil,
           # Important website links for the brand
           links: nil,
-          # An array of logos associated with the brand
+          # An array of logos associated with the brand. When a similarly shaped SVG variant
+          # exists, it is returned ahead of its raster equivalent; otherwise relevance order
+          # is preserved
           logos: nil,
           # Company phone number
           phone: nil,
