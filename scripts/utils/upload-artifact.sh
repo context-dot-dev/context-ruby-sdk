@@ -110,4 +110,4 @@ walk_tree "$DIST_DIR"
 echo "::endgroup::"
 
 echo -e "${GREEN}Gem artifacts uploaded to Stainless storage.${NC}"
-echo -e "\033[32mInstallation: bundle remove context.dev && bundle add context.dev --source 'https://pkg.stainless.com/s/context.dev-ruby/$SHA'\033[0m"
+echo -e "\033[32mInstallation: bundle remove context.dev && bundle add context.dev --source 'https://pkg.stainless.com/s/context-ruby-sdk-staging/$SHA'\033[0m"
