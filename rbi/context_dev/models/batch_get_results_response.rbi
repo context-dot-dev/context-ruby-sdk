@@ -130,6 +130,24 @@ module ContextDev
               )
             end
 
+          # Cache outcome for this response. Composite responses are hits only when every
+          # cache-controlled fetch contributing to the output was a hit; age_ms is the
+          # oldest contributing hit.
+          sig do
+            returns(
+              ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata
+            )
+          end
+          attr_reader :cache_metadata
+
+          sig do
+            params(
+              cache_metadata:
+                ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::OrHash
+            ).void
+          end
+          attr_writer :cache_metadata
+
           # URL the content was read from, after redirects.
           sig { returns(String) }
           attr_accessor :final_url
@@ -202,6 +220,8 @@ module ContextDev
           # A page the batch fetched successfully.
           sig do
             params(
+              cache_metadata:
+                ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::OrHash,
               final_url: String,
               http_status: T.nilable(Integer),
               metadata:
@@ -216,6 +236,10 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
+            # Cache outcome for this response. Composite responses are hits only when every
+            # cache-controlled fetch contributing to the output was a hit; age_ms is the
+            # oldest contributing hit.
+            cache_metadata:,
             # URL the content was read from, after redirects.
             final_url:,
             # HTTP status of the final response, when known.
@@ -244,6 +268,8 @@ module ContextDev
           sig do
             override.returns(
               {
+                cache_metadata:
+                  ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata,
                 final_url: String,
                 http_status: T.nilable(Integer),
                 metadata:
@@ -259,6 +285,101 @@ module ContextDev
             )
           end
           def to_hash
+          end
+
+          class CacheMetadata < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+            sig { returns(Integer) }
+            attr_accessor :age_ms
+
+            # Whether the response was served from cache, required fresh work, or honored
+            # zero-data-retention cache bypass.
+            sig do
+              returns(
+                ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::Status::TaggedSymbol
+              )
+            end
+            attr_accessor :status
+
+            # Cache outcome for this response. Composite responses are hits only when every
+            # cache-controlled fetch contributing to the output was a hit; age_ms is the
+            # oldest contributing hit.
+            sig do
+              params(
+                age_ms: Integer,
+                status:
+                  ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::Status::OrSymbol
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+              age_ms:,
+              # Whether the response was served from cache, required fresh work, or honored
+              # zero-data-retention cache bypass.
+              status:
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  age_ms: Integer,
+                  status:
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::Status::TaggedSymbol
+                }
+              )
+            end
+            def to_hash
+            end
+
+            # Whether the response was served from cache, required fresh work, or honored
+            # zero-data-retention cache bypass.
+            module Status
+              extend ContextDev::Internal::Type::Enum
+
+              TaggedSymbol =
+                T.type_alias do
+                  T.all(
+                    Symbol,
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::Status
+                  )
+                end
+              OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+              HIT =
+                T.let(
+                  :hit,
+                  ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::Status::TaggedSymbol
+                )
+              MISS =
+                T.let(
+                  :miss,
+                  ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::Status::TaggedSymbol
+                )
+              ZDR =
+                T.let(
+                  :zdr,
+                  ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::Status::TaggedSymbol
+                )
+
+              sig do
+                override.returns(
+                  T::Array[
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::Status::TaggedSymbol
+                  ]
+                )
+              end
+              def self.values
+              end
+            end
           end
 
           class Metadata < ContextDev::Internal::Type::BaseModel

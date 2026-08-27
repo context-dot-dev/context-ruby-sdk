@@ -4,6 +4,14 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Web#extract_styleguide
     class WebExtractStyleguideResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute cache_metadata
+      #   Cache outcome for this response. Composite responses are hits only when every
+      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+      #   oldest contributing hit.
+      #
+      #   @return [ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata]
+      required :cache_metadata, -> { ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata }
+
       # @!attribute code
       #   HTTP status code
       #
@@ -35,9 +43,11 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide, nil]
       optional :styleguide, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide }
 
-      # @!method initialize(code: nil, domain: nil, key_metadata: nil, status: nil, styleguide: nil)
+      # @!method initialize(cache_metadata:, code: nil, domain: nil, key_metadata: nil, status: nil, styleguide: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractStyleguideResponse} for more details.
+      #
+      #   @param cache_metadata [ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param code [Integer] HTTP status code
       #
@@ -48,6 +58,50 @@ module ContextDev
       #   @param status [String] Status of the response, e.g., 'ok'
       #
       #   @param styleguide [ContextDev::Models::WebExtractStyleguideResponse::Styleguide] Comprehensive styleguide data extracted from the website
+
+      # @see ContextDev::Models::WebExtractStyleguideResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata} for more
+        #   details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
 
       # @see ContextDev::Models::WebExtractStyleguideResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel

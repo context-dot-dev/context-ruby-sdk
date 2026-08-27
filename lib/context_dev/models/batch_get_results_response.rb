@@ -55,6 +55,14 @@ module ContextDev
         variant :error, -> { ContextDev::Models::BatchGetResultsResponse::Data::Error }
 
         class Ok < ContextDev::Internal::Type::BaseModel
+          # @!attribute cache_metadata
+          #   Cache outcome for this response. Composite responses are hits only when every
+          #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+          #   oldest contributing hit.
+          #
+          #   @return [ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata]
+          required :cache_metadata, -> { ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata }
+
           # @!attribute final_url
           #   URL the content was read from, after redirects.
           #
@@ -117,11 +125,13 @@ module ContextDev
           #   @return [Integer, nil]
           optional :ocr_pages, Integer
 
-          # @!method initialize(final_url:, http_status:, metadata:, url:, html: nil, item_id: nil, markdown: nil, meta: nil, ocr_pages: nil, status: :ok)
+          # @!method initialize(cache_metadata:, final_url:, http_status:, metadata:, url:, html: nil, item_id: nil, markdown: nil, meta: nil, ocr_pages: nil, status: :ok)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BatchGetResultsResponse::Data::Ok} for more details.
           #
           #   A page the batch fetched successfully.
+          #
+          #   @param cache_metadata [ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
           #
           #   @param final_url [String] URL the content was read from, after redirects.
           #
@@ -142,6 +152,51 @@ module ContextDev
           #   @param ocr_pages [Integer] PDF pages of this document recovered by OCR (pdf.ocr=true). Each recovered page
           #
           #   @param status [Symbol, :ok] The page was scraped.
+
+          # @see ContextDev::Models::BatchGetResultsResponse::Data::Ok#cache_metadata
+          class CacheMetadata < ContextDev::Internal::Type::BaseModel
+            # @!attribute age_ms
+            #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+            #
+            #   @return [Integer]
+            required :age_ms, Integer
+
+            # @!attribute status
+            #   Whether the response was served from cache, required fresh work, or honored
+            #   zero-data-retention cache bypass.
+            #
+            #   @return [Symbol, ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::Status]
+            required :status,
+                     enum: -> { ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::Status }
+
+            # @!method initialize(age_ms:, status:)
+            #   Some parameter documentations has been truncated, see
+            #   {ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata} for more
+            #   details.
+            #
+            #   Cache outcome for this response. Composite responses are hits only when every
+            #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+            #   oldest contributing hit.
+            #
+            #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+            #
+            #   @param status [Symbol, ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+            # Whether the response was served from cache, required fresh work, or honored
+            # zero-data-retention cache bypass.
+            #
+            # @see ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata#status
+            module Status
+              extend ContextDev::Internal::Type::Enum
+
+              HIT = :hit
+              MISS = :miss
+              ZDR = :zdr
+
+              # @!method self.values
+              #   @return [Array<Symbol>]
+            end
+          end
 
           # @see ContextDev::Models::BatchGetResultsResponse::Data::Ok#metadata
           class Metadata < ContextDev::Internal::Type::BaseModel

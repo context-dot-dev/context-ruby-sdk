@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type web_extract_styleguide_response =
       {
+        cache_metadata: ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata,
         code: Integer,
         domain: String,
         key_metadata: ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata,
@@ -10,6 +11,8 @@ module ContextDev
       }
 
     class WebExtractStyleguideResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor cache_metadata: ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata
+
       attr_reader code: Integer?
 
       def code=: (Integer) -> Integer
@@ -35,6 +38,7 @@ module ContextDev
       ) -> ContextDev::Models::WebExtractStyleguideResponse::Styleguide
 
       def initialize: (
+        cache_metadata: ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata,
         ?code: Integer,
         ?domain: String,
         ?key_metadata: ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata,
@@ -43,12 +47,47 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        cache_metadata: ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata,
         code: Integer,
         domain: String,
         key_metadata: ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata,
         status: String,
         styleguide: ContextDev::Models::WebExtractStyleguideResponse::Styleguide
       }
+
+      type cache_metadata =
+        {
+          age_ms: Integer,
+          status: ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::status
+        }
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor age_ms: Integer
+
+        attr_accessor status: ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::status
+
+        def initialize: (
+          age_ms: Integer,
+          status: ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::status
+        ) -> void
+
+        def to_hash: -> {
+          age_ms: Integer,
+          status: ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::status
+        }
+
+        type status = :hit | :miss | :zdr
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT: :hit
+          MISS: :miss
+          ZDR: :zdr
+
+          def self?.values: -> ::Array[ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::status]
+        end
+      end
 
       type key_metadata =
         { credits_consumed: Integer, credits_remaining: Integer }

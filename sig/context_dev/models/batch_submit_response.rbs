@@ -3,6 +3,7 @@ module ContextDev
     type batch_submit_response =
       {
         id: String,
+        cache_metadata: ContextDev::Models::BatchSubmitResponse::CacheMetadata,
         crawl: ContextDev::CrawlControls?,
         created_at: String,
         credits: ContextDev::Models::BatchSubmitResponse::Credits,
@@ -18,6 +19,8 @@ module ContextDev
 
     class BatchSubmitResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor id: String
+
+      attr_accessor cache_metadata: ContextDev::Models::BatchSubmitResponse::CacheMetadata
 
       attr_accessor crawl: ContextDev::CrawlControls?
 
@@ -49,6 +52,7 @@ module ContextDev
 
       def initialize: (
         id: String,
+        cache_metadata: ContextDev::Models::BatchSubmitResponse::CacheMetadata,
         crawl: ContextDev::CrawlControls?,
         created_at: String,
         credits: ContextDev::Models::BatchSubmitResponse::Credits,
@@ -64,6 +68,7 @@ module ContextDev
 
       def to_hash: -> {
         id: String,
+        cache_metadata: ContextDev::Models::BatchSubmitResponse::CacheMetadata,
         crawl: ContextDev::CrawlControls?,
         created_at: String,
         credits: ContextDev::Models::BatchSubmitResponse::Credits,
@@ -76,6 +81,40 @@ module ContextDev
         key_metadata: ContextDev::Models::BatchSubmitResponse::KeyMetadata,
         webhook_secret: String
       }
+
+      type cache_metadata =
+        {
+          age_ms: Integer,
+          status: ContextDev::Models::BatchSubmitResponse::CacheMetadata::status
+        }
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor age_ms: Integer
+
+        attr_accessor status: ContextDev::Models::BatchSubmitResponse::CacheMetadata::status
+
+        def initialize: (
+          age_ms: Integer,
+          status: ContextDev::Models::BatchSubmitResponse::CacheMetadata::status
+        ) -> void
+
+        def to_hash: -> {
+          age_ms: Integer,
+          status: ContextDev::Models::BatchSubmitResponse::CacheMetadata::status
+        }
+
+        type status = :hit | :miss | :zdr
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT: :hit
+          MISS: :miss
+          ZDR: :zdr
+
+          def self?.values: -> ::Array[ContextDev::Models::BatchSubmitResponse::CacheMetadata::status]
+        end
+      end
 
       type credits = { reserved: Integer }
 

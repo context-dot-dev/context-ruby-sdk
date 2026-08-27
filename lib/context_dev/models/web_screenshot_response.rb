@@ -4,6 +4,14 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Web#screenshot
     class WebScreenshotResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute cache_metadata
+      #   Cache outcome for this response. Composite responses are hits only when every
+      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+      #   oldest contributing hit.
+      #
+      #   @return [ContextDev::Models::WebScreenshotResponse::CacheMetadata]
+      required :cache_metadata, -> { ContextDev::Models::WebScreenshotResponse::CacheMetadata }
+
       # @!attribute code
       #   HTTP status code
       #
@@ -56,9 +64,11 @@ module ContextDev
       #   @return [Integer, nil]
       optional :width, Integer
 
-      # @!method initialize(code: nil, domain: nil, height: nil, key_metadata: nil, screenshot: nil, screenshot_type: nil, status: nil, width: nil)
+      # @!method initialize(cache_metadata:, code: nil, domain: nil, height: nil, key_metadata: nil, screenshot: nil, screenshot_type: nil, status: nil, width: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScreenshotResponse} for more details.
+      #
+      #   @param cache_metadata [ContextDev::Models::WebScreenshotResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param code [Integer] HTTP status code
       #
@@ -75,6 +85,49 @@ module ContextDev
       #   @param status [String] Status of the response, e.g., 'ok'
       #
       #   @param width [Integer] Width in pixels of the returned screenshot image
+
+      # @see ContextDev::Models::WebScreenshotResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::WebScreenshotResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::WebScreenshotResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScreenshotResponse::CacheMetadata} for more details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::WebScreenshotResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::WebScreenshotResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
 
       # @see ContextDev::Models::WebScreenshotResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
