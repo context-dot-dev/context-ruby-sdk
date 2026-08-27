@@ -10,6 +10,14 @@ module ContextDev
       #   @return [String]
       required :id, String
 
+      # @!attribute cache_metadata
+      #   Cache outcome for this response. Composite responses are hits only when every
+      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+      #   oldest contributing hit.
+      #
+      #   @return [ContextDev::Models::BatchSubmitResponse::CacheMetadata]
+      required :cache_metadata, -> { ContextDev::Models::BatchSubmitResponse::CacheMetadata }
+
       # @!attribute crawl
       #   The crawl controls as submitted, so the limits requested can be compared against
       #   what the crawl reached.
@@ -79,11 +87,13 @@ module ContextDev
       #   @return [String, nil]
       optional :webhook_secret, String
 
-      # @!method initialize(id:, crawl:, created_at:, credits:, format_:, input:, invalid_urls:, mode:, status:, tags:, key_metadata: nil, webhook_secret: nil)
+      # @!method initialize(id:, cache_metadata:, crawl:, created_at:, credits:, format_:, input:, invalid_urls:, mode:, status:, tags:, key_metadata: nil, webhook_secret: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchSubmitResponse} for more details.
       #
       #   @param id [String] Batch ID. Poll GET /batch/{batch_id} with it.
+      #
+      #   @param cache_metadata [ContextDev::Models::BatchSubmitResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param crawl [ContextDev::Models::CrawlControls, nil] The crawl controls as submitted, so the limits requested can be compared against
       #
@@ -106,6 +116,49 @@ module ContextDev
       #   @param key_metadata [ContextDev::Models::BatchSubmitResponse::KeyMetadata] API key usage for this request.
       #
       #   @param webhook_secret [String] Signing secret for the completion webhook, returned only here and never again. S
+
+      # @see ContextDev::Models::BatchSubmitResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::BatchSubmitResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::BatchSubmitResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::BatchSubmitResponse::CacheMetadata} for more details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::BatchSubmitResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::BatchSubmitResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
 
       # @see ContextDev::Models::BatchSubmitResponse#credits
       class Credits < ContextDev::Internal::Type::BaseModel

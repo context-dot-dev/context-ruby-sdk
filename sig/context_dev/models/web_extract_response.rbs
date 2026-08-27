@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type web_extract_response =
       {
+        cache_metadata: ContextDev::Models::WebExtractResponse::CacheMetadata,
         data: ::Hash[Symbol, top],
         metadata: ContextDev::Models::WebExtractResponse::Metadata,
         status: String,
@@ -11,6 +12,8 @@ module ContextDev
       }
 
     class WebExtractResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor cache_metadata: ContextDev::Models::WebExtractResponse::CacheMetadata
+
       attr_accessor data: ::Hash[Symbol, top]
 
       attr_accessor metadata: ContextDev::Models::WebExtractResponse::Metadata
@@ -28,6 +31,7 @@ module ContextDev
       ) -> ContextDev::Models::WebExtractResponse::KeyMetadata
 
       def initialize: (
+        cache_metadata: ContextDev::Models::WebExtractResponse::CacheMetadata,
         data: ::Hash[Symbol, top],
         metadata: ContextDev::Models::WebExtractResponse::Metadata,
         status: String,
@@ -37,6 +41,7 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        cache_metadata: ContextDev::Models::WebExtractResponse::CacheMetadata,
         data: ::Hash[Symbol, top],
         metadata: ContextDev::Models::WebExtractResponse::Metadata,
         status: String,
@@ -44,6 +49,40 @@ module ContextDev
         urls_analyzed: ::Array[String],
         key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata
       }
+
+      type cache_metadata =
+        {
+          age_ms: Integer,
+          status: ContextDev::Models::WebExtractResponse::CacheMetadata::status
+        }
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor age_ms: Integer
+
+        attr_accessor status: ContextDev::Models::WebExtractResponse::CacheMetadata::status
+
+        def initialize: (
+          age_ms: Integer,
+          status: ContextDev::Models::WebExtractResponse::CacheMetadata::status
+        ) -> void
+
+        def to_hash: -> {
+          age_ms: Integer,
+          status: ContextDev::Models::WebExtractResponse::CacheMetadata::status
+        }
+
+        type status = :hit | :miss | :zdr
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT: :hit
+          MISS: :miss
+          ZDR: :zdr
+
+          def self?.values: -> ::Array[ContextDev::Models::WebExtractResponse::CacheMetadata::status]
+        end
+      end
 
       type metadata =
         {

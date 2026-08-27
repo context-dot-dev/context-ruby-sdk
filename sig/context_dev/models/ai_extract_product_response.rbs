@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type ai_extract_product_response =
       {
+        cache_metadata: ContextDev::Models::AIExtractProductResponse::CacheMetadata,
         is_product_page: bool,
         key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
         platform: ContextDev::Models::AIExtractProductResponse::platform?,
@@ -9,6 +10,8 @@ module ContextDev
       }
 
     class AIExtractProductResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor cache_metadata: ContextDev::Models::AIExtractProductResponse::CacheMetadata
+
       attr_reader is_product_page: bool?
 
       def is_product_page=: (bool) -> bool
@@ -24,6 +27,7 @@ module ContextDev
       attr_accessor product: ContextDev::Models::AIExtractProductResponse::Product?
 
       def initialize: (
+        cache_metadata: ContextDev::Models::AIExtractProductResponse::CacheMetadata,
         ?is_product_page: bool,
         ?key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
         ?platform: ContextDev::Models::AIExtractProductResponse::platform?,
@@ -31,11 +35,46 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        cache_metadata: ContextDev::Models::AIExtractProductResponse::CacheMetadata,
         is_product_page: bool,
         key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
         platform: ContextDev::Models::AIExtractProductResponse::platform?,
         product: ContextDev::Models::AIExtractProductResponse::Product?
       }
+
+      type cache_metadata =
+        {
+          age_ms: Integer,
+          status: ContextDev::Models::AIExtractProductResponse::CacheMetadata::status
+        }
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor age_ms: Integer
+
+        attr_accessor status: ContextDev::Models::AIExtractProductResponse::CacheMetadata::status
+
+        def initialize: (
+          age_ms: Integer,
+          status: ContextDev::Models::AIExtractProductResponse::CacheMetadata::status
+        ) -> void
+
+        def to_hash: -> {
+          age_ms: Integer,
+          status: ContextDev::Models::AIExtractProductResponse::CacheMetadata::status
+        }
+
+        type status = :hit | :miss | :zdr
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT: :hit
+          MISS: :miss
+          ZDR: :zdr
+
+          def self?.values: -> ::Array[ContextDev::Models::AIExtractProductResponse::CacheMetadata::status]
+        end
+      end
 
       type key_metadata =
         { credits_consumed: Integer, credits_remaining: Integer }

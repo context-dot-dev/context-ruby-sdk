@@ -137,6 +137,7 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         id: String,
+        cache_metadata: ContextDev::Models::BatchSubmitResponse::CacheMetadata,
         crawl: ContextDev::CrawlControls | nil,
         created_at: String,
         credits: ContextDev::Models::BatchSubmitResponse::Credits,

@@ -50,6 +50,7 @@ module ContextDev
 
         type ok =
           {
+            cache_metadata: ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata,
             final_url: String,
             http_status: Integer?,
             metadata: ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata,
@@ -63,6 +64,8 @@ module ContextDev
           }
 
         class Ok < ContextDev::Internal::Type::BaseModel
+          attr_accessor cache_metadata: ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata
+
           attr_accessor final_url: String
 
           attr_accessor http_status: Integer?
@@ -94,6 +97,7 @@ module ContextDev
           def ocr_pages=: (Integer) -> Integer
 
           def initialize: (
+            cache_metadata: ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata,
             final_url: String,
             http_status: Integer?,
             metadata: ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata,
@@ -107,6 +111,7 @@ module ContextDev
           ) -> void
 
           def to_hash: -> {
+            cache_metadata: ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata,
             final_url: String,
             http_status: Integer?,
             metadata: ContextDev::Models::BatchGetResultsResponse::Data::Ok::Metadata,
@@ -118,6 +123,40 @@ module ContextDev
             meta: ::Hash[Symbol, top],
             ocr_pages: Integer
           }
+
+          type cache_metadata =
+            {
+              age_ms: Integer,
+              status: ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::status
+            }
+
+          class CacheMetadata < ContextDev::Internal::Type::BaseModel
+            attr_accessor age_ms: Integer
+
+            attr_accessor status: ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::status
+
+            def initialize: (
+              age_ms: Integer,
+              status: ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::status
+            ) -> void
+
+            def to_hash: -> {
+              age_ms: Integer,
+              status: ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::status
+            }
+
+            type status = :hit | :miss | :zdr
+
+            module Status
+              extend ContextDev::Internal::Type::Enum
+
+              HIT: :hit
+              MISS: :miss
+              ZDR: :zdr
+
+              def self?.values: -> ::Array[ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata::status]
+            end
+          end
 
           type metadata =
             {

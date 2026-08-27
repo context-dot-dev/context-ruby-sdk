@@ -14,6 +14,7 @@ class ContextDev::Test::Resources::AITest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        cache_metadata: ContextDev::Models::AIExtractProductResponse::CacheMetadata,
         is_product_page: ContextDev::Internal::Type::Boolean | nil,
         key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata | nil,
         platform: ContextDev::Models::AIExtractProductResponse::Platform | nil,
@@ -33,6 +34,7 @@ class ContextDev::Test::Resources::AITest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        cache_metadata: ContextDev::Models::AIExtractProductsResponse::CacheMetadata,
         key_metadata: ContextDev::Models::AIExtractProductsResponse::KeyMetadata | nil,
         products: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::AIExtractProductsResponse::Product]) | nil
       }

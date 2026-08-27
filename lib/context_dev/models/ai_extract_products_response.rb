@@ -4,6 +4,14 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::AI#extract_products
     class AIExtractProductsResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute cache_metadata
+      #   Cache outcome for this response. Composite responses are hits only when every
+      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+      #   oldest contributing hit.
+      #
+      #   @return [ContextDev::Models::AIExtractProductsResponse::CacheMetadata]
+      required :cache_metadata, -> { ContextDev::Models::AIExtractProductsResponse::CacheMetadata }
+
       # @!attribute key_metadata
       #   Metadata about the API key used for the request. Included in every response
       #   whenever a valid API key is provided, even when the response status is not 200.
@@ -18,13 +26,58 @@ module ContextDev
       optional :products,
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::AIExtractProductsResponse::Product] }
 
-      # @!method initialize(key_metadata: nil, products: nil)
+      # @!method initialize(cache_metadata:, key_metadata: nil, products: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::AIExtractProductsResponse} for more details.
+      #
+      #   @param cache_metadata [ContextDev::Models::AIExtractProductsResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param key_metadata [ContextDev::Models::AIExtractProductsResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
       #
       #   @param products [Array<ContextDev::Models::AIExtractProductsResponse::Product>] Array of products extracted from the website
+
+      # @see ContextDev::Models::AIExtractProductsResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::AIExtractProductsResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::AIExtractProductsResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::AIExtractProductsResponse::CacheMetadata} for more details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::AIExtractProductsResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::AIExtractProductsResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
 
       # @see ContextDev::Models::AIExtractProductsResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
