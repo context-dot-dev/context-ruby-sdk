@@ -43,7 +43,7 @@ context_dev = ContextDev::Client.new(
 
 brand = context_dev.brand.retrieve(body: {domain: "stripe.com", type: "by_domain"})
 
-puts(brand.brand)
+puts(brand.cache_metadata)
 ```
 
 ### Handling errors

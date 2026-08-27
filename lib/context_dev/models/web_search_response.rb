@@ -4,6 +4,14 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Web#search
     class WebSearchResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute cache_metadata
+      #   Cache outcome for this response. Composite responses are hits only when every
+      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+      #   oldest contributing hit.
+      #
+      #   @return [ContextDev::Models::WebSearchResponse::CacheMetadata]
+      required :cache_metadata, -> { ContextDev::Models::WebSearchResponse::CacheMetadata }
+
       # @!attribute query
       #   Echo of the original query (useful when fanout was enabled).
       #
@@ -23,15 +31,60 @@ module ContextDev
       #   @return [ContextDev::Models::WebSearchResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebSearchResponse::KeyMetadata }
 
-      # @!method initialize(query:, results:, key_metadata: nil)
+      # @!method initialize(cache_metadata:, query:, results:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebSearchResponse} for more details.
+      #
+      #   @param cache_metadata [ContextDev::Models::WebSearchResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param query [String] Echo of the original query (useful when fanout was enabled).
       #
       #   @param results [Array<ContextDev::Models::WebSearchResponse::Result>]
       #
       #   @param key_metadata [ContextDev::Models::WebSearchResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
+
+      # @see ContextDev::Models::WebSearchResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::WebSearchResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::WebSearchResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebSearchResponse::CacheMetadata} for more details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::WebSearchResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::WebSearchResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
 
       class Result < ContextDev::Internal::Type::BaseModel
         # @!attribute description

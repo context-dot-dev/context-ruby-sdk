@@ -4,6 +4,14 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Web#extract_fonts
     class WebExtractFontsResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute cache_metadata
+      #   Cache outcome for this response. Composite responses are hits only when every
+      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+      #   oldest contributing hit.
+      #
+      #   @return [ContextDev::Models::WebExtractFontsResponse::CacheMetadata]
+      required :cache_metadata, -> { ContextDev::Models::WebExtractFontsResponse::CacheMetadata }
+
       # @!attribute code
       #   HTTP status code, e.g., 200
       #
@@ -46,9 +54,11 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractFontsResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebExtractFontsResponse::KeyMetadata }
 
-      # @!method initialize(code:, domain:, fonts:, status:, font_links: nil, key_metadata: nil)
+      # @!method initialize(cache_metadata:, code:, domain:, fonts:, status:, font_links: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractFontsResponse} for more details.
+      #
+      #   @param cache_metadata [ContextDev::Models::WebExtractFontsResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param code [Integer] HTTP status code, e.g., 200
       #
@@ -61,6 +71,49 @@ module ContextDev
       #   @param font_links [Hash{Symbol=>ContextDev::Models::WebExtractFontsResponse::FontLink}] Font assets keyed by family name as it appears in the fonts array (non-generic n
       #
       #   @param key_metadata [ContextDev::Models::WebExtractFontsResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
+
+      # @see ContextDev::Models::WebExtractFontsResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::WebExtractFontsResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::WebExtractFontsResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebExtractFontsResponse::CacheMetadata} for more details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::WebExtractFontsResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::WebExtractFontsResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
 
       class Font < ContextDev::Internal::Type::BaseModel
         # @!attribute fallbacks

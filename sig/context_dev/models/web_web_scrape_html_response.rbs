@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type web_web_scrape_html_response =
       {
+        cache_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata,
         html: String,
         metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
@@ -13,6 +14,8 @@ module ContextDev
       }
 
     class WebWebScrapeHTMLResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor cache_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata
+
       attr_accessor html: String
 
       attr_accessor metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata
@@ -40,6 +43,7 @@ module ContextDev
       ) -> ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata
 
       def initialize: (
+        cache_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata,
         html: String,
         metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
@@ -51,6 +55,7 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        cache_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata,
         html: String,
         metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
@@ -60,6 +65,40 @@ module ContextDev
         actions_html_stale: bool,
         key_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata
       }
+
+      type cache_metadata =
+        {
+          age_ms: Integer,
+          status: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata::status
+        }
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor age_ms: Integer
+
+        attr_accessor status: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata::status
+
+        def initialize: (
+          age_ms: Integer,
+          status: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata::status
+        ) -> void
+
+        def to_hash: -> {
+          age_ms: Integer,
+          status: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata::status
+        }
+
+        type status = :hit | :miss | :zdr
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT: :hit
+          MISS: :miss
+          ZDR: :zdr
+
+          def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata::status]
+        end
+      end
 
       type metadata =
         {

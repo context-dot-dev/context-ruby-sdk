@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type web_screenshot_response =
       {
+        cache_metadata: ContextDev::Models::WebScreenshotResponse::CacheMetadata,
         code: Integer,
         domain: String,
         height: Integer,
@@ -13,6 +14,8 @@ module ContextDev
       }
 
     class WebScreenshotResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor cache_metadata: ContextDev::Models::WebScreenshotResponse::CacheMetadata
+
       attr_reader code: Integer?
 
       def code=: (Integer) -> Integer
@@ -50,6 +53,7 @@ module ContextDev
       def width=: (Integer) -> Integer
 
       def initialize: (
+        cache_metadata: ContextDev::Models::WebScreenshotResponse::CacheMetadata,
         ?code: Integer,
         ?domain: String,
         ?height: Integer,
@@ -61,6 +65,7 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        cache_metadata: ContextDev::Models::WebScreenshotResponse::CacheMetadata,
         code: Integer,
         domain: String,
         height: Integer,
@@ -70,6 +75,40 @@ module ContextDev
         status: String,
         width: Integer
       }
+
+      type cache_metadata =
+        {
+          age_ms: Integer,
+          status: ContextDev::Models::WebScreenshotResponse::CacheMetadata::status
+        }
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor age_ms: Integer
+
+        attr_accessor status: ContextDev::Models::WebScreenshotResponse::CacheMetadata::status
+
+        def initialize: (
+          age_ms: Integer,
+          status: ContextDev::Models::WebScreenshotResponse::CacheMetadata::status
+        ) -> void
+
+        def to_hash: -> {
+          age_ms: Integer,
+          status: ContextDev::Models::WebScreenshotResponse::CacheMetadata::status
+        }
+
+        type status = :hit | :miss | :zdr
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT: :hit
+          MISS: :miss
+          ZDR: :zdr
+
+          def self?.values: -> ::Array[ContextDev::Models::WebScreenshotResponse::CacheMetadata::status]
+        end
+      end
 
       type key_metadata =
         { credits_consumed: Integer, credits_remaining: Integer }

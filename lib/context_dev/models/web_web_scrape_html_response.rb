@@ -4,6 +4,14 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Web#web_scrape_html
     class WebWebScrapeHTMLResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute cache_metadata
+      #   Cache outcome for this response. Composite responses are hits only when every
+      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+      #   oldest contributing hit.
+      #
+      #   @return [ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata]
+      required :cache_metadata, -> { ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata }
+
       # @!attribute html
       #   The scraped content of the page. For normal pages this is the raw HTML. When the
       #   page is a sitemap or feed served behind an XSL stylesheet (which browsers render
@@ -61,9 +69,11 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata }
 
-      # @!method initialize(html:, metadata:, success:, type:, url:, actions_applied: nil, actions_html_stale: nil, key_metadata: nil)
+      # @!method initialize(cache_metadata:, html:, metadata:, success:, type:, url:, actions_applied: nil, actions_html_stale: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeHTMLResponse} for more details.
+      #
+      #   @param cache_metadata [ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param html [String] The scraped content of the page. For normal pages this is the raw HTML. When the
       #
@@ -80,6 +90,49 @@ module ContextDev
       #   @param actions_html_stale [Boolean] True when an action was applied but the returned content could not be refreshed
       #
       #   @param key_metadata [ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
+
+      # @see ContextDev::Models::WebWebScrapeHTMLResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata} for more details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
 
       # @see ContextDev::Models::WebWebScrapeHTMLResponse#metadata
       class Metadata < ContextDev::Internal::Type::BaseModel

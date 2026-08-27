@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type web_extract_fonts_response =
       {
+        cache_metadata: ContextDev::Models::WebExtractFontsResponse::CacheMetadata,
         code: Integer,
         domain: String,
         fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
@@ -11,6 +12,8 @@ module ContextDev
       }
 
     class WebExtractFontsResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor cache_metadata: ContextDev::Models::WebExtractFontsResponse::CacheMetadata
+
       attr_accessor code: Integer
 
       attr_accessor domain: String
@@ -32,6 +35,7 @@ module ContextDev
       ) -> ContextDev::Models::WebExtractFontsResponse::KeyMetadata
 
       def initialize: (
+        cache_metadata: ContextDev::Models::WebExtractFontsResponse::CacheMetadata,
         code: Integer,
         domain: String,
         fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
@@ -41,6 +45,7 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        cache_metadata: ContextDev::Models::WebExtractFontsResponse::CacheMetadata,
         code: Integer,
         domain: String,
         fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
@@ -48,6 +53,40 @@ module ContextDev
         font_links: ::Hash[Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink],
         key_metadata: ContextDev::Models::WebExtractFontsResponse::KeyMetadata
       }
+
+      type cache_metadata =
+        {
+          age_ms: Integer,
+          status: ContextDev::Models::WebExtractFontsResponse::CacheMetadata::status
+        }
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor age_ms: Integer
+
+        attr_accessor status: ContextDev::Models::WebExtractFontsResponse::CacheMetadata::status
+
+        def initialize: (
+          age_ms: Integer,
+          status: ContextDev::Models::WebExtractFontsResponse::CacheMetadata::status
+        ) -> void
+
+        def to_hash: -> {
+          age_ms: Integer,
+          status: ContextDev::Models::WebExtractFontsResponse::CacheMetadata::status
+        }
+
+        type status = :hit | :miss | :zdr
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT: :hit
+          MISS: :miss
+          ZDR: :zdr
+
+          def self?.values: -> ::Array[ContextDev::Models::WebExtractFontsResponse::CacheMetadata::status]
+        end
+      end
 
       type font =
         {

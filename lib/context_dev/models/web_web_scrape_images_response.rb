@@ -4,6 +4,14 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Web#web_scrape_images
     class WebWebScrapeImagesResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute cache_metadata
+      #   Cache outcome for this response. Composite responses are hits only when every
+      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+      #   oldest contributing hit.
+      #
+      #   @return [ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata]
+      required :cache_metadata, -> { ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata }
+
       # @!attribute images
       #   Images found on the page.
       #
@@ -38,9 +46,11 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata }
 
-      # @!method initialize(images:, success:, url:, actions_applied: nil, key_metadata: nil)
+      # @!method initialize(cache_metadata:, images:, success:, url:, actions_applied: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeImagesResponse} for more details.
+      #
+      #   @param cache_metadata [ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param images [Array<ContextDev::Models::WebWebScrapeImagesResponse::Image>] Images found on the page.
       #
@@ -51,6 +61,50 @@ module ContextDev
       #   @param actions_applied [Array<ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied>] One verified outcome per requested browser action, in request order.
       #
       #   @param key_metadata [ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
+
+      # @see ContextDev::Models::WebWebScrapeImagesResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata} for more
+        #   details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
 
       class Image < ContextDev::Internal::Type::BaseModel
         # @!attribute alt

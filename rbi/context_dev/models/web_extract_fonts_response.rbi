@@ -11,6 +11,22 @@ module ContextDev
           )
         end
 
+      # Cache outcome for this response. Composite responses are hits only when every
+      # cache-controlled fetch contributing to the output was a hit; age_ms is the
+      # oldest contributing hit.
+      sig do
+        returns(ContextDev::Models::WebExtractFontsResponse::CacheMetadata)
+      end
+      attr_reader :cache_metadata
+
+      sig do
+        params(
+          cache_metadata:
+            ContextDev::Models::WebExtractFontsResponse::CacheMetadata::OrHash
+        ).void
+      end
+      attr_writer :cache_metadata
+
       # HTTP status code, e.g., 200
       sig { returns(Integer) }
       attr_accessor :code
@@ -74,6 +90,8 @@ module ContextDev
 
       sig do
         params(
+          cache_metadata:
+            ContextDev::Models::WebExtractFontsResponse::CacheMetadata::OrHash,
           code: Integer,
           domain: String,
           fonts:
@@ -89,6 +107,10 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Cache outcome for this response. Composite responses are hits only when every
+        # cache-controlled fetch contributing to the output was a hit; age_ms is the
+        # oldest contributing hit.
+        cache_metadata:,
         # HTTP status code, e.g., 200
         code:,
         # The normalized domain that was processed
@@ -110,6 +132,8 @@ module ContextDev
       sig do
         override.returns(
           {
+            cache_metadata:
+              ContextDev::Models::WebExtractFontsResponse::CacheMetadata,
             code: Integer,
             domain: String,
             fonts: T::Array[ContextDev::Models::WebExtractFontsResponse::Font],
@@ -125,6 +149,101 @@ module ContextDev
         )
       end
       def to_hash
+      end
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::WebExtractFontsResponse::CacheMetadata,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        sig { returns(Integer) }
+        attr_accessor :age_ms
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        sig do
+          returns(
+            ContextDev::Models::WebExtractFontsResponse::CacheMetadata::Status::TaggedSymbol
+          )
+        end
+        attr_accessor :status
+
+        # Cache outcome for this response. Composite responses are hits only when every
+        # cache-controlled fetch contributing to the output was a hit; age_ms is the
+        # oldest contributing hit.
+        sig do
+          params(
+            age_ms: Integer,
+            status:
+              ContextDev::Models::WebExtractFontsResponse::CacheMetadata::Status::OrSymbol
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+          age_ms:,
+          # Whether the response was served from cache, required fresh work, or honored
+          # zero-data-retention cache bypass.
+          status:
+        )
+        end
+
+        sig do
+          override.returns(
+            {
+              age_ms: Integer,
+              status:
+                ContextDev::Models::WebExtractFontsResponse::CacheMetadata::Status::TaggedSymbol
+            }
+          )
+        end
+        def to_hash
+        end
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::Models::WebExtractFontsResponse::CacheMetadata::Status
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          HIT =
+            T.let(
+              :hit,
+              ContextDev::Models::WebExtractFontsResponse::CacheMetadata::Status::TaggedSymbol
+            )
+          MISS =
+            T.let(
+              :miss,
+              ContextDev::Models::WebExtractFontsResponse::CacheMetadata::Status::TaggedSymbol
+            )
+          ZDR =
+            T.let(
+              :zdr,
+              ContextDev::Models::WebExtractFontsResponse::CacheMetadata::Status::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::WebExtractFontsResponse::CacheMetadata::Status::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
+        end
       end
 
       class Font < ContextDev::Internal::Type::BaseModel

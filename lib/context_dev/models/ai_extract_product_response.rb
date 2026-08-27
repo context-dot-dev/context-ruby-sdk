@@ -4,6 +4,14 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::AI#extract_product
     class AIExtractProductResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute cache_metadata
+      #   Cache outcome for this response. Composite responses are hits only when every
+      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+      #   oldest contributing hit.
+      #
+      #   @return [ContextDev::Models::AIExtractProductResponse::CacheMetadata]
+      required :cache_metadata, -> { ContextDev::Models::AIExtractProductResponse::CacheMetadata }
+
       # @!attribute is_product_page
       #   Whether the given URL is a product detail page
       #
@@ -29,9 +37,11 @@ module ContextDev
       #   @return [ContextDev::Models::AIExtractProductResponse::Product, nil]
       optional :product, -> { ContextDev::Models::AIExtractProductResponse::Product }, nil?: true
 
-      # @!method initialize(is_product_page: nil, key_metadata: nil, platform: nil, product: nil)
+      # @!method initialize(cache_metadata:, is_product_page: nil, key_metadata: nil, platform: nil, product: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::AIExtractProductResponse} for more details.
+      #
+      #   @param cache_metadata [ContextDev::Models::AIExtractProductResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param is_product_page [Boolean] Whether the given URL is a product detail page
       #
@@ -40,6 +50,49 @@ module ContextDev
       #   @param platform [Symbol, ContextDev::Models::AIExtractProductResponse::Platform, nil] The detected ecommerce platform, or null if not a product page
       #
       #   @param product [ContextDev::Models::AIExtractProductResponse::Product, nil] The extracted product data, or null if not a product page
+
+      # @see ContextDev::Models::AIExtractProductResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::AIExtractProductResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::AIExtractProductResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::AIExtractProductResponse::CacheMetadata} for more details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::AIExtractProductResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::AIExtractProductResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
 
       # @see ContextDev::Models::AIExtractProductResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel

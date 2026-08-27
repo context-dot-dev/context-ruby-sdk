@@ -18,6 +18,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        cache_metadata: ContextDev::Models::WebExtractResponse::CacheMetadata,
         data: ^(ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]),
         metadata: ContextDev::Models::WebExtractResponse::Metadata,
         status: String,
@@ -59,6 +60,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        cache_metadata: ContextDev::Models::WebExtractFontsResponse::CacheMetadata,
         code: Integer,
         domain: String,
         fonts: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebExtractFontsResponse::Font]),
@@ -80,6 +82,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        cache_metadata: ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata,
         code: Integer | nil,
         domain: String | nil,
         key_metadata: ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata | nil,
@@ -100,6 +103,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        cache_metadata: ContextDev::Models::WebScreenshotResponse::CacheMetadata,
         code: Integer | nil,
         domain: String | nil,
         height: Integer | nil,
@@ -123,6 +127,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        cache_metadata: ContextDev::Models::WebSearchResponse::CacheMetadata,
         query: String,
         results: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebSearchResponse::Result]),
         key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata | nil
@@ -141,6 +146,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        cache_metadata: ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata,
         metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata,
         results: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebCrawlMdResponse::Result]),
         key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata | nil
@@ -159,6 +165,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        cache_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata,
         html: String,
         metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::Success,
@@ -182,6 +189,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        cache_metadata: ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata,
         images: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeImagesResponse::Image]),
         success: ContextDev::Models::WebWebScrapeImagesResponse::Success,
         url: String,
@@ -202,6 +210,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        cache_metadata: ContextDev::Models::WebWebScrapeMdResponse::CacheMetadata,
         content_length: Integer,
         markdown: String,
         metadata: ContextDev::Models::WebWebScrapeMdResponse::Metadata,
