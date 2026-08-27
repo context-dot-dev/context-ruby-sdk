@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.12.0...v2.13.0) (2026-08-27)
+
+
+### Features
+
+* initial stlc build ([bf63ae0](https://github.com/context-dot-dev/context-ruby-sdk/commit/bf63ae0769d9756a0b36480fd0c2d05ae939997c))
+
 ## 2.12.0 (2026-08-23)
 
 Full Changelog: [v2.11.0...v2.12.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.11.0...v2.12.0)
