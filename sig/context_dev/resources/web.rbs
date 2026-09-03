@@ -164,6 +164,7 @@ module ContextDev
       def web_scrape_sitemap: (
         domain: String,
         ?headers: ::Hash[Symbol, String],
+        ?include_subdomains: bool,
         ?max_links: Integer,
         ?search: String,
         ?sitemap_url: String,
