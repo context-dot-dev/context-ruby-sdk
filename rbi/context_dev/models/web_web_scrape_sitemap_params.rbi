@@ -27,6 +27,14 @@ module ContextDev
       sig { params(headers: T::Hash[Symbol, String]).void }
       attr_writer :headers
 
+      # When true, discover and include public pages and sitemaps on subdomains of the
+      # requested domain. Defaults to false.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :include_subdomains
+
+      sig { params(include_subdomains: T::Boolean).void }
+      attr_writer :include_subdomains
+
       # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
       # Minimum is 1, maximum is 100,000.
       sig { returns(T.nilable(Integer)) }
@@ -96,6 +104,7 @@ module ContextDev
         params(
           domain: String,
           headers: T::Hash[Symbol, String],
+          include_subdomains: T::Boolean,
           max_links: Integer,
           search: String,
           sitemap_url: String,
@@ -113,6 +122,9 @@ module ContextDev
         # deep-object query params such as headers[X-Custom]=value. When provided, caching
         # is bypassed: the result is neither read from nor written to cache.
         headers: nil,
+        # When true, discover and include public pages and sitemaps on subdomains of the
+        # requested domain. Defaults to false.
+        include_subdomains: nil,
         # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
         # Minimum is 1, maximum is 100,000.
         max_links: nil,
@@ -148,6 +160,7 @@ module ContextDev
           {
             domain: String,
             headers: T::Hash[Symbol, String],
+            include_subdomains: T::Boolean,
             max_links: Integer,
             search: String,
             sitemap_url: String,
