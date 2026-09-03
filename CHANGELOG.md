@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.14.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.13.0...v2.14.0) (2026-09-03)
+
+
+### Features
+
+* **sitemap:** add subdomain discovery ([5630b67](https://github.com/context-dot-dev/context-ruby-sdk/commit/5630b67ab555ab5dabd06b0ade2c4d2837f13423))
+
+
+### Bug Fixes
+
+* **openapi:** strip empty-object defaults from the generated spec ([fcbb393](https://github.com/context-dot-dev/context-ruby-sdk/commit/fcbb393067fd9058bb2d443bd2a8f2a9e4b8f17c))
+
 ## [2.13.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.12.0...v2.13.0) (2026-08-27)
 
 
