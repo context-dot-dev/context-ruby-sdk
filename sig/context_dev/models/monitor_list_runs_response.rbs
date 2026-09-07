@@ -43,7 +43,8 @@ module ContextDev
           skip_reason: ContextDev::Models::MonitorListRunsResponse::Data::skip_reason?,
           started_at: Time?,
           webhook_deliveries: ::Array[ContextDev::WebhookDelivery],
-          webhook_delivery: ContextDev::WebhookDelivery
+          webhook_delivery: ContextDev::WebhookDelivery,
+          webhook_delivery_ids: ::Array[String]
         }
 
       class Data < ContextDev::Internal::Type::BaseModel
@@ -87,6 +88,10 @@ module ContextDev
           ContextDev::WebhookDelivery
         ) -> ContextDev::WebhookDelivery
 
+        attr_reader webhook_delivery_ids: ::Array[String]?
+
+        def webhook_delivery_ids=: (::Array[String]) -> ::Array[String]
+
         def initialize: (
           id: String,
           baseline_created: bool,
@@ -103,7 +108,8 @@ module ContextDev
           ?skip_reason: ContextDev::Models::MonitorListRunsResponse::Data::skip_reason?,
           ?started_at: Time?,
           ?webhook_deliveries: ::Array[ContextDev::WebhookDelivery],
-          ?webhook_delivery: ContextDev::WebhookDelivery
+          ?webhook_delivery: ContextDev::WebhookDelivery,
+          ?webhook_delivery_ids: ::Array[String]
         ) -> void
 
         def to_hash: -> {
@@ -122,7 +128,8 @@ module ContextDev
           skip_reason: ContextDev::Models::MonitorListRunsResponse::Data::skip_reason?,
           started_at: Time?,
           webhook_deliveries: ::Array[ContextDev::WebhookDelivery],
-          webhook_delivery: ContextDev::WebhookDelivery
+          webhook_delivery: ContextDev::WebhookDelivery,
+          webhook_delivery_ids: ::Array[String]
         }
 
         type change_detection_type = :exact | :semantic

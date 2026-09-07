@@ -1083,6 +1083,15 @@ module ContextDev
         end
         attr_writer :events
 
+        # Opt into durable webhook delivery. An empty object uses the default retry
+        # schedule. Omit retry to preserve legacy delivery behavior. The policy is
+        # snapshotted for each event.
+        sig { returns(T.nilable(ContextDev::RetryConfig)) }
+        attr_reader :retry_
+
+        sig { params(retry_: ContextDev::RetryConfig::OrHash).void }
+        attr_writer :retry_
+
         # Signing secret used to verify webhook authenticity. Each delivery includes an
         # `X-Context-Signature: t=<unix>,v1=<hmac>` header, where the HMAC is SHA-256 over
         # `"{t}.{rawRequestBody}"` keyed by this secret. Recompute it with a constant-time
@@ -1101,6 +1110,7 @@ module ContextDev
               T::Array[
                 ContextDev::Models::MonitorRetrieveResponse::Webhook::Event::OrSymbol
               ],
+            retry_: ContextDev::RetryConfig::OrHash,
             secret: String
           ).returns(T.attached_class)
         end
@@ -1112,6 +1122,10 @@ module ContextDev
           # that detected no change — and embeds the change when one was detected. Defaults
           # to `["change.detected"]` when omitted.
           events: nil,
+          # Opt into durable webhook delivery. An empty object uses the default retry
+          # schedule. Omit retry to preserve legacy delivery behavior. The policy is
+          # snapshotted for each event.
+          retry_: nil,
           # Signing secret used to verify webhook authenticity. Each delivery includes an
           # `X-Context-Signature: t=<unix>,v1=<hmac>` header, where the HMAC is SHA-256 over
           # `"{t}.{rawRequestBody}"` keyed by this secret. Recompute it with a constant-time
@@ -1129,6 +1143,7 @@ module ContextDev
                 T::Array[
                   ContextDev::Models::MonitorRetrieveResponse::Webhook::Event::TaggedSymbol
                 ],
+              retry_: ContextDev::RetryConfig,
               secret: String
             }
           )

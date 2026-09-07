@@ -99,7 +99,14 @@ module ContextDev
       #   @return [ContextDev::Models::BatchRetrieveResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::BatchRetrieveResponse::KeyMetadata }
 
-      # @!method initialize(id:, crawl:, credits:, failure:, format_:, input:, invalid_urls:, mode:, page_errors:, progress:, results:, status:, tags:, timing:, key_metadata: nil)
+      # @!attribute webhook_delivery_id
+      #   Retained completion delivery ID. Inspect or retry it through
+      #   /webhooks/deliveries/{delivery_id}. Present once the delivery has been retained.
+      #
+      #   @return [String, nil]
+      optional :webhook_delivery_id, String
+
+      # @!method initialize(id:, crawl:, credits:, failure:, format_:, input:, invalid_urls:, mode:, page_errors:, progress:, results:, status:, tags:, timing:, key_metadata: nil, webhook_delivery_id: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchRetrieveResponse} for more details.
       #
@@ -133,6 +140,8 @@ module ContextDev
       #   @param timing [ContextDev::Models::BatchRetrieveResponse::Timing]
       #
       #   @param key_metadata [ContextDev::Models::BatchRetrieveResponse::KeyMetadata] API key usage for this request.
+      #
+      #   @param webhook_delivery_id [String] Retained completion delivery ID. Inspect or retry it through /webhooks/deliverie
 
       # @see ContextDev::Models::BatchRetrieveResponse#credits
       class Credits < ContextDev::Internal::Type::BaseModel

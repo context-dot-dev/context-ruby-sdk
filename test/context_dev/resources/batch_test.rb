@@ -28,7 +28,8 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
         status: ContextDev::Models::BatchRetrieveResponse::Status,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
-        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata | nil
+        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata | nil,
+        webhook_delivery_id: String | nil
       }
     end
   end

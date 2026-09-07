@@ -16,7 +16,8 @@ module ContextDev
         status: ContextDev::Models::BatchRetrieveResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
-        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata
+        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
+        webhook_delivery_id: String
       }
 
     class BatchRetrieveResponse < ContextDev::Internal::Type::BaseModel
@@ -54,6 +55,10 @@ module ContextDev
         ContextDev::Models::BatchRetrieveResponse::KeyMetadata
       ) -> ContextDev::Models::BatchRetrieveResponse::KeyMetadata
 
+      attr_reader webhook_delivery_id: String?
+
+      def webhook_delivery_id=: (String) -> String
+
       def initialize: (
         id: String,
         crawl: ContextDev::CrawlControls?,
@@ -69,7 +74,8 @@ module ContextDev
         status: ContextDev::Models::BatchRetrieveResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
-        ?key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata
+        ?key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
+        ?webhook_delivery_id: String
       ) -> void
 
       def to_hash: -> {
@@ -87,7 +93,8 @@ module ContextDev
         status: ContextDev::Models::BatchRetrieveResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
-        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata
+        key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
+        webhook_delivery_id: String
       }
 
       type credits =

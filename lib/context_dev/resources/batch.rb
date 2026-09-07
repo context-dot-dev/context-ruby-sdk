@@ -139,13 +139,15 @@ module ContextDev
       #
       # Scrape 25K URLs or crawl large websites asynchronously.
       #
-      # @overload submit(input:, tags: nil, webhook_url: nil, idempotency_key: nil, request_options: {})
+      # @overload submit(input:, tags: nil, webhook: nil, webhook_url: nil, idempotency_key: nil, request_options: {})
       #
       # @param input [ContextDev::Models::BatchSubmitParams::Input::Scrape, ContextDev::Models::BatchSubmitParams::Input::Crawl] Body param: Choose a URL list or a site crawl.
       #
       # @param tags [Array<String>] Body param: Tags stored on the batch. Filter the batch list by them later.
       #
-      # @param webhook_url [String] Body param: URL notified when the batch finishes.
+      # @param webhook [ContextDev::Models::BatchSubmitParams::Webhook] Body param: Completion webhook settings. Cannot be combined with webhookUrl. Omi
+      #
+      # @param webhook_url [String] Body param: Legacy URL notified when the batch finishes. Preserves one best-effo
       #
       # @param idempotency_key [String] Header param: Any string unique to this submission. Retries with the same key re
       #

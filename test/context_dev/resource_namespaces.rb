@@ -3,6 +3,8 @@
 module ContextDev
   module Test
     module Resources
+      module Webhooks
+      end
     end
   end
 end

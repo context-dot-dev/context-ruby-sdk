@@ -124,7 +124,16 @@ module ContextDev
         #   @return [ContextDev::Models::WebhookDelivery, nil]
         optional :webhook_delivery, -> { ContextDev::WebhookDelivery }
 
-        # @!method initialize(id:, baseline_created:, change_detected:, change_detection_type:, credits_charged:, monitor_id:, run_type:, status:, target_type:, change_id: nil, completed_at: nil, error: nil, skip_reason: nil, started_at: nil, webhook_deliveries: nil, webhook_delivery: nil)
+        # @!attribute webhook_delivery_ids
+        #   Retained webhook deliveries for this run. Inspect their live state and attempt
+        #   history through /webhooks/deliveries. With webhook.retry configured, delivery is
+        #   asynchronous and the legacy webhook_delivery/webhook_deliveries outcomes are
+        #   omitted.
+        #
+        #   @return [Array<String>, nil]
+        optional :webhook_delivery_ids, ContextDev::Internal::Type::ArrayOf[String]
+
+        # @!method initialize(id:, baseline_created:, change_detected:, change_detection_type:, credits_charged:, monitor_id:, run_type:, status:, target_type:, change_id: nil, completed_at: nil, error: nil, skip_reason: nil, started_at: nil, webhook_deliveries: nil, webhook_delivery: nil, webhook_delivery_ids: nil)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::MonitorListAccountRunsResponse::Data} for more details.
         #
@@ -159,6 +168,8 @@ module ContextDev
         #   @param webhook_deliveries [Array<ContextDev::Models::WebhookDelivery>] All webhook deliveries attempted by this run — one per subscribed event that fir
         #
         #   @param webhook_delivery [ContextDev::Models::WebhookDelivery] Deprecated: use `webhook_deliveries`, which records every attempt now that a run
+        #
+        #   @param webhook_delivery_ids [Array<String>] Retained webhook deliveries for this run. Inspect their live state and attempt h
 
         # @see ContextDev::Models::MonitorListAccountRunsResponse::Data#change_detection_type
         module ChangeDetectionType

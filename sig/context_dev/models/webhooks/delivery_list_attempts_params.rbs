@@ -1,0 +1,49 @@
+module ContextDev
+  module Models
+    module Webhooks
+      type delivery_list_attempts_params =
+        {
+          delivery_id: String,
+          cursor: String,
+          limit: Integer,
+          tags: ::Array[String]
+        }
+        & ContextDev::Internal::Type::request_parameters
+
+      class DeliveryListAttemptsParams < ContextDev::Internal::Type::BaseModel
+        extend ContextDev::Internal::Type::RequestParameters::Converter
+        include ContextDev::Internal::Type::RequestParameters
+
+        attr_accessor delivery_id: String
+
+        attr_reader cursor: String?
+
+        def cursor=: (String) -> String
+
+        attr_reader limit: Integer?
+
+        def limit=: (Integer) -> Integer
+
+        attr_reader tags: ::Array[String]?
+
+        def tags=: (::Array[String]) -> ::Array[String]
+
+        def initialize: (
+          delivery_id: String,
+          ?cursor: String,
+          ?limit: Integer,
+          ?tags: ::Array[String],
+          ?request_options: ContextDev::request_opts
+        ) -> void
+
+        def to_hash: -> {
+          delivery_id: String,
+          cursor: String,
+          limit: Integer,
+          tags: ::Array[String],
+          request_options: ContextDev::RequestOptions
+        }
+      end
+    end
+  end
+end

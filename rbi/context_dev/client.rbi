@@ -42,6 +42,9 @@ module ContextDev
     sig { returns(ContextDev::Resources::Batch) }
     attr_reader :batch
 
+    sig { returns(ContextDev::Resources::Webhooks) }
+    attr_reader :webhooks
+
     sig { returns(ContextDev::Resources::People) }
     attr_reader :people
 

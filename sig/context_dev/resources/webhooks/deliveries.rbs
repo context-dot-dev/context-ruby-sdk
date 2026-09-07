@@ -1,0 +1,42 @@
+module ContextDev
+  module Resources
+    class Webhooks
+      class Deliveries
+        def retrieve: (
+          String delivery_id,
+          ?tags: ::Array[String],
+          ?request_options: ContextDev::request_opts
+        ) -> ContextDev::Models::Webhooks::DeliveryRetrieveResponse
+
+        def list: (
+          ?batch_id: String,
+          ?cursor: String,
+          ?limit: Integer,
+          ?monitor_id: String,
+          ?run_id: String,
+          ?status: ContextDev::Models::Webhooks::DeliveryListParams::status,
+          ?tags: ::Array[String],
+          ?request_options: ContextDev::request_opts
+        ) -> ContextDev::Models::Webhooks::DeliveryListResponse
+
+        def list_attempts: (
+          String delivery_id,
+          ?cursor: String,
+          ?limit: Integer,
+          ?tags: ::Array[String],
+          ?request_options: ContextDev::request_opts
+        ) -> ContextDev::Models::Webhooks::DeliveryListAttemptsResponse
+
+        def retry_: (
+          String delivery_id,
+          ?force: bool,
+          ?tags: ::Array[String],
+          ?idempotency_key: String,
+          ?request_options: ContextDev::request_opts
+        ) -> ContextDev::Models::Webhooks::DeliveryRetryResponse
+
+        def initialize: (client: ContextDev::Client) -> void
+      end
+    end
+  end
+end

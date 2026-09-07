@@ -1,0 +1,9 @@
+module ContextDev
+  module Resources
+    class Webhooks
+      attr_reader deliveries: ContextDev::Resources::Webhooks::Deliveries
+
+      def initialize: (client: ContextDev::Client) -> void
+    end
+  end
+end

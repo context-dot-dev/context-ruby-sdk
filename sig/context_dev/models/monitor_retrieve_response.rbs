@@ -436,6 +436,7 @@ module ContextDev
         {
           url: String,
           events: ::Array[ContextDev::Models::MonitorRetrieveResponse::Webhook::event],
+          retry_: ContextDev::RetryConfig,
           secret: String
         }
 
@@ -448,6 +449,10 @@ module ContextDev
           ::Array[ContextDev::Models::MonitorRetrieveResponse::Webhook::event]
         ) -> ::Array[ContextDev::Models::MonitorRetrieveResponse::Webhook::event]
 
+        attr_reader retry_: ContextDev::RetryConfig?
+
+        def retry_=: (ContextDev::RetryConfig) -> ContextDev::RetryConfig
+
         attr_reader secret: String?
 
         def secret=: (String) -> String
@@ -455,12 +460,14 @@ module ContextDev
         def initialize: (
           url: String,
           ?events: ::Array[ContextDev::Models::MonitorRetrieveResponse::Webhook::event],
+          ?retry_: ContextDev::RetryConfig,
           ?secret: String
         ) -> void
 
         def to_hash: -> {
           url: String,
           events: ::Array[ContextDev::Models::MonitorRetrieveResponse::Webhook::event],
+          retry_: ContextDev::RetryConfig,
           secret: String
         }
 

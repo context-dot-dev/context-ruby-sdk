@@ -172,6 +172,16 @@ module ContextDev
         end
         attr_writer :webhook_delivery
 
+        # Retained webhook deliveries for this run. Inspect their live state and attempt
+        # history through /webhooks/deliveries. With webhook.retry configured, delivery is
+        # asynchronous and the legacy webhook_delivery/webhook_deliveries outcomes are
+        # omitted.
+        sig { returns(T.nilable(T::Array[String])) }
+        attr_reader :webhook_delivery_ids
+
+        sig { params(webhook_delivery_ids: T::Array[String]).void }
+        attr_writer :webhook_delivery_ids
+
         sig do
           params(
             id: String,
@@ -199,7 +209,8 @@ module ContextDev
               ),
             started_at: T.nilable(Time),
             webhook_deliveries: T::Array[ContextDev::WebhookDelivery::OrHash],
-            webhook_delivery: ContextDev::WebhookDelivery::OrHash
+            webhook_delivery: ContextDev::WebhookDelivery::OrHash,
+            webhook_delivery_ids: T::Array[String]
           ).returns(T.attached_class)
         end
         def self.new(
@@ -231,7 +242,12 @@ module ContextDev
           # Deprecated: use `webhook_deliveries`, which records every attempt now that a run
           # can deliver multiple events. Omitted when no webhook was attempted, including
           # historical runs created before delivery tracking was added.
-          webhook_delivery: nil
+          webhook_delivery: nil,
+          # Retained webhook deliveries for this run. Inspect their live state and attempt
+          # history through /webhooks/deliveries. With webhook.retry configured, delivery is
+          # asynchronous and the legacy webhook_delivery/webhook_deliveries outcomes are
+          # omitted.
+          webhook_delivery_ids: nil
         )
         end
 
@@ -263,7 +279,8 @@ module ContextDev
                 ),
               started_at: T.nilable(Time),
               webhook_deliveries: T::Array[ContextDev::WebhookDelivery],
-              webhook_delivery: ContextDev::WebhookDelivery
+              webhook_delivery: ContextDev::WebhookDelivery,
+              webhook_delivery_ids: T::Array[String]
             }
           )
         end

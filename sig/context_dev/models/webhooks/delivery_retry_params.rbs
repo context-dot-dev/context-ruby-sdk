@@ -1,0 +1,49 @@
+module ContextDev
+  module Models
+    module Webhooks
+      type delivery_retry_params =
+        {
+          delivery_id: String,
+          force: bool,
+          tags: ::Array[String],
+          idempotency_key: String
+        }
+        & ContextDev::Internal::Type::request_parameters
+
+      class DeliveryRetryParams < ContextDev::Internal::Type::BaseModel
+        extend ContextDev::Internal::Type::RequestParameters::Converter
+        include ContextDev::Internal::Type::RequestParameters
+
+        attr_accessor delivery_id: String
+
+        attr_reader force: bool?
+
+        def force=: (bool) -> bool
+
+        attr_reader tags: ::Array[String]?
+
+        def tags=: (::Array[String]) -> ::Array[String]
+
+        attr_reader idempotency_key: String?
+
+        def idempotency_key=: (String) -> String
+
+        def initialize: (
+          delivery_id: String,
+          ?force: bool,
+          ?tags: ::Array[String],
+          ?idempotency_key: String,
+          ?request_options: ContextDev::request_opts
+        ) -> void
+
+        def to_hash: -> {
+          delivery_id: String,
+          force: bool,
+          tags: ::Array[String],
+          idempotency_key: String,
+          request_options: ContextDev::RequestOptions
+        }
+      end
+    end
+  end
+end

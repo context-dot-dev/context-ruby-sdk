@@ -1,0 +1,15 @@
+module ContextDev
+  module Models
+    type retry_config = { delays_seconds: ::Array[Integer] }
+
+    class RetryConfig < ContextDev::Internal::Type::BaseModel
+      attr_reader delays_seconds: ::Array[Integer]?
+
+      def delays_seconds=: (::Array[Integer]) -> ::Array[Integer]
+
+      def initialize: (?delays_seconds: ::Array[Integer]) -> void
+
+      def to_hash: -> { delays_seconds: ::Array[Integer] }
+    end
+  end
+end
