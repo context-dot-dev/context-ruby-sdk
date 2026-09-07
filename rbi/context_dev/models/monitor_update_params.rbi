@@ -720,6 +720,15 @@ module ContextDev
         end
         attr_writer :events
 
+        # Opt into durable webhook delivery. An empty object uses the default retry
+        # schedule. Omit retry to preserve legacy delivery behavior. The policy is
+        # snapshotted for each event.
+        sig { returns(T.nilable(ContextDev::RetryConfig)) }
+        attr_reader :retry_
+
+        sig { params(retry_: ContextDev::RetryConfig::OrHash).void }
+        attr_writer :retry_
+
         # Set to null to remove the webhook.
         sig do
           params(
@@ -727,7 +736,8 @@ module ContextDev
             events:
               T::Array[
                 ContextDev::MonitorUpdateParams::Webhook::Event::OrSymbol
-              ]
+              ],
+            retry_: ContextDev::RetryConfig::OrHash
           ).returns(T.attached_class)
         end
         def self.new(
@@ -737,7 +747,11 @@ module ContextDev
           # detects a change; `run.completed` fires on every completed run — including runs
           # that detected no change — and embeds the change when one was detected. Defaults
           # to `["change.detected"]` when omitted.
-          events: nil
+          events: nil,
+          # Opt into durable webhook delivery. An empty object uses the default retry
+          # schedule. Omit retry to preserve legacy delivery behavior. The policy is
+          # snapshotted for each event.
+          retry_: nil
         )
         end
 
@@ -749,6 +763,7 @@ module ContextDev
                 T::Array[
                   ContextDev::MonitorUpdateParams::Webhook::Event::OrSymbol
                 ],
+              retry_: ContextDev::RetryConfig,
               secret: String
             }
           )

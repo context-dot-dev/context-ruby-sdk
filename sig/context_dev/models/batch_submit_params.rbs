@@ -4,6 +4,7 @@ module ContextDev
       {
         input: ContextDev::Models::BatchSubmitParams::input,
         tags: ::Array[String],
+        webhook: ContextDev::BatchSubmitParams::Webhook,
         webhook_url: String,
         idempotency_key: String
       }
@@ -19,6 +20,12 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
+      attr_reader webhook: ContextDev::BatchSubmitParams::Webhook?
+
+      def webhook=: (
+        ContextDev::BatchSubmitParams::Webhook
+      ) -> ContextDev::BatchSubmitParams::Webhook
+
       attr_reader webhook_url: String?
 
       def webhook_url=: (String) -> String
@@ -30,6 +37,7 @@ module ContextDev
       def initialize: (
         input: ContextDev::Models::BatchSubmitParams::input,
         ?tags: ::Array[String],
+        ?webhook: ContextDev::BatchSubmitParams::Webhook,
         ?webhook_url: String,
         ?idempotency_key: String,
         ?request_options: ContextDev::request_opts
@@ -38,6 +46,7 @@ module ContextDev
       def to_hash: -> {
         input: ContextDev::Models::BatchSubmitParams::input,
         tags: ::Array[String],
+        webhook: ContextDev::BatchSubmitParams::Webhook,
         webhook_url: String,
         idempotency_key: String,
         request_options: ContextDev::RequestOptions
@@ -2697,6 +2706,20 @@ module ContextDev
         end
 
         def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::input]
+      end
+
+      type webhook = { url: String, retry_: ContextDev::RetryConfig }
+
+      class Webhook < ContextDev::Internal::Type::BaseModel
+        attr_accessor url: String
+
+        attr_reader retry_: ContextDev::RetryConfig?
+
+        def retry_=: (ContextDev::RetryConfig) -> ContextDev::RetryConfig
+
+        def initialize: (url: String, ?retry_: ContextDev::RetryConfig) -> void
+
+        def to_hash: -> { url: String, retry_: ContextDev::RetryConfig }
       end
     end
   end

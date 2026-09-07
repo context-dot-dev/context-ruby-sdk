@@ -29,7 +29,18 @@ module ContextDev
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # URL notified when the batch finishes.
+      # Completion webhook settings. Cannot be combined with webhookUrl. Omitting retry
+      # preserves legacy delivery; retry: {} opts into durable retries.
+      sig { returns(T.nilable(ContextDev::BatchSubmitParams::Webhook)) }
+      attr_reader :webhook
+
+      sig do
+        params(webhook: ContextDev::BatchSubmitParams::Webhook::OrHash).void
+      end
+      attr_writer :webhook
+
+      # Legacy URL notified when the batch finishes. Preserves one best-effort attempt.
+      # Cannot be combined with webhook.
       sig { returns(T.nilable(String)) }
       attr_reader :webhook_url
 
@@ -52,6 +63,7 @@ module ContextDev
               ContextDev::BatchSubmitParams::Input::Crawl::OrHash
             ),
           tags: T::Array[String],
+          webhook: ContextDev::BatchSubmitParams::Webhook::OrHash,
           webhook_url: String,
           idempotency_key: String,
           request_options: ContextDev::RequestOptions::OrHash
@@ -62,7 +74,11 @@ module ContextDev
         input:,
         # Tags stored on the batch. Filter the batch list by them later.
         tags: nil,
-        # URL notified when the batch finishes.
+        # Completion webhook settings. Cannot be combined with webhookUrl. Omitting retry
+        # preserves legacy delivery; retry: {} opts into durable retries.
+        webhook: nil,
+        # Legacy URL notified when the batch finishes. Preserves one best-effort attempt.
+        # Cannot be combined with webhook.
         webhook_url: nil,
         # Any string unique to this submission. Retries with the same key return the
         # original batch.
@@ -80,6 +96,7 @@ module ContextDev
                 ContextDev::BatchSubmitParams::Input::Crawl
               ),
             tags: T::Array[String],
+            webhook: ContextDev::BatchSubmitParams::Webhook,
             webhook_url: String,
             idempotency_key: String,
             request_options: ContextDev::RequestOptions
@@ -6475,6 +6492,50 @@ module ContextDev
           )
         end
         def self.variants
+        end
+      end
+
+      class Webhook < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::BatchSubmitParams::Webhook,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        sig { returns(String) }
+        attr_accessor :url
+
+        # Opt into durable webhook delivery. An empty object uses the default retry
+        # schedule. Omit retry to preserve legacy delivery behavior. The policy is
+        # snapshotted for each event.
+        sig { returns(T.nilable(ContextDev::RetryConfig)) }
+        attr_reader :retry_
+
+        sig { params(retry_: ContextDev::RetryConfig::OrHash).void }
+        attr_writer :retry_
+
+        # Completion webhook settings. Cannot be combined with webhookUrl. Omitting retry
+        # preserves legacy delivery; retry: {} opts into durable retries.
+        sig do
+          params(url: String, retry_: ContextDev::RetryConfig::OrHash).returns(
+            T.attached_class
+          )
+        end
+        def self.new(
+          url:,
+          # Opt into durable webhook delivery. An empty object uses the default retry
+          # schedule. Omit retry to preserve legacy delivery behavior. The policy is
+          # snapshotted for each event.
+          retry_: nil
+        )
+        end
+
+        sig do
+          override.returns({ url: String, retry_: ContextDev::RetryConfig })
+        end
+        def to_hash
         end
       end
     end

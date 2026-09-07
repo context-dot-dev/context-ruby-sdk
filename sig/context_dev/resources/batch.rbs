@@ -36,6 +36,7 @@ module ContextDev
       def submit: (
         input: ContextDev::Models::BatchSubmitParams::input,
         ?tags: ::Array[String],
+        ?webhook: ContextDev::BatchSubmitParams::Webhook,
         ?webhook_url: String,
         ?idempotency_key: String,
         ?request_options: ContextDev::request_opts

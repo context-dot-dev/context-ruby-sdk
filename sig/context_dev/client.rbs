@@ -26,6 +26,8 @@ module ContextDev
 
     attr_reader batch: ContextDev::Resources::Batch
 
+    attr_reader webhooks: ContextDev::Resources::Webhooks
+
     attr_reader people: ContextDev::Resources::People
 
     attr_reader news: ContextDev::Resources::News

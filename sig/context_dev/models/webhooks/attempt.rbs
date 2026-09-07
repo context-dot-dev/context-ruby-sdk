@@ -1,0 +1,81 @@
+module ContextDev
+  module Models
+    module Webhooks
+      type attempt =
+        {
+          id: String,
+          attempt: Integer,
+          completed_at: Time?,
+          error: ContextDev::Webhooks::Attempt::Error?,
+          http_status: Integer?,
+          started_at: Time,
+          trigger: ContextDev::Models::Webhooks::Attempt::trigger,
+          url: String
+        }
+
+      class Attempt < ContextDev::Internal::Type::BaseModel
+        attr_accessor id: String
+
+        attr_accessor attempt: Integer
+
+        attr_accessor completed_at: Time?
+
+        attr_accessor error: ContextDev::Webhooks::Attempt::Error?
+
+        attr_accessor http_status: Integer?
+
+        attr_accessor started_at: Time
+
+        attr_accessor trigger: ContextDev::Models::Webhooks::Attempt::trigger
+
+        attr_accessor url: String
+
+        def initialize: (
+          id: String,
+          attempt: Integer,
+          completed_at: Time?,
+          error: ContextDev::Webhooks::Attempt::Error?,
+          http_status: Integer?,
+          started_at: Time,
+          trigger: ContextDev::Models::Webhooks::Attempt::trigger,
+          url: String
+        ) -> void
+
+        def to_hash: -> {
+          id: String,
+          attempt: Integer,
+          completed_at: Time?,
+          error: ContextDev::Webhooks::Attempt::Error?,
+          http_status: Integer?,
+          started_at: Time,
+          trigger: ContextDev::Models::Webhooks::Attempt::trigger,
+          url: String
+        }
+
+        type error = { code: String, message: String }
+
+        class Error < ContextDev::Internal::Type::BaseModel
+          attr_accessor code: String
+
+          attr_accessor message: String
+
+          def initialize: (code: String, message: String) -> void
+
+          def to_hash: -> { code: String, message: String }
+        end
+
+        type trigger = :initial | :automatic | :manual
+
+        module Trigger
+          extend ContextDev::Internal::Type::Enum
+
+          INITIAL: :initial
+          AUTOMATIC: :automatic
+          MANUAL: :manual
+
+          def self?.values: -> ::Array[ContextDev::Models::Webhooks::Attempt::trigger]
+        end
+      end
+    end
+  end
+end

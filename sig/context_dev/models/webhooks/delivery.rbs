@@ -1,0 +1,221 @@
+module ContextDev
+  module Models
+    module Webhooks
+      type delivery =
+        {
+          id: String,
+          attempt_count: Integer,
+          created_at: Time,
+          delivered_at: Time?,
+          event: ContextDev::Models::Webhooks::Delivery::event,
+          event_id: String,
+          last_attempt: ContextDev::Webhooks::Delivery::LastAttempt,
+          last_error: ContextDev::Webhooks::Delivery::LastError?,
+          next_attempt_at: Time?,
+          retry_: ContextDev::RetryConfig,
+          retry_expires_at: Time,
+          source: ContextDev::Models::Webhooks::Delivery::source,
+          status: ContextDev::Models::Webhooks::Delivery::status,
+          url: String
+        }
+
+      class Delivery < ContextDev::Internal::Type::BaseModel
+        attr_accessor id: String
+
+        attr_accessor attempt_count: Integer
+
+        attr_accessor created_at: Time
+
+        attr_accessor delivered_at: Time?
+
+        attr_accessor event: ContextDev::Models::Webhooks::Delivery::event
+
+        attr_accessor event_id: String
+
+        attr_accessor last_attempt: ContextDev::Webhooks::Delivery::LastAttempt
+
+        attr_accessor last_error: ContextDev::Webhooks::Delivery::LastError?
+
+        attr_accessor next_attempt_at: Time?
+
+        attr_accessor retry_: ContextDev::RetryConfig
+
+        attr_accessor retry_expires_at: Time
+
+        attr_accessor source: ContextDev::Models::Webhooks::Delivery::source
+
+        attr_accessor status: ContextDev::Models::Webhooks::Delivery::status
+
+        attr_accessor url: String
+
+        def initialize: (
+          id: String,
+          attempt_count: Integer,
+          created_at: Time,
+          delivered_at: Time?,
+          event: ContextDev::Models::Webhooks::Delivery::event,
+          event_id: String,
+          last_attempt: ContextDev::Webhooks::Delivery::LastAttempt,
+          last_error: ContextDev::Webhooks::Delivery::LastError?,
+          next_attempt_at: Time?,
+          retry_: ContextDev::RetryConfig,
+          retry_expires_at: Time,
+          source: ContextDev::Models::Webhooks::Delivery::source,
+          status: ContextDev::Models::Webhooks::Delivery::status,
+          url: String
+        ) -> void
+
+        def to_hash: -> {
+          id: String,
+          attempt_count: Integer,
+          created_at: Time,
+          delivered_at: Time?,
+          event: ContextDev::Models::Webhooks::Delivery::event,
+          event_id: String,
+          last_attempt: ContextDev::Webhooks::Delivery::LastAttempt,
+          last_error: ContextDev::Webhooks::Delivery::LastError?,
+          next_attempt_at: Time?,
+          retry_: ContextDev::RetryConfig,
+          retry_expires_at: Time,
+          source: ContextDev::Models::Webhooks::Delivery::source,
+          status: ContextDev::Models::Webhooks::Delivery::status,
+          url: String
+        }
+
+        type event =
+          :"batch.completed"
+          | :"batch.failed"
+          | :"batch.cancelled"
+          | :"change.detected"
+          | :"run.completed"
+
+        module Event
+          extend ContextDev::Internal::Type::Enum
+
+          BATCH_COMPLETED: :"batch.completed"
+          BATCH_FAILED: :"batch.failed"
+          BATCH_CANCELLED: :"batch.cancelled"
+          CHANGE_DETECTED: :"change.detected"
+          RUN_COMPLETED: :"run.completed"
+
+          def self?.values: -> ::Array[ContextDev::Models::Webhooks::Delivery::event]
+        end
+
+        type last_attempt = {  }
+
+        class LastAttempt < ContextDev::Models::Webhooks::Attempt
+          def initialize: -> void
+
+          def to_hash: -> {  }
+        end
+
+        type last_error = { code: String, message: String }
+
+        class LastError < ContextDev::Internal::Type::BaseModel
+          attr_accessor code: String
+
+          attr_accessor message: String
+
+          def initialize: (code: String, message: String) -> void
+
+          def to_hash: -> { code: String, message: String }
+        end
+
+        type source =
+          ContextDev::Webhooks::Delivery::Source::UnionMember0
+          | ContextDev::Webhooks::Delivery::Source::UnionMember1
+
+        module Source
+          extend ContextDev::Internal::Type::Union
+
+          type union_member0 =
+            {
+              batch_id: String,
+              type: ContextDev::Models::Webhooks::Delivery::Source::UnionMember0::type_
+            }
+
+          class UnionMember0 < ContextDev::Internal::Type::BaseModel
+            attr_accessor batch_id: String
+
+            attr_accessor type: ContextDev::Models::Webhooks::Delivery::Source::UnionMember0::type_
+
+            def initialize: (
+              batch_id: String,
+              type: ContextDev::Models::Webhooks::Delivery::Source::UnionMember0::type_
+            ) -> void
+
+            def to_hash: -> {
+              batch_id: String,
+              type: ContextDev::Models::Webhooks::Delivery::Source::UnionMember0::type_
+            }
+
+            type type_ = :batch
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              BATCH: :batch
+
+              def self?.values: -> ::Array[ContextDev::Models::Webhooks::Delivery::Source::UnionMember0::type_]
+            end
+          end
+
+          type union_member1 =
+            {
+              monitor_id: String,
+              run_id: String,
+              type: ContextDev::Models::Webhooks::Delivery::Source::UnionMember1::type_
+            }
+
+          class UnionMember1 < ContextDev::Internal::Type::BaseModel
+            attr_accessor monitor_id: String
+
+            attr_accessor run_id: String
+
+            attr_accessor type: ContextDev::Models::Webhooks::Delivery::Source::UnionMember1::type_
+
+            def initialize: (
+              monitor_id: String,
+              run_id: String,
+              type: ContextDev::Models::Webhooks::Delivery::Source::UnionMember1::type_
+            ) -> void
+
+            def to_hash: -> {
+              monitor_id: String,
+              run_id: String,
+              type: ContextDev::Models::Webhooks::Delivery::Source::UnionMember1::type_
+            }
+
+            type type_ = :monitor
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              MONITOR: :monitor
+
+              def self?.values: -> ::Array[ContextDev::Models::Webhooks::Delivery::Source::UnionMember1::type_]
+            end
+          end
+
+          def self?.variants: -> ::Array[ContextDev::Models::Webhooks::Delivery::source]
+        end
+
+        type status =
+          :pending | :delivering | :retrying | :delivered | :failed | :cancelled
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          PENDING: :pending
+          DELIVERING: :delivering
+          RETRYING: :retrying
+          DELIVERED: :delivered
+          FAILED: :failed
+          CANCELLED: :cancelled
+
+          def self?.values: -> ::Array[ContextDev::Models::Webhooks::Delivery::status]
+        end
+      end
+    end
+  end
+end

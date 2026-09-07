@@ -41,7 +41,14 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebhookDelivery::Status]
       required :status, enum: -> { ContextDev::WebhookDelivery::Status }
 
-      # @!method initialize(attempted_at:, error:, event:, event_id:, http_status:, status:)
+      # @!attribute delivery_id
+      #   Retained delivery ID for GET /webhooks/deliveries/{delivery_id}. Omitted for
+      #   historical or unretained deliveries.
+      #
+      #   @return [String, nil]
+      optional :delivery_id, String
+
+      # @!method initialize(attempted_at:, error:, event:, event_id:, http_status:, status:, delivery_id: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebhookDelivery} for more details.
       #
@@ -56,6 +63,8 @@ module ContextDev
       #   @param http_status [Integer, nil] The endpoint's final HTTP response status, or null when no response was received
       #
       #   @param status [Symbol, ContextDev::Models::WebhookDelivery::Status] Delivery outcome. delivered means any 2xx response; rejected means a non-2xx res
+      #
+      #   @param delivery_id [String] Retained delivery ID for GET /webhooks/deliveries/{delivery_id}. Omitted for his
 
       # @see ContextDev::Models::WebhookDelivery#error
       class Error < ContextDev::Internal::Type::BaseModel

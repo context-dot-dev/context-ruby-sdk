@@ -65,6 +65,8 @@ module ContextDev
 
   class PersonEnrichParams = ContextDev::Models::PersonEnrichParams
 
+  class RetryConfig = ContextDev::Models::RetryConfig
+
   class UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 
   class WebExtractCompetitorsParams = ContextDev::Models::WebExtractCompetitorsParams
@@ -76,6 +78,8 @@ module ContextDev
   class WebExtractStyleguideParams = ContextDev::Models::WebExtractStyleguideParams
 
   class WebhookDelivery = ContextDev::Models::WebhookDelivery
+
+  module Webhooks = ContextDev::Models::Webhooks
 
   class WebScreenshotParams = ContextDev::Models::WebScreenshotParams
 

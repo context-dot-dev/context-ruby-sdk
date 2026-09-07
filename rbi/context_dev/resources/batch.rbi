@@ -111,6 +111,7 @@ module ContextDev
               ContextDev::BatchSubmitParams::Input::Crawl::OrHash
             ),
           tags: T::Array[String],
+          webhook: ContextDev::BatchSubmitParams::Webhook::OrHash,
           webhook_url: String,
           idempotency_key: String,
           request_options: ContextDev::RequestOptions::OrHash
@@ -121,7 +122,11 @@ module ContextDev
         input:,
         # Body param: Tags stored on the batch. Filter the batch list by them later.
         tags: nil,
-        # Body param: URL notified when the batch finishes.
+        # Body param: Completion webhook settings. Cannot be combined with webhookUrl.
+        # Omitting retry preserves legacy delivery; retry: {} opts into durable retries.
+        webhook: nil,
+        # Body param: Legacy URL notified when the batch finishes. Preserves one
+        # best-effort attempt. Cannot be combined with webhook.
         webhook_url: nil,
         # Header param: Any string unique to this submission. Retries with the same key
         # return the original batch.

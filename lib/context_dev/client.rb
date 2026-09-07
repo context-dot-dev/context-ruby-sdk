@@ -47,6 +47,9 @@ module ContextDev
     # @return [ContextDev::Resources::Batch]
     attr_reader :batch
 
+    # @return [ContextDev::Resources::Webhooks]
+    attr_reader :webhooks
+
     # @return [ContextDev::Resources::People]
     attr_reader :people
 
@@ -123,6 +126,7 @@ module ContextDev
       @utility = ContextDev::Resources::Utility.new(client: self)
       @monitors = ContextDev::Resources::Monitors.new(client: self)
       @batch = ContextDev::Resources::Batch.new(client: self)
+      @webhooks = ContextDev::Resources::Webhooks.new(client: self)
       @people = ContextDev::Resources::People.new(client: self)
       @news = ContextDev::Resources::News.new(client: self)
     end

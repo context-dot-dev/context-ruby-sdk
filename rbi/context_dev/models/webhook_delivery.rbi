@@ -41,6 +41,14 @@ module ContextDev
       sig { returns(ContextDev::WebhookDelivery::Status::TaggedSymbol) }
       attr_accessor :status
 
+      # Retained delivery ID for GET /webhooks/deliveries/{delivery_id}. Omitted for
+      # historical or unretained deliveries.
+      sig { returns(T.nilable(String)) }
+      attr_reader :delivery_id
+
+      sig { params(delivery_id: String).void }
+      attr_writer :delivery_id
+
       sig do
         params(
           attempted_at: Time,
@@ -48,7 +56,8 @@ module ContextDev
           event: ContextDev::WebhookDelivery::Event::OrSymbol,
           event_id: String,
           http_status: T.nilable(Integer),
-          status: ContextDev::WebhookDelivery::Status::OrSymbol
+          status: ContextDev::WebhookDelivery::Status::OrSymbol,
+          delivery_id: String
         ).returns(T.attached_class)
       end
       def self.new(
@@ -65,7 +74,10 @@ module ContextDev
         # Delivery outcome. delivered means any 2xx response; rejected means a non-2xx
         # response; failed means no HTTP response was received; skipped_unsafe_url means
         # the URL failed the public-endpoint safety check.
-        status:
+        status:,
+        # Retained delivery ID for GET /webhooks/deliveries/{delivery_id}. Omitted for
+        # historical or unretained deliveries.
+        delivery_id: nil
       )
       end
 
@@ -77,7 +89,8 @@ module ContextDev
             event: ContextDev::WebhookDelivery::Event::TaggedSymbol,
             event_id: String,
             http_status: T.nilable(Integer),
-            status: ContextDev::WebhookDelivery::Status::TaggedSymbol
+            status: ContextDev::WebhookDelivery::Status::TaggedSymbol,
+            delivery_id: String
           }
         )
       end

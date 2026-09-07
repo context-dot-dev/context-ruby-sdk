@@ -19,8 +19,16 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
+      # @!attribute webhook
+      #   Completion webhook settings. Cannot be combined with webhookUrl. Omitting retry
+      #   preserves legacy delivery; retry: {} opts into durable retries.
+      #
+      #   @return [ContextDev::Models::BatchSubmitParams::Webhook, nil]
+      optional :webhook, -> { ContextDev::BatchSubmitParams::Webhook }
+
       # @!attribute webhook_url
-      #   URL notified when the batch finishes.
+      #   Legacy URL notified when the batch finishes. Preserves one best-effort attempt.
+      #   Cannot be combined with webhook.
       #
       #   @return [String, nil]
       optional :webhook_url, String, api_name: :webhookUrl
@@ -32,7 +40,7 @@ module ContextDev
       #   @return [String, nil]
       optional :idempotency_key, String
 
-      # @!method initialize(input:, tags: nil, webhook_url: nil, idempotency_key: nil, request_options: {})
+      # @!method initialize(input:, tags: nil, webhook: nil, webhook_url: nil, idempotency_key: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchSubmitParams} for more details.
       #
@@ -40,7 +48,9 @@ module ContextDev
       #
       #   @param tags [Array<String>] Tags stored on the batch. Filter the batch list by them later.
       #
-      #   @param webhook_url [String] URL notified when the batch finishes.
+      #   @param webhook [ContextDev::Models::BatchSubmitParams::Webhook] Completion webhook settings. Cannot be combined with webhookUrl. Omitting retry
+      #
+      #   @param webhook_url [String] Legacy URL notified when the batch finishes. Preserves one best-effort attempt.
       #
       #   @param idempotency_key [String] Any string unique to this submission. Retries with the same key return the origi
       #
@@ -2104,6 +2114,32 @@ module ContextDev
 
         # @!method self.variants
         #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Scrape, ContextDev::Models::BatchSubmitParams::Input::Crawl)]
+      end
+
+      class Webhook < ContextDev::Internal::Type::BaseModel
+        # @!attribute url
+        #
+        #   @return [String]
+        required :url, String
+
+        # @!attribute retry_
+        #   Opt into durable webhook delivery. An empty object uses the default retry
+        #   schedule. Omit retry to preserve legacy delivery behavior. The policy is
+        #   snapshotted for each event.
+        #
+        #   @return [ContextDev::Models::RetryConfig, nil]
+        optional :retry_, -> { ContextDev::RetryConfig }, api_name: :retry
+
+        # @!method initialize(url:, retry_: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::BatchSubmitParams::Webhook} for more details.
+        #
+        #   Completion webhook settings. Cannot be combined with webhookUrl. Omitting retry
+        #   preserves legacy delivery; retry: {} opts into durable retries.
+        #
+        #   @param url [String]
+        #
+        #   @param retry_ [ContextDev::Models::RetryConfig] Opt into durable webhook delivery. An empty object uses the default retry schedu
       end
     end
   end

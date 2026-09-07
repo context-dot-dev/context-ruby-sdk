@@ -647,6 +647,14 @@ module ContextDev
           optional :events,
                    -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::Models::MonitorListResponse::Data::Webhook::Event] }
 
+          # @!attribute retry_
+          #   Opt into durable webhook delivery. An empty object uses the default retry
+          #   schedule. Omit retry to preserve legacy delivery behavior. The policy is
+          #   snapshotted for each event.
+          #
+          #   @return [ContextDev::Models::RetryConfig, nil]
+          optional :retry_, -> { ContextDev::RetryConfig }, api_name: :retry
+
           response_only do
             # @!attribute secret
             #   Signing secret used to verify webhook authenticity. Each delivery includes an
@@ -659,13 +667,15 @@ module ContextDev
             optional :secret, String
           end
 
-          # @!method initialize(url:, events: nil, secret: nil)
+          # @!method initialize(url:, events: nil, retry_: nil, secret: nil)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorListResponse::Data::Webhook} for more details.
           #
           #   @param url [String] Webhook URL events are delivered to.
           #
           #   @param events [Array<Symbol, ContextDev::Models::MonitorListResponse::Data::Webhook::Event>] Events delivered to this endpoint. `change.detected` fires only when a run detec
+          #
+          #   @param retry_ [ContextDev::Models::RetryConfig] Opt into durable webhook delivery. An empty object uses the default retry schedu
           #
           #   @param secret [String] Signing secret used to verify webhook authenticity. Each delivery includes an `X
 

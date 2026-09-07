@@ -137,6 +137,14 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # Retained completion delivery ID. Inspect or retry it through
+      # /webhooks/deliveries/{delivery_id}. Present once the delivery has been retained.
+      sig { returns(T.nilable(String)) }
+      attr_reader :webhook_delivery_id
+
+      sig { params(webhook_delivery_id: String).void }
+      attr_writer :webhook_delivery_id
+
       sig do
         params(
           id: String,
@@ -160,7 +168,8 @@ module ContextDev
           tags: T::Array[String],
           timing: ContextDev::Models::BatchRetrieveResponse::Timing::OrHash,
           key_metadata:
-            ContextDev::Models::BatchRetrieveResponse::KeyMetadata::OrHash
+            ContextDev::Models::BatchRetrieveResponse::KeyMetadata::OrHash,
+          webhook_delivery_id: String
         ).returns(T.attached_class)
       end
       def self.new(
@@ -197,7 +206,10 @@ module ContextDev
         tags:,
         timing:,
         # API key usage for this request.
-        key_metadata: nil
+        key_metadata: nil,
+        # Retained completion delivery ID. Inspect or retry it through
+        # /webhooks/deliveries/{delivery_id}. Present once the delivery has been retained.
+        webhook_delivery_id: nil
       )
       end
 
@@ -222,7 +234,9 @@ module ContextDev
               ContextDev::Models::BatchRetrieveResponse::Status::TaggedSymbol,
             tags: T::Array[String],
             timing: ContextDev::Models::BatchRetrieveResponse::Timing,
-            key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata
+            key_metadata:
+              ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
+            webhook_delivery_id: String
           }
         )
       end
