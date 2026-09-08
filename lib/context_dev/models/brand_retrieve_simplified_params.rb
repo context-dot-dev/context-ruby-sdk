@@ -23,9 +23,8 @@ module ContextDev
       optional :max_age_ms, Integer, nil?: true
 
       # @!attribute tags
-      #   Optional comma-separated caller-defined tags for tracking this request. Tags are
-      #   recorded on the request's usage log and can be used to filter usage on the
-      #   dashboard usage page. Up to 20 tags, each 1-50 characters.
+      #   Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+      #   characters.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -52,7 +51,7 @@ module ContextDev
       #
       #   @param max_age_ms [Integer, nil] Maximum age in milliseconds for cached brand data before the API performs a hard
       #
-      #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       #   @param theme [Symbol, ContextDev::Models::BrandRetrieveSimplifiedParams::Theme] Optional theme preference used when selecting brand assets.
       #

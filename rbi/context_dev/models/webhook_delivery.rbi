@@ -41,8 +41,7 @@ module ContextDev
       sig { returns(ContextDev::WebhookDelivery::Status::TaggedSymbol) }
       attr_accessor :status
 
-      # Retained delivery ID for GET /webhooks/deliveries/{delivery_id}. Omitted for
-      # historical or unretained deliveries.
+      # Delivery ID for status checks and retries, when available.
       sig { returns(T.nilable(String)) }
       attr_reader :delivery_id
 
@@ -75,8 +74,7 @@ module ContextDev
         # response; failed means no HTTP response was received; skipped_unsafe_url means
         # the URL failed the public-endpoint safety check.
         status:,
-        # Retained delivery ID for GET /webhooks/deliveries/{delivery_id}. Omitted for
-        # historical or unretained deliveries.
+        # Delivery ID for status checks and retries, when available.
         delivery_id: nil
       )
       end

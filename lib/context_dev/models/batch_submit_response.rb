@@ -238,13 +238,13 @@ module ContextDev
       # @see ContextDev::Models::BatchSubmitResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   The number of credits consumed by this request.
+        #   Credits used by this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   The number of credits remaining for your organization after this request.
+        #   Credits remaining for your organization.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -252,9 +252,9 @@ module ContextDev
         # @!method initialize(credits_consumed:, credits_remaining:)
         #   API key usage for this request.
         #
-        #   @param credits_consumed [Integer] The number of credits consumed by this request.
+        #   @param credits_consumed [Integer] Credits used by this request.
         #
-        #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
+        #   @param credits_remaining [Integer] Credits remaining for your organization.
       end
     end
   end

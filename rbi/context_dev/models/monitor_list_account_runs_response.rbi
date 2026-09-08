@@ -172,10 +172,7 @@ module ContextDev
         end
         attr_writer :webhook_delivery
 
-        # Retained webhook deliveries for this run. Inspect their live state and attempt
-        # history through /webhooks/deliveries. With webhook.retry configured, delivery is
-        # asynchronous and the legacy webhook_delivery/webhook_deliveries outcomes are
-        # omitted.
+        # Webhook delivery IDs for this run.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :webhook_delivery_ids
 
@@ -243,10 +240,7 @@ module ContextDev
           # can deliver multiple events. Omitted when no webhook was attempted, including
           # historical runs created before delivery tracking was added.
           webhook_delivery: nil,
-          # Retained webhook deliveries for this run. Inspect their live state and attempt
-          # history through /webhooks/deliveries. With webhook.retry configured, delivery is
-          # asynchronous and the legacy webhook_delivery/webhook_deliveries outcomes are
-          # omitted.
+          # Webhook delivery IDs for this run.
           webhook_delivery_ids: nil
         )
         end

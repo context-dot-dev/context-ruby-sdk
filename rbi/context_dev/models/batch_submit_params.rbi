@@ -6507,9 +6507,7 @@ module ContextDev
         sig { returns(String) }
         attr_accessor :url
 
-        # Opt into durable webhook delivery. An empty object uses the default retry
-        # schedule. Omit retry to preserve legacy delivery behavior. The policy is
-        # snapshotted for each event.
+        # Webhook retry settings. Use {} for the default schedule.
         sig { returns(T.nilable(ContextDev::RetryConfig)) }
         attr_reader :retry_
 
@@ -6525,9 +6523,7 @@ module ContextDev
         end
         def self.new(
           url:,
-          # Opt into durable webhook delivery. An empty object uses the default retry
-          # schedule. Omit retry to preserve legacy delivery behavior. The policy is
-          # snapshotted for each event.
+          # Webhook retry settings. Use {} for the default schedule.
           retry_: nil
         )
         end

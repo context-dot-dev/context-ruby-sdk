@@ -137,8 +137,7 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # Retained completion delivery ID. Inspect or retry it through
-      # /webhooks/deliveries/{delivery_id}. Present once the delivery has been retained.
+      # Batch completion delivery ID, when available.
       sig { returns(T.nilable(String)) }
       attr_reader :webhook_delivery_id
 
@@ -207,8 +206,7 @@ module ContextDev
         timing:,
         # API key usage for this request.
         key_metadata: nil,
-        # Retained completion delivery ID. Inspect or retry it through
-        # /webhooks/deliveries/{delivery_id}. Present once the delivery has been retained.
+        # Batch completion delivery ID, when available.
         webhook_delivery_id: nil
       )
       end
@@ -667,11 +665,11 @@ module ContextDev
             )
           end
 
-        # The number of credits consumed by this request.
+        # Credits used by this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # The number of credits remaining for your organization after this request.
+        # Credits remaining for your organization.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -682,9 +680,9 @@ module ContextDev
           )
         end
         def self.new(
-          # The number of credits consumed by this request.
+          # Credits used by this request.
           credits_consumed:,
-          # The number of credits remaining for your organization after this request.
+          # Credits remaining for your organization.
           credits_remaining:
         )
         end

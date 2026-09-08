@@ -387,9 +387,7 @@ module ContextDev
                  -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::MonitorCreateParams::Webhook::Event] }
 
         # @!attribute retry_
-        #   Opt into durable webhook delivery. An empty object uses the default retry
-        #   schedule. Omit retry to preserve legacy delivery behavior. The policy is
-        #   snapshotted for each event.
+        #   Webhook retry settings. Use {} for the default schedule.
         #
         #   @return [ContextDev::Models::RetryConfig, nil]
         optional :retry_, -> { ContextDev::RetryConfig }, api_name: :retry
@@ -402,7 +400,7 @@ module ContextDev
         #
         #   @param events [Array<Symbol, ContextDev::Models::MonitorCreateParams::Webhook::Event>] Events delivered to this endpoint. `change.detected` fires only when a run detec
         #
-        #   @param retry_ [ContextDev::Models::RetryConfig] Opt into durable webhook delivery. An empty object uses the default retry schedu
+        #   @param retry_ [ContextDev::Models::RetryConfig] Webhook retry settings. Use {} for the default schedule.
 
         module Event
           extend ContextDev::Internal::Type::Enum

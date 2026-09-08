@@ -93,9 +93,8 @@ module ContextDev
       optional :scroll_offset, Integer, nil?: true
 
       # @!attribute tags
-      #   Optional comma-separated caller-defined tags for tracking this request. Tags are
-      #   recorded on the request's usage log and can be used to filter usage on the
-      #   dashboard usage page. Up to 20 tags, each 1-50 characters.
+      #   Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+      #   characters.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -155,7 +154,7 @@ module ContextDev
       #
       #   @param scroll_offset [Integer, nil] Optional vertical scroll offset in pixels for capturing a long page in viewport-
       #
-      #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

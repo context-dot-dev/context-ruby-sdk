@@ -3,7 +3,7 @@
 module ContextDev
   module Models
     module Webhooks
-      class Delivery < ContextDev::Internal::Type::BaseModel
+      class DeliverySummary < ContextDev::Internal::Type::BaseModel
         # @!attribute id
         #   Delivery ID.
         #
@@ -25,38 +25,20 @@ module ContextDev
         # @!attribute event
         #   Webhook event type.
         #
-        #   @return [Symbol, ContextDev::Models::Webhooks::Delivery::Event]
-        required :event, enum: -> { ContextDev::Webhooks::Delivery::Event }
-
-        # @!attribute event_id
-        #   Stable event ID for deduplicating received webhooks.
-        #
-        #   @return [String]
-        required :event_id, String
-
-        # @!attribute last_attempt
-        #   Latest attempt, or null if none.
-        #
-        #   @return [ContextDev::Models::Webhooks::Attempt, nil]
-        required :last_attempt, -> { ContextDev::Webhooks::Attempt }, nil?: true
+        #   @return [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Event]
+        required :event, enum: -> { ContextDev::Webhooks::DeliverySummary::Event }
 
         # @!attribute last_error
         #   Latest delivery error, or null if none.
         #
-        #   @return [ContextDev::Models::Webhooks::Delivery::LastError, nil]
-        required :last_error, -> { ContextDev::Webhooks::Delivery::LastError }, nil?: true
+        #   @return [ContextDev::Models::Webhooks::DeliverySummary::LastError, nil]
+        required :last_error, -> { ContextDev::Webhooks::DeliverySummary::LastError }, nil?: true
 
         # @!attribute next_attempt_at
         #   Next scheduled attempt, or null if none.
         #
         #   @return [Time, nil]
         required :next_attempt_at, Time, nil?: true
-
-        # @!attribute retry_
-        #   Webhook retry settings. Use {} for the default schedule.
-        #
-        #   @return [ContextDev::Models::RetryConfig]
-        required :retry_, -> { ContextDev::RetryConfig }, api_name: :retry
 
         # @!attribute retry_expires_at
         #   Manual retry deadline, seven days after event creation.
@@ -67,14 +49,14 @@ module ContextDev
         # @!attribute source
         #   Batch or monitor run that produced the event.
         #
-        #   @return [ContextDev::Models::Webhooks::Delivery::Source::Batch, ContextDev::Models::Webhooks::Delivery::Source::Monitor]
-        required :source, union: -> { ContextDev::Webhooks::Delivery::Source }
+        #   @return [ContextDev::Models::Webhooks::DeliverySummary::Source::Batch, ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor]
+        required :source, union: -> { ContextDev::Webhooks::DeliverySummary::Source }
 
         # @!attribute status
         #   Current delivery status.
         #
-        #   @return [Symbol, ContextDev::Models::Webhooks::Delivery::Status]
-        required :status, enum: -> { ContextDev::Webhooks::Delivery::Status }
+        #   @return [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Status]
+        required :status, enum: -> { ContextDev::Webhooks::DeliverySummary::Status }
 
         # @!attribute url
         #   Webhook destination URL.
@@ -82,36 +64,30 @@ module ContextDev
         #   @return [String]
         required :url, String
 
-        # @!method initialize(id:, created_at:, delivered_at:, event:, event_id:, last_attempt:, last_error:, next_attempt_at:, retry_:, retry_expires_at:, source:, status:, url:)
+        # @!method initialize(id:, created_at:, delivered_at:, event:, last_error:, next_attempt_at:, retry_expires_at:, source:, status:, url:)
         #   @param id [String] Delivery ID.
         #
         #   @param created_at [Time] Event creation time.
         #
         #   @param delivered_at [Time, nil] Last successful delivery time, or null if never delivered.
         #
-        #   @param event [Symbol, ContextDev::Models::Webhooks::Delivery::Event] Webhook event type.
+        #   @param event [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Event] Webhook event type.
         #
-        #   @param event_id [String] Stable event ID for deduplicating received webhooks.
-        #
-        #   @param last_attempt [ContextDev::Models::Webhooks::Attempt, nil] Latest attempt, or null if none.
-        #
-        #   @param last_error [ContextDev::Models::Webhooks::Delivery::LastError, nil] Latest delivery error, or null if none.
+        #   @param last_error [ContextDev::Models::Webhooks::DeliverySummary::LastError, nil] Latest delivery error, or null if none.
         #
         #   @param next_attempt_at [Time, nil] Next scheduled attempt, or null if none.
         #
-        #   @param retry_ [ContextDev::Models::RetryConfig] Webhook retry settings. Use {} for the default schedule.
-        #
         #   @param retry_expires_at [Time] Manual retry deadline, seven days after event creation.
         #
-        #   @param source [ContextDev::Models::Webhooks::Delivery::Source::Batch, ContextDev::Models::Webhooks::Delivery::Source::Monitor] Batch or monitor run that produced the event.
+        #   @param source [ContextDev::Models::Webhooks::DeliverySummary::Source::Batch, ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor] Batch or monitor run that produced the event.
         #
-        #   @param status [Symbol, ContextDev::Models::Webhooks::Delivery::Status] Current delivery status.
+        #   @param status [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Status] Current delivery status.
         #
         #   @param url [String] Webhook destination URL.
 
         # Webhook event type.
         #
-        # @see ContextDev::Models::Webhooks::Delivery#event
+        # @see ContextDev::Models::Webhooks::DeliverySummary#event
         module Event
           extend ContextDev::Internal::Type::Enum
 
@@ -125,7 +101,7 @@ module ContextDev
           #   @return [Array<Symbol>]
         end
 
-        # @see ContextDev::Models::Webhooks::Delivery#last_error
+        # @see ContextDev::Models::Webhooks::DeliverySummary#last_error
         class LastError < ContextDev::Internal::Type::BaseModel
           # @!attribute code
           #   Error code.
@@ -149,13 +125,13 @@ module ContextDev
 
         # Batch or monitor run that produced the event.
         #
-        # @see ContextDev::Models::Webhooks::Delivery#source
+        # @see ContextDev::Models::Webhooks::DeliverySummary#source
         module Source
           extend ContextDev::Internal::Type::Union
 
-          variant -> { ContextDev::Webhooks::Delivery::Source::Batch }
+          variant -> { ContextDev::Webhooks::DeliverySummary::Source::Batch }
 
-          variant -> { ContextDev::Webhooks::Delivery::Source::Monitor }
+          variant -> { ContextDev::Webhooks::DeliverySummary::Source::Monitor }
 
           class Batch < ContextDev::Internal::Type::BaseModel
             # @!attribute batch_id
@@ -167,17 +143,17 @@ module ContextDev
             # @!attribute type
             #   Delivery source.
             #
-            #   @return [Symbol, ContextDev::Models::Webhooks::Delivery::Source::Batch::Type]
-            required :type, enum: -> { ContextDev::Webhooks::Delivery::Source::Batch::Type }
+            #   @return [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Source::Batch::Type]
+            required :type, enum: -> { ContextDev::Webhooks::DeliverySummary::Source::Batch::Type }
 
             # @!method initialize(batch_id:, type:)
             #   @param batch_id [String] Batch ID.
             #
-            #   @param type [Symbol, ContextDev::Models::Webhooks::Delivery::Source::Batch::Type] Delivery source.
+            #   @param type [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Source::Batch::Type] Delivery source.
 
             # Delivery source.
             #
-            # @see ContextDev::Models::Webhooks::Delivery::Source::Batch#type
+            # @see ContextDev::Models::Webhooks::DeliverySummary::Source::Batch#type
             module Type
               extend ContextDev::Internal::Type::Enum
 
@@ -204,19 +180,19 @@ module ContextDev
             # @!attribute type
             #   Delivery source.
             #
-            #   @return [Symbol, ContextDev::Models::Webhooks::Delivery::Source::Monitor::Type]
-            required :type, enum: -> { ContextDev::Webhooks::Delivery::Source::Monitor::Type }
+            #   @return [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor::Type]
+            required :type, enum: -> { ContextDev::Webhooks::DeliverySummary::Source::Monitor::Type }
 
             # @!method initialize(monitor_id:, run_id:, type:)
             #   @param monitor_id [String] Monitor ID.
             #
             #   @param run_id [String] Monitor run ID.
             #
-            #   @param type [Symbol, ContextDev::Models::Webhooks::Delivery::Source::Monitor::Type] Delivery source.
+            #   @param type [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor::Type] Delivery source.
 
             # Delivery source.
             #
-            # @see ContextDev::Models::Webhooks::Delivery::Source::Monitor#type
+            # @see ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor#type
             module Type
               extend ContextDev::Internal::Type::Enum
 
@@ -228,12 +204,12 @@ module ContextDev
           end
 
           # @!method self.variants
-          #   @return [Array(ContextDev::Models::Webhooks::Delivery::Source::Batch, ContextDev::Models::Webhooks::Delivery::Source::Monitor)]
+          #   @return [Array(ContextDev::Models::Webhooks::DeliverySummary::Source::Batch, ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor)]
         end
 
         # Current delivery status.
         #
-        # @see ContextDev::Models::Webhooks::Delivery#status
+        # @see ContextDev::Models::Webhooks::DeliverySummary#status
         module Status
           extend ContextDev::Internal::Type::Enum
 

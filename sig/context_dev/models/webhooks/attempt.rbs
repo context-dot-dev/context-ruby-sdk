@@ -3,7 +3,6 @@ module ContextDev
     module Webhooks
       type attempt =
         {
-          id: String,
           attempt: Integer,
           completed_at: Time?,
           error: ContextDev::Webhooks::Attempt::Error?,
@@ -14,8 +13,6 @@ module ContextDev
         }
 
       class Attempt < ContextDev::Internal::Type::BaseModel
-        attr_accessor id: String
-
         attr_accessor attempt: Integer
 
         attr_accessor completed_at: Time?
@@ -31,7 +28,6 @@ module ContextDev
         attr_accessor url: String
 
         def initialize: (
-          id: String,
           attempt: Integer,
           completed_at: Time?,
           error: ContextDev::Webhooks::Attempt::Error?,
@@ -42,7 +38,6 @@ module ContextDev
         ) -> void
 
         def to_hash: -> {
-          id: String,
           attempt: Integer,
           completed_at: Time?,
           error: ContextDev::Webhooks::Attempt::Error?,

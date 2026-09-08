@@ -9,11 +9,13 @@ module ContextDev
         include ContextDev::Internal::Type::RequestParameters
 
         # @!attribute delivery_id
+        #   Delivery ID.
         #
         #   @return [String]
         required :delivery_id, String
 
         # @!attribute force
+        #   Resend a delivery that already succeeded.
         #
         #   @return [Boolean, nil]
         optional :force, ContextDev::Internal::Type::Boolean
@@ -25,18 +27,19 @@ module ContextDev
         optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
         # @!attribute idempotency_key
+        #   Unique key to prevent duplicate retry requests.
         #
         #   @return [String, nil]
         optional :idempotency_key, String
 
         # @!method initialize(delivery_id:, force: nil, tags: nil, idempotency_key: nil, request_options: {})
-        #   @param delivery_id [String]
+        #   @param delivery_id [String] Delivery ID.
         #
-        #   @param force [Boolean]
+        #   @param force [Boolean] Resend a delivery that already succeeded.
         #
         #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         #
-        #   @param idempotency_key [String]
+        #   @param idempotency_key [String] Unique key to prevent duplicate retry requests.
         #
         #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
       end

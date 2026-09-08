@@ -13,8 +13,7 @@ module ContextDev
       required :cache_metadata, -> { ContextDev::Models::AIExtractProductsResponse::CacheMetadata }
 
       # @!attribute key_metadata
-      #   Metadata about the API key used for the request. Included in every response
-      #   whenever a valid API key is provided, even when the response status is not 200.
+      #   Credit usage, included whenever a valid API key is provided.
       #
       #   @return [ContextDev::Models::AIExtractProductsResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::AIExtractProductsResponse::KeyMetadata }
@@ -32,7 +31,7 @@ module ContextDev
       #
       #   @param cache_metadata [ContextDev::Models::AIExtractProductsResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
-      #   @param key_metadata [ContextDev::Models::AIExtractProductsResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
+      #   @param key_metadata [ContextDev::Models::AIExtractProductsResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
       #
       #   @param products [Array<ContextDev::Models::AIExtractProductsResponse::Product>] Array of products extracted from the website
 
@@ -82,24 +81,23 @@ module ContextDev
       # @see ContextDev::Models::AIExtractProductsResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   The number of credits consumed by this request.
+        #   Credits used by this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   The number of credits remaining for your organization after this request.
+        #   Credits remaining for your organization.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Metadata about the API key used for the request. Included in every response
-        #   whenever a valid API key is provided, even when the response status is not 200.
+        #   Credit usage, included whenever a valid API key is provided.
         #
-        #   @param credits_consumed [Integer] The number of credits consumed by this request.
+        #   @param credits_consumed [Integer] Credits used by this request.
         #
-        #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
+        #   @param credits_remaining [Integer] Credits remaining for your organization.
       end
 
       class Product < ContextDev::Internal::Type::BaseModel

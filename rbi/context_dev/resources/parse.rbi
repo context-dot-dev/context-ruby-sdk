@@ -44,9 +44,8 @@ module ContextDev
         pdf: nil,
         # Query param: Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
-        # Query param: Optional comma-separated caller-defined tags for tracking this
-        # request. Tags are recorded on the request's usage log and can be used to filter
-        # usage on the dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Query param: Comma-separated tags for tracking request usage. Up to 20 tags,
+        # each 1-50 characters.
         tags: nil,
         # Query param: Extract only the main content from HTML-like inputs
         use_main_content_only: nil,

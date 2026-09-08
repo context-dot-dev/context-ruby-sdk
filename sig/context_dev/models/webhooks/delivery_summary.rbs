@@ -1,47 +1,38 @@
 module ContextDev
   module Models
     module Webhooks
-      type delivery =
+      type delivery_summary =
         {
           id: String,
           created_at: Time,
           delivered_at: Time?,
-          event: ContextDev::Models::Webhooks::Delivery::event,
-          event_id: String,
-          last_attempt: ContextDev::Webhooks::Attempt?,
-          last_error: ContextDev::Webhooks::Delivery::LastError?,
+          event: ContextDev::Models::Webhooks::DeliverySummary::event,
+          last_error: ContextDev::Webhooks::DeliverySummary::LastError?,
           next_attempt_at: Time?,
-          retry_: ContextDev::RetryConfig,
           retry_expires_at: Time,
-          source: ContextDev::Models::Webhooks::Delivery::source,
-          status: ContextDev::Models::Webhooks::Delivery::status,
+          source: ContextDev::Models::Webhooks::DeliverySummary::source,
+          status: ContextDev::Models::Webhooks::DeliverySummary::status,
           url: String
         }
 
-      class Delivery < ContextDev::Internal::Type::BaseModel
+      class DeliverySummary < ContextDev::Internal::Type::BaseModel
         attr_accessor id: String
 
         attr_accessor created_at: Time
 
         attr_accessor delivered_at: Time?
 
-        attr_accessor event: ContextDev::Models::Webhooks::Delivery::event
+        attr_accessor event: ContextDev::Models::Webhooks::DeliverySummary::event
 
-        attr_accessor event_id: String
-
-        attr_accessor last_attempt: ContextDev::Webhooks::Attempt?
-
-        attr_accessor last_error: ContextDev::Webhooks::Delivery::LastError?
+        attr_accessor last_error: ContextDev::Webhooks::DeliverySummary::LastError?
 
         attr_accessor next_attempt_at: Time?
 
-        attr_accessor retry_: ContextDev::RetryConfig
-
         attr_accessor retry_expires_at: Time
 
-        attr_accessor source: ContextDev::Models::Webhooks::Delivery::source
+        attr_accessor source: ContextDev::Models::Webhooks::DeliverySummary::source
 
-        attr_accessor status: ContextDev::Models::Webhooks::Delivery::status
+        attr_accessor status: ContextDev::Models::Webhooks::DeliverySummary::status
 
         attr_accessor url: String
 
@@ -49,15 +40,12 @@ module ContextDev
           id: String,
           created_at: Time,
           delivered_at: Time?,
-          event: ContextDev::Models::Webhooks::Delivery::event,
-          event_id: String,
-          last_attempt: ContextDev::Webhooks::Attempt?,
-          last_error: ContextDev::Webhooks::Delivery::LastError?,
+          event: ContextDev::Models::Webhooks::DeliverySummary::event,
+          last_error: ContextDev::Webhooks::DeliverySummary::LastError?,
           next_attempt_at: Time?,
-          retry_: ContextDev::RetryConfig,
           retry_expires_at: Time,
-          source: ContextDev::Models::Webhooks::Delivery::source,
-          status: ContextDev::Models::Webhooks::Delivery::status,
+          source: ContextDev::Models::Webhooks::DeliverySummary::source,
+          status: ContextDev::Models::Webhooks::DeliverySummary::status,
           url: String
         ) -> void
 
@@ -65,15 +53,12 @@ module ContextDev
           id: String,
           created_at: Time,
           delivered_at: Time?,
-          event: ContextDev::Models::Webhooks::Delivery::event,
-          event_id: String,
-          last_attempt: ContextDev::Webhooks::Attempt?,
-          last_error: ContextDev::Webhooks::Delivery::LastError?,
+          event: ContextDev::Models::Webhooks::DeliverySummary::event,
+          last_error: ContextDev::Webhooks::DeliverySummary::LastError?,
           next_attempt_at: Time?,
-          retry_: ContextDev::RetryConfig,
           retry_expires_at: Time,
-          source: ContextDev::Models::Webhooks::Delivery::source,
-          status: ContextDev::Models::Webhooks::Delivery::status,
+          source: ContextDev::Models::Webhooks::DeliverySummary::source,
+          status: ContextDev::Models::Webhooks::DeliverySummary::status,
           url: String
         }
 
@@ -93,7 +78,7 @@ module ContextDev
           CHANGE_DETECTED: :"change.detected"
           RUN_COMPLETED: :"run.completed"
 
-          def self?.values: -> ::Array[ContextDev::Models::Webhooks::Delivery::event]
+          def self?.values: -> ::Array[ContextDev::Models::Webhooks::DeliverySummary::event]
         end
 
         type last_error = { code: String, message: String }
@@ -109,8 +94,8 @@ module ContextDev
         end
 
         type source =
-          ContextDev::Webhooks::Delivery::Source::Batch
-          | ContextDev::Webhooks::Delivery::Source::Monitor
+          ContextDev::Webhooks::DeliverySummary::Source::Batch
+          | ContextDev::Webhooks::DeliverySummary::Source::Monitor
 
         module Source
           extend ContextDev::Internal::Type::Union
@@ -118,22 +103,22 @@ module ContextDev
           type batch =
             {
               batch_id: String,
-              type: ContextDev::Models::Webhooks::Delivery::Source::Batch::type_
+              type: ContextDev::Models::Webhooks::DeliverySummary::Source::Batch::type_
             }
 
           class Batch < ContextDev::Internal::Type::BaseModel
             attr_accessor batch_id: String
 
-            attr_accessor type: ContextDev::Models::Webhooks::Delivery::Source::Batch::type_
+            attr_accessor type: ContextDev::Models::Webhooks::DeliverySummary::Source::Batch::type_
 
             def initialize: (
               batch_id: String,
-              type: ContextDev::Models::Webhooks::Delivery::Source::Batch::type_
+              type: ContextDev::Models::Webhooks::DeliverySummary::Source::Batch::type_
             ) -> void
 
             def to_hash: -> {
               batch_id: String,
-              type: ContextDev::Models::Webhooks::Delivery::Source::Batch::type_
+              type: ContextDev::Models::Webhooks::DeliverySummary::Source::Batch::type_
             }
 
             type type_ = :batch
@@ -143,7 +128,7 @@ module ContextDev
 
               BATCH: :batch
 
-              def self?.values: -> ::Array[ContextDev::Models::Webhooks::Delivery::Source::Batch::type_]
+              def self?.values: -> ::Array[ContextDev::Models::Webhooks::DeliverySummary::Source::Batch::type_]
             end
           end
 
@@ -151,7 +136,7 @@ module ContextDev
             {
               monitor_id: String,
               run_id: String,
-              type: ContextDev::Models::Webhooks::Delivery::Source::Monitor::type_
+              type: ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor::type_
             }
 
           class Monitor < ContextDev::Internal::Type::BaseModel
@@ -159,18 +144,18 @@ module ContextDev
 
             attr_accessor run_id: String
 
-            attr_accessor type: ContextDev::Models::Webhooks::Delivery::Source::Monitor::type_
+            attr_accessor type: ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor::type_
 
             def initialize: (
               monitor_id: String,
               run_id: String,
-              type: ContextDev::Models::Webhooks::Delivery::Source::Monitor::type_
+              type: ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor::type_
             ) -> void
 
             def to_hash: -> {
               monitor_id: String,
               run_id: String,
-              type: ContextDev::Models::Webhooks::Delivery::Source::Monitor::type_
+              type: ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor::type_
             }
 
             type type_ = :monitor
@@ -180,11 +165,11 @@ module ContextDev
 
               MONITOR: :monitor
 
-              def self?.values: -> ::Array[ContextDev::Models::Webhooks::Delivery::Source::Monitor::type_]
+              def self?.values: -> ::Array[ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor::type_]
             end
           end
 
-          def self?.variants: -> ::Array[ContextDev::Models::Webhooks::Delivery::source]
+          def self?.variants: -> ::Array[ContextDev::Models::Webhooks::DeliverySummary::source]
         end
 
         type status =
@@ -200,7 +185,7 @@ module ContextDev
           FAILED: :failed
           CANCELLED: :cancelled
 
-          def self?.values: -> ::Array[ContextDev::Models::Webhooks::Delivery::status]
+          def self?.values: -> ::Array[ContextDev::Models::Webhooks::DeliverySummary::status]
         end
       end
     end

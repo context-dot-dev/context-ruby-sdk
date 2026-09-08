@@ -71,7 +71,7 @@ module ContextDev
       #
       # @param num_competitors [Integer] Exact number of direct competitors to return. Defaults to 5.
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -106,7 +106,7 @@ module ContextDev
       #
       # @param max_age_ms [Integer, nil] Maximum age in milliseconds for cached brand data before the API performs a hard
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -147,7 +147,7 @@ module ContextDev
       #
       # @param max_age_ms [Integer, nil] Maximum age in milliseconds for cached brand data before the API performs a hard
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -200,7 +200,7 @@ module ContextDev
       #
       # @param scroll_offset [Integer, nil] Optional vertical scroll offset in pixels for capturing a long page in viewport-
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -374,7 +374,7 @@ module ContextDev
       #
       # @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -433,7 +433,7 @@ module ContextDev
       #
       # @param max_age_ms [Integer, nil] Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -523,7 +523,7 @@ module ContextDev
       #
       # @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -587,7 +587,7 @@ module ContextDev
       #
       # @param sitemap_url [String] Optional explicit sitemap URL. When provided, exactly this sitemap is crawled in
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

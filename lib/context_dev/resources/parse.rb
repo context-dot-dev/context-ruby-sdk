@@ -27,7 +27,7 @@ module ContextDev
       #
       # @param shorten_base64_images [Boolean] Query param: Shorten base64-encoded image data in the Markdown output
       #
-      # @param tags [Array<String>] Query param: Optional comma-separated caller-defined tags for tracking this requ
+      # @param tags [Array<String>] Query param: Comma-separated tags for tracking request usage. Up to 20 tags, eac
       #
       # @param use_main_content_only [Boolean] Query param: Extract only the main content from HTML-like inputs
       #

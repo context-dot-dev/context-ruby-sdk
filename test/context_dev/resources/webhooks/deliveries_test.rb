@@ -13,10 +13,10 @@ class ContextDev::Test::Resources::Webhooks::DeliveriesTest < ContextDev::Test::
     end
   end
 
-  def test_list
+  def test_list_required_params
     skip("Mock server tests are disabled")
 
-    response = @context_dev.webhooks.deliveries.list
+    response = @context_dev.webhooks.deliveries.list(body: {type: :batch})
 
     assert_pattern do
       response => ContextDev::Models::Webhooks::DeliveryListResponse
@@ -24,7 +24,7 @@ class ContextDev::Test::Resources::Webhooks::DeliveriesTest < ContextDev::Test::
 
     assert_pattern do
       response => {
-        data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Webhooks::Delivery]),
+        data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Webhooks::DeliverySummary]),
         has_more: ContextDev::Internal::Type::Boolean,
         next_cursor: String | nil,
         key_metadata: ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata | nil
@@ -58,6 +58,13 @@ class ContextDev::Test::Resources::Webhooks::DeliveriesTest < ContextDev::Test::
 
     assert_pattern do
       response => ContextDev::Models::Webhooks::DeliveryRetryResponse
+    end
+
+    assert_pattern do
+      response => {
+        id: String,
+        key_metadata: ContextDev::Models::Webhooks::DeliveryRetryResponse::KeyMetadata | nil
+      }
     end
   end
 end

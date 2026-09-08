@@ -125,10 +125,7 @@ module ContextDev
         optional :webhook_delivery, -> { ContextDev::WebhookDelivery }
 
         # @!attribute webhook_delivery_ids
-        #   Retained webhook deliveries for this run. Inspect their live state and attempt
-        #   history through /webhooks/deliveries. With webhook.retry configured, delivery is
-        #   asynchronous and the legacy webhook_delivery/webhook_deliveries outcomes are
-        #   omitted.
+        #   Webhook delivery IDs for this run.
         #
         #   @return [Array<String>, nil]
         optional :webhook_delivery_ids, ContextDev::Internal::Type::ArrayOf[String]
@@ -169,7 +166,7 @@ module ContextDev
         #
         #   @param webhook_delivery [ContextDev::Models::WebhookDelivery] Deprecated: use `webhook_deliveries`, which records every attempt now that a run
         #
-        #   @param webhook_delivery_ids [Array<String>] Retained webhook deliveries for this run. Inspect their live state and attempt h
+        #   @param webhook_delivery_ids [Array<String>] Webhook delivery IDs for this run.
 
         # @see ContextDev::Models::MonitorListRunsResponse::Data#change_detection_type
         module ChangeDetectionType

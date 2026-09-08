@@ -33,8 +33,7 @@ module ContextDev
       sig { returns(T.nilable(String)) }
       attr_accessor :next_cursor
 
-      # Metadata about the API key used for the request. Included in every response
-      # whenever a valid API key is provided, even when the response status is not 200.
+      # Credit usage, included whenever a valid API key is provided.
       sig do
         returns(T.nilable(ContextDev::Models::NewsSearchResponse::KeyMetadata))
       end
@@ -68,8 +67,7 @@ module ContextDev
         # Pass as cursor in the next request to fetch the following page. Null when there
         # are no more results.
         next_cursor:,
-        # Metadata about the API key used for the request. Included in every response
-        # whenever a valid API key is provided, even when the response status is not 200.
+        # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil
       )
       end
@@ -453,25 +451,24 @@ module ContextDev
             )
           end
 
-        # The number of credits consumed by this request.
+        # Credits used by this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # The number of credits remaining for your organization after this request.
+        # Credits remaining for your organization.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
-        # Metadata about the API key used for the request. Included in every response
-        # whenever a valid API key is provided, even when the response status is not 200.
+        # Credit usage, included whenever a valid API key is provided.
         sig do
           params(credits_consumed: Integer, credits_remaining: Integer).returns(
             T.attached_class
           )
         end
         def self.new(
-          # The number of credits consumed by this request.
+          # Credits used by this request.
           credits_consumed:,
-          # The number of credits remaining for your organization after this request.
+          # Credits remaining for your organization.
           credits_remaining:
         )
         end

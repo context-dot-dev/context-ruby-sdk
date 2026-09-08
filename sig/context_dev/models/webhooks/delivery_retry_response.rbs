@@ -3,21 +3,26 @@ module ContextDev
     module Webhooks
       type delivery_retry_response =
         {
+          id: String,
           key_metadata: ContextDev::Models::Webhooks::DeliveryRetryResponse::KeyMetadata
         }
 
-      class DeliveryRetryResponse < ContextDev::Models::Webhooks::Delivery
-        def key_metadata: -> ContextDev::Models::Webhooks::DeliveryRetryResponse::KeyMetadata?
+      class DeliveryRetryResponse < ContextDev::Internal::Type::BaseModel
+        attr_accessor id: String
+
+        attr_reader key_metadata: ContextDev::Models::Webhooks::DeliveryRetryResponse::KeyMetadata?
 
         def key_metadata=: (
-          ContextDev::Models::Webhooks::DeliveryRetryResponse::KeyMetadata _
+          ContextDev::Models::Webhooks::DeliveryRetryResponse::KeyMetadata
         ) -> ContextDev::Models::Webhooks::DeliveryRetryResponse::KeyMetadata
 
         def initialize: (
+          id: String,
           ?key_metadata: ContextDev::Models::Webhooks::DeliveryRetryResponse::KeyMetadata
         ) -> void
 
         def to_hash: -> {
+          id: String,
           key_metadata: ContextDev::Models::Webhooks::DeliveryRetryResponse::KeyMetadata
         }
 

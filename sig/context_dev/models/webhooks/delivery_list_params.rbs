@@ -2,87 +2,204 @@ module ContextDev
   module Models
     module Webhooks
       type delivery_list_params =
-        {
-          batch_id: String,
-          cursor: String,
-          limit: Integer,
-          monitor_id: String,
-          run_id: String,
-          status: ContextDev::Models::Webhooks::DeliveryListParams::status,
-          tags: ::Array[String]
-        }
+        { body: ContextDev::Models::Webhooks::DeliveryListParams::body }
         & ContextDev::Internal::Type::request_parameters
 
       class DeliveryListParams < ContextDev::Internal::Type::BaseModel
         extend ContextDev::Internal::Type::RequestParameters::Converter
         include ContextDev::Internal::Type::RequestParameters
 
-        attr_reader batch_id: String?
-
-        def batch_id=: (String) -> String
-
-        attr_reader cursor: String?
-
-        def cursor=: (String) -> String
-
-        attr_reader limit: Integer?
-
-        def limit=: (Integer) -> Integer
-
-        attr_reader monitor_id: String?
-
-        def monitor_id=: (String) -> String
-
-        attr_reader run_id: String?
-
-        def run_id=: (String) -> String
-
-        attr_reader status: ContextDev::Models::Webhooks::DeliveryListParams::status?
-
-        def status=: (
-          ContextDev::Models::Webhooks::DeliveryListParams::status
-        ) -> ContextDev::Models::Webhooks::DeliveryListParams::status
-
-        attr_reader tags: ::Array[String]?
-
-        def tags=: (::Array[String]) -> ::Array[String]
+        attr_accessor body: ContextDev::Models::Webhooks::DeliveryListParams::body
 
         def initialize: (
-          ?batch_id: String,
-          ?cursor: String,
-          ?limit: Integer,
-          ?monitor_id: String,
-          ?run_id: String,
-          ?status: ContextDev::Models::Webhooks::DeliveryListParams::status,
-          ?tags: ::Array[String],
+          body: ContextDev::Models::Webhooks::DeliveryListParams::body,
           ?request_options: ContextDev::request_opts
         ) -> void
 
         def to_hash: -> {
-          batch_id: String,
-          cursor: String,
-          limit: Integer,
-          monitor_id: String,
-          run_id: String,
-          status: ContextDev::Models::Webhooks::DeliveryListParams::status,
-          tags: ::Array[String],
+          body: ContextDev::Models::Webhooks::DeliveryListParams::body,
           request_options: ContextDev::RequestOptions
         }
 
-        type status =
-          :pending | :delivering | :retrying | :delivered | :failed | :cancelled
+        type body =
+          ContextDev::Webhooks::DeliveryListParams::Body::Batch
+          | ContextDev::Webhooks::DeliveryListParams::Body::Monitor
 
-        module Status
-          extend ContextDev::Internal::Type::Enum
+        module Body
+          extend ContextDev::Internal::Type::Union
 
-          PENDING: :pending
-          DELIVERING: :delivering
-          RETRYING: :retrying
-          DELIVERED: :delivered
-          FAILED: :failed
-          CANCELLED: :cancelled
+          type batch =
+            {
+              type: :batch,
+              batch_id: String,
+              created_after: Time,
+              cursor: String,
+              limit: Integer,
+              status: ContextDev::Models::Webhooks::DeliveryListParams::Body::Batch::status,
+              tags: ::Array[String]
+            }
 
-          def self?.values: -> ::Array[ContextDev::Models::Webhooks::DeliveryListParams::status]
+          class Batch < ContextDev::Internal::Type::BaseModel
+            attr_accessor type: :batch
+
+            attr_reader batch_id: String?
+
+            def batch_id=: (String) -> String
+
+            attr_reader created_after: Time?
+
+            def created_after=: (Time) -> Time
+
+            attr_reader cursor: String?
+
+            def cursor=: (String) -> String
+
+            attr_reader limit: Integer?
+
+            def limit=: (Integer) -> Integer
+
+            attr_reader status: ContextDev::Models::Webhooks::DeliveryListParams::Body::Batch::status?
+
+            def status=: (
+              ContextDev::Models::Webhooks::DeliveryListParams::Body::Batch::status
+            ) -> ContextDev::Models::Webhooks::DeliveryListParams::Body::Batch::status
+
+            attr_reader tags: ::Array[String]?
+
+            def tags=: (::Array[String]) -> ::Array[String]
+
+            def initialize: (
+              ?batch_id: String,
+              ?created_after: Time,
+              ?cursor: String,
+              ?limit: Integer,
+              ?status: ContextDev::Models::Webhooks::DeliveryListParams::Body::Batch::status,
+              ?tags: ::Array[String],
+              ?type: :batch
+            ) -> void
+
+            def to_hash: -> {
+              type: :batch,
+              batch_id: String,
+              created_after: Time,
+              cursor: String,
+              limit: Integer,
+              status: ContextDev::Models::Webhooks::DeliveryListParams::Body::Batch::status,
+              tags: ::Array[String]
+            }
+
+            type status =
+              :pending
+              | :delivering
+              | :retrying
+              | :delivered
+              | :failed
+              | :cancelled
+
+            module Status
+              extend ContextDev::Internal::Type::Enum
+
+              PENDING: :pending
+              DELIVERING: :delivering
+              RETRYING: :retrying
+              DELIVERED: :delivered
+              FAILED: :failed
+              CANCELLED: :cancelled
+
+              def self?.values: -> ::Array[ContextDev::Models::Webhooks::DeliveryListParams::Body::Batch::status]
+            end
+          end
+
+          type monitor =
+            {
+              type: :monitor,
+              created_after: Time,
+              cursor: String,
+              limit: Integer,
+              monitor_id: String,
+              run_id: String,
+              status: ContextDev::Models::Webhooks::DeliveryListParams::Body::Monitor::status,
+              tags: ::Array[String]
+            }
+
+          class Monitor < ContextDev::Internal::Type::BaseModel
+            attr_accessor type: :monitor
+
+            attr_reader created_after: Time?
+
+            def created_after=: (Time) -> Time
+
+            attr_reader cursor: String?
+
+            def cursor=: (String) -> String
+
+            attr_reader limit: Integer?
+
+            def limit=: (Integer) -> Integer
+
+            attr_reader monitor_id: String?
+
+            def monitor_id=: (String) -> String
+
+            attr_reader run_id: String?
+
+            def run_id=: (String) -> String
+
+            attr_reader status: ContextDev::Models::Webhooks::DeliveryListParams::Body::Monitor::status?
+
+            def status=: (
+              ContextDev::Models::Webhooks::DeliveryListParams::Body::Monitor::status
+            ) -> ContextDev::Models::Webhooks::DeliveryListParams::Body::Monitor::status
+
+            attr_reader tags: ::Array[String]?
+
+            def tags=: (::Array[String]) -> ::Array[String]
+
+            def initialize: (
+              ?created_after: Time,
+              ?cursor: String,
+              ?limit: Integer,
+              ?monitor_id: String,
+              ?run_id: String,
+              ?status: ContextDev::Models::Webhooks::DeliveryListParams::Body::Monitor::status,
+              ?tags: ::Array[String],
+              ?type: :monitor
+            ) -> void
+
+            def to_hash: -> {
+              type: :monitor,
+              created_after: Time,
+              cursor: String,
+              limit: Integer,
+              monitor_id: String,
+              run_id: String,
+              status: ContextDev::Models::Webhooks::DeliveryListParams::Body::Monitor::status,
+              tags: ::Array[String]
+            }
+
+            type status =
+              :pending
+              | :delivering
+              | :retrying
+              | :delivered
+              | :failed
+              | :cancelled
+
+            module Status
+              extend ContextDev::Internal::Type::Enum
+
+              PENDING: :pending
+              DELIVERING: :delivering
+              RETRYING: :retrying
+              DELIVERED: :delivered
+              FAILED: :failed
+              CANCELLED: :cancelled
+
+              def self?.values: -> ::Array[ContextDev::Models::Webhooks::DeliveryListParams::Body::Monitor::status]
+            end
+          end
+
+          def self?.variants: -> ::Array[ContextDev::Models::Webhooks::DeliveryListParams::body]
         end
       end
     end

@@ -12,8 +12,7 @@ module ContextDev
             )
           end
 
-        # Metadata about the API key used for the request. Included in every response
-        # whenever a valid API key is provided, even when the response status is not 200.
+        # Credit usage, included whenever a valid API key is provided.
         sig do
           returns(
             T.nilable(
@@ -38,8 +37,7 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Metadata about the API key used for the request. Included in every response
-          # whenever a valid API key is provided, even when the response status is not 200.
+          # Credit usage, included whenever a valid API key is provided.
           key_metadata: nil
         )
         end
@@ -64,16 +62,15 @@ module ContextDev
               )
             end
 
-          # The number of credits consumed by this request.
+          # Credits used by this request.
           sig { returns(Integer) }
           attr_accessor :credits_consumed
 
-          # The number of credits remaining for your organization after this request.
+          # Credits remaining for your organization.
           sig { returns(Integer) }
           attr_accessor :credits_remaining
 
-          # Metadata about the API key used for the request. Included in every response
-          # whenever a valid API key is provided, even when the response status is not 200.
+          # Credit usage, included whenever a valid API key is provided.
           sig do
             params(
               credits_consumed: Integer,
@@ -81,9 +78,9 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # The number of credits consumed by this request.
+            # Credits used by this request.
             credits_consumed:,
-            # The number of credits remaining for your organization after this request.
+            # Credits remaining for your organization.
             credits_remaining:
           )
           end

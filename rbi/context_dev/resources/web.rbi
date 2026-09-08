@@ -109,9 +109,8 @@ module ContextDev
         domain:,
         # Exact number of direct competitors to return. Defaults to 5.
         num_competitors: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -147,9 +146,8 @@ module ContextDev
         # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
         # year.
         max_age_ms: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -191,9 +189,8 @@ module ContextDev
         # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
         # year.
         max_age_ms: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -271,9 +268,8 @@ module ContextDev
         # top to bottom). The final slice may be shorter than the viewport height. Takes
         # precedence over fullScreenshot. Max: 100000.
         scroll_offset: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -509,9 +505,8 @@ module ContextDev
         # extracting HTML. Defaults to false. This adds a bit of latency in exchange for
         # more stable output on animated pages.
         settle_animations: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -583,9 +578,8 @@ module ContextDev
         # Reuse a cached result this many milliseconds old or newer. Default: 86400000 (1
         # day). Set to 0 to bypass cache. Maximum: 2592000000 (30 days).
         max_age_ms: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -706,9 +700,8 @@ module ContextDev
         settle_animations: nil,
         # Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed
@@ -770,9 +763,8 @@ module ContextDev
         # Optional explicit sitemap URL. When provided, exactly this sitemap is crawled
         # instead of discovering the domain's sitemaps.
         sitemap_url: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed

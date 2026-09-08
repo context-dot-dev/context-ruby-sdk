@@ -50,9 +50,8 @@ module ContextDev
         # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
         # year.
         max_age_ms: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
         tags: nil,
         # Optional theme preference used when selecting brand assets.
         theme: nil,
@@ -85,9 +84,8 @@ module ContextDev
         # Fields to match the search term against, as a comma-separated list or repeated
         # parameter: 'name', 'domain', or both. Defaults to both.
         query_by: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
         tags: nil,
         # Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
         # typo tolerance).

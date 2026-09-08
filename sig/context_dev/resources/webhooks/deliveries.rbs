@@ -9,13 +9,7 @@ module ContextDev
         ) -> ContextDev::Models::Webhooks::DeliveryRetrieveResponse
 
         def list: (
-          ?batch_id: String,
-          ?cursor: String,
-          ?limit: Integer,
-          ?monitor_id: String,
-          ?run_id: String,
-          ?status: ContextDev::Models::Webhooks::DeliveryListParams::status,
-          ?tags: ::Array[String],
+          body: ContextDev::Models::Webhooks::DeliveryListParams::body,
           ?request_options: ContextDev::request_opts
         ) -> ContextDev::Models::Webhooks::DeliveryListResponse
 
