@@ -6,60 +6,58 @@ module ContextDev
       # @see ContextDev::Resources::Webhooks::Deliveries#list
       class DeliveryListResponse < ContextDev::Internal::Type::BaseModel
         # @!attribute data
+        #   Webhook deliveries.
         #
-        #   @return [Array<ContextDev::Models::Webhooks::Delivery>]
-        required :data, -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Webhooks::Delivery] }
+        #   @return [Array<ContextDev::Models::Webhooks::DeliverySummary>]
+        required :data, -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Webhooks::DeliverySummary] }
 
         # @!attribute has_more
+        #   Whether more deliveries are available.
         #
         #   @return [Boolean]
         required :has_more, ContextDev::Internal::Type::Boolean
 
         # @!attribute next_cursor
+        #   Next page cursor, or null on the last page.
         #
         #   @return [String, nil]
         required :next_cursor, String, nil?: true
 
         # @!attribute key_metadata
-        #   Metadata about the API key used for the request. Included in every response
-        #   whenever a valid API key is provided, even when the response status is not 200.
+        #   Credit usage, included whenever a valid API key is provided.
         #
         #   @return [ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata, nil]
         optional :key_metadata, -> { ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata }
 
         # @!method initialize(data:, has_more:, next_cursor:, key_metadata: nil)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::Webhooks::DeliveryListResponse} for more details.
+        #   @param data [Array<ContextDev::Models::Webhooks::DeliverySummary>] Webhook deliveries.
         #
-        #   @param data [Array<ContextDev::Models::Webhooks::Delivery>]
+        #   @param has_more [Boolean] Whether more deliveries are available.
         #
-        #   @param has_more [Boolean]
+        #   @param next_cursor [String, nil] Next page cursor, or null on the last page.
         #
-        #   @param next_cursor [String, nil]
-        #
-        #   @param key_metadata [ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
+        #   @param key_metadata [ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
 
         # @see ContextDev::Models::Webhooks::DeliveryListResponse#key_metadata
         class KeyMetadata < ContextDev::Internal::Type::BaseModel
           # @!attribute credits_consumed
-          #   The number of credits consumed by this request.
+          #   Credits used by this request.
           #
           #   @return [Integer]
           required :credits_consumed, Integer
 
           # @!attribute credits_remaining
-          #   The number of credits remaining for your organization after this request.
+          #   Credits remaining for your organization.
           #
           #   @return [Integer]
           required :credits_remaining, Integer
 
           # @!method initialize(credits_consumed:, credits_remaining:)
-          #   Metadata about the API key used for the request. Included in every response
-          #   whenever a valid API key is provided, even when the response status is not 200.
+          #   Credit usage, included whenever a valid API key is provided.
           #
-          #   @param credits_consumed [Integer] The number of credits consumed by this request.
+          #   @param credits_consumed [Integer] Credits used by this request.
           #
-          #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
+          #   @param credits_remaining [Integer] Credits remaining for your organization.
         end
       end
     end

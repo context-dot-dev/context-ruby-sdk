@@ -11,8 +11,7 @@ module ContextDev
       optional :domain, String
 
       # @!attribute key_metadata
-      #   Metadata about the API key used for the request. Included in every response
-      #   whenever a valid API key is provided, even when the response status is not 200.
+      #   Credit usage, included whenever a valid API key is provided.
       #
       #   @return [ContextDev::Models::UtilityPrefetchResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::UtilityPrefetchResponse::KeyMetadata }
@@ -36,12 +35,9 @@ module ContextDev
       optional :type, enum: -> { ContextDev::Models::UtilityPrefetchResponse::Type }
 
       # @!method initialize(domain: nil, key_metadata: nil, message: nil, status: nil, type: nil)
-      #   Some parameter documentations has been truncated, see
-      #   {ContextDev::Models::UtilityPrefetchResponse} for more details.
-      #
       #   @param domain [String] The domain that was queued for prefetching
       #
-      #   @param key_metadata [ContextDev::Models::UtilityPrefetchResponse::KeyMetadata] Metadata about the API key used for the request. Included in every response when
+      #   @param key_metadata [ContextDev::Models::UtilityPrefetchResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
       #
       #   @param message [String] Success message
       #
@@ -52,24 +48,23 @@ module ContextDev
       # @see ContextDev::Models::UtilityPrefetchResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   The number of credits consumed by this request.
+        #   Credits used by this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   The number of credits remaining for your organization after this request.
+        #   Credits remaining for your organization.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Metadata about the API key used for the request. Included in every response
-        #   whenever a valid API key is provided, even when the response status is not 200.
+        #   Credit usage, included whenever a valid API key is provided.
         #
-        #   @param credits_consumed [Integer] The number of credits consumed by this request.
+        #   @param credits_consumed [Integer] Credits used by this request.
         #
-        #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
+        #   @param credits_remaining [Integer] Credits remaining for your organization.
       end
 
       # The type of prefetch that was queued, echoed from the request

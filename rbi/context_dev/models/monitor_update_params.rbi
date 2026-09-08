@@ -720,9 +720,7 @@ module ContextDev
         end
         attr_writer :events
 
-        # Opt into durable webhook delivery. An empty object uses the default retry
-        # schedule. Omit retry to preserve legacy delivery behavior. The policy is
-        # snapshotted for each event.
+        # Webhook retry settings. Use {} for the default schedule.
         sig { returns(T.nilable(ContextDev::RetryConfig)) }
         attr_reader :retry_
 
@@ -748,9 +746,7 @@ module ContextDev
           # that detected no change — and embeds the change when one was detected. Defaults
           # to `["change.detected"]` when omitted.
           events: nil,
-          # Opt into durable webhook delivery. An empty object uses the default retry
-          # schedule. Omit retry to preserve legacy delivery behavior. The policy is
-          # snapshotted for each event.
+          # Webhook retry settings. Use {} for the default schedule.
           retry_: nil
         )
         end

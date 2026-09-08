@@ -3,14 +3,14 @@ module ContextDev
     module Webhooks
       type delivery_list_response =
         {
-          data: ::Array[ContextDev::Webhooks::Delivery],
+          data: ::Array[ContextDev::Webhooks::DeliverySummary],
           has_more: bool,
           next_cursor: String?,
           key_metadata: ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata
         }
 
       class DeliveryListResponse < ContextDev::Internal::Type::BaseModel
-        attr_accessor data: ::Array[ContextDev::Webhooks::Delivery]
+        attr_accessor data: ::Array[ContextDev::Webhooks::DeliverySummary]
 
         attr_accessor has_more: bool
 
@@ -23,14 +23,14 @@ module ContextDev
         ) -> ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata
 
         def initialize: (
-          data: ::Array[ContextDev::Webhooks::Delivery],
+          data: ::Array[ContextDev::Webhooks::DeliverySummary],
           has_more: bool,
           next_cursor: String?,
           ?key_metadata: ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata
         ) -> void
 
         def to_hash: -> {
-          data: ::Array[ContextDev::Webhooks::Delivery],
+          data: ::Array[ContextDev::Webhooks::DeliverySummary],
           has_more: bool,
           next_cursor: String?,
           key_metadata: ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata

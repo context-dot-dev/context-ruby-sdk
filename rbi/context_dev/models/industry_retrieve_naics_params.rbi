@@ -35,9 +35,8 @@ module ContextDev
       sig { params(min_results: Integer).void }
       attr_writer :min_results
 
-      # Optional comma-separated caller-defined tags for tracking this request. Tags are
-      # recorded on the request's usage log and can be used to filter usage on the
-      # dashboard usage page. Up to 20 tags, each 1-50 characters.
+      # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+      # characters.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -73,9 +72,8 @@ module ContextDev
         max_results: nil,
         # Minimum number of NAICS codes to return. Must be at least 1. Defaults to 1.
         min_results: nil,
-        # Optional comma-separated caller-defined tags for tracking this request. Tags are
-        # recorded on the request's usage log and can be used to filter usage on the
-        # dashboard usage page. Up to 20 tags, each 1-50 characters.
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
         tags: nil,
         # Optional timeout in milliseconds for the request. If the request takes longer
         # than this value, it will be aborted with a 408 status code. Maximum allowed

@@ -60,9 +60,8 @@ module ContextDev
       optional :shorten_base64_images, ContextDev::Internal::Type::Boolean
 
       # @!attribute tags
-      #   Optional comma-separated caller-defined tags for tracking this request. Tags are
-      #   recorded on the request's usage log and can be used to filter usage on the
-      #   dashboard usage page. Up to 20 tags, each 1-50 characters.
+      #   Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+      #   characters.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -102,7 +101,7 @@ module ContextDev
       #
       #   @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
       #
-      #   @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       #   @param use_main_content_only [Boolean] Extract only the main content from HTML-like inputs
       #

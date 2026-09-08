@@ -9,15 +9,15 @@ module ContextDev
             T.any(ContextDev::Webhooks::Attempt, ContextDev::Internal::AnyHash)
           end
 
-        sig { returns(String) }
-        attr_accessor :id
-
+        # Attempt number, starting at 1.
         sig { returns(Integer) }
         attr_accessor :attempt
 
+        # Completion time, or null while in progress.
         sig { returns(T.nilable(Time)) }
         attr_accessor :completed_at
 
+        # Attempt error, or null if none.
         sig { returns(T.nilable(ContextDev::Webhooks::Attempt::Error)) }
         attr_reader :error
 
@@ -28,21 +28,24 @@ module ContextDev
         end
         attr_writer :error
 
+        # HTTP response status, or null if no response was received.
         sig { returns(T.nilable(Integer)) }
         attr_accessor :http_status
 
+        # Attempt start time.
         sig { returns(Time) }
         attr_accessor :started_at
 
+        # What started this attempt.
         sig { returns(ContextDev::Webhooks::Attempt::Trigger::TaggedSymbol) }
         attr_accessor :trigger
 
+        # URL used for this attempt.
         sig { returns(String) }
         attr_accessor :url
 
         sig do
           params(
-            id: String,
             attempt: Integer,
             completed_at: T.nilable(Time),
             error: T.nilable(ContextDev::Webhooks::Attempt::Error::OrHash),
@@ -53,13 +56,19 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          id:,
+          # Attempt number, starting at 1.
           attempt:,
+          # Completion time, or null while in progress.
           completed_at:,
+          # Attempt error, or null if none.
           error:,
+          # HTTP response status, or null if no response was received.
           http_status:,
+          # Attempt start time.
           started_at:,
+          # What started this attempt.
           trigger:,
+          # URL used for this attempt.
           url:
         )
         end
@@ -67,7 +76,6 @@ module ContextDev
         sig do
           override.returns(
             {
-              id: String,
               attempt: Integer,
               completed_at: T.nilable(Time),
               error: T.nilable(ContextDev::Webhooks::Attempt::Error),
@@ -90,16 +98,24 @@ module ContextDev
               )
             end
 
+          # Error code.
           sig { returns(String) }
           attr_accessor :code
 
+          # Error details.
           sig { returns(String) }
           attr_accessor :message
 
+          # Attempt error, or null if none.
           sig do
             params(code: String, message: String).returns(T.attached_class)
           end
-          def self.new(code:, message:)
+          def self.new(
+            # Error code.
+            code:,
+            # Error details.
+            message:
+          )
           end
 
           sig { override.returns({ code: String, message: String }) }
@@ -107,6 +123,7 @@ module ContextDev
           end
         end
 
+        # What started this attempt.
         module Trigger
           extend ContextDev::Internal::Type::Enum
 

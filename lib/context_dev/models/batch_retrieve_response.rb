@@ -100,8 +100,7 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::BatchRetrieveResponse::KeyMetadata }
 
       # @!attribute webhook_delivery_id
-      #   Retained completion delivery ID. Inspect or retry it through
-      #   /webhooks/deliveries/{delivery_id}. Present once the delivery has been retained.
+      #   Batch completion delivery ID, when available.
       #
       #   @return [String, nil]
       optional :webhook_delivery_id, String
@@ -141,7 +140,7 @@ module ContextDev
       #
       #   @param key_metadata [ContextDev::Models::BatchRetrieveResponse::KeyMetadata] API key usage for this request.
       #
-      #   @param webhook_delivery_id [String] Retained completion delivery ID. Inspect or retry it through /webhooks/deliverie
+      #   @param webhook_delivery_id [String] Batch completion delivery ID, when available.
 
       # @see ContextDev::Models::BatchRetrieveResponse#credits
       class Credits < ContextDev::Internal::Type::BaseModel
@@ -368,13 +367,13 @@ module ContextDev
       # @see ContextDev::Models::BatchRetrieveResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   The number of credits consumed by this request.
+        #   Credits used by this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   The number of credits remaining for your organization after this request.
+        #   Credits remaining for your organization.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -382,9 +381,9 @@ module ContextDev
         # @!method initialize(credits_consumed:, credits_remaining:)
         #   API key usage for this request.
         #
-        #   @param credits_consumed [Integer] The number of credits consumed by this request.
+        #   @param credits_consumed [Integer] Credits used by this request.
         #
-        #   @param credits_remaining [Integer] The number of credits remaining for your organization after this request.
+        #   @param credits_remaining [Integer] Credits remaining for your organization.
       end
     end
   end

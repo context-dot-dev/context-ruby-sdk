@@ -389,11 +389,11 @@ module ContextDev
             )
           end
 
-        # The number of credits consumed by this request.
+        # Credits used by this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # The number of credits remaining for your organization after this request.
+        # Credits remaining for your organization.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -404,9 +404,9 @@ module ContextDev
           )
         end
         def self.new(
-          # The number of credits consumed by this request.
+          # Credits used by this request.
           credits_consumed:,
-          # The number of credits remaining for your organization after this request.
+          # Credits remaining for your organization.
           credits_remaining:
         )
         end

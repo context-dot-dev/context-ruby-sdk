@@ -16,7 +16,7 @@ module ContextDev
       #
       # @param min_results [Integer] Minimum number of NAICS codes to return. Must be at least 1. Defaults to 1.
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #
@@ -56,7 +56,7 @@ module ContextDev
       #
       # @param min_results [Integer] Minimum number of SIC codes to return. Must be at least 1. Defaults to 1.
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
       #

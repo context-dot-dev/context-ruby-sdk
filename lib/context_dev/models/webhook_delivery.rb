@@ -42,8 +42,7 @@ module ContextDev
       required :status, enum: -> { ContextDev::WebhookDelivery::Status }
 
       # @!attribute delivery_id
-      #   Retained delivery ID for GET /webhooks/deliveries/{delivery_id}. Omitted for
-      #   historical or unretained deliveries.
+      #   Delivery ID for status checks and retries, when available.
       #
       #   @return [String, nil]
       optional :delivery_id, String
@@ -64,7 +63,7 @@ module ContextDev
       #
       #   @param status [Symbol, ContextDev::Models::WebhookDelivery::Status] Delivery outcome. delivered means any 2xx response; rejected means a non-2xx res
       #
-      #   @param delivery_id [String] Retained delivery ID for GET /webhooks/deliveries/{delivery_id}. Omitted for his
+      #   @param delivery_id [String] Delivery ID for status checks and retries, when available.
 
       # @see ContextDev::Models::WebhookDelivery#error
       class Error < ContextDev::Internal::Type::BaseModel

@@ -15,9 +15,11 @@ module ContextDev
             )
           end
 
+        # Delivery ID.
         sig { returns(String) }
         attr_accessor :delivery_id
 
+        # Resend a delivery that already succeeded.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :force
 
@@ -31,6 +33,7 @@ module ContextDev
         sig { params(tags: T::Array[String]).void }
         attr_writer :tags
 
+        # Unique key to prevent duplicate retry requests.
         sig { returns(T.nilable(String)) }
         attr_reader :idempotency_key
 
@@ -47,10 +50,13 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
+          # Delivery ID.
           delivery_id:,
+          # Resend a delivery that already succeeded.
           force: nil,
           # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
           tags: nil,
+          # Unique key to prevent duplicate retry requests.
           idempotency_key: nil,
           request_options: {}
         )

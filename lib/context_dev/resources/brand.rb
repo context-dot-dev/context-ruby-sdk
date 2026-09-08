@@ -42,7 +42,7 @@ module ContextDev
       #
       # @param max_age_ms [Integer, nil] Maximum age in milliseconds for cached brand data before the API performs a hard
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param theme [Symbol, ContextDev::Models::BrandRetrieveSimplifiedParams::Theme] Optional theme preference used when selecting brand assets.
       #
@@ -78,7 +78,7 @@ module ContextDev
       #
       # @param query_by [Array<Symbol, ContextDev::Models::BrandSearchParams::QueryBy>] Fields to match the search term against, as a comma-separated list or repeated p
       #
-      # @param tags [Array<String>] Optional comma-separated caller-defined tags for tracking this request. Tags are
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param typo_tolerance [Integer] Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
       #
