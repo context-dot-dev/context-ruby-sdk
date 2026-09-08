@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.15.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.14.0...v2.15.0) (2026-09-08)
+
+
+### Features
+
+* **webhooks:** add configurable retries and manual replay ([00388ec](https://github.com/context-dot-dev/context-ruby-sdk/commit/00388ec76d375d7466c9b0d85dfe983d2a369807))
+* **webhooks:** simplify delivery APIs ([fbd879e](https://github.com/context-dot-dev/context-ruby-sdk/commit/fbd879eaa0c0008cba1c3b19f1fe1accb53d8771))
+
 ## [2.14.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.13.0...v2.14.0) (2026-09-03)
 
 
