@@ -279,7 +279,8 @@ module ContextDev
         viewport: nil,
         # Optional browser wait time in milliseconds after initial page load before taking
         # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
-        # omitted.
+        # omitted. When combined with timeoutMS, timeoutMS must be at least waitForMs +
+        # 10000 ms; a shorter deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Requires zero data retention to be enabled for your
@@ -516,7 +517,9 @@ module ContextDev
         # headers, footers, sidebars, and navigation when detectable.
         use_main_content_only: nil,
         # Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
-        # 30000 (30 seconds).
+        # 30000 (30 seconds). When combined with timeoutMS, timeoutMS must be at least
+        # waitForMs + 10000 ms; a shorter deadline is rejected with 400
+        # TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Requires zero data retention to be enabled for your
@@ -586,7 +589,9 @@ module ContextDev
         # value is 300000ms (5 minutes).
         timeout_ms: nil,
         # Optional browser wait time in milliseconds after initial page load before
-        # collecting images. Min: 0. Max: 30000 (30 seconds).
+        # collecting images. Min: 0. Max: 30000 (30 seconds). When combined with
+        # timeoutMS, timeoutMS must be at least waitForMs + 10000 ms; a shorter deadline
+        # is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         request_options: {}
       )
@@ -711,7 +716,9 @@ module ContextDev
         # and navigation
         use_main_content_only: nil,
         # Optional browser wait time in milliseconds after initial page load before
-        # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds).
+        # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds). When combined
+        # with timeoutMS, timeoutMS must be at least waitForMs + 10000 ms; a shorter
+        # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Requires zero data retention to be enabled for your

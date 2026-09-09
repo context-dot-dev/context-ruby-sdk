@@ -107,7 +107,9 @@ module ContextDev
 
       # @!attribute wait_for_ms
       #   Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
-      #   30000 (30 seconds).
+      #   30000 (30 seconds). When combined with timeoutMS, timeoutMS must be at least
+      #   waitForMs + 10000 ms; a shorter deadline is rejected with 400
+      #   TIMEOUT_TOO_SHORT_FOR_WAIT.
       #
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, nil?: true
