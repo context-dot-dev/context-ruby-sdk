@@ -155,7 +155,9 @@ module ContextDev
       attr_writer :use_main_content_only
 
       # Optional browser wait time in milliseconds after initial page load before
-      # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds).
+      # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds). When combined
+      # with timeoutMS, timeoutMS must be at least waitForMs + 10000 ms; a shorter
+      # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :wait_for_ms
 
@@ -261,7 +263,9 @@ module ContextDev
         # and navigation
         use_main_content_only: nil,
         # Optional browser wait time in milliseconds after initial page load before
-        # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds).
+        # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds). When combined
+        # with timeoutMS, timeoutMS must be at least waitForMs + 10000 ms; a shorter
+        # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Requires zero data retention to be enabled for your

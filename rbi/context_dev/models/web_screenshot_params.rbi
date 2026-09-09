@@ -151,7 +151,8 @@ module ContextDev
 
       # Optional browser wait time in milliseconds after initial page load before taking
       # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
-      # omitted.
+      # omitted. When combined with timeoutMS, timeoutMS must be at least waitForMs +
+      # 10000 ms; a shorter deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :wait_for_ms
 
@@ -243,7 +244,8 @@ module ContextDev
         viewport: nil,
         # Optional browser wait time in milliseconds after initial page load before taking
         # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
-        # omitted.
+        # omitted. When combined with timeoutMS, timeoutMS must be at least waitForMs +
+        # 10000 ms; a shorter deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Requires zero data retention to be enabled for your
