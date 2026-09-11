@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.16.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.15.0...v2.16.0) (2026-09-11)
+
+
+### Features
+
+* **api:** return request_id on every response ([012ba65](https://github.com/context-dot-dev/context-ruby-sdk/commit/012ba65ea7648ebd7b18fa7ad00955a13b8394b9))
+* **logs:** expose request log endpoints in SDKs ([#1025](https://github.com/context-dot-dev/context-ruby-sdk/issues/1025)) ([5b22be7](https://github.com/context-dot-dev/context-ruby-sdk/commit/5b22be7bd1cb6401b8260b5a756b6ec040cbc6a8))
+
+
+### Bug Fixes
+
+* **api:** reject timeoutMS too short for waitForMs ([e8a6725](https://github.com/context-dot-dev/context-ruby-sdk/commit/e8a67255c9354f69d632697179a4d6270a4677ee))
+
 ## [2.15.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.14.0...v2.15.0) (2026-09-08)
 
 
