@@ -57,6 +57,11 @@ module ContextDev
     # @return [ContextDev::Resources::News]
     attr_reader :news
 
+    # Read your organization's API request logs to debug failed calls. These endpoints
+    # cost no credits and use a separate rate limit.
+    # @return [ContextDev::Resources::Logs]
+    attr_reader :logs
+
     # @api private
     #
     # @return [Hash{String=>String}]
@@ -129,6 +134,7 @@ module ContextDev
       @webhooks = ContextDev::Resources::Webhooks.new(client: self)
       @people = ContextDev::Resources::People.new(client: self)
       @news = ContextDev::Resources::News.new(client: self)
+      @logs = ContextDev::Resources::Logs.new(client: self)
     end
   end
 end

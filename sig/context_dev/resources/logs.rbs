@@ -1,0 +1,27 @@
+module ContextDev
+  module Resources
+    class Logs
+      def retrieve: (
+        String request_id,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::LogRetrieveResponse
+
+      def list: (
+        ?error_code: String,
+        ?errors_only: bool,
+        ?from: Time,
+        ?key_id: String,
+        ?limit: Integer,
+        ?page: Integer,
+        ?path: String,
+        ?search: String,
+        ?status_code: Integer,
+        ?tags: String,
+        ?to: Time,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::LogListResponse
+
+      def initialize: (client: ContextDev::Client) -> void
+    end
+  end
+end

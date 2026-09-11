@@ -1,0 +1,179 @@
+module ContextDev
+  module Models
+    type log_retrieve_response =
+      {
+        data: ContextDev::Models::LogRetrieveResponse::Data,
+        request_id: String,
+        key_metadata: ContextDev::Models::LogRetrieveResponse::KeyMetadata
+      }
+
+    class LogRetrieveResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor data: ContextDev::Models::LogRetrieveResponse::Data
+
+      attr_accessor request_id: String
+
+      attr_reader key_metadata: ContextDev::Models::LogRetrieveResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::LogRetrieveResponse::KeyMetadata
+      ) -> ContextDev::Models::LogRetrieveResponse::KeyMetadata
+
+      def initialize: (
+        data: ContextDev::Models::LogRetrieveResponse::Data,
+        request_id: String,
+        ?key_metadata: ContextDev::Models::LogRetrieveResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        data: ContextDev::Models::LogRetrieveResponse::Data,
+        request_id: String,
+        key_metadata: ContextDev::Models::LogRetrieveResponse::KeyMetadata
+      }
+
+      type data =
+        {
+          credits_used: Integer,
+          error_code: String?,
+          input: ContextDev::Models::LogRetrieveResponse::Data::Input,
+          key_id: String?,
+          latency_ms: Float,
+          method_: String,
+          path: String,
+          request_id: String,
+          status_code: Integer,
+          tags: ::Array[String],
+          timestamp: Time,
+          user_agent: String?,
+          zdr: bool,
+          key_metadata: ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata,
+          response: top
+        }
+
+      class Data < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_used: Integer
+
+        attr_accessor error_code: String?
+
+        attr_accessor input: ContextDev::Models::LogRetrieveResponse::Data::Input
+
+        attr_accessor key_id: String?
+
+        attr_accessor latency_ms: Float
+
+        attr_accessor method_: String
+
+        attr_accessor path: String
+
+        attr_accessor request_id: String
+
+        attr_accessor status_code: Integer
+
+        attr_accessor tags: ::Array[String]
+
+        attr_accessor timestamp: Time
+
+        attr_accessor user_agent: String?
+
+        attr_accessor zdr: bool
+
+        attr_reader key_metadata: ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata?
+
+        def key_metadata=: (
+          ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata
+        ) -> ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata
+
+        attr_reader response: top?
+
+        def response=: (top) -> top
+
+        def initialize: (
+          credits_used: Integer,
+          error_code: String?,
+          input: ContextDev::Models::LogRetrieveResponse::Data::Input,
+          key_id: String?,
+          latency_ms: Float,
+          method_: String,
+          path: String,
+          request_id: String,
+          status_code: Integer,
+          tags: ::Array[String],
+          timestamp: Time,
+          user_agent: String?,
+          zdr: bool,
+          ?key_metadata: ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata,
+          ?response: top
+        ) -> void
+
+        def to_hash: -> {
+          credits_used: Integer,
+          error_code: String?,
+          input: ContextDev::Models::LogRetrieveResponse::Data::Input,
+          key_id: String?,
+          latency_ms: Float,
+          method_: String,
+          path: String,
+          request_id: String,
+          status_code: Integer,
+          tags: ::Array[String],
+          timestamp: Time,
+          user_agent: String?,
+          zdr: bool,
+          key_metadata: ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata,
+          response: top
+        }
+
+        type input = { query: ::Hash[Symbol, top], body: top }
+
+        class Input < ContextDev::Internal::Type::BaseModel
+          attr_accessor query: ::Hash[Symbol, top]
+
+          attr_reader body: top?
+
+          def body=: (top) -> top
+
+          def initialize: (query: ::Hash[Symbol, top], ?body: top) -> void
+
+          def to_hash: -> { query: ::Hash[Symbol, top], body: top }
+        end
+
+        type key_metadata =
+          { credits_consumed: Integer, credits_remaining: Integer }
+
+        class KeyMetadata < ContextDev::Internal::Type::BaseModel
+          attr_accessor credits_consumed: Integer
+
+          attr_accessor credits_remaining: Integer
+
+          def initialize: (
+            credits_consumed: Integer,
+            credits_remaining: Integer
+          ) -> void
+
+          def to_hash: -> {
+            credits_consumed: Integer,
+            credits_remaining: Integer
+          }
+        end
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end

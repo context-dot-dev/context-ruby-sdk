@@ -52,6 +52,11 @@ module ContextDev
     sig { returns(ContextDev::Resources::News) }
     attr_reader :news
 
+    # Read your organization's API request logs to debug failed calls. These endpoints
+    # cost no credits and use a separate rate limit.
+    sig { returns(ContextDev::Resources::Logs) }
+    attr_reader :logs
+
     # @api private
     sig { override.returns(T::Hash[String, String]) }
     private def auth_headers

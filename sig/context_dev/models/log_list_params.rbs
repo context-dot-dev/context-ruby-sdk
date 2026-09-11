@@ -1,0 +1,98 @@
+module ContextDev
+  module Models
+    type log_list_params =
+      {
+        error_code: String,
+        errors_only: bool,
+        from: Time,
+        key_id: String,
+        limit: Integer,
+        page: Integer,
+        path: String,
+        search: String,
+        status_code: Integer,
+        tags: String,
+        to: Time
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class LogListParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_reader error_code: String?
+
+      def error_code=: (String) -> String
+
+      attr_reader errors_only: bool?
+
+      def errors_only=: (bool) -> bool
+
+      attr_reader from: Time?
+
+      def from=: (Time) -> Time
+
+      attr_reader key_id: String?
+
+      def key_id=: (String) -> String
+
+      attr_reader limit: Integer?
+
+      def limit=: (Integer) -> Integer
+
+      attr_reader page: Integer?
+
+      def page=: (Integer) -> Integer
+
+      attr_reader path: String?
+
+      def path=: (String) -> String
+
+      attr_reader search: String?
+
+      def search=: (String) -> String
+
+      attr_reader status_code: Integer?
+
+      def status_code=: (Integer) -> Integer
+
+      attr_reader tags: String?
+
+      def tags=: (String) -> String
+
+      attr_reader to: Time?
+
+      def to=: (Time) -> Time
+
+      def initialize: (
+        ?error_code: String,
+        ?errors_only: bool,
+        ?from: Time,
+        ?key_id: String,
+        ?limit: Integer,
+        ?page: Integer,
+        ?path: String,
+        ?search: String,
+        ?status_code: Integer,
+        ?tags: String,
+        ?to: Time,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        error_code: String,
+        errors_only: bool,
+        from: Time,
+        key_id: String,
+        limit: Integer,
+        page: Integer,
+        path: String,
+        search: String,
+        status_code: Integer,
+        tags: String,
+        to: Time,
+        request_options: ContextDev::RequestOptions
+      }
+    end
+  end
+end

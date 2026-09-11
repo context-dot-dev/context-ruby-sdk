@@ -1,0 +1,135 @@
+module ContextDev
+  module Models
+    type log_list_response =
+      {
+        data: ::Array[ContextDev::Models::LogListResponse::Data],
+        has_more: bool,
+        limit: Integer,
+        page: Integer,
+        request_id: String,
+        key_metadata: ContextDev::Models::LogListResponse::KeyMetadata
+      }
+
+    class LogListResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor data: ::Array[ContextDev::Models::LogListResponse::Data]
+
+      attr_accessor has_more: bool
+
+      attr_accessor limit: Integer
+
+      attr_accessor page: Integer
+
+      attr_accessor request_id: String
+
+      attr_reader key_metadata: ContextDev::Models::LogListResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::LogListResponse::KeyMetadata
+      ) -> ContextDev::Models::LogListResponse::KeyMetadata
+
+      def initialize: (
+        data: ::Array[ContextDev::Models::LogListResponse::Data],
+        has_more: bool,
+        limit: Integer,
+        page: Integer,
+        request_id: String,
+        ?key_metadata: ContextDev::Models::LogListResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        data: ::Array[ContextDev::Models::LogListResponse::Data],
+        has_more: bool,
+        limit: Integer,
+        page: Integer,
+        request_id: String,
+        key_metadata: ContextDev::Models::LogListResponse::KeyMetadata
+      }
+
+      type data =
+        {
+          credits_used: Integer,
+          error_code: String?,
+          key_id: String?,
+          latency_ms: Float,
+          method_: String,
+          path: String,
+          request_id: String,
+          status_code: Integer,
+          tags: ::Array[String],
+          timestamp: Time,
+          zdr: bool
+        }
+
+      class Data < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_used: Integer
+
+        attr_accessor error_code: String?
+
+        attr_accessor key_id: String?
+
+        attr_accessor latency_ms: Float
+
+        attr_accessor method_: String
+
+        attr_accessor path: String
+
+        attr_accessor request_id: String
+
+        attr_accessor status_code: Integer
+
+        attr_accessor tags: ::Array[String]
+
+        attr_accessor timestamp: Time
+
+        attr_accessor zdr: bool
+
+        def initialize: (
+          credits_used: Integer,
+          error_code: String?,
+          key_id: String?,
+          latency_ms: Float,
+          method_: String,
+          path: String,
+          request_id: String,
+          status_code: Integer,
+          tags: ::Array[String],
+          timestamp: Time,
+          zdr: bool
+        ) -> void
+
+        def to_hash: -> {
+          credits_used: Integer,
+          error_code: String?,
+          key_id: String?,
+          latency_ms: Float,
+          method_: String,
+          path: String,
+          request_id: String,
+          status_code: Integer,
+          tags: ::Array[String],
+          timestamp: Time,
+          zdr: bool
+        }
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end
