@@ -1,0 +1,23 @@
+module ContextDev
+  module Models
+    type log_retrieve_params =
+      { request_id: String } & ContextDev::Internal::Type::request_parameters
+
+    class LogRetrieveParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor request_id: String
+
+      def initialize: (
+        request_id: String,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        request_id: String,
+        request_options: ContextDev::RequestOptions
+      }
+    end
+  end
+end

@@ -31,6 +31,10 @@ module ContextDev
 
   class Intake = ContextDev::Models::Intake
 
+  class LogListParams = ContextDev::Models::LogListParams
+
+  class LogRetrieveParams = ContextDev::Models::LogRetrieveParams
+
   class MonitorCreateParams = ContextDev::Models::MonitorCreateParams
 
   class MonitorDeleteParams = ContextDev::Models::MonitorDeleteParams
