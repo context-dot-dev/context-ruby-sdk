@@ -3,10 +3,15 @@ module ContextDev
     module Webhooks
       type delivery_retrieve_response =
         {
+          request_id: String,
           key_metadata: ContextDev::Models::Webhooks::DeliveryRetrieveResponse::KeyMetadata
         }
 
       class DeliveryRetrieveResponse < ContextDev::Models::Webhooks::Delivery
+        def request_id: -> String
+
+        def request_id=: (String _) -> String
+
         def key_metadata: -> ContextDev::Models::Webhooks::DeliveryRetrieveResponse::KeyMetadata?
 
         def key_metadata=: (
@@ -14,10 +19,12 @@ module ContextDev
         ) -> ContextDev::Models::Webhooks::DeliveryRetrieveResponse::KeyMetadata
 
         def initialize: (
+          request_id: String,
           ?key_metadata: ContextDev::Models::Webhooks::DeliveryRetrieveResponse::KeyMetadata
         ) -> void
 
         def to_hash: -> {
+          request_id: String,
           key_metadata: ContextDev::Models::Webhooks::DeliveryRetrieveResponse::KeyMetadata
         }
 

@@ -3,12 +3,15 @@ module ContextDev
     type ai_extract_products_response =
       {
         cache_metadata: ContextDev::Models::AIExtractProductsResponse::CacheMetadata,
+        request_id: String,
         key_metadata: ContextDev::Models::AIExtractProductsResponse::KeyMetadata,
         products: ::Array[ContextDev::Models::AIExtractProductsResponse::Product]
       }
 
     class AIExtractProductsResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor cache_metadata: ContextDev::Models::AIExtractProductsResponse::CacheMetadata
+
+      attr_accessor request_id: String
 
       attr_reader key_metadata: ContextDev::Models::AIExtractProductsResponse::KeyMetadata?
 
@@ -24,12 +27,14 @@ module ContextDev
 
       def initialize: (
         cache_metadata: ContextDev::Models::AIExtractProductsResponse::CacheMetadata,
+        request_id: String,
         ?key_metadata: ContextDev::Models::AIExtractProductsResponse::KeyMetadata,
         ?products: ::Array[ContextDev::Models::AIExtractProductsResponse::Product]
       ) -> void
 
       def to_hash: -> {
         cache_metadata: ContextDev::Models::AIExtractProductsResponse::CacheMetadata,
+        request_id: String,
         key_metadata: ContextDev::Models::AIExtractProductsResponse::KeyMetadata,
         products: ::Array[ContextDev::Models::AIExtractProductsResponse::Product]
       }

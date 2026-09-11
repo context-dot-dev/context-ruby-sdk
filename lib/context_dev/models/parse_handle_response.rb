@@ -10,6 +10,13 @@ module ContextDev
       #   @return [String]
       required :markdown, String
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute success
       #   Indicates success
       #
@@ -28,8 +35,13 @@ module ContextDev
       #   @return [ContextDev::Models::ParseHandleResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::ParseHandleResponse::KeyMetadata }
 
-      # @!method initialize(markdown:, success:, type:, key_metadata: nil)
+      # @!method initialize(markdown:, request_id:, success:, type:, key_metadata: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::ParseHandleResponse} for more details.
+      #
       #   @param markdown [String] Input bytes converted to GitHub Flavored Markdown
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param success [Boolean, ContextDev::Models::ParseHandleResponse::Success] Indicates success
       #

@@ -441,8 +441,8 @@ module ContextDev
         #   # `parse_handle_response` is a `ContextDev::Models::ParseHandleResponse`
         #   parse_handle_response => {
         #     markdown: markdown,
-        #     success: success,
-        #     type: type
+        #     request_id: request_id,
+        #     success: success
         #   }
         def deconstruct_keys(keys)
           (keys || self.class.known_fields.keys)

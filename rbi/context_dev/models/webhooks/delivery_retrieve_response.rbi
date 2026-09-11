@@ -12,6 +12,11 @@ module ContextDev
             )
           end
 
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        sig { returns(String) }
+        attr_accessor :request_id
+
         # Credit usage, included whenever a valid API key is provided.
         sig do
           returns(
@@ -32,11 +37,15 @@ module ContextDev
 
         sig do
           params(
+            request_id: String,
             key_metadata:
               ContextDev::Models::Webhooks::DeliveryRetrieveResponse::KeyMetadata::OrHash
           ).returns(T.attached_class)
         end
         def self.new(
+          # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+          # it when contacting support about a failed request.
+          request_id:,
           # Credit usage, included whenever a valid API key is provided.
           key_metadata: nil
         )
@@ -45,6 +54,7 @@ module ContextDev
         sig do
           override.returns(
             {
+              request_id: String,
               key_metadata:
                 ContextDev::Models::Webhooks::DeliveryRetrieveResponse::KeyMetadata
             }

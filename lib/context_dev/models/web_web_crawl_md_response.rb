@@ -17,6 +17,13 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebCrawlMdResponse::Metadata]
       required :metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::Metadata }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute results
       #
       #   @return [Array<ContextDev::Models::WebWebCrawlMdResponse::Result>]
@@ -29,13 +36,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, metadata:, results:, key_metadata: nil)
+      # @!method initialize(cache_metadata:, metadata:, request_id:, results:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdResponse} for more details.
       #
       #   @param cache_metadata [ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param metadata [ContextDev::Models::WebWebCrawlMdResponse::Metadata]
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param results [Array<ContextDev::Models::WebWebCrawlMdResponse::Result>]
       #

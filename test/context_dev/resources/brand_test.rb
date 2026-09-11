@@ -15,6 +15,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         cache_metadata: ContextDev::Models::BrandRetrieveResponse::CacheMetadata,
+        request_id: String,
         brand: ContextDev::Models::BrandRetrieveResponse::Brand | nil,
         code: Integer | nil,
         key_metadata: ContextDev::Models::BrandRetrieveResponse::KeyMetadata | nil,
@@ -35,6 +36,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
+        request_id: String,
         brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand | nil,
         code: Integer | nil,
         key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata | nil,
@@ -54,6 +56,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        request_id: String,
         results: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BrandSearchResponse::Result]),
         key_metadata: ContextDev::Models::BrandSearchResponse::KeyMetadata | nil
       }

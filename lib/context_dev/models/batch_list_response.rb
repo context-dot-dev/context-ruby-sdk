@@ -4,6 +4,13 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Batch#list
     class BatchListResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute data
       #   Batches on this page.
       #
@@ -28,7 +35,12 @@ module ContextDev
       #   @return [String, nil]
       optional :next_cursor, String, nil?: true
 
-      # @!method initialize(data: nil, has_more: nil, key_metadata: nil, next_cursor: nil)
+      # @!method initialize(request_id:, data: nil, has_more: nil, key_metadata: nil, next_cursor: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::BatchListResponse} for more details.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #
       #   @param data [Array<ContextDev::Models::BatchListResponse::Data>] Batches on this page.
       #
       #   @param has_more [Boolean] Whether another page is available.

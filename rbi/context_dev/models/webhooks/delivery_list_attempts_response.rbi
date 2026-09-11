@@ -24,6 +24,11 @@ module ContextDev
         sig { returns(T.nilable(String)) }
         attr_accessor :next_cursor
 
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        sig { returns(String) }
+        attr_accessor :request_id
+
         # Credit usage, included whenever a valid API key is provided.
         sig do
           returns(
@@ -47,6 +52,7 @@ module ContextDev
             data: T::Array[ContextDev::Webhooks::Attempt::OrHash],
             has_more: T::Boolean,
             next_cursor: T.nilable(String),
+            request_id: String,
             key_metadata:
               ContextDev::Models::Webhooks::DeliveryListAttemptsResponse::KeyMetadata::OrHash
           ).returns(T.attached_class)
@@ -58,6 +64,9 @@ module ContextDev
           has_more:,
           # Next page cursor, or null on the last page.
           next_cursor:,
+          # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+          # it when contacting support about a failed request.
+          request_id:,
           # Credit usage, included whenever a valid API key is provided.
           key_metadata: nil
         )
@@ -69,6 +78,7 @@ module ContextDev
               data: T::Array[ContextDev::Webhooks::Attempt],
               has_more: T::Boolean,
               next_cursor: T.nilable(String),
+              request_id: String,
               key_metadata:
                 ContextDev::Models::Webhooks::DeliveryListAttemptsResponse::KeyMetadata
             }

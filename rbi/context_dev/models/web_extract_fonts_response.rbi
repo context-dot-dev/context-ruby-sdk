@@ -41,6 +41,11 @@ module ContextDev
       end
       attr_accessor :fonts
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Status of the response, e.g., 'ok'
       sig { returns(String) }
       attr_accessor :status
@@ -95,6 +100,7 @@ module ContextDev
           domain: String,
           fonts:
             T::Array[ContextDev::Models::WebExtractFontsResponse::Font::OrHash],
+          request_id: String,
           status: String,
           font_links:
             T::Hash[
@@ -116,6 +122,9 @@ module ContextDev
         domain:,
         # Array of font usage information
         fonts:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Status of the response, e.g., 'ok'
         status:,
         # Font assets keyed by family name as it appears in the fonts array (non-generic
@@ -135,6 +144,7 @@ module ContextDev
             code: Integer,
             domain: String,
             fonts: T::Array[ContextDev::Models::WebExtractFontsResponse::Font],
+            request_id: String,
             status: String,
             font_links:
               T::Hash[

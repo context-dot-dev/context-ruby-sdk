@@ -4,6 +4,13 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Industry#retrieve_sic
     class IndustryRetrieveSicResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute classification
       #   Echoes back which SIC dataset was used to classify the brand.
       #
@@ -43,9 +50,11 @@ module ContextDev
       #   @return [String, nil]
       optional :type, String
 
-      # @!method initialize(classification: nil, codes: nil, domain: nil, key_metadata: nil, status: nil, type: nil)
+      # @!method initialize(request_id:, classification: nil, codes: nil, domain: nil, key_metadata: nil, status: nil, type: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::IndustryRetrieveSicResponse} for more details.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param classification [Symbol, ContextDev::Models::IndustryRetrieveSicResponse::Classification] Echoes back which SIC dataset was used to classify the brand.
       #

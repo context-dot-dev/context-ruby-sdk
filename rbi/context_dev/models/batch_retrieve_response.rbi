@@ -84,6 +84,11 @@ module ContextDev
       end
       attr_writer :progress
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Download links, available once the batch reaches a final status and null before
       # then. GET /batch/{batch_id}/results serves the same records as paginated JSON.
       sig do
@@ -159,6 +164,7 @@ module ContextDev
           mode: ContextDev::Models::BatchRetrieveResponse::Mode::OrSymbol,
           page_errors: T::Array[ContextDev::PageErrorCount::OrHash],
           progress: ContextDev::Models::BatchRetrieveResponse::Progress::OrHash,
+          request_id: String,
           results:
             T.nilable(
               ContextDev::Models::BatchRetrieveResponse::Results::OrHash
@@ -196,6 +202,9 @@ module ContextDev
         page_errors:,
         # Pages attempted so far. Use `status` to check completion.
         progress:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Download links, available once the batch reaches a final status and null before
         # then. GET /batch/{batch_id}/results serves the same records as paginated JSON.
         results:,
@@ -226,6 +235,7 @@ module ContextDev
             mode: ContextDev::Models::BatchRetrieveResponse::Mode::TaggedSymbol,
             page_errors: T::Array[ContextDev::PageErrorCount],
             progress: ContextDev::Models::BatchRetrieveResponse::Progress,
+            request_id: String,
             results:
               T.nilable(ContextDev::Models::BatchRetrieveResponse::Results),
             status:

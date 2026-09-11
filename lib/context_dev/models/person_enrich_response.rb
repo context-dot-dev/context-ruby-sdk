@@ -10,14 +10,26 @@ module ContextDev
       #   @return [ContextDev::Models::PersonEnrichResponse::Match::Candidate, ContextDev::Models::PersonEnrichResponse::Match::NotFound]
       required :match, union: -> { ContextDev::Models::PersonEnrichResponse::Match }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute key_metadata
       #   Credit usage, included whenever a valid API key is provided.
       #
       #   @return [ContextDev::Models::PersonEnrichResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::PersonEnrichResponse::KeyMetadata }
 
-      # @!method initialize(match:, key_metadata: nil)
+      # @!method initialize(match:, request_id:, key_metadata: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::PersonEnrichResponse} for more details.
+      #
       #   @param match [ContextDev::Models::PersonEnrichResponse::Match::Candidate, ContextDev::Models::PersonEnrichResponse::Match::NotFound] The highest-scoring person candidate.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param key_metadata [ContextDev::Models::PersonEnrichResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
 

@@ -15,6 +15,7 @@ class ContextDev::Test::Resources::ParseTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         markdown: String,
+        request_id: String,
         success: ContextDev::Models::ParseHandleResponse::Success,
         type: ContextDev::Models::ParseHandleResponse::Type,
         key_metadata: ContextDev::Models::ParseHandleResponse::KeyMetadata | nil

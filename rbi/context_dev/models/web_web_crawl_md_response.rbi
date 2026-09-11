@@ -35,6 +35,11 @@ module ContextDev
       end
       attr_writer :metadata
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       sig do
         returns(T::Array[ContextDev::Models::WebWebCrawlMdResponse::Result])
       end
@@ -61,6 +66,7 @@ module ContextDev
           cache_metadata:
             ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata::OrHash,
           metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata::OrHash,
+          request_id: String,
           results:
             T::Array[ContextDev::Models::WebWebCrawlMdResponse::Result::OrHash],
           key_metadata:
@@ -73,6 +79,9 @@ module ContextDev
         # oldest contributing hit.
         cache_metadata:,
         metadata:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         results:,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil
@@ -85,6 +94,7 @@ module ContextDev
             cache_metadata:
               ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata,
             metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata,
+            request_id: String,
             results:
               T::Array[ContextDev::Models::WebWebCrawlMdResponse::Result],
             key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata

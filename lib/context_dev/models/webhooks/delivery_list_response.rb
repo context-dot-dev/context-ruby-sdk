@@ -23,18 +23,30 @@ module ContextDev
         #   @return [String, nil]
         required :next_cursor, String, nil?: true
 
+        # @!attribute request_id
+        #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        #   it when contacting support about a failed request.
+        #
+        #   @return [String]
+        required :request_id, String
+
         # @!attribute key_metadata
         #   Credit usage, included whenever a valid API key is provided.
         #
         #   @return [ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata, nil]
         optional :key_metadata, -> { ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata }
 
-        # @!method initialize(data:, has_more:, next_cursor:, key_metadata: nil)
+        # @!method initialize(data:, has_more:, next_cursor:, request_id:, key_metadata: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::Webhooks::DeliveryListResponse} for more details.
+        #
         #   @param data [Array<ContextDev::Models::Webhooks::DeliverySummary>] Webhook deliveries.
         #
         #   @param has_more [Boolean] Whether more deliveries are available.
         #
         #   @param next_cursor [String, nil] Next page cursor, or null on the last page.
+        #
+        #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
         #
         #   @param key_metadata [ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
 

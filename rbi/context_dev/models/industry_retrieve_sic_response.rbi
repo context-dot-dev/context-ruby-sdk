@@ -11,6 +11,11 @@ module ContextDev
           )
         end
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Echoes back which SIC dataset was used to classify the brand.
       sig do
         returns(
@@ -92,6 +97,7 @@ module ContextDev
 
       sig do
         params(
+          request_id: String,
           classification:
             ContextDev::Models::IndustryRetrieveSicResponse::Classification::OrSymbol,
           codes:
@@ -106,6 +112,9 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Echoes back which SIC dataset was used to classify the brand.
         classification: nil,
         # Array of SIC codes with confidence scores. Extra fields depend on the requested
@@ -126,6 +135,7 @@ module ContextDev
       sig do
         override.returns(
           {
+            request_id: String,
             classification:
               ContextDev::Models::IndustryRetrieveSicResponse::Classification::TaggedSymbol,
             codes:

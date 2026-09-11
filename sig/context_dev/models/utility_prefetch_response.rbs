@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type utility_prefetch_response =
       {
+        request_id: String,
         domain: String,
         key_metadata: ContextDev::Models::UtilityPrefetchResponse::KeyMetadata,
         message: String,
@@ -10,6 +11,8 @@ module ContextDev
       }
 
     class UtilityPrefetchResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor request_id: String
+
       attr_reader domain: String?
 
       def domain=: (String) -> String
@@ -35,6 +38,7 @@ module ContextDev
       ) -> ContextDev::Models::UtilityPrefetchResponse::type_
 
       def initialize: (
+        request_id: String,
         ?domain: String,
         ?key_metadata: ContextDev::Models::UtilityPrefetchResponse::KeyMetadata,
         ?message: String,
@@ -43,6 +47,7 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        request_id: String,
         domain: String,
         key_metadata: ContextDev::Models::UtilityPrefetchResponse::KeyMetadata,
         message: String,

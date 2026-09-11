@@ -12,6 +12,13 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute code
       #   HTTP status code
       #
@@ -42,11 +49,13 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide, nil]
       optional :styleguide, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide }
 
-      # @!method initialize(cache_metadata:, code: nil, domain: nil, key_metadata: nil, status: nil, styleguide: nil)
+      # @!method initialize(cache_metadata:, request_id:, code: nil, domain: nil, key_metadata: nil, status: nil, styleguide: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractStyleguideResponse} for more details.
       #
       #   @param cache_metadata [ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param code [Integer] HTTP status code
       #

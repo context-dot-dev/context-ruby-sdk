@@ -31,6 +31,13 @@ module ContextDev
       required :fonts,
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebExtractFontsResponse::Font] }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute status
       #   Status of the response, e.g., 'ok'
       #
@@ -53,7 +60,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractFontsResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebExtractFontsResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, code:, domain:, fonts:, status:, font_links: nil, key_metadata: nil)
+      # @!method initialize(cache_metadata:, code:, domain:, fonts:, request_id:, status:, font_links: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractFontsResponse} for more details.
       #
@@ -64,6 +71,8 @@ module ContextDev
       #   @param domain [String] The normalized domain that was processed
       #
       #   @param fonts [Array<ContextDev::Models::WebExtractFontsResponse::Font>] Array of font usage information
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param status [String] Status of the response, e.g., 'ok'
       #

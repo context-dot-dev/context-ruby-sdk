@@ -29,6 +29,11 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Simplified brand information
       sig do
         returns(
@@ -81,6 +86,7 @@ module ContextDev
         params(
           cache_metadata:
             ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::OrHash,
+          request_id: String,
           brand:
             ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::OrHash,
           code: Integer,
@@ -94,6 +100,9 @@ module ContextDev
         # cache-controlled fetch contributing to the output was a hit; age_ms is the
         # oldest contributing hit.
         cache_metadata:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Simplified brand information
         brand: nil,
         # HTTP status code of the response
@@ -110,6 +119,7 @@ module ContextDev
           {
             cache_metadata:
               ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
+            request_id: String,
             brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
             code: Integer,
             key_metadata:

@@ -23,6 +23,13 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractResponse::Metadata]
       required :metadata, -> { ContextDev::Models::WebExtractResponse::Metadata }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute status
       #   Status of the response, e.g., 'ok'
       #
@@ -47,7 +54,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebExtractResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, data:, metadata:, status:, url:, urls_analyzed:, key_metadata: nil)
+      # @!method initialize(cache_metadata:, data:, metadata:, request_id:, status:, url:, urls_analyzed:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractResponse} for more details.
       #
@@ -56,6 +63,8 @@ module ContextDev
       #   @param data [Hash{Symbol=>Object}] Extracted data matching the request schema
       #
       #   @param metadata [ContextDev::Models::WebExtractResponse::Metadata]
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param status [String] Status of the response, e.g., 'ok'
       #

@@ -4,6 +4,13 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Brand#search
     class BrandSearchResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute results
       #   Up to 10 matching brands, name matches first, then domain matches, most popular
       #   first within each group. Empty when nothing matches.
@@ -18,9 +25,11 @@ module ContextDev
       #   @return [ContextDev::Models::BrandSearchResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::BrandSearchResponse::KeyMetadata }
 
-      # @!method initialize(results:, key_metadata: nil)
+      # @!method initialize(request_id:, results:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BrandSearchResponse} for more details.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param results [Array<ContextDev::Models::BrandSearchResponse::Result>] Up to 10 matching brands, name matches first, then domain matches, most popular
       #

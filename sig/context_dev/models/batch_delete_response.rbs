@@ -2,12 +2,15 @@ module ContextDev
   module Models
     type batch_delete_response =
       {
+        request_id: String,
         id: String,
         deleted: bool,
         key_metadata: ContextDev::Models::BatchDeleteResponse::KeyMetadata
       }
 
     class BatchDeleteResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor request_id: String
+
       attr_reader id: String?
 
       def id=: (String) -> String
@@ -23,12 +26,14 @@ module ContextDev
       ) -> ContextDev::Models::BatchDeleteResponse::KeyMetadata
 
       def initialize: (
+        request_id: String,
         ?id: String,
         ?deleted: bool,
         ?key_metadata: ContextDev::Models::BatchDeleteResponse::KeyMetadata
       ) -> void
 
       def to_hash: -> {
+        request_id: String,
         id: String,
         deleted: bool,
         key_metadata: ContextDev::Models::BatchDeleteResponse::KeyMetadata

@@ -11,6 +11,11 @@ module ContextDev
           )
         end
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Up to 10 matching brands, name matches first, then domain matches, most popular
       # first within each group. Empty when nothing matches.
       sig { returns(T::Array[ContextDev::Models::BrandSearchResponse::Result]) }
@@ -32,6 +37,7 @@ module ContextDev
 
       sig do
         params(
+          request_id: String,
           results:
             T::Array[ContextDev::Models::BrandSearchResponse::Result::OrHash],
           key_metadata:
@@ -39,6 +45,9 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Up to 10 matching brands, name matches first, then domain matches, most popular
         # first within each group. Empty when nothing matches.
         results:,
@@ -50,6 +59,7 @@ module ContextDev
       sig do
         override.returns(
           {
+            request_id: String,
             results: T::Array[ContextDev::Models::BrandSearchResponse::Result],
             key_metadata: ContextDev::Models::BrandSearchResponse::KeyMetadata
           }

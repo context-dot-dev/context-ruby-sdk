@@ -15,6 +15,11 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :markdown
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Indicates success
       sig do
         returns(ContextDev::Models::ParseHandleResponse::Success::TaggedBoolean)
@@ -44,6 +49,7 @@ module ContextDev
       sig do
         params(
           markdown: String,
+          request_id: String,
           success: ContextDev::Models::ParseHandleResponse::Success::OrBoolean,
           type: ContextDev::Models::ParseHandleResponse::Type::OrSymbol,
           key_metadata:
@@ -53,6 +59,9 @@ module ContextDev
       def self.new(
         # Input bytes converted to GitHub Flavored Markdown
         markdown:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Indicates success
         success:,
         # Detected content type used for parsing
@@ -66,6 +75,7 @@ module ContextDev
         override.returns(
           {
             markdown: String,
+            request_id: String,
             success:
               ContextDev::Models::ParseHandleResponse::Success::TaggedBoolean,
             type: ContextDev::Models::ParseHandleResponse::Type::TaggedSymbol,

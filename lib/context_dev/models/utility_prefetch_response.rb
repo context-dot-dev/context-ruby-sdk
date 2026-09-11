@@ -4,6 +4,13 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Utility#prefetch
     class UtilityPrefetchResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute domain
       #   The domain that was queued for prefetching
       #
@@ -34,7 +41,12 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::UtilityPrefetchResponse::Type, nil]
       optional :type, enum: -> { ContextDev::Models::UtilityPrefetchResponse::Type }
 
-      # @!method initialize(domain: nil, key_metadata: nil, message: nil, status: nil, type: nil)
+      # @!method initialize(request_id:, domain: nil, key_metadata: nil, message: nil, status: nil, type: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::UtilityPrefetchResponse} for more details.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #
       #   @param domain [String] The domain that was queued for prefetching
       #
       #   @param key_metadata [ContextDev::Models::UtilityPrefetchResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.

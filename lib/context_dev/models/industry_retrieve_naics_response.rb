@@ -4,6 +4,13 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Industry#retrieve_naics
     class IndustryRetrieveNaicsResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute codes
       #   Array of NAICS codes and titles.
       #
@@ -35,7 +42,12 @@ module ContextDev
       #   @return [String, nil]
       optional :type, String
 
-      # @!method initialize(codes: nil, domain: nil, key_metadata: nil, status: nil, type: nil)
+      # @!method initialize(request_id:, codes: nil, domain: nil, key_metadata: nil, status: nil, type: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::IndustryRetrieveNaicsResponse} for more details.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #
       #   @param codes [Array<ContextDev::Models::IndustryRetrieveNaicsResponse::Code>] Array of NAICS codes and titles.
       #
       #   @param domain [String] Domain found for the brand

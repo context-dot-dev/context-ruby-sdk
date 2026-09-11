@@ -29,13 +29,20 @@ module ContextDev
       #   @return [String, nil]
       required :next_cursor, String, nil?: true
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute key_metadata
       #   Credit usage, included whenever a valid API key is provided.
       #
       #   @return [ContextDev::Models::NewsSearchResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::NewsSearchResponse::KeyMetadata }
 
-      # @!method initialize(data:, has_more:, meta:, next_cursor:, key_metadata: nil)
+      # @!method initialize(data:, has_more:, meta:, next_cursor:, request_id:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::NewsSearchResponse} for more details.
       #
@@ -46,6 +53,8 @@ module ContextDev
       #   @param meta [ContextDev::Models::NewsSearchResponse::Meta] Summary information about this response.
       #
       #   @param next_cursor [String, nil] Pass as cursor in the next request to fetch the following page. Null when there
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param key_metadata [ContextDev::Models::NewsSearchResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
 

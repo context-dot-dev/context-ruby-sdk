@@ -11,6 +11,7 @@ module ContextDev
         input: ContextDev::Intake,
         invalid_urls: ::Array[ContextDev::Models::BatchSubmitResponse::InvalidURL],
         mode: ContextDev::Models::BatchSubmitResponse::mode,
+        request_id: String,
         status: ContextDev::Models::BatchSubmitResponse::status,
         tags: ::Array[String],
         key_metadata: ContextDev::Models::BatchSubmitResponse::KeyMetadata,
@@ -36,6 +37,8 @@ module ContextDev
 
       attr_accessor mode: ContextDev::Models::BatchSubmitResponse::mode
 
+      attr_accessor request_id: String
+
       attr_accessor status: ContextDev::Models::BatchSubmitResponse::status
 
       attr_accessor tags: ::Array[String]
@@ -60,6 +63,7 @@ module ContextDev
         input: ContextDev::Intake,
         invalid_urls: ::Array[ContextDev::Models::BatchSubmitResponse::InvalidURL],
         mode: ContextDev::Models::BatchSubmitResponse::mode,
+        request_id: String,
         status: ContextDev::Models::BatchSubmitResponse::status,
         tags: ::Array[String],
         ?key_metadata: ContextDev::Models::BatchSubmitResponse::KeyMetadata,
@@ -76,6 +80,7 @@ module ContextDev
         input: ContextDev::Intake,
         invalid_urls: ::Array[ContextDev::Models::BatchSubmitResponse::InvalidURL],
         mode: ContextDev::Models::BatchSubmitResponse::mode,
+        request_id: String,
         status: ContextDev::Models::BatchSubmitResponse::status,
         tags: ::Array[String],
         key_metadata: ContextDev::Models::BatchSubmitResponse::KeyMetadata,

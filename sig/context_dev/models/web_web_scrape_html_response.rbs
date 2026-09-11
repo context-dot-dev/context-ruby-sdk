@@ -5,6 +5,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata,
         html: String,
         metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
         type: ContextDev::Models::WebWebScrapeHTMLResponse::type_,
         url: String,
@@ -19,6 +20,8 @@ module ContextDev
       attr_accessor html: String
 
       attr_accessor metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata
+
+      attr_accessor request_id: String
 
       attr_accessor success: ContextDev::Models::WebWebScrapeHTMLResponse::success
 
@@ -46,6 +49,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata,
         html: String,
         metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
         type: ContextDev::Models::WebWebScrapeHTMLResponse::type_,
         url: String,
@@ -58,6 +62,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata,
         html: String,
         metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::success,
         type: ContextDev::Models::WebWebScrapeHTMLResponse::type_,
         url: String,

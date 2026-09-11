@@ -15,6 +15,11 @@ module ContextDev
       sig { returns(ContextDev::Models::PersonEnrichResponse::Match::Variants) }
       attr_accessor :match
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Credit usage, included whenever a valid API key is provided.
       sig do
         returns(
@@ -38,6 +43,7 @@ module ContextDev
               ContextDev::Models::PersonEnrichResponse::Match::Candidate::OrHash,
               ContextDev::Models::PersonEnrichResponse::Match::NotFound::OrHash
             ),
+          request_id: String,
           key_metadata:
             ContextDev::Models::PersonEnrichResponse::KeyMetadata::OrHash
         ).returns(T.attached_class)
@@ -45,6 +51,9 @@ module ContextDev
       def self.new(
         # The highest-scoring person candidate.
         match:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil
       )
@@ -54,6 +63,7 @@ module ContextDev
         override.returns(
           {
             match: ContextDev::Models::PersonEnrichResponse::Match::Variants,
+            request_id: String,
             key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata
           }
         )

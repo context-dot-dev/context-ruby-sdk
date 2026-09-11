@@ -39,6 +39,11 @@ module ContextDev
       end
       attr_writer :metadata
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Status of the response, e.g., 'ok'
       sig { returns(String) }
       attr_accessor :status
@@ -71,6 +76,7 @@ module ContextDev
             ContextDev::Models::WebExtractResponse::CacheMetadata::OrHash,
           data: T::Hash[Symbol, T.anything],
           metadata: ContextDev::Models::WebExtractResponse::Metadata::OrHash,
+          request_id: String,
           status: String,
           url: String,
           urls_analyzed: T::Array[String],
@@ -86,6 +92,9 @@ module ContextDev
         # Extracted data matching the request schema
         data:,
         metadata:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Status of the response, e.g., 'ok'
         status:,
         # The starting URL that was analyzed
@@ -104,6 +113,7 @@ module ContextDev
               ContextDev::Models::WebExtractResponse::CacheMetadata,
             data: T::Hash[Symbol, T.anything],
             metadata: ContextDev::Models::WebExtractResponse::Metadata,
+            request_id: String,
             status: String,
             url: String,
             urls_analyzed: T::Array[String],

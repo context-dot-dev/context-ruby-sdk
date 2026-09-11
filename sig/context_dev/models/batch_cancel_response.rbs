@@ -10,6 +10,7 @@ module ContextDev
         mode: ContextDev::Models::BatchCancelResponse::mode,
         page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchCancelResponse::Progress,
+        request_id: String,
         status: ContextDev::Models::BatchCancelResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchCancelResponse::Timing,
@@ -33,6 +34,8 @@ module ContextDev
 
       attr_accessor progress: ContextDev::Models::BatchCancelResponse::Progress
 
+      attr_accessor request_id: String
+
       attr_accessor status: ContextDev::Models::BatchCancelResponse::status
 
       attr_accessor tags: ::Array[String]
@@ -54,6 +57,7 @@ module ContextDev
         mode: ContextDev::Models::BatchCancelResponse::mode,
         page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchCancelResponse::Progress,
+        request_id: String,
         status: ContextDev::Models::BatchCancelResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchCancelResponse::Timing,
@@ -69,6 +73,7 @@ module ContextDev
         mode: ContextDev::Models::BatchCancelResponse::mode,
         page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchCancelResponse::Progress,
+        request_id: String,
         status: ContextDev::Models::BatchCancelResponse::status,
         tags: ::Array[String],
         timing: ContextDev::Models::BatchCancelResponse::Timing,

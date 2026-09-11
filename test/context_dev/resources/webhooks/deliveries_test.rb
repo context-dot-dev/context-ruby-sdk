@@ -27,6 +27,7 @@ class ContextDev::Test::Resources::Webhooks::DeliveriesTest < ContextDev::Test::
         data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Webhooks::DeliverySummary]),
         has_more: ContextDev::Internal::Type::Boolean,
         next_cursor: String | nil,
+        request_id: String,
         key_metadata: ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata | nil
       }
     end
@@ -46,6 +47,7 @@ class ContextDev::Test::Resources::Webhooks::DeliveriesTest < ContextDev::Test::
         data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Webhooks::Attempt]),
         has_more: ContextDev::Internal::Type::Boolean,
         next_cursor: String | nil,
+        request_id: String,
         key_metadata: ContextDev::Models::Webhooks::DeliveryListAttemptsResponse::KeyMetadata | nil
       }
     end
@@ -63,6 +65,7 @@ class ContextDev::Test::Resources::Webhooks::DeliveriesTest < ContextDev::Test::
     assert_pattern do
       response => {
         id: String,
+        request_id: String,
         key_metadata: ContextDev::Models::Webhooks::DeliveryRetryResponse::KeyMetadata | nil
       }
     end

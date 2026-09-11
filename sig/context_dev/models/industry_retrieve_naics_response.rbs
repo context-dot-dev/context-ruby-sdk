@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type industry_retrieve_naics_response =
       {
+        request_id: String,
         codes: ::Array[ContextDev::Models::IndustryRetrieveNaicsResponse::Code],
         domain: String,
         key_metadata: ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata,
@@ -10,6 +11,8 @@ module ContextDev
       }
 
     class IndustryRetrieveNaicsResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor request_id: String
+
       attr_reader codes: ::Array[ContextDev::Models::IndustryRetrieveNaicsResponse::Code]?
 
       def codes=: (
@@ -35,6 +38,7 @@ module ContextDev
       def type=: (String) -> String
 
       def initialize: (
+        request_id: String,
         ?codes: ::Array[ContextDev::Models::IndustryRetrieveNaicsResponse::Code],
         ?domain: String,
         ?key_metadata: ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata,
@@ -43,6 +47,7 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        request_id: String,
         codes: ::Array[ContextDev::Models::IndustryRetrieveNaicsResponse::Code],
         domain: String,
         key_metadata: ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata,

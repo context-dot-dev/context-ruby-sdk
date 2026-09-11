@@ -3,6 +3,7 @@ module ContextDev
     type ai_extract_product_response =
       {
         cache_metadata: ContextDev::Models::AIExtractProductResponse::CacheMetadata,
+        request_id: String,
         is_product_page: bool,
         key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
         platform: ContextDev::Models::AIExtractProductResponse::platform?,
@@ -11,6 +12,8 @@ module ContextDev
 
     class AIExtractProductResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor cache_metadata: ContextDev::Models::AIExtractProductResponse::CacheMetadata
+
+      attr_accessor request_id: String
 
       attr_reader is_product_page: bool?
 
@@ -28,6 +31,7 @@ module ContextDev
 
       def initialize: (
         cache_metadata: ContextDev::Models::AIExtractProductResponse::CacheMetadata,
+        request_id: String,
         ?is_product_page: bool,
         ?key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
         ?platform: ContextDev::Models::AIExtractProductResponse::platform?,
@@ -36,6 +40,7 @@ module ContextDev
 
       def to_hash: -> {
         cache_metadata: ContextDev::Models::AIExtractProductResponse::CacheMetadata,
+        request_id: String,
         is_product_page: bool,
         key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
         platform: ContextDev::Models::AIExtractProductResponse::platform?,

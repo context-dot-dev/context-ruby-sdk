@@ -69,6 +69,13 @@ module ContextDev
       #   @return [ContextDev::Models::BatchRetrieveResponse::Progress]
       required :progress, -> { ContextDev::Models::BatchRetrieveResponse::Progress }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute results
       #   Download links, available once the batch reaches a final status and null before
       #   then. GET /batch/{batch_id}/results serves the same records as paginated JSON.
@@ -105,7 +112,7 @@ module ContextDev
       #   @return [String, nil]
       optional :webhook_delivery_id, String
 
-      # @!method initialize(id:, crawl:, credits:, failure:, format_:, input:, invalid_urls:, mode:, page_errors:, progress:, results:, status:, tags:, timing:, key_metadata: nil, webhook_delivery_id: nil)
+      # @!method initialize(id:, crawl:, credits:, failure:, format_:, input:, invalid_urls:, mode:, page_errors:, progress:, request_id:, results:, status:, tags:, timing:, key_metadata: nil, webhook_delivery_id: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchRetrieveResponse} for more details.
       #
@@ -129,6 +136,8 @@ module ContextDev
       #   @param page_errors [Array<ContextDev::Models::PageErrorCount>] Individual page failures grouped by error code, sorted by count. Unrelated to `f
       #
       #   @param progress [ContextDev::Models::BatchRetrieveResponse::Progress] Pages attempted so far. Use `status` to check completion.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param results [ContextDev::Models::BatchRetrieveResponse::Results, nil] Download links, available once the batch reaches a final status and null before
       #

@@ -14,6 +14,7 @@ class ContextDev::Test::Resources::IndustryTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        request_id: String,
         codes: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::IndustryRetrieveNaicsResponse::Code]) | nil,
         domain: String | nil,
         key_metadata: ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata | nil,
@@ -34,6 +35,7 @@ class ContextDev::Test::Resources::IndustryTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        request_id: String,
         classification: ContextDev::Models::IndustryRetrieveSicResponse::Classification | nil,
         codes: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::IndustryRetrieveSicResponse::Code]) | nil,
         domain: String | nil,

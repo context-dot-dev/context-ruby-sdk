@@ -33,6 +33,11 @@ module ContextDev
       end
       attr_accessor :images
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Always true on success.
       sig do
         returns(
@@ -91,6 +96,7 @@ module ContextDev
             T::Array[
               ContextDev::Models::WebWebScrapeImagesResponse::Image::OrHash
             ],
+          request_id: String,
           success:
             ContextDev::Models::WebWebScrapeImagesResponse::Success::OrBoolean,
           url: String,
@@ -109,6 +115,9 @@ module ContextDev
         cache_metadata:,
         # Images found on the page.
         images:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Always true on success.
         success:,
         # Page URL that was scraped.
@@ -127,6 +136,7 @@ module ContextDev
               ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata,
             images:
               T::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image],
+            request_id: String,
             success:
               ContextDev::Models::WebWebScrapeImagesResponse::Success::TaggedBoolean,
             url: String,

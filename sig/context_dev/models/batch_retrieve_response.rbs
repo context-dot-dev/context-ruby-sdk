@@ -12,6 +12,7 @@ module ContextDev
         mode: ContextDev::Models::BatchRetrieveResponse::mode,
         page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
+        request_id: String,
         results: ContextDev::Models::BatchRetrieveResponse::Results?,
         status: ContextDev::Models::BatchRetrieveResponse::status,
         tags: ::Array[String],
@@ -40,6 +41,8 @@ module ContextDev
       attr_accessor page_errors: ::Array[ContextDev::PageErrorCount]
 
       attr_accessor progress: ContextDev::Models::BatchRetrieveResponse::Progress
+
+      attr_accessor request_id: String
 
       attr_accessor results: ContextDev::Models::BatchRetrieveResponse::Results?
 
@@ -70,6 +73,7 @@ module ContextDev
         mode: ContextDev::Models::BatchRetrieveResponse::mode,
         page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
+        request_id: String,
         results: ContextDev::Models::BatchRetrieveResponse::Results?,
         status: ContextDev::Models::BatchRetrieveResponse::status,
         tags: ::Array[String],
@@ -89,6 +93,7 @@ module ContextDev
         mode: ContextDev::Models::BatchRetrieveResponse::mode,
         page_errors: ::Array[ContextDev::PageErrorCount],
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
+        request_id: String,
         results: ContextDev::Models::BatchRetrieveResponse::Results?,
         status: ContextDev::Models::BatchRetrieveResponse::status,
         tags: ::Array[String],

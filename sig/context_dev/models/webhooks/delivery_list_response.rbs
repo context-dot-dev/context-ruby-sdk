@@ -6,6 +6,7 @@ module ContextDev
           data: ::Array[ContextDev::Webhooks::DeliverySummary],
           has_more: bool,
           next_cursor: String?,
+          request_id: String,
           key_metadata: ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata
         }
 
@@ -15,6 +16,8 @@ module ContextDev
         attr_accessor has_more: bool
 
         attr_accessor next_cursor: String?
+
+        attr_accessor request_id: String
 
         attr_reader key_metadata: ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata?
 
@@ -26,6 +29,7 @@ module ContextDev
           data: ::Array[ContextDev::Webhooks::DeliverySummary],
           has_more: bool,
           next_cursor: String?,
+          request_id: String,
           ?key_metadata: ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata
         ) -> void
 
@@ -33,6 +37,7 @@ module ContextDev
           data: ::Array[ContextDev::Webhooks::DeliverySummary],
           has_more: bool,
           next_cursor: String?,
+          request_id: String,
           key_metadata: ContextDev::Models::Webhooks::DeliveryListResponse::KeyMetadata
         }
 

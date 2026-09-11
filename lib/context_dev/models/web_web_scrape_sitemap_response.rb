@@ -16,6 +16,13 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeSitemapResponse::Meta]
       required :meta, -> { ContextDev::Models::WebWebScrapeSitemapResponse::Meta }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute success
       #   Indicates success
       #
@@ -35,13 +42,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata }
 
-      # @!method initialize(domain:, meta:, success:, urls:, key_metadata: nil)
+      # @!method initialize(domain:, meta:, request_id:, success:, urls:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeSitemapResponse} for more details.
       #
       #   @param domain [String] The normalized domain that was crawled
       #
       #   @param meta [ContextDev::Models::WebWebScrapeSitemapResponse::Meta] Metadata about the sitemap crawl operation
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param success [Boolean, ContextDev::Models::WebWebScrapeSitemapResponse::Success] Indicates success
       #

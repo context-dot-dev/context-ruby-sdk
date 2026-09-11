@@ -21,6 +21,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         cache_metadata: ContextDev::Models::WebExtractResponse::CacheMetadata,
         data: ^(ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]),
         metadata: ContextDev::Models::WebExtractResponse::Metadata,
+        request_id: String,
         status: String,
         url: String,
         urls_analyzed: ^(ContextDev::Internal::Type::ArrayOf[String]),
@@ -42,6 +43,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
       response => {
         competitors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebExtractCompetitorsResponse::Competitor]),
         domain: String,
+        request_id: String,
         status: ContextDev::Models::WebExtractCompetitorsResponse::Status,
         target: ContextDev::Models::WebExtractCompetitorsResponse::Target,
         key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata | nil
@@ -64,6 +66,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         code: Integer,
         domain: String,
         fonts: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebExtractFontsResponse::Font]),
+        request_id: String,
         status: String,
         font_links: ^(ContextDev::Internal::Type::HashOf[ContextDev::Models::WebExtractFontsResponse::FontLink]) | nil,
         key_metadata: ContextDev::Models::WebExtractFontsResponse::KeyMetadata | nil
@@ -83,6 +86,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         cache_metadata: ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata,
+        request_id: String,
         code: Integer | nil,
         domain: String | nil,
         key_metadata: ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata | nil,
@@ -104,6 +108,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         cache_metadata: ContextDev::Models::WebScreenshotResponse::CacheMetadata,
+        request_id: String,
         code: Integer | nil,
         domain: String | nil,
         height: Integer | nil,
@@ -129,6 +134,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
       response => {
         cache_metadata: ContextDev::Models::WebSearchResponse::CacheMetadata,
         query: String,
+        request_id: String,
         results: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebSearchResponse::Result]),
         key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata | nil
       }
@@ -148,6 +154,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
       response => {
         cache_metadata: ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata,
         metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata,
+        request_id: String,
         results: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebCrawlMdResponse::Result]),
         key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata | nil
       }
@@ -168,6 +175,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         cache_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata,
         html: String,
         metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeHTMLResponse::Success,
         type: ContextDev::Models::WebWebScrapeHTMLResponse::Type,
         url: String,
@@ -191,6 +199,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
       response => {
         cache_metadata: ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata,
         images: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeImagesResponse::Image]),
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeImagesResponse::Success,
         url: String,
         actions_applied: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied]) | nil,
@@ -214,6 +223,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         content_length: Integer,
         markdown: String,
         metadata: ContextDev::Models::WebWebScrapeMdResponse::Metadata,
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeMdResponse::Success,
         url: String,
         actions_applied: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeMdResponse::ActionsApplied]) | nil,
@@ -237,6 +247,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
       response => {
         domain: String,
         meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeSitemapResponse::Success,
         urls: ^(ContextDev::Internal::Type::ArrayOf[String]),
         key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata | nil

@@ -68,6 +68,11 @@ module ContextDev
       end
       attr_writer :progress
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Always `cancelling`. Work already in flight finishes; the batch reaches
       # `cancelled` shortly after.
       sig do
@@ -114,6 +119,7 @@ module ContextDev
           mode: ContextDev::Models::BatchCancelResponse::Mode::OrSymbol,
           page_errors: T::Array[ContextDev::PageErrorCount::OrHash],
           progress: ContextDev::Models::BatchCancelResponse::Progress::OrHash,
+          request_id: String,
           status: ContextDev::Models::BatchCancelResponse::Status::OrSymbol,
           tags: T::Array[String],
           timing: ContextDev::Models::BatchCancelResponse::Timing::OrHash,
@@ -139,6 +145,9 @@ module ContextDev
         page_errors:,
         # How far the batch got before cancellation.
         progress:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Always `cancelling`. Work already in flight finishes; the batch reaches
         # `cancelled` shortly after.
         status:,
@@ -163,6 +172,7 @@ module ContextDev
             mode: ContextDev::Models::BatchCancelResponse::Mode::TaggedSymbol,
             page_errors: T::Array[ContextDev::PageErrorCount],
             progress: ContextDev::Models::BatchCancelResponse::Progress,
+            request_id: String,
             status:
               ContextDev::Models::BatchCancelResponse::Status::TaggedSymbol,
             tags: T::Array[String],
