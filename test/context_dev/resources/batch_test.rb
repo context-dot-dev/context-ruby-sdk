@@ -24,6 +24,7 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
         mode: ContextDev::Models::BatchRetrieveResponse::Mode,
         page_errors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::PageErrorCount]),
         progress: ContextDev::Models::BatchRetrieveResponse::Progress,
+        request_id: String,
         results: ContextDev::Models::BatchRetrieveResponse::Results | nil,
         status: ContextDev::Models::BatchRetrieveResponse::Status,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
@@ -45,6 +46,7 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        request_id: String,
         data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchListResponse::Data]) | nil,
         has_more: ContextDev::Internal::Type::Boolean | nil,
         key_metadata: ContextDev::Models::BatchListResponse::KeyMetadata | nil,
@@ -64,6 +66,7 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        request_id: String,
         id: String | nil,
         deleted: ContextDev::Internal::Type::Boolean | nil,
         key_metadata: ContextDev::Models::BatchDeleteResponse::KeyMetadata | nil
@@ -90,6 +93,7 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
         mode: ContextDev::Models::BatchCancelResponse::Mode,
         page_errors: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::PageErrorCount]),
         progress: ContextDev::Models::BatchCancelResponse::Progress,
+        request_id: String,
         status: ContextDev::Models::BatchCancelResponse::Status,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
         timing: ContextDev::Models::BatchCancelResponse::Timing,
@@ -109,6 +113,7 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        request_id: String,
         data: ^(ContextDev::Internal::Type::ArrayOf[union: ContextDev::Models::BatchGetResultsResponse::Data]) | nil,
         has_more: ContextDev::Internal::Type::Boolean | nil,
         key_metadata: ContextDev::Models::BatchGetResultsResponse::KeyMetadata | nil,
@@ -146,6 +151,7 @@ class ContextDev::Test::Resources::BatchTest < ContextDev::Test::ResourceTest
         input: ContextDev::Intake,
         invalid_urls: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchSubmitResponse::InvalidURL]),
         mode: ContextDev::Models::BatchSubmitResponse::Mode,
+        request_id: String,
         status: ContextDev::Models::BatchSubmitResponse::Status,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
         key_metadata: ContextDev::Models::BatchSubmitResponse::KeyMetadata | nil,

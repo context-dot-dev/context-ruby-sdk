@@ -77,6 +77,11 @@ module ContextDev
       end
       attr_accessor :mode
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Always `queued`. An accepted batch has not started yet.
       sig do
         returns(ContextDev::Models::BatchSubmitResponse::Status::TaggedSymbol)
@@ -124,6 +129,7 @@ module ContextDev
               ContextDev::Models::BatchSubmitResponse::InvalidURL::OrHash
             ],
           mode: ContextDev::Models::BatchSubmitResponse::Mode::OrSymbol,
+          request_id: String,
           status: ContextDev::Models::BatchSubmitResponse::Status::OrSymbol,
           tags: T::Array[String],
           key_metadata:
@@ -153,6 +159,9 @@ module ContextDev
         invalid_urls:,
         # How pages will be selected.
         mode:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Always `queued`. An accepted batch has not started yet.
         status:,
         # Tags stored on the batch.
@@ -180,6 +189,7 @@ module ContextDev
             invalid_urls:
               T::Array[ContextDev::Models::BatchSubmitResponse::InvalidURL],
             mode: ContextDev::Models::BatchSubmitResponse::Mode::TaggedSymbol,
+            request_id: String,
             status:
               ContextDev::Models::BatchSubmitResponse::Status::TaggedSymbol,
             tags: T::Array[String],

@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type batch_get_results_response =
       {
+        request_id: String,
         data: ::Array[ContextDev::Models::BatchGetResultsResponse::data],
         has_more: bool,
         key_metadata: ContextDev::Models::BatchGetResultsResponse::KeyMetadata,
@@ -9,6 +10,8 @@ module ContextDev
       }
 
     class BatchGetResultsResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor request_id: String
+
       attr_reader data: ::Array[ContextDev::Models::BatchGetResultsResponse::data]?
 
       def data=: (
@@ -28,6 +31,7 @@ module ContextDev
       attr_accessor next_cursor: String?
 
       def initialize: (
+        request_id: String,
         ?data: ::Array[ContextDev::Models::BatchGetResultsResponse::data],
         ?has_more: bool,
         ?key_metadata: ContextDev::Models::BatchGetResultsResponse::KeyMetadata,
@@ -35,6 +39,7 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        request_id: String,
         data: ::Array[ContextDev::Models::BatchGetResultsResponse::data],
         has_more: bool,
         key_metadata: ContextDev::Models::BatchGetResultsResponse::KeyMetadata,

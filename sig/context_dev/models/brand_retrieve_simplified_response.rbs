@@ -3,6 +3,7 @@ module ContextDev
     type brand_retrieve_simplified_response =
       {
         cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
+        request_id: String,
         brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
         code: Integer,
         key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata,
@@ -11,6 +12,8 @@ module ContextDev
 
     class BrandRetrieveSimplifiedResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata
+
+      attr_accessor request_id: String
 
       attr_reader brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand?
 
@@ -34,6 +37,7 @@ module ContextDev
 
       def initialize: (
         cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
+        request_id: String,
         ?brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
         ?code: Integer,
         ?key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata,
@@ -42,6 +46,7 @@ module ContextDev
 
       def to_hash: -> {
         cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
+        request_id: String,
         brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
         code: Integer,
         key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata,

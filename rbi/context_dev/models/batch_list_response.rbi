@@ -11,6 +11,11 @@ module ContextDev
           )
         end
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Batches on this page.
       sig do
         returns(
@@ -53,6 +58,7 @@ module ContextDev
 
       sig do
         params(
+          request_id: String,
           data: T::Array[ContextDev::Models::BatchListResponse::Data::OrHash],
           has_more: T::Boolean,
           key_metadata:
@@ -61,6 +67,9 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Batches on this page.
         data: nil,
         # Whether another page is available.
@@ -75,6 +84,7 @@ module ContextDev
       sig do
         override.returns(
           {
+            request_id: String,
             data: T::Array[ContextDev::Models::BatchListResponse::Data],
             has_more: T::Boolean,
             key_metadata: ContextDev::Models::BatchListResponse::KeyMetadata,

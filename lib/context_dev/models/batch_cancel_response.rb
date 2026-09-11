@@ -53,6 +53,13 @@ module ContextDev
       #   @return [ContextDev::Models::BatchCancelResponse::Progress]
       required :progress, -> { ContextDev::Models::BatchCancelResponse::Progress }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute status
       #   Always `cancelling`. Work already in flight finishes; the batch reaches
       #   `cancelled` shortly after.
@@ -78,7 +85,7 @@ module ContextDev
       #   @return [ContextDev::Models::BatchCancelResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::BatchCancelResponse::KeyMetadata }
 
-      # @!method initialize(id:, crawl:, credits:, format_:, input:, mode:, page_errors:, progress:, status:, tags:, timing:, key_metadata: nil)
+      # @!method initialize(id:, crawl:, credits:, format_:, input:, mode:, page_errors:, progress:, request_id:, status:, tags:, timing:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchCancelResponse} for more details.
       #
@@ -97,6 +104,8 @@ module ContextDev
       #   @param page_errors [Array<ContextDev::Models::PageErrorCount>] Page failures so far, grouped by error code and sorted by count.
       #
       #   @param progress [ContextDev::Models::BatchCancelResponse::Progress] How far the batch got before cancellation.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param status [Symbol, ContextDev::Models::BatchCancelResponse::Status] Always `cancelling`. Work already in flight finishes; the batch reaches `cancell
       #

@@ -62,6 +62,13 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::BatchSubmitResponse::Mode]
       required :mode, enum: -> { ContextDev::Models::BatchSubmitResponse::Mode }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute status
       #   Always `queued`. An accepted batch has not started yet.
       #
@@ -87,7 +94,7 @@ module ContextDev
       #   @return [String, nil]
       optional :webhook_secret, String
 
-      # @!method initialize(id:, cache_metadata:, crawl:, created_at:, credits:, format_:, input:, invalid_urls:, mode:, status:, tags:, key_metadata: nil, webhook_secret: nil)
+      # @!method initialize(id:, cache_metadata:, crawl:, created_at:, credits:, format_:, input:, invalid_urls:, mode:, request_id:, status:, tags:, key_metadata: nil, webhook_secret: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchSubmitResponse} for more details.
       #
@@ -108,6 +115,8 @@ module ContextDev
       #   @param invalid_urls [Array<ContextDev::Models::BatchSubmitResponse::InvalidURL>] Rejected URLs, up to 100. These are not charged.
       #
       #   @param mode [Symbol, ContextDev::Models::BatchSubmitResponse::Mode] How pages will be selected.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param status [Symbol, ContextDev::Models::BatchSubmitResponse::Status] Always `queued`. An accepted batch has not started yet.
       #

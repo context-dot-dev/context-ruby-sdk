@@ -25,6 +25,11 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :domain
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Status of the response.
       sig do
         returns(
@@ -70,6 +75,7 @@ module ContextDev
               ContextDev::Models::WebExtractCompetitorsResponse::Competitor::OrHash
             ],
           domain: String,
+          request_id: String,
           status:
             ContextDev::Models::WebExtractCompetitorsResponse::Status::OrSymbol,
           target:
@@ -83,6 +89,9 @@ module ContextDev
         competitors:,
         # Normalized input domain.
         domain:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Status of the response.
         status:,
         # Target company profile inferred from the landing page.
@@ -100,6 +109,7 @@ module ContextDev
                 ContextDev::Models::WebExtractCompetitorsResponse::Competitor
               ],
             domain: String,
+            request_id: String,
             status:
               ContextDev::Models::WebExtractCompetitorsResponse::Status::TaggedSymbol,
             target: ContextDev::Models::WebExtractCompetitorsResponse::Target,

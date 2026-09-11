@@ -33,6 +33,11 @@ module ContextDev
       sig { returns(T.nilable(String)) }
       attr_accessor :next_cursor
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Credit usage, included whenever a valid API key is provided.
       sig do
         returns(T.nilable(ContextDev::Models::NewsSearchResponse::KeyMetadata))
@@ -53,6 +58,7 @@ module ContextDev
           has_more: T::Boolean,
           meta: ContextDev::Models::NewsSearchResponse::Meta::OrHash,
           next_cursor: T.nilable(String),
+          request_id: String,
           key_metadata:
             ContextDev::Models::NewsSearchResponse::KeyMetadata::OrHash
         ).returns(T.attached_class)
@@ -67,6 +73,9 @@ module ContextDev
         # Pass as cursor in the next request to fetch the following page. Null when there
         # are no more results.
         next_cursor:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil
       )
@@ -79,6 +88,7 @@ module ContextDev
             has_more: T::Boolean,
             meta: ContextDev::Models::NewsSearchResponse::Meta,
             next_cursor: T.nilable(String),
+            request_id: String,
             key_metadata: ContextDev::Models::NewsSearchResponse::KeyMetadata
           }
         )

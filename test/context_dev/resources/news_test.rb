@@ -18,6 +18,7 @@ class ContextDev::Test::Resources::NewsTest < ContextDev::Test::ResourceTest
         has_more: ContextDev::Internal::Type::Boolean,
         meta: ContextDev::Models::NewsSearchResponse::Meta,
         next_cursor: String | nil,
+        request_id: String,
         key_metadata: ContextDev::Models::NewsSearchResponse::KeyMetadata | nil
       }
     end

@@ -32,6 +32,13 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeMdResponse::Metadata]
       required :metadata, -> { ContextDev::Models::WebWebScrapeMdResponse::Metadata }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute success
       #   Indicates success
       #
@@ -73,7 +80,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, content_length:, markdown:, metadata:, success:, url:, actions_applied: nil, actions_html_stale: nil, html: nil, key_metadata: nil)
+      # @!method initialize(cache_metadata:, content_length:, markdown:, metadata:, request_id:, success:, url:, actions_applied: nil, actions_html_stale: nil, html: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeMdResponse} for more details.
       #
@@ -84,6 +91,8 @@ module ContextDev
       #   @param markdown [String] Page content converted to GitHub Flavored Markdown
       #
       #   @param metadata [ContextDev::Models::WebWebScrapeMdResponse::Metadata] Metadata extracted from the scraped page HTML.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param success [Boolean, ContextDev::Models::WebWebScrapeMdResponse::Success] Indicates success
       #

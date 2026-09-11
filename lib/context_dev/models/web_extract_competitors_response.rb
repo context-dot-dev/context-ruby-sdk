@@ -17,6 +17,13 @@ module ContextDev
       #   @return [String]
       required :domain, String
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute status
       #   Status of the response.
       #
@@ -35,10 +42,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata }
 
-      # @!method initialize(competitors:, domain:, status:, target:, key_metadata: nil)
+      # @!method initialize(competitors:, domain:, request_id:, status:, target:, key_metadata: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::WebExtractCompetitorsResponse} for more details.
+      #
       #   @param competitors [Array<ContextDev::Models::WebExtractCompetitorsResponse::Competitor>] Direct competitors ordered by relevance and confidence.
       #
       #   @param domain [String] Normalized input domain.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param status [Symbol, ContextDev::Models::WebExtractCompetitorsResponse::Status] Status of the response.
       #

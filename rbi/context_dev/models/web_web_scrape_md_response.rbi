@@ -46,6 +46,11 @@ module ContextDev
       end
       attr_writer :metadata
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Indicates success
       sig do
         returns(
@@ -119,6 +124,7 @@ module ContextDev
           markdown: String,
           metadata:
             ContextDev::Models::WebWebScrapeMdResponse::Metadata::OrHash,
+          request_id: String,
           success:
             ContextDev::Models::WebWebScrapeMdResponse::Success::OrBoolean,
           url: String,
@@ -145,6 +151,9 @@ module ContextDev
         markdown:,
         # Metadata extracted from the scraped page HTML.
         metadata:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Indicates success
         success:,
         # The URL that was scraped
@@ -171,6 +180,7 @@ module ContextDev
             content_length: Integer,
             markdown: String,
             metadata: ContextDev::Models::WebWebScrapeMdResponse::Metadata,
+            request_id: String,
             success:
               ContextDev::Models::WebWebScrapeMdResponse::Success::TaggedBoolean,
             url: String,

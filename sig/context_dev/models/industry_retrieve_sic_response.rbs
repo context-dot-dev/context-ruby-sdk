@@ -2,6 +2,7 @@ module ContextDev
   module Models
     type industry_retrieve_sic_response =
       {
+        request_id: String,
         classification: ContextDev::Models::IndustryRetrieveSicResponse::classification,
         codes: ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code],
         domain: String,
@@ -11,6 +12,8 @@ module ContextDev
       }
 
     class IndustryRetrieveSicResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor request_id: String
+
       attr_reader classification: ContextDev::Models::IndustryRetrieveSicResponse::classification?
 
       def classification=: (
@@ -42,6 +45,7 @@ module ContextDev
       def type=: (String) -> String
 
       def initialize: (
+        request_id: String,
         ?classification: ContextDev::Models::IndustryRetrieveSicResponse::classification,
         ?codes: ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code],
         ?domain: String,
@@ -51,6 +55,7 @@ module ContextDev
       ) -> void
 
       def to_hash: -> {
+        request_id: String,
         classification: ContextDev::Models::IndustryRetrieveSicResponse::classification,
         codes: ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code],
         domain: String,

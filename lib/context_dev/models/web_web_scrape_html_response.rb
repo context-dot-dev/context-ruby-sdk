@@ -26,6 +26,13 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeHTMLResponse::Metadata]
       required :metadata, -> { ContextDev::Models::WebWebScrapeHTMLResponse::Metadata }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute success
       #   Indicates success
       #
@@ -68,7 +75,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, html:, metadata:, success:, type:, url:, actions_applied: nil, actions_html_stale: nil, key_metadata: nil)
+      # @!method initialize(cache_metadata:, html:, metadata:, request_id:, success:, type:, url:, actions_applied: nil, actions_html_stale: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeHTMLResponse} for more details.
       #
@@ -77,6 +84,8 @@ module ContextDev
       #   @param html [String] The scraped content of the page. For normal pages this is the raw HTML. When the
       #
       #   @param metadata [ContextDev::Models::WebWebScrapeHTMLResponse::Metadata] Metadata extracted from the scraped page HTML.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param success [Boolean, ContextDev::Models::WebWebScrapeHTMLResponse::Success] Indicates success
       #

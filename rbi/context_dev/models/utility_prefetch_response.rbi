@@ -11,6 +11,11 @@ module ContextDev
           )
         end
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # The domain that was queued for prefetching
       sig { returns(T.nilable(String)) }
       attr_reader :domain
@@ -67,6 +72,7 @@ module ContextDev
 
       sig do
         params(
+          request_id: String,
           domain: String,
           key_metadata:
             ContextDev::Models::UtilityPrefetchResponse::KeyMetadata::OrHash,
@@ -76,6 +82,9 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # The domain that was queued for prefetching
         domain: nil,
         # Credit usage, included whenever a valid API key is provided.
@@ -92,6 +101,7 @@ module ContextDev
       sig do
         override.returns(
           {
+            request_id: String,
             domain: String,
             key_metadata:
               ContextDev::Models::UtilityPrefetchResponse::KeyMetadata,

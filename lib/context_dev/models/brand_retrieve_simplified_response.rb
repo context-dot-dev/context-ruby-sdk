@@ -12,6 +12,13 @@ module ContextDev
       #   @return [ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute brand
       #   Simplified brand information
       #
@@ -36,11 +43,13 @@ module ContextDev
       #   @return [String, nil]
       optional :status, String
 
-      # @!method initialize(cache_metadata:, brand: nil, code: nil, key_metadata: nil, status: nil)
+      # @!method initialize(cache_metadata:, request_id:, brand: nil, code: nil, key_metadata: nil, status: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BrandRetrieveSimplifiedResponse} for more details.
       #
       #   @param cache_metadata [ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param brand [ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand] Simplified brand information
       #

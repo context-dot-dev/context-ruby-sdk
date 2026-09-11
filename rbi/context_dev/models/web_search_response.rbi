@@ -29,6 +29,11 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :query
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       sig { returns(T::Array[ContextDev::Models::WebSearchResponse::Result]) }
       attr_accessor :results
 
@@ -51,6 +56,7 @@ module ContextDev
           cache_metadata:
             ContextDev::Models::WebSearchResponse::CacheMetadata::OrHash,
           query: String,
+          request_id: String,
           results:
             T::Array[ContextDev::Models::WebSearchResponse::Result::OrHash],
           key_metadata:
@@ -64,6 +70,9 @@ module ContextDev
         cache_metadata:,
         # Echo of the original query (useful when fanout was enabled).
         query:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         results:,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil
@@ -76,6 +85,7 @@ module ContextDev
             cache_metadata:
               ContextDev::Models::WebSearchResponse::CacheMetadata,
             query: String,
+            request_id: String,
             results: T::Array[ContextDev::Models::WebSearchResponse::Result],
             key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata
           }

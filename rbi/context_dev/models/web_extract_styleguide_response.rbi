@@ -27,6 +27,11 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # HTTP status code
       sig { returns(T.nilable(Integer)) }
       attr_reader :code
@@ -88,6 +93,7 @@ module ContextDev
         params(
           cache_metadata:
             ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::OrHash,
+          request_id: String,
           code: Integer,
           domain: String,
           key_metadata:
@@ -102,6 +108,9 @@ module ContextDev
         # cache-controlled fetch contributing to the output was a hit; age_ms is the
         # oldest contributing hit.
         cache_metadata:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # HTTP status code
         code: nil,
         # The normalized domain that was processed
@@ -120,6 +129,7 @@ module ContextDev
           {
             cache_metadata:
               ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata,
+            request_id: String,
             code: Integer,
             domain: String,
             key_metadata:

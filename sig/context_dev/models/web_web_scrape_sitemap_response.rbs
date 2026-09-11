@@ -4,6 +4,7 @@ module ContextDev
       {
         domain: String,
         meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
         urls: ::Array[String],
         key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
@@ -13,6 +14,8 @@ module ContextDev
       attr_accessor domain: String
 
       attr_accessor meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta
+
+      attr_accessor request_id: String
 
       attr_accessor success: ContextDev::Models::WebWebScrapeSitemapResponse::success
 
@@ -27,6 +30,7 @@ module ContextDev
       def initialize: (
         domain: String,
         meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
         urls: ::Array[String],
         ?key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
@@ -35,6 +39,7 @@ module ContextDev
       def to_hash: -> {
         domain: String,
         meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
         urls: ::Array[String],
         key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata

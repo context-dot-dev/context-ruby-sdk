@@ -45,6 +45,11 @@ module ContextDev
       end
       attr_writer :metadata
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Indicates success
       sig do
         returns(
@@ -121,6 +126,7 @@ module ContextDev
           html: String,
           metadata:
             ContextDev::Models::WebWebScrapeHTMLResponse::Metadata::OrHash,
+          request_id: String,
           success:
             ContextDev::Models::WebWebScrapeHTMLResponse::Success::OrBoolean,
           type: ContextDev::Models::WebWebScrapeHTMLResponse::Type::OrSymbol,
@@ -145,6 +151,9 @@ module ContextDev
         html:,
         # Metadata extracted from the scraped page HTML.
         metadata:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Indicates success
         success:,
         # Detected content type of the returned `html` field. Sitemaps and feeds are
@@ -171,6 +180,7 @@ module ContextDev
               ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata,
             html: String,
             metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
+            request_id: String,
             success:
               ContextDev::Models::WebWebScrapeHTMLResponse::Success::TaggedBoolean,
             type:

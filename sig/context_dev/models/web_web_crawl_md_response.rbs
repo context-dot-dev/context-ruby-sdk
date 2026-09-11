@@ -4,6 +4,7 @@ module ContextDev
       {
         cache_metadata: ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata,
         metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata,
+        request_id: String,
         results: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result],
         key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata
       }
@@ -12,6 +13,8 @@ module ContextDev
       attr_accessor cache_metadata: ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata
 
       attr_accessor metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata
+
+      attr_accessor request_id: String
 
       attr_accessor results: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result]
 
@@ -24,6 +27,7 @@ module ContextDev
       def initialize: (
         cache_metadata: ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata,
         metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata,
+        request_id: String,
         results: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result],
         ?key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata
       ) -> void
@@ -31,6 +35,7 @@ module ContextDev
       def to_hash: -> {
         cache_metadata: ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata,
         metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata,
+        request_id: String,
         results: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result],
         key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata
       }

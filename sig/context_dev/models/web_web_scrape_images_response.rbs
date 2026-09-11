@@ -4,6 +4,7 @@ module ContextDev
       {
         cache_metadata: ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata,
         images: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image],
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
         url: String,
         actions_applied: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied],
@@ -14,6 +15,8 @@ module ContextDev
       attr_accessor cache_metadata: ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata
 
       attr_accessor images: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image]
+
+      attr_accessor request_id: String
 
       attr_accessor success: ContextDev::Models::WebWebScrapeImagesResponse::success
 
@@ -34,6 +37,7 @@ module ContextDev
       def initialize: (
         cache_metadata: ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata,
         images: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image],
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
         url: String,
         ?actions_applied: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied],
@@ -43,6 +47,7 @@ module ContextDev
       def to_hash: -> {
         cache_metadata: ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata,
         images: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::Image],
+        request_id: String,
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
         url: String,
         actions_applied: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied],

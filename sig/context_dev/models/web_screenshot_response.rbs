@@ -3,6 +3,7 @@ module ContextDev
     type web_screenshot_response =
       {
         cache_metadata: ContextDev::Models::WebScreenshotResponse::CacheMetadata,
+        request_id: String,
         code: Integer,
         domain: String,
         height: Integer,
@@ -15,6 +16,8 @@ module ContextDev
 
     class WebScreenshotResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor cache_metadata: ContextDev::Models::WebScreenshotResponse::CacheMetadata
+
+      attr_accessor request_id: String
 
       attr_reader code: Integer?
 
@@ -54,6 +57,7 @@ module ContextDev
 
       def initialize: (
         cache_metadata: ContextDev::Models::WebScreenshotResponse::CacheMetadata,
+        request_id: String,
         ?code: Integer,
         ?domain: String,
         ?height: Integer,
@@ -66,6 +70,7 @@ module ContextDev
 
       def to_hash: -> {
         cache_metadata: ContextDev::Models::WebScreenshotResponse::CacheMetadata,
+        request_id: String,
         code: Integer,
         domain: String,
         height: Integer,

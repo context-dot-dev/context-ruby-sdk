@@ -19,6 +19,13 @@ module ContextDev
       required :images,
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeImagesResponse::Image] }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute success
       #   Always true on success.
       #
@@ -45,13 +52,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, images:, success:, url:, actions_applied: nil, key_metadata: nil)
+      # @!method initialize(cache_metadata:, images:, request_id:, success:, url:, actions_applied: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeImagesResponse} for more details.
       #
       #   @param cache_metadata [ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param images [Array<ContextDev::Models::WebWebScrapeImagesResponse::Image>] Images found on the page.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param success [Boolean, ContextDev::Models::WebWebScrapeImagesResponse::Success] Always true on success.
       #

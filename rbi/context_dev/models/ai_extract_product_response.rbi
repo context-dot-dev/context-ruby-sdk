@@ -27,6 +27,11 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Whether the given URL is a product detail page
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :is_product_page
@@ -82,6 +87,7 @@ module ContextDev
         params(
           cache_metadata:
             ContextDev::Models::AIExtractProductResponse::CacheMetadata::OrHash,
+          request_id: String,
           is_product_page: T::Boolean,
           key_metadata:
             ContextDev::Models::AIExtractProductResponse::KeyMetadata::OrHash,
@@ -100,6 +106,9 @@ module ContextDev
         # cache-controlled fetch contributing to the output was a hit; age_ms is the
         # oldest contributing hit.
         cache_metadata:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Whether the given URL is a product detail page
         is_product_page: nil,
         # Credit usage, included whenever a valid API key is provided.
@@ -116,6 +125,7 @@ module ContextDev
           {
             cache_metadata:
               ContextDev::Models::AIExtractProductResponse::CacheMetadata,
+            request_id: String,
             is_product_page: T::Boolean,
             key_metadata:
               ContextDev::Models::AIExtractProductResponse::KeyMetadata,

@@ -11,6 +11,11 @@ module ContextDev
           )
         end
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # ID of the deleted batch.
       sig { returns(T.nilable(String)) }
       attr_reader :id
@@ -41,6 +46,7 @@ module ContextDev
 
       sig do
         params(
+          request_id: String,
           id: String,
           deleted: T::Boolean,
           key_metadata:
@@ -48,6 +54,9 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # ID of the deleted batch.
         id: nil,
         # Always true on success.
@@ -60,6 +69,7 @@ module ContextDev
       sig do
         override.returns(
           {
+            request_id: String,
             id: String,
             deleted: T::Boolean,
             key_metadata: ContextDev::Models::BatchDeleteResponse::KeyMetadata

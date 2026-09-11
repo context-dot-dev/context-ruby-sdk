@@ -26,6 +26,11 @@ module ContextDev
       end
       attr_writer :meta
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Indicates success
       sig do
         returns(
@@ -61,6 +66,7 @@ module ContextDev
         params(
           domain: String,
           meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta::OrHash,
+          request_id: String,
           success:
             ContextDev::Models::WebWebScrapeSitemapResponse::Success::OrBoolean,
           urls: T::Array[String],
@@ -73,6 +79,9 @@ module ContextDev
         domain:,
         # Metadata about the sitemap crawl operation
         meta:,
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Indicates success
         success:,
         # Discovered page URLs from the sitemap, up to `maxLinks`. When `search` is set
@@ -88,6 +97,7 @@ module ContextDev
           {
             domain: String,
             meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
+            request_id: String,
             success:
               ContextDev::Models::WebWebScrapeSitemapResponse::Success::TaggedBoolean,
             urls: T::Array[String],

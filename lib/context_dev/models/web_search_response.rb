@@ -18,6 +18,13 @@ module ContextDev
       #   @return [String]
       required :query, String
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute results
       #
       #   @return [Array<ContextDev::Models::WebSearchResponse::Result>]
@@ -30,13 +37,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebSearchResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebSearchResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, query:, results:, key_metadata: nil)
+      # @!method initialize(cache_metadata:, query:, request_id:, results:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebSearchResponse} for more details.
       #
       #   @param cache_metadata [ContextDev::Models::WebSearchResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param query [String] Echo of the original query (useful when fanout was enabled).
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param results [Array<ContextDev::Models::WebSearchResponse::Result>]
       #

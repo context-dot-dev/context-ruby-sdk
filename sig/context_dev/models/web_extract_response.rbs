@@ -5,6 +5,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::WebExtractResponse::CacheMetadata,
         data: ::Hash[Symbol, top],
         metadata: ContextDev::Models::WebExtractResponse::Metadata,
+        request_id: String,
         status: String,
         url: String,
         urls_analyzed: ::Array[String],
@@ -17,6 +18,8 @@ module ContextDev
       attr_accessor data: ::Hash[Symbol, top]
 
       attr_accessor metadata: ContextDev::Models::WebExtractResponse::Metadata
+
+      attr_accessor request_id: String
 
       attr_accessor status: String
 
@@ -34,6 +37,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::WebExtractResponse::CacheMetadata,
         data: ::Hash[Symbol, top],
         metadata: ContextDev::Models::WebExtractResponse::Metadata,
+        request_id: String,
         status: String,
         url: String,
         urls_analyzed: ::Array[String],
@@ -44,6 +48,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::WebExtractResponse::CacheMetadata,
         data: ::Hash[Symbol, top],
         metadata: ContextDev::Models::WebExtractResponse::Metadata,
+        request_id: String,
         status: String,
         url: String,
         urls_analyzed: ::Array[String],

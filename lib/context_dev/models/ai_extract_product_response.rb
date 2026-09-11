@@ -12,6 +12,13 @@ module ContextDev
       #   @return [ContextDev::Models::AIExtractProductResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::AIExtractProductResponse::CacheMetadata }
 
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute is_product_page
       #   Whether the given URL is a product detail page
       #
@@ -36,11 +43,13 @@ module ContextDev
       #   @return [ContextDev::Models::AIExtractProductResponse::Product, nil]
       optional :product, -> { ContextDev::Models::AIExtractProductResponse::Product }, nil?: true
 
-      # @!method initialize(cache_metadata:, is_product_page: nil, key_metadata: nil, platform: nil, product: nil)
+      # @!method initialize(cache_metadata:, request_id:, is_product_page: nil, key_metadata: nil, platform: nil, product: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::AIExtractProductResponse} for more details.
       #
       #   @param cache_metadata [ContextDev::Models::AIExtractProductResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param is_product_page [Boolean] Whether the given URL is a product detail page
       #

@@ -3,6 +3,7 @@ module ContextDev
     type parse_handle_response =
       {
         markdown: String,
+        request_id: String,
         success: ContextDev::Models::ParseHandleResponse::success,
         type: ContextDev::Models::ParseHandleResponse::type_,
         key_metadata: ContextDev::Models::ParseHandleResponse::KeyMetadata
@@ -10,6 +11,8 @@ module ContextDev
 
     class ParseHandleResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor markdown: String
+
+      attr_accessor request_id: String
 
       attr_accessor success: ContextDev::Models::ParseHandleResponse::success
 
@@ -23,6 +26,7 @@ module ContextDev
 
       def initialize: (
         markdown: String,
+        request_id: String,
         success: ContextDev::Models::ParseHandleResponse::success,
         type: ContextDev::Models::ParseHandleResponse::type_,
         ?key_metadata: ContextDev::Models::ParseHandleResponse::KeyMetadata
@@ -30,6 +34,7 @@ module ContextDev
 
       def to_hash: -> {
         markdown: String,
+        request_id: String,
         success: ContextDev::Models::ParseHandleResponse::success,
         type: ContextDev::Models::ParseHandleResponse::type_,
         key_metadata: ContextDev::Models::ParseHandleResponse::KeyMetadata

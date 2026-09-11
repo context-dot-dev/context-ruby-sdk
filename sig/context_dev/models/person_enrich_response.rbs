@@ -3,11 +3,14 @@ module ContextDev
     type person_enrich_response =
       {
         match: ContextDev::Models::PersonEnrichResponse::match,
+        request_id: String,
         key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata
       }
 
     class PersonEnrichResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor match: ContextDev::Models::PersonEnrichResponse::match
+
+      attr_accessor request_id: String
 
       attr_reader key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata?
 
@@ -17,11 +20,13 @@ module ContextDev
 
       def initialize: (
         match: ContextDev::Models::PersonEnrichResponse::match,
+        request_id: String,
         ?key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata
       ) -> void
 
       def to_hash: -> {
         match: ContextDev::Models::PersonEnrichResponse::match,
+        request_id: String,
         key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata
       }
 

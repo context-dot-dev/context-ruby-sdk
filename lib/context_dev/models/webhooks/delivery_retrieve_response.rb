@@ -5,13 +5,25 @@ module ContextDev
     module Webhooks
       # @see ContextDev::Resources::Webhooks::Deliveries#retrieve
       class DeliveryRetrieveResponse < ContextDev::Models::Webhooks::Delivery
+        # @!attribute request_id
+        #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        #   it when contacting support about a failed request.
+        #
+        #   @return [String]
+        required :request_id, String
+
         # @!attribute key_metadata
         #   Credit usage, included whenever a valid API key is provided.
         #
         #   @return [ContextDev::Models::Webhooks::DeliveryRetrieveResponse::KeyMetadata, nil]
         optional :key_metadata, -> { ContextDev::Models::Webhooks::DeliveryRetrieveResponse::KeyMetadata }
 
-        # @!method initialize(key_metadata: nil)
+        # @!method initialize(request_id:, key_metadata: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::Webhooks::DeliveryRetrieveResponse} for more details.
+        #
+        #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        #
         #   @param key_metadata [ContextDev::Models::Webhooks::DeliveryRetrieveResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
 
         class KeyMetadata < ContextDev::Internal::Type::BaseModel

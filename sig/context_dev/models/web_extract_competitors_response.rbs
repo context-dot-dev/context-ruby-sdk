@@ -4,6 +4,7 @@ module ContextDev
       {
         competitors: ::Array[ContextDev::Models::WebExtractCompetitorsResponse::Competitor],
         domain: String,
+        request_id: String,
         status: ContextDev::Models::WebExtractCompetitorsResponse::status,
         target: ContextDev::Models::WebExtractCompetitorsResponse::Target,
         key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata
@@ -13,6 +14,8 @@ module ContextDev
       attr_accessor competitors: ::Array[ContextDev::Models::WebExtractCompetitorsResponse::Competitor]
 
       attr_accessor domain: String
+
+      attr_accessor request_id: String
 
       attr_accessor status: ContextDev::Models::WebExtractCompetitorsResponse::status
 
@@ -27,6 +30,7 @@ module ContextDev
       def initialize: (
         competitors: ::Array[ContextDev::Models::WebExtractCompetitorsResponse::Competitor],
         domain: String,
+        request_id: String,
         status: ContextDev::Models::WebExtractCompetitorsResponse::status,
         target: ContextDev::Models::WebExtractCompetitorsResponse::Target,
         ?key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata
@@ -35,6 +39,7 @@ module ContextDev
       def to_hash: -> {
         competitors: ::Array[ContextDev::Models::WebExtractCompetitorsResponse::Competitor],
         domain: String,
+        request_id: String,
         status: ContextDev::Models::WebExtractCompetitorsResponse::status,
         target: ContextDev::Models::WebExtractCompetitorsResponse::Target,
         key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata

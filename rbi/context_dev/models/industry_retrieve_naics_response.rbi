@@ -11,6 +11,11 @@ module ContextDev
           )
         end
 
+      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      # it when contacting support about a failed request.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # Array of NAICS codes and titles.
       sig do
         returns(
@@ -72,6 +77,7 @@ module ContextDev
 
       sig do
         params(
+          request_id: String,
           codes:
             T::Array[
               ContextDev::Models::IndustryRetrieveNaicsResponse::Code::OrHash
@@ -84,6 +90,9 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        # it when contacting support about a failed request.
+        request_id:,
         # Array of NAICS codes and titles.
         codes: nil,
         # Domain found for the brand
@@ -100,6 +109,7 @@ module ContextDev
       sig do
         override.returns(
           {
+            request_id: String,
             codes:
               T::Array[ContextDev::Models::IndustryRetrieveNaicsResponse::Code],
             domain: String,

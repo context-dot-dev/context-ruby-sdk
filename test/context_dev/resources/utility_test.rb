@@ -14,6 +14,7 @@ class ContextDev::Test::Resources::UtilityTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        request_id: String,
         domain: String | nil,
         key_metadata: ContextDev::Models::UtilityPrefetchResponse::KeyMetadata | nil,
         message: String | nil,

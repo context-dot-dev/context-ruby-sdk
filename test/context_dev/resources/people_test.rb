@@ -15,6 +15,7 @@ class ContextDev::Test::Resources::PeopleTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         match: ContextDev::Models::PersonEnrichResponse::Match,
+        request_id: String,
         key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata | nil
       }
     end
