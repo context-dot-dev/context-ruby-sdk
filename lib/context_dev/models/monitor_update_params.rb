@@ -219,6 +219,25 @@ module ContextDev
           #   @return [String]
           required :url, String
 
+          # @!attribute exclude_selectors
+          #   CSS selectors for HTML regions to remove before text extraction. Applied after
+          #   include_selectors; exclusion takes precedence when an element matches both. Omit
+          #   or pass an empty array to apply no explicit exclusions. Changing these selectors
+          #   creates a new baseline.
+          #
+          #   @return [Array<String>, nil]
+          optional :exclude_selectors, ContextDev::Internal::Type::ArrayOf[String]
+
+          # @!attribute include_selectors
+          #   CSS selectors defining the HTML regions to monitor. Matching subtrees are
+          #   combined in document order before text extraction, instead of automatic
+          #   main-content selection. Omit or pass an empty array to use automatic
+          #   main-content extraction. If the filtered page has no usable text, the run fails
+          #   without replacing the baseline. Changing these selectors creates a new baseline.
+          #
+          #   @return [Array<String>, nil]
+          optional :include_selectors, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute instructions
           #   Plain-language goal describing which page changes matter. When provided without
           #   change_detection, semantic detection is inferred.
@@ -232,7 +251,7 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :normalize_whitespace, ContextDev::Internal::Type::Boolean
 
-          # @!method initialize(url:, instructions: nil, normalize_whitespace: nil, type: :page)
+          # @!method initialize(url:, exclude_selectors: nil, include_selectors: nil, instructions: nil, normalize_whitespace: nil, type: :page)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorUpdateParams::Target::Page} for more details.
           #
@@ -240,6 +259,10 @@ module ContextDev
           #   detection judges confirmed stable diffs against `instructions`.
           #
           #   @param url [String]
+          #
+          #   @param exclude_selectors [Array<String>] CSS selectors for HTML regions to remove before text extraction. Applied after i
+          #
+          #   @param include_selectors [Array<String>] CSS selectors defining the HTML regions to monitor. Matching subtrees are combin
           #
           #   @param instructions [String] Plain-language goal describing which page changes matter. When provided without
           #
