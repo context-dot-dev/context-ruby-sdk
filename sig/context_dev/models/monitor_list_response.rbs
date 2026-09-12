@@ -244,6 +244,8 @@ module ContextDev
             {
               type: :page,
               url: String,
+              exclude_selectors: ::Array[String],
+              include_selectors: ::Array[String],
               instructions: String,
               normalize_whitespace: bool
             }
@@ -252,6 +254,14 @@ module ContextDev
             attr_accessor type: :page
 
             attr_accessor url: String
+
+            attr_reader exclude_selectors: ::Array[String]?
+
+            def exclude_selectors=: (::Array[String]) -> ::Array[String]
+
+            attr_reader include_selectors: ::Array[String]?
+
+            def include_selectors=: (::Array[String]) -> ::Array[String]
 
             attr_reader instructions: String?
 
@@ -263,6 +273,8 @@ module ContextDev
 
             def initialize: (
               url: String,
+              ?exclude_selectors: ::Array[String],
+              ?include_selectors: ::Array[String],
               ?instructions: String,
               ?normalize_whitespace: bool,
               ?type: :page
@@ -271,6 +283,8 @@ module ContextDev
             def to_hash: -> {
               type: :page,
               url: String,
+              exclude_selectors: ::Array[String],
+              include_selectors: ::Array[String],
               instructions: String,
               normalize_whitespace: bool
             }

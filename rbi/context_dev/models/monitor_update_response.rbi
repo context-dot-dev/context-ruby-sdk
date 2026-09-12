@@ -591,6 +591,27 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :url
 
+          # CSS selectors for HTML regions to remove before text extraction. Applied after
+          # include_selectors; exclusion takes precedence when an element matches both. Omit
+          # or pass an empty array to apply no explicit exclusions. Changing these selectors
+          # creates a new baseline.
+          sig { returns(T.nilable(T::Array[String])) }
+          attr_reader :exclude_selectors
+
+          sig { params(exclude_selectors: T::Array[String]).void }
+          attr_writer :exclude_selectors
+
+          # CSS selectors defining the HTML regions to monitor. Matching subtrees are
+          # combined in document order before text extraction, instead of automatic
+          # main-content selection. Omit or pass an empty array to use automatic
+          # main-content extraction. If the filtered page has no usable text, the run fails
+          # without replacing the baseline. Changing these selectors creates a new baseline.
+          sig { returns(T.nilable(T::Array[String])) }
+          attr_reader :include_selectors
+
+          sig { params(include_selectors: T::Array[String]).void }
+          attr_writer :include_selectors
+
           # Plain-language goal describing which page changes matter. When provided without
           # change_detection, semantic detection is inferred.
           sig { returns(T.nilable(String)) }
@@ -611,6 +632,8 @@ module ContextDev
           sig do
             params(
               url: String,
+              exclude_selectors: T::Array[String],
+              include_selectors: T::Array[String],
               instructions: String,
               normalize_whitespace: T::Boolean,
               type: Symbol
@@ -618,6 +641,17 @@ module ContextDev
           end
           def self.new(
             url:,
+            # CSS selectors for HTML regions to remove before text extraction. Applied after
+            # include_selectors; exclusion takes precedence when an element matches both. Omit
+            # or pass an empty array to apply no explicit exclusions. Changing these selectors
+            # creates a new baseline.
+            exclude_selectors: nil,
+            # CSS selectors defining the HTML regions to monitor. Matching subtrees are
+            # combined in document order before text extraction, instead of automatic
+            # main-content selection. Omit or pass an empty array to use automatic
+            # main-content extraction. If the filtered page has no usable text, the run fails
+            # without replacing the baseline. Changing these selectors creates a new baseline.
+            include_selectors: nil,
             # Plain-language goal describing which page changes matter. When provided without
             # change_detection, semantic detection is inferred.
             instructions: nil,
@@ -632,6 +666,8 @@ module ContextDev
               {
                 type: Symbol,
                 url: String,
+                exclude_selectors: T::Array[String],
+                include_selectors: T::Array[String],
                 instructions: String,
                 normalize_whitespace: T::Boolean
               }
