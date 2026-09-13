@@ -1152,7 +1152,8 @@ module ContextDev
               )
             end
 
-          # Webhook URL events are delivered to.
+          # Webhook URL events are delivered to. Slack incoming webhook URLs are
+          # automatically formatted as Slack messages.
           sig { returns(String) }
           attr_accessor :url
 
@@ -1212,7 +1213,8 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Webhook URL events are delivered to.
+            # Webhook URL events are delivered to. Slack incoming webhook URLs are
+            # automatically formatted as Slack messages.
             url:,
             # Events delivered to this endpoint. `change.detected` fires only when a run
             # detects a change; `run.completed` fires on every completed run — including runs
