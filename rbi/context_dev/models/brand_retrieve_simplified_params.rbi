@@ -19,9 +19,9 @@ module ContextDev
       attr_accessor :domain
 
       # Maximum age in milliseconds for cached brand data before the API performs a hard
-      # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
-      # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
-      # year.
+      # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
+      # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
+      # are clamped to 1 year.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :max_age_ms
 
@@ -71,9 +71,9 @@ module ContextDev
         # Domain name to retrieve simplified brand data for
         domain:,
         # Maximum age in milliseconds for cached brand data before the API performs a hard
-        # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
-        # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
-        # year.
+        # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
+        # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
+        # are clamped to 1 year.
         max_age_ms: nil,
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.

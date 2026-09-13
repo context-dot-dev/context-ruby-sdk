@@ -109,9 +109,9 @@ module ContextDev
           attr_accessor :force_language
 
           # Maximum age in milliseconds for cached brand data before the API performs a hard
-          # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
-          # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
-          # year.
+          # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
+          # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
+          # are clamped to 1 year.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
@@ -163,9 +163,9 @@ module ContextDev
             domain:,
             force_language: nil,
             # Maximum age in milliseconds for cached brand data before the API performs a hard
-            # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
-            # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
-            # year.
+            # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
+            # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
+            # are clamped to 1 year.
             max_age_ms: nil,
             # Optional parameter to optimize the API call for maximum speed. When set to true,
             # the API will skip time-consuming operations for faster response at the cost of
@@ -861,9 +861,9 @@ module ContextDev
           attr_accessor :force_language
 
           # Maximum age in milliseconds for cached brand data before the API performs a hard
-          # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
-          # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
-          # year.
+          # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
+          # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
+          # are clamped to 1 year.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
@@ -920,9 +920,9 @@ module ContextDev
             country_gl: nil,
             force_language: nil,
             # Maximum age in milliseconds for cached brand data before the API performs a hard
-            # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
-            # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
-            # year.
+            # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
+            # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
+            # are clamped to 1 year.
             max_age_ms: nil,
             # Optional parameter to optimize the API call for maximum speed. When set to true,
             # the API will skip time-consuming operations for faster response at the cost of
@@ -1611,9 +1611,9 @@ module ContextDev
           attr_accessor :force_language
 
           # Maximum age in milliseconds for cached brand data before the API performs a hard
-          # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
-          # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
-          # year.
+          # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
+          # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
+          # are clamped to 1 year.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
@@ -1667,9 +1667,9 @@ module ContextDev
             email:,
             force_language: nil,
             # Maximum age in milliseconds for cached brand data before the API performs a hard
-            # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
-            # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
-            # year.
+            # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
+            # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
+            # are clamped to 1 year.
             max_age_ms: nil,
             # Optional parameter to optimize the API call for maximum speed. When set to true,
             # the API will skip time-consuming operations for faster response at the cost of
@@ -2357,9 +2357,9 @@ module ContextDev
           attr_accessor :force_language
 
           # Maximum age in milliseconds for cached brand data before the API performs a hard
-          # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
-          # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
-          # year.
+          # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
+          # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
+          # are clamped to 1 year.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
@@ -2420,9 +2420,9 @@ module ContextDev
             ticker:,
             force_language: nil,
             # Maximum age in milliseconds for cached brand data before the API performs a hard
-            # refresh. Defaults to 3 months (7776000000 ms). Values below 1 day (86400000 ms)
-            # are clamped to 1 day; values above 1 year (31536000000 ms) are clamped to 1
-            # year.
+            # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
+            # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
+            # are clamped to 1 year.
             max_age_ms: nil,
             # Optional parameter to optimize the API call for maximum speed. When set to true,
             # the API will skip time-consuming operations for faster response at the cost of
