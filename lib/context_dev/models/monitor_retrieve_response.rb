@@ -631,7 +631,8 @@ module ContextDev
       # @see ContextDev::Models::MonitorRetrieveResponse#webhook
       class Webhook < ContextDev::Internal::Type::BaseModel
         # @!attribute url
-        #   Webhook URL events are delivered to.
+        #   Webhook URL events are delivered to. Slack incoming webhook URLs are
+        #   automatically formatted as Slack messages.
         #
         #   @return [String]
         required :url, String
@@ -669,7 +670,7 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::MonitorRetrieveResponse::Webhook} for more details.
         #
-        #   @param url [String] Webhook URL events are delivered to.
+        #   @param url [String] Webhook URL events are delivered to. Slack incoming webhook URLs are automatical
         #
         #   @param events [Array<Symbol, ContextDev::Models::MonitorRetrieveResponse::Webhook::Event>] Events delivered to this endpoint. `change.detected` fires only when a run detec
         #
