@@ -3,6 +3,24 @@
 require_relative "../test_helper"
 
 class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
+  def test_answers_required_params
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.web.answers(task: "Find the pricing page URL and plan names for context.dev.")
+
+    assert_pattern do
+      response => ContextDev::Models::WebAnswersResponse
+    end
+
+    assert_pattern do
+      response => {
+        json_content: ^(ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]),
+        sources: ^(ContextDev::Internal::Type::ArrayOf[String]),
+        key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata | nil
+      }
+    end
+  end
+
   def test_extract_required_params
     skip("Mock server tests are disabled")
 

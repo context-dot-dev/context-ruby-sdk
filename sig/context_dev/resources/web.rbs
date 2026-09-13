@@ -1,6 +1,15 @@
 module ContextDev
   module Resources
     class Web
+      def answers: (
+        task: String,
+        ?json_format: ::Hash[Symbol, top],
+        ?mode: ContextDev::Models::WebAnswersParams::mode,
+        ?tags: ::Array[String],
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::WebAnswersResponse
+
       def extract: (
         schema: ::Hash[Symbol, top],
         url: String,

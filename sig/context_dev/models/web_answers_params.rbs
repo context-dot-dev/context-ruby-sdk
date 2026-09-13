@@ -1,0 +1,67 @@
+module ContextDev
+  module Models
+    type web_answers_params =
+      {
+        task: String,
+        json_format: ::Hash[Symbol, top],
+        mode: ContextDev::Models::WebAnswersParams::mode,
+        tags: ::Array[String],
+        timeout_ms: Integer
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class WebAnswersParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor task: String
+
+      attr_reader json_format: ::Hash[Symbol, top]?
+
+      def json_format=: (::Hash[Symbol, top]) -> ::Hash[Symbol, top]
+
+      attr_reader mode: ContextDev::Models::WebAnswersParams::mode?
+
+      def mode=: (
+        ContextDev::Models::WebAnswersParams::mode
+      ) -> ContextDev::Models::WebAnswersParams::mode
+
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
+      attr_reader timeout_ms: Integer?
+
+      def timeout_ms=: (Integer) -> Integer
+
+      def initialize: (
+        task: String,
+        ?json_format: ::Hash[Symbol, top],
+        ?mode: ContextDev::Models::WebAnswersParams::mode,
+        ?tags: ::Array[String],
+        ?timeout_ms: Integer,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        task: String,
+        json_format: ::Hash[Symbol, top],
+        mode: ContextDev::Models::WebAnswersParams::mode,
+        tags: ::Array[String],
+        timeout_ms: Integer,
+        request_options: ContextDev::RequestOptions
+      }
+
+      type mode = :fast | :ultra
+
+      module Mode
+        extend ContextDev::Internal::Type::Enum
+
+        FAST: :fast
+        ULTRA: :ultra
+
+        def self?.values: -> ::Array[ContextDev::Models::WebAnswersParams::mode]
+      end
+    end
+  end
+end

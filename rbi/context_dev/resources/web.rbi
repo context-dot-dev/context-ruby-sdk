@@ -3,6 +3,44 @@
 module ContextDev
   module Resources
     class Web
+      # Researches the live web and returns a sourced answer in your requested JSON
+      # shape. Select fast for a smaller research budget at 10 credits or ultra for
+      # deeper reasoning at 100 credits. Defaults to ultra. Fast research is limited to
+      # 30 seconds and ultra to 50 seconds; timeoutMS can shorten either deadline.
+      sig do
+        params(
+          task: String,
+          json_format: T::Hash[Symbol, T.anything],
+          mode: ContextDev::WebAnswersParams::Mode::OrSymbol,
+          tags: T::Array[String],
+          timeout_ms: Integer,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebAnswersResponse)
+      end
+      def answers(
+        # What to research and answer, in plain language. Naming a domain in the task (for
+        # example "pricing on context.dev") makes the agent read that site before it
+        # searches.
+        task:,
+        # An example object with placeholder values (for example {"pricing_page_url": "",
+        # "plans": [{"name": "", "price": 0}]}). Object keys and value types are
+        # preserved; unknown values may be null. Empty arrays accept any JSON items.
+        # Defaults to {"result": ""}. Maximum 8 levels, 500 values, and 16000 characters.
+        json_format: nil,
+        # Research level: fast uses a smaller model and research budget for 10 credits;
+        # ultra uses deeper reasoning and research for 100 credits. Defaults to ultra.
+        # Only successful requests consume credits.
+        mode: nil,
+        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        tags: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
+        request_options: {}
+      )
+      end
+
       # Crawl a website, use the provided JSON Schema and instructions to prioritize
       # relevant internal links, and extract structured data from the selected pages.
       sig do
