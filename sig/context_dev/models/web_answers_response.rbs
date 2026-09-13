@@ -1,0 +1,53 @@
+module ContextDev
+  module Models
+    type web_answers_response =
+      {
+        json_content: ::Hash[Symbol, top],
+        sources: ::Array[String],
+        key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata
+      }
+
+    class WebAnswersResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor json_content: ::Hash[Symbol, top]
+
+      attr_accessor sources: ::Array[String]
+
+      attr_reader key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::WebAnswersResponse::KeyMetadata
+      ) -> ContextDev::Models::WebAnswersResponse::KeyMetadata
+
+      def initialize: (
+        json_content: ::Hash[Symbol, top],
+        sources: ::Array[String],
+        ?key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        json_content: ::Hash[Symbol, top],
+        sources: ::Array[String],
+        key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata
+      }
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end

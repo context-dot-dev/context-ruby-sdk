@@ -4,6 +4,42 @@ module ContextDev
   module Resources
     class Web
       # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebAnswersParams} for more details.
+      #
+      # Researches the live web and returns a sourced answer in your requested JSON
+      # shape. Select fast for a smaller research budget at 10 credits or ultra for
+      # deeper reasoning at 100 credits. Defaults to ultra. Fast research is limited to
+      # 30 seconds and ultra to 50 seconds; timeoutMS can shorten either deadline.
+      #
+      # @overload answers(task:, json_format: nil, mode: nil, tags: nil, timeout_ms: nil, request_options: {})
+      #
+      # @param task [String] What to research and answer, in plain language. Naming a domain in the task (for
+      #
+      # @param json_format [Hash{Symbol=>Object}] An example object with placeholder values (for example {"pricing_page_url": "",
+      #
+      # @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] Research level: fast uses a smaller model and research budget for 10 credits; ul
+      #
+      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #
+      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::WebAnswersResponse]
+      #
+      # @see ContextDev::Models::WebAnswersParams
+      def answers(params)
+        parsed, options = ContextDev::WebAnswersParams.dump_request(params)
+        @client.request(
+          method: :post,
+          path: "web/answers",
+          body: parsed,
+          model: ContextDev::Models::WebAnswersResponse,
+          options: options
+        )
+      end
+
+      # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebExtractParams} for more details.
       #
       # Crawl a website, use the provided JSON Schema and instructions to prioritize
