@@ -213,7 +213,8 @@ module ContextDev
             )
           end
 
-        # Snippet excerpt from the page.
+        # Snippet excerpt from the page. Empty string when the search provider does not
+        # supply a snippet.
         sig { returns(String) }
         attr_accessor :description
 
@@ -257,7 +258,8 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Snippet excerpt from the page.
+          # Snippet excerpt from the page. Empty string when the search provider does not
+          # supply a snippet.
           description:,
           # Markdown scrape status and content for this result.
           markdown:,

@@ -2,29 +2,25 @@ module ContextDev
   module Models
     type brand_retrieve_simplified_response =
       {
-        cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
-        request_id: String,
         brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
+        cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
         code: Integer,
+        request_id: String,
+        status: String,
         key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata,
-        partial: bool,
-        status: String
+        partial: bool
       }
 
     class BrandRetrieveSimplifiedResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand
+
       attr_accessor cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata
+
+      attr_accessor code: Integer
 
       attr_accessor request_id: String
 
-      attr_reader brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand?
-
-      def brand=: (
-        ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand
-      ) -> ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand
-
-      attr_reader code: Integer?
-
-      def code=: (Integer) -> Integer
+      attr_accessor status: String
 
       attr_reader key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata?
 
@@ -36,63 +32,25 @@ module ContextDev
 
       def partial=: (bool) -> bool
 
-      attr_reader status: String?
-
-      def status=: (String) -> String
-
       def initialize: (
+        brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
         cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
+        code: Integer,
         request_id: String,
-        ?brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
-        ?code: Integer,
+        status: String,
         ?key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata,
-        ?partial: bool,
-        ?status: String
+        ?partial: bool
       ) -> void
 
       def to_hash: -> {
-        cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
-        request_id: String,
         brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
+        cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
         code: Integer,
+        request_id: String,
+        status: String,
         key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata,
-        partial: bool,
-        status: String
+        partial: bool
       }
-
-      type cache_metadata =
-        {
-          age_ms: Integer,
-          status: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::status
-        }
-
-      class CacheMetadata < ContextDev::Internal::Type::BaseModel
-        attr_accessor age_ms: Integer
-
-        attr_accessor status: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::status
-
-        def initialize: (
-          age_ms: Integer,
-          status: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::status
-        ) -> void
-
-        def to_hash: -> {
-          age_ms: Integer,
-          status: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::status
-        }
-
-        type status = :hit | :miss | :zdr
-
-        module Status
-          extend ContextDev::Internal::Type::Enum
-
-          HIT: :hit
-          MISS: :miss
-          ZDR: :zdr
-
-          def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::status]
-        end
-      end
 
       type brand =
         {
@@ -395,6 +353,40 @@ module ContextDev
 
             def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand::Logo::type_]
           end
+        end
+      end
+
+      type cache_metadata =
+        {
+          age_ms: Integer,
+          status: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::status
+        }
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor age_ms: Integer
+
+        attr_accessor status: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::status
+
+        def initialize: (
+          age_ms: Integer,
+          status: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::status
+        ) -> void
+
+        def to_hash: -> {
+          age_ms: Integer,
+          status: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::status
+        }
+
+        type status = :hit | :miss | :zdr
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT: :hit
+          MISS: :miss
+          ZDR: :zdr
+
+          def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::status]
         end
       end
 
