@@ -5,7 +5,7 @@ module ContextDev
         url: String,
         ?max_age_ms: Integer,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::AIExtractProductParams::TimeoutOpts,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::AIExtractProductResponse
 

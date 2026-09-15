@@ -8,7 +8,9 @@ module ContextDev
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
         url: String,
         actions_applied: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied],
-        key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
+        final_dom_state: ContextDev::Models::WebWebScrapeImagesResponse::final_dom_state,
+        key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata,
+        partial: bool
       }
 
     class WebWebScrapeImagesResponse < ContextDev::Internal::Type::BaseModel
@@ -28,11 +30,21 @@ module ContextDev
         ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied]
       ) -> ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied]
 
+      attr_reader final_dom_state: ContextDev::Models::WebWebScrapeImagesResponse::final_dom_state?
+
+      def final_dom_state=: (
+        ContextDev::Models::WebWebScrapeImagesResponse::final_dom_state
+      ) -> ContextDev::Models::WebWebScrapeImagesResponse::final_dom_state
+
       attr_reader key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata?
 
       def key_metadata=: (
         ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
       ) -> ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
+
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
 
       def initialize: (
         cache_metadata: ContextDev::Models::WebWebScrapeImagesResponse::CacheMetadata,
@@ -41,7 +53,9 @@ module ContextDev
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
         url: String,
         ?actions_applied: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied],
-        ?key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
+        ?final_dom_state: ContextDev::Models::WebWebScrapeImagesResponse::final_dom_state,
+        ?key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata,
+        ?partial: bool
       ) -> void
 
       def to_hash: -> {
@@ -51,7 +65,9 @@ module ContextDev
         success: ContextDev::Models::WebWebScrapeImagesResponse::success,
         url: String,
         actions_applied: ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied],
-        key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
+        final_dom_state: ContextDev::Models::WebWebScrapeImagesResponse::final_dom_state,
+        key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata,
+        partial: bool
       }
 
       type cache_metadata =
@@ -319,6 +335,17 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied::status]
         end
+      end
+
+      type final_dom_state = :loaded | :"still-loading"
+
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        LOADED: :loaded
+        STILL_LOADING: :"still-loading"
+
+        def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeImagesResponse::final_dom_state]
       end
 
       type key_metadata =

@@ -99,13 +99,13 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!attribute timeout_ms
-      #   Optional timeout in milliseconds for the request. If the request takes longer
-      #   than this value, it will be aborted with a 408 status code. Maximum allowed
-      #   value is 300000ms (5 minutes).
+      # @!attribute timeout_opts
+      #   Optional request deadline and behavior on timeout. For GET requests, use
+      #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+      #   timeoutOpts object.
       #
-      #   @return [Integer, nil]
-      optional :timeout_ms, Integer
+      #   @return [ContextDev::Models::WebScreenshotParams::TimeoutOpts, nil]
+      optional :timeout_opts, -> { ContextDev::WebScreenshotParams::TimeoutOpts }
 
       # @!attribute viewport
       #   Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
@@ -116,8 +116,9 @@ module ContextDev
       # @!attribute wait_for_ms
       #   Optional browser wait time in milliseconds after initial page load before taking
       #   the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
-      #   omitted. When combined with timeoutMS, timeoutMS must be at least waitForMs +
-      #   10000 ms; a shorter deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+      #   omitted. When combined with timeoutOpts, timeoutOpts.milliseconds must be at
+      #   least waitForMs + 10000 ms; a shorter deadline is rejected with 400
+      #   TIMEOUT_TOO_SHORT_FOR_WAIT.
       #
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, nil?: true
@@ -131,7 +132,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebScreenshotParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebScreenshotParams::Zdr }
 
-      # @!method initialize(clear_popups: nil, color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @!method initialize(clear_popups: nil, color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScreenshotParams} for more details.
       #
@@ -157,7 +158,7 @@ module ContextDev
       #
       #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #   @param timeout_opts [ContextDev::Models::WebScreenshotParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       #   @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       #
@@ -425,6 +426,53 @@ module ContextDev
 
         # @!method self.values
         #   @return [Array<Symbol>]
+      end
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        # @!attribute milliseconds
+        #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #
+        #   @return [Integer]
+        required :milliseconds, Integer
+
+        # @!attribute behavior
+        #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        #   credits. "return-partial" returns usable results collected so far; if none are
+        #   available, the request still fails without charging credits. Partial results are
+        #   not cached as complete results. "return-partial" requires milliseconds of at
+        #   least 15000.
+        #
+        #   @return [Symbol, ContextDev::Models::WebScreenshotParams::TimeoutOpts::Behavior, nil]
+        optional :behavior, enum: -> { ContextDev::WebScreenshotParams::TimeoutOpts::Behavior }
+
+        # @!method initialize(milliseconds:, behavior: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScreenshotParams::TimeoutOpts} for more details.
+        #
+        #   Optional request deadline and behavior on timeout. For GET requests, use
+        #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        #   timeoutOpts object.
+        #
+        #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #
+        #   @param behavior [Symbol, ContextDev::Models::WebScreenshotParams::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+
+        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        # credits. "return-partial" returns usable results collected so far; if none are
+        # available, the request still fails without charging credits. Partial results are
+        # not cached as complete results. "return-partial" requires milliseconds of at
+        # least 15000.
+        #
+        # @see ContextDev::Models::WebScreenshotParams::TimeoutOpts#behavior
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL = :fail
+          RETURN_PARTIAL = :"return-partial"
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
       end
 
       class Viewport < ContextDev::Internal::Type::BaseModel

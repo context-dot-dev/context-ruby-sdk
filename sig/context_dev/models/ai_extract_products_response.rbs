@@ -5,6 +5,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::AIExtractProductsResponse::CacheMetadata,
         request_id: String,
         key_metadata: ContextDev::Models::AIExtractProductsResponse::KeyMetadata,
+        partial: bool,
         products: ::Array[ContextDev::Models::AIExtractProductsResponse::Product]
       }
 
@@ -19,6 +20,10 @@ module ContextDev
         ContextDev::Models::AIExtractProductsResponse::KeyMetadata
       ) -> ContextDev::Models::AIExtractProductsResponse::KeyMetadata
 
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
       attr_reader products: ::Array[ContextDev::Models::AIExtractProductsResponse::Product]?
 
       def products=: (
@@ -29,6 +34,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::AIExtractProductsResponse::CacheMetadata,
         request_id: String,
         ?key_metadata: ContextDev::Models::AIExtractProductsResponse::KeyMetadata,
+        ?partial: bool,
         ?products: ::Array[ContextDev::Models::AIExtractProductsResponse::Product]
       ) -> void
 
@@ -36,6 +42,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::AIExtractProductsResponse::CacheMetadata,
         request_id: String,
         key_metadata: ContextDev::Models::AIExtractProductsResponse::KeyMetadata,
+        partial: bool,
         products: ::Array[ContextDev::Models::AIExtractProductsResponse::Product]
       }
 

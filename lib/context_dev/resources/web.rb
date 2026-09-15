@@ -9,9 +9,10 @@ module ContextDev
       # Researches the live web and returns a sourced answer in your requested JSON
       # shape. Select fast for a smaller research budget at 10 credits or ultra for
       # deeper reasoning at 100 credits. Defaults to ultra. Fast research is limited to
-      # 30 seconds and ultra to 50 seconds; timeoutMS can shorten either deadline.
+      # 30 seconds and ultra to 50 seconds; timeoutOpts.milliseconds can shorten either
+      # deadline.
       #
-      # @overload answers(task:, json_format: nil, mode: nil, tags: nil, timeout_ms: nil, request_options: {})
+      # @overload answers(task:, json_format: nil, mode: nil, tags: nil, timeout_opts: nil, request_options: {})
       #
       # @param task [String] What to research and answer, in plain language. Naming a domain in the task (for
       #
@@ -21,7 +22,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebAnswersParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -45,7 +46,7 @@ module ContextDev
       # Crawl a website, use the provided JSON Schema and instructions to prioritize
       # relevant internal links, and extract structured data from the selected pages.
       #
-      # @overload extract(schema:, url:, actions: nil, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @overload extract(schema:, url:, actions: nil, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, request_options: {})
       #
       # @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. Image fields such as `image_urls` or `
       #
@@ -75,7 +76,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebExtractParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load for each craw
       #
@@ -101,7 +102,7 @@ module ContextDev
       # Analyze a company's landing page and web search evidence to return direct
       # competitors for the same product or market.
       #
-      # @overload extract_competitors(domain:, num_competitors: nil, tags: nil, timeout_ms: nil, request_options: {})
+      # @overload extract_competitors(domain:, num_competitors: nil, tags: nil, timeout_opts: nil, request_options: {})
       #
       # @param domain [String] Company domain to analyze, such as `stripe.com`. Full http(s) URLs are accepted
       #
@@ -109,7 +110,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -122,7 +123,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/competitors",
-          query: query.transform_keys(num_competitors: "numCompetitors", timeout_ms: "timeoutMS"),
+          query: query.transform_keys(num_competitors: "numCompetitors", timeout_opts: "timeoutOpts"),
           model: ContextDev::Models::WebExtractCompetitorsResponse,
           options: options
         )
@@ -134,7 +135,7 @@ module ContextDev
       # Scrape font information from a website including font families, usage
       # statistics, fallbacks, and element/word counts.
       #
-      # @overload extract_fonts(direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_ms: nil, request_options: {})
+      # @overload extract_fonts(direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, request_options: {})
       #
       # @param direct_url [String] A specific URL to fetch fonts from directly, bypassing domain resolution (e.g.,
       #
@@ -144,7 +145,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebExtractFontsParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -160,7 +161,7 @@ module ContextDev
           query: query.transform_keys(
             direct_url: "directUrl",
             max_age_ms: "maxAgeMs",
-            timeout_ms: "timeoutMS"
+            timeout_opts: "timeoutOpts"
           ),
           model: ContextDev::Models::WebExtractFontsResponse,
           options: options
@@ -173,7 +174,7 @@ module ContextDev
       # Extract a comprehensive design system from a website including colors,
       # typography, spacing, shadows, and UI components.
       #
-      # @overload extract_styleguide(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_ms: nil, request_options: {})
+      # @overload extract_styleguide(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, request_options: {})
       #
       # @param color_scheme [Symbol, ContextDev::Models::WebExtractStyleguideParams::ColorScheme] Optional browser color scheme to emulate for websites that respond to prefers-co
       #
@@ -185,7 +186,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -202,7 +203,7 @@ module ContextDev
             color_scheme: "colorScheme",
             direct_url: "directUrl",
             max_age_ms: "maxAgeMs",
-            timeout_ms: "timeoutMS"
+            timeout_opts: "timeoutOpts"
           ),
           model: ContextDev::Models::WebExtractStyleguideResponse,
           options: options
@@ -214,7 +215,7 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(clear_popups: nil, color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_ms: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload screenshot(clear_popups: nil, color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param clear_popups [Boolean] Optional parameter for comprehensive popup cleanup. If 'true', the browser dismi
       #
@@ -238,7 +239,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebScreenshotParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       #
@@ -265,7 +266,7 @@ module ContextDev
             handle_cookie_popup: "handleCookiePopup",
             max_age_ms: "maxAgeMs",
             scroll_offset: "scrollOffset",
-            timeout_ms: "timeoutMS",
+            timeout_opts: "timeoutOpts",
             wait_for_ms: "waitForMs"
           ),
           model: ContextDev::Models::WebScreenshotResponse,
@@ -278,7 +279,7 @@ module ContextDev
       #
       # Search the web and optionally scrape each result to Markdown in one round-trip.
       #
-      # @overload search(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_ms: nil, request_options: {})
+      # @overload search(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_opts: nil, request_options: {})
       #
       # @param query [String] Search query. Accepts natural language as well as Google-style search operators
       #
@@ -298,7 +299,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebSearchParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -322,7 +323,7 @@ module ContextDev
       # Performs a crawl starting from a given URL, extracts page content as Markdown,
       # and returns results for all crawled pages.
       #
-      # @overload web_crawl_md(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload web_crawl_md(url:, country: nil, exclude_selectors: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, stop_after_ms: nil, tags: nil, timeout_opts: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
       #
@@ -356,7 +357,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped. An
       #
@@ -396,7 +397,7 @@ module ContextDev
       # resource size: 20 MiB (20971520 bytes), before base64 encoding. Successful
       # requests cost 1 credit; errors are not billed.
       #
-      # @overload web_scrape_bytes(url:, country: nil, headers: nil, tags: nil, timeout_ms: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_bytes(url:, country: nil, headers: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full HTTP(S) URL of the resource to download, such as an image, PDF, or page.
       #
@@ -406,7 +407,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param zdr [Symbol, ContextDev::Models::WebWebScrapeBytesParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
@@ -421,7 +422,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/bytes",
-          query: query.transform_keys(timeout_ms: "timeoutMS"),
+          query: query.transform_keys(timeout_opts: "timeoutOpts"),
           model: ContextDev::Models::WebWebScrapeBytesResponse,
           options: options
         )
@@ -431,9 +432,13 @@ module ContextDev
       # {ContextDev::Models::WebWebScrapeHTMLParams} for more details.
       #
       # Scrapes the given URL and returns the raw HTML content of the page. The base
-      # request costs 1 credit; requests with browser actions cost 2 credits.
+      # request costs 1 credit; requests with browser actions cost 2 credits. A request
+      # that hits its timeoutOpts.milliseconds deadline fails with 408 and is not
+      # billed, unless timeoutOpts.behavior=return-partial is set — then the page as
+      # rendered so far is returned with `finalDOMState: "still-loading"` and billed at
+      # the base cost of 1 credit.
       #
-      # @overload web_scrape_html(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_html(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, tags: nil, timeout_opts: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
       #
@@ -457,7 +462,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebWebScrapeHTMLParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param use_main_content_only [Boolean] When true, return only the page's main content in the HTML response, excluding h
       #
@@ -482,7 +487,7 @@ module ContextDev
             include_selectors: "includeSelectors",
             max_age_ms: "maxAgeMs",
             settle_animations: "settleAnimations",
-            timeout_ms: "timeoutMS",
+            timeout_opts: "timeoutOpts",
             use_main_content_only: "useMainContentOnly",
             wait_for_ms: "waitForMs"
           ),
@@ -500,7 +505,7 @@ module ContextDev
       # enrichment is enabled, the entire call costs 5 credits, including requests that
       # also use actions.
       #
-      # @overload web_scrape_images(url:, actions: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_images(url:, actions: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, request_options: {})
       #
       # @param url [String] Page URL to inspect. Must include http:// or https://.
       #
@@ -516,7 +521,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebWebScrapeImagesParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before collec
       #
@@ -533,7 +538,7 @@ module ContextDev
           path: "web/scrape/images",
           query: query.transform_keys(
             max_age_ms: "maxAgeMs",
-            timeout_ms: "timeoutMS",
+            timeout_opts: "timeoutOpts",
             wait_for_ms: "waitForMs"
           ),
           model: ContextDev::Models::WebWebScrapeImagesResponse,
@@ -564,17 +569,17 @@ module ContextDev
       #
       # | HTTP status | Billed?                                   | Meaning                                                                                                                                                                                                                                                                                                       |
       # | ----------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-      # | 200         | Yes — 1 credit, or 2 credits with actions | Successful scrape, including a zero-length result when includeSelectors matched nothing                                                                                                                                                                                                                       |
+      # | 200         | Yes — 1 credit, or 2 credits with actions | Successful scrape, including a zero-length result when includeSelectors matched nothing. A partial result (`finalDOMState: "still-loading"`, only with timeoutOpts.behavior=return-partial) is billed at the base 1 credit with no OCR or actions surcharge                                                   |
       # | 400         | No                                        | Invalid input, skipped PDF, or the page could not be scraped. error_code WEBSITE_BLOCKED specifically means the site answered with an anti-bot challenge, CAPTCHA wall, or login shell instead of the page (even when the site returned HTTP 200) — retrying later or from another country sometimes succeeds |
       # | 401 / 403   | No                                        | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code                                                                                                                                                                                                                      |
       # | 404         | No                                        | Target page returned or fingerprinted as not found                                                                                                                                                                                                                                                            |
-      # | 408         | No                                        | Request timed out                                                                                                                                                                                                                                                                                             |
+      # | 408         | No                                        | Request timed out. With timeoutOpts.behavior=return-partial this only happens when nothing usable had rendered by the deadline                                                                                                                                                                                |
       # | 413         | No                                        | Target content exceeds the maximum supported size (20 MB)                                                                                                                                                                                                                                                     |
       # | 415         | No                                        | Unsupported content type                                                                                                                                                                                                                                                                                      |
       # | 429         | No                                        | Per-minute rate limit exceeded; honor Retry-After                                                                                                                                                                                                                                                             |
       # | 500         | No                                        | Internal error                                                                                                                                                                                                                                                                                                |
       #
-      # @overload web_scrape_md(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_html: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_ms: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_md(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_html: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, tags: nil, timeout_opts: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape into LLM usable Markdown (must include http:// or https:// pr
       #
@@ -606,7 +611,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebWebScrapeMdParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param use_main_content_only [Boolean] Extract only the main content of the page, excluding headers, footers, sidebars,
       #
@@ -635,7 +640,7 @@ module ContextDev
             max_age_ms: "maxAgeMs",
             settle_animations: "settleAnimations",
             shorten_base64_images: "shortenBase64Images",
-            timeout_ms: "timeoutMS",
+            timeout_opts: "timeoutOpts",
             use_main_content_only: "useMainContentOnly",
             wait_for_ms: "waitForMs"
           ),
@@ -654,7 +659,7 @@ module ContextDev
       # `pricing and plans` or `api authentication docs`), most relevant first — a
       # searched crawl scans the whole sitemap and costs 2 credits instead of 1.
       #
-      # @overload web_scrape_sitemap(domain:, headers: nil, include_subdomains: nil, max_links: nil, search: nil, sitemap_url: nil, tags: nil, timeout_ms: nil, url_regex: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_sitemap(domain:, headers: nil, include_subdomains: nil, max_links: nil, search: nil, sitemap_url: nil, tags: nil, timeout_opts: nil, url_regex: nil, zdr: nil, request_options: {})
       #
       # @param domain [String] Domain to build a sitemap for
       #
@@ -670,7 +675,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::WebWebScrapeSitemapParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param url_regex [String] Optional RE2-compatible regex pattern. Only URLs matching this pattern are retur
       #
@@ -691,7 +696,7 @@ module ContextDev
             include_subdomains: "includeSubdomains",
             max_links: "maxLinks",
             sitemap_url: "sitemapUrl",
-            timeout_ms: "timeoutMS",
+            timeout_opts: "timeoutOpts",
             url_regex: "urlRegex"
           ),
           model: ContextDev::Models::WebWebScrapeSitemapResponse,

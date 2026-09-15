@@ -11,7 +11,7 @@ module ContextDev
         ?max_age_ms: Integer?,
         ?tags: ::Array[String],
         ?theme: ContextDev::Models::BrandRetrieveSimplifiedParams::theme,
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::BrandRetrieveSimplifiedParams::TimeoutOpts,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::BrandRetrieveSimplifiedResponse
 

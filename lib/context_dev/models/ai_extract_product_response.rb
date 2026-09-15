@@ -31,6 +31,13 @@ module ContextDev
       #   @return [ContextDev::Models::AIExtractProductResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::AIExtractProductResponse::KeyMetadata }
 
+      # @!attribute partial
+      #   True when the timeout ended processing and this response contains only usable
+      #   results completed so far. Unfinished results are omitted.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
       # @!attribute platform
       #   The detected ecommerce platform, or null if not a product page
       #
@@ -43,7 +50,7 @@ module ContextDev
       #   @return [ContextDev::Models::AIExtractProductResponse::Product, nil]
       optional :product, -> { ContextDev::Models::AIExtractProductResponse::Product }, nil?: true
 
-      # @!method initialize(cache_metadata:, request_id:, is_product_page: nil, key_metadata: nil, platform: nil, product: nil)
+      # @!method initialize(cache_metadata:, request_id:, is_product_page: nil, key_metadata: nil, partial: nil, platform: nil, product: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::AIExtractProductResponse} for more details.
       #
@@ -54,6 +61,8 @@ module ContextDev
       #   @param is_product_page [Boolean] Whether the given URL is a product detail page
       #
       #   @param key_metadata [ContextDev::Models::AIExtractProductResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when the timeout ended processing and this response contains only usable re
       #
       #   @param platform [Symbol, ContextDev::Models::AIExtractProductResponse::Platform, nil] The detected ecommerce platform, or null if not a product page
       #

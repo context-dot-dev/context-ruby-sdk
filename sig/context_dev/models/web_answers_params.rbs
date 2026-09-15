@@ -6,7 +6,7 @@ module ContextDev
         json_format: ::Hash[Symbol, top],
         mode: ContextDev::Models::WebAnswersParams::mode,
         tags: ::Array[String],
-        timeout_ms: Integer
+        timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -30,16 +30,18 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
-      attr_reader timeout_ms: Integer?
+      attr_reader timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts?
 
-      def timeout_ms=: (Integer) -> Integer
+      def timeout_opts=: (
+        ContextDev::WebAnswersParams::TimeoutOpts
+      ) -> ContextDev::WebAnswersParams::TimeoutOpts
 
       def initialize: (
         task: String,
         ?json_format: ::Hash[Symbol, top],
         ?mode: ContextDev::Models::WebAnswersParams::mode,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -48,7 +50,7 @@ module ContextDev
         json_format: ::Hash[Symbol, top],
         mode: ContextDev::Models::WebAnswersParams::mode,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts,
         request_options: ContextDev::RequestOptions
       }
 
@@ -61,6 +63,43 @@ module ContextDev
         ULTRA: :ultra
 
         def self?.values: -> ::Array[ContextDev::Models::WebAnswersParams::mode]
+      end
+
+      type timeout_opts =
+        {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebAnswersParams::TimeoutOpts::behavior
+        }
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        attr_accessor milliseconds: Integer
+
+        attr_reader behavior: ContextDev::Models::WebAnswersParams::TimeoutOpts::behavior?
+
+        def behavior=: (
+          ContextDev::Models::WebAnswersParams::TimeoutOpts::behavior
+        ) -> ContextDev::Models::WebAnswersParams::TimeoutOpts::behavior
+
+        def initialize: (
+          milliseconds: Integer,
+          ?behavior: ContextDev::Models::WebAnswersParams::TimeoutOpts::behavior
+        ) -> void
+
+        def to_hash: -> {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebAnswersParams::TimeoutOpts::behavior
+        }
+
+        type behavior = :fail | :"return-partial"
+
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL: :fail
+          RETURN_PARTIAL: :"return-partial"
+
+          def self?.values: -> ::Array[ContextDev::Models::WebAnswersParams::TimeoutOpts::behavior]
+        end
       end
     end
   end

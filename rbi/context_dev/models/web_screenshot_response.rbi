@@ -44,6 +44,28 @@ module ContextDev
       sig { params(domain: String).void }
       attr_writer :domain
 
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      sig do
+        returns(
+          T.nilable(
+            ContextDev::Models::WebScreenshotResponse::FinalDomState::TaggedSymbol
+          )
+        )
+      end
+      attr_reader :final_dom_state
+
+      sig do
+        params(
+          final_dom_state:
+            ContextDev::Models::WebScreenshotResponse::FinalDomState::OrSymbol
+        ).void
+      end
+      attr_writer :final_dom_state
+
       # Height in pixels of the returned screenshot image
       sig { returns(T.nilable(Integer)) }
       attr_reader :height
@@ -114,6 +136,8 @@ module ContextDev
           request_id: String,
           code: Integer,
           domain: String,
+          final_dom_state:
+            ContextDev::Models::WebScreenshotResponse::FinalDomState::OrSymbol,
           height: Integer,
           key_metadata:
             ContextDev::Models::WebScreenshotResponse::KeyMetadata::OrHash,
@@ -136,6 +160,12 @@ module ContextDev
         code: nil,
         # The normalized domain that was processed
         domain: nil,
+        # How complete the returned content is. `loaded` means the page finished the waits
+        # the request asked for. `still-loading` only occurs with
+        # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+        # reached first, so the content reflects the DOM at that moment and late-rendering
+        # parts may be missing. Partial results are billed at the base request cost.
+        final_dom_state: nil,
         # Height in pixels of the returned screenshot image
         height: nil,
         # Credit usage, included whenever a valid API key is provided.
@@ -160,6 +190,8 @@ module ContextDev
             request_id: String,
             code: Integer,
             domain: String,
+            final_dom_state:
+              ContextDev::Models::WebScreenshotResponse::FinalDomState::TaggedSymbol,
             height: Integer,
             key_metadata:
               ContextDev::Models::WebScreenshotResponse::KeyMetadata,
@@ -266,6 +298,45 @@ module ContextDev
           end
           def self.values
           end
+        end
+      end
+
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(
+              Symbol,
+              ContextDev::Models::WebScreenshotResponse::FinalDomState
+            )
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        LOADED =
+          T.let(
+            :loaded,
+            ContextDev::Models::WebScreenshotResponse::FinalDomState::TaggedSymbol
+          )
+        STILL_LOADING =
+          T.let(
+            :"still-loading",
+            ContextDev::Models::WebScreenshotResponse::FinalDomState::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::WebScreenshotResponse::FinalDomState::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
         end
       end
 

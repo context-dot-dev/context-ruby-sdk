@@ -47,15 +47,15 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!attribute timeout_ms
-      #   Optional timeout in milliseconds for the request. If the request takes longer
-      #   than this value, it will be aborted with a 408 status code. Maximum allowed
-      #   value is 300000ms (5 minutes).
+      # @!attribute timeout_opts
+      #   Optional request deadline and behavior on timeout. For GET requests, use
+      #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+      #   timeoutOpts object.
       #
-      #   @return [Integer, nil]
-      optional :timeout_ms, Integer
+      #   @return [ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts, nil]
+      optional :timeout_opts, -> { ContextDev::WebExtractStyleguideParams::TimeoutOpts }
 
-      # @!method initialize(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_ms: nil, request_options: {})
+      # @!method initialize(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractStyleguideParams} for more details.
       #
@@ -69,7 +69,7 @@ module ContextDev
       #
       #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #   @param timeout_opts [ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -83,6 +83,53 @@ module ContextDev
 
         # @!method self.values
         #   @return [Array<Symbol>]
+      end
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        # @!attribute milliseconds
+        #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #
+        #   @return [Integer]
+        required :milliseconds, Integer
+
+        # @!attribute behavior
+        #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        #   credits. "return-partial" returns usable results collected so far; if none are
+        #   available, the request still fails without charging credits. Partial results are
+        #   not cached as complete results. "return-partial" requires milliseconds of at
+        #   least 15000.
+        #
+        #   @return [Symbol, ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::Behavior, nil]
+        optional :behavior, enum: -> { ContextDev::WebExtractStyleguideParams::TimeoutOpts::Behavior }
+
+        # @!method initialize(milliseconds:, behavior: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts} for more details.
+        #
+        #   Optional request deadline and behavior on timeout. For GET requests, use
+        #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        #   timeoutOpts object.
+        #
+        #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #
+        #   @param behavior [Symbol, ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+
+        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        # credits. "return-partial" returns usable results collected so far; if none are
+        # available, the request still fails without charging credits. Partial results are
+        # not cached as complete results. "return-partial" requires milliseconds of at
+        # least 15000.
+        #
+        # @see ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts#behavior
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL = :fail
+          RETURN_PARTIAL = :"return-partial"
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
       end
     end
   end

@@ -48,6 +48,15 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # True when timeoutOpts.behavior=return-partial returned the usable results
+      # collected before the deadline. Partial collections are not cached as complete
+      # results.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
+
       # Array of products extracted from the website
       sig do
         returns(
@@ -75,6 +84,7 @@ module ContextDev
           request_id: String,
           key_metadata:
             ContextDev::Models::AIExtractProductsResponse::KeyMetadata::OrHash,
+          partial: T::Boolean,
           products:
             T::Array[
               ContextDev::Models::AIExtractProductsResponse::Product::OrHash
@@ -91,6 +101,10 @@ module ContextDev
         request_id:,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil,
+        # True when timeoutOpts.behavior=return-partial returned the usable results
+        # collected before the deadline. Partial collections are not cached as complete
+        # results.
+        partial: nil,
         # Array of products extracted from the website
         products: nil
       )
@@ -104,6 +118,7 @@ module ContextDev
             request_id: String,
             key_metadata:
               ContextDev::Models::AIExtractProductsResponse::KeyMetadata,
+            partial: T::Boolean,
             products:
               T::Array[ContextDev::Models::AIExtractProductsResponse::Product]
           }

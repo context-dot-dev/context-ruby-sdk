@@ -36,7 +36,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, metadata:, request_id:, results:, key_metadata: nil)
+      # @!attribute partial
+      #   True when timeoutOpts.behavior=return-partial returned the usable results
+      #   collected before the deadline. Partial collections are not cached as complete
+      #   results.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
+      # @!method initialize(cache_metadata:, metadata:, request_id:, results:, key_metadata: nil, partial: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdResponse} for more details.
       #
@@ -49,6 +57,8 @@ module ContextDev
       #   @param results [Array<ContextDev::Models::WebWebCrawlMdResponse::Result>]
       #
       #   @param key_metadata [ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when timeoutOpts.behavior=return-partial returned the usable results collec
 
       # @see ContextDev::Models::WebWebCrawlMdResponse#cache_metadata
       class CacheMetadata < ContextDev::Internal::Type::BaseModel

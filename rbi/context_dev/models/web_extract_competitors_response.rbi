@@ -68,6 +68,14 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # True when the timeout ended processing and this response contains only usable
+      # results completed so far. Unfinished results are omitted.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
+
       sig do
         params(
           competitors:
@@ -81,7 +89,8 @@ module ContextDev
           target:
             ContextDev::Models::WebExtractCompetitorsResponse::Target::OrHash,
           key_metadata:
-            ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata::OrHash
+            ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata::OrHash,
+          partial: T::Boolean
         ).returns(T.attached_class)
       end
       def self.new(
@@ -97,7 +106,10 @@ module ContextDev
         # Target company profile inferred from the landing page.
         target:,
         # Credit usage, included whenever a valid API key is provided.
-        key_metadata: nil
+        key_metadata: nil,
+        # True when the timeout ended processing and this response contains only usable
+        # results completed so far. Unfinished results are omitted.
+        partial: nil
       )
       end
 
@@ -114,7 +126,8 @@ module ContextDev
               ContextDev::Models::WebExtractCompetitorsResponse::Status::TaggedSymbol,
             target: ContextDev::Models::WebExtractCompetitorsResponse::Target,
             key_metadata:
-              ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata
+              ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata,
+            partial: T::Boolean
           }
         )
       end

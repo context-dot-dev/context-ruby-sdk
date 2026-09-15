@@ -36,7 +36,7 @@ module ContextDev
       # information: domain, title, colors, logos, and backdrops. Optimized for faster
       # responses and reduced data transfer.
       #
-      # @overload retrieve_simplified(domain:, max_age_ms: nil, tags: nil, theme: nil, timeout_ms: nil, request_options: {})
+      # @overload retrieve_simplified(domain:, max_age_ms: nil, tags: nil, theme: nil, timeout_opts: nil, request_options: {})
       #
       # @param domain [String] Domain name to retrieve simplified brand data for
       #
@@ -46,7 +46,7 @@ module ContextDev
       #
       # @param theme [Symbol, ContextDev::Models::BrandRetrieveSimplifiedParams::Theme] Optional theme preference used when selecting brand assets.
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::BrandRetrieveSimplifiedParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -59,7 +59,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "brand/retrieve-simplified",
-          query: query.transform_keys(max_age_ms: "maxAgeMs", timeout_ms: "timeoutMS"),
+          query: query.transform_keys(max_age_ms: "maxAgeMs", timeout_opts: "timeoutOpts"),
           model: ContextDev::Models::BrandRetrieveSimplifiedResponse,
           options: options
         )

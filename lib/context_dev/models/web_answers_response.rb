@@ -23,7 +23,14 @@ module ContextDev
       #   @return [ContextDev::Models::WebAnswersResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebAnswersResponse::KeyMetadata }
 
-      # @!method initialize(json_content:, sources:, key_metadata: nil)
+      # @!attribute partial
+      #   True when the request deadline ended research and the answer uses the evidence
+      #   collected so far.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
+      # @!method initialize(json_content:, sources:, key_metadata: nil, partial: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebAnswersResponse} for more details.
       #
@@ -32,6 +39,8 @@ module ContextDev
       #   @param sources [Array<String>] URLs that supplied search results or readable page content, in first-seen order.
       #
       #   @param key_metadata [ContextDev::Models::WebAnswersResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when the request deadline ended research and the answer uses the evidence c
 
       # @see ContextDev::Models::WebAnswersResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel

@@ -5,7 +5,7 @@ module ContextDev
         url: String,
         max_age_ms: Integer,
         tags: ::Array[String],
-        timeout_ms: Integer
+        timeout_opts: ContextDev::AIExtractProductParams::TimeoutOpts
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -23,15 +23,17 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
-      attr_reader timeout_ms: Integer?
+      attr_reader timeout_opts: ContextDev::AIExtractProductParams::TimeoutOpts?
 
-      def timeout_ms=: (Integer) -> Integer
+      def timeout_opts=: (
+        ContextDev::AIExtractProductParams::TimeoutOpts
+      ) -> ContextDev::AIExtractProductParams::TimeoutOpts
 
       def initialize: (
         url: String,
         ?max_age_ms: Integer,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::AIExtractProductParams::TimeoutOpts,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -39,9 +41,46 @@ module ContextDev
         url: String,
         max_age_ms: Integer,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::AIExtractProductParams::TimeoutOpts,
         request_options: ContextDev::RequestOptions
       }
+
+      type timeout_opts =
+        {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::AIExtractProductParams::TimeoutOpts::behavior
+        }
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        attr_accessor milliseconds: Integer
+
+        attr_reader behavior: ContextDev::Models::AIExtractProductParams::TimeoutOpts::behavior?
+
+        def behavior=: (
+          ContextDev::Models::AIExtractProductParams::TimeoutOpts::behavior
+        ) -> ContextDev::Models::AIExtractProductParams::TimeoutOpts::behavior
+
+        def initialize: (
+          milliseconds: Integer,
+          ?behavior: ContextDev::Models::AIExtractProductParams::TimeoutOpts::behavior
+        ) -> void
+
+        def to_hash: -> {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::AIExtractProductParams::TimeoutOpts::behavior
+        }
+
+        type behavior = :fail | :"return-partial"
+
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL: :fail
+          RETURN_PARTIAL: :"return-partial"
+
+          def self?.values: -> ::Array[ContextDev::Models::AIExtractProductParams::TimeoutOpts::behavior]
+        end
+      end
     end
   end
 end

@@ -12,6 +12,18 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata }
 
+      # @!attribute final_dom_state
+      #   How complete the returned content is. `loaded` means the page finished the waits
+      #   the request asked for. `still-loading` only occurs with
+      #   timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      #   reached first, so the content reflects the DOM at that moment and late-rendering
+      #   parts may be missing. Partial results are billed at the base request cost.
+      #
+      #   @return [Symbol, ContextDev::Models::WebWebScrapeHTMLResponse::FinalDomState]
+      required :final_dom_state,
+               enum: -> { ContextDev::Models::WebWebScrapeHTMLResponse::FinalDomState },
+               api_name: :finalDOMState
+
       # @!attribute html
       #   The scraped content of the page. For normal pages this is the raw HTML. When the
       #   page is a sitemap or feed served behind an XSL stylesheet (which browsers render
@@ -75,11 +87,13 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, html:, metadata:, request_id:, success:, type:, url:, actions_applied: nil, actions_html_stale: nil, key_metadata: nil)
+      # @!method initialize(cache_metadata:, final_dom_state:, html:, metadata:, request_id:, success:, type:, url:, actions_applied: nil, actions_html_stale: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeHTMLResponse} for more details.
       #
       #   @param cache_metadata [ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #
+      #   @param final_dom_state [Symbol, ContextDev::Models::WebWebScrapeHTMLResponse::FinalDomState] How complete the returned content is. `loaded` means the page finished the waits
       #
       #   @param html [String] The scraped content of the page. For normal pages this is the raw HTML. When the
       #
@@ -140,6 +154,23 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      #
+      # @see ContextDev::Models::WebWebScrapeHTMLResponse#final_dom_state
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        LOADED = :loaded
+        STILL_LOADING = :"still-loading"
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
 
       # @see ContextDev::Models::WebWebScrapeHTMLResponse#metadata

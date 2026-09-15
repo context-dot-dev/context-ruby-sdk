@@ -17,7 +17,7 @@ module ContextDev
             ),
           type: ContextDev::UtilityPrefetchParams::Type::OrSymbol,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::UtilityPrefetchParams::TimeoutOpts::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::UtilityPrefetchResponse)
       end
@@ -29,10 +29,10 @@ module ContextDev
         type:,
         # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         request_options: {}
       )
       end

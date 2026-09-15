@@ -81,6 +81,14 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # True when the timeout ended processing and this response contains only usable
+      # results completed so far. Unfinished results are omitted.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
+
       # Status of the response, e.g., 'ok'
       sig { returns(T.nilable(String)) }
       attr_reader :status
@@ -107,6 +115,7 @@ module ContextDev
           domain: String,
           key_metadata:
             ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata::OrHash,
+          partial: T::Boolean,
           status: String,
           type: String
         ).returns(T.attached_class)
@@ -125,6 +134,9 @@ module ContextDev
         domain: nil,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil,
+        # True when the timeout ended processing and this response contains only usable
+        # results completed so far. Unfinished results are omitted.
+        partial: nil,
         # Status of the response, e.g., 'ok'
         status: nil,
         # Industry classification type, for sic api it will be `sic`
@@ -143,6 +155,7 @@ module ContextDev
             domain: String,
             key_metadata:
               ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata,
+            partial: T::Boolean,
             status: String,
             type: String
           }

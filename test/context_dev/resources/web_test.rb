@@ -16,7 +16,8 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
       response => {
         json_content: ^(ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]),
         sources: ^(ContextDev::Internal::Type::ArrayOf[String]),
-        key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata | nil
+        key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil
       }
     end
   end
@@ -43,7 +44,8 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         status: String,
         url: String,
         urls_analyzed: ^(ContextDev::Internal::Type::ArrayOf[String]),
-        key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata | nil
+        key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil
       }
     end
   end
@@ -64,7 +66,8 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         request_id: String,
         status: ContextDev::Models::WebExtractCompetitorsResponse::Status,
         target: ContextDev::Models::WebExtractCompetitorsResponse::Target,
-        key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata | nil
+        key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil
       }
     end
   end
@@ -86,6 +89,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         fonts: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebExtractFontsResponse::Font]),
         request_id: String,
         status: String,
+        final_dom_state: ContextDev::Models::WebExtractFontsResponse::FinalDomState | nil,
         font_links: ^(ContextDev::Internal::Type::HashOf[ContextDev::Models::WebExtractFontsResponse::FontLink]) | nil,
         key_metadata: ContextDev::Models::WebExtractFontsResponse::KeyMetadata | nil
       }
@@ -107,6 +111,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         request_id: String,
         code: Integer | nil,
         domain: String | nil,
+        final_dom_state: ContextDev::Models::WebExtractStyleguideResponse::FinalDomState | nil,
         key_metadata: ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata | nil,
         status: String | nil,
         styleguide: ContextDev::Models::WebExtractStyleguideResponse::Styleguide | nil
@@ -129,6 +134,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         request_id: String,
         code: Integer | nil,
         domain: String | nil,
+        final_dom_state: ContextDev::Models::WebScreenshotResponse::FinalDomState | nil,
         height: Integer | nil,
         key_metadata: ContextDev::Models::WebScreenshotResponse::KeyMetadata | nil,
         screenshot: String | nil,
@@ -154,7 +160,8 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         query: String,
         request_id: String,
         results: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebSearchResponse::Result]),
-        key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata | nil
+        key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil
       }
     end
   end
@@ -174,7 +181,8 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata,
         request_id: String,
         results: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebCrawlMdResponse::Result]),
-        key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata | nil
+        key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil
       }
     end
   end
@@ -216,6 +224,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         cache_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata,
+        final_dom_state: ContextDev::Models::WebWebScrapeHTMLResponse::FinalDomState,
         html: String,
         metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
         request_id: String,
@@ -246,7 +255,9 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         success: ContextDev::Models::WebWebScrapeImagesResponse::Success,
         url: String,
         actions_applied: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied]) | nil,
-        key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata | nil
+        final_dom_state: ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState | nil,
+        key_metadata: ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil
       }
     end
   end
@@ -264,6 +275,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
       response => {
         cache_metadata: ContextDev::Models::WebWebScrapeMdResponse::CacheMetadata,
         content_length: Integer,
+        final_dom_state: ContextDev::Models::WebWebScrapeMdResponse::FinalDomState,
         markdown: String,
         metadata: ContextDev::Models::WebWebScrapeMdResponse::Metadata,
         request_id: String,
@@ -293,7 +305,8 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         request_id: String,
         success: ContextDev::Models::WebWebScrapeSitemapResponse::Success,
         urls: ^(ContextDev::Internal::Type::ArrayOf[String]),
-        key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata | nil
+        key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil
       }
     end
   end

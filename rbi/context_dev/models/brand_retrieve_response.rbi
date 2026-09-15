@@ -66,6 +66,14 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # True when the timeout ended processing and this response contains the usable
+      # data completed so far. Unfinished fields are omitted.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
+
       # Status of the response, e.g., 'ok'
       sig { returns(T.nilable(String)) }
       attr_reader :status
@@ -82,6 +90,7 @@ module ContextDev
           code: Integer,
           key_metadata:
             ContextDev::Models::BrandRetrieveResponse::KeyMetadata::OrHash,
+          partial: T::Boolean,
           status: String
         ).returns(T.attached_class)
       end
@@ -99,6 +108,9 @@ module ContextDev
         code: nil,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil,
+        # True when the timeout ended processing and this response contains the usable
+        # data completed so far. Unfinished fields are omitted.
+        partial: nil,
         # Status of the response, e.g., 'ok'
         status: nil
       )
@@ -114,6 +126,7 @@ module ContextDev
             code: Integer,
             key_metadata:
               ContextDev::Models::BrandRetrieveResponse::KeyMetadata,
+            partial: T::Boolean,
             status: String
           }
         )

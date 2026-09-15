@@ -62,6 +62,15 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # True when timeoutOpts.behavior=return-partial returned the usable results
+      # collected before the deadline. Partial collections are not cached as complete
+      # results.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
+
       sig do
         params(
           domain: String,
@@ -71,7 +80,8 @@ module ContextDev
             ContextDev::Models::WebWebScrapeSitemapResponse::Success::OrBoolean,
           urls: T::Array[String],
           key_metadata:
-            ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata::OrHash
+            ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata::OrHash,
+          partial: T::Boolean
         ).returns(T.attached_class)
       end
       def self.new(
@@ -88,7 +98,11 @@ module ContextDev
         # these are only the matching pages, most relevant first.
         urls:,
         # Credit usage, included whenever a valid API key is provided.
-        key_metadata: nil
+        key_metadata: nil,
+        # True when timeoutOpts.behavior=return-partial returned the usable results
+        # collected before the deadline. Partial collections are not cached as complete
+        # results.
+        partial: nil
       )
       end
 
@@ -102,7 +116,8 @@ module ContextDev
               ContextDev::Models::WebWebScrapeSitemapResponse::Success::TaggedBoolean,
             urls: T::Array[String],
             key_metadata:
-              ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
+              ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata,
+            partial: T::Boolean
           }
         )
       end

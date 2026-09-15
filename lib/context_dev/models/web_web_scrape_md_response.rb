@@ -20,6 +20,18 @@ module ContextDev
       #   @return [Integer]
       required :content_length, Integer, api_name: :contentLength
 
+      # @!attribute final_dom_state
+      #   How complete the returned content is. `loaded` means the page finished the waits
+      #   the request asked for. `still-loading` only occurs with
+      #   timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      #   reached first, so the content reflects the DOM at that moment and late-rendering
+      #   parts may be missing. Partial results are billed at the base request cost.
+      #
+      #   @return [Symbol, ContextDev::Models::WebWebScrapeMdResponse::FinalDomState]
+      required :final_dom_state,
+               enum: -> { ContextDev::Models::WebWebScrapeMdResponse::FinalDomState },
+               api_name: :finalDOMState
+
       # @!attribute markdown
       #   Page content converted to GitHub Flavored Markdown
       #
@@ -80,13 +92,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeMdResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, content_length:, markdown:, metadata:, request_id:, success:, url:, actions_applied: nil, actions_html_stale: nil, html: nil, key_metadata: nil)
+      # @!method initialize(cache_metadata:, content_length:, final_dom_state:, markdown:, metadata:, request_id:, success:, url:, actions_applied: nil, actions_html_stale: nil, html: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeMdResponse} for more details.
       #
       #   @param cache_metadata [ContextDev::Models::WebWebScrapeMdResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param content_length [Integer] UTF-8 byte length of the returned Markdown. Use 0 to identify an empty result an
+      #
+      #   @param final_dom_state [Symbol, ContextDev::Models::WebWebScrapeMdResponse::FinalDomState] How complete the returned content is. `loaded` means the page finished the waits
       #
       #   @param markdown [String] Page content converted to GitHub Flavored Markdown
       #
@@ -147,6 +161,23 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      #
+      # @see ContextDev::Models::WebWebScrapeMdResponse#final_dom_state
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        LOADED = :loaded
+        STILL_LOADING = :"still-loading"
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
 
       # @see ContextDev::Models::WebWebScrapeMdResponse#metadata

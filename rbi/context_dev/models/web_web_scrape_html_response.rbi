@@ -27,6 +27,18 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      sig do
+        returns(
+          ContextDev::Models::WebWebScrapeHTMLResponse::FinalDomState::TaggedSymbol
+        )
+      end
+      attr_accessor :final_dom_state
+
       # The scraped content of the page. For normal pages this is the raw HTML. When the
       # page is a sitemap or feed served behind an XSL stylesheet (which browsers render
       # into HTML), this is the underlying XML instead — see the `type` field.
@@ -123,6 +135,8 @@ module ContextDev
         params(
           cache_metadata:
             ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata::OrHash,
+          final_dom_state:
+            ContextDev::Models::WebWebScrapeHTMLResponse::FinalDomState::OrSymbol,
           html: String,
           metadata:
             ContextDev::Models::WebWebScrapeHTMLResponse::Metadata::OrHash,
@@ -145,6 +159,12 @@ module ContextDev
         # cache-controlled fetch contributing to the output was a hit; age_ms is the
         # oldest contributing hit.
         cache_metadata:,
+        # How complete the returned content is. `loaded` means the page finished the waits
+        # the request asked for. `still-loading` only occurs with
+        # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+        # reached first, so the content reflects the DOM at that moment and late-rendering
+        # parts may be missing. Partial results are billed at the base request cost.
+        final_dom_state:,
         # The scraped content of the page. For normal pages this is the raw HTML. When the
         # page is a sitemap or feed served behind an XSL stylesheet (which browsers render
         # into HTML), this is the underlying XML instead — see the `type` field.
@@ -178,6 +198,8 @@ module ContextDev
           {
             cache_metadata:
               ContextDev::Models::WebWebScrapeHTMLResponse::CacheMetadata,
+            final_dom_state:
+              ContextDev::Models::WebWebScrapeHTMLResponse::FinalDomState::TaggedSymbol,
             html: String,
             metadata: ContextDev::Models::WebWebScrapeHTMLResponse::Metadata,
             request_id: String,
@@ -291,6 +313,45 @@ module ContextDev
           end
           def self.values
           end
+        end
+      end
+
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(
+              Symbol,
+              ContextDev::Models::WebWebScrapeHTMLResponse::FinalDomState
+            )
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        LOADED =
+          T.let(
+            :loaded,
+            ContextDev::Models::WebWebScrapeHTMLResponse::FinalDomState::TaggedSymbol
+          )
+        STILL_LOADING =
+          T.let(
+            :"still-loading",
+            ContextDev::Models::WebWebScrapeHTMLResponse::FinalDomState::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::WebWebScrapeHTMLResponse::FinalDomState::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
         end
       end
 

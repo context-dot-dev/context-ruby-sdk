@@ -7,7 +7,8 @@ module ContextDev
         request_id: String,
         success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
         urls: ::Array[String],
-        key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata,
+        partial: bool
       }
 
     class WebWebScrapeSitemapResponse < ContextDev::Internal::Type::BaseModel
@@ -27,13 +28,18 @@ module ContextDev
         ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
       ) -> ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
 
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
       def initialize: (
         domain: String,
         meta: ContextDev::Models::WebWebScrapeSitemapResponse::Meta,
         request_id: String,
         success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
         urls: ::Array[String],
-        ?key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
+        ?key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata,
+        ?partial: bool
       ) -> void
 
       def to_hash: -> {
@@ -42,7 +48,8 @@ module ContextDev
         request_id: String,
         success: ContextDev::Models::WebWebScrapeSitemapResponse::success,
         urls: ::Array[String],
-        key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata,
+        partial: bool
       }
 
       type meta =

@@ -46,13 +46,33 @@ module ContextDev
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied] },
                api_name: :actionsApplied
 
+      # @!attribute final_dom_state
+      #   How complete the returned content is. `loaded` means the page finished the waits
+      #   the request asked for. `still-loading` only occurs with
+      #   timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      #   reached first, so the content reflects the DOM at that moment and late-rendering
+      #   parts may be missing. Partial results are billed at the base request cost.
+      #
+      #   @return [Symbol, ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState, nil]
+      optional :final_dom_state,
+               enum: -> { ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState },
+               api_name: :finalDOMState
+
       # @!attribute key_metadata
       #   Credit usage, included whenever a valid API key is provided.
       #
       #   @return [ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, images:, request_id:, success:, url:, actions_applied: nil, key_metadata: nil)
+      # @!attribute partial
+      #   True when the deadline interrupted rendering or image enrichment. Partial
+      #   results are billed at the base request cost, without enrichment or actions
+      #   surcharges.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
+      # @!method initialize(cache_metadata:, images:, request_id:, success:, url:, actions_applied: nil, final_dom_state: nil, key_metadata: nil, partial: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeImagesResponse} for more details.
       #
@@ -68,7 +88,11 @@ module ContextDev
       #
       #   @param actions_applied [Array<ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied>] One verified outcome per requested browser action, in request order.
       #
+      #   @param final_dom_state [Symbol, ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState] How complete the returned content is. `loaded` means the page finished the waits
+      #
       #   @param key_metadata [ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when the deadline interrupted rendering or image enrichment. Partial result
 
       # @see ContextDev::Models::WebWebScrapeImagesResponse#cache_metadata
       class CacheMetadata < ContextDev::Internal::Type::BaseModel
@@ -340,6 +364,23 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      #
+      # @see ContextDev::Models::WebWebScrapeImagesResponse#final_dom_state
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        LOADED = :loaded
+        STILL_LOADING = :"still-loading"
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
 
       # @see ContextDev::Models::WebWebScrapeImagesResponse#key_metadata

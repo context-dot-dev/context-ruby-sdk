@@ -9,7 +9,7 @@ module ContextDev
         search: String,
         sitemap_url: String,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::WebWebScrapeSitemapParams::TimeoutOpts,
         url_regex: String,
         zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr
       }
@@ -45,9 +45,11 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
-      attr_reader timeout_ms: Integer?
+      attr_reader timeout_opts: ContextDev::WebWebScrapeSitemapParams::TimeoutOpts?
 
-      def timeout_ms=: (Integer) -> Integer
+      def timeout_opts=: (
+        ContextDev::WebWebScrapeSitemapParams::TimeoutOpts
+      ) -> ContextDev::WebWebScrapeSitemapParams::TimeoutOpts
 
       attr_reader url_regex: String?
 
@@ -67,7 +69,7 @@ module ContextDev
         ?search: String,
         ?sitemap_url: String,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::WebWebScrapeSitemapParams::TimeoutOpts,
         ?url_regex: String,
         ?zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr,
         ?request_options: ContextDev::request_opts
@@ -81,11 +83,48 @@ module ContextDev
         search: String,
         sitemap_url: String,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::WebWebScrapeSitemapParams::TimeoutOpts,
         url_regex: String,
         zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr,
         request_options: ContextDev::RequestOptions
       }
+
+      type timeout_opts =
+        {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebWebScrapeSitemapParams::TimeoutOpts::behavior
+        }
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        attr_accessor milliseconds: Integer
+
+        attr_reader behavior: ContextDev::Models::WebWebScrapeSitemapParams::TimeoutOpts::behavior?
+
+        def behavior=: (
+          ContextDev::Models::WebWebScrapeSitemapParams::TimeoutOpts::behavior
+        ) -> ContextDev::Models::WebWebScrapeSitemapParams::TimeoutOpts::behavior
+
+        def initialize: (
+          milliseconds: Integer,
+          ?behavior: ContextDev::Models::WebWebScrapeSitemapParams::TimeoutOpts::behavior
+        ) -> void
+
+        def to_hash: -> {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebWebScrapeSitemapParams::TimeoutOpts::behavior
+        }
+
+        type behavior = :fail | :"return-partial"
+
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL: :fail
+          RETURN_PARTIAL: :"return-partial"
+
+          def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeSitemapParams::TimeoutOpts::behavior]
+        end
+      end
 
       type zdr = :enabled | :disabled
 

@@ -42,7 +42,14 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata }
 
-      # @!method initialize(competitors:, domain:, request_id:, status:, target:, key_metadata: nil)
+      # @!attribute partial
+      #   True when the timeout ended processing and this response contains only usable
+      #   results completed so far. Unfinished results are omitted.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
+      # @!method initialize(competitors:, domain:, request_id:, status:, target:, key_metadata: nil, partial: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractCompetitorsResponse} for more details.
       #
@@ -57,6 +64,8 @@ module ContextDev
       #   @param target [ContextDev::Models::WebExtractCompetitorsResponse::Target] Target company profile inferred from the landing page.
       #
       #   @param key_metadata [ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when the timeout ended processing and this response contains only usable re
 
       class Competitor < ContextDev::Internal::Type::BaseModel
         # @!attribute confidence

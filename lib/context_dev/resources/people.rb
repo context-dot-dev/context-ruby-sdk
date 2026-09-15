@@ -11,7 +11,7 @@ module ContextDev
       # plans. Successful requests cost 20 credits. Disposable and free email addresses
       # (like gmail.com, yahoo.com) will throw a 422 error.
       #
-      # @overload enrich(company: nil, education: nil, email: nil, location: nil, name: nil, social_urls: nil, tags: nil, timeout_ms: nil, request_options: {})
+      # @overload enrich(company: nil, education: nil, email: nil, location: nil, name: nil, social_urls: nil, tags: nil, timeout_opts: nil, request_options: {})
       #
       # @param company [ContextDev::Models::PersonEnrichParams::Company]
       #
@@ -27,7 +27,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::PersonEnrichParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

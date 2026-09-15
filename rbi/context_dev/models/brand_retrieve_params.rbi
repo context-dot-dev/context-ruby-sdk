@@ -134,14 +134,25 @@ module ContextDev
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Optional timeout in milliseconds for the request. If the request takes longer
-          # than this value, it will be aborted with a 408 status code. Maximum allowed
-          # value is 300000ms (5 minutes).
-          sig { returns(T.nilable(Integer)) }
-          attr_reader :timeout_ms
+          # Optional request deadline and behavior on timeout. For GET requests, use
+          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+          # timeoutOpts object.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts
+              )
+            )
+          end
+          attr_reader :timeout_opts
 
-          sig { params(timeout_ms: Integer).void }
-          attr_writer :timeout_ms
+          sig do
+            params(
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::OrHash
+            ).void
+          end
+          attr_writer :timeout_opts
 
           # Retrieve brand data by domain. Cannot be combined with name, email, or ticker.
           sig do
@@ -154,7 +165,8 @@ module ContextDev
               max_age_ms: Integer,
               max_speed: T::Boolean,
               tags: T::Array[String],
-              timeout_ms: Integer,
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::OrHash,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -173,10 +185,10 @@ module ContextDev
             max_speed: nil,
             # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
             tags: nil,
-            # Optional timeout in milliseconds for the request. If the request takes longer
-            # than this value, it will be aborted with a 408 status code. Maximum allowed
-            # value is 300000ms (5 minutes).
-            timeout_ms: nil,
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            timeout_opts: nil,
             # Discriminator for domain-based brand retrieval.
             type: :by_domain
           )
@@ -194,7 +206,8 @@ module ContextDev
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
                 tags: T::Array[String],
-                timeout_ms: Integer
+                timeout_opts:
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts
               }
             )
           end
@@ -824,6 +837,112 @@ module ContextDev
             def self.values
             end
           end
+
+          class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            sig { returns(Integer) }
+            attr_accessor :milliseconds
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            sig do
+              returns(
+                T.nilable(
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior::OrSymbol
+                )
+              )
+            end
+            attr_reader :behavior
+
+            sig do
+              params(
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior::OrSymbol
+              ).void
+            end
+            attr_writer :behavior
+
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            sig do
+              params(
+                milliseconds: Integer,
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior::OrSymbol
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              milliseconds:,
+              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+              # credits. "return-partial" returns usable results collected so far; if none are
+              # available, the request still fails without charging credits. Partial results are
+              # not cached as complete results.
+              behavior: nil
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  milliseconds: Integer,
+                  behavior:
+                    ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior::OrSymbol
+                }
+              )
+            end
+            def to_hash
+            end
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            module Behavior
+              extend ContextDev::Internal::Type::Enum
+
+              TaggedSymbol =
+                T.type_alias do
+                  T.all(
+                    Symbol,
+                    ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior
+                  )
+                end
+              OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+              FAIL =
+                T.let(
+                  :fail,
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior::TaggedSymbol
+                )
+              RETURN_PARTIAL =
+                T.let(
+                  :"return-partial",
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior::TaggedSymbol
+                )
+
+              sig do
+                override.returns(
+                  T::Array[
+                    ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior::TaggedSymbol
+                  ]
+                )
+              end
+              def self.values
+              end
+            end
+          end
         end
 
         class ByName < ContextDev::Internal::Type::BaseModel
@@ -886,14 +1005,25 @@ module ContextDev
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Optional timeout in milliseconds for the request. If the request takes longer
-          # than this value, it will be aborted with a 408 status code. Maximum allowed
-          # value is 300000ms (5 minutes).
-          sig { returns(T.nilable(Integer)) }
-          attr_reader :timeout_ms
+          # Optional request deadline and behavior on timeout. For GET requests, use
+          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+          # timeoutOpts object.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts
+              )
+            )
+          end
+          attr_reader :timeout_opts
 
-          sig { params(timeout_ms: Integer).void }
-          attr_writer :timeout_ms
+          sig do
+            params(
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::OrHash
+            ).void
+          end
+          attr_writer :timeout_opts
 
           # Retrieve brand data by company name. Cannot be combined with domain, email, or
           # ticker.
@@ -908,7 +1038,8 @@ module ContextDev
               max_age_ms: Integer,
               max_speed: T::Boolean,
               tags: T::Array[String],
-              timeout_ms: Integer,
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::OrHash,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -930,10 +1061,10 @@ module ContextDev
             max_speed: nil,
             # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
             tags: nil,
-            # Optional timeout in milliseconds for the request. If the request takes longer
-            # than this value, it will be aborted with a 408 status code. Maximum allowed
-            # value is 300000ms (5 minutes).
-            timeout_ms: nil,
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            timeout_opts: nil,
             # Discriminator for name-based brand retrieval.
             type: :by_name
           )
@@ -952,7 +1083,8 @@ module ContextDev
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
                 tags: T::Array[String],
-                timeout_ms: Integer
+                timeout_opts:
+                  ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts
               }
             )
           end
@@ -1582,6 +1714,112 @@ module ContextDev
             def self.values
             end
           end
+
+          class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            sig { returns(Integer) }
+            attr_accessor :milliseconds
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            sig do
+              returns(
+                T.nilable(
+                  ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior::OrSymbol
+                )
+              )
+            end
+            attr_reader :behavior
+
+            sig do
+              params(
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior::OrSymbol
+              ).void
+            end
+            attr_writer :behavior
+
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            sig do
+              params(
+                milliseconds: Integer,
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior::OrSymbol
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              milliseconds:,
+              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+              # credits. "return-partial" returns usable results collected so far; if none are
+              # available, the request still fails without charging credits. Partial results are
+              # not cached as complete results.
+              behavior: nil
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  milliseconds: Integer,
+                  behavior:
+                    ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior::OrSymbol
+                }
+              )
+            end
+            def to_hash
+            end
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            module Behavior
+              extend ContextDev::Internal::Type::Enum
+
+              TaggedSymbol =
+                T.type_alias do
+                  T.all(
+                    Symbol,
+                    ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior
+                  )
+                end
+              OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+              FAIL =
+                T.let(
+                  :fail,
+                  ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior::TaggedSymbol
+                )
+              RETURN_PARTIAL =
+                T.let(
+                  :"return-partial",
+                  ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior::TaggedSymbol
+                )
+
+              sig do
+                override.returns(
+                  T::Array[
+                    ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior::TaggedSymbol
+                  ]
+                )
+              end
+              def self.values
+              end
+            end
+          end
         end
 
         class ByEmail < ContextDev::Internal::Type::BaseModel
@@ -1636,14 +1874,25 @@ module ContextDev
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Optional timeout in milliseconds for the request. If the request takes longer
-          # than this value, it will be aborted with a 408 status code. Maximum allowed
-          # value is 300000ms (5 minutes).
-          sig { returns(T.nilable(Integer)) }
-          attr_reader :timeout_ms
+          # Optional request deadline and behavior on timeout. For GET requests, use
+          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+          # timeoutOpts object.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts
+              )
+            )
+          end
+          attr_reader :timeout_opts
 
-          sig { params(timeout_ms: Integer).void }
-          attr_writer :timeout_ms
+          sig do
+            params(
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::OrHash
+            ).void
+          end
+          attr_writer :timeout_opts
 
           # Retrieve brand data by email address. The domain is extracted from the email.
           # Free and disposable email providers are rejected with 422. Cannot be combined
@@ -1658,7 +1907,8 @@ module ContextDev
               max_age_ms: Integer,
               max_speed: T::Boolean,
               tags: T::Array[String],
-              timeout_ms: Integer,
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::OrHash,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -1677,10 +1927,10 @@ module ContextDev
             max_speed: nil,
             # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
             tags: nil,
-            # Optional timeout in milliseconds for the request. If the request takes longer
-            # than this value, it will be aborted with a 408 status code. Maximum allowed
-            # value is 300000ms (5 minutes).
-            timeout_ms: nil,
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            timeout_opts: nil,
             # Discriminator for email-based brand retrieval.
             type: :by_email
           )
@@ -1698,7 +1948,8 @@ module ContextDev
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
                 tags: T::Array[String],
-                timeout_ms: Integer
+                timeout_opts:
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts
               }
             )
           end
@@ -2328,6 +2579,112 @@ module ContextDev
             def self.values
             end
           end
+
+          class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            sig { returns(Integer) }
+            attr_accessor :milliseconds
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            sig do
+              returns(
+                T.nilable(
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior::OrSymbol
+                )
+              )
+            end
+            attr_reader :behavior
+
+            sig do
+              params(
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior::OrSymbol
+              ).void
+            end
+            attr_writer :behavior
+
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            sig do
+              params(
+                milliseconds: Integer,
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior::OrSymbol
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              milliseconds:,
+              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+              # credits. "return-partial" returns usable results collected so far; if none are
+              # available, the request still fails without charging credits. Partial results are
+              # not cached as complete results.
+              behavior: nil
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  milliseconds: Integer,
+                  behavior:
+                    ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior::OrSymbol
+                }
+              )
+            end
+            def to_hash
+            end
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            module Behavior
+              extend ContextDev::Internal::Type::Enum
+
+              TaggedSymbol =
+                T.type_alias do
+                  T.all(
+                    Symbol,
+                    ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior
+                  )
+                end
+              OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+              FAIL =
+                T.let(
+                  :fail,
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior::TaggedSymbol
+                )
+              RETURN_PARTIAL =
+                T.let(
+                  :"return-partial",
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior::TaggedSymbol
+                )
+
+              sig do
+                override.returns(
+                  T::Array[
+                    ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior::TaggedSymbol
+                  ]
+                )
+              end
+              def self.values
+              end
+            end
+          end
         end
 
         class ByTicker < ContextDev::Internal::Type::BaseModel
@@ -2389,14 +2746,25 @@ module ContextDev
           sig { params(ticker_exchange: String).void }
           attr_writer :ticker_exchange
 
-          # Optional timeout in milliseconds for the request. If the request takes longer
-          # than this value, it will be aborted with a 408 status code. Maximum allowed
-          # value is 300000ms (5 minutes).
-          sig { returns(T.nilable(Integer)) }
-          attr_reader :timeout_ms
+          # Optional request deadline and behavior on timeout. For GET requests, use
+          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+          # timeoutOpts object.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts
+              )
+            )
+          end
+          attr_reader :timeout_opts
 
-          sig { params(timeout_ms: Integer).void }
-          attr_writer :timeout_ms
+          sig do
+            params(
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::OrHash
+            ).void
+          end
+          attr_writer :timeout_opts
 
           # Retrieve brand data by stock ticker. Cannot be combined with domain, name, or
           # email.
@@ -2411,7 +2779,8 @@ module ContextDev
               max_speed: T::Boolean,
               tags: T::Array[String],
               ticker_exchange: String,
-              timeout_ms: Integer,
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::OrHash,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -2432,10 +2801,10 @@ module ContextDev
             tags: nil,
             # Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
             ticker_exchange: nil,
-            # Optional timeout in milliseconds for the request. If the request takes longer
-            # than this value, it will be aborted with a 408 status code. Maximum allowed
-            # value is 300000ms (5 minutes).
-            timeout_ms: nil,
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            timeout_opts: nil,
             # Discriminator for ticker-based brand retrieval.
             type: :by_ticker
           )
@@ -2454,7 +2823,8 @@ module ContextDev
                 max_speed: T::Boolean,
                 tags: T::Array[String],
                 ticker_exchange: String,
-                timeout_ms: Integer
+                timeout_opts:
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts
               }
             )
           end
@@ -3084,6 +3454,112 @@ module ContextDev
             def self.values
             end
           end
+
+          class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            sig { returns(Integer) }
+            attr_accessor :milliseconds
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            sig do
+              returns(
+                T.nilable(
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior::OrSymbol
+                )
+              )
+            end
+            attr_reader :behavior
+
+            sig do
+              params(
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior::OrSymbol
+              ).void
+            end
+            attr_writer :behavior
+
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            sig do
+              params(
+                milliseconds: Integer,
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior::OrSymbol
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              milliseconds:,
+              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+              # credits. "return-partial" returns usable results collected so far; if none are
+              # available, the request still fails without charging credits. Partial results are
+              # not cached as complete results.
+              behavior: nil
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  milliseconds: Integer,
+                  behavior:
+                    ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior::OrSymbol
+                }
+              )
+            end
+            def to_hash
+            end
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            module Behavior
+              extend ContextDev::Internal::Type::Enum
+
+              TaggedSymbol =
+                T.type_alias do
+                  T.all(
+                    Symbol,
+                    ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior
+                  )
+                end
+              OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+              FAIL =
+                T.let(
+                  :fail,
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior::TaggedSymbol
+                )
+              RETURN_PARTIAL =
+                T.let(
+                  :"return-partial",
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior::TaggedSymbol
+                )
+
+              sig do
+                override.returns(
+                  T::Array[
+                    ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior::TaggedSymbol
+                  ]
+                )
+              end
+              def self.values
+              end
+            end
+          end
         end
 
         class ByDirectURL < ContextDev::Internal::Type::BaseModel
@@ -3112,14 +3588,25 @@ module ContextDev
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Optional timeout in milliseconds for the request. If the request takes longer
-          # than this value, it will be aborted with a 408 status code. Maximum allowed
-          # value is 300000ms (5 minutes).
-          sig { returns(T.nilable(Integer)) }
-          attr_reader :timeout_ms
+          # Optional request deadline and behavior on timeout. For GET requests, use
+          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+          # timeoutOpts object.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts
+              )
+            )
+          end
+          attr_reader :timeout_opts
 
-          sig { params(timeout_ms: Integer).void }
-          attr_writer :timeout_ms
+          sig do
+            params(
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::OrHash
+            ).void
+          end
+          attr_writer :timeout_opts
 
           # Retrieve brand data by fetching the provided URL directly. Note: if you use
           # this, brand data is fetched only from the provided URL — not from the entire
@@ -3130,7 +3617,8 @@ module ContextDev
             params(
               direct_url: String,
               tags: T::Array[String],
-              timeout_ms: Integer,
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::OrHash,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -3141,10 +3629,10 @@ module ContextDev
             direct_url:,
             # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
             tags: nil,
-            # Optional timeout in milliseconds for the request. If the request takes longer
-            # than this value, it will be aborted with a 408 status code. Maximum allowed
-            # value is 300000ms (5 minutes).
-            timeout_ms: nil,
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            timeout_opts: nil,
             # Discriminator for direct-URL-based brand retrieval.
             type: :by_direct_url
           )
@@ -3156,11 +3644,118 @@ module ContextDev
                 direct_url: String,
                 type: Symbol,
                 tags: T::Array[String],
-                timeout_ms: Integer
+                timeout_opts:
+                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts
               }
             )
           end
           def to_hash
+          end
+
+          class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            sig { returns(Integer) }
+            attr_accessor :milliseconds
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            sig do
+              returns(
+                T.nilable(
+                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior::OrSymbol
+                )
+              )
+            end
+            attr_reader :behavior
+
+            sig do
+              params(
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior::OrSymbol
+              ).void
+            end
+            attr_writer :behavior
+
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            sig do
+              params(
+                milliseconds: Integer,
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior::OrSymbol
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              milliseconds:,
+              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+              # credits. "return-partial" returns usable results collected so far; if none are
+              # available, the request still fails without charging credits. Partial results are
+              # not cached as complete results.
+              behavior: nil
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  milliseconds: Integer,
+                  behavior:
+                    ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior::OrSymbol
+                }
+              )
+            end
+            def to_hash
+            end
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            module Behavior
+              extend ContextDev::Internal::Type::Enum
+
+              TaggedSymbol =
+                T.type_alias do
+                  T.all(
+                    Symbol,
+                    ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior
+                  )
+                end
+              OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+              FAIL =
+                T.let(
+                  :fail,
+                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior::TaggedSymbol
+                )
+              RETURN_PARTIAL =
+                T.let(
+                  :"return-partial",
+                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior::TaggedSymbol
+                )
+
+              sig do
+                override.returns(
+                  T::Array[
+                    ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior::TaggedSymbol
+                  ]
+                )
+              end
+              def self.values
+              end
+            end
           end
         end
 
@@ -3266,14 +3861,25 @@ module ContextDev
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Optional timeout in milliseconds for the request. If the request takes longer
-          # than this value, it will be aborted with a 408 status code. Maximum allowed
-          # value is 300000ms (5 minutes).
-          sig { returns(T.nilable(Integer)) }
-          attr_reader :timeout_ms
+          # Optional request deadline and behavior on timeout. For GET requests, use
+          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+          # timeoutOpts object.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts
+              )
+            )
+          end
+          attr_reader :timeout_opts
 
-          sig { params(timeout_ms: Integer).void }
-          attr_writer :timeout_ms
+          sig do
+            params(
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::OrHash
+            ).void
+          end
+          attr_writer :timeout_opts
 
           # Identify brand data from a transaction descriptor. Cannot be combined with
           # domain, name, email, or ticker.
@@ -3293,7 +3899,8 @@ module ContextDev
               phone:
                 ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone::Variants,
               tags: T::Array[String],
-              timeout_ms: Integer,
+              timeout_opts:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::OrHash,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -3320,10 +3927,10 @@ module ContextDev
             phone: nil,
             # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
             tags: nil,
-            # Optional timeout in milliseconds for the request. If the request takes longer
-            # than this value, it will be aborted with a 408 status code. Maximum allowed
-            # value is 300000ms (5 minutes).
-            timeout_ms: nil,
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            timeout_opts: nil,
             # Discriminator for transaction-based brand retrieval.
             type: :by_transaction
           )
@@ -3347,7 +3954,8 @@ module ContextDev
                 phone:
                   ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone::Variants,
                 tags: T::Array[String],
-                timeout_ms: Integer
+                timeout_opts:
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts
               }
             )
           end
@@ -4010,6 +4618,112 @@ module ContextDev
               )
             end
             def self.variants
+            end
+          end
+
+          class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            sig { returns(Integer) }
+            attr_accessor :milliseconds
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            sig do
+              returns(
+                T.nilable(
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior::OrSymbol
+                )
+              )
+            end
+            attr_reader :behavior
+
+            sig do
+              params(
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior::OrSymbol
+              ).void
+            end
+            attr_writer :behavior
+
+            # Optional request deadline and behavior on timeout. For GET requests, use
+            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+            # timeoutOpts object.
+            sig do
+              params(
+                milliseconds: Integer,
+                behavior:
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior::OrSymbol
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              milliseconds:,
+              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+              # credits. "return-partial" returns usable results collected so far; if none are
+              # available, the request still fails without charging credits. Partial results are
+              # not cached as complete results.
+              behavior: nil
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  milliseconds: Integer,
+                  behavior:
+                    ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior::OrSymbol
+                }
+              )
+            end
+            def to_hash
+            end
+
+            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            # credits. "return-partial" returns usable results collected so far; if none are
+            # available, the request still fails without charging credits. Partial results are
+            # not cached as complete results.
+            module Behavior
+              extend ContextDev::Internal::Type::Enum
+
+              TaggedSymbol =
+                T.type_alias do
+                  T.all(
+                    Symbol,
+                    ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior
+                  )
+                end
+              OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+              FAIL =
+                T.let(
+                  :fail,
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior::TaggedSymbol
+                )
+              RETURN_PARTIAL =
+                T.let(
+                  :"return-partial",
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior::TaggedSymbol
+                )
+
+              sig do
+                override.returns(
+                  T::Array[
+                    ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior::TaggedSymbol
+                  ]
+                )
+              end
+              def self.values
+              end
             end
           end
         end

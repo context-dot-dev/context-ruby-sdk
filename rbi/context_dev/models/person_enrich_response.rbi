@@ -36,6 +36,14 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # True when the timeout ended processing and this response contains the usable
+      # data completed so far. Unfinished fields are omitted.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
+
       sig do
         params(
           match:
@@ -45,7 +53,8 @@ module ContextDev
             ),
           request_id: String,
           key_metadata:
-            ContextDev::Models::PersonEnrichResponse::KeyMetadata::OrHash
+            ContextDev::Models::PersonEnrichResponse::KeyMetadata::OrHash,
+          partial: T::Boolean
         ).returns(T.attached_class)
       end
       def self.new(
@@ -55,7 +64,10 @@ module ContextDev
         # it when contacting support about a failed request.
         request_id:,
         # Credit usage, included whenever a valid API key is provided.
-        key_metadata: nil
+        key_metadata: nil,
+        # True when the timeout ended processing and this response contains the usable
+        # data completed so far. Unfinished fields are omitted.
+        partial: nil
       )
       end
 
@@ -64,7 +76,8 @@ module ContextDev
           {
             match: ContextDev::Models::PersonEnrichResponse::Match::Variants,
             request_id: String,
-            key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata
+            key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata,
+            partial: T::Boolean
           }
         )
       end

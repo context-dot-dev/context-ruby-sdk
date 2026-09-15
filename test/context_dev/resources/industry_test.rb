@@ -18,6 +18,7 @@ class ContextDev::Test::Resources::IndustryTest < ContextDev::Test::ResourceTest
         codes: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::IndustryRetrieveNaicsResponse::Code]) | nil,
         domain: String | nil,
         key_metadata: ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil,
         status: String | nil,
         type: String | nil
       }
@@ -40,6 +41,7 @@ class ContextDev::Test::Resources::IndustryTest < ContextDev::Test::ResourceTest
         codes: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::IndustryRetrieveSicResponse::Code]) | nil,
         domain: String | nil,
         key_metadata: ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil,
         status: String | nil,
         type: String | nil
       }

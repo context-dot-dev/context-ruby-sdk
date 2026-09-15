@@ -6,14 +6,15 @@ module ContextDev
       # Researches the live web and returns a sourced answer in your requested JSON
       # shape. Select fast for a smaller research budget at 10 credits or ultra for
       # deeper reasoning at 100 credits. Defaults to ultra. Fast research is limited to
-      # 30 seconds and ultra to 50 seconds; timeoutMS can shorten either deadline.
+      # 30 seconds and ultra to 50 seconds; timeoutOpts.milliseconds can shorten either
+      # deadline.
       sig do
         params(
           task: String,
           json_format: T::Hash[Symbol, T.anything],
           mode: ContextDev::WebAnswersParams::Mode::OrSymbol,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebAnswersResponse)
       end
@@ -33,10 +34,10 @@ module ContextDev
         mode: nil,
         # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         request_options: {}
       )
       end
@@ -66,7 +67,7 @@ module ContextDev
           settle_animations: T::Boolean,
           stop_after_ms: Integer,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebExtractParams::TimeoutOpts::OrHash,
           wait_for_ms: Integer,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractResponse)
@@ -119,10 +120,10 @@ module ContextDev
         stop_after_ms: nil,
         # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         # Optional browser wait time in milliseconds after initial page load for each
         # crawled page.
         wait_for_ms: nil,
@@ -137,7 +138,8 @@ module ContextDev
           domain: String,
           num_competitors: Integer,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts:
+            ContextDev::WebExtractCompetitorsParams::TimeoutOpts::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractCompetitorsResponse)
       end
@@ -150,10 +152,10 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         request_options: {}
       )
       end
@@ -166,7 +168,7 @@ module ContextDev
           domain: String,
           max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebExtractFontsParams::TimeoutOpts::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractFontsResponse)
       end
@@ -187,10 +189,10 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         request_options: {}
       )
       end
@@ -205,7 +207,8 @@ module ContextDev
           domain: String,
           max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts:
+            ContextDev::WebExtractStyleguideParams::TimeoutOpts::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractStyleguideResponse)
       end
@@ -230,10 +233,10 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         request_options: {}
       )
       end
@@ -253,7 +256,7 @@ module ContextDev
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           scroll_offset: T.nilable(Integer),
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebScreenshotParams::TimeoutOpts::OrHash,
           viewport: ContextDev::WebScreenshotParams::Viewport::OrHash,
           wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebScreenshotParams::Zdr::OrSymbol,
@@ -309,16 +312,17 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
         viewport: nil,
         # Optional browser wait time in milliseconds after initial page load before taking
         # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
-        # omitted. When combined with timeoutMS, timeoutMS must be at least waitForMs +
-        # 10000 ms; a shorter deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+        # omitted. When combined with timeoutOpts, timeoutOpts.milliseconds must be at
+        # least waitForMs + 10000 ms; a shorter deadline is rejected with 400
+        # TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Requires zero data retention to be enabled for your
@@ -342,7 +346,7 @@ module ContextDev
           num_results: Integer,
           query_fanout: T::Boolean,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebSearchParams::TimeoutOpts::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebSearchResponse)
       end
@@ -369,10 +373,10 @@ module ContextDev
         query_fanout: nil,
         # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         request_options: {}
       )
       end
@@ -397,7 +401,7 @@ module ContextDev
           shorten_base64_images: T::Boolean,
           stop_after_ms: Integer,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebWebCrawlMdParams::TimeoutOpts::OrHash,
           url_regex: String,
           use_main_content_only: T::Boolean,
           wait_for_ms: Integer,
@@ -455,10 +459,10 @@ module ContextDev
         stop_after_ms: nil,
         # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         # Regex pattern. Only URLs matching this pattern will be followed and scraped. An
         # automatic prefix scope in the form ^<starting URL> follows a redirect of the
         # starting page.
@@ -494,7 +498,8 @@ module ContextDev
           country: ContextDev::WebWebScrapeBytesParams::Country::OrSymbol,
           headers: T::Hash[Symbol, String],
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts:
+            ContextDev::WebWebScrapeBytesParams::TimeoutOpts::OrHash,
           zdr: ContextDev::WebWebScrapeBytesParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeBytesResponse)
@@ -514,10 +519,10 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Requires zero data retention to be enabled for your
         # organization (contact support@context.dev), otherwise the request fails with
@@ -528,7 +533,11 @@ module ContextDev
       end
 
       # Scrapes the given URL and returns the raw HTML content of the page. The base
-      # request costs 1 credit; requests with browser actions cost 2 credits.
+      # request costs 1 credit; requests with browser actions cost 2 credits. A request
+      # that hits its timeoutOpts.milliseconds deadline fails with 408 and is not
+      # billed, unless timeoutOpts.behavior=return-partial is set — then the page as
+      # rendered so far is returned with `finalDOMState: "still-loading"` and billed at
+      # the base cost of 1 credit.
       sig do
         params(
           url: String,
@@ -551,7 +560,7 @@ module ContextDev
           pdf: ContextDev::WebWebScrapeHTMLParams::Pdf::OrHash,
           settle_animations: T::Boolean,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebWebScrapeHTMLParams::TimeoutOpts::OrHash,
           use_main_content_only: T::Boolean,
           wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeHTMLParams::Zdr::OrSymbol,
@@ -596,16 +605,16 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         # When true, return only the page's main content in the HTML response, excluding
         # headers, footers, sidebars, and navigation when detectable.
         use_main_content_only: nil,
         # Optional browser wait time in milliseconds after initial page load. Min: 0. Max:
-        # 30000 (30 seconds). When combined with timeoutMS, timeoutMS must be at least
-        # waitForMs + 10000 ms; a shorter deadline is rejected with 400
+        # 30000 (30 seconds). When combined with timeoutOpts, timeoutOpts.milliseconds
+        # must be at least waitForMs + 10000 ms; a shorter deadline is rejected with 400
         # TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
@@ -641,7 +650,8 @@ module ContextDev
           headers: T::Hash[Symbol, String],
           max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts:
+            ContextDev::WebWebScrapeImagesParams::TimeoutOpts::OrHash,
           wait_for_ms: T.nilable(Integer),
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeImagesResponse)
@@ -671,14 +681,14 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         # Optional browser wait time in milliseconds after initial page load before
         # collecting images. Min: 0. Max: 30000 (30 seconds). When combined with
-        # timeoutMS, timeoutMS must be at least waitForMs + 10000 ms; a shorter deadline
-        # is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+        # timeoutOpts, timeoutOpts.milliseconds must be at least waitForMs + 10000 ms; a
+        # shorter deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         request_options: {}
       )
@@ -704,11 +714,11 @@ module ContextDev
       #
       # | HTTP status | Billed?                                   | Meaning                                                                                                                                                                                                                                                                                                       |
       # | ----------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-      # | 200         | Yes — 1 credit, or 2 credits with actions | Successful scrape, including a zero-length result when includeSelectors matched nothing                                                                                                                                                                                                                       |
+      # | 200         | Yes — 1 credit, or 2 credits with actions | Successful scrape, including a zero-length result when includeSelectors matched nothing. A partial result (`finalDOMState: "still-loading"`, only with timeoutOpts.behavior=return-partial) is billed at the base 1 credit with no OCR or actions surcharge                                                   |
       # | 400         | No                                        | Invalid input, skipped PDF, or the page could not be scraped. error_code WEBSITE_BLOCKED specifically means the site answered with an anti-bot challenge, CAPTCHA wall, or login shell instead of the page (even when the site returned HTTP 200) — retrying later or from another country sometimes succeeds |
       # | 401 / 403   | No                                        | Invalid/disabled key, insufficient permissions, or credits exhausted; inspect error_code                                                                                                                                                                                                                      |
       # | 404         | No                                        | Target page returned or fingerprinted as not found                                                                                                                                                                                                                                                            |
-      # | 408         | No                                        | Request timed out                                                                                                                                                                                                                                                                                             |
+      # | 408         | No                                        | Request timed out. With timeoutOpts.behavior=return-partial this only happens when nothing usable had rendered by the deadline                                                                                                                                                                                |
       # | 413         | No                                        | Target content exceeds the maximum supported size (20 MB)                                                                                                                                                                                                                                                     |
       # | 415         | No                                        | Unsupported content type                                                                                                                                                                                                                                                                                      |
       # | 429         | No                                        | Per-minute rate limit exceeded; honor Retry-After                                                                                                                                                                                                                                                             |
@@ -739,7 +749,7 @@ module ContextDev
           settle_animations: T::Boolean,
           shorten_base64_images: T::Boolean,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebWebScrapeMdParams::TimeoutOpts::OrHash,
           use_main_content_only: T::Boolean,
           wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeMdParams::Zdr::OrSymbol,
@@ -795,17 +805,17 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         # Extract only the main content of the page, excluding headers, footers, sidebars,
         # and navigation
         use_main_content_only: nil,
         # Optional browser wait time in milliseconds after initial page load before
         # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds). When combined
-        # with timeoutMS, timeoutMS must be at least waitForMs + 10000 ms; a shorter
-        # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+        # with timeoutOpts, timeoutOpts.milliseconds must be at least waitForMs + 10000
+        # ms; a shorter deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Requires zero data retention to be enabled for your
@@ -831,7 +841,8 @@ module ContextDev
           search: String,
           sitemap_url: String,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts:
+            ContextDev::WebWebScrapeSitemapParams::TimeoutOpts::OrHash,
           url_regex: String,
           zdr: ContextDev::WebWebScrapeSitemapParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
@@ -860,10 +871,10 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         # Optional RE2-compatible regex pattern. Only URLs matching this pattern are
         # returned and counted against maxLinks.
         url_regex: nil,

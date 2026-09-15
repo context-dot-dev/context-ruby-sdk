@@ -27,15 +27,15 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!attribute timeout_ms
-      #   Optional timeout in milliseconds for the request. If the request takes longer
-      #   than this value, it will be aborted with a 408 status code. Maximum allowed
-      #   value is 300000ms (5 minutes).
+      # @!attribute timeout_opts
+      #   Optional request deadline and behavior on timeout. For GET requests, use
+      #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+      #   timeoutOpts object.
       #
-      #   @return [Integer, nil]
-      optional :timeout_ms, Integer
+      #   @return [ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts, nil]
+      optional :timeout_opts, -> { ContextDev::WebExtractCompetitorsParams::TimeoutOpts }
 
-      # @!method initialize(domain:, num_competitors: nil, tags: nil, timeout_ms: nil, request_options: {})
+      # @!method initialize(domain:, num_competitors: nil, tags: nil, timeout_opts: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractCompetitorsParams} for more details.
       #
@@ -45,9 +45,54 @@ module ContextDev
       #
       #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
-      #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #   @param timeout_opts [ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        # @!attribute milliseconds
+        #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #
+        #   @return [Integer]
+        required :milliseconds, Integer
+
+        # @!attribute behavior
+        #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        #   credits. "return-partial" returns usable results collected so far; if none are
+        #   available, the request still fails without charging credits. Partial results are
+        #   not cached as complete results.
+        #
+        #   @return [Symbol, ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts::Behavior, nil]
+        optional :behavior, enum: -> { ContextDev::WebExtractCompetitorsParams::TimeoutOpts::Behavior }
+
+        # @!method initialize(milliseconds:, behavior: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts} for more details.
+        #
+        #   Optional request deadline and behavior on timeout. For GET requests, use
+        #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        #   timeoutOpts object.
+        #
+        #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #
+        #   @param behavior [Symbol, ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+
+        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        # credits. "return-partial" returns usable results collected so far; if none are
+        # available, the request still fails without charging credits. Partial results are
+        # not cached as complete results.
+        #
+        # @see ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts#behavior
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL = :fail
+          RETURN_PARTIAL = :"return-partial"
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
     end
   end
 end

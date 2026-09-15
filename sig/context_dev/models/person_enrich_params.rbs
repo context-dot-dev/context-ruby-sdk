@@ -9,7 +9,7 @@ module ContextDev
         name: ContextDev::PersonEnrichParams::Name,
         social_urls: ::Array[String],
         tags: ::Array[String],
-        timeout_ms: Integer
+        timeout_opts: ContextDev::PersonEnrichParams::TimeoutOpts
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -53,9 +53,11 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
-      attr_reader timeout_ms: Integer?
+      attr_reader timeout_opts: ContextDev::PersonEnrichParams::TimeoutOpts?
 
-      def timeout_ms=: (Integer) -> Integer
+      def timeout_opts=: (
+        ContextDev::PersonEnrichParams::TimeoutOpts
+      ) -> ContextDev::PersonEnrichParams::TimeoutOpts
 
       def initialize: (
         ?company: ContextDev::PersonEnrichParams::Company,
@@ -65,7 +67,7 @@ module ContextDev
         ?name: ContextDev::PersonEnrichParams::Name,
         ?social_urls: ::Array[String],
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::PersonEnrichParams::TimeoutOpts,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -77,7 +79,7 @@ module ContextDev
         name: ContextDev::PersonEnrichParams::Name,
         social_urls: ::Array[String],
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::PersonEnrichParams::TimeoutOpts,
         request_options: ContextDev::RequestOptions
       }
 
@@ -193,6 +195,43 @@ module ContextDev
         def initialize: (?first: String, ?last: String) -> void
 
         def to_hash: -> { first: String, last: String }
+      end
+
+      type timeout_opts =
+        {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::PersonEnrichParams::TimeoutOpts::behavior
+        }
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        attr_accessor milliseconds: Integer
+
+        attr_reader behavior: ContextDev::Models::PersonEnrichParams::TimeoutOpts::behavior?
+
+        def behavior=: (
+          ContextDev::Models::PersonEnrichParams::TimeoutOpts::behavior
+        ) -> ContextDev::Models::PersonEnrichParams::TimeoutOpts::behavior
+
+        def initialize: (
+          milliseconds: Integer,
+          ?behavior: ContextDev::Models::PersonEnrichParams::TimeoutOpts::behavior
+        ) -> void
+
+        def to_hash: -> {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::PersonEnrichParams::TimeoutOpts::behavior
+        }
+
+        type behavior = :fail | :"return-partial"
+
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL: :fail
+          RETURN_PARTIAL: :"return-partial"
+
+          def self?.values: -> ::Array[ContextDev::Models::PersonEnrichParams::TimeoutOpts::behavior]
+        end
       end
     end
   end

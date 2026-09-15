@@ -38,7 +38,8 @@ module ContextDev
           max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
           theme: ContextDev::BrandRetrieveSimplifiedParams::Theme::OrSymbol,
-          timeout_ms: Integer,
+          timeout_opts:
+            ContextDev::BrandRetrieveSimplifiedParams::TimeoutOpts::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::BrandRetrieveSimplifiedResponse)
       end
@@ -55,10 +56,10 @@ module ContextDev
         tags: nil,
         # Optional theme preference used when selecting brand assets.
         theme: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         request_options: {}
       )
       end

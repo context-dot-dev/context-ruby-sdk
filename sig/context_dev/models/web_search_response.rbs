@@ -6,7 +6,8 @@ module ContextDev
         query: String,
         request_id: String,
         results: ::Array[ContextDev::Models::WebSearchResponse::Result],
-        key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata,
+        partial: bool
       }
 
     class WebSearchResponse < ContextDev::Internal::Type::BaseModel
@@ -24,12 +25,17 @@ module ContextDev
         ContextDev::Models::WebSearchResponse::KeyMetadata
       ) -> ContextDev::Models::WebSearchResponse::KeyMetadata
 
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
       def initialize: (
         cache_metadata: ContextDev::Models::WebSearchResponse::CacheMetadata,
         query: String,
         request_id: String,
         results: ::Array[ContextDev::Models::WebSearchResponse::Result],
-        ?key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata
+        ?key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata,
+        ?partial: bool
       ) -> void
 
       def to_hash: -> {
@@ -37,7 +43,8 @@ module ContextDev
         query: String,
         request_id: String,
         results: ::Array[ContextDev::Models::WebSearchResponse::Result],
-        key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata,
+        partial: bool
       }
 
       type cache_metadata =
@@ -113,7 +120,8 @@ module ContextDev
         type markdown =
           {
             code: ContextDev::Models::WebSearchResponse::Result::Markdown::code,
-            markdown: String?
+            markdown: String?,
+            final_dom_state: ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state
           }
 
         class Markdown < ContextDev::Internal::Type::BaseModel
@@ -121,14 +129,22 @@ module ContextDev
 
           attr_accessor markdown: String?
 
+          attr_reader final_dom_state: ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state?
+
+          def final_dom_state=: (
+            ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state
+          ) -> ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state
+
           def initialize: (
             code: ContextDev::Models::WebSearchResponse::Result::Markdown::code,
-            markdown: String?
+            markdown: String?,
+            ?final_dom_state: ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state
           ) -> void
 
           def to_hash: -> {
             code: ContextDev::Models::WebSearchResponse::Result::Markdown::code,
-            markdown: String?
+            markdown: String?,
+            final_dom_state: ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state
           }
 
           type code =
@@ -150,6 +166,17 @@ module ContextDev
             ERROR: :ERROR
 
             def self?.values: -> ::Array[ContextDev::Models::WebSearchResponse::Result::Markdown::code]
+          end
+
+          type final_dom_state = :loaded | :"still-loading"
+
+          module FinalDomState
+            extend ContextDev::Internal::Type::Enum
+
+            LOADED: :loaded
+            STILL_LOADING: :"still-loading"
+
+            def self?.values: -> ::Array[ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state]
           end
         end
 

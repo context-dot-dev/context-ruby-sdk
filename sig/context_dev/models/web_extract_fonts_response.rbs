@@ -8,6 +8,7 @@ module ContextDev
         fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
         request_id: String,
         status: String,
+        final_dom_state: ContextDev::Models::WebExtractFontsResponse::final_dom_state,
         font_links: ::Hash[Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink],
         key_metadata: ContextDev::Models::WebExtractFontsResponse::KeyMetadata
       }
@@ -24,6 +25,12 @@ module ContextDev
       attr_accessor request_id: String
 
       attr_accessor status: String
+
+      attr_reader final_dom_state: ContextDev::Models::WebExtractFontsResponse::final_dom_state?
+
+      def final_dom_state=: (
+        ContextDev::Models::WebExtractFontsResponse::final_dom_state
+      ) -> ContextDev::Models::WebExtractFontsResponse::final_dom_state
 
       attr_reader font_links: ::Hash[Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink]?
 
@@ -44,6 +51,7 @@ module ContextDev
         fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
         request_id: String,
         status: String,
+        ?final_dom_state: ContextDev::Models::WebExtractFontsResponse::final_dom_state,
         ?font_links: ::Hash[Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink],
         ?key_metadata: ContextDev::Models::WebExtractFontsResponse::KeyMetadata
       ) -> void
@@ -55,6 +63,7 @@ module ContextDev
         fonts: ::Array[ContextDev::Models::WebExtractFontsResponse::Font],
         request_id: String,
         status: String,
+        final_dom_state: ContextDev::Models::WebExtractFontsResponse::final_dom_state,
         font_links: ::Hash[Symbol, ContextDev::Models::WebExtractFontsResponse::FontLink],
         key_metadata: ContextDev::Models::WebExtractFontsResponse::KeyMetadata
       }
@@ -138,6 +147,17 @@ module ContextDev
           percent_words: Float,
           uses: ::Array[String]
         }
+      end
+
+      type final_dom_state = :loaded | :"still-loading"
+
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        LOADED: :loaded
+        STILL_LOADING: :"still-loading"
+
+        def self?.values: -> ::Array[ContextDev::Models::WebExtractFontsResponse::final_dom_state]
       end
 
       type font_link =

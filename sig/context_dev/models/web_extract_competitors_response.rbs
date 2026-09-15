@@ -7,7 +7,8 @@ module ContextDev
         request_id: String,
         status: ContextDev::Models::WebExtractCompetitorsResponse::status,
         target: ContextDev::Models::WebExtractCompetitorsResponse::Target,
-        key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata,
+        partial: bool
       }
 
     class WebExtractCompetitorsResponse < ContextDev::Internal::Type::BaseModel
@@ -27,13 +28,18 @@ module ContextDev
         ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata
       ) -> ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata
 
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
       def initialize: (
         competitors: ::Array[ContextDev::Models::WebExtractCompetitorsResponse::Competitor],
         domain: String,
         request_id: String,
         status: ContextDev::Models::WebExtractCompetitorsResponse::status,
         target: ContextDev::Models::WebExtractCompetitorsResponse::Target,
-        ?key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata
+        ?key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata,
+        ?partial: bool
       ) -> void
 
       def to_hash: -> {
@@ -42,7 +48,8 @@ module ContextDev
         request_id: String,
         status: ContextDev::Models::WebExtractCompetitorsResponse::status,
         target: ContextDev::Models::WebExtractCompetitorsResponse::Target,
-        key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata,
+        partial: bool
       }
 
       type competitor =

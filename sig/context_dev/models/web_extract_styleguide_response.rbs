@@ -6,6 +6,7 @@ module ContextDev
         request_id: String,
         code: Integer,
         domain: String,
+        final_dom_state: ContextDev::Models::WebExtractStyleguideResponse::final_dom_state,
         key_metadata: ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata,
         status: String,
         styleguide: ContextDev::Models::WebExtractStyleguideResponse::Styleguide
@@ -23,6 +24,12 @@ module ContextDev
       attr_reader domain: String?
 
       def domain=: (String) -> String
+
+      attr_reader final_dom_state: ContextDev::Models::WebExtractStyleguideResponse::final_dom_state?
+
+      def final_dom_state=: (
+        ContextDev::Models::WebExtractStyleguideResponse::final_dom_state
+      ) -> ContextDev::Models::WebExtractStyleguideResponse::final_dom_state
 
       attr_reader key_metadata: ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata?
 
@@ -45,6 +52,7 @@ module ContextDev
         request_id: String,
         ?code: Integer,
         ?domain: String,
+        ?final_dom_state: ContextDev::Models::WebExtractStyleguideResponse::final_dom_state,
         ?key_metadata: ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata,
         ?status: String,
         ?styleguide: ContextDev::Models::WebExtractStyleguideResponse::Styleguide
@@ -55,6 +63,7 @@ module ContextDev
         request_id: String,
         code: Integer,
         domain: String,
+        final_dom_state: ContextDev::Models::WebExtractStyleguideResponse::final_dom_state,
         key_metadata: ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata,
         status: String,
         styleguide: ContextDev::Models::WebExtractStyleguideResponse::Styleguide
@@ -92,6 +101,17 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::status]
         end
+      end
+
+      type final_dom_state = :loaded | :"still-loading"
+
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        LOADED: :loaded
+        STILL_LOADING: :"still-loading"
+
+        def self?.values: -> ::Array[ContextDev::Models::WebExtractStyleguideResponse::final_dom_state]
       end
 
       type key_metadata =

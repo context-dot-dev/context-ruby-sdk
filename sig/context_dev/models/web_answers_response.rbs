@@ -4,7 +4,8 @@ module ContextDev
       {
         json_content: ::Hash[Symbol, top],
         sources: ::Array[String],
-        key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata,
+        partial: bool
       }
 
     class WebAnswersResponse < ContextDev::Internal::Type::BaseModel
@@ -18,16 +19,22 @@ module ContextDev
         ContextDev::Models::WebAnswersResponse::KeyMetadata
       ) -> ContextDev::Models::WebAnswersResponse::KeyMetadata
 
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
       def initialize: (
         json_content: ::Hash[Symbol, top],
         sources: ::Array[String],
-        ?key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata
+        ?key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata,
+        ?partial: bool
       ) -> void
 
       def to_hash: -> {
         json_content: ::Hash[Symbol, top],
         sources: ::Array[String],
-        key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata,
+        partial: bool
       }
 
       type key_metadata =

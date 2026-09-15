@@ -55,6 +55,14 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # True when the timeout ended processing and this response contains only usable
+      # results completed so far. Unfinished results are omitted.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
+
       # The detected ecommerce platform, or null if not a product page
       sig do
         returns(
@@ -91,6 +99,7 @@ module ContextDev
           is_product_page: T::Boolean,
           key_metadata:
             ContextDev::Models::AIExtractProductResponse::KeyMetadata::OrHash,
+          partial: T::Boolean,
           platform:
             T.nilable(
               ContextDev::Models::AIExtractProductResponse::Platform::OrSymbol
@@ -113,6 +122,9 @@ module ContextDev
         is_product_page: nil,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil,
+        # True when the timeout ended processing and this response contains only usable
+        # results completed so far. Unfinished results are omitted.
+        partial: nil,
         # The detected ecommerce platform, or null if not a product page
         platform: nil,
         # The extracted product data, or null if not a product page
@@ -129,6 +141,7 @@ module ContextDev
             is_product_page: T::Boolean,
             key_metadata:
               ContextDev::Models::AIExtractProductResponse::KeyMetadata,
+            partial: T::Boolean,
             platform:
               T.nilable(
                 ContextDev::Models::AIExtractProductResponse::Platform::TaggedSymbol

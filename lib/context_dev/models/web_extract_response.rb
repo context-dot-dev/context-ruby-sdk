@@ -54,7 +54,14 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebExtractResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, data:, metadata:, request_id:, status:, url:, urls_analyzed:, key_metadata: nil)
+      # @!attribute partial
+      #   True when the timeout ended processing and this response contains only usable
+      #   results completed so far. Unfinished results are omitted.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
+      # @!method initialize(cache_metadata:, data:, metadata:, request_id:, status:, url:, urls_analyzed:, key_metadata: nil, partial: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractResponse} for more details.
       #
@@ -73,6 +80,8 @@ module ContextDev
       #   @param urls_analyzed [Array<String>] List of URLs whose Markdown was used for extraction
       #
       #   @param key_metadata [ContextDev::Models::WebExtractResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when the timeout ended processing and this response contains only usable re
 
       # @see ContextDev::Models::WebExtractResponse#cache_metadata
       class CacheMetadata < ContextDev::Internal::Type::BaseModel

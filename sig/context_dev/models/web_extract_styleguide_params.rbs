@@ -7,7 +7,7 @@ module ContextDev
         domain: String,
         max_age_ms: Integer?,
         tags: ::Array[String],
-        timeout_ms: Integer
+        timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -35,9 +35,11 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
-      attr_reader timeout_ms: Integer?
+      attr_reader timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts?
 
-      def timeout_ms=: (Integer) -> Integer
+      def timeout_opts=: (
+        ContextDev::WebExtractStyleguideParams::TimeoutOpts
+      ) -> ContextDev::WebExtractStyleguideParams::TimeoutOpts
 
       def initialize: (
         ?color_scheme: ContextDev::Models::WebExtractStyleguideParams::color_scheme,
@@ -45,7 +47,7 @@ module ContextDev
         ?domain: String,
         ?max_age_ms: Integer?,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -55,7 +57,7 @@ module ContextDev
         domain: String,
         max_age_ms: Integer?,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts,
         request_options: ContextDev::RequestOptions
       }
 
@@ -68,6 +70,43 @@ module ContextDev
         DARK: :dark
 
         def self?.values: -> ::Array[ContextDev::Models::WebExtractStyleguideParams::color_scheme]
+      end
+
+      type timeout_opts =
+        {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::behavior
+        }
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        attr_accessor milliseconds: Integer
+
+        attr_reader behavior: ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::behavior?
+
+        def behavior=: (
+          ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::behavior
+        ) -> ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::behavior
+
+        def initialize: (
+          milliseconds: Integer,
+          ?behavior: ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::behavior
+        ) -> void
+
+        def to_hash: -> {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::behavior
+        }
+
+        type behavior = :fail | :"return-partial"
+
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL: :fail
+          RETURN_PARTIAL: :"return-partial"
+
+          def self?.values: -> ::Array[ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::behavior]
+        end
       end
     end
   end

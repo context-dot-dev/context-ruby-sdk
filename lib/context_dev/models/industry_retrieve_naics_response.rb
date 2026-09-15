@@ -30,6 +30,13 @@ module ContextDev
       #   @return [ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata }
 
+      # @!attribute partial
+      #   True when the timeout ended processing and this response contains only usable
+      #   results completed so far. Unfinished results are omitted.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
       # @!attribute status
       #   Status of the response, e.g., 'ok'
       #
@@ -42,7 +49,7 @@ module ContextDev
       #   @return [String, nil]
       optional :type, String
 
-      # @!method initialize(request_id:, codes: nil, domain: nil, key_metadata: nil, status: nil, type: nil)
+      # @!method initialize(request_id:, codes: nil, domain: nil, key_metadata: nil, partial: nil, status: nil, type: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::IndustryRetrieveNaicsResponse} for more details.
       #
@@ -53,6 +60,8 @@ module ContextDev
       #   @param domain [String] Domain found for the brand
       #
       #   @param key_metadata [ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when the timeout ended processing and this response contains only usable re
       #
       #   @param status [String] Status of the response, e.g., 'ok'
       #

@@ -31,6 +31,18 @@ module ContextDev
       #   @return [String, nil]
       optional :domain, String
 
+      # @!attribute final_dom_state
+      #   How complete the returned content is. `loaded` means the page finished the waits
+      #   the request asked for. `still-loading` only occurs with
+      #   timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      #   reached first, so the content reflects the DOM at that moment and late-rendering
+      #   parts may be missing. Partial results are billed at the base request cost.
+      #
+      #   @return [Symbol, ContextDev::Models::WebExtractStyleguideResponse::FinalDomState, nil]
+      optional :final_dom_state,
+               enum: -> { ContextDev::Models::WebExtractStyleguideResponse::FinalDomState },
+               api_name: :finalDOMState
+
       # @!attribute key_metadata
       #   Credit usage, included whenever a valid API key is provided.
       #
@@ -49,7 +61,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide, nil]
       optional :styleguide, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide }
 
-      # @!method initialize(cache_metadata:, request_id:, code: nil, domain: nil, key_metadata: nil, status: nil, styleguide: nil)
+      # @!method initialize(cache_metadata:, request_id:, code: nil, domain: nil, final_dom_state: nil, key_metadata: nil, status: nil, styleguide: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractStyleguideResponse} for more details.
       #
@@ -60,6 +72,8 @@ module ContextDev
       #   @param code [Integer] HTTP status code
       #
       #   @param domain [String] The normalized domain that was processed
+      #
+      #   @param final_dom_state [Symbol, ContextDev::Models::WebExtractStyleguideResponse::FinalDomState] How complete the returned content is. `loaded` means the page finished the waits
       #
       #   @param key_metadata [ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
       #
@@ -109,6 +123,23 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      #
+      # @see ContextDev::Models::WebExtractStyleguideResponse#final_dom_state
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        LOADED = :loaded
+        STILL_LOADING = :"still-loading"
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
 
       # @see ContextDev::Models::WebExtractStyleguideResponse#key_metadata

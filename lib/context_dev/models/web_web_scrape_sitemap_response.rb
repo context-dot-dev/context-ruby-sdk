@@ -42,7 +42,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata }
 
-      # @!method initialize(domain:, meta:, request_id:, success:, urls:, key_metadata: nil)
+      # @!attribute partial
+      #   True when timeoutOpts.behavior=return-partial returned the usable results
+      #   collected before the deadline. Partial collections are not cached as complete
+      #   results.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
+      # @!method initialize(domain:, meta:, request_id:, success:, urls:, key_metadata: nil, partial: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeSitemapResponse} for more details.
       #
@@ -57,6 +65,8 @@ module ContextDev
       #   @param urls [Array<String>] Discovered page URLs from the sitemap, up to `maxLinks`. When `search` is set th
       #
       #   @param key_metadata [ContextDev::Models::WebWebScrapeSitemapResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when timeoutOpts.behavior=return-partial returned the usable results collec
 
       # @see ContextDev::Models::WebWebScrapeSitemapResponse#meta
       class Meta < ContextDev::Internal::Type::BaseModel
