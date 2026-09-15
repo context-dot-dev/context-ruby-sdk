@@ -14,13 +14,13 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        brand: ContextDev::Models::BrandRetrieveResponse::Brand,
         cache_metadata: ContextDev::Models::BrandRetrieveResponse::CacheMetadata,
+        code: Integer,
         request_id: String,
-        brand: ContextDev::Models::BrandRetrieveResponse::Brand | nil,
-        code: Integer | nil,
+        status: String,
         key_metadata: ContextDev::Models::BrandRetrieveResponse::KeyMetadata | nil,
-        partial: ContextDev::Internal::Type::Boolean | nil,
-        status: String | nil
+        partial: ContextDev::Internal::Type::Boolean | nil
       }
     end
   end
@@ -36,13 +36,13 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
 
     assert_pattern do
       response => {
+        brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
         cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
+        code: Integer,
         request_id: String,
-        brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand | nil,
-        code: Integer | nil,
+        status: String,
         key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata | nil,
-        partial: ContextDev::Internal::Type::Boolean | nil,
-        status: String | nil
+        partial: ContextDev::Internal::Type::Boolean | nil
       }
     end
   end

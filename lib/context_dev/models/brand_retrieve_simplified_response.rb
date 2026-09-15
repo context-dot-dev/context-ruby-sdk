@@ -4,6 +4,12 @@ module ContextDev
   module Models
     # @see ContextDev::Resources::Brand#retrieve_simplified
     class BrandRetrieveSimplifiedResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute brand
+      #   Simplified brand information
+      #
+      #   @return [ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand]
+      required :brand, -> { ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand }
+
       # @!attribute cache_metadata
       #   Cache outcome for this response. Composite responses are hits only when every
       #   cache-controlled fetch contributing to the output was a hit; age_ms is the
@@ -12,6 +18,12 @@ module ContextDev
       #   @return [ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata }
 
+      # @!attribute code
+      #   HTTP status code of the response
+      #
+      #   @return [Integer]
+      required :code, Integer
+
       # @!attribute request_id
       #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #   it when contacting support about a failed request.
@@ -19,17 +31,11 @@ module ContextDev
       #   @return [String]
       required :request_id, String
 
-      # @!attribute brand
-      #   Simplified brand information
+      # @!attribute status
+      #   Status of the response, e.g., 'ok'
       #
-      #   @return [ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand, nil]
-      optional :brand, -> { ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand }
-
-      # @!attribute code
-      #   HTTP status code of the response
-      #
-      #   @return [Integer, nil]
-      optional :code, Integer
+      #   @return [String]
+      required :status, String
 
       # @!attribute key_metadata
       #   Credit usage, included whenever a valid API key is provided.
@@ -44,73 +50,23 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :partial, ContextDev::Internal::Type::Boolean
 
-      # @!attribute status
-      #   Status of the response, e.g., 'ok'
-      #
-      #   @return [String, nil]
-      optional :status, String
-
-      # @!method initialize(cache_metadata:, request_id:, brand: nil, code: nil, key_metadata: nil, partial: nil, status: nil)
+      # @!method initialize(brand:, cache_metadata:, code:, request_id:, status:, key_metadata: nil, partial: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BrandRetrieveSimplifiedResponse} for more details.
       #
+      #   @param brand [ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand] Simplified brand information
+      #
       #   @param cache_metadata [ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #
+      #   @param code [Integer] HTTP status code of the response
       #
       #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
-      #   @param brand [ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand] Simplified brand information
-      #
-      #   @param code [Integer] HTTP status code of the response
+      #   @param status [String] Status of the response, e.g., 'ok'
       #
       #   @param key_metadata [ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
       #
       #   @param partial [Boolean] True when the timeout ended processing and only completed brand data is returned
-      #
-      #   @param status [String] Status of the response, e.g., 'ok'
-
-      # @see ContextDev::Models::BrandRetrieveSimplifiedResponse#cache_metadata
-      class CacheMetadata < ContextDev::Internal::Type::BaseModel
-        # @!attribute age_ms
-        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
-        #
-        #   @return [Integer]
-        required :age_ms, Integer
-
-        # @!attribute status
-        #   Whether the response was served from cache, required fresh work, or honored
-        #   zero-data-retention cache bypass.
-        #
-        #   @return [Symbol, ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::Status]
-        required :status, enum: -> { ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::Status }
-
-        # @!method initialize(age_ms:, status:)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata} for more
-        #   details.
-        #
-        #   Cache outcome for this response. Composite responses are hits only when every
-        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-        #   oldest contributing hit.
-        #
-        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
-        #
-        #   @param status [Symbol, ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
-
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
-        #
-        # @see ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata#status
-        module Status
-          extend ContextDev::Internal::Type::Enum
-
-          HIT = :hit
-          MISS = :miss
-          ZDR = :zdr
-
-          # @!method self.values
-          #   @return [Array<Symbol>]
-        end
-      end
 
       # @see ContextDev::Models::BrandRetrieveSimplifiedResponse#brand
       class Brand < ContextDev::Internal::Type::BaseModel
@@ -412,6 +368,50 @@ module ContextDev
             # @!method self.values
             #   @return [Array<Symbol>]
           end
+        end
+      end
+
+      # @see ContextDev::Models::BrandRetrieveSimplifiedResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata} for more
+        #   details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
         end
       end
 

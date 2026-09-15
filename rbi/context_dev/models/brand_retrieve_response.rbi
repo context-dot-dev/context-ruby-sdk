@@ -11,6 +11,17 @@ module ContextDev
           )
         end
 
+      # Detailed brand information
+      sig { returns(ContextDev::Models::BrandRetrieveResponse::Brand) }
+      attr_reader :brand
+
+      sig do
+        params(
+          brand: ContextDev::Models::BrandRetrieveResponse::Brand::OrHash
+        ).void
+      end
+      attr_writer :brand
+
       # Cache outcome for this response. Composite responses are hits only when every
       # cache-controlled fetch contributing to the output was a hit; age_ms is the
       # oldest contributing hit.
@@ -25,30 +36,18 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
+      # HTTP status code
+      sig { returns(Integer) }
+      attr_accessor :code
+
       # Unique id of this API call, also sent in the X-Request-Id response header. Quote
       # it when contacting support about a failed request.
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Detailed brand information
-      sig do
-        returns(T.nilable(ContextDev::Models::BrandRetrieveResponse::Brand))
-      end
-      attr_reader :brand
-
-      sig do
-        params(
-          brand: ContextDev::Models::BrandRetrieveResponse::Brand::OrHash
-        ).void
-      end
-      attr_writer :brand
-
-      # HTTP status code
-      sig { returns(T.nilable(Integer)) }
-      attr_reader :code
-
-      sig { params(code: Integer).void }
-      attr_writer :code
+      # Status of the response, e.g., 'ok'
+      sig { returns(String) }
+      attr_accessor :status
 
       # Credit usage, included whenever a valid API key is provided.
       sig do
@@ -74,159 +73,57 @@ module ContextDev
       sig { params(partial: T::Boolean).void }
       attr_writer :partial
 
-      # Status of the response, e.g., 'ok'
-      sig { returns(T.nilable(String)) }
-      attr_reader :status
-
-      sig { params(status: String).void }
-      attr_writer :status
-
       sig do
         params(
+          brand: ContextDev::Models::BrandRetrieveResponse::Brand::OrHash,
           cache_metadata:
             ContextDev::Models::BrandRetrieveResponse::CacheMetadata::OrHash,
-          request_id: String,
-          brand: ContextDev::Models::BrandRetrieveResponse::Brand::OrHash,
           code: Integer,
+          request_id: String,
+          status: String,
           key_metadata:
             ContextDev::Models::BrandRetrieveResponse::KeyMetadata::OrHash,
-          partial: T::Boolean,
-          status: String
+          partial: T::Boolean
         ).returns(T.attached_class)
       end
       def self.new(
+        # Detailed brand information
+        brand:,
         # Cache outcome for this response. Composite responses are hits only when every
         # cache-controlled fetch contributing to the output was a hit; age_ms is the
         # oldest contributing hit.
         cache_metadata:,
+        # HTTP status code
+        code:,
         # Unique id of this API call, also sent in the X-Request-Id response header. Quote
         # it when contacting support about a failed request.
         request_id:,
-        # Detailed brand information
-        brand: nil,
-        # HTTP status code
-        code: nil,
+        # Status of the response, e.g., 'ok'
+        status:,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil,
         # True when the timeout ended processing and this response contains the usable
         # data completed so far. Unfinished fields are omitted.
-        partial: nil,
-        # Status of the response, e.g., 'ok'
-        status: nil
+        partial: nil
       )
       end
 
       sig do
         override.returns(
           {
+            brand: ContextDev::Models::BrandRetrieveResponse::Brand,
             cache_metadata:
               ContextDev::Models::BrandRetrieveResponse::CacheMetadata,
-            request_id: String,
-            brand: ContextDev::Models::BrandRetrieveResponse::Brand,
             code: Integer,
+            request_id: String,
+            status: String,
             key_metadata:
               ContextDev::Models::BrandRetrieveResponse::KeyMetadata,
-            partial: T::Boolean,
-            status: String
+            partial: T::Boolean
           }
         )
       end
       def to_hash
-      end
-
-      class CacheMetadata < ContextDev::Internal::Type::BaseModel
-        OrHash =
-          T.type_alias do
-            T.any(
-              ContextDev::Models::BrandRetrieveResponse::CacheMetadata,
-              ContextDev::Internal::AnyHash
-            )
-          end
-
-        # Age of the cached data in milliseconds. Zero for miss and zdr responses.
-        sig { returns(Integer) }
-        attr_accessor :age_ms
-
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
-        sig do
-          returns(
-            ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
-          )
-        end
-        attr_accessor :status
-
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
-        sig do
-          params(
-            age_ms: Integer,
-            status:
-              ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::OrSymbol
-          ).returns(T.attached_class)
-        end
-        def self.new(
-          # Age of the cached data in milliseconds. Zero for miss and zdr responses.
-          age_ms:,
-          # Whether the response was served from cache, required fresh work, or honored
-          # zero-data-retention cache bypass.
-          status:
-        )
-        end
-
-        sig do
-          override.returns(
-            {
-              age_ms: Integer,
-              status:
-                ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
-            }
-          )
-        end
-        def to_hash
-        end
-
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
-        module Status
-          extend ContextDev::Internal::Type::Enum
-
-          TaggedSymbol =
-            T.type_alias do
-              T.all(
-                Symbol,
-                ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status
-              )
-            end
-          OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-          HIT =
-            T.let(
-              :hit,
-              ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
-            )
-          MISS =
-            T.let(
-              :miss,
-              ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
-            )
-          ZDR =
-            T.let(
-              :zdr,
-              ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
-            )
-
-          sig do
-            override.returns(
-              T::Array[
-                ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
-              ]
-            )
-          end
-          def self.values
-          end
-        end
       end
 
       class Brand < ContextDev::Internal::Type::BaseModel
@@ -3811,6 +3708,101 @@ module ContextDev
 
           sig { override.returns({ exchange: String, ticker: String }) }
           def to_hash
+          end
+        end
+      end
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::BrandRetrieveResponse::CacheMetadata,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        sig { returns(Integer) }
+        attr_accessor :age_ms
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        sig do
+          returns(
+            ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
+          )
+        end
+        attr_accessor :status
+
+        # Cache outcome for this response. Composite responses are hits only when every
+        # cache-controlled fetch contributing to the output was a hit; age_ms is the
+        # oldest contributing hit.
+        sig do
+          params(
+            age_ms: Integer,
+            status:
+              ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::OrSymbol
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+          age_ms:,
+          # Whether the response was served from cache, required fresh work, or honored
+          # zero-data-retention cache bypass.
+          status:
+        )
+        end
+
+        sig do
+          override.returns(
+            {
+              age_ms: Integer,
+              status:
+                ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
+            }
+          )
+        end
+        def to_hash
+        end
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          HIT =
+            T.let(
+              :hit,
+              ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
+            )
+          MISS =
+            T.let(
+              :miss,
+              ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
+            )
+          ZDR =
+            T.let(
+              :zdr,
+              ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
           end
         end
       end

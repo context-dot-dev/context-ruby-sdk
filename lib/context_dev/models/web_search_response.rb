@@ -106,7 +106,8 @@ module ContextDev
 
       class Result < ContextDev::Internal::Type::BaseModel
         # @!attribute description
-        #   Snippet excerpt from the page.
+        #   Snippet excerpt from the page. Empty string when the search provider does not
+        #   supply a snippet.
         #
         #   @return [String]
         required :description, String
@@ -136,7 +137,10 @@ module ContextDev
         required :url, String
 
         # @!method initialize(description:, markdown:, relevance:, title:, url:)
-        #   @param description [String] Snippet excerpt from the page.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebSearchResponse::Result} for more details.
+        #
+        #   @param description [String] Snippet excerpt from the page. Empty string when the search provider does not su
         #
         #   @param markdown [ContextDev::Models::WebSearchResponse::Result::Markdown] Markdown scrape status and content for this result.
         #
