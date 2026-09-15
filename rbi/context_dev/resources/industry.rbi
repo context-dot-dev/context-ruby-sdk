@@ -10,7 +10,8 @@ module ContextDev
           max_results: Integer,
           min_results: Integer,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts:
+            ContextDev::IndustryRetrieveNaicsParams::TimeoutOpts::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::IndustryRetrieveNaicsResponse)
       end
@@ -27,10 +28,10 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         request_options: {}
       )
       end
@@ -44,7 +45,8 @@ module ContextDev
           max_results: Integer,
           min_results: Integer,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts:
+            ContextDev::IndustryRetrieveSicParams::TimeoutOpts::OrHash,
           type: ContextDev::IndustryRetrieveSicParams::Type::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::IndustryRetrieveSicResponse)
@@ -61,10 +63,10 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         # Which SIC dataset to classify against. `original_sic` uses the 1987 Standard
         # Industrial Classification system; `latest_sec` uses the current SIC list as
         # published by the SEC. Defaults to `original_sic`.

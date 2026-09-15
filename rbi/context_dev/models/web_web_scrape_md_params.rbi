@@ -137,14 +137,18 @@ module ContextDev
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Optional timeout in milliseconds for the request. If the request takes longer
-      # than this value, it will be aborted with a 408 status code. Maximum allowed
-      # value is 300000ms (5 minutes).
-      sig { returns(T.nilable(Integer)) }
-      attr_reader :timeout_ms
+      # Optional request deadline and behavior on timeout. For GET requests, use
+      # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+      # timeoutOpts object.
+      sig { returns(T.nilable(ContextDev::WebWebScrapeMdParams::TimeoutOpts)) }
+      attr_reader :timeout_opts
 
-      sig { params(timeout_ms: Integer).void }
-      attr_writer :timeout_ms
+      sig do
+        params(
+          timeout_opts: ContextDev::WebWebScrapeMdParams::TimeoutOpts::OrHash
+        ).void
+      end
+      attr_writer :timeout_opts
 
       # Extract only the main content of the page, excluding headers, footers, sidebars,
       # and navigation
@@ -156,8 +160,8 @@ module ContextDev
 
       # Optional browser wait time in milliseconds after initial page load before
       # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds). When combined
-      # with timeoutMS, timeoutMS must be at least waitForMs + 10000 ms; a shorter
-      # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+      # with timeoutOpts, timeoutOpts.milliseconds must be at least waitForMs + 10000
+      # ms; a shorter deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :wait_for_ms
 
@@ -199,7 +203,7 @@ module ContextDev
           settle_animations: T::Boolean,
           shorten_base64_images: T::Boolean,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebWebScrapeMdParams::TimeoutOpts::OrHash,
           use_main_content_only: T::Boolean,
           wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeMdParams::Zdr::OrSymbol,
@@ -255,17 +259,17 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         # Extract only the main content of the page, excluding headers, footers, sidebars,
         # and navigation
         use_main_content_only: nil,
         # Optional browser wait time in milliseconds after initial page load before
         # converting the page to Markdown. Min: 0. Max: 30000 (30 seconds). When combined
-        # with timeoutMS, timeoutMS must be at least waitForMs + 10000 ms; a shorter
-        # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+        # with timeoutOpts, timeoutOpts.milliseconds must be at least waitForMs + 10000
+        # ms; a shorter deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Requires zero data retention to be enabled for your
@@ -303,7 +307,7 @@ module ContextDev
             settle_animations: T::Boolean,
             shorten_base64_images: T::Boolean,
             tags: T::Array[String],
-            timeout_ms: Integer,
+            timeout_opts: ContextDev::WebWebScrapeMdParams::TimeoutOpts,
             use_main_content_only: T::Boolean,
             wait_for_ms: T.nilable(Integer),
             zdr: ContextDev::WebWebScrapeMdParams::Zdr::OrSymbol,
@@ -904,6 +908,115 @@ module ContextDev
           )
         end
         def to_hash
+        end
+      end
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::WebWebScrapeMdParams::TimeoutOpts,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        sig { returns(Integer) }
+        attr_accessor :milliseconds
+
+        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        # credits. "return-partial" returns usable results collected so far; if none are
+        # available, the request still fails without charging credits. Partial results are
+        # not cached as complete results. "return-partial" requires milliseconds of at
+        # least 15000.
+        sig do
+          returns(
+            T.nilable(
+              ContextDev::WebWebScrapeMdParams::TimeoutOpts::Behavior::OrSymbol
+            )
+          )
+        end
+        attr_reader :behavior
+
+        sig do
+          params(
+            behavior:
+              ContextDev::WebWebScrapeMdParams::TimeoutOpts::Behavior::OrSymbol
+          ).void
+        end
+        attr_writer :behavior
+
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        sig do
+          params(
+            milliseconds: Integer,
+            behavior:
+              ContextDev::WebWebScrapeMdParams::TimeoutOpts::Behavior::OrSymbol
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          milliseconds:,
+          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+          # credits. "return-partial" returns usable results collected so far; if none are
+          # available, the request still fails without charging credits. Partial results are
+          # not cached as complete results. "return-partial" requires milliseconds of at
+          # least 15000.
+          behavior: nil
+        )
+        end
+
+        sig do
+          override.returns(
+            {
+              milliseconds: Integer,
+              behavior:
+                ContextDev::WebWebScrapeMdParams::TimeoutOpts::Behavior::OrSymbol
+            }
+          )
+        end
+        def to_hash
+        end
+
+        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        # credits. "return-partial" returns usable results collected so far; if none are
+        # available, the request still fails without charging credits. Partial results are
+        # not cached as complete results. "return-partial" requires milliseconds of at
+        # least 15000.
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::WebWebScrapeMdParams::TimeoutOpts::Behavior
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          FAIL =
+            T.let(
+              :fail,
+              ContextDev::WebWebScrapeMdParams::TimeoutOpts::Behavior::TaggedSymbol
+            )
+          RETURN_PARTIAL =
+            T.let(
+              :"return-partial",
+              ContextDev::WebWebScrapeMdParams::TimeoutOpts::Behavior::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::WebWebScrapeMdParams::TimeoutOpts::Behavior::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
         end
       end
 

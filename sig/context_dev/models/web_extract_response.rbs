@@ -9,7 +9,8 @@ module ContextDev
         status: String,
         url: String,
         urls_analyzed: ::Array[String],
-        key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata,
+        partial: bool
       }
 
     class WebExtractResponse < ContextDev::Internal::Type::BaseModel
@@ -33,6 +34,10 @@ module ContextDev
         ContextDev::Models::WebExtractResponse::KeyMetadata
       ) -> ContextDev::Models::WebExtractResponse::KeyMetadata
 
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
       def initialize: (
         cache_metadata: ContextDev::Models::WebExtractResponse::CacheMetadata,
         data: ::Hash[Symbol, top],
@@ -41,7 +46,8 @@ module ContextDev
         status: String,
         url: String,
         urls_analyzed: ::Array[String],
-        ?key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata
+        ?key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata,
+        ?partial: bool
       ) -> void
 
       def to_hash: -> {
@@ -52,7 +58,8 @@ module ContextDev
         status: String,
         url: String,
         urls_analyzed: ::Array[String],
-        key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata,
+        partial: bool
       }
 
       type cache_metadata =

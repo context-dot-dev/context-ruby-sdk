@@ -13,7 +13,7 @@ module ContextDev
         page: ContextDev::Models::WebScreenshotParams::page,
         scroll_offset: Integer?,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::WebScreenshotParams::TimeoutOpts,
         viewport: ContextDev::WebScreenshotParams::Viewport,
         wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebScreenshotParams::zdr
@@ -72,9 +72,11 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
-      attr_reader timeout_ms: Integer?
+      attr_reader timeout_opts: ContextDev::WebScreenshotParams::TimeoutOpts?
 
-      def timeout_ms=: (Integer) -> Integer
+      def timeout_opts=: (
+        ContextDev::WebScreenshotParams::TimeoutOpts
+      ) -> ContextDev::WebScreenshotParams::TimeoutOpts
 
       attr_reader viewport: ContextDev::WebScreenshotParams::Viewport?
 
@@ -102,7 +104,7 @@ module ContextDev
         ?page: ContextDev::Models::WebScreenshotParams::page,
         ?scroll_offset: Integer?,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::WebScreenshotParams::TimeoutOpts,
         ?viewport: ContextDev::WebScreenshotParams::Viewport,
         ?wait_for_ms: Integer?,
         ?zdr: ContextDev::Models::WebScreenshotParams::zdr,
@@ -121,7 +123,7 @@ module ContextDev
         page: ContextDev::Models::WebScreenshotParams::page,
         scroll_offset: Integer?,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::WebScreenshotParams::TimeoutOpts,
         viewport: ContextDev::WebScreenshotParams::Viewport,
         wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebScreenshotParams::zdr,
@@ -590,6 +592,43 @@ module ContextDev
         CONTACT: :contact
 
         def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::page]
+      end
+
+      type timeout_opts =
+        {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebScreenshotParams::TimeoutOpts::behavior
+        }
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        attr_accessor milliseconds: Integer
+
+        attr_reader behavior: ContextDev::Models::WebScreenshotParams::TimeoutOpts::behavior?
+
+        def behavior=: (
+          ContextDev::Models::WebScreenshotParams::TimeoutOpts::behavior
+        ) -> ContextDev::Models::WebScreenshotParams::TimeoutOpts::behavior
+
+        def initialize: (
+          milliseconds: Integer,
+          ?behavior: ContextDev::Models::WebScreenshotParams::TimeoutOpts::behavior
+        ) -> void
+
+        def to_hash: -> {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebScreenshotParams::TimeoutOpts::behavior
+        }
+
+        type behavior = :fail | :"return-partial"
+
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL: :fail
+          RETURN_PARTIAL: :"return-partial"
+
+          def self?.values: -> ::Array[ContextDev::Models::WebScreenshotParams::TimeoutOpts::behavior]
+        end
       end
 
       type viewport = { height: Integer, width: Integer }

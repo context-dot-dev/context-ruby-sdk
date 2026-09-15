@@ -19,6 +19,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
         brand: ContextDev::Models::BrandRetrieveResponse::Brand | nil,
         code: Integer | nil,
         key_metadata: ContextDev::Models::BrandRetrieveResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil,
         status: String | nil
       }
     end
@@ -40,6 +41,7 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
         brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand | nil,
         code: Integer | nil,
         key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil,
         status: String | nil
       }
     end

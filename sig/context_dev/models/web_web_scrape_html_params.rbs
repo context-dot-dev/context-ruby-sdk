@@ -13,7 +13,7 @@ module ContextDev
         pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
         settle_animations: bool,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::WebWebScrapeHTMLParams::TimeoutOpts,
         use_main_content_only: bool,
         wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebWebScrapeHTMLParams::zdr
@@ -62,9 +62,11 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
-      attr_reader timeout_ms: Integer?
+      attr_reader timeout_opts: ContextDev::WebWebScrapeHTMLParams::TimeoutOpts?
 
-      def timeout_ms=: (Integer) -> Integer
+      def timeout_opts=: (
+        ContextDev::WebWebScrapeHTMLParams::TimeoutOpts
+      ) -> ContextDev::WebWebScrapeHTMLParams::TimeoutOpts
 
       attr_reader use_main_content_only: bool?
 
@@ -90,7 +92,7 @@ module ContextDev
         ?pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
         ?settle_animations: bool,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::WebWebScrapeHTMLParams::TimeoutOpts,
         ?use_main_content_only: bool,
         ?wait_for_ms: Integer?,
         ?zdr: ContextDev::Models::WebWebScrapeHTMLParams::zdr,
@@ -109,7 +111,7 @@ module ContextDev
         pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
         settle_animations: bool,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::WebWebScrapeHTMLParams::TimeoutOpts,
         use_main_content_only: bool,
         wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebWebScrapeHTMLParams::zdr,
@@ -674,6 +676,43 @@ module ContextDev
           should_parse: bool,
           start: Integer
         }
+      end
+
+      type timeout_opts =
+        {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebWebScrapeHTMLParams::TimeoutOpts::behavior
+        }
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        attr_accessor milliseconds: Integer
+
+        attr_reader behavior: ContextDev::Models::WebWebScrapeHTMLParams::TimeoutOpts::behavior?
+
+        def behavior=: (
+          ContextDev::Models::WebWebScrapeHTMLParams::TimeoutOpts::behavior
+        ) -> ContextDev::Models::WebWebScrapeHTMLParams::TimeoutOpts::behavior
+
+        def initialize: (
+          milliseconds: Integer,
+          ?behavior: ContextDev::Models::WebWebScrapeHTMLParams::TimeoutOpts::behavior
+        ) -> void
+
+        def to_hash: -> {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebWebScrapeHTMLParams::TimeoutOpts::behavior
+        }
+
+        type behavior = :fail | :"return-partial"
+
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL: :fail
+          RETURN_PARTIAL: :"return-partial"
+
+          def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::TimeoutOpts::behavior]
+        end
       end
 
       type zdr = :enabled | :disabled

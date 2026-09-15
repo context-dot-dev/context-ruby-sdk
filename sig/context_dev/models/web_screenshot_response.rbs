@@ -6,6 +6,7 @@ module ContextDev
         request_id: String,
         code: Integer,
         domain: String,
+        final_dom_state: ContextDev::Models::WebScreenshotResponse::final_dom_state,
         height: Integer,
         key_metadata: ContextDev::Models::WebScreenshotResponse::KeyMetadata,
         screenshot: String,
@@ -26,6 +27,12 @@ module ContextDev
       attr_reader domain: String?
 
       def domain=: (String) -> String
+
+      attr_reader final_dom_state: ContextDev::Models::WebScreenshotResponse::final_dom_state?
+
+      def final_dom_state=: (
+        ContextDev::Models::WebScreenshotResponse::final_dom_state
+      ) -> ContextDev::Models::WebScreenshotResponse::final_dom_state
 
       attr_reader height: Integer?
 
@@ -60,6 +67,7 @@ module ContextDev
         request_id: String,
         ?code: Integer,
         ?domain: String,
+        ?final_dom_state: ContextDev::Models::WebScreenshotResponse::final_dom_state,
         ?height: Integer,
         ?key_metadata: ContextDev::Models::WebScreenshotResponse::KeyMetadata,
         ?screenshot: String,
@@ -73,6 +81,7 @@ module ContextDev
         request_id: String,
         code: Integer,
         domain: String,
+        final_dom_state: ContextDev::Models::WebScreenshotResponse::final_dom_state,
         height: Integer,
         key_metadata: ContextDev::Models::WebScreenshotResponse::KeyMetadata,
         screenshot: String,
@@ -113,6 +122,17 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::WebScreenshotResponse::CacheMetadata::status]
         end
+      end
+
+      type final_dom_state = :loaded | :"still-loading"
+
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        LOADED: :loaded
+        STILL_LOADING: :"still-loading"
+
+        def self?.values: -> ::Array[ContextDev::Models::WebScreenshotResponse::final_dom_state]
       end
 
       type key_metadata =

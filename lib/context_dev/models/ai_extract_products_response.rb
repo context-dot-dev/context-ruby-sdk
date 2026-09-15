@@ -25,6 +25,14 @@ module ContextDev
       #   @return [ContextDev::Models::AIExtractProductsResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::AIExtractProductsResponse::KeyMetadata }
 
+      # @!attribute partial
+      #   True when timeoutOpts.behavior=return-partial returned the usable results
+      #   collected before the deadline. Partial collections are not cached as complete
+      #   results.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
       # @!attribute products
       #   Array of products extracted from the website
       #
@@ -32,7 +40,7 @@ module ContextDev
       optional :products,
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::AIExtractProductsResponse::Product] }
 
-      # @!method initialize(cache_metadata:, request_id:, key_metadata: nil, products: nil)
+      # @!method initialize(cache_metadata:, request_id:, key_metadata: nil, partial: nil, products: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::AIExtractProductsResponse} for more details.
       #
@@ -41,6 +49,8 @@ module ContextDev
       #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param key_metadata [ContextDev::Models::AIExtractProductsResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when timeoutOpts.behavior=return-partial returned the usable results collec
       #
       #   @param products [Array<ContextDev::Models::AIExtractProductsResponse::Product>] Array of products extracted from the website
 

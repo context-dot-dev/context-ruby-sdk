@@ -37,7 +37,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebSearchResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebSearchResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, query:, request_id:, results:, key_metadata: nil)
+      # @!attribute partial
+      #   True when timeoutOpts.behavior=return-partial returned the usable results
+      #   collected before the deadline. Partial collections are not cached as complete
+      #   results.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
+      # @!method initialize(cache_metadata:, query:, request_id:, results:, key_metadata: nil, partial: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebSearchResponse} for more details.
       #
@@ -50,6 +58,8 @@ module ContextDev
       #   @param results [Array<ContextDev::Models::WebSearchResponse::Result>]
       #
       #   @param key_metadata [ContextDev::Models::WebSearchResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when timeoutOpts.behavior=return-partial returned the usable results collec
 
       # @see ContextDev::Models::WebSearchResponse#cache_metadata
       class CacheMetadata < ContextDev::Internal::Type::BaseModel
@@ -151,7 +161,19 @@ module ContextDev
           #   @return [String, nil]
           required :markdown, String, nil?: true
 
-          # @!method initialize(code:, markdown:)
+          # @!attribute final_dom_state
+          #   How complete the returned content is. `loaded` means the page finished the waits
+          #   the request asked for. `still-loading` only occurs with
+          #   timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+          #   reached first, so the content reflects the DOM at that moment and late-rendering
+          #   parts may be missing. Partial results are billed at the base request cost.
+          #
+          #   @return [Symbol, ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState, nil]
+          optional :final_dom_state,
+                   enum: -> { ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState },
+                   api_name: :finalDOMState
+
+          # @!method initialize(code:, markdown:, final_dom_state: nil)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::WebSearchResponse::Result::Markdown} for more details.
           #
@@ -160,6 +182,8 @@ module ContextDev
           #   @param code [Symbol, ContextDev::Models::WebSearchResponse::Result::Markdown::Code] Per-result scrape outcome. Inspect this before reading `markdown`.
           #
           #   @param markdown [String, nil] GFM Markdown of the page. Null unless markdownOptions.enabled is true and scrapi
+          #
+          #   @param final_dom_state [Symbol, ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState] How complete the returned content is. `loaded` means the page finished the waits
 
           # Per-result scrape outcome. Inspect this before reading `markdown`.
           #
@@ -173,6 +197,23 @@ module ContextDev
             CONTENT_TOO_LARGE = :CONTENT_TOO_LARGE
             WEBSITE_ACCESS_ERROR = :WEBSITE_ACCESS_ERROR
             ERROR = :ERROR
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
+
+          # How complete the returned content is. `loaded` means the page finished the waits
+          # the request asked for. `still-loading` only occurs with
+          # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+          # reached first, so the content reflects the DOM at that moment and late-rendering
+          # parts may be missing. Partial results are billed at the base request cost.
+          #
+          # @see ContextDev::Models::WebSearchResponse::Result::Markdown#final_dom_state
+          module FinalDomState
+            extend ContextDev::Internal::Type::Enum
+
+            LOADED = :loaded
+            STILL_LOADING = :"still-loading"
 
             # @!method self.values
             #   @return [Array<Symbol>]

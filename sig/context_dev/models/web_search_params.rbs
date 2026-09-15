@@ -11,7 +11,7 @@ module ContextDev
         num_results: Integer,
         query_fanout: bool,
         tags: ::Array[String],
-        timeout_ms: Integer
+        timeout_opts: ContextDev::WebSearchParams::TimeoutOpts
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -59,9 +59,11 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
-      attr_reader timeout_ms: Integer?
+      attr_reader timeout_opts: ContextDev::WebSearchParams::TimeoutOpts?
 
-      def timeout_ms=: (Integer) -> Integer
+      def timeout_opts=: (
+        ContextDev::WebSearchParams::TimeoutOpts
+      ) -> ContextDev::WebSearchParams::TimeoutOpts
 
       def initialize: (
         query: String,
@@ -73,7 +75,7 @@ module ContextDev
         ?num_results: Integer,
         ?query_fanout: bool,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::WebSearchParams::TimeoutOpts,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -87,7 +89,7 @@ module ContextDev
         num_results: Integer,
         query_fanout: bool,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::WebSearchParams::TimeoutOpts,
         request_options: ContextDev::RequestOptions
       }
 
@@ -600,7 +602,7 @@ module ContextDev
           max_age_ms: Integer,
           pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf,
           :shorten_base64_images => bool,
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts,
           use_main_content_only: bool,
           wait_for_ms: Integer
         }
@@ -636,9 +638,11 @@ module ContextDev
 
         def shorten_base64_images=: (bool) -> bool
 
-        attr_reader timeout_ms: Integer?
+        attr_reader timeout_opts: ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts?
 
-        def timeout_ms=: (Integer) -> Integer
+        def timeout_opts=: (
+          ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts
+        ) -> ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts
 
         attr_reader use_main_content_only: bool?
 
@@ -656,7 +660,7 @@ module ContextDev
           ?max_age_ms: Integer,
           ?pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf,
           ?shorten_base64_images: bool,
-          ?timeout_ms: Integer,
+          ?timeout_opts: ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts,
           ?use_main_content_only: bool,
           ?wait_for_ms: Integer
         ) -> void
@@ -669,7 +673,7 @@ module ContextDev
           max_age_ms: Integer,
           pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf,
           :shorten_base64_images => bool,
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts,
           use_main_content_only: bool,
           wait_for_ms: Integer
         }
@@ -696,6 +700,80 @@ module ContextDev
           ) -> void
 
           def to_hash: -> { end_: Integer, should_parse: bool, start: Integer }
+        end
+
+        type timeout_opts =
+          {
+            milliseconds: Integer,
+            behavior: ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::behavior
+          }
+
+        class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+          attr_accessor milliseconds: Integer
+
+          attr_reader behavior: ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::behavior?
+
+          def behavior=: (
+            ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::behavior
+          ) -> ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::behavior
+
+          def initialize: (
+            milliseconds: Integer,
+            ?behavior: ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::behavior
+          ) -> void
+
+          def to_hash: -> {
+            milliseconds: Integer,
+            behavior: ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::behavior
+          }
+
+          type behavior = :fail | :"return-partial"
+
+          module Behavior
+            extend ContextDev::Internal::Type::Enum
+
+            FAIL: :fail
+            RETURN_PARTIAL: :"return-partial"
+
+            def self?.values: -> ::Array[ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::behavior]
+          end
+        end
+      end
+
+      type timeout_opts =
+        {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebSearchParams::TimeoutOpts::behavior
+        }
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        attr_accessor milliseconds: Integer
+
+        attr_reader behavior: ContextDev::Models::WebSearchParams::TimeoutOpts::behavior?
+
+        def behavior=: (
+          ContextDev::Models::WebSearchParams::TimeoutOpts::behavior
+        ) -> ContextDev::Models::WebSearchParams::TimeoutOpts::behavior
+
+        def initialize: (
+          milliseconds: Integer,
+          ?behavior: ContextDev::Models::WebSearchParams::TimeoutOpts::behavior
+        ) -> void
+
+        def to_hash: -> {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebSearchParams::TimeoutOpts::behavior
+        }
+
+        type behavior = :fail | :"return-partial"
+
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL: :fail
+          RETURN_PARTIAL: :"return-partial"
+
+          def self?.values: -> ::Array[ContextDev::Models::WebSearchParams::TimeoutOpts::behavior]
         end
       end
     end

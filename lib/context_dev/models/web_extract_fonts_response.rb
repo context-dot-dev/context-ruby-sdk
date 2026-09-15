@@ -44,6 +44,18 @@ module ContextDev
       #   @return [String]
       required :status, String
 
+      # @!attribute final_dom_state
+      #   How complete the returned content is. `loaded` means the page finished the waits
+      #   the request asked for. `still-loading` only occurs with
+      #   timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      #   reached first, so the content reflects the DOM at that moment and late-rendering
+      #   parts may be missing. Partial results are billed at the base request cost.
+      #
+      #   @return [Symbol, ContextDev::Models::WebExtractFontsResponse::FinalDomState, nil]
+      optional :final_dom_state,
+               enum: -> { ContextDev::Models::WebExtractFontsResponse::FinalDomState },
+               api_name: :finalDOMState
+
       # @!attribute font_links
       #   Font assets keyed by family name as it appears in the fonts array (non-generic
       #   names only). Clients match entries in fonts to pick a file URL from files.
@@ -60,7 +72,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebExtractFontsResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebExtractFontsResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, code:, domain:, fonts:, request_id:, status:, font_links: nil, key_metadata: nil)
+      # @!method initialize(cache_metadata:, code:, domain:, fonts:, request_id:, status:, final_dom_state: nil, font_links: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractFontsResponse} for more details.
       #
@@ -75,6 +87,8 @@ module ContextDev
       #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param status [String] Status of the response, e.g., 'ok'
+      #
+      #   @param final_dom_state [Symbol, ContextDev::Models::WebExtractFontsResponse::FinalDomState] How complete the returned content is. `loaded` means the page finished the waits
       #
       #   @param font_links [Hash{Symbol=>ContextDev::Models::WebExtractFontsResponse::FontLink}] Font assets keyed by family name as it appears in the fonts array (non-generic n
       #
@@ -180,6 +194,23 @@ module ContextDev
         #   @param percent_words [Float] Percentage of words using this font
         #
         #   @param uses [Array<String>] Array of CSS selectors or element types where this font is used
+      end
+
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      #
+      # @see ContextDev::Models::WebExtractFontsResponse#final_dom_state
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        LOADED = :loaded
+        STILL_LOADING = :"still-loading"
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
 
       class FontLink < ContextDev::Internal::Type::BaseModel

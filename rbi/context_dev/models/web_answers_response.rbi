@@ -34,12 +34,21 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # True when the request deadline ended research and the answer uses the evidence
+      # collected so far.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
+
       sig do
         params(
           json_content: T::Hash[Symbol, T.anything],
           sources: T::Array[String],
           key_metadata:
-            ContextDev::Models::WebAnswersResponse::KeyMetadata::OrHash
+            ContextDev::Models::WebAnswersResponse::KeyMetadata::OrHash,
+          partial: T::Boolean
         ).returns(T.attached_class)
       end
       def self.new(
@@ -49,7 +58,10 @@ module ContextDev
         # Unreadable pages are excluded.
         sources:,
         # Credit usage, included whenever a valid API key is provided.
-        key_metadata: nil
+        key_metadata: nil,
+        # True when the request deadline ended research and the answer uses the evidence
+        # collected so far.
+        partial: nil
       )
       end
 
@@ -58,7 +70,8 @@ module ContextDev
           {
             json_content: T::Hash[Symbol, T.anything],
             sources: T::Array[String],
-            key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata
+            key_metadata: ContextDev::Models::WebAnswersResponse::KeyMetadata,
+            partial: T::Boolean
           }
         )
       end

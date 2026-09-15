@@ -6,7 +6,8 @@ module ContextDev
         metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata,
         request_id: String,
         results: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result],
-        key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata,
+        partial: bool
       }
 
     class WebWebCrawlMdResponse < ContextDev::Internal::Type::BaseModel
@@ -24,12 +25,17 @@ module ContextDev
         ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata
       ) -> ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata
 
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
       def initialize: (
         cache_metadata: ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata,
         metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata,
         request_id: String,
         results: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result],
-        ?key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata
+        ?key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata,
+        ?partial: bool
       ) -> void
 
       def to_hash: -> {
@@ -37,7 +43,8 @@ module ContextDev
         metadata: ContextDev::Models::WebWebCrawlMdResponse::Metadata,
         request_id: String,
         results: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result],
-        key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata
+        key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata,
+        partial: bool
       }
 
       type cache_metadata =

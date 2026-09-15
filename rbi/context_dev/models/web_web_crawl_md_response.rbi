@@ -61,6 +61,15 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # True when timeoutOpts.behavior=return-partial returned the usable results
+      # collected before the deadline. Partial collections are not cached as complete
+      # results.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
+
       sig do
         params(
           cache_metadata:
@@ -70,7 +79,8 @@ module ContextDev
           results:
             T::Array[ContextDev::Models::WebWebCrawlMdResponse::Result::OrHash],
           key_metadata:
-            ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata::OrHash
+            ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata::OrHash,
+          partial: T::Boolean
         ).returns(T.attached_class)
       end
       def self.new(
@@ -84,7 +94,11 @@ module ContextDev
         request_id:,
         results:,
         # Credit usage, included whenever a valid API key is provided.
-        key_metadata: nil
+        key_metadata: nil,
+        # True when timeoutOpts.behavior=return-partial returned the usable results
+        # collected before the deadline. Partial collections are not cached as complete
+        # results.
+        partial: nil
       )
       end
 
@@ -97,7 +111,9 @@ module ContextDev
             request_id: String,
             results:
               T::Array[ContextDev::Models::WebWebCrawlMdResponse::Result],
-            key_metadata: ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata
+            key_metadata:
+              ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata,
+            partial: T::Boolean
           }
         )
       end

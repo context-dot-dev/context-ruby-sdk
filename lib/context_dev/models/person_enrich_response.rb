@@ -23,7 +23,14 @@ module ContextDev
       #   @return [ContextDev::Models::PersonEnrichResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::PersonEnrichResponse::KeyMetadata }
 
-      # @!method initialize(match:, request_id:, key_metadata: nil)
+      # @!attribute partial
+      #   True when the timeout ended processing and this response contains the usable
+      #   data completed so far. Unfinished fields are omitted.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
+      # @!method initialize(match:, request_id:, key_metadata: nil, partial: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::PersonEnrichResponse} for more details.
       #
@@ -32,6 +39,8 @@ module ContextDev
       #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param key_metadata [ContextDev::Models::PersonEnrichResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when the timeout ended processing and this response contains the usable dat
 
       # The highest-scoring person candidate.
       #

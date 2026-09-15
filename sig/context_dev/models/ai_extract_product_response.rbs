@@ -6,6 +6,7 @@ module ContextDev
         request_id: String,
         is_product_page: bool,
         key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
+        partial: bool,
         platform: ContextDev::Models::AIExtractProductResponse::platform?,
         product: ContextDev::Models::AIExtractProductResponse::Product?
       }
@@ -25,6 +26,10 @@ module ContextDev
         ContextDev::Models::AIExtractProductResponse::KeyMetadata
       ) -> ContextDev::Models::AIExtractProductResponse::KeyMetadata
 
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
       attr_accessor platform: ContextDev::Models::AIExtractProductResponse::platform?
 
       attr_accessor product: ContextDev::Models::AIExtractProductResponse::Product?
@@ -34,6 +39,7 @@ module ContextDev
         request_id: String,
         ?is_product_page: bool,
         ?key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
+        ?partial: bool,
         ?platform: ContextDev::Models::AIExtractProductResponse::platform?,
         ?product: ContextDev::Models::AIExtractProductResponse::Product?
       ) -> void
@@ -43,6 +49,7 @@ module ContextDev
         request_id: String,
         is_product_page: bool,
         key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata,
+        partial: bool,
         platform: ContextDev::Models::AIExtractProductResponse::platform?,
         product: ContextDev::Models::AIExtractProductResponse::Product?
       }

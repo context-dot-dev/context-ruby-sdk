@@ -50,6 +50,28 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :status
 
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      sig do
+        returns(
+          T.nilable(
+            ContextDev::Models::WebExtractFontsResponse::FinalDomState::TaggedSymbol
+          )
+        )
+      end
+      attr_reader :final_dom_state
+
+      sig do
+        params(
+          final_dom_state:
+            ContextDev::Models::WebExtractFontsResponse::FinalDomState::OrSymbol
+        ).void
+      end
+      attr_writer :final_dom_state
+
       # Font assets keyed by family name as it appears in the fonts array (non-generic
       # names only). Clients match entries in fonts to pick a file URL from files.
       # Omitted when no families resolve to Google or custom @font-face URLs.
@@ -102,6 +124,8 @@ module ContextDev
             T::Array[ContextDev::Models::WebExtractFontsResponse::Font::OrHash],
           request_id: String,
           status: String,
+          final_dom_state:
+            ContextDev::Models::WebExtractFontsResponse::FinalDomState::OrSymbol,
           font_links:
             T::Hash[
               Symbol,
@@ -127,6 +151,12 @@ module ContextDev
         request_id:,
         # Status of the response, e.g., 'ok'
         status:,
+        # How complete the returned content is. `loaded` means the page finished the waits
+        # the request asked for. `still-loading` only occurs with
+        # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+        # reached first, so the content reflects the DOM at that moment and late-rendering
+        # parts may be missing. Partial results are billed at the base request cost.
+        final_dom_state: nil,
         # Font assets keyed by family name as it appears in the fonts array (non-generic
         # names only). Clients match entries in fonts to pick a file URL from files.
         # Omitted when no families resolve to Google or custom @font-face URLs.
@@ -146,6 +176,8 @@ module ContextDev
             fonts: T::Array[ContextDev::Models::WebExtractFontsResponse::Font],
             request_id: String,
             status: String,
+            final_dom_state:
+              ContextDev::Models::WebExtractFontsResponse::FinalDomState::TaggedSymbol,
             font_links:
               T::Hash[
                 Symbol,
@@ -334,6 +366,45 @@ module ContextDev
           )
         end
         def to_hash
+        end
+      end
+
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(
+              Symbol,
+              ContextDev::Models::WebExtractFontsResponse::FinalDomState
+            )
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        LOADED =
+          T.let(
+            :loaded,
+            ContextDev::Models::WebExtractFontsResponse::FinalDomState::TaggedSymbol
+          )
+        STILL_LOADING =
+          T.let(
+            :"still-loading",
+            ContextDev::Models::WebExtractFontsResponse::FinalDomState::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::WebExtractFontsResponse::FinalDomState::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
         end
       end
 

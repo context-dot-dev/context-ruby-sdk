@@ -12,7 +12,7 @@ module ContextDev
       # or an email whose domain is extracted and validated (free email providers and
       # disposable email addresses are not allowed).
       #
-      # @overload prefetch(identifier:, type:, tags: nil, timeout_ms: nil, request_options: {})
+      # @overload prefetch(identifier:, type:, tags: nil, timeout_opts: nil, request_options: {})
       #
       # @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier] Identifier of the target to prefetch. Provide exactly one of domain or email.
       #
@@ -20,7 +20,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::UtilityPrefetchParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

@@ -67,14 +67,21 @@ module ContextDev
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Optional timeout in milliseconds for the request. If the request takes longer
-      # than this value, it will be aborted with a 408 status code. Maximum allowed
-      # value is 300000ms (5 minutes).
-      sig { returns(T.nilable(Integer)) }
-      attr_reader :timeout_ms
+      # Optional request deadline and behavior on timeout. For GET requests, use
+      # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+      # timeoutOpts object.
+      sig do
+        returns(T.nilable(ContextDev::WebExtractStyleguideParams::TimeoutOpts))
+      end
+      attr_reader :timeout_opts
 
-      sig { params(timeout_ms: Integer).void }
-      attr_writer :timeout_ms
+      sig do
+        params(
+          timeout_opts:
+            ContextDev::WebExtractStyleguideParams::TimeoutOpts::OrHash
+        ).void
+      end
+      attr_writer :timeout_opts
 
       sig do
         params(
@@ -84,7 +91,8 @@ module ContextDev
           domain: String,
           max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts:
+            ContextDev::WebExtractStyleguideParams::TimeoutOpts::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -109,10 +117,10 @@ module ContextDev
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
-        # Optional timeout in milliseconds for the request. If the request takes longer
-        # than this value, it will be aborted with a 408 status code. Maximum allowed
-        # value is 300000ms (5 minutes).
-        timeout_ms: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
         request_options: {}
       )
       end
@@ -126,7 +134,7 @@ module ContextDev
             domain: String,
             max_age_ms: T.nilable(Integer),
             tags: T::Array[String],
-            timeout_ms: Integer,
+            timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts,
             request_options: ContextDev::RequestOptions
           }
         )
@@ -164,6 +172,115 @@ module ContextDev
           )
         end
         def self.values
+        end
+      end
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::WebExtractStyleguideParams::TimeoutOpts,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        sig { returns(Integer) }
+        attr_accessor :milliseconds
+
+        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        # credits. "return-partial" returns usable results collected so far; if none are
+        # available, the request still fails without charging credits. Partial results are
+        # not cached as complete results. "return-partial" requires milliseconds of at
+        # least 15000.
+        sig do
+          returns(
+            T.nilable(
+              ContextDev::WebExtractStyleguideParams::TimeoutOpts::Behavior::OrSymbol
+            )
+          )
+        end
+        attr_reader :behavior
+
+        sig do
+          params(
+            behavior:
+              ContextDev::WebExtractStyleguideParams::TimeoutOpts::Behavior::OrSymbol
+          ).void
+        end
+        attr_writer :behavior
+
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        sig do
+          params(
+            milliseconds: Integer,
+            behavior:
+              ContextDev::WebExtractStyleguideParams::TimeoutOpts::Behavior::OrSymbol
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          milliseconds:,
+          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+          # credits. "return-partial" returns usable results collected so far; if none are
+          # available, the request still fails without charging credits. Partial results are
+          # not cached as complete results. "return-partial" requires milliseconds of at
+          # least 15000.
+          behavior: nil
+        )
+        end
+
+        sig do
+          override.returns(
+            {
+              milliseconds: Integer,
+              behavior:
+                ContextDev::WebExtractStyleguideParams::TimeoutOpts::Behavior::OrSymbol
+            }
+          )
+        end
+        def to_hash
+        end
+
+        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        # credits. "return-partial" returns usable results collected so far; if none are
+        # available, the request still fails without charging credits. Partial results are
+        # not cached as complete results. "return-partial" requires milliseconds of at
+        # least 15000.
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::WebExtractStyleguideParams::TimeoutOpts::Behavior
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          FAIL =
+            T.let(
+              :fail,
+              ContextDev::WebExtractStyleguideParams::TimeoutOpts::Behavior::TaggedSymbol
+            )
+          RETURN_PARTIAL =
+            T.let(
+              :"return-partial",
+              ContextDev::WebExtractStyleguideParams::TimeoutOpts::Behavior::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::WebExtractStyleguideParams::TimeoutOpts::Behavior::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
         end
       end
     end

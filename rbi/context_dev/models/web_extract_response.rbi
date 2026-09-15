@@ -70,6 +70,14 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # True when the timeout ended processing and this response contains only usable
+      # results completed so far. Unfinished results are omitted.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
+
       sig do
         params(
           cache_metadata:
@@ -81,7 +89,8 @@ module ContextDev
           url: String,
           urls_analyzed: T::Array[String],
           key_metadata:
-            ContextDev::Models::WebExtractResponse::KeyMetadata::OrHash
+            ContextDev::Models::WebExtractResponse::KeyMetadata::OrHash,
+          partial: T::Boolean
         ).returns(T.attached_class)
       end
       def self.new(
@@ -102,7 +111,10 @@ module ContextDev
         # List of URLs whose Markdown was used for extraction
         urls_analyzed:,
         # Credit usage, included whenever a valid API key is provided.
-        key_metadata: nil
+        key_metadata: nil,
+        # True when the timeout ended processing and this response contains only usable
+        # results completed so far. Unfinished results are omitted.
+        partial: nil
       )
       end
 
@@ -117,7 +129,8 @@ module ContextDev
             status: String,
             url: String,
             urls_analyzed: T::Array[String],
-            key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata
+            key_metadata: ContextDev::Models::WebExtractResponse::KeyMetadata,
+            partial: T::Boolean
           }
         )
       end

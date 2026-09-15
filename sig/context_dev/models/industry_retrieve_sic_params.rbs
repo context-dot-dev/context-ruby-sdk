@@ -6,7 +6,7 @@ module ContextDev
         max_results: Integer,
         min_results: Integer,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::IndustryRetrieveSicParams::TimeoutOpts,
         type: ContextDev::Models::IndustryRetrieveSicParams::type_
       }
       & ContextDev::Internal::Type::request_parameters
@@ -29,9 +29,11 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
-      attr_reader timeout_ms: Integer?
+      attr_reader timeout_opts: ContextDev::IndustryRetrieveSicParams::TimeoutOpts?
 
-      def timeout_ms=: (Integer) -> Integer
+      def timeout_opts=: (
+        ContextDev::IndustryRetrieveSicParams::TimeoutOpts
+      ) -> ContextDev::IndustryRetrieveSicParams::TimeoutOpts
 
       attr_reader type: ContextDev::Models::IndustryRetrieveSicParams::type_?
 
@@ -44,7 +46,7 @@ module ContextDev
         ?max_results: Integer,
         ?min_results: Integer,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::IndustryRetrieveSicParams::TimeoutOpts,
         ?type: ContextDev::Models::IndustryRetrieveSicParams::type_,
         ?request_options: ContextDev::request_opts
       ) -> void
@@ -54,10 +56,47 @@ module ContextDev
         max_results: Integer,
         min_results: Integer,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::IndustryRetrieveSicParams::TimeoutOpts,
         type: ContextDev::Models::IndustryRetrieveSicParams::type_,
         request_options: ContextDev::RequestOptions
       }
+
+      type timeout_opts =
+        {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::IndustryRetrieveSicParams::TimeoutOpts::behavior
+        }
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        attr_accessor milliseconds: Integer
+
+        attr_reader behavior: ContextDev::Models::IndustryRetrieveSicParams::TimeoutOpts::behavior?
+
+        def behavior=: (
+          ContextDev::Models::IndustryRetrieveSicParams::TimeoutOpts::behavior
+        ) -> ContextDev::Models::IndustryRetrieveSicParams::TimeoutOpts::behavior
+
+        def initialize: (
+          milliseconds: Integer,
+          ?behavior: ContextDev::Models::IndustryRetrieveSicParams::TimeoutOpts::behavior
+        ) -> void
+
+        def to_hash: -> {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::IndustryRetrieveSicParams::TimeoutOpts::behavior
+        }
+
+        type behavior = :fail | :"return-partial"
+
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL: :fail
+          RETURN_PARTIAL: :"return-partial"
+
+          def self?.values: -> ::Array[ContextDev::Models::IndustryRetrieveSicParams::TimeoutOpts::behavior]
+        end
+      end
 
       type type_ = :original_sic | :latest_sec
 

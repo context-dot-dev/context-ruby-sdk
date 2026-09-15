@@ -7,6 +7,7 @@ module ContextDev
         codes: ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code],
         domain: String,
         key_metadata: ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata,
+        partial: bool,
         status: String,
         type: String
       }
@@ -36,6 +37,10 @@ module ContextDev
         ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata
       ) -> ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata
 
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
       attr_reader status: String?
 
       def status=: (String) -> String
@@ -50,6 +55,7 @@ module ContextDev
         ?codes: ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code],
         ?domain: String,
         ?key_metadata: ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata,
+        ?partial: bool,
         ?status: String,
         ?type: String
       ) -> void
@@ -60,6 +66,7 @@ module ContextDev
         codes: ::Array[ContextDev::Models::IndustryRetrieveSicResponse::Code],
         domain: String,
         key_metadata: ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata,
+        partial: bool,
         status: String,
         type: String
       }

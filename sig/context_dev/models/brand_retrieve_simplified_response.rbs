@@ -7,6 +7,7 @@ module ContextDev
         brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
         code: Integer,
         key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata,
+        partial: bool,
         status: String
       }
 
@@ -31,6 +32,10 @@ module ContextDev
         ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata
       ) -> ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata
 
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
       attr_reader status: String?
 
       def status=: (String) -> String
@@ -41,6 +46,7 @@ module ContextDev
         ?brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
         ?code: Integer,
         ?key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata,
+        ?partial: bool,
         ?status: String
       ) -> void
 
@@ -50,6 +56,7 @@ module ContextDev
         brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
         code: Integer,
         key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata,
+        partial: bool,
         status: String
       }
 

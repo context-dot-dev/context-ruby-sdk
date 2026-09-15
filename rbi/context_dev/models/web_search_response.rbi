@@ -51,6 +51,15 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # True when timeoutOpts.behavior=return-partial returned the usable results
+      # collected before the deadline. Partial collections are not cached as complete
+      # results.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
+
       sig do
         params(
           cache_metadata:
@@ -60,7 +69,8 @@ module ContextDev
           results:
             T::Array[ContextDev::Models::WebSearchResponse::Result::OrHash],
           key_metadata:
-            ContextDev::Models::WebSearchResponse::KeyMetadata::OrHash
+            ContextDev::Models::WebSearchResponse::KeyMetadata::OrHash,
+          partial: T::Boolean
         ).returns(T.attached_class)
       end
       def self.new(
@@ -75,7 +85,11 @@ module ContextDev
         request_id:,
         results:,
         # Credit usage, included whenever a valid API key is provided.
-        key_metadata: nil
+        key_metadata: nil,
+        # True when timeoutOpts.behavior=return-partial returned the usable results
+        # collected before the deadline. Partial collections are not cached as complete
+        # results.
+        partial: nil
       )
       end
 
@@ -87,7 +101,8 @@ module ContextDev
             query: String,
             request_id: String,
             results: T::Array[ContextDev::Models::WebSearchResponse::Result],
-            key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata
+            key_metadata: ContextDev::Models::WebSearchResponse::KeyMetadata,
+            partial: T::Boolean
           }
         )
       end
@@ -292,12 +307,36 @@ module ContextDev
           sig { returns(T.nilable(String)) }
           attr_accessor :markdown
 
+          # How complete the returned content is. `loaded` means the page finished the waits
+          # the request asked for. `still-loading` only occurs with
+          # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+          # reached first, so the content reflects the DOM at that moment and late-rendering
+          # parts may be missing. Partial results are billed at the base request cost.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState::TaggedSymbol
+              )
+            )
+          end
+          attr_reader :final_dom_state
+
+          sig do
+            params(
+              final_dom_state:
+                ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState::OrSymbol
+            ).void
+          end
+          attr_writer :final_dom_state
+
           # Markdown scrape status and content for this result.
           sig do
             params(
               code:
                 ContextDev::Models::WebSearchResponse::Result::Markdown::Code::OrSymbol,
-              markdown: T.nilable(String)
+              markdown: T.nilable(String),
+              final_dom_state:
+                ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState::OrSymbol
             ).returns(T.attached_class)
           end
           def self.new(
@@ -305,7 +344,13 @@ module ContextDev
             code:,
             # GFM Markdown of the page. Null unless markdownOptions.enabled is true and
             # scraping succeeded.
-            markdown:
+            markdown:,
+            # How complete the returned content is. `loaded` means the page finished the waits
+            # the request asked for. `still-loading` only occurs with
+            # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+            # reached first, so the content reflects the DOM at that moment and late-rendering
+            # parts may be missing. Partial results are billed at the base request cost.
+            final_dom_state: nil
           )
           end
 
@@ -314,7 +359,9 @@ module ContextDev
               {
                 code:
                   ContextDev::Models::WebSearchResponse::Result::Markdown::Code::TaggedSymbol,
-                markdown: T.nilable(String)
+                markdown: T.nilable(String),
+                final_dom_state:
+                  ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState::TaggedSymbol
               }
             )
           end
@@ -369,6 +416,45 @@ module ContextDev
               override.returns(
                 T::Array[
                   ContextDev::Models::WebSearchResponse::Result::Markdown::Code::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
+          end
+
+          # How complete the returned content is. `loaded` means the page finished the waits
+          # the request asked for. `still-loading` only occurs with
+          # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+          # reached first, so the content reflects the DOM at that moment and late-rendering
+          # parts may be missing. Partial results are billed at the base request cost.
+          module FinalDomState
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            LOADED =
+              T.let(
+                :loaded,
+                ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState::TaggedSymbol
+              )
+            STILL_LOADING =
+              T.let(
+                :"still-loading",
+                ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState::TaggedSymbol
                 ]
               )
             end

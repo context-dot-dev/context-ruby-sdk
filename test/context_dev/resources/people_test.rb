@@ -16,7 +16,8 @@ class ContextDev::Test::Resources::PeopleTest < ContextDev::Test::ResourceTest
       response => {
         match: ContextDev::Models::PersonEnrichResponse::Match,
         request_id: String,
-        key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata | nil
+        key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil
       }
     end
   end

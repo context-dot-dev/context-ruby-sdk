@@ -18,6 +18,7 @@ class ContextDev::Test::Resources::AITest < ContextDev::Test::ResourceTest
         request_id: String,
         is_product_page: ContextDev::Internal::Type::Boolean | nil,
         key_metadata: ContextDev::Models::AIExtractProductResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil,
         platform: ContextDev::Models::AIExtractProductResponse::Platform | nil,
         product: ContextDev::Models::AIExtractProductResponse::Product | nil
       }
@@ -38,6 +39,7 @@ class ContextDev::Test::Resources::AITest < ContextDev::Test::ResourceTest
         cache_metadata: ContextDev::Models::AIExtractProductsResponse::CacheMetadata,
         request_id: String,
         key_metadata: ContextDev::Models::AIExtractProductsResponse::KeyMetadata | nil,
+        partial: ContextDev::Internal::Type::Boolean | nil,
         products: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::AIExtractProductsResponse::Product]) | nil
       }
     end

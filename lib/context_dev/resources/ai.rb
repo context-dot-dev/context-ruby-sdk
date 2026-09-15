@@ -9,7 +9,7 @@ module ContextDev
       # Given a single URL, determines if it is a product page and extracts the product
       # information.
       #
-      # @overload extract_product(url:, max_age_ms: nil, tags: nil, timeout_ms: nil, request_options: {})
+      # @overload extract_product(url:, max_age_ms: nil, tags: nil, timeout_opts: nil, request_options: {})
       #
       # @param url [String] The product page URL to extract product data from.
       #
@@ -17,7 +17,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
-      # @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      # @param timeout_opts [ContextDev::Models::AIExtractProductParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

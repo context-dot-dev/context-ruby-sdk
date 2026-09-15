@@ -6,7 +6,7 @@ module ContextDev
         country: ContextDev::Models::WebWebScrapeBytesParams::country,
         headers: ::Hash[Symbol, String],
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
         zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
@@ -31,9 +31,11 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
-      attr_reader timeout_ms: Integer?
+      attr_reader timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts?
 
-      def timeout_ms=: (Integer) -> Integer
+      def timeout_opts=: (
+        ContextDev::WebWebScrapeBytesParams::TimeoutOpts
+      ) -> ContextDev::WebWebScrapeBytesParams::TimeoutOpts
 
       attr_reader zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr?
 
@@ -46,7 +48,7 @@ module ContextDev
         ?country: ContextDev::Models::WebWebScrapeBytesParams::country,
         ?headers: ::Hash[Symbol, String],
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
         ?zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
@@ -56,7 +58,7 @@ module ContextDev
         country: ContextDev::Models::WebWebScrapeBytesParams::country,
         headers: ::Hash[Symbol, String],
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
         zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr,
         request_options: ContextDev::RequestOptions
       }
@@ -476,6 +478,42 @@ module ContextDev
         ZW: :zw
 
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeBytesParams::country]
+      end
+
+      type timeout_opts =
+        {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts::behavior
+        }
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        attr_accessor milliseconds: Integer
+
+        attr_reader behavior: ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts::behavior?
+
+        def behavior=: (
+          ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts::behavior
+        ) -> ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts::behavior
+
+        def initialize: (
+          milliseconds: Integer,
+          ?behavior: ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts::behavior
+        ) -> void
+
+        def to_hash: -> {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts::behavior
+        }
+
+        type behavior = :fail
+
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL: :fail
+
+          def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts::behavior]
+        end
       end
 
       type zdr = :enabled | :disabled

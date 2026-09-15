@@ -72,6 +72,28 @@ module ContextDev
       end
       attr_writer :actions_applied
 
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      sig do
+        returns(
+          T.nilable(
+            ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState::TaggedSymbol
+          )
+        )
+      end
+      attr_reader :final_dom_state
+
+      sig do
+        params(
+          final_dom_state:
+            ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState::OrSymbol
+        ).void
+      end
+      attr_writer :final_dom_state
+
       # Credit usage, included whenever a valid API key is provided.
       sig do
         returns(
@@ -87,6 +109,15 @@ module ContextDev
         ).void
       end
       attr_writer :key_metadata
+
+      # True when the deadline interrupted rendering or image enrichment. Partial
+      # results are billed at the base request cost, without enrichment or actions
+      # surcharges.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :partial
+
+      sig { params(partial: T::Boolean).void }
+      attr_writer :partial
 
       sig do
         params(
@@ -104,8 +135,11 @@ module ContextDev
             T::Array[
               ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied::OrHash
             ],
+          final_dom_state:
+            ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState::OrSymbol,
           key_metadata:
-            ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata::OrHash
+            ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata::OrHash,
+          partial: T::Boolean
         ).returns(T.attached_class)
       end
       def self.new(
@@ -124,8 +158,18 @@ module ContextDev
         url:,
         # One verified outcome per requested browser action, in request order.
         actions_applied: nil,
+        # How complete the returned content is. `loaded` means the page finished the waits
+        # the request asked for. `still-loading` only occurs with
+        # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+        # reached first, so the content reflects the DOM at that moment and late-rendering
+        # parts may be missing. Partial results are billed at the base request cost.
+        final_dom_state: nil,
         # Credit usage, included whenever a valid API key is provided.
-        key_metadata: nil
+        key_metadata: nil,
+        # True when the deadline interrupted rendering or image enrichment. Partial
+        # results are billed at the base request cost, without enrichment or actions
+        # surcharges.
+        partial: nil
       )
       end
 
@@ -144,8 +188,11 @@ module ContextDev
               T::Array[
                 ContextDev::Models::WebWebScrapeImagesResponse::ActionsApplied
               ],
+            final_dom_state:
+              ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState::TaggedSymbol,
             key_metadata:
-              ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata
+              ContextDev::Models::WebWebScrapeImagesResponse::KeyMetadata,
+            partial: T::Boolean
           }
         )
       end
@@ -777,6 +824,45 @@ module ContextDev
           end
           def self.values
           end
+        end
+      end
+
+      # How complete the returned content is. `loaded` means the page finished the waits
+      # the request asked for. `still-loading` only occurs with
+      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
+      # reached first, so the content reflects the DOM at that moment and late-rendering
+      # parts may be missing. Partial results are billed at the base request cost.
+      module FinalDomState
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(
+              Symbol,
+              ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState
+            )
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        LOADED =
+          T.let(
+            :loaded,
+            ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState::TaggedSymbol
+          )
+        STILL_LOADING =
+          T.let(
+            :"still-loading",
+            ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::WebWebScrapeImagesResponse::FinalDomState::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
         end
       end
 

@@ -5,7 +5,7 @@ module ContextDev
         identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
         type: ContextDev::Models::UtilityPrefetchParams::type_,
         tags: ::Array[String],
-        timeout_ms: Integer
+        timeout_opts: ContextDev::UtilityPrefetchParams::TimeoutOpts
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -21,15 +21,17 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
-      attr_reader timeout_ms: Integer?
+      attr_reader timeout_opts: ContextDev::UtilityPrefetchParams::TimeoutOpts?
 
-      def timeout_ms=: (Integer) -> Integer
+      def timeout_opts=: (
+        ContextDev::UtilityPrefetchParams::TimeoutOpts
+      ) -> ContextDev::UtilityPrefetchParams::TimeoutOpts
 
       def initialize: (
         identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
         type: ContextDev::Models::UtilityPrefetchParams::type_,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::UtilityPrefetchParams::TimeoutOpts,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -37,7 +39,7 @@ module ContextDev
         identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
         type: ContextDev::Models::UtilityPrefetchParams::type_,
         tags: ::Array[String],
-        timeout_ms: Integer,
+        timeout_opts: ContextDev::UtilityPrefetchParams::TimeoutOpts,
         request_options: ContextDev::RequestOptions
       }
 
@@ -80,6 +82,42 @@ module ContextDev
         STYLEGUIDE: :styleguide
 
         def self?.values: -> ::Array[ContextDev::Models::UtilityPrefetchParams::type_]
+      end
+
+      type timeout_opts =
+        {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::UtilityPrefetchParams::TimeoutOpts::behavior
+        }
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        attr_accessor milliseconds: Integer
+
+        attr_reader behavior: ContextDev::Models::UtilityPrefetchParams::TimeoutOpts::behavior?
+
+        def behavior=: (
+          ContextDev::Models::UtilityPrefetchParams::TimeoutOpts::behavior
+        ) -> ContextDev::Models::UtilityPrefetchParams::TimeoutOpts::behavior
+
+        def initialize: (
+          milliseconds: Integer,
+          ?behavior: ContextDev::Models::UtilityPrefetchParams::TimeoutOpts::behavior
+        ) -> void
+
+        def to_hash: -> {
+          milliseconds: Integer,
+          behavior: ContextDev::Models::UtilityPrefetchParams::TimeoutOpts::behavior
+        }
+
+        type behavior = :fail
+
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL: :fail
+
+          def self?.values: -> ::Array[ContextDev::Models::UtilityPrefetchParams::TimeoutOpts::behavior]
+        end
       end
     end
   end

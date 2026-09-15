@@ -4,7 +4,8 @@ module ContextDev
       {
         match: ContextDev::Models::PersonEnrichResponse::match,
         request_id: String,
-        key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata
+        key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata,
+        partial: bool
       }
 
     class PersonEnrichResponse < ContextDev::Internal::Type::BaseModel
@@ -18,16 +19,22 @@ module ContextDev
         ContextDev::Models::PersonEnrichResponse::KeyMetadata
       ) -> ContextDev::Models::PersonEnrichResponse::KeyMetadata
 
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
       def initialize: (
         match: ContextDev::Models::PersonEnrichResponse::match,
         request_id: String,
-        ?key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata
+        ?key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata,
+        ?partial: bool
       ) -> void
 
       def to_hash: -> {
         match: ContextDev::Models::PersonEnrichResponse::match,
         request_id: String,
-        key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata
+        key_metadata: ContextDev::Models::PersonEnrichResponse::KeyMetadata,
+        partial: bool
       }
 
       type match =

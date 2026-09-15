@@ -37,13 +37,20 @@ module ContextDev
       #   @return [ContextDev::Models::BrandRetrieveResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::BrandRetrieveResponse::KeyMetadata }
 
+      # @!attribute partial
+      #   True when the timeout ended processing and this response contains the usable
+      #   data completed so far. Unfinished fields are omitted.
+      #
+      #   @return [Boolean, nil]
+      optional :partial, ContextDev::Internal::Type::Boolean
+
       # @!attribute status
       #   Status of the response, e.g., 'ok'
       #
       #   @return [String, nil]
       optional :status, String
 
-      # @!method initialize(cache_metadata:, request_id:, brand: nil, code: nil, key_metadata: nil, status: nil)
+      # @!method initialize(cache_metadata:, request_id:, brand: nil, code: nil, key_metadata: nil, partial: nil, status: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BrandRetrieveResponse} for more details.
       #
@@ -56,6 +63,8 @@ module ContextDev
       #   @param code [Integer] HTTP status code
       #
       #   @param key_metadata [ContextDev::Models::BrandRetrieveResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #
+      #   @param partial [Boolean] True when the timeout ended processing and this response contains the usable dat
       #
       #   @param status [String] Status of the response, e.g., 'ok'
 

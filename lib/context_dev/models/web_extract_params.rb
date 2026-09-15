@@ -110,13 +110,13 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!attribute timeout_ms
-      #   Optional timeout in milliseconds for the request. If the request takes longer
-      #   than this value, it will be aborted with a 408 status code. Maximum allowed
-      #   value is 300000ms (5 minutes).
+      # @!attribute timeout_opts
+      #   Optional request deadline and behavior on timeout. For GET requests, use
+      #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+      #   timeoutOpts object.
       #
-      #   @return [Integer, nil]
-      optional :timeout_ms, Integer, api_name: :timeoutMS
+      #   @return [ContextDev::Models::WebExtractParams::TimeoutOpts, nil]
+      optional :timeout_opts, -> { ContextDev::WebExtractParams::TimeoutOpts }, api_name: :timeoutOpts
 
       # @!attribute wait_for_ms
       #   Optional browser wait time in milliseconds after initial page load for each
@@ -125,7 +125,7 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, api_name: :waitForMs
 
-      # @!method initialize(schema:, url:, actions: nil, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_ms: nil, wait_for_ms: nil, request_options: {})
+      # @!method initialize(schema:, url:, actions: nil, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractParams} for more details.
       #
@@ -157,7 +157,7 @@ module ContextDev
       #
       #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
-      #   @param timeout_ms [Integer] Optional timeout in milliseconds for the request. If the request takes longer th
+      #   @param timeout_opts [ContextDev::Models::WebExtractParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       #   @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load for each craw
       #
@@ -341,6 +341,51 @@ module ContextDev
         #   @param should_parse [Boolean] When true, PDF pages are fetched and parsed. When false, PDF pages are skipped.
         #
         #   @param start [Integer] First 1-based PDF page to parse.
+      end
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        # @!attribute milliseconds
+        #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #
+        #   @return [Integer]
+        required :milliseconds, Integer
+
+        # @!attribute behavior
+        #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        #   credits. "return-partial" returns usable results collected so far; if none are
+        #   available, the request still fails without charging credits. Partial results are
+        #   not cached as complete results.
+        #
+        #   @return [Symbol, ContextDev::Models::WebExtractParams::TimeoutOpts::Behavior, nil]
+        optional :behavior, enum: -> { ContextDev::WebExtractParams::TimeoutOpts::Behavior }
+
+        # @!method initialize(milliseconds:, behavior: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebExtractParams::TimeoutOpts} for more details.
+        #
+        #   Optional request deadline and behavior on timeout. For GET requests, use
+        #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        #   timeoutOpts object.
+        #
+        #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #
+        #   @param behavior [Symbol, ContextDev::Models::WebExtractParams::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+
+        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        # credits. "return-partial" returns usable results collected so far; if none are
+        # available, the request still fails without charging credits. Partial results are
+        # not cached as complete results.
+        #
+        # @see ContextDev::Models::WebExtractParams::TimeoutOpts#behavior
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL = :fail
+          RETURN_PARTIAL = :"return-partial"
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
       end
     end
   end
