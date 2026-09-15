@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.17.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.16.0...v2.17.0) (2026-09-15)
+
+
+### Features
+
+* **answers:** add live web research with fast and ultra modes ([#954](https://github.com/context-dot-dev/context-ruby-sdk/issues/954)) ([838e943](https://github.com/context-dot-dev/context-ruby-sdk/commit/838e943b1fe34aeaf6f804ff534c22f62b4900fe))
+* **api-keys:** enforce scoped API key permissions ([#1038](https://github.com/context-dot-dev/context-ruby-sdk/issues/1038)) ([7f87431](https://github.com/context-dot-dev/context-ruby-sdk/commit/7f874312c42b5c12020d71251f8bfc6eaa8ab2aa))
+* **api:** unify timeout configuration and return partial results ([#1030](https://github.com/context-dot-dev/context-ruby-sdk/issues/1030)) ([7c0fa1f](https://github.com/context-dot-dev/context-ruby-sdk/commit/7c0fa1f308fc51885405c065aef2fd4ab8fe5725))
+* **monitors:** add page selector filters ([#1037](https://github.com/context-dot-dev/context-ruby-sdk/issues/1037)) ([1f3a748](https://github.com/context-dot-dev/context-ruby-sdk/commit/1f3a74858133f69ea52c3a189f9ed8c80b80c0c6))
+* **web:** add raw bytes scraping endpoint ([#1081](https://github.com/context-dot-dev/context-ruby-sdk/issues/1081)) ([e4b2347](https://github.com/context-dot-dev/context-ruby-sdk/commit/e4b23477deab52f1822eb2e3e2bbbca6b9cf9c07))
+
+
+### Bug Fixes
+
+* **api:** honour maxAgeMs=0 on brand retrieve, styleguide and fonts endpoints ([#998](https://github.com/context-dot-dev/context-ruby-sdk/issues/998)) ([78491ef](https://github.com/context-dot-dev/context-ruby-sdk/commit/78491ef8e43ab49074d011ce8c10e3cda5cb27db))
+* **webhooks:** format Slack webhook notifications ([#1045](https://github.com/context-dot-dev/context-ruby-sdk/issues/1045)) ([4bd0df1](https://github.com/context-dot-dev/context-ruby-sdk/commit/4bd0df1c614713a46e366ca1320942fa777452fc))
+
 ## [2.16.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.15.0...v2.16.0) (2026-09-11)
 
 
