@@ -115,6 +115,16 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebCrawlMdResponse
 
+      def web_scrape_bytes: (
+        url: String,
+        ?country: ContextDev::Models::WebWebScrapeBytesParams::country,
+        ?headers: ::Hash[Symbol, String],
+        ?tags: ::Array[String],
+        ?timeout_ms: Integer,
+        ?zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::WebWebScrapeBytesResponse
+
       def web_scrape_html: (
         url: String,
         ?actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?,

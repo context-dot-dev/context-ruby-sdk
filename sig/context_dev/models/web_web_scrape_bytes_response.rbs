@@ -1,0 +1,108 @@
+module ContextDev
+  module Models
+    type web_web_scrape_bytes_response =
+      {
+        bytes: String,
+        content_length: Integer,
+        content_type: String,
+        encoding: ContextDev::Models::WebWebScrapeBytesResponse::encoding,
+        final_url: String,
+        request_id: String,
+        status_code: Integer,
+        success: ContextDev::Models::WebWebScrapeBytesResponse::success,
+        url: String,
+        key_metadata: ContextDev::Models::WebWebScrapeBytesResponse::KeyMetadata
+      }
+
+    class WebWebScrapeBytesResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor bytes: String
+
+      attr_accessor content_length: Integer
+
+      attr_accessor content_type: String
+
+      attr_accessor encoding: ContextDev::Models::WebWebScrapeBytesResponse::encoding
+
+      attr_accessor final_url: String
+
+      attr_accessor request_id: String
+
+      attr_accessor status_code: Integer
+
+      attr_accessor success: ContextDev::Models::WebWebScrapeBytesResponse::success
+
+      attr_accessor url: String
+
+      attr_reader key_metadata: ContextDev::Models::WebWebScrapeBytesResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::WebWebScrapeBytesResponse::KeyMetadata
+      ) -> ContextDev::Models::WebWebScrapeBytesResponse::KeyMetadata
+
+      def initialize: (
+        bytes: String,
+        content_length: Integer,
+        content_type: String,
+        encoding: ContextDev::Models::WebWebScrapeBytesResponse::encoding,
+        final_url: String,
+        request_id: String,
+        status_code: Integer,
+        success: ContextDev::Models::WebWebScrapeBytesResponse::success,
+        url: String,
+        ?key_metadata: ContextDev::Models::WebWebScrapeBytesResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        bytes: String,
+        content_length: Integer,
+        content_type: String,
+        encoding: ContextDev::Models::WebWebScrapeBytesResponse::encoding,
+        final_url: String,
+        request_id: String,
+        status_code: Integer,
+        success: ContextDev::Models::WebWebScrapeBytesResponse::success,
+        url: String,
+        key_metadata: ContextDev::Models::WebWebScrapeBytesResponse::KeyMetadata
+      }
+
+      type encoding = :base64
+
+      module Encoding
+        extend ContextDev::Internal::Type::Enum
+
+        BASE64: :base64
+
+        def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeBytesResponse::encoding]
+      end
+
+      type success = true
+
+      module Success
+        extend ContextDev::Internal::Type::Enum
+
+        TRUE: true
+
+        def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeBytesResponse::success]
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end
