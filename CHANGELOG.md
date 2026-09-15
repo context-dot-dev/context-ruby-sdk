@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.17.1](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.17.0...v2.17.1) (2026-09-15)
+
+
+### Bug Fixes
+
+* **api:** guarantee search descriptions and align response types ([#1089](https://github.com/context-dot-dev/context-ruby-sdk/issues/1089)) ([7ee03fc](https://github.com/context-dot-dev/context-ruby-sdk/commit/7ee03fc233d3e975f01fd3d290defb48a6e6ad56))
+
 ## [2.17.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.16.0...v2.17.0) (2026-09-15)
 
 
