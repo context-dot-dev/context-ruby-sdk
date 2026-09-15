@@ -478,6 +478,55 @@ module ContextDev
       )
       end
 
+      # Downloads a resource and returns its bytes as base64. Supports images, PDFs,
+      # HTML pages, and any other content type without image conversion, text
+      # extraction, or character-encoding changes. HTTP compression is decoded before
+      # base64 encoding. HTML is the original HTTP response; JavaScript is not rendered.
+      # Follows public redirects and retries failed downloads through ISP and
+      # residential proxies, with a direct fallback. When country is specified, only a
+      # residential proxy in that country is used. Supply headers such as Referer for
+      # images that require a referring page. Downloads are not cached. Maximum decoded
+      # resource size: 20 MiB (20971520 bytes), before base64 encoding. Successful
+      # requests cost 1 credit; errors are not billed.
+      sig do
+        params(
+          url: String,
+          country: ContextDev::WebWebScrapeBytesParams::Country::OrSymbol,
+          headers: T::Hash[Symbol, String],
+          tags: T::Array[String],
+          timeout_ms: Integer,
+          zdr: ContextDev::WebWebScrapeBytesParams::Zdr::OrSymbol,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebWebScrapeBytesResponse)
+      end
+      def web_scrape_bytes(
+        # Full HTTP(S) URL of the resource to download, such as an image, PDF, or page.
+        url:,
+        # Fetch the target page through a residential proxy in this country (ISO 3166-1
+        # alpha-2).
+        country: nil,
+        # Optional outbound HTTP headers, such as Referer, Cookie, or Authorization. Send
+        # as a JSON object or deep-object query params such as
+        # headers[Referer]=https://example.com/. Host, Content-Length, and hop-by-hop
+        # transport headers are rejected. Authorization and cookies are removed when a
+        # redirect changes origin.
+        headers: nil,
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
+        tags: nil,
+        # Optional timeout in milliseconds for the request. If the request takes longer
+        # than this value, it will be aborted with a 408 status code. Maximum allowed
+        # value is 300000ms (5 minutes).
+        timeout_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Requires zero data retention to be enabled for your
+        # organization (contact support@context.dev), otherwise the request fails with
+        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
+        request_options: {}
+      )
+      end
+
       # Scrapes the given URL and returns the raw HTML content of the page. The base
       # request costs 1 credit; requests with browser actions cost 2 credits.
       sig do

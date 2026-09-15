@@ -179,6 +179,31 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     end
   end
 
+  def test_web_scrape_bytes_required_params
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.web.web_scrape_bytes(url: "https://example.com")
+
+    assert_pattern do
+      response => ContextDev::Models::WebWebScrapeBytesResponse
+    end
+
+    assert_pattern do
+      response => {
+        bytes: String,
+        content_length: Integer,
+        content_type: String,
+        encoding: ContextDev::Models::WebWebScrapeBytesResponse::Encoding,
+        final_url: String,
+        request_id: String,
+        status_code: Integer,
+        success: ContextDev::Models::WebWebScrapeBytesResponse::Success,
+        url: String,
+        key_metadata: ContextDev::Models::WebWebScrapeBytesResponse::KeyMetadata | nil
+      }
+    end
+  end
+
   def test_web_scrape_html_required_params
     skip("Mock server tests are disabled")
 

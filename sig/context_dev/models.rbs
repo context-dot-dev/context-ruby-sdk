@@ -93,6 +93,8 @@ module ContextDev
 
   class WebWebCrawlMdParams = ContextDev::Models::WebWebCrawlMdParams
 
+  class WebWebScrapeBytesParams = ContextDev::Models::WebWebScrapeBytesParams
+
   class WebWebScrapeHTMLParams = ContextDev::Models::WebWebScrapeHTMLParams
 
   class WebWebScrapeImagesParams = ContextDev::Models::WebWebScrapeImagesParams
