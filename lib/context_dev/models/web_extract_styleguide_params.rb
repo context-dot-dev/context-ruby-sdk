@@ -97,7 +97,7 @@ module ContextDev
         #   credits. "return-partial" returns usable results collected so far; if none are
         #   available, the request still fails without charging credits. Partial results are
         #   not cached as complete results. "return-partial" requires milliseconds of at
-        #   least 15000.
+        #   least 5000.
         #
         #   @return [Symbol, ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebExtractStyleguideParams::TimeoutOpts::Behavior }
@@ -118,7 +118,7 @@ module ContextDev
         # credits. "return-partial" returns usable results collected so far; if none are
         # available, the request still fails without charging credits. Partial results are
         # not cached as complete results. "return-partial" requires milliseconds of at
-        # least 15000.
+        # least 5000.
         #
         # @see ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts#behavior
         module Behavior

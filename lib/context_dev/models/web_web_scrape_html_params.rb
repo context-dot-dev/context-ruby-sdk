@@ -580,7 +580,7 @@ module ContextDev
         #   credits. "return-partial" returns usable results collected so far; if none are
         #   available, the request still fails without charging credits. Partial results are
         #   not cached as complete results. "return-partial" requires milliseconds of at
-        #   least 15000.
+        #   least 5000.
         #
         #   @return [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebWebScrapeHTMLParams::TimeoutOpts::Behavior }
@@ -601,7 +601,7 @@ module ContextDev
         # credits. "return-partial" returns usable results collected so far; if none are
         # available, the request still fails without charging credits. Partial results are
         # not cached as complete results. "return-partial" requires milliseconds of at
-        # least 15000.
+        # least 5000.
         #
         # @see ContextDev::Models::WebWebScrapeHTMLParams::TimeoutOpts#behavior
         module Behavior
