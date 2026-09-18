@@ -258,7 +258,16 @@ module ContextDev
         #   @return [String, nil]
         optional :url, String, nil?: true
 
-        # @!method initialize(description:, features:, images:, name:, sku:, tags:, target_audience:, availability: nil, billing_frequency: nil, category: nil, currency: nil, dimensions: nil, image_url: nil, price: nil, pricing_model: nil, regular_price: nil, url: nil)
+        # @!attribute variants
+        #   Product variations, such as different colors or sizes, with their attributes and
+        #   images. Empty if none are found. May not include every variation offered by the
+        #   store.
+        #
+        #   @return [Array<ContextDev::Models::AIExtractProductResponse::Product::Variant>, nil]
+        optional :variants,
+                 -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::AIExtractProductResponse::Product::Variant] }
+
+        # @!method initialize(description:, features:, images:, name:, sku:, tags:, target_audience:, availability: nil, billing_frequency: nil, category: nil, currency: nil, dimensions: nil, image_url: nil, price: nil, pricing_model: nil, regular_price: nil, url: nil, variants: nil)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::AIExtractProductResponse::Product} for more details.
         #
@@ -297,6 +306,8 @@ module ContextDev
         #   @param regular_price [Float, nil] Original or regular price before a displayed discount
         #
         #   @param url [String, nil] URL to the product page
+        #
+        #   @param variants [Array<ContextDev::Models::AIExtractProductResponse::Product::Variant>] Product variations, such as different colors or sizes, with their attributes and
 
         # Normalized stock or ordering availability
         #
@@ -345,6 +356,45 @@ module ContextDev
 
           # @!method self.values
           #   @return [Array<Symbol>]
+        end
+
+        class Variant < ContextDev::Internal::Type::BaseModel
+          # @!attribute attributes
+          #   Explicit variant attributes such as color, size, material, pattern and
+          #   properties declared by page.
+          #
+          #   @return [Hash{Symbol=>String}]
+          required :attributes, ContextDev::Internal::Type::HashOf[String]
+
+          # @!attribute images
+          #   Original source image URLs explicitly attached to this variant.
+          #
+          #   @return [Array<String>]
+          required :images, ContextDev::Internal::Type::ArrayOf[String]
+
+          # @!attribute sku
+          #
+          #   @return [String, nil]
+          required :sku, String, nil?: true
+
+          # @!attribute url
+          #   Variant or offer URL when provided by the source. May be shared by variants.
+          #
+          #   @return [String, nil]
+          required :url, String, nil?: true
+
+          # @!method initialize(attributes:, images:, sku:, url:)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::AIExtractProductResponse::Product::Variant} for more
+          #   details.
+          #
+          #   @param attributes [Hash{Symbol=>String}] Explicit variant attributes such as color, size, material, pattern and propertie
+          #
+          #   @param images [Array<String>] Original source image URLs explicitly attached to this variant.
+          #
+          #   @param sku [String, nil]
+          #
+          #   @param url [String, nil] Variant or offer URL when provided by the source. May be shared by variants.
         end
       end
     end

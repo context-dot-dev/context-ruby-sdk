@@ -138,7 +138,8 @@ module ContextDev
           price: Float?,
           pricing_model: ContextDev::Models::AIExtractProductResponse::Product::pricing_model?,
           regular_price: Float?,
-          url: String?
+          url: String?,
+          variants: ::Array[ContextDev::Models::AIExtractProductResponse::Product::Variant]
         }
 
       class Product < ContextDev::Internal::Type::BaseModel
@@ -178,6 +179,12 @@ module ContextDev
 
         attr_accessor url: String?
 
+        attr_reader variants: ::Array[ContextDev::Models::AIExtractProductResponse::Product::Variant]?
+
+        def variants=: (
+          ::Array[ContextDev::Models::AIExtractProductResponse::Product::Variant]
+        ) -> ::Array[ContextDev::Models::AIExtractProductResponse::Product::Variant]
+
         def initialize: (
           description: String,
           features: ::Array[String],
@@ -195,7 +202,8 @@ module ContextDev
           ?price: Float?,
           ?pricing_model: ContextDev::Models::AIExtractProductResponse::Product::pricing_model?,
           ?regular_price: Float?,
-          ?url: String?
+          ?url: String?,
+          ?variants: ::Array[ContextDev::Models::AIExtractProductResponse::Product::Variant]
         ) -> void
 
         def to_hash: -> {
@@ -215,7 +223,8 @@ module ContextDev
           price: Float?,
           pricing_model: ContextDev::Models::AIExtractProductResponse::Product::pricing_model?,
           regular_price: Float?,
-          url: String?
+          url: String?,
+          variants: ::Array[ContextDev::Models::AIExtractProductResponse::Product::Variant]
         }
 
         type availability =
@@ -266,6 +275,38 @@ module ContextDev
           CUSTOM: :custom
 
           def self?.values: -> ::Array[ContextDev::Models::AIExtractProductResponse::Product::pricing_model]
+        end
+
+        type variant =
+          {
+            attributes: ::Hash[Symbol, String],
+            images: ::Array[String],
+            sku: String?,
+            url: String?
+          }
+
+        class Variant < ContextDev::Internal::Type::BaseModel
+          attr_accessor attributes: ::Hash[Symbol, String]
+
+          attr_accessor images: ::Array[String]
+
+          attr_accessor sku: String?
+
+          attr_accessor url: String?
+
+          def initialize: (
+            attributes: ::Hash[Symbol, String],
+            images: ::Array[String],
+            sku: String?,
+            url: String?
+          ) -> void
+
+          def to_hash: -> {
+            attributes: ::Hash[Symbol, String],
+            images: ::Array[String],
+            sku: String?,
+            url: String?
+          }
         end
       end
     end
