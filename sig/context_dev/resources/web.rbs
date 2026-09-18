@@ -187,6 +187,23 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeMdResponse
 
+      def web_scrape_screenshot: (
+        url: String,
+        ?clear_popups: bool,
+        ?color_scheme: ContextDev::Models::WebWebScrapeScreenshotParams::color_scheme,
+        ?country: ContextDev::Models::WebWebScrapeScreenshotParams::country,
+        ?full_screenshot: ContextDev::Models::WebWebScrapeScreenshotParams::full_screenshot,
+        ?handle_cookie_popup: bool,
+        ?max_age_ms: Integer?,
+        ?scroll_offset: Integer?,
+        ?tags: ::Array[String],
+        ?timeout_opts: ContextDev::WebWebScrapeScreenshotParams::TimeoutOpts,
+        ?viewport: ContextDev::WebWebScrapeScreenshotParams::Viewport,
+        ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebWebScrapeScreenshotParams::zdr,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::WebWebScrapeScreenshotResponse
+
       def web_scrape_sitemap: (
         domain: String,
         ?headers: ::Hash[Symbol, String],

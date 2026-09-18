@@ -892,6 +892,91 @@ module ContextDev
       )
       end
 
+      # Capture the given HTTP or HTTPS URL with configurable viewport, full-page
+      # capture, wait time, popup handling, theme, scroll offset, cache age, country,
+      # and request timeout. Defaults to a 1920x1080 viewport, a 3-second wait, and a
+      # cache age of 1 day. With timeoutOpts.behavior=return-partial, a screenshot of
+      # the page rendered so far may be returned; inspect finalDOMState to identify an
+      # incomplete render. Successful requests cost 1 credit; errors are not billed.
+      sig do
+        params(
+          url: String,
+          clear_popups: T::Boolean,
+          color_scheme:
+            ContextDev::WebWebScrapeScreenshotParams::ColorScheme::OrSymbol,
+          country: ContextDev::WebWebScrapeScreenshotParams::Country::OrSymbol,
+          full_screenshot:
+            ContextDev::WebWebScrapeScreenshotParams::FullScreenshot::OrSymbol,
+          handle_cookie_popup: T::Boolean,
+          max_age_ms: T.nilable(Integer),
+          scroll_offset: T.nilable(Integer),
+          tags: T::Array[String],
+          timeout_opts:
+            ContextDev::WebWebScrapeScreenshotParams::TimeoutOpts::OrHash,
+          viewport: ContextDev::WebWebScrapeScreenshotParams::Viewport::OrHash,
+          wait_for_ms: T.nilable(Integer),
+          zdr: ContextDev::WebWebScrapeScreenshotParams::Zdr::OrSymbol,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebWebScrapeScreenshotResponse)
+      end
+      def web_scrape_screenshot(
+        url:,
+        # Optional parameter for comprehensive popup cleanup. If 'true', the browser
+        # dismisses detected cookie/consent UI and clears other detected obstructive
+        # popups and overlays before capture. If 'false' or not provided, this parameter
+        # requests no cleanup; handleCookiePopup can still request cookie/consent handling
+        # independently.
+        clear_popups: nil,
+        # Optional parameter to choose the site's visual theme in the screenshot. Use
+        # 'light' or 'dark' when the site offers both appearances.
+        color_scheme: nil,
+        # Fetch the target page through a residential proxy in this country (ISO 3166-1
+        # alpha-2).
+        country: nil,
+        # Optional parameter to determine screenshot type. If 'true', takes a full page
+        # screenshot capturing all content. If 'false' or not provided, takes a viewport
+        # screenshot (standard browser view).
+        full_screenshot: nil,
+        # Optional parameter to control cookie/consent popup handling. If 'true', we
+        # dismiss cookie banner before capture. If 'false' or not provided, captures the
+        # page without that step.
+        handle_cookie_popup: nil,
+        # Return a cached screenshot if a prior screenshot for the same parameters exists
+        # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+        # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
+        max_age_ms: nil,
+        # Optional vertical scroll offset in pixels for capturing a long page in
+        # viewport-sized chunks. When provided, the full page is captured once and the
+        # returned image is the viewport-sized slice that begins at this Y offset (e.g.
+        # request scrollOffset=0, then 1080, then 2160 to walk a 1920x1080 landing page
+        # top to bottom). The final slice may be shorter than the viewport height. Takes
+        # precedence over fullScreenshot. Max: 100000.
+        scroll_offset: nil,
+        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
+        # characters.
+        tags: nil,
+        # Optional request deadline and behavior on timeout. For GET requests, use
+        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
+        # timeoutOpts object.
+        timeout_opts: nil,
+        # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
+        viewport: nil,
+        # Optional browser wait time in milliseconds after initial page load before taking
+        # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
+        # omitted. When combined with timeoutOpts, timeoutOpts.milliseconds must be at
+        # least waitForMs + 10000 ms; a shorter deadline is rejected with 400
+        # TIMEOUT_TOO_SHORT_FOR_WAIT.
+        wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
+        request_options: {}
+      )
+      end
+
       # Crawl an entire website's sitemap and return all discovered page URLs. Set
       # `includeSubdomains=true` to also discover public pages and sitemaps on child
       # hosts such as `docs.example.com` or `brand.example.com`. Pass `search` to have

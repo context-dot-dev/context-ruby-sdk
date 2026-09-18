@@ -290,6 +290,29 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     end
   end
 
+  def test_web_scrape_screenshot_required_params
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.web.web_scrape_screenshot(url: "https://example.com")
+
+    assert_pattern do
+      response => ContextDev::Models::WebWebScrapeScreenshotResponse
+    end
+
+    assert_pattern do
+      response => {
+        cache_metadata: ContextDev::Models::WebWebScrapeScreenshotResponse::CacheMetadata,
+        height: Integer,
+        request_id: String,
+        screenshot: String,
+        url: String,
+        width: Integer,
+        final_dom_state: ContextDev::Models::WebWebScrapeScreenshotResponse::FinalDomState | nil,
+        key_metadata: ContextDev::Models::WebWebScrapeScreenshotResponse::KeyMetadata | nil
+      }
+    end
+  end
+
   def test_web_scrape_sitemap_required_params
     skip("Mock server tests are disabled")
 

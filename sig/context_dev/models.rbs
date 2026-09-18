@@ -101,5 +101,7 @@ module ContextDev
 
   class WebWebScrapeMdParams = ContextDev::Models::WebWebScrapeMdParams
 
+  class WebWebScrapeScreenshotParams = ContextDev::Models::WebWebScrapeScreenshotParams
+
   class WebWebScrapeSitemapParams = ContextDev::Models::WebWebScrapeSitemapParams
 end
