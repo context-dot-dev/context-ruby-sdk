@@ -669,6 +669,70 @@ module ContextDev
       end
 
       # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebWebScrapeScreenshotParams} for more details.
+      #
+      # Capture the given HTTP or HTTPS URL with configurable viewport, full-page
+      # capture, wait time, popup handling, theme, scroll offset, cache age, country,
+      # and request timeout. Defaults to a 1920x1080 viewport, a 3-second wait, and a
+      # cache age of 1 day. With timeoutOpts.behavior=return-partial, a screenshot of
+      # the page rendered so far may be returned; inspect finalDOMState to identify an
+      # incomplete render. Successful requests cost 1 credit; errors are not billed.
+      #
+      # @overload web_scrape_screenshot(url:, clear_popups: nil, color_scheme: nil, country: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      #
+      # @param url [String]
+      #
+      # @param clear_popups [Boolean] Optional parameter for comprehensive popup cleanup. If 'true', the browser dismi
+      #
+      # @param color_scheme [Symbol, ContextDev::Models::WebWebScrapeScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
+      #
+      # @param country [Symbol, ContextDev::Models::WebWebScrapeScreenshotParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
+      #
+      # @param full_screenshot [Symbol, ContextDev::Models::WebWebScrapeScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
+      #
+      # @param handle_cookie_popup [Boolean] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
+      #
+      # @param max_age_ms [Integer, nil] Return a cached screenshot if a prior screenshot for the same parameters exists
+      #
+      # @param scroll_offset [Integer, nil] Optional vertical scroll offset in pixels for capturing a long page in viewport-
+      #
+      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
+      #
+      # @param timeout_opts [ContextDev::Models::WebWebScrapeScreenshotParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #
+      # @param viewport [ContextDev::Models::WebWebScrapeScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
+      #
+      # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before taking
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebWebScrapeScreenshotParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::WebWebScrapeScreenshotResponse]
+      #
+      # @see ContextDev::Models::WebWebScrapeScreenshotParams
+      def web_scrape_screenshot(params)
+        parsed, options = ContextDev::WebWebScrapeScreenshotParams.dump_request(params)
+        query = ContextDev::Internal::Util.encode_query_params(parsed)
+        @client.request(
+          method: :get,
+          path: "web/scrape/screenshot",
+          query: query.transform_keys(
+            clear_popups: "clearPopups",
+            color_scheme: "colorScheme",
+            full_screenshot: "fullScreenshot",
+            handle_cookie_popup: "handleCookiePopup",
+            max_age_ms: "maxAgeMs",
+            scroll_offset: "scrollOffset",
+            timeout_opts: "timeoutOpts",
+            wait_for_ms: "waitForMs"
+          ),
+          model: ContextDev::Models::WebWebScrapeScreenshotResponse,
+          options: options
+        )
+      end
+
+      # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebWebScrapeSitemapParams} for more details.
       #
       # Crawl an entire website's sitemap and return all discovered page URLs. Set
