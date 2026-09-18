@@ -6,7 +6,8 @@ module ContextDev
         max_results: Integer,
         min_results: Integer,
         tags: ::Array[String],
-        timeout_opts: ContextDev::IndustryRetrieveNaicsParams::TimeoutOpts
+        timeout_opts: ContextDev::IndustryRetrieveNaicsParams::TimeoutOpts,
+        zdr: ContextDev::Models::IndustryRetrieveNaicsParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -34,12 +35,19 @@ module ContextDev
         ContextDev::IndustryRetrieveNaicsParams::TimeoutOpts
       ) -> ContextDev::IndustryRetrieveNaicsParams::TimeoutOpts
 
+      attr_reader zdr: ContextDev::Models::IndustryRetrieveNaicsParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::IndustryRetrieveNaicsParams::zdr
+      ) -> ContextDev::Models::IndustryRetrieveNaicsParams::zdr
+
       def initialize: (
         input: String,
         ?max_results: Integer,
         ?min_results: Integer,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::IndustryRetrieveNaicsParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::IndustryRetrieveNaicsParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -49,6 +57,7 @@ module ContextDev
         min_results: Integer,
         tags: ::Array[String],
         timeout_opts: ContextDev::IndustryRetrieveNaicsParams::TimeoutOpts,
+        zdr: ContextDev::Models::IndustryRetrieveNaicsParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -87,6 +96,17 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::IndustryRetrieveNaicsParams::TimeoutOpts::behavior]
         end
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::IndustryRetrieveNaicsParams::zdr]
       end
     end
   end

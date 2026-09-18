@@ -12,6 +12,7 @@ module ContextDev
           tags: T::Array[String],
           timeout_opts:
             ContextDev::IndustryRetrieveNaicsParams::TimeoutOpts::OrHash,
+          zdr: ContextDev::IndustryRetrieveNaicsParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::IndustryRetrieveNaicsResponse)
       end
@@ -32,6 +33,12 @@ module ContextDev
         # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
         # timeoutOpts object.
         timeout_opts: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -48,6 +55,7 @@ module ContextDev
           timeout_opts:
             ContextDev::IndustryRetrieveSicParams::TimeoutOpts::OrHash,
           type: ContextDev::IndustryRetrieveSicParams::Type::OrSymbol,
+          zdr: ContextDev::IndustryRetrieveSicParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::IndustryRetrieveSicResponse)
       end
@@ -71,6 +79,12 @@ module ContextDev
         # Industrial Classification system; `latest_sec` uses the current SIC list as
         # published by the SEC. Defaults to `original_sic`.
         type: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end

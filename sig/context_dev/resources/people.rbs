@@ -10,6 +10,7 @@ module ContextDev
         ?social_urls: ::Array[String],
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::PersonEnrichParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::PersonEnrichParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::PersonEnrichResponse
 

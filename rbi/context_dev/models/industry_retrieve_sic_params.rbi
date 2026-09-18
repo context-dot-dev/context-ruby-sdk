@@ -73,6 +73,21 @@ module ContextDev
       end
       attr_writer :type
 
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      # omitted. Requires zero data retention to be enabled for your organization
+      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      # Successful ZDR responses include X-Context-ZDR: true.
+      sig do
+        returns(T.nilable(ContextDev::IndustryRetrieveSicParams::Zdr::OrSymbol))
+      end
+      attr_reader :zdr
+
+      sig do
+        params(zdr: ContextDev::IndustryRetrieveSicParams::Zdr::OrSymbol).void
+      end
+      attr_writer :zdr
+
       sig do
         params(
           input: String,
@@ -82,6 +97,7 @@ module ContextDev
           timeout_opts:
             ContextDev::IndustryRetrieveSicParams::TimeoutOpts::OrHash,
           type: ContextDev::IndustryRetrieveSicParams::Type::OrSymbol,
+          zdr: ContextDev::IndustryRetrieveSicParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -105,6 +121,12 @@ module ContextDev
         # Industrial Classification system; `latest_sec` uses the current SIC list as
         # published by the SEC. Defaults to `original_sic`.
         type: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -118,6 +140,7 @@ module ContextDev
             tags: T::Array[String],
             timeout_opts: ContextDev::IndustryRetrieveSicParams::TimeoutOpts,
             type: ContextDev::IndustryRetrieveSicParams::Type::OrSymbol,
+            zdr: ContextDev::IndustryRetrieveSicParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
           }
         )
@@ -257,6 +280,40 @@ module ContextDev
         sig do
           override.returns(
             T::Array[ContextDev::IndustryRetrieveSicParams::Type::TaggedSymbol]
+          )
+        end
+        def self.values
+        end
+      end
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      # omitted. Requires zero data retention to be enabled for your organization
+      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      # Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::IndustryRetrieveSicParams::Zdr)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        ENABLED =
+          T.let(
+            :enabled,
+            ContextDev::IndustryRetrieveSicParams::Zdr::TaggedSymbol
+          )
+        DISABLED =
+          T.let(
+            :disabled,
+            ContextDev::IndustryRetrieveSicParams::Zdr::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::IndustryRetrieveSicParams::Zdr::TaggedSymbol]
           )
         end
         def self.values

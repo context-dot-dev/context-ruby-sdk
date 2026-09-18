@@ -74,9 +74,10 @@ module ContextDev
 
       # @!attribute zdr
       #   Set to enabled to bypass shared caches and omit request and response content
-      #   from retained usage logs. Requires zero data retention to be enabled for your
-      #   organization (contact support@context.dev), otherwise the request fails with
-      #   ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      #   from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      #   omitted. Requires zero data retention to be enabled for your organization
+      #   (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      #   Successful ZDR responses include X-Context-ZDR: true.
       #
       #   @return [Symbol, ContextDev::Models::ParseHandleParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::ParseHandleParams::Zdr }
@@ -215,9 +216,10 @@ module ContextDev
       end
 
       # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Requires zero data retention to be enabled for your
-      # organization (contact support@context.dev), otherwise the request fails with
-      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      # omitted. Requires zero data retention to be enabled for your organization
+      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      # Successful ZDR responses include X-Context-ZDR: true.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

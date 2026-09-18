@@ -5,7 +5,8 @@ module ContextDev
         domain: String,
         num_competitors: Integer,
         tags: ::Array[String],
-        timeout_opts: ContextDev::WebExtractCompetitorsParams::TimeoutOpts
+        timeout_opts: ContextDev::WebExtractCompetitorsParams::TimeoutOpts,
+        zdr: ContextDev::Models::WebExtractCompetitorsParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -29,11 +30,18 @@ module ContextDev
         ContextDev::WebExtractCompetitorsParams::TimeoutOpts
       ) -> ContextDev::WebExtractCompetitorsParams::TimeoutOpts
 
+      attr_reader zdr: ContextDev::Models::WebExtractCompetitorsParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebExtractCompetitorsParams::zdr
+      ) -> ContextDev::Models::WebExtractCompetitorsParams::zdr
+
       def initialize: (
         domain: String,
         ?num_competitors: Integer,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebExtractCompetitorsParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::WebExtractCompetitorsParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -42,6 +50,7 @@ module ContextDev
         num_competitors: Integer,
         tags: ::Array[String],
         timeout_opts: ContextDev::WebExtractCompetitorsParams::TimeoutOpts,
+        zdr: ContextDev::Models::WebExtractCompetitorsParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -80,6 +89,17 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts::behavior]
         end
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebExtractCompetitorsParams::zdr]
       end
     end
   end

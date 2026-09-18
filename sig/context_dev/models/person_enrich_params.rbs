@@ -9,7 +9,8 @@ module ContextDev
         name: ContextDev::PersonEnrichParams::Name,
         social_urls: ::Array[String],
         tags: ::Array[String],
-        timeout_opts: ContextDev::PersonEnrichParams::TimeoutOpts
+        timeout_opts: ContextDev::PersonEnrichParams::TimeoutOpts,
+        zdr: ContextDev::Models::PersonEnrichParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -59,6 +60,12 @@ module ContextDev
         ContextDev::PersonEnrichParams::TimeoutOpts
       ) -> ContextDev::PersonEnrichParams::TimeoutOpts
 
+      attr_reader zdr: ContextDev::Models::PersonEnrichParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::PersonEnrichParams::zdr
+      ) -> ContextDev::Models::PersonEnrichParams::zdr
+
       def initialize: (
         ?company: ContextDev::PersonEnrichParams::Company,
         ?education: ::Array[ContextDev::PersonEnrichParams::Education],
@@ -68,6 +75,7 @@ module ContextDev
         ?social_urls: ::Array[String],
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::PersonEnrichParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::PersonEnrichParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -80,6 +88,7 @@ module ContextDev
         social_urls: ::Array[String],
         tags: ::Array[String],
         timeout_opts: ContextDev::PersonEnrichParams::TimeoutOpts,
+        zdr: ContextDev::Models::PersonEnrichParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -232,6 +241,17 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::PersonEnrichParams::TimeoutOpts::behavior]
         end
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::PersonEnrichParams::zdr]
       end
     end
   end

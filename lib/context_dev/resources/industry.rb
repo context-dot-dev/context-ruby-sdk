@@ -8,7 +8,7 @@ module ContextDev
       #
       # Classify any brand into 2022 NAICS industry codes from its domain or name.
       #
-      # @overload retrieve_naics(input:, max_results: nil, min_results: nil, tags: nil, timeout_opts: nil, request_options: {})
+      # @overload retrieve_naics(input:, max_results: nil, min_results: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param input [String] Brand domain or title to retrieve NAICS code for. If a valid domain is provided,
       #
@@ -19,6 +19,8 @@ module ContextDev
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_opts [ContextDev::Models::IndustryRetrieveNaicsParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #
+      # @param zdr [Symbol, ContextDev::Models::IndustryRetrieveNaicsParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -48,7 +50,7 @@ module ContextDev
       # domain or name. Choose between the original SIC system (`original_sic`) or the
       # latest SIC list maintained by the SEC (`latest_sec`).
       #
-      # @overload retrieve_sic(input:, max_results: nil, min_results: nil, tags: nil, timeout_opts: nil, type: nil, request_options: {})
+      # @overload retrieve_sic(input:, max_results: nil, min_results: nil, tags: nil, timeout_opts: nil, type: nil, zdr: nil, request_options: {})
       #
       # @param input [String] Brand domain or title to retrieve SIC code for. If a valid domain is provided, i
       #
@@ -61,6 +63,8 @@ module ContextDev
       # @param timeout_opts [ContextDev::Models::IndustryRetrieveSicParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param type [Symbol, ContextDev::Models::IndustryRetrieveSicParams::Type] Which SIC dataset to classify against. `original_sic` uses the 1987 Standard Ind
+      #
+      # @param zdr [Symbol, ContextDev::Models::IndustryRetrieveSicParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

@@ -12,7 +12,7 @@ module ContextDev
       # 30 seconds and ultra to 50 seconds; timeoutOpts.milliseconds can shorten either
       # deadline.
       #
-      # @overload answers(task:, json_format: nil, mode: nil, tags: nil, timeout_opts: nil, request_options: {})
+      # @overload answers(task:, json_format: nil, mode: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param task [String] What to research and answer, in plain language. Naming a domain in the task (for
       #
@@ -23,6 +23,8 @@ module ContextDev
       # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       # @param timeout_opts [ContextDev::Models::WebAnswersParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebAnswersParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -46,7 +48,7 @@ module ContextDev
       # Crawl a website, use the provided JSON Schema and instructions to prioritize
       # relevant internal links, and extract structured data from the selected pages.
       #
-      # @overload extract(schema:, url:, actions: nil, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, request_options: {})
+      # @overload extract(schema:, url:, actions: nil, fact_check: nil, follow_subdomains: nil, include_frames: nil, instructions: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, stop_after_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param schema [Hash{Symbol=>Object}] JSON Schema for the returned data object. Image fields such as `image_urls` or `
       #
@@ -80,6 +82,8 @@ module ContextDev
       #
       # @param wait_for_ms [Integer] Optional browser wait time in milliseconds after initial page load for each craw
       #
+      # @param zdr [Symbol, ContextDev::Models::WebExtractParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
       # @return [ContextDev::Models::WebExtractResponse]
@@ -102,7 +106,7 @@ module ContextDev
       # Analyze a company's landing page and web search evidence to return direct
       # competitors for the same product or market.
       #
-      # @overload extract_competitors(domain:, num_competitors: nil, tags: nil, timeout_opts: nil, request_options: {})
+      # @overload extract_competitors(domain:, num_competitors: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param domain [String] Company domain to analyze, such as `stripe.com`. Full http(s) URLs are accepted
       #
@@ -111,6 +115,8 @@ module ContextDev
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_opts [ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebExtractCompetitorsParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -174,7 +180,7 @@ module ContextDev
       # Extract a comprehensive design system from a website including colors,
       # typography, spacing, shadows, and UI components.
       #
-      # @overload extract_styleguide(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, request_options: {})
+      # @overload extract_styleguide(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param color_scheme [Symbol, ContextDev::Models::WebExtractStyleguideParams::ColorScheme] Optional browser color scheme to emulate for websites that respond to prefers-co
       #
@@ -187,6 +193,8 @@ module ContextDev
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_opts [ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebExtractStyleguideParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -279,7 +287,7 @@ module ContextDev
       #
       # Search the web and optionally scrape each result to Markdown in one round-trip.
       #
-      # @overload search(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_opts: nil, request_options: {})
+      # @overload search(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param query [String] Search query. Accepts natural language as well as Google-style search operators
       #
@@ -300,6 +308,8 @@ module ContextDev
       # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       # @param timeout_opts [ContextDev::Models::WebSearchParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebSearchParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -512,7 +522,7 @@ module ContextDev
       # enrichment is enabled, the entire call costs 5 credits, including requests that
       # also use actions.
       #
-      # @overload web_scrape_images(url:, actions: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, request_options: {})
+      # @overload web_scrape_images(url:, actions: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Page URL to inspect. Must include http:// or https://.
       #
@@ -531,6 +541,8 @@ module ContextDev
       # @param timeout_opts [ContextDev::Models::WebWebScrapeImagesParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       # @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before collec
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebWebScrapeImagesParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
