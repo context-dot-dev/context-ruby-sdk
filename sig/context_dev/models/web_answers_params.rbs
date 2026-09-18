@@ -6,7 +6,8 @@ module ContextDev
         json_format: ::Hash[Symbol, top],
         mode: ContextDev::Models::WebAnswersParams::mode,
         tags: ::Array[String],
-        timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts
+        timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts,
+        zdr: ContextDev::Models::WebAnswersParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -36,12 +37,19 @@ module ContextDev
         ContextDev::WebAnswersParams::TimeoutOpts
       ) -> ContextDev::WebAnswersParams::TimeoutOpts
 
+      attr_reader zdr: ContextDev::Models::WebAnswersParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebAnswersParams::zdr
+      ) -> ContextDev::Models::WebAnswersParams::zdr
+
       def initialize: (
         task: String,
         ?json_format: ::Hash[Symbol, top],
         ?mode: ContextDev::Models::WebAnswersParams::mode,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::WebAnswersParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -51,6 +59,7 @@ module ContextDev
         mode: ContextDev::Models::WebAnswersParams::mode,
         tags: ::Array[String],
         timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts,
+        zdr: ContextDev::Models::WebAnswersParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -100,6 +109,17 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::WebAnswersParams::TimeoutOpts::behavior]
         end
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebAnswersParams::zdr]
       end
     end
   end

@@ -10,7 +10,8 @@ module ContextDev
         max_age_ms: Integer?,
         tags: ::Array[String],
         timeout_opts: ContextDev::WebWebScrapeImagesParams::TimeoutOpts,
-        wait_for_ms: Integer?
+        wait_for_ms: Integer?,
+        zdr: ContextDev::Models::WebWebScrapeImagesParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -46,6 +47,12 @@ module ContextDev
 
       attr_accessor wait_for_ms: Integer?
 
+      attr_reader zdr: ContextDev::Models::WebWebScrapeImagesParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebWebScrapeImagesParams::zdr
+      ) -> ContextDev::Models::WebWebScrapeImagesParams::zdr
+
       def initialize: (
         url: String,
         ?actions: ::Array[ContextDev::Models::WebWebScrapeImagesParams::action]?,
@@ -56,6 +63,7 @@ module ContextDev
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebWebScrapeImagesParams::TimeoutOpts,
         ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebWebScrapeImagesParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -69,6 +77,7 @@ module ContextDev
         tags: ::Array[String],
         timeout_opts: ContextDev::WebWebScrapeImagesParams::TimeoutOpts,
         wait_for_ms: Integer?,
+        zdr: ContextDev::Models::WebWebScrapeImagesParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -255,6 +264,17 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeImagesParams::TimeoutOpts::behavior]
         end
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeImagesParams::zdr]
       end
     end
   end

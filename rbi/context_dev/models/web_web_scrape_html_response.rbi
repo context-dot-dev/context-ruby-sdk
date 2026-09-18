@@ -115,6 +115,37 @@ module ContextDev
       sig { params(actions_html_stale: T::Boolean).void }
       attr_writer :actions_html_stale
 
+      # Present only when extractRules is supplied. Keys match the requested fields.
+      # Values are normalized text, raw attribute strings, outer HTML, nested objects,
+      # or lists. Missing items are null; lists with no matches are empty. Rules run on
+      # the returned HTML after filtering.
+      sig do
+        returns(
+          T.nilable(
+            T::Hash[
+              Symbol,
+              T.nilable(
+                ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::Variants
+              )
+            ]
+          )
+        )
+      end
+      attr_reader :extracted
+
+      sig do
+        params(
+          extracted:
+            T::Hash[
+              Symbol,
+              T.nilable(
+                ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::Variants
+              )
+            ]
+        ).void
+      end
+      attr_writer :extracted
+
       # Credit usage, included whenever a valid API key is provided.
       sig do
         returns(
@@ -150,6 +181,13 @@ module ContextDev
               ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied::OrHash
             ],
           actions_html_stale: T::Boolean,
+          extracted:
+            T::Hash[
+              Symbol,
+              T.nilable(
+                ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::Variants
+              )
+            ],
           key_metadata:
             ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata::OrHash
         ).returns(T.attached_class)
@@ -188,6 +226,11 @@ module ContextDev
         # True when an action was applied but the returned content could not be refreshed
         # afterward.
         actions_html_stale: nil,
+        # Present only when extractRules is supplied. Keys match the requested fields.
+        # Values are normalized text, raw attribute strings, outer HTML, nested objects,
+        # or lists. Missing items are null; lists with no matches are empty. Rules run on
+        # the returned HTML after filtering.
+        extracted: nil,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil
       )
@@ -213,6 +256,13 @@ module ContextDev
                 ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied
               ],
             actions_html_stale: T::Boolean,
+            extracted:
+              T::Hash[
+                Symbol,
+                T.nilable(
+                  ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::Variants
+                )
+              ],
             key_metadata:
               ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata
           }
@@ -1138,6 +1188,59 @@ module ContextDev
           def self.values
           end
         end
+      end
+
+      module Extracted
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              String,
+              T.anything,
+              T::Array[
+                T.nilable(
+                  ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::UnionMember2::Variants
+                )
+              ]
+            )
+          end
+
+        module UnionMember2
+          extend ContextDev::Internal::Type::Union
+
+          Variants = T.type_alias { T.any(String, T.anything) }
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::UnionMember2::Variants
+              ]
+            )
+          end
+          def self.variants
+          end
+        end
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::Variants
+            ]
+          )
+        end
+        def self.variants
+        end
+
+        UnionMember2Array =
+          T.let(
+            ContextDev::Internal::Type::ArrayOf[
+              union:
+                ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::UnionMember2,
+              nil?: true
+            ],
+            ContextDev::Internal::Type::Converter
+          )
       end
 
       class KeyMetadata < ContextDev::Internal::Type::BaseModel

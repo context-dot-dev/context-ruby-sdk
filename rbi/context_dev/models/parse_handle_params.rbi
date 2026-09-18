@@ -90,9 +90,10 @@ module ContextDev
       attr_writer :use_main_content_only
 
       # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Requires zero data retention to be enabled for your
-      # organization (contact support@context.dev), otherwise the request fails with
-      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      # omitted. Requires zero data retention to be enabled for your organization
+      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      # Successful ZDR responses include X-Context-ZDR: true.
       sig { returns(T.nilable(ContextDev::ParseHandleParams::Zdr::OrSymbol)) }
       attr_reader :zdr
 
@@ -142,9 +143,10 @@ module ContextDev
         # Extract only the main content from HTML-like inputs
         use_main_content_only: nil,
         # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Requires zero data retention to be enabled for your
-        # organization (contact support@context.dev), otherwise the request fails with
-        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
         zdr: nil,
         request_options: {}
       )
@@ -370,9 +372,10 @@ module ContextDev
       end
 
       # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Requires zero data retention to be enabled for your
-      # organization (contact support@context.dev), otherwise the request fails with
-      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      # omitted. Requires zero data retention to be enabled for your organization
+      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      # Successful ZDR responses include X-Context-ZDR: true.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

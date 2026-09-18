@@ -6,6 +6,7 @@ module ContextDev
         actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?,
         country: ContextDev::Models::WebWebScrapeHTMLParams::country,
         exclude_selectors: ::Array[String]?,
+        extract_rules: ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLParams::extract_rule],
         headers: ::Hash[Symbol, String],
         include_frames: bool,
         include_selectors: ::Array[String]?,
@@ -35,6 +36,12 @@ module ContextDev
       ) -> ContextDev::Models::WebWebScrapeHTMLParams::country
 
       attr_accessor exclude_selectors: ::Array[String]?
+
+      attr_reader extract_rules: ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLParams::extract_rule]?
+
+      def extract_rules=: (
+        ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLParams::extract_rule]
+      ) -> ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLParams::extract_rule]
 
       attr_reader headers: ::Hash[Symbol, String]?
 
@@ -85,6 +92,7 @@ module ContextDev
         ?actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?,
         ?country: ContextDev::Models::WebWebScrapeHTMLParams::country,
         ?exclude_selectors: ::Array[String]?,
+        ?extract_rules: ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLParams::extract_rule],
         ?headers: ::Hash[Symbol, String],
         ?include_frames: bool,
         ?include_selectors: ::Array[String]?,
@@ -104,6 +112,7 @@ module ContextDev
         actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?,
         country: ContextDev::Models::WebWebScrapeHTMLParams::country,
         exclude_selectors: ::Array[String]?,
+        extract_rules: ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLParams::extract_rule],
         headers: ::Hash[Symbol, String],
         include_frames: bool,
         include_selectors: ::Array[String]?,
@@ -641,6 +650,145 @@ module ContextDev
         ZW: :zw
 
         def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::country]
+      end
+
+      type extract_rule =
+        String | ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1
+
+      module ExtractRule
+        extend ContextDev::Internal::Type::Union
+
+        type union_member1 =
+          {
+            selector: String,
+            output: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::output,
+            type: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::type_
+          }
+
+        class UnionMember1 < ContextDev::Internal::Type::BaseModel
+          attr_accessor selector: String
+
+          attr_reader output: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::output?
+
+          def output=: (
+            ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::output
+          ) -> ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::output
+
+          attr_reader type: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::type_?
+
+          def type=: (
+            ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::type_
+          ) -> ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::type_
+
+          def initialize: (
+            selector: String,
+            ?output: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::output,
+            ?type: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::type_
+          ) -> void
+
+          def to_hash: -> {
+            selector: String,
+            output: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::output,
+            type: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::type_
+          }
+
+          type output =
+            :text
+            | :html
+            | String
+            | ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::html_extraction_rule]
+
+          module Output
+            extend ContextDev::Internal::Type::Union
+
+            type html_extraction_rule =
+              String
+              | ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1
+
+            module HTMLExtractionRule
+              extend ContextDev::Internal::Type::Union
+
+              type union_member1 =
+                {
+                  selector: String,
+                  output: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::output,
+                  type: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::type_
+                }
+
+              class UnionMember1 < ContextDev::Internal::Type::BaseModel
+                attr_accessor selector: String
+
+                attr_reader output: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::output?
+
+                def output=: (
+                  ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::output
+                ) -> ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::output
+
+                attr_reader type: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::type_?
+
+                def type=: (
+                  ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::type_
+                ) -> ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::type_
+
+                def initialize: (
+                  selector: String,
+                  ?output: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::output,
+                  ?type: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::type_
+                ) -> void
+
+                def to_hash: -> {
+                  selector: String,
+                  output: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::output,
+                  type: ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::type_
+                }
+
+                type output = :text | :html | String | top
+
+                module Output
+                  extend ContextDev::Internal::Type::Union
+
+                  def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::output]
+
+                  TEXT: :text
+                  HTML: :html
+                end
+
+                type type_ = :item | :list
+
+                module Type
+                  extend ContextDev::Internal::Type::Enum
+
+                  ITEM: :item
+                  LIST: :list
+
+                  def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::type_]
+                end
+              end
+
+              def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::html_extraction_rule]
+            end
+
+            def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::output]
+
+            TEXT: :text
+            HTML: :html
+
+            HTMLExtractionRuleMap: ContextDev::Internal::Type::Converter
+          end
+
+          type type_ = :item | :list
+
+          module Type
+            extend ContextDev::Internal::Type::Enum
+
+            ITEM: :item
+            LIST: :list
+
+            def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::type_]
+          end
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLParams::extract_rule]
       end
 
       type pdf =

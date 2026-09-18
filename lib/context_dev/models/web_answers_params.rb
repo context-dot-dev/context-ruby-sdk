@@ -46,7 +46,17 @@ module ContextDev
       #   @return [ContextDev::Models::WebAnswersParams::TimeoutOpts, nil]
       optional :timeout_opts, -> { ContextDev::WebAnswersParams::TimeoutOpts }, api_name: :timeoutOpts
 
-      # @!method initialize(task:, json_format: nil, mode: nil, tags: nil, timeout_opts: nil, request_options: {})
+      # @!attribute zdr
+      #   Set to enabled to bypass shared caches and omit request and response content
+      #   from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      #   omitted. Requires zero data retention to be enabled for your organization
+      #   (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      #   Successful ZDR responses include X-Context-ZDR: true.
+      #
+      #   @return [Symbol, ContextDev::Models::WebAnswersParams::Zdr, nil]
+      optional :zdr, enum: -> { ContextDev::WebAnswersParams::Zdr }
+
+      # @!method initialize(task:, json_format: nil, mode: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebAnswersParams} for more details.
       #
@@ -59,6 +69,8 @@ module ContextDev
       #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
       #
       #   @param timeout_opts [ContextDev::Models::WebAnswersParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #
+      #   @param zdr [Symbol, ContextDev::Models::WebAnswersParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -118,6 +130,21 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      # omitted. Requires zero data retention to be enabled for your organization
+      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      # Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED = :enabled
+        DISABLED = :disabled
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
     end
   end

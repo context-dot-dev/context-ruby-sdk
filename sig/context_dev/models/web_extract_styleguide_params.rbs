@@ -7,7 +7,8 @@ module ContextDev
         domain: String,
         max_age_ms: Integer?,
         tags: ::Array[String],
-        timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts
+        timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts,
+        zdr: ContextDev::Models::WebExtractStyleguideParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -41,6 +42,12 @@ module ContextDev
         ContextDev::WebExtractStyleguideParams::TimeoutOpts
       ) -> ContextDev::WebExtractStyleguideParams::TimeoutOpts
 
+      attr_reader zdr: ContextDev::Models::WebExtractStyleguideParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebExtractStyleguideParams::zdr
+      ) -> ContextDev::Models::WebExtractStyleguideParams::zdr
+
       def initialize: (
         ?color_scheme: ContextDev::Models::WebExtractStyleguideParams::color_scheme,
         ?direct_url: String,
@@ -48,6 +55,7 @@ module ContextDev
         ?max_age_ms: Integer?,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::WebExtractStyleguideParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -58,6 +66,7 @@ module ContextDev
         max_age_ms: Integer?,
         tags: ::Array[String],
         timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts,
+        zdr: ContextDev::Models::WebExtractStyleguideParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -107,6 +116,17 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::behavior]
         end
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebExtractStyleguideParams::zdr]
       end
     end
   end

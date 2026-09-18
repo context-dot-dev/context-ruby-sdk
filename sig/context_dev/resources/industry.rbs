@@ -7,6 +7,7 @@ module ContextDev
         ?min_results: Integer,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::IndustryRetrieveNaicsParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::IndustryRetrieveNaicsParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::IndustryRetrieveNaicsResponse
 
@@ -17,6 +18,7 @@ module ContextDev
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::IndustryRetrieveSicParams::TimeoutOpts,
         ?type: ContextDev::Models::IndustryRetrieveSicParams::type_,
+        ?zdr: ContextDev::Models::IndustryRetrieveSicParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::IndustryRetrieveSicResponse
 

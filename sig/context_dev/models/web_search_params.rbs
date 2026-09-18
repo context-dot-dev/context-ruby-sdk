@@ -11,7 +11,8 @@ module ContextDev
         num_results: Integer,
         query_fanout: bool,
         tags: ::Array[String],
-        timeout_opts: ContextDev::WebSearchParams::TimeoutOpts
+        timeout_opts: ContextDev::WebSearchParams::TimeoutOpts,
+        zdr: ContextDev::Models::WebSearchParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -65,6 +66,12 @@ module ContextDev
         ContextDev::WebSearchParams::TimeoutOpts
       ) -> ContextDev::WebSearchParams::TimeoutOpts
 
+      attr_reader zdr: ContextDev::Models::WebSearchParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebSearchParams::zdr
+      ) -> ContextDev::Models::WebSearchParams::zdr
+
       def initialize: (
         query: String,
         ?country: ContextDev::Models::WebSearchParams::country,
@@ -76,6 +83,7 @@ module ContextDev
         ?query_fanout: bool,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebSearchParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::WebSearchParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -90,6 +98,7 @@ module ContextDev
         query_fanout: bool,
         tags: ::Array[String],
         timeout_opts: ContextDev::WebSearchParams::TimeoutOpts,
+        zdr: ContextDev::Models::WebSearchParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -775,6 +784,17 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::WebSearchParams::TimeoutOpts::behavior]
         end
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebSearchParams::zdr]
       end
     end
   end

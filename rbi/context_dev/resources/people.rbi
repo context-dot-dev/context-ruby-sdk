@@ -18,6 +18,7 @@ module ContextDev
           social_urls: T::Array[String],
           tags: T::Array[String],
           timeout_opts: ContextDev::PersonEnrichParams::TimeoutOpts::OrHash,
+          zdr: ContextDev::PersonEnrichParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::PersonEnrichResponse)
       end
@@ -34,6 +35,12 @@ module ContextDev
         # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
         # timeoutOpts object.
         timeout_opts: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end

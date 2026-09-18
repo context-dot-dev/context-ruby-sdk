@@ -80,7 +80,17 @@ module ContextDev
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, nil?: true
 
-      # @!method initialize(url:, actions: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, request_options: {})
+      # @!attribute zdr
+      #   Set to enabled to bypass shared caches and omit request and response content
+      #   from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      #   omitted. Requires zero data retention to be enabled for your organization
+      #   (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      #   Successful ZDR responses include X-Context-ZDR: true.
+      #
+      #   @return [Symbol, ContextDev::Models::WebWebScrapeImagesParams::Zdr, nil]
+      optional :zdr, enum: -> { ContextDev::WebWebScrapeImagesParams::Zdr }
+
+      # @!method initialize(url:, actions: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeImagesParams} for more details.
       #
@@ -101,6 +111,8 @@ module ContextDev
       #   @param timeout_opts [ContextDev::Models::WebWebScrapeImagesParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
       #
       #   @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before collec
+      #
+      #   @param zdr [Symbol, ContextDev::Models::WebWebScrapeImagesParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -262,7 +274,7 @@ module ContextDev
 
         # @!attribute hosted_url
         #   Host materializable images on the Brand.dev CDN and return their URL and MIME
-        #   type.
+        #   type. Ignored when zero data retention is enabled.
         #
         #   @return [Boolean, nil]
         optional :hosted_url, ContextDev::Internal::Type::Boolean, api_name: :hostedUrl
@@ -340,6 +352,21 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      # omitted. Requires zero data retention to be enabled for your organization
+      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      # Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED = :enabled
+        DISABLED = :disabled
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
     end
   end

@@ -7,6 +7,7 @@ module ContextDev
         ?mode: ContextDev::Models::WebAnswersParams::mode,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::WebAnswersParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebAnswersResponse
 
@@ -27,6 +28,7 @@ module ContextDev
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebExtractParams::TimeoutOpts,
         ?wait_for_ms: Integer,
+        ?zdr: ContextDev::Models::WebExtractParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractResponse
 
@@ -35,6 +37,7 @@ module ContextDev
         ?num_competitors: Integer,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebExtractCompetitorsParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::WebExtractCompetitorsParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractCompetitorsResponse
 
@@ -54,6 +57,7 @@ module ContextDev
         ?max_age_ms: Integer?,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::WebExtractStyleguideParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractStyleguideResponse
 
@@ -87,6 +91,7 @@ module ContextDev
         ?query_fanout: bool,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebSearchParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::WebSearchParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebSearchResponse
 
@@ -130,6 +135,7 @@ module ContextDev
         ?actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?,
         ?country: ContextDev::Models::WebWebScrapeHTMLParams::country,
         ?exclude_selectors: ::Array[String]?,
+        ?extract_rules: ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLParams::extract_rule],
         ?headers: ::Hash[Symbol, String],
         ?include_frames: bool,
         ?include_selectors: ::Array[String]?,
@@ -154,6 +160,7 @@ module ContextDev
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebWebScrapeImagesParams::TimeoutOpts,
         ?wait_for_ms: Integer?,
+        ?zdr: ContextDev::Models::WebWebScrapeImagesParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeImagesResponse
 

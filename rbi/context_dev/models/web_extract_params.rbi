@@ -166,6 +166,17 @@ module ContextDev
       sig { params(wait_for_ms: Integer).void }
       attr_writer :wait_for_ms
 
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      # omitted. Requires zero data retention to be enabled for your organization
+      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      # Successful ZDR responses include X-Context-ZDR: true.
+      sig { returns(T.nilable(ContextDev::WebExtractParams::Zdr::OrSymbol)) }
+      attr_reader :zdr
+
+      sig { params(zdr: ContextDev::WebExtractParams::Zdr::OrSymbol).void }
+      attr_writer :zdr
+
       sig do
         params(
           schema: T::Hash[Symbol, T.anything],
@@ -191,6 +202,7 @@ module ContextDev
           tags: T::Array[String],
           timeout_opts: ContextDev::WebExtractParams::TimeoutOpts::OrHash,
           wait_for_ms: Integer,
+          zdr: ContextDev::WebExtractParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -249,6 +261,12 @@ module ContextDev
         # Optional browser wait time in milliseconds after initial page load for each
         # crawled page.
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -279,6 +297,7 @@ module ContextDev
             tags: T::Array[String],
             timeout_opts: ContextDev::WebExtractParams::TimeoutOpts,
             wait_for_ms: Integer,
+            zdr: ContextDev::WebExtractParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
           }
         )
@@ -729,6 +748,32 @@ module ContextDev
           end
           def self.values
           end
+        end
+      end
+
+      # Set to enabled to bypass shared caches and omit request and response content
+      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+      # omitted. Requires zero data retention to be enabled for your organization
+      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+      # Successful ZDR responses include X-Context-ZDR: true.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias { T.all(Symbol, ContextDev::WebExtractParams::Zdr) }
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        ENABLED =
+          T.let(:enabled, ContextDev::WebExtractParams::Zdr::TaggedSymbol)
+        DISABLED =
+          T.let(:disabled, ContextDev::WebExtractParams::Zdr::TaggedSymbol)
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebExtractParams::Zdr::TaggedSymbol]
+          )
+        end
+        def self.values
         end
       end
     end

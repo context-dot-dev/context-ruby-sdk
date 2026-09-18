@@ -432,6 +432,30 @@ module ContextDev
         sig { returns(T.nilable(String)) }
         attr_accessor :url
 
+        # Product variations, such as different colors or sizes, with their attributes and
+        # images. Empty if none are found. May not include every variation offered by the
+        # store.
+        sig do
+          returns(
+            T.nilable(
+              T::Array[
+                ContextDev::Models::AIExtractProductResponse::Product::Variant
+              ]
+            )
+          )
+        end
+        attr_reader :variants
+
+        sig do
+          params(
+            variants:
+              T::Array[
+                ContextDev::Models::AIExtractProductResponse::Product::Variant::OrHash
+              ]
+          ).void
+        end
+        attr_writer :variants
+
         # The extracted product data, or null if not a product page
         sig do
           params(
@@ -460,7 +484,11 @@ module ContextDev
                 ContextDev::Models::AIExtractProductResponse::Product::PricingModel::OrSymbol
               ),
             regular_price: T.nilable(Float),
-            url: T.nilable(String)
+            url: T.nilable(String),
+            variants:
+              T::Array[
+                ContextDev::Models::AIExtractProductResponse::Product::Variant::OrHash
+              ]
           ).returns(T.attached_class)
         end
         def self.new(
@@ -497,7 +525,11 @@ module ContextDev
           # Original or regular price before a displayed discount
           regular_price: nil,
           # URL to the product page
-          url: nil
+          url: nil,
+          # Product variations, such as different colors or sizes, with their attributes and
+          # images. Empty if none are found. May not include every variation offered by the
+          # store.
+          variants: nil
         )
         end
 
@@ -529,7 +561,11 @@ module ContextDev
                   ContextDev::Models::AIExtractProductResponse::Product::PricingModel::TaggedSymbol
                 ),
               regular_price: T.nilable(Float),
-              url: T.nilable(String)
+              url: T.nilable(String),
+              variants:
+                T::Array[
+                  ContextDev::Models::AIExtractProductResponse::Product::Variant
+                ]
             }
           )
         end
@@ -688,6 +724,65 @@ module ContextDev
             )
           end
           def self.values
+          end
+        end
+
+        class Variant < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::AIExtractProductResponse::Product::Variant,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Explicit variant attributes such as color, size, material, pattern and
+          # properties declared by page.
+          sig { returns(T::Hash[Symbol, String]) }
+          attr_accessor :attributes
+
+          # Original source image URLs explicitly attached to this variant.
+          sig { returns(T::Array[String]) }
+          attr_accessor :images
+
+          sig { returns(T.nilable(String)) }
+          attr_accessor :sku
+
+          # Variant or offer URL when provided by the source. May be shared by variants.
+          sig { returns(T.nilable(String)) }
+          attr_accessor :url
+
+          sig do
+            params(
+              attributes: T::Hash[Symbol, String],
+              images: T::Array[String],
+              sku: T.nilable(String),
+              url: T.nilable(String)
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            # Explicit variant attributes such as color, size, material, pattern and
+            # properties declared by page.
+            attributes:,
+            # Original source image URLs explicitly attached to this variant.
+            images:,
+            sku:,
+            # Variant or offer URL when provided by the source. May be shared by variants.
+            url:
+          )
+          end
+
+          sig do
+            override.returns(
+              {
+                attributes: T::Hash[Symbol, String],
+                images: T::Array[String],
+                sku: T.nilable(String),
+                url: T.nilable(String)
+              }
+            )
+          end
+          def to_hash
           end
         end
       end

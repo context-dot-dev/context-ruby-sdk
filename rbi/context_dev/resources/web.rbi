@@ -15,6 +15,7 @@ module ContextDev
           mode: ContextDev::WebAnswersParams::Mode::OrSymbol,
           tags: T::Array[String],
           timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts::OrHash,
+          zdr: ContextDev::WebAnswersParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebAnswersResponse)
       end
@@ -38,6 +39,12 @@ module ContextDev
         # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
         # timeoutOpts object.
         timeout_opts: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -69,6 +76,7 @@ module ContextDev
           tags: T::Array[String],
           timeout_opts: ContextDev::WebExtractParams::TimeoutOpts::OrHash,
           wait_for_ms: Integer,
+          zdr: ContextDev::WebExtractParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractResponse)
       end
@@ -127,6 +135,12 @@ module ContextDev
         # Optional browser wait time in milliseconds after initial page load for each
         # crawled page.
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -140,6 +154,7 @@ module ContextDev
           tags: T::Array[String],
           timeout_opts:
             ContextDev::WebExtractCompetitorsParams::TimeoutOpts::OrHash,
+          zdr: ContextDev::WebExtractCompetitorsParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractCompetitorsResponse)
       end
@@ -156,6 +171,12 @@ module ContextDev
         # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
         # timeoutOpts object.
         timeout_opts: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -209,6 +230,7 @@ module ContextDev
           tags: T::Array[String],
           timeout_opts:
             ContextDev::WebExtractStyleguideParams::TimeoutOpts::OrHash,
+          zdr: ContextDev::WebExtractStyleguideParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebExtractStyleguideResponse)
       end
@@ -237,6 +259,12 @@ module ContextDev
         # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
         # timeoutOpts object.
         timeout_opts: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -325,9 +353,10 @@ module ContextDev
         # TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Requires zero data retention to be enabled for your
-        # organization (contact support@context.dev), otherwise the request fails with
-        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
         zdr: nil,
         request_options: {}
       )
@@ -347,6 +376,7 @@ module ContextDev
           query_fanout: T::Boolean,
           tags: T::Array[String],
           timeout_opts: ContextDev::WebSearchParams::TimeoutOpts::OrHash,
+          zdr: ContextDev::WebSearchParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebSearchResponse)
       end
@@ -377,6 +407,12 @@ module ContextDev
         # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
         # timeoutOpts object.
         timeout_opts: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -524,20 +560,25 @@ module ContextDev
         # timeoutOpts object.
         timeout_opts: nil,
         # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Requires zero data retention to be enabled for your
-        # organization (contact support@context.dev), otherwise the request fails with
-        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
         zdr: nil,
         request_options: {}
       )
       end
 
-      # Scrapes the given URL and returns the raw HTML content of the page. The base
-      # request costs 1 credit; requests with browser actions cost 2 credits. A request
-      # that hits its timeoutOpts.milliseconds deadline fails with 408 and is not
-      # billed, unless timeoutOpts.behavior=return-partial is set — then the page as
-      # rendered so far is returned with `finalDOMState: "still-loading"` and billed at
-      # the base cost of 1 credit.
+      # Scrapes the given URL and returns the HTML content of the page. Optional
+      # extractRules return deterministic structured data in extracted using CSS
+      # selectors, attributes, lists, and nested rules, without an LLM or additional
+      # credits. Rules run on the returned HTML after selector and main-content
+      # filtering. Send extractRules as a JSON-encoded query parameter. The base request
+      # costs 1 credit; requests with browser actions cost 2 credits. A request that
+      # hits its timeoutOpts.milliseconds deadline fails with 408 and is not billed,
+      # unless timeoutOpts.behavior=return-partial is set — then the page as rendered so
+      # far is returned with `finalDOMState: "still-loading"` and billed at the base
+      # cost of 1 credit.
       sig do
         params(
           url: String,
@@ -553,6 +594,14 @@ module ContextDev
             ),
           country: ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol,
           exclude_selectors: T.nilable(T::Array[String]),
+          extract_rules:
+            T::Hash[
+              Symbol,
+              T.any(
+                String,
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::OrHash
+              )
+            ],
           headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
           include_selectors: T.nilable(T::Array[String]),
@@ -581,6 +630,14 @@ module ContextDev
         # Exclusion takes precedence: an element matching both is removed. Examples:
         # "nav", "footer", ".ad-banner", "[aria-hidden=true]".
         exclude_selectors: nil,
+        # Optional CSS extraction rules applied to the returned HTML after selector and
+        # main-content filtering. Use selector strings ("h1", "a@href") or objects with
+        # selector, type (item or list), and output (text, html, @attribute, or nested
+        # rules). Text whitespace is normalized; html includes the matched element;
+        # attributes are returned as written. Missing items are null and missing lists are
+        # empty. CSS only; XPath is not supported. Maximum: 100 fields across 5 levels.
+        # Send a JSON-encoded string in the extractRules query parameter.
+        extract_rules: nil,
         # Optional outbound HTTP headers forwarded only to the target URL, sent as
         # deep-object query params such as headers[X-Custom]=value. When provided, caching
         # is bypassed: the result is neither read from nor written to cache.
@@ -618,9 +675,10 @@ module ContextDev
         # TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Requires zero data retention to be enabled for your
-        # organization (contact support@context.dev), otherwise the request fails with
-        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
         zdr: nil,
         request_options: {}
       )
@@ -653,6 +711,7 @@ module ContextDev
           timeout_opts:
             ContextDev::WebWebScrapeImagesParams::TimeoutOpts::OrHash,
           wait_for_ms: T.nilable(Integer),
+          zdr: ContextDev::WebWebScrapeImagesParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeImagesResponse)
       end
@@ -690,6 +749,12 @@ module ContextDev
         # timeoutOpts, timeoutOpts.milliseconds must be at least waitForMs + 10000 ms; a
         # shorter deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
+        # Set to enabled to bypass shared caches and omit request and response content
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -818,9 +883,10 @@ module ContextDev
         # ms; a shorter deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Requires zero data retention to be enabled for your
-        # organization (contact support@context.dev), otherwise the request fails with
-        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
         zdr: nil,
         request_options: {}
       )
@@ -879,9 +945,10 @@ module ContextDev
         # returned and counted against maxLinks.
         url_regex: nil,
         # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Requires zero data retention to be enabled for your
-        # organization (contact support@context.dev), otherwise the request fails with
-        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
+        # omitted. Requires zero data retention to be enabled for your organization
+        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
+        # Successful ZDR responses include X-Context-ZDR: true.
         zdr: nil,
         request_options: {}
       )

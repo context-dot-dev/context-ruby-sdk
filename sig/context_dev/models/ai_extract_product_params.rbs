@@ -5,7 +5,8 @@ module ContextDev
         url: String,
         max_age_ms: Integer,
         tags: ::Array[String],
-        timeout_opts: ContextDev::AIExtractProductParams::TimeoutOpts
+        timeout_opts: ContextDev::AIExtractProductParams::TimeoutOpts,
+        zdr: ContextDev::Models::AIExtractProductParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -29,11 +30,18 @@ module ContextDev
         ContextDev::AIExtractProductParams::TimeoutOpts
       ) -> ContextDev::AIExtractProductParams::TimeoutOpts
 
+      attr_reader zdr: ContextDev::Models::AIExtractProductParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::AIExtractProductParams::zdr
+      ) -> ContextDev::Models::AIExtractProductParams::zdr
+
       def initialize: (
         url: String,
         ?max_age_ms: Integer,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::AIExtractProductParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::AIExtractProductParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -42,6 +50,7 @@ module ContextDev
         max_age_ms: Integer,
         tags: ::Array[String],
         timeout_opts: ContextDev::AIExtractProductParams::TimeoutOpts,
+        zdr: ContextDev::Models::AIExtractProductParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -80,6 +89,17 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::AIExtractProductParams::TimeoutOpts::behavior]
         end
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::AIExtractProductParams::zdr]
       end
     end
   end

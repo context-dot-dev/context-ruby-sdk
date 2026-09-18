@@ -6,6 +6,7 @@ module ContextDev
         ?max_age_ms: Integer,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::AIExtractProductParams::TimeoutOpts,
+        ?zdr: ContextDev::Models::AIExtractProductParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::AIExtractProductResponse
 
