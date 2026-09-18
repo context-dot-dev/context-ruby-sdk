@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.18.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.17.1...v2.18.0) (2026-09-18)
+
+
+### Features
+
+* **api:** enable ZDR on remaining AI endpoints via OpenAI ([#1099](https://github.com/context-dot-dev/context-ruby-sdk/issues/1099)) ([36e5487](https://github.com/context-dot-dev/context-ruby-sdk/commit/36e548724224b3198e49d248735916f3af6d1b61))
+* **products:** extract ProductGroup variants with images ([#1124](https://github.com/context-dot-dev/context-ruby-sdk/issues/1124)) ([dd14116](https://github.com/context-dot-dev/context-ruby-sdk/commit/dd141167200666c0bbb658f9a83ffa8896411aae))
+* **scrape:** add CSS extraction rules to HTML scraping ([#1146](https://github.com/context-dot-dev/context-ruby-sdk/issues/1146)) ([4ed406d](https://github.com/context-dot-dev/context-ruby-sdk/commit/4ed406dfa5bf0dd2ad8e6652fb85ef9ebe37ff07))
+* **web:** add URL-based scrape screenshot endpoint ([#1150](https://github.com/context-dot-dev/context-ruby-sdk/issues/1150)) ([52c8043](https://github.com/context-dot-dev/context-ruby-sdk/commit/52c80435c9c767bdb6ff782c487ada1263d9f767))
+
+
+### Bug Fixes
+
+* **api:** lower partial scrape timeout minimum to five seconds ([#1118](https://github.com/context-dot-dev/context-ruby-sdk/issues/1118)) ([871982b](https://github.com/context-dot-dev/context-ruby-sdk/commit/871982bff814f9cb698fc59f1e07c2d87c5a6dad))
+
 ## [2.17.1](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.17.0...v2.17.1) (2026-09-15)
 
 
