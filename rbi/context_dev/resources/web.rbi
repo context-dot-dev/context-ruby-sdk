@@ -532,12 +532,16 @@ module ContextDev
       )
       end
 
-      # Scrapes the given URL and returns the raw HTML content of the page. The base
-      # request costs 1 credit; requests with browser actions cost 2 credits. A request
-      # that hits its timeoutOpts.milliseconds deadline fails with 408 and is not
-      # billed, unless timeoutOpts.behavior=return-partial is set — then the page as
-      # rendered so far is returned with `finalDOMState: "still-loading"` and billed at
-      # the base cost of 1 credit.
+      # Scrapes the given URL and returns the HTML content of the page. Optional
+      # extractRules return deterministic structured data in extracted using CSS
+      # selectors, attributes, lists, and nested rules, without an LLM or additional
+      # credits. Rules run on the returned HTML after selector and main-content
+      # filtering. Send extractRules as a JSON-encoded query parameter. The base request
+      # costs 1 credit; requests with browser actions cost 2 credits. A request that
+      # hits its timeoutOpts.milliseconds deadline fails with 408 and is not billed,
+      # unless timeoutOpts.behavior=return-partial is set — then the page as rendered so
+      # far is returned with `finalDOMState: "still-loading"` and billed at the base
+      # cost of 1 credit.
       sig do
         params(
           url: String,
@@ -553,6 +557,14 @@ module ContextDev
             ),
           country: ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol,
           exclude_selectors: T.nilable(T::Array[String]),
+          extract_rules:
+            T::Hash[
+              Symbol,
+              T.any(
+                String,
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::OrHash
+              )
+            ],
           headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
           include_selectors: T.nilable(T::Array[String]),
@@ -581,6 +593,14 @@ module ContextDev
         # Exclusion takes precedence: an element matching both is removed. Examples:
         # "nav", "footer", ".ad-banner", "[aria-hidden=true]".
         exclude_selectors: nil,
+        # Optional CSS extraction rules applied to the returned HTML after selector and
+        # main-content filtering. Use selector strings ("h1", "a@href") or objects with
+        # selector, type (item or list), and output (text, html, @attribute, or nested
+        # rules). Text whitespace is normalized; html includes the matched element;
+        # attributes are returned as written. Missing items are null and missing lists are
+        # empty. CSS only; XPath is not supported. Maximum: 100 fields across 5 levels.
+        # Send a JSON-encoded string in the extractRules query parameter.
+        extract_rules: nil,
         # Optional outbound HTTP headers forwarded only to the target URL, sent as
         # deep-object query params such as headers[X-Custom]=value. When provided, caching
         # is bypassed: the result is neither read from nor written to cache.

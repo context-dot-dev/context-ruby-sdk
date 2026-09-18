@@ -81,13 +81,23 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :actions_html_stale, ContextDev::Internal::Type::Boolean, api_name: :actionsHtmlStale
 
+      # @!attribute extracted
+      #   Present only when extractRules is supplied. Keys match the requested fields.
+      #   Values are normalized text, raw attribute strings, outer HTML, nested objects,
+      #   or lists. Missing items are null; lists with no matches are empty. Rules run on
+      #   the returned HTML after filtering.
+      #
+      #   @return [Hash{Symbol=>String, Object, Array<String, Object, nil>, nil}, nil]
+      optional :extracted,
+               -> { ContextDev::Internal::Type::HashOf[union: ContextDev::Models::WebWebScrapeHTMLResponse::Extracted, nil?: true] }
+
       # @!attribute key_metadata
       #   Credit usage, included whenever a valid API key is provided.
       #
       #   @return [ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata }
 
-      # @!method initialize(cache_metadata:, final_dom_state:, html:, metadata:, request_id:, success:, type:, url:, actions_applied: nil, actions_html_stale: nil, key_metadata: nil)
+      # @!method initialize(cache_metadata:, final_dom_state:, html:, metadata:, request_id:, success:, type:, url:, actions_applied: nil, actions_html_stale: nil, extracted: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeHTMLResponse} for more details.
       #
@@ -110,6 +120,8 @@ module ContextDev
       #   @param actions_applied [Array<ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied>] One verified outcome per requested browser action, in request order.
       #
       #   @param actions_html_stale [Boolean] True when an action was applied but the returned content could not be refreshed
+      #
+      #   @param extracted [Hash{Symbol=>String, Object, Array<String, Object, nil>, nil}] Present only when extractRules is supplied. Keys match the requested fields. Val
       #
       #   @param key_metadata [ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
 
@@ -560,6 +572,34 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      module Extracted
+        extend ContextDev::Internal::Type::Union
+
+        variant String
+
+        variant ContextDev::Internal::Type::Unknown
+
+        variant -> { ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::UnionMember2Array }
+
+        module UnionMember2
+          extend ContextDev::Internal::Type::Union
+
+          variant String
+
+          variant ContextDev::Internal::Type::Unknown
+
+          # @!method self.variants
+          #   @return [Array(String, Object)]
+        end
+
+        # @!method self.variants
+        #   @return [Array(String, Object, Array<String, Object, nil>)]
+
+        # @type [ContextDev::Internal::Type::Converter]
+        UnionMember2Array =
+          ContextDev::Internal::Type::ArrayOf[union: -> { ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::UnionMember2 }, nil?: true]
       end
 
       # @see ContextDev::Models::WebWebScrapeHTMLResponse#key_metadata

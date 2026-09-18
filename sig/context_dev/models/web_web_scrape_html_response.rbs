@@ -12,6 +12,7 @@ module ContextDev
         url: String,
         actions_applied: ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied],
         actions_html_stale: bool,
+        extracted: ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLResponse::extracted?],
         key_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata
       }
 
@@ -42,6 +43,12 @@ module ContextDev
 
       def actions_html_stale=: (bool) -> bool
 
+      attr_reader extracted: ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLResponse::extracted?]?
+
+      def extracted=: (
+        ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLResponse::extracted?]
+      ) -> ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLResponse::extracted?]
+
       attr_reader key_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata?
 
       def key_metadata=: (
@@ -59,6 +66,7 @@ module ContextDev
         url: String,
         ?actions_applied: ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied],
         ?actions_html_stale: bool,
+        ?extracted: ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLResponse::extracted?],
         ?key_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata
       ) -> void
 
@@ -73,6 +81,7 @@ module ContextDev
         url: String,
         actions_applied: ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied],
         actions_html_stale: bool,
+        extracted: ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLResponse::extracted?],
         key_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata
       }
 
@@ -470,6 +479,27 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied::status]
         end
+      end
+
+      type extracted =
+        String
+        | top
+        | ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::union_member2?]
+
+      module Extracted
+        extend ContextDev::Internal::Type::Union
+
+        type union_member2 = String | top
+
+        module UnionMember2
+          extend ContextDev::Internal::Type::Union
+
+          def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::Extracted::union_member2]
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::WebWebScrapeHTMLResponse::extracted]
+
+        UnionMember2Array: ContextDev::Internal::Type::Converter
       end
 
       type key_metadata =

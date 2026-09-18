@@ -58,6 +58,42 @@ module ContextDev
       sig { returns(T.nilable(T::Array[String])) }
       attr_accessor :exclude_selectors
 
+      # Optional CSS extraction rules applied to the returned HTML after selector and
+      # main-content filtering. Use selector strings ("h1", "a@href") or objects with
+      # selector, type (item or list), and output (text, html, @attribute, or nested
+      # rules). Text whitespace is normalized; html includes the matched element;
+      # attributes are returned as written. Missing items are null and missing lists are
+      # empty. CSS only; XPath is not supported. Maximum: 100 fields across 5 levels.
+      # Send a JSON-encoded string in the extractRules query parameter.
+      sig do
+        returns(
+          T.nilable(
+            T::Hash[
+              Symbol,
+              T.any(
+                String,
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1
+              )
+            ]
+          )
+        )
+      end
+      attr_reader :extract_rules
+
+      sig do
+        params(
+          extract_rules:
+            T::Hash[
+              Symbol,
+              T.any(
+                String,
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::OrHash
+              )
+            ]
+        ).void
+      end
+      attr_writer :extract_rules
+
       # Optional outbound HTTP headers forwarded only to the target URL, sent as
       # deep-object query params such as headers[X-Custom]=value. When provided, caching
       # is bypassed: the result is neither read from nor written to cache.
@@ -170,6 +206,14 @@ module ContextDev
             ),
           country: ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol,
           exclude_selectors: T.nilable(T::Array[String]),
+          extract_rules:
+            T::Hash[
+              Symbol,
+              T.any(
+                String,
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::OrHash
+              )
+            ],
           headers: T::Hash[Symbol, String],
           include_frames: T::Boolean,
           include_selectors: T.nilable(T::Array[String]),
@@ -198,6 +242,14 @@ module ContextDev
         # Exclusion takes precedence: an element matching both is removed. Examples:
         # "nav", "footer", ".ad-banner", "[aria-hidden=true]".
         exclude_selectors: nil,
+        # Optional CSS extraction rules applied to the returned HTML after selector and
+        # main-content filtering. Use selector strings ("h1", "a@href") or objects with
+        # selector, type (item or list), and output (text, html, @attribute, or nested
+        # rules). Text whitespace is normalized; html includes the matched element;
+        # attributes are returned as written. Missing items are null and missing lists are
+        # empty. CSS only; XPath is not supported. Maximum: 100 fields across 5 levels.
+        # Send a JSON-encoded string in the extractRules query parameter.
+        extract_rules: nil,
         # Optional outbound HTTP headers forwarded only to the target URL, sent as
         # deep-object query params such as headers[X-Custom]=value. When provided, caching
         # is bypassed: the result is neither read from nor written to cache.
@@ -259,6 +311,14 @@ module ContextDev
               ),
             country: ContextDev::WebWebScrapeHTMLParams::Country::OrSymbol,
             exclude_selectors: T.nilable(T::Array[String]),
+            extract_rules:
+              T::Hash[
+                Symbol,
+                T.any(
+                  String,
+                  ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1
+                )
+              ],
             headers: T::Hash[Symbol, String],
             include_frames: T::Boolean,
             include_selectors: T.nilable(T::Array[String]),
@@ -988,6 +1048,416 @@ module ContextDev
           )
         end
         def self.values
+        end
+      end
+
+      module ExtractRule
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              String,
+              ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1
+            )
+          end
+
+        class UnionMember1 < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          sig { returns(String) }
+          attr_accessor :selector
+
+          sig do
+            returns(
+              T.nilable(
+                T.any(
+                  ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::OrSymbol,
+                  String,
+                  T::Hash[
+                    Symbol,
+                    T.any(
+                      String,
+                      ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1
+                    )
+                  ]
+                )
+              )
+            )
+          end
+          attr_reader :output
+
+          sig do
+            params(
+              output:
+                T.any(
+                  ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::OrSymbol,
+                  String,
+                  T::Hash[
+                    Symbol,
+                    T.any(
+                      String,
+                      ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::OrHash
+                    )
+                  ]
+                )
+            ).void
+          end
+          attr_writer :output
+
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Type::OrSymbol
+              )
+            )
+          end
+          attr_reader :type
+
+          sig do
+            params(
+              type:
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Type::OrSymbol
+            ).void
+          end
+          attr_writer :type
+
+          sig do
+            params(
+              selector: String,
+              output:
+                T.any(
+                  ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::OrSymbol,
+                  String,
+                  T::Hash[
+                    Symbol,
+                    T.any(
+                      String,
+                      ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::OrHash
+                    )
+                  ]
+                ),
+              type:
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Type::OrSymbol
+            ).returns(T.attached_class)
+          end
+          def self.new(selector:, output: nil, type: nil)
+          end
+
+          sig do
+            override.returns(
+              {
+                selector: String,
+                output:
+                  T.any(
+                    ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::OrSymbol,
+                    String,
+                    T::Hash[
+                      Symbol,
+                      T.any(
+                        String,
+                        ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1
+                      )
+                    ]
+                  ),
+                type:
+                  ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Type::OrSymbol
+              }
+            )
+          end
+          def to_hash
+          end
+
+          module Output
+            extend ContextDev::Internal::Type::Union
+
+            Variants =
+              T.type_alias do
+                T.any(
+                  ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::TaggedSymbol,
+                  String,
+                  T::Hash[
+                    Symbol,
+                    ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::Variants
+                  ]
+                )
+              end
+
+            module HTMLExtractionRule
+              extend ContextDev::Internal::Type::Union
+
+              Variants =
+                T.type_alias do
+                  T.any(
+                    String,
+                    ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1
+                  )
+                end
+
+              class UnionMember1 < ContextDev::Internal::Type::BaseModel
+                OrHash =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1,
+                      ContextDev::Internal::AnyHash
+                    )
+                  end
+
+                sig { returns(String) }
+                attr_accessor :selector
+
+                sig do
+                  returns(
+                    T.nilable(
+                      T.any(
+                        ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output::OrSymbol,
+                        String,
+                        T.anything
+                      )
+                    )
+                  )
+                end
+                attr_reader :output
+
+                sig do
+                  params(
+                    output:
+                      T.any(
+                        ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output::OrSymbol,
+                        String,
+                        T.anything
+                      )
+                  ).void
+                end
+                attr_writer :output
+
+                sig do
+                  returns(
+                    T.nilable(
+                      ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Type::OrSymbol
+                    )
+                  )
+                end
+                attr_reader :type
+
+                sig do
+                  params(
+                    type:
+                      ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Type::OrSymbol
+                  ).void
+                end
+                attr_writer :type
+
+                sig do
+                  params(
+                    selector: String,
+                    output:
+                      T.any(
+                        ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output::OrSymbol,
+                        String,
+                        T.anything
+                      ),
+                    type:
+                      ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Type::OrSymbol
+                  ).returns(T.attached_class)
+                end
+                def self.new(selector:, output: nil, type: nil)
+                end
+
+                sig do
+                  override.returns(
+                    {
+                      selector: String,
+                      output:
+                        T.any(
+                          ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output::OrSymbol,
+                          String,
+                          T.anything
+                        ),
+                      type:
+                        ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Type::OrSymbol
+                    }
+                  )
+                end
+                def to_hash
+                end
+
+                module Output
+                  extend ContextDev::Internal::Type::Union
+
+                  Variants =
+                    T.type_alias do
+                      T.any(
+                        ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output::TaggedSymbol,
+                        String,
+                        T.anything
+                      )
+                    end
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output::Variants
+                      ]
+                    )
+                  end
+                  def self.variants
+                  end
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  TEXT =
+                    T.let(
+                      :text,
+                      ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output::TaggedSymbol
+                    )
+                  HTML =
+                    T.let(
+                      :html,
+                      ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output::TaggedSymbol
+                    )
+                end
+
+                module Type
+                  extend ContextDev::Internal::Type::Enum
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Type
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  ITEM =
+                    T.let(
+                      :item,
+                      ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Type::TaggedSymbol
+                    )
+                  LIST =
+                    T.let(
+                      :list,
+                      ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Type::TaggedSymbol
+                    )
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Type::TaggedSymbol
+                      ]
+                    )
+                  end
+                  def self.values
+                  end
+                end
+              end
+
+              sig do
+                override.returns(
+                  T::Array[
+                    ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::Variants
+                  ]
+                )
+              end
+              def self.variants
+              end
+            end
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::Variants
+                ]
+              )
+            end
+            def self.variants
+            end
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            TEXT =
+              T.let(
+                :text,
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::TaggedSymbol
+              )
+            HTML =
+              T.let(
+                :html,
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::TaggedSymbol
+              )
+
+            HTMLExtractionRuleMap =
+              T.let(
+                ContextDev::Internal::Type::HashOf[
+                  union:
+                    ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule
+                ],
+                ContextDev::Internal::Type::Converter
+              )
+          end
+
+          module Type
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Type
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            ITEM =
+              T.let(
+                :item,
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Type::TaggedSymbol
+              )
+            LIST =
+              T.let(
+                :list,
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Type::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Type::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
+          end
+        end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebWebScrapeHTMLParams::ExtractRule::Variants]
+          )
+        end
+        def self.variants
         end
       end
 

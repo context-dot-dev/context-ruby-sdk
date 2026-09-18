@@ -233,6 +233,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         url: String,
         actions_applied: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebScrapeHTMLResponse::ActionsApplied]) | nil,
         actions_html_stale: ContextDev::Internal::Type::Boolean | nil,
+        extracted: ^(ContextDev::Internal::Type::HashOf[union: ContextDev::Models::WebWebScrapeHTMLResponse::Extracted, nil?: true]) | nil,
         key_metadata: ContextDev::Models::WebWebScrapeHTMLResponse::KeyMetadata | nil
       }
     end

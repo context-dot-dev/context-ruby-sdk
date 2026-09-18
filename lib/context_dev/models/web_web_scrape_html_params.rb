@@ -38,6 +38,19 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :exclude_selectors, ContextDev::Internal::Type::ArrayOf[String], nil?: true
 
+      # @!attribute extract_rules
+      #   Optional CSS extraction rules applied to the returned HTML after selector and
+      #   main-content filtering. Use selector strings ("h1", "a@href") or objects with
+      #   selector, type (item or list), and output (text, html, @attribute, or nested
+      #   rules). Text whitespace is normalized; html includes the matched element;
+      #   attributes are returned as written. Missing items are null and missing lists are
+      #   empty. CSS only; XPath is not supported. Maximum: 100 fields across 5 levels.
+      #   Send a JSON-encoded string in the extractRules query parameter.
+      #
+      #   @return [Hash{Symbol=>String, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1}, nil]
+      optional :extract_rules,
+               -> { ContextDev::Internal::Type::HashOf[union: ContextDev::WebWebScrapeHTMLParams::ExtractRule] }
+
       # @!attribute headers
       #   Optional outbound HTTP headers forwarded only to the target URL, sent as
       #   deep-object query params such as headers[X-Custom]=value. When provided, caching
@@ -123,7 +136,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebWebScrapeHTMLParams::Zdr }
 
-      # @!method initialize(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, tags: nil, timeout_opts: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @!method initialize(url:, actions: nil, country: nil, exclude_selectors: nil, extract_rules: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, tags: nil, timeout_opts: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeHTMLParams} for more details.
       #
@@ -134,6 +147,8 @@ module ContextDev
       #   @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       #   @param exclude_selectors [Array<String>, nil] CSS selectors to remove from the result. Applied after includeSelectors. Exclusi
+      #
+      #   @param extract_rules [Hash{Symbol=>String, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1}] Optional CSS extraction rules applied to the returned HTML after selector and ma
       #
       #   @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
@@ -520,6 +535,168 @@ module ContextDev
 
         # @!method self.values
         #   @return [Array<Symbol>]
+      end
+
+      module ExtractRule
+        extend ContextDev::Internal::Type::Union
+
+        variant String
+
+        variant -> { ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1 }
+
+        class UnionMember1 < ContextDev::Internal::Type::BaseModel
+          # @!attribute selector
+          #
+          #   @return [String]
+          required :selector, String
+
+          # @!attribute output
+          #
+          #   @return [Symbol, String, Hash{Symbol=>String, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1}, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output, nil]
+          optional :output, union: -> { ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output }
+
+          # @!attribute type
+          #
+          #   @return [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Type, nil]
+          optional :type, enum: -> { ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Type }
+
+          # @!method initialize(selector:, output: nil, type: nil)
+          #   @param selector [String]
+          #   @param output [Symbol, String, Hash{Symbol=>String, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1}, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output]
+          #   @param type [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Type]
+
+          # @see ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1#output
+          module Output
+            extend ContextDev::Internal::Type::Union
+
+            variant const: -> { ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::TEXT }
+
+            variant const: -> { ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTML }
+
+            variant String
+
+            variant -> { ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRuleMap }
+
+            module HTMLExtractionRule
+              extend ContextDev::Internal::Type::Union
+
+              variant String
+
+              variant -> { ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1 }
+
+              class UnionMember1 < ContextDev::Internal::Type::BaseModel
+                # @!attribute selector
+                #
+                #   @return [String]
+                required :selector, String
+
+                # @!attribute output
+                #
+                #   @return [Symbol, String, Object, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output, nil]
+                optional :output,
+                         union: -> { ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output }
+
+                # @!attribute type
+                #
+                #   @return [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Type, nil]
+                optional :type,
+                         enum: -> { ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Type }
+
+                # @!method initialize(selector:, output: nil, type: nil)
+                #   @param selector [String]
+                #   @param output [Symbol, String, Object, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output]
+                #   @param type [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Type]
+
+                # @see ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1#output
+                module Output
+                  extend ContextDev::Internal::Type::Union
+
+                  variant const: -> { ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output::TEXT }
+
+                  variant const: -> { ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output::HTML }
+
+                  variant String
+
+                  variant ContextDev::Internal::Type::Unknown
+
+                  # @!method self.variants
+                  #   @return [Array(Symbol, String, Object)]
+
+                  define_sorbet_constant!(:Variants) do
+                    T.type_alias do
+                      T.any(
+                        ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1::Output::TaggedSymbol,
+                        String,
+                        T.anything
+                      )
+                    end
+                  end
+
+                  # @!group
+
+                  TEXT = :text
+                  HTML = :html
+
+                  # @!endgroup
+                end
+
+                # @see ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1#type
+                module Type
+                  extend ContextDev::Internal::Type::Enum
+
+                  ITEM = :item
+                  LIST = :list
+
+                  # @!method self.values
+                  #   @return [Array<Symbol>]
+                end
+              end
+
+              # @!method self.variants
+              #   @return [Array(String, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1)]
+            end
+
+            # @!method self.variants
+            #   @return [Array(Symbol, String, Hash{Symbol=>String, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::UnionMember1})]
+
+            define_sorbet_constant!(:Variants) do
+              T.type_alias do
+                T.any(
+                  ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::TaggedSymbol,
+                  String,
+                  T::Hash[Symbol, ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule::Variants]
+                )
+              end
+            end
+
+            # @!group
+
+            TEXT = :text
+            HTML = :html
+
+            # @!endgroup
+
+            # @type [ContextDev::Internal::Type::Converter]
+            HTMLExtractionRuleMap =
+              ContextDev::Internal::Type::HashOf[union: -> {
+                ContextDev::WebWebScrapeHTMLParams::ExtractRule::UnionMember1::Output::HTMLExtractionRule
+              }]
+          end
+
+          # @see ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1#type
+          module Type
+            extend ContextDev::Internal::Type::Enum
+
+            ITEM = :item
+            LIST = :list
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
+        end
+
+        # @!method self.variants
+        #   @return [Array(String, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1)]
       end
 
       class Pdf < ContextDev::Internal::Type::BaseModel

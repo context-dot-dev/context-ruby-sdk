@@ -431,14 +431,18 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebWebScrapeHTMLParams} for more details.
       #
-      # Scrapes the given URL and returns the raw HTML content of the page. The base
-      # request costs 1 credit; requests with browser actions cost 2 credits. A request
-      # that hits its timeoutOpts.milliseconds deadline fails with 408 and is not
-      # billed, unless timeoutOpts.behavior=return-partial is set — then the page as
-      # rendered so far is returned with `finalDOMState: "still-loading"` and billed at
-      # the base cost of 1 credit.
+      # Scrapes the given URL and returns the HTML content of the page. Optional
+      # extractRules return deterministic structured data in extracted using CSS
+      # selectors, attributes, lists, and nested rules, without an LLM or additional
+      # credits. Rules run on the returned HTML after selector and main-content
+      # filtering. Send extractRules as a JSON-encoded query parameter. The base request
+      # costs 1 credit; requests with browser actions cost 2 credits. A request that
+      # hits its timeoutOpts.milliseconds deadline fails with 408 and is not billed,
+      # unless timeoutOpts.behavior=return-partial is set — then the page as rendered so
+      # far is returned with `finalDOMState: "still-loading"` and billed at the base
+      # cost of 1 credit.
       #
-      # @overload web_scrape_html(url:, actions: nil, country: nil, exclude_selectors: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, tags: nil, timeout_opts: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_html(url:, actions: nil, country: nil, exclude_selectors: nil, extract_rules: nil, headers: nil, include_frames: nil, include_selectors: nil, max_age_ms: nil, pdf: nil, settle_animations: nil, tags: nil, timeout_opts: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full URL to scrape (must include http:// or https:// protocol)
       #
@@ -447,6 +451,8 @@ module ContextDev
       # @param country [Symbol, ContextDev::Models::WebWebScrapeHTMLParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       # @param exclude_selectors [Array<String>, nil] CSS selectors to remove from the result. Applied after includeSelectors. Exclusi
+      #
+      # @param extract_rules [Hash{Symbol=>String, ContextDev::Models::WebWebScrapeHTMLParams::ExtractRule::UnionMember1}] Optional CSS extraction rules applied to the returned HTML after selector and ma
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
       #
@@ -483,6 +489,7 @@ module ContextDev
           path: "web/scrape/html",
           query: query.transform_keys(
             exclude_selectors: "excludeSelectors",
+            extract_rules: "extractRules",
             include_frames: "includeFrames",
             include_selectors: "includeSelectors",
             max_age_ms: "maxAgeMs",

@@ -130,6 +130,7 @@ module ContextDev
         ?actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?,
         ?country: ContextDev::Models::WebWebScrapeHTMLParams::country,
         ?exclude_selectors: ::Array[String]?,
+        ?extract_rules: ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLParams::extract_rule],
         ?headers: ::Hash[Symbol, String],
         ?include_frames: bool,
         ?include_selectors: ::Array[String]?,
