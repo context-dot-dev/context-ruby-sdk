@@ -518,10 +518,12 @@ module ContextDev
       )
       end
 
-      # Downloads a resource and returns its bytes as base64. Supports images, PDFs,
-      # HTML pages, and any other content type without image conversion, text
-      # extraction, or character-encoding changes. HTTP compression is decoded before
-      # base64 encoding. HTML is the original HTTP response; JavaScript is not rendered.
+      # Downloads a resource and returns its bytes as base64. Without waitForMs, returns
+      # the original HTTP response without image conversion, text extraction, or
+      # character-encoding changes. HTTP compression is decoded before base64 encoding.
+      # Supply waitForMs to render HTML with JavaScript in the browser and return the
+      # resulting HTML as UTF-8 bytes after the wait. Non-HTML resources, including
+      # images and PDFs, keep their original bytes and do not incur a browser wait.
       # Follows public redirects and retries failed downloads through ISP and
       # residential proxies, with a direct fallback. When country is specified, only a
       # residential proxy in that country is used. Supply headers such as Referer for
@@ -536,6 +538,7 @@ module ContextDev
           tags: T::Array[String],
           timeout_opts:
             ContextDev::WebWebScrapeBytesParams::TimeoutOpts::OrHash,
+          wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeBytesParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeBytesResponse)
@@ -559,6 +562,13 @@ module ContextDev
         # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
         # timeoutOpts object.
         timeout_opts: nil,
+        # Optional browser wait time after initial page load, in milliseconds (0–30000; 0
+        # uses 500). When supplied, HTML is rendered with JavaScript and returned as UTF-8
+        # bytes. Other resources keep their original bytes without a browser wait. Omit to
+        # download the original HTTP response. When combined with timeoutOpts,
+        # timeoutOpts.milliseconds must be at least waitForMs + 10000 ms; a shorter
+        # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+        wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
         # omitted. Requires zero data retention to be enabled for your organization

@@ -7,6 +7,7 @@ module ContextDev
         headers: ::Hash[Symbol, String],
         tags: ::Array[String],
         timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
+        wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
@@ -37,6 +38,8 @@ module ContextDev
         ContextDev::WebWebScrapeBytesParams::TimeoutOpts
       ) -> ContextDev::WebWebScrapeBytesParams::TimeoutOpts
 
+      attr_accessor wait_for_ms: Integer?
+
       attr_reader zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr?
 
       def zdr=: (
@@ -49,6 +52,7 @@ module ContextDev
         ?headers: ::Hash[Symbol, String],
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
+        ?wait_for_ms: Integer?,
         ?zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
@@ -59,6 +63,7 @@ module ContextDev
         headers: ::Hash[Symbol, String],
         tags: ::Array[String],
         timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
+        wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr,
         request_options: ContextDev::RequestOptions
       }

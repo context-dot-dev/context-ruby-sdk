@@ -396,10 +396,12 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebWebScrapeBytesParams} for more details.
       #
-      # Downloads a resource and returns its bytes as base64. Supports images, PDFs,
-      # HTML pages, and any other content type without image conversion, text
-      # extraction, or character-encoding changes. HTTP compression is decoded before
-      # base64 encoding. HTML is the original HTTP response; JavaScript is not rendered.
+      # Downloads a resource and returns its bytes as base64. Without waitForMs, returns
+      # the original HTTP response without image conversion, text extraction, or
+      # character-encoding changes. HTTP compression is decoded before base64 encoding.
+      # Supply waitForMs to render HTML with JavaScript in the browser and return the
+      # resulting HTML as UTF-8 bytes after the wait. Non-HTML resources, including
+      # images and PDFs, keep their original bytes and do not incur a browser wait.
       # Follows public redirects and retries failed downloads through ISP and
       # residential proxies, with a direct fallback. When country is specified, only a
       # residential proxy in that country is used. Supply headers such as Referer for
@@ -407,7 +409,7 @@ module ContextDev
       # resource size: 20 MiB (20971520 bytes), before base64 encoding. Successful
       # requests cost 1 credit; errors are not billed.
       #
-      # @overload web_scrape_bytes(url:, country: nil, headers: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_bytes(url:, country: nil, headers: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full HTTP(S) URL of the resource to download, such as an image, PDF, or page.
       #
@@ -418,6 +420,8 @@ module ContextDev
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_opts [ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #
+      # @param wait_for_ms [Integer, nil] Optional browser wait time after initial page load, in milliseconds (0–30000; 0
       #
       # @param zdr [Symbol, ContextDev::Models::WebWebScrapeBytesParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
@@ -432,7 +436,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/bytes",
-          query: query.transform_keys(timeout_opts: "timeoutOpts"),
+          query: query.transform_keys(timeout_opts: "timeoutOpts", wait_for_ms: "waitForMs"),
           model: ContextDev::Models::WebWebScrapeBytesResponse,
           options: options
         )

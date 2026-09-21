@@ -45,6 +45,17 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts, nil]
       optional :timeout_opts, -> { ContextDev::WebWebScrapeBytesParams::TimeoutOpts }
 
+      # @!attribute wait_for_ms
+      #   Optional browser wait time after initial page load, in milliseconds (0–30000; 0
+      #   uses 500). When supplied, HTML is rendered with JavaScript and returned as UTF-8
+      #   bytes. Other resources keep their original bytes without a browser wait. Omit to
+      #   download the original HTTP response. When combined with timeoutOpts,
+      #   timeoutOpts.milliseconds must be at least waitForMs + 10000 ms; a shorter
+      #   deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+      #
+      #   @return [Integer, nil]
+      optional :wait_for_ms, Integer, nil?: true
+
       # @!attribute zdr
       #   Set to enabled to bypass shared caches and omit request and response content
       #   from retained usage logs. Asset uploads are skipped, so hosted image URLs are
@@ -55,7 +66,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebWebScrapeBytesParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebWebScrapeBytesParams::Zdr }
 
-      # @!method initialize(url:, country: nil, headers: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(url:, country: nil, headers: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeBytesParams} for more details.
       #
@@ -68,6 +79,8 @@ module ContextDev
       #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       #   @param timeout_opts [ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #
+      #   @param wait_for_ms [Integer, nil] Optional browser wait time after initial page load, in milliseconds (0–30000; 0
       #
       #   @param zdr [Symbol, ContextDev::Models::WebWebScrapeBytesParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #

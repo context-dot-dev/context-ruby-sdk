@@ -68,6 +68,15 @@ module ContextDev
       end
       attr_writer :timeout_opts
 
+      # Optional browser wait time after initial page load, in milliseconds (0–30000; 0
+      # uses 500). When supplied, HTML is rendered with JavaScript and returned as UTF-8
+      # bytes. Other resources keep their original bytes without a browser wait. Omit to
+      # download the original HTTP response. When combined with timeoutOpts,
+      # timeoutOpts.milliseconds must be at least waitForMs + 10000 ms; a shorter
+      # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+      sig { returns(T.nilable(Integer)) }
+      attr_accessor :wait_for_ms
+
       # Set to enabled to bypass shared caches and omit request and response content
       # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
       # omitted. Requires zero data retention to be enabled for your organization
@@ -91,6 +100,7 @@ module ContextDev
           tags: T::Array[String],
           timeout_opts:
             ContextDev::WebWebScrapeBytesParams::TimeoutOpts::OrHash,
+          wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeBytesParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
@@ -114,6 +124,13 @@ module ContextDev
         # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
         # timeoutOpts object.
         timeout_opts: nil,
+        # Optional browser wait time after initial page load, in milliseconds (0–30000; 0
+        # uses 500). When supplied, HTML is rendered with JavaScript and returned as UTF-8
+        # bytes. Other resources keep their original bytes without a browser wait. Omit to
+        # download the original HTTP response. When combined with timeoutOpts,
+        # timeoutOpts.milliseconds must be at least waitForMs + 10000 ms; a shorter
+        # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+        wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
         # omitted. Requires zero data retention to be enabled for your organization
@@ -132,6 +149,7 @@ module ContextDev
             headers: T::Hash[Symbol, String],
             tags: T::Array[String],
             timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
+            wait_for_ms: T.nilable(Integer),
             zdr: ContextDev::WebWebScrapeBytesParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
           }

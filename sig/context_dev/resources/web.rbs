@@ -126,6 +126,7 @@ module ContextDev
         ?headers: ::Hash[Symbol, String],
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
+        ?wait_for_ms: Integer?,
         ?zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeBytesResponse
