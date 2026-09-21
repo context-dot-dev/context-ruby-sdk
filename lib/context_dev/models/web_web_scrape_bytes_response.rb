@@ -11,6 +11,14 @@ module ContextDev
       #   @return [String]
       required :bytes, String
 
+      # @!attribute cache_metadata
+      #   Cache outcome for this response. Composite responses are hits only when every
+      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+      #   oldest contributing hit.
+      #
+      #   @return [ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata]
+      required :cache_metadata, -> { ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata }
+
       # @!attribute content_length
       #   Number of decoded resource bytes, before base64 encoding.
       #
@@ -65,11 +73,13 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebScrapeBytesResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebScrapeBytesResponse::KeyMetadata }
 
-      # @!method initialize(bytes:, content_length:, content_type:, encoding:, final_url:, request_id:, status_code:, success:, url:, key_metadata: nil)
+      # @!method initialize(bytes:, cache_metadata:, content_length:, content_type:, encoding:, final_url:, request_id:, status_code:, success:, url:, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeBytesResponse} for more details.
       #
       #   @param bytes [String] Base64-encoded resource bytes, without a data URI prefix. Decode this field to r
+      #
+      #   @param cache_metadata [ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
       #   @param content_length [Integer] Number of decoded resource bytes, before base64 encoding.
       #
@@ -88,6 +98,49 @@ module ContextDev
       #   @param url [String] The requested resource URL.
       #
       #   @param key_metadata [ContextDev::Models::WebWebScrapeBytesResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+
+      # @see ContextDev::Models::WebWebScrapeBytesResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata} for more details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
 
       # @see ContextDev::Models::WebWebScrapeBytesResponse#encoding
       module Encoding

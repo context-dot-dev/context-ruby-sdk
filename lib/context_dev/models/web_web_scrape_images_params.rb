@@ -25,6 +25,13 @@ module ContextDev
                },
                nil?: true
 
+      # @!attribute country
+      #   Fetch the target page through a residential proxy in this country (ISO 3166-1
+      #   alpha-2).
+      #
+      #   @return [Symbol, ContextDev::Models::WebWebScrapeImagesParams::Country, nil]
+      optional :country, enum: -> { ContextDev::WebWebScrapeImagesParams::Country }
+
       # @!attribute dedupe
       #   When true, visually duplicate images are removed: every image is loaded and
       #   perceptually hashed, and only the highest-resolution copy of each duplicate
@@ -90,13 +97,15 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebWebScrapeImagesParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebWebScrapeImagesParams::Zdr }
 
-      # @!method initialize(url:, actions: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @!method initialize(url:, actions: nil, country: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeImagesParams} for more details.
       #
       #   @param url [String] Page URL to inspect. Must include http:// or https://.
       #
       #   @param actions [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll>, nil] Optional browser actions executed in array order after the page loads and before
+      #
+      #   @param country [Symbol, ContextDev::Models::WebWebScrapeImagesParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       #   @param dedupe [Boolean] When true, visually duplicate images are removed: every image is loaded and perc
       #
@@ -263,6 +272,220 @@ module ContextDev
 
         # @!method self.variants
         #   @return [Array(ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll)]
+      end
+
+      # Fetch the target page through a residential proxy in this country (ISO 3166-1
+      # alpha-2).
+      module Country
+        extend ContextDev::Internal::Type::Enum
+
+        AD = :ad
+        AE = :ae
+        AF = :af
+        AG = :ag
+        AI = :ai
+        AL = :al
+        AM = :am
+        AO = :ao
+        AR = :ar
+        AT = :at
+        AU = :au
+        AW = :aw
+        AZ = :az
+        BA = :ba
+        BB = :bb
+        BD = :bd
+        BE = :be
+        BF = :bf
+        BG = :bg
+        BH = :bh
+        BI = :bi
+        BJ = :bj
+        BM = :bm
+        BN = :bn
+        BO = :bo
+        BQ = :bq
+        BR = :br
+        BS = :bs
+        BW = :bw
+        BY = :by
+        BZ = :bz
+        CA = :ca
+        CD = :cd
+        CF = :cf
+        CG = :cg
+        CH = :ch
+        CI = :ci
+        CL = :cl
+        CM = :cm
+        CN = :cn
+        CO = :co
+        CR = :cr
+        CV = :cv
+        CW = :cw
+        CY = :cy
+        CZ = :cz
+        DE = :de
+        DJ = :dj
+        DK = :dk
+        DM = :dm
+        DO = :do
+        DZ = :dz
+        EC = :ec
+        EE = :ee
+        EG = :eg
+        ES = :es
+        ET = :et
+        FI = :fi
+        FJ = :fj
+        FR = :fr
+        GA = :ga
+        GB = :gb
+        GD = :gd
+        GE = :ge
+        GF = :gf
+        GG = :gg
+        GH = :gh
+        GM = :gm
+        GN = :gn
+        GP = :gp
+        GQ = :gq
+        GR = :gr
+        GT = :gt
+        GU = :gu
+        GW = :gw
+        GY = :gy
+        HK = :hk
+        HN = :hn
+        HR = :hr
+        HT = :ht
+        HU = :hu
+        ID = :id
+        IE = :ie
+        IL = :il
+        IM = :im
+        IN = :in
+        IQ = :iq
+        IR = :ir
+        IS = :is
+        IT = :it
+        JE = :je
+        JM = :jm
+        JO = :jo
+        JP = :jp
+        KE = :ke
+        KG = :kg
+        KH = :kh
+        KN = :kn
+        KR = :kr
+        KW = :kw
+        KY = :ky
+        KZ = :kz
+        LA = :la
+        LB = :lb
+        LC = :lc
+        LK = :lk
+        LR = :lr
+        LS = :ls
+        LT = :lt
+        LU = :lu
+        LV = :lv
+        LY = :ly
+        MA = :ma
+        MC = :mc
+        MD = :md
+        ME = :me
+        MF = :mf
+        MG = :mg
+        MK = :mk
+        ML = :ml
+        MM = :mm
+        MN = :mn
+        MO = :mo
+        MQ = :mq
+        MR = :mr
+        MT = :mt
+        MU = :mu
+        MV = :mv
+        MW = :mw
+        MX = :mx
+        MY = :my
+        MZ = :mz
+        NA = :na
+        NC = :nc
+        NE = :ne
+        NG = :ng
+        NI = :ni
+        NL = :nl
+        NO = :no
+        NP = :np
+        NZ = :nz
+        OM = :om
+        PA = :pa
+        PE = :pe
+        PF = :pf
+        PG = :pg
+        PH = :ph
+        PK = :pk
+        PL = :pl
+        PR = :pr
+        PS = :ps
+        PT = :pt
+        PY = :py
+        QA = :qa
+        RE = :re
+        RO = :ro
+        RS = :rs
+        RU = :ru
+        RW = :rw
+        SA = :sa
+        SC = :sc
+        SD = :sd
+        SE = :se
+        SG = :sg
+        SI = :si
+        SK = :sk
+        SL = :sl
+        SM = :sm
+        SN = :sn
+        SO = :so
+        SR = :sr
+        SS = :ss
+        ST = :st
+        SV = :sv
+        SX = :sx
+        SY = :sy
+        SZ = :sz
+        TC = :tc
+        TD = :td
+        TG = :tg
+        TH = :th
+        TJ = :tj
+        TL = :tl
+        TM = :tm
+        TN = :tn
+        TR = :tr
+        TT = :tt
+        TW = :tw
+        TZ = :tz
+        UA = :ua
+        UG = :ug
+        US = :us
+        UY = :uy
+        UZ = :uz
+        VC = :vc
+        VE = :ve
+        VG = :vg
+        VI = :vi
+        VN = :vn
+        YE = :ye
+        YT = :yt
+        ZA = :za
+        ZM = :zm
+        ZW = :zw
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
 
       class Enrichment < ContextDev::Internal::Type::BaseModel

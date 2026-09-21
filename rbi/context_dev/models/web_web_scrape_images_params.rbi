@@ -36,6 +36,22 @@ module ContextDev
       end
       attr_accessor :actions
 
+      # Fetch the target page through a residential proxy in this country (ISO 3166-1
+      # alpha-2).
+      sig do
+        returns(
+          T.nilable(ContextDev::WebWebScrapeImagesParams::Country::OrSymbol)
+        )
+      end
+      attr_reader :country
+
+      sig do
+        params(
+          country: ContextDev::WebWebScrapeImagesParams::Country::OrSymbol
+        ).void
+      end
+      attr_writer :country
+
       # When true, visually duplicate images are removed: every image is loaded and
       # perceptually hashed, and only the highest-resolution copy of each duplicate
       # group is kept. Images that cannot be downloaded or hashed are kept. Default:
@@ -134,6 +150,7 @@ module ContextDev
                 )
               ]
             ),
+          country: ContextDev::WebWebScrapeImagesParams::Country::OrSymbol,
           dedupe: T::Boolean,
           enrichment:
             T.nilable(ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash),
@@ -154,6 +171,9 @@ module ContextDev
         # content is captured. Requires a paid plan. Send a JSON array in the query
         # parameter. Maximum: 5 actions.
         actions: nil,
+        # Fetch the target page through a residential proxy in this country (ISO 3166-1
+        # alpha-2).
+        country: nil,
         # When true, visually duplicate images are removed: every image is loaded and
         # perceptually hashed, and only the highest-resolution copy of each duplicate
         # group is kept. Images that cannot be downloaded or hashed are kept. Default:
@@ -205,6 +225,7 @@ module ContextDev
                   )
                 ]
               ),
+            country: ContextDev::WebWebScrapeImagesParams::Country::OrSymbol,
             dedupe: T::Boolean,
             enrichment:
               T.nilable(ContextDev::WebWebScrapeImagesParams::Enrichment),
@@ -503,6 +524,1049 @@ module ContextDev
           )
         end
         def self.variants
+        end
+      end
+
+      # Fetch the target page through a residential proxy in this country (ISO 3166-1
+      # alpha-2).
+      module Country
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::WebWebScrapeImagesParams::Country)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        AD =
+          T.let(
+            :ad,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AE =
+          T.let(
+            :ae,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AF =
+          T.let(
+            :af,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AG =
+          T.let(
+            :ag,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AI =
+          T.let(
+            :ai,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AL =
+          T.let(
+            :al,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AM =
+          T.let(
+            :am,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AO =
+          T.let(
+            :ao,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AR =
+          T.let(
+            :ar,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AT =
+          T.let(
+            :at,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AU =
+          T.let(
+            :au,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AW =
+          T.let(
+            :aw,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        AZ =
+          T.let(
+            :az,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BA =
+          T.let(
+            :ba,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BB =
+          T.let(
+            :bb,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BD =
+          T.let(
+            :bd,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BE =
+          T.let(
+            :be,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BF =
+          T.let(
+            :bf,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BG =
+          T.let(
+            :bg,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BH =
+          T.let(
+            :bh,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BI =
+          T.let(
+            :bi,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BJ =
+          T.let(
+            :bj,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BM =
+          T.let(
+            :bm,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BN =
+          T.let(
+            :bn,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BO =
+          T.let(
+            :bo,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BQ =
+          T.let(
+            :bq,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BR =
+          T.let(
+            :br,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BS =
+          T.let(
+            :bs,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BW =
+          T.let(
+            :bw,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BY =
+          T.let(
+            :by,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        BZ =
+          T.let(
+            :bz,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CA =
+          T.let(
+            :ca,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CD =
+          T.let(
+            :cd,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CF =
+          T.let(
+            :cf,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CG =
+          T.let(
+            :cg,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CH =
+          T.let(
+            :ch,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CI =
+          T.let(
+            :ci,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CL =
+          T.let(
+            :cl,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CM =
+          T.let(
+            :cm,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CN =
+          T.let(
+            :cn,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CO =
+          T.let(
+            :co,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CR =
+          T.let(
+            :cr,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CV =
+          T.let(
+            :cv,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CW =
+          T.let(
+            :cw,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CY =
+          T.let(
+            :cy,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        CZ =
+          T.let(
+            :cz,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        DE =
+          T.let(
+            :de,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        DJ =
+          T.let(
+            :dj,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        DK =
+          T.let(
+            :dk,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        DM =
+          T.let(
+            :dm,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        DO =
+          T.let(
+            :do,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        DZ =
+          T.let(
+            :dz,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        EC =
+          T.let(
+            :ec,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        EE =
+          T.let(
+            :ee,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        EG =
+          T.let(
+            :eg,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        ES =
+          T.let(
+            :es,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        ET =
+          T.let(
+            :et,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        FI =
+          T.let(
+            :fi,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        FJ =
+          T.let(
+            :fj,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        FR =
+          T.let(
+            :fr,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GA =
+          T.let(
+            :ga,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GB =
+          T.let(
+            :gb,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GD =
+          T.let(
+            :gd,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GE =
+          T.let(
+            :ge,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GF =
+          T.let(
+            :gf,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GG =
+          T.let(
+            :gg,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GH =
+          T.let(
+            :gh,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GM =
+          T.let(
+            :gm,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GN =
+          T.let(
+            :gn,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GP =
+          T.let(
+            :gp,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GQ =
+          T.let(
+            :gq,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GR =
+          T.let(
+            :gr,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GT =
+          T.let(
+            :gt,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GU =
+          T.let(
+            :gu,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GW =
+          T.let(
+            :gw,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        GY =
+          T.let(
+            :gy,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        HK =
+          T.let(
+            :hk,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        HN =
+          T.let(
+            :hn,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        HR =
+          T.let(
+            :hr,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        HT =
+          T.let(
+            :ht,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        HU =
+          T.let(
+            :hu,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        ID =
+          T.let(
+            :id,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        IE =
+          T.let(
+            :ie,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        IL =
+          T.let(
+            :il,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        IM =
+          T.let(
+            :im,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        IN =
+          T.let(
+            :in,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        IQ =
+          T.let(
+            :iq,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        IR =
+          T.let(
+            :ir,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        IS =
+          T.let(
+            :is,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        IT =
+          T.let(
+            :it,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        JE =
+          T.let(
+            :je,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        JM =
+          T.let(
+            :jm,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        JO =
+          T.let(
+            :jo,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        JP =
+          T.let(
+            :jp,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        KE =
+          T.let(
+            :ke,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        KG =
+          T.let(
+            :kg,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        KH =
+          T.let(
+            :kh,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        KN =
+          T.let(
+            :kn,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        KR =
+          T.let(
+            :kr,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        KW =
+          T.let(
+            :kw,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        KY =
+          T.let(
+            :ky,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        KZ =
+          T.let(
+            :kz,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        LA =
+          T.let(
+            :la,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        LB =
+          T.let(
+            :lb,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        LC =
+          T.let(
+            :lc,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        LK =
+          T.let(
+            :lk,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        LR =
+          T.let(
+            :lr,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        LS =
+          T.let(
+            :ls,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        LT =
+          T.let(
+            :lt,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        LU =
+          T.let(
+            :lu,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        LV =
+          T.let(
+            :lv,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        LY =
+          T.let(
+            :ly,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MA =
+          T.let(
+            :ma,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MC =
+          T.let(
+            :mc,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MD =
+          T.let(
+            :md,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        ME =
+          T.let(
+            :me,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MF =
+          T.let(
+            :mf,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MG =
+          T.let(
+            :mg,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MK =
+          T.let(
+            :mk,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        ML =
+          T.let(
+            :ml,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MM =
+          T.let(
+            :mm,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MN =
+          T.let(
+            :mn,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MO =
+          T.let(
+            :mo,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MQ =
+          T.let(
+            :mq,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MR =
+          T.let(
+            :mr,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MT =
+          T.let(
+            :mt,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MU =
+          T.let(
+            :mu,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MV =
+          T.let(
+            :mv,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MW =
+          T.let(
+            :mw,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MX =
+          T.let(
+            :mx,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MY =
+          T.let(
+            :my,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        MZ =
+          T.let(
+            :mz,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        NA =
+          T.let(
+            :na,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        NC =
+          T.let(
+            :nc,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        NE =
+          T.let(
+            :ne,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        NG =
+          T.let(
+            :ng,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        NI =
+          T.let(
+            :ni,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        NL =
+          T.let(
+            :nl,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        NO =
+          T.let(
+            :no,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        NP =
+          T.let(
+            :np,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        NZ =
+          T.let(
+            :nz,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        OM =
+          T.let(
+            :om,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        PA =
+          T.let(
+            :pa,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        PE =
+          T.let(
+            :pe,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        PF =
+          T.let(
+            :pf,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        PG =
+          T.let(
+            :pg,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        PH =
+          T.let(
+            :ph,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        PK =
+          T.let(
+            :pk,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        PL =
+          T.let(
+            :pl,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        PR =
+          T.let(
+            :pr,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        PS =
+          T.let(
+            :ps,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        PT =
+          T.let(
+            :pt,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        PY =
+          T.let(
+            :py,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        QA =
+          T.let(
+            :qa,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        RE =
+          T.let(
+            :re,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        RO =
+          T.let(
+            :ro,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        RS =
+          T.let(
+            :rs,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        RU =
+          T.let(
+            :ru,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        RW =
+          T.let(
+            :rw,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SA =
+          T.let(
+            :sa,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SC =
+          T.let(
+            :sc,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SD =
+          T.let(
+            :sd,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SE =
+          T.let(
+            :se,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SG =
+          T.let(
+            :sg,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SI =
+          T.let(
+            :si,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SK =
+          T.let(
+            :sk,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SL =
+          T.let(
+            :sl,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SM =
+          T.let(
+            :sm,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SN =
+          T.let(
+            :sn,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SO =
+          T.let(
+            :so,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SR =
+          T.let(
+            :sr,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SS =
+          T.let(
+            :ss,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        ST =
+          T.let(
+            :st,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SV =
+          T.let(
+            :sv,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SX =
+          T.let(
+            :sx,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SY =
+          T.let(
+            :sy,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        SZ =
+          T.let(
+            :sz,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TC =
+          T.let(
+            :tc,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TD =
+          T.let(
+            :td,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TG =
+          T.let(
+            :tg,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TH =
+          T.let(
+            :th,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TJ =
+          T.let(
+            :tj,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TL =
+          T.let(
+            :tl,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TM =
+          T.let(
+            :tm,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TN =
+          T.let(
+            :tn,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TR =
+          T.let(
+            :tr,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TT =
+          T.let(
+            :tt,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TW =
+          T.let(
+            :tw,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        TZ =
+          T.let(
+            :tz,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        UA =
+          T.let(
+            :ua,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        UG =
+          T.let(
+            :ug,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        US =
+          T.let(
+            :us,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        UY =
+          T.let(
+            :uy,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        UZ =
+          T.let(
+            :uz,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        VC =
+          T.let(
+            :vc,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        VE =
+          T.let(
+            :ve,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        VG =
+          T.let(
+            :vg,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        VI =
+          T.let(
+            :vi,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        VN =
+          T.let(
+            :vn,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        YE =
+          T.let(
+            :ye,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        YT =
+          T.let(
+            :yt,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        ZA =
+          T.let(
+            :za,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        ZM =
+          T.let(
+            :zm,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+        ZW =
+          T.let(
+            :zw,
+            ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::WebWebScrapeImagesParams::Country::TaggedSymbol
+            ]
+          )
+        end
+        def self.values
         end
       end
 

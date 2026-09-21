@@ -38,12 +38,19 @@ module ContextDev
       # as a JSON object or deep-object query params such as
       # headers[Referer]=https://example.com/. Host, Content-Length, and hop-by-hop
       # transport headers are rejected. Authorization and cookies are removed when a
-      # redirect changes origin.
+      # redirect changes origin. Credential-bearing headers bypass cache reads and
+      # writes; other headers are included in the cache key.
       sig { returns(T.nilable(T::Hash[Symbol, String])) }
       attr_reader :headers
 
       sig { params(headers: T::Hash[Symbol, String]).void }
       attr_writer :headers
+
+      # Return a cached result if a prior scrape for the same parameters exists and is
+      # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+      # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+      sig { returns(T.nilable(Integer)) }
+      attr_accessor :max_age_ms
 
       # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
       # characters.
@@ -97,6 +104,7 @@ module ContextDev
           url: String,
           country: ContextDev::WebWebScrapeBytesParams::Country::OrSymbol,
           headers: T::Hash[Symbol, String],
+          max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
           timeout_opts:
             ContextDev::WebWebScrapeBytesParams::TimeoutOpts::OrHash,
@@ -115,8 +123,13 @@ module ContextDev
         # as a JSON object or deep-object query params such as
         # headers[Referer]=https://example.com/. Host, Content-Length, and hop-by-hop
         # transport headers are rejected. Authorization and cookies are removed when a
-        # redirect changes origin.
+        # redirect changes origin. Credential-bearing headers bypass cache reads and
+        # writes; other headers are included in the cache key.
         headers: nil,
+        # Return a cached result if a prior scrape for the same parameters exists and is
+        # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+        # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+        max_age_ms: nil,
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
@@ -147,6 +160,7 @@ module ContextDev
             url: String,
             country: ContextDev::WebWebScrapeBytesParams::Country::OrSymbol,
             headers: T::Hash[Symbol, String],
+            max_age_ms: T.nilable(Integer),
             tags: T::Array[String],
             timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
             wait_for_ms: T.nilable(Integer),

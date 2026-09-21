@@ -5,6 +5,7 @@ module ContextDev
         url: String,
         country: ContextDev::Models::WebWebScrapeBytesParams::country,
         headers: ::Hash[Symbol, String],
+        max_age_ms: Integer?,
         tags: ::Array[String],
         timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
         wait_for_ms: Integer?,
@@ -28,6 +29,8 @@ module ContextDev
 
       def headers=: (::Hash[Symbol, String]) -> ::Hash[Symbol, String]
 
+      attr_accessor max_age_ms: Integer?
+
       attr_reader tags: ::Array[String]?
 
       def tags=: (::Array[String]) -> ::Array[String]
@@ -50,6 +53,7 @@ module ContextDev
         url: String,
         ?country: ContextDev::Models::WebWebScrapeBytesParams::country,
         ?headers: ::Hash[Symbol, String],
+        ?max_age_ms: Integer?,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
         ?wait_for_ms: Integer?,
@@ -61,6 +65,7 @@ module ContextDev
         url: String,
         country: ContextDev::Models::WebWebScrapeBytesParams::country,
         headers: ::Hash[Symbol, String],
+        max_age_ms: Integer?,
         tags: ::Array[String],
         timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
         wait_for_ms: Integer?,

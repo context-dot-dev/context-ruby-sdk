@@ -407,17 +407,24 @@ module ContextDev
       # Follows public redirects and retries failed downloads through ISP and
       # residential proxies, with a direct fallback. When country is specified, only a
       # residential proxy in that country is used. Supply headers such as Referer for
-      # images that require a referring page. Downloads are not cached. Maximum decoded
-      # resource size: 20 MiB (20971520 bytes), before base64 encoding. Successful
-      # requests cost 1 credit; errors are not billed.
+      # images that require a referring page. Cached results are reused according to
+      # maxAgeMs (default: 1 day; maximum: 30 days). Set maxAgeMs=0 to fetch fresh and
+      # refresh the cache. Cache identity includes the exact URL, country, waitForMs,
+      # and normalized outbound headers. Credential-bearing headers and zero data
+      # retention bypass cache reads and writes. cache_metadata reports hit, miss, or
+      # zdr and the cached result age in milliseconds. Maximum decoded resource size: 20
+      # MiB (20971520 bytes), before base64 encoding. Successful requests cost 1 credit;
+      # errors are not billed.
       #
-      # @overload web_scrape_bytes(url:, country: nil, headers: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_bytes(url:, country: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full HTTP(S) URL of the resource to download, such as an image, PDF, or page.
       #
       # @param country [Symbol, ContextDev::Models::WebWebScrapeBytesParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers, such as Referer, Cookie, or Authorization. Send
+      #
+      # @param max_age_ms [Integer, nil] Return a cached result if a prior scrape for the same parameters exists and is y
       #
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
@@ -438,7 +445,11 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/bytes",
-          query: query.transform_keys(timeout_opts: "timeoutOpts", wait_for_ms: "waitForMs"),
+          query: query.transform_keys(
+            max_age_ms: "maxAgeMs",
+            timeout_opts: "timeoutOpts",
+            wait_for_ms: "waitForMs"
+          ),
           model: ContextDev::Models::WebWebScrapeBytesResponse,
           options: options
         )
@@ -528,11 +539,13 @@ module ContextDev
       # enrichment is enabled, the entire call costs 5 credits, including requests that
       # also use actions.
       #
-      # @overload web_scrape_images(url:, actions: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_images(url:, actions: nil, country: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Page URL to inspect. Must include http:// or https://.
       #
       # @param actions [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll>, nil] Optional browser actions executed in array order after the page loads and before
+      #
+      # @param country [Symbol, ContextDev::Models::WebWebScrapeImagesParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       # @param dedupe [Boolean] When true, visually duplicate images are removed: every image is loaded and perc
       #

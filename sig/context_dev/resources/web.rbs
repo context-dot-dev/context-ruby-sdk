@@ -125,6 +125,7 @@ module ContextDev
         url: String,
         ?country: ContextDev::Models::WebWebScrapeBytesParams::country,
         ?headers: ::Hash[Symbol, String],
+        ?max_age_ms: Integer?,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
         ?wait_for_ms: Integer?,
@@ -155,6 +156,7 @@ module ContextDev
       def web_scrape_images: (
         url: String,
         ?actions: ::Array[ContextDev::Models::WebWebScrapeImagesParams::action]?,
+        ?country: ContextDev::Models::WebWebScrapeImagesParams::country,
         ?dedupe: bool,
         ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment?,
         ?headers: ::Hash[Symbol, String],

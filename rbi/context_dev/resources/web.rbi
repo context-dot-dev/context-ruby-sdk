@@ -536,14 +536,20 @@ module ContextDev
       # Follows public redirects and retries failed downloads through ISP and
       # residential proxies, with a direct fallback. When country is specified, only a
       # residential proxy in that country is used. Supply headers such as Referer for
-      # images that require a referring page. Downloads are not cached. Maximum decoded
-      # resource size: 20 MiB (20971520 bytes), before base64 encoding. Successful
-      # requests cost 1 credit; errors are not billed.
+      # images that require a referring page. Cached results are reused according to
+      # maxAgeMs (default: 1 day; maximum: 30 days). Set maxAgeMs=0 to fetch fresh and
+      # refresh the cache. Cache identity includes the exact URL, country, waitForMs,
+      # and normalized outbound headers. Credential-bearing headers and zero data
+      # retention bypass cache reads and writes. cache_metadata reports hit, miss, or
+      # zdr and the cached result age in milliseconds. Maximum decoded resource size: 20
+      # MiB (20971520 bytes), before base64 encoding. Successful requests cost 1 credit;
+      # errors are not billed.
       sig do
         params(
           url: String,
           country: ContextDev::WebWebScrapeBytesParams::Country::OrSymbol,
           headers: T::Hash[Symbol, String],
+          max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
           timeout_opts:
             ContextDev::WebWebScrapeBytesParams::TimeoutOpts::OrHash,
@@ -562,8 +568,13 @@ module ContextDev
         # as a JSON object or deep-object query params such as
         # headers[Referer]=https://example.com/. Host, Content-Length, and hop-by-hop
         # transport headers are rejected. Authorization and cookies are removed when a
-        # redirect changes origin.
+        # redirect changes origin. Credential-bearing headers bypass cache reads and
+        # writes; other headers are included in the cache key.
         headers: nil,
+        # Return a cached result if a prior scrape for the same parameters exists and is
+        # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+        # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+        max_age_ms: nil,
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
@@ -721,6 +732,7 @@ module ContextDev
                 )
               ]
             ),
+          country: ContextDev::WebWebScrapeImagesParams::Country::OrSymbol,
           dedupe: T::Boolean,
           enrichment:
             T.nilable(ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash),
@@ -741,6 +753,9 @@ module ContextDev
         # content is captured. Requires a paid plan. Send a JSON array in the query
         # parameter. Maximum: 5 actions.
         actions: nil,
+        # Fetch the target page through a residential proxy in this country (ISO 3166-1
+        # alpha-2).
+        country: nil,
         # When true, visually duplicate images are removed: every image is loaded and
         # perceptually hashed, and only the highest-resolution copy of each duplicate
         # group is kept. Images that cannot be downloaded or hashed are kept. Default:
