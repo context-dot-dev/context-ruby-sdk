@@ -219,6 +219,55 @@ module ContextDev
       end
 
       # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::WebScrapeParams} for more details.
+      #
+      # Capture the requested formats from one page visit. Shared settings apply once.
+      # HTML-only requests use the existing fast acquisition path. One credit per
+      # capture, or two with browser actions; PDF OCR adds one credit per recovered
+      # page. Original response bytes and screenshots are limited to 20 MiB each,
+      # screenshots to 40 megapixels, and the combined browser capture to 60 MiB.
+      #
+      # @overload scrape(formats:, url:, image_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_ms: nil, zdr: nil, request_options: {})
+      #
+      # @param formats [ContextDev::Models::WebScrapeParams::Formats] Outputs to return. Enable at least one; omitted formats are false.
+      #
+      # @param url [String] The URL to scrape.
+      #
+      # @param image_params [ContextDev::Models::WebScrapeParams::ImageParams] Image options. Requires formats.images: true.
+      #
+      # @param markdown_params [ContextDev::Models::WebScrapeParams::MarkdownParams] Markdown options. Requires formats.markdown: true.
+      #
+      # @param max_age_ms [Integer] Maximum age for the entire capture, including bytes. Defaults to 1 day; 0 fetche
+      #
+      # @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams] Required when formats.parse is true.
+      #
+      # @param screenshot_params [ContextDev::Models::WebScrapeParams::ScreenshotParams] Screenshot options. Requires formats.screenshot: true.
+      #
+      # @param shared_params [ContextDev::Models::WebScrapeParams::SharedParams] Shared browser and content settings. Content filters leave screenshots and origi
+      #
+      # @param tags [Array<String>] Labels for tracking request usage. Not retained when zdr is enabled.
+      #
+      # @param timeout_ms [Integer] Total deadline, including navigation, actions, waiting, and all outputs.
+      #
+      # @param zdr [Symbol, ContextDev::Models::WebScrapeParams::Zdr] Zero data retention. Bypasses caches and uploads; excludes request/response cont
+      #
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::WebScrapeResponse]
+      #
+      # @see ContextDev::Models::WebScrapeParams
+      def scrape(params)
+        parsed, options = ContextDev::WebScrapeParams.dump_request(params)
+        @client.request(
+          method: :post,
+          path: "web/scrape",
+          body: parsed,
+          model: ContextDev::Models::WebScrapeResponse,
+          options: options
+        )
+      end
+
+      # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebScreenshotParams} for more details.
       #
       # Capture a screenshot of a website.

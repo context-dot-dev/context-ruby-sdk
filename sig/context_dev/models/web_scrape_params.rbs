@@ -1,0 +1,795 @@
+module ContextDev
+  module Models
+    type web_scrape_params =
+      {
+        formats: ContextDev::WebScrapeParams::Formats,
+        url: String,
+        image_params: ContextDev::WebScrapeParams::ImageParams,
+        markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
+        max_age_ms: Integer,
+        parse_params: ContextDev::WebScrapeParams::ParseParams,
+        screenshot_params: ContextDev::WebScrapeParams::ScreenshotParams,
+        shared_params: ContextDev::WebScrapeParams::SharedParams,
+        tags: ::Array[String],
+        timeout_ms: Integer,
+        zdr: ContextDev::Models::WebScrapeParams::zdr
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class WebScrapeParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor formats: ContextDev::WebScrapeParams::Formats
+
+      attr_accessor url: String
+
+      attr_reader image_params: ContextDev::WebScrapeParams::ImageParams?
+
+      def image_params=: (
+        ContextDev::WebScrapeParams::ImageParams
+      ) -> ContextDev::WebScrapeParams::ImageParams
+
+      attr_reader markdown_params: ContextDev::WebScrapeParams::MarkdownParams?
+
+      def markdown_params=: (
+        ContextDev::WebScrapeParams::MarkdownParams
+      ) -> ContextDev::WebScrapeParams::MarkdownParams
+
+      attr_reader max_age_ms: Integer?
+
+      def max_age_ms=: (Integer) -> Integer
+
+      attr_reader parse_params: ContextDev::WebScrapeParams::ParseParams?
+
+      def parse_params=: (
+        ContextDev::WebScrapeParams::ParseParams
+      ) -> ContextDev::WebScrapeParams::ParseParams
+
+      attr_reader screenshot_params: ContextDev::WebScrapeParams::ScreenshotParams?
+
+      def screenshot_params=: (
+        ContextDev::WebScrapeParams::ScreenshotParams
+      ) -> ContextDev::WebScrapeParams::ScreenshotParams
+
+      attr_reader shared_params: ContextDev::WebScrapeParams::SharedParams?
+
+      def shared_params=: (
+        ContextDev::WebScrapeParams::SharedParams
+      ) -> ContextDev::WebScrapeParams::SharedParams
+
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
+      attr_reader timeout_ms: Integer?
+
+      def timeout_ms=: (Integer) -> Integer
+
+      attr_reader zdr: ContextDev::Models::WebScrapeParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::WebScrapeParams::zdr
+      ) -> ContextDev::Models::WebScrapeParams::zdr
+
+      def initialize: (
+        formats: ContextDev::WebScrapeParams::Formats,
+        url: String,
+        ?image_params: ContextDev::WebScrapeParams::ImageParams,
+        ?markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
+        ?max_age_ms: Integer,
+        ?parse_params: ContextDev::WebScrapeParams::ParseParams,
+        ?screenshot_params: ContextDev::WebScrapeParams::ScreenshotParams,
+        ?shared_params: ContextDev::WebScrapeParams::SharedParams,
+        ?tags: ::Array[String],
+        ?timeout_ms: Integer,
+        ?zdr: ContextDev::Models::WebScrapeParams::zdr,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        formats: ContextDev::WebScrapeParams::Formats,
+        url: String,
+        image_params: ContextDev::WebScrapeParams::ImageParams,
+        markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
+        max_age_ms: Integer,
+        parse_params: ContextDev::WebScrapeParams::ParseParams,
+        screenshot_params: ContextDev::WebScrapeParams::ScreenshotParams,
+        shared_params: ContextDev::WebScrapeParams::SharedParams,
+        tags: ::Array[String],
+        timeout_ms: Integer,
+        zdr: ContextDev::Models::WebScrapeParams::zdr,
+        request_options: ContextDev::RequestOptions
+      }
+
+      type formats =
+        {
+          bytes: bool,
+          html: bool,
+          images: bool,
+          markdown: bool,
+          parse: bool,
+          screenshot: bool
+        }
+
+      class Formats < ContextDev::Internal::Type::BaseModel
+        attr_reader bytes: bool?
+
+        def bytes=: (bool) -> bool
+
+        attr_reader html: bool?
+
+        def html=: (bool) -> bool
+
+        attr_reader images: bool?
+
+        def images=: (bool) -> bool
+
+        attr_reader markdown: bool?
+
+        def markdown=: (bool) -> bool
+
+        attr_reader parse: bool?
+
+        def parse=: (bool) -> bool
+
+        attr_reader screenshot: bool?
+
+        def screenshot=: (bool) -> bool
+
+        def initialize: (
+          ?bytes: bool,
+          ?html: bool,
+          ?images: bool,
+          ?markdown: bool,
+          ?parse: bool,
+          ?screenshot: bool
+        ) -> void
+
+        def to_hash: -> {
+          bytes: bool,
+          html: bool,
+          images: bool,
+          markdown: bool,
+          parse: bool,
+          screenshot: bool
+        }
+      end
+
+      type image_params =
+        {
+          dedupe: ContextDev::Models::WebScrapeParams::ImageParams::dedupe,
+          enrich: ::Array[ContextDev::Models::WebScrapeParams::ImageParams::enrich]
+        }
+
+      class ImageParams < ContextDev::Internal::Type::BaseModel
+        attr_reader dedupe: ContextDev::Models::WebScrapeParams::ImageParams::dedupe?
+
+        def dedupe=: (
+          ContextDev::Models::WebScrapeParams::ImageParams::dedupe
+        ) -> ContextDev::Models::WebScrapeParams::ImageParams::dedupe
+
+        attr_reader enrich: ::Array[ContextDev::Models::WebScrapeParams::ImageParams::enrich]?
+
+        def enrich=: (
+          ::Array[ContextDev::Models::WebScrapeParams::ImageParams::enrich]
+        ) -> ::Array[ContextDev::Models::WebScrapeParams::ImageParams::enrich]
+
+        def initialize: (
+          ?dedupe: ContextDev::Models::WebScrapeParams::ImageParams::dedupe,
+          ?enrich: ::Array[ContextDev::Models::WebScrapeParams::ImageParams::enrich]
+        ) -> void
+
+        def to_hash: -> {
+          dedupe: ContextDev::Models::WebScrapeParams::ImageParams::dedupe,
+          enrich: ::Array[ContextDev::Models::WebScrapeParams::ImageParams::enrich]
+        }
+
+        type dedupe = :none | :visual
+
+        module Dedupe
+          extend ContextDev::Internal::Type::Enum
+
+          NONE: :none
+          VISUAL: :visual
+
+          def self?.values: -> ::Array[ContextDev::Models::WebScrapeParams::ImageParams::dedupe]
+        end
+
+        type enrich = :dimensions | :classification | :file
+
+        module Enrich
+          extend ContextDev::Internal::Type::Enum
+
+          DIMENSIONS: :dimensions
+          CLASSIFICATION: :classification
+          FILE: :file
+
+          def self?.values: -> ::Array[ContextDev::Models::WebScrapeParams::ImageParams::enrich]
+        end
+      end
+
+      type markdown_params =
+        {
+          include_images: bool,
+          include_links: bool,
+          inline_images: ContextDev::Models::WebScrapeParams::MarkdownParams::inline_images
+        }
+
+      class MarkdownParams < ContextDev::Internal::Type::BaseModel
+        attr_reader include_images: bool?
+
+        def include_images=: (bool) -> bool
+
+        attr_reader include_links: bool?
+
+        def include_links=: (bool) -> bool
+
+        attr_reader inline_images: ContextDev::Models::WebScrapeParams::MarkdownParams::inline_images?
+
+        def inline_images=: (
+          ContextDev::Models::WebScrapeParams::MarkdownParams::inline_images
+        ) -> ContextDev::Models::WebScrapeParams::MarkdownParams::inline_images
+
+        def initialize: (
+          ?include_images: bool,
+          ?include_links: bool,
+          ?inline_images: ContextDev::Models::WebScrapeParams::MarkdownParams::inline_images
+        ) -> void
+
+        def to_hash: -> {
+          include_images: bool,
+          include_links: bool,
+          inline_images: ContextDev::Models::WebScrapeParams::MarkdownParams::inline_images
+        }
+
+        type inline_images = :placeholder | :preserve
+
+        module InlineImages
+          extend ContextDev::Internal::Type::Enum
+
+          PLACEHOLDER: :placeholder
+          PRESERVE: :preserve
+
+          def self?.values: -> ::Array[ContextDev::Models::WebScrapeParams::MarkdownParams::inline_images]
+        end
+      end
+
+      type parse_params =
+        {
+          rules: ::Hash[Symbol, ContextDev::Models::WebScrapeParams::ParseParams::rule]
+        }
+
+      class ParseParams < ContextDev::Internal::Type::BaseModel
+        attr_accessor rules: ::Hash[Symbol, ContextDev::Models::WebScrapeParams::ParseParams::rule]
+
+        def initialize: (
+          rules: ::Hash[Symbol, ContextDev::Models::WebScrapeParams::ParseParams::rule]
+        ) -> void
+
+        def to_hash: -> {
+          rules: ::Hash[Symbol, ContextDev::Models::WebScrapeParams::ParseParams::rule]
+        }
+
+        type rule =
+          String | ContextDev::WebScrapeParams::ParseParams::Rule::UnionMember1
+
+        module Rule
+          extend ContextDev::Internal::Type::Union
+
+          type union_member1 =
+            {
+              selector: String,
+              output: ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::output,
+              type: ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::type_
+            }
+
+          class UnionMember1 < ContextDev::Internal::Type::BaseModel
+            attr_accessor selector: String
+
+            attr_reader output: ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::output?
+
+            def output=: (
+              ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::output
+            ) -> ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::output
+
+            attr_reader type: ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::type_?
+
+            def type=: (
+              ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::type_
+            ) -> ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::type_
+
+            def initialize: (
+              selector: String,
+              ?output: ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::output,
+              ?type: ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::type_
+            ) -> void
+
+            def to_hash: -> {
+              selector: String,
+              output: ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::output,
+              type: ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::type_
+            }
+
+            type output = :text | :html | String | top
+
+            module Output
+              extend ContextDev::Internal::Type::Union
+
+              def self?.variants: -> ::Array[ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::output]
+
+              TEXT: :text
+              HTML: :html
+            end
+
+            type type_ = :item | :list
+
+            module Type
+              extend ContextDev::Internal::Type::Enum
+
+              ITEM: :item
+              LIST: :list
+
+              def self?.values: -> ::Array[ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::type_]
+            end
+          end
+
+          def self?.variants: -> ::Array[ContextDev::Models::WebScrapeParams::ParseParams::rule]
+        end
+      end
+
+      type screenshot_params =
+        {
+          area: ContextDev::Models::WebScrapeParams::ScreenshotParams::area,
+          format_: ContextDev::Models::WebScrapeParams::ScreenshotParams::format_
+        }
+
+      class ScreenshotParams < ContextDev::Internal::Type::BaseModel
+        attr_reader area: ContextDev::Models::WebScrapeParams::ScreenshotParams::area?
+
+        def area=: (
+          ContextDev::Models::WebScrapeParams::ScreenshotParams::area
+        ) -> ContextDev::Models::WebScrapeParams::ScreenshotParams::area
+
+        attr_reader format_: ContextDev::Models::WebScrapeParams::ScreenshotParams::format_?
+
+        def format_=: (
+          ContextDev::Models::WebScrapeParams::ScreenshotParams::format_
+        ) -> ContextDev::Models::WebScrapeParams::ScreenshotParams::format_
+
+        def initialize: (
+          ?area: ContextDev::Models::WebScrapeParams::ScreenshotParams::area,
+          ?format_: ContextDev::Models::WebScrapeParams::ScreenshotParams::format_
+        ) -> void
+
+        def to_hash: -> {
+          area: ContextDev::Models::WebScrapeParams::ScreenshotParams::area,
+          format_: ContextDev::Models::WebScrapeParams::ScreenshotParams::format_
+        }
+
+        type area =
+          ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::page
+          | ContextDev::WebScrapeParams::ScreenshotParams::Area::Element
+          | ContextDev::WebScrapeParams::ScreenshotParams::Area::Rectangle
+
+        module Area
+          extend ContextDev::Internal::Type::Union
+
+          type page = :viewport | :fullPage
+
+          module Page
+            extend ContextDev::Internal::Type::Enum
+
+            VIEWPORT: :viewport
+            FULL_PAGE: :fullPage
+
+            def self?.values: -> ::Array[ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::page]
+          end
+
+          type element = { selector: String }
+
+          class Element < ContextDev::Internal::Type::BaseModel
+            attr_accessor selector: String
+
+            def initialize: (selector: String) -> void
+
+            def to_hash: -> { selector: String }
+          end
+
+          type rectangle =
+            { height: Integer, width: Integer, x: Integer, y_: Integer }
+
+          class Rectangle < ContextDev::Internal::Type::BaseModel
+            attr_accessor height: Integer
+
+            attr_accessor width: Integer
+
+            attr_accessor x: Integer
+
+            attr_accessor y_: Integer
+
+            def initialize: (
+              height: Integer,
+              width: Integer,
+              x: Integer,
+              y_: Integer
+            ) -> void
+
+            def to_hash: -> {
+              height: Integer,
+              width: Integer,
+              x: Integer,
+              y_: Integer
+            }
+          end
+
+          def self?.variants: -> ::Array[ContextDev::Models::WebScrapeParams::ScreenshotParams::area]
+        end
+
+        type format_ = :png | :jpeg | :webp
+
+        module Format
+          extend ContextDev::Internal::Type::Enum
+
+          PNG: :png
+          JPEG: :jpeg
+          WEBP: :webp
+
+          def self?.values: -> ::Array[ContextDev::Models::WebScrapeParams::ScreenshotParams::format_]
+        end
+      end
+
+      type shared_params =
+        {
+          actions: ::Array[ContextDev::Models::WebScrapeParams::SharedParams::action],
+          country: String,
+          dismiss_cookies: bool,
+          dismiss_popups: bool,
+          exclude_selectors: ::Array[String],
+          headers: ::Hash[Symbol, String],
+          include_frames: bool,
+          include_selectors: ::Array[String],
+          main_content_only: bool,
+          parsers: ContextDev::WebScrapeParams::SharedParams::Parsers,
+          settle_animations: bool,
+          theme: ContextDev::Models::WebScrapeParams::SharedParams::theme,
+          viewport: ContextDev::WebScrapeParams::SharedParams::Viewport,
+          wait_for: ContextDev::Models::WebScrapeParams::SharedParams::wait_for
+        }
+
+      class SharedParams < ContextDev::Internal::Type::BaseModel
+        attr_reader actions: ::Array[ContextDev::Models::WebScrapeParams::SharedParams::action]?
+
+        def actions=: (
+          ::Array[ContextDev::Models::WebScrapeParams::SharedParams::action]
+        ) -> ::Array[ContextDev::Models::WebScrapeParams::SharedParams::action]
+
+        attr_reader country: String?
+
+        def country=: (String) -> String
+
+        attr_reader dismiss_cookies: bool?
+
+        def dismiss_cookies=: (bool) -> bool
+
+        attr_reader dismiss_popups: bool?
+
+        def dismiss_popups=: (bool) -> bool
+
+        attr_reader exclude_selectors: ::Array[String]?
+
+        def exclude_selectors=: (::Array[String]) -> ::Array[String]
+
+        attr_reader headers: ::Hash[Symbol, String]?
+
+        def headers=: (::Hash[Symbol, String]) -> ::Hash[Symbol, String]
+
+        attr_reader include_frames: bool?
+
+        def include_frames=: (bool) -> bool
+
+        attr_reader include_selectors: ::Array[String]?
+
+        def include_selectors=: (::Array[String]) -> ::Array[String]
+
+        attr_reader main_content_only: bool?
+
+        def main_content_only=: (bool) -> bool
+
+        attr_reader parsers: ContextDev::WebScrapeParams::SharedParams::Parsers?
+
+        def parsers=: (
+          ContextDev::WebScrapeParams::SharedParams::Parsers
+        ) -> ContextDev::WebScrapeParams::SharedParams::Parsers
+
+        attr_reader settle_animations: bool?
+
+        def settle_animations=: (bool) -> bool
+
+        attr_reader theme: ContextDev::Models::WebScrapeParams::SharedParams::theme?
+
+        def theme=: (
+          ContextDev::Models::WebScrapeParams::SharedParams::theme
+        ) -> ContextDev::Models::WebScrapeParams::SharedParams::theme
+
+        attr_reader viewport: ContextDev::WebScrapeParams::SharedParams::Viewport?
+
+        def viewport=: (
+          ContextDev::WebScrapeParams::SharedParams::Viewport
+        ) -> ContextDev::WebScrapeParams::SharedParams::Viewport
+
+        attr_reader wait_for: ContextDev::Models::WebScrapeParams::SharedParams::wait_for?
+
+        def wait_for=: (
+          ContextDev::Models::WebScrapeParams::SharedParams::wait_for
+        ) -> ContextDev::Models::WebScrapeParams::SharedParams::wait_for
+
+        def initialize: (
+          ?actions: ::Array[ContextDev::Models::WebScrapeParams::SharedParams::action],
+          ?country: String,
+          ?dismiss_cookies: bool,
+          ?dismiss_popups: bool,
+          ?exclude_selectors: ::Array[String],
+          ?headers: ::Hash[Symbol, String],
+          ?include_frames: bool,
+          ?include_selectors: ::Array[String],
+          ?main_content_only: bool,
+          ?parsers: ContextDev::WebScrapeParams::SharedParams::Parsers,
+          ?settle_animations: bool,
+          ?theme: ContextDev::Models::WebScrapeParams::SharedParams::theme,
+          ?viewport: ContextDev::WebScrapeParams::SharedParams::Viewport,
+          ?wait_for: ContextDev::Models::WebScrapeParams::SharedParams::wait_for
+        ) -> void
+
+        def to_hash: -> {
+          actions: ::Array[ContextDev::Models::WebScrapeParams::SharedParams::action],
+          country: String,
+          dismiss_cookies: bool,
+          dismiss_popups: bool,
+          exclude_selectors: ::Array[String],
+          headers: ::Hash[Symbol, String],
+          include_frames: bool,
+          include_selectors: ::Array[String],
+          main_content_only: bool,
+          parsers: ContextDev::WebScrapeParams::SharedParams::Parsers,
+          settle_animations: bool,
+          theme: ContextDev::Models::WebScrapeParams::SharedParams::theme,
+          viewport: ContextDev::WebScrapeParams::SharedParams::Viewport,
+          wait_for: ContextDev::Models::WebScrapeParams::SharedParams::wait_for
+        }
+
+        type action =
+          ContextDev::WebScrapeParams::SharedParams::Action::Perform
+          | ContextDev::WebScrapeParams::SharedParams::Action::Scroll
+          | ContextDev::WebScrapeParams::SharedParams::Action::Wait
+          | ContextDev::WebScrapeParams::SharedParams::Action::WaitFor
+
+        module Action
+          extend ContextDev::Internal::Type::Union
+
+          type perform = { action: String, type: :perform }
+
+          class Perform < ContextDev::Internal::Type::BaseModel
+            attr_accessor action: String
+
+            attr_accessor type: :perform
+
+            def initialize: (action: String, ?type: :perform) -> void
+
+            def to_hash: -> { action: String, type: :perform }
+          end
+
+          type scroll =
+            {
+              type: :scroll,
+              amount: ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::amount,
+              direction: ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::direction,
+              max_scrolls: Integer,
+              selector: String
+            }
+
+          class Scroll < ContextDev::Internal::Type::BaseModel
+            attr_accessor type: :scroll
+
+            attr_reader amount: ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::amount?
+
+            def amount=: (
+              ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::amount
+            ) -> ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::amount
+
+            attr_reader direction: ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::direction?
+
+            def direction=: (
+              ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::direction
+            ) -> ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::direction
+
+            attr_reader max_scrolls: Integer?
+
+            def max_scrolls=: (Integer) -> Integer
+
+            attr_reader selector: String?
+
+            def selector=: (String) -> String
+
+            def initialize: (
+              ?amount: ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::amount,
+              ?direction: ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::direction,
+              ?max_scrolls: Integer,
+              ?selector: String,
+              ?type: :scroll
+            ) -> void
+
+            def to_hash: -> {
+              type: :scroll,
+              amount: ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::amount,
+              direction: ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::direction,
+              max_scrolls: Integer,
+              selector: String
+            }
+
+            type amount = Integer | :viewport | :max
+
+            module Amount
+              extend ContextDev::Internal::Type::Union
+
+              def self?.variants: -> ::Array[ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::amount]
+
+              VIEWPORT: :viewport
+              MAX: :max
+            end
+
+            type direction = :down | :up | :left | :right
+
+            module Direction
+              extend ContextDev::Internal::Type::Enum
+
+              DOWN: :down
+              UP: :up
+              LEFT: :left
+              RIGHT: :right
+
+              def self?.values: -> ::Array[ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::direction]
+            end
+          end
+
+          type wait = { milliseconds: Integer, type: :wait }
+
+          class Wait < ContextDev::Internal::Type::BaseModel
+            attr_accessor milliseconds: Integer
+
+            attr_accessor type: :wait
+
+            def initialize: (milliseconds: Integer, ?type: :wait) -> void
+
+            def to_hash: -> { milliseconds: Integer, type: :wait }
+          end
+
+          type wait_for = { selector: String, type: :waitFor }
+
+          class WaitFor < ContextDev::Internal::Type::BaseModel
+            attr_accessor selector: String
+
+            attr_accessor type: :waitFor
+
+            def initialize: (selector: String, ?type: :waitFor) -> void
+
+            def to_hash: -> { selector: String, type: :waitFor }
+          end
+
+          def self?.variants: -> ::Array[ContextDev::Models::WebScrapeParams::SharedParams::action]
+        end
+
+        type parsers =
+          { pdf: ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf }
+
+        class Parsers < ContextDev::Internal::Type::BaseModel
+          attr_reader pdf: ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf?
+
+          def pdf=: (
+            ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf
+          ) -> ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf
+
+          def initialize: (
+            ?pdf: ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf
+          ) -> void
+
+          def to_hash: -> {
+            pdf: ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf
+          }
+
+          type pdf =
+            {
+              end_page: Integer,
+              ocr: ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::ocr,
+              start_page: Integer
+            }
+
+          class Pdf < ContextDev::Internal::Type::BaseModel
+            attr_reader end_page: Integer?
+
+            def end_page=: (Integer) -> Integer
+
+            attr_reader ocr: ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::ocr?
+
+            def ocr=: (
+              ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::ocr
+            ) -> ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::ocr
+
+            attr_reader start_page: Integer?
+
+            def start_page=: (Integer) -> Integer
+
+            def initialize: (
+              ?end_page: Integer,
+              ?ocr: ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::ocr,
+              ?start_page: Integer
+            ) -> void
+
+            def to_hash: -> {
+              end_page: Integer,
+              ocr: ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::ocr,
+              start_page: Integer
+            }
+
+            type ocr = :off | :auto
+
+            module Ocr
+              extend ContextDev::Internal::Type::Enum
+
+              OFF: :off
+              AUTO: :auto
+
+              def self?.values: -> ::Array[ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::ocr]
+            end
+          end
+        end
+
+        type theme = :light | :dark
+
+        module Theme
+          extend ContextDev::Internal::Type::Enum
+
+          LIGHT: :light
+          DARK: :dark
+
+          def self?.values: -> ::Array[ContextDev::Models::WebScrapeParams::SharedParams::theme]
+        end
+
+        type viewport = { height: Integer, width: Integer }
+
+        class Viewport < ContextDev::Internal::Type::BaseModel
+          attr_reader height: Integer?
+
+          def height=: (Integer) -> Integer
+
+          attr_reader width: Integer?
+
+          def width=: (Integer) -> Integer
+
+          def initialize: (?height: Integer, ?width: Integer) -> void
+
+          def to_hash: -> { height: Integer, width: Integer }
+        end
+
+        type wait_for = Integer | String
+
+        module WaitFor
+          extend ContextDev::Internal::Type::Union
+
+          def self?.variants: -> ::Array[ContextDev::Models::WebScrapeParams::SharedParams::wait_for]
+        end
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::WebScrapeParams::zdr]
+      end
+    end
+  end
+end

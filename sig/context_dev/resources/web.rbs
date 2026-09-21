@@ -61,6 +61,21 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractStyleguideResponse
 
+      def scrape: (
+        formats: ContextDev::WebScrapeParams::Formats,
+        url: String,
+        ?image_params: ContextDev::WebScrapeParams::ImageParams,
+        ?markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
+        ?max_age_ms: Integer,
+        ?parse_params: ContextDev::WebScrapeParams::ParseParams,
+        ?screenshot_params: ContextDev::WebScrapeParams::ScreenshotParams,
+        ?shared_params: ContextDev::WebScrapeParams::SharedParams,
+        ?tags: ::Array[String],
+        ?timeout_ms: Integer,
+        ?zdr: ContextDev::Models::WebScrapeParams::zdr,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::WebScrapeResponse
+
       def screenshot: (
         ?clear_popups: bool,
         ?color_scheme: ContextDev::Models::WebScreenshotParams::color_scheme,

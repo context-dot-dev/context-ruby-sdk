@@ -1,0 +1,533 @@
+module ContextDev
+  module Models
+    type web_scrape_response =
+      {
+        bytes: ContextDev::Models::WebScrapeResponse::Bytes,
+        cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata,
+        html: ContextDev::Models::WebScrapeResponse::HTML,
+        images: ContextDev::Models::WebScrapeResponse::Images,
+        markdown: ContextDev::Models::WebScrapeResponse::Markdown,
+        metadata: ContextDev::Models::WebScrapeResponse::Metadata,
+        parsed: ContextDev::Models::WebScrapeResponse::Parsed,
+        request_id: String,
+        screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
+        url: String,
+        key_metadata: ContextDev::Models::WebScrapeResponse::KeyMetadata
+      }
+
+    class WebScrapeResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor bytes: ContextDev::Models::WebScrapeResponse::Bytes
+
+      attr_accessor cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata
+
+      attr_accessor html: ContextDev::Models::WebScrapeResponse::HTML
+
+      attr_accessor images: ContextDev::Models::WebScrapeResponse::Images
+
+      attr_accessor markdown: ContextDev::Models::WebScrapeResponse::Markdown
+
+      attr_accessor metadata: ContextDev::Models::WebScrapeResponse::Metadata
+
+      attr_accessor parsed: ContextDev::Models::WebScrapeResponse::Parsed
+
+      attr_accessor request_id: String
+
+      attr_accessor screenshot: ContextDev::Models::WebScrapeResponse::Screenshot
+
+      attr_accessor url: String
+
+      attr_reader key_metadata: ContextDev::Models::WebScrapeResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::WebScrapeResponse::KeyMetadata
+      ) -> ContextDev::Models::WebScrapeResponse::KeyMetadata
+
+      def initialize: (
+        bytes: ContextDev::Models::WebScrapeResponse::Bytes,
+        cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata,
+        html: ContextDev::Models::WebScrapeResponse::HTML,
+        images: ContextDev::Models::WebScrapeResponse::Images,
+        markdown: ContextDev::Models::WebScrapeResponse::Markdown,
+        metadata: ContextDev::Models::WebScrapeResponse::Metadata,
+        parsed: ContextDev::Models::WebScrapeResponse::Parsed,
+        request_id: String,
+        screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
+        url: String,
+        ?key_metadata: ContextDev::Models::WebScrapeResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        bytes: ContextDev::Models::WebScrapeResponse::Bytes,
+        cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata,
+        html: ContextDev::Models::WebScrapeResponse::HTML,
+        images: ContextDev::Models::WebScrapeResponse::Images,
+        markdown: ContextDev::Models::WebScrapeResponse::Markdown,
+        metadata: ContextDev::Models::WebScrapeResponse::Metadata,
+        parsed: ContextDev::Models::WebScrapeResponse::Parsed,
+        request_id: String,
+        screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
+        url: String,
+        key_metadata: ContextDev::Models::WebScrapeResponse::KeyMetadata
+      }
+
+      type bytes =
+        {
+          data: ContextDev::Models::WebScrapeResponse::Bytes::Data?,
+          requested: bool
+        }
+
+      class Bytes < ContextDev::Internal::Type::BaseModel
+        attr_accessor data: ContextDev::Models::WebScrapeResponse::Bytes::Data?
+
+        attr_accessor requested: bool
+
+        def initialize: (
+          data: ContextDev::Models::WebScrapeResponse::Bytes::Data?,
+          requested: bool
+        ) -> void
+
+        def to_hash: -> {
+          data: ContextDev::Models::WebScrapeResponse::Bytes::Data?,
+          requested: bool
+        }
+
+        type data = { :base64 => String, content_type: String }
+
+        class Data < ContextDev::Internal::Type::BaseModel
+          attr_accessor base64: String
+
+          attr_accessor content_type: String
+
+          def initialize: (base64: String, content_type: String) -> void
+
+          def to_hash: -> { :base64 => String, content_type: String }
+        end
+      end
+
+      type cache_metadata =
+        {
+          age_ms: Integer,
+          status: ContextDev::Models::WebScrapeResponse::CacheMetadata::status
+        }
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor age_ms: Integer
+
+        attr_accessor status: ContextDev::Models::WebScrapeResponse::CacheMetadata::status
+
+        def initialize: (
+          age_ms: Integer,
+          status: ContextDev::Models::WebScrapeResponse::CacheMetadata::status
+        ) -> void
+
+        def to_hash: -> {
+          age_ms: Integer,
+          status: ContextDev::Models::WebScrapeResponse::CacheMetadata::status
+        }
+
+        type status = :hit | :miss | :zdr
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT: :hit
+          MISS: :miss
+          ZDR: :zdr
+
+          def self?.values: -> ::Array[ContextDev::Models::WebScrapeResponse::CacheMetadata::status]
+        end
+      end
+
+      type html = { data: String?, requested: bool }
+
+      class HTML < ContextDev::Internal::Type::BaseModel
+        attr_accessor data: String?
+
+        attr_accessor requested: bool
+
+        def initialize: (data: String?, requested: bool) -> void
+
+        def to_hash: -> { data: String?, requested: bool }
+      end
+
+      type images =
+        {
+          data: ::Array[ContextDev::Models::WebScrapeResponse::Images::Data]?,
+          requested: bool
+        }
+
+      class Images < ContextDev::Internal::Type::BaseModel
+        attr_accessor data: ::Array[ContextDev::Models::WebScrapeResponse::Images::Data]?
+
+        attr_accessor requested: bool
+
+        def initialize: (
+          data: ::Array[ContextDev::Models::WebScrapeResponse::Images::Data]?,
+          requested: bool
+        ) -> void
+
+        def to_hash: -> {
+          data: ::Array[ContextDev::Models::WebScrapeResponse::Images::Data]?,
+          requested: bool
+        }
+
+        type data =
+          {
+            alt: String?,
+            url: String,
+            classification: ContextDev::Models::WebScrapeResponse::Images::Data::classification,
+            file_url: String,
+            height: Integer,
+            width: Integer
+          }
+
+        class Data < ContextDev::Internal::Type::BaseModel
+          attr_accessor alt: String?
+
+          attr_accessor url: String
+
+          attr_reader classification: ContextDev::Models::WebScrapeResponse::Images::Data::classification?
+
+          def classification=: (
+            ContextDev::Models::WebScrapeResponse::Images::Data::classification
+          ) -> ContextDev::Models::WebScrapeResponse::Images::Data::classification
+
+          attr_reader file_url: String?
+
+          def file_url=: (String) -> String
+
+          attr_reader height: Integer?
+
+          def height=: (Integer) -> Integer
+
+          attr_reader width: Integer?
+
+          def width=: (Integer) -> Integer
+
+          def initialize: (
+            alt: String?,
+            url: String,
+            ?classification: ContextDev::Models::WebScrapeResponse::Images::Data::classification,
+            ?file_url: String,
+            ?height: Integer,
+            ?width: Integer
+          ) -> void
+
+          def to_hash: -> {
+            alt: String?,
+            url: String,
+            classification: ContextDev::Models::WebScrapeResponse::Images::Data::classification,
+            file_url: String,
+            height: Integer,
+            width: Integer
+          }
+
+          type classification =
+            :photography
+            | :illustration
+            | :logo
+            | :wordmark
+            | :icon
+            | :pattern
+            | :graphic
+            | :other
+
+          module Classification
+            extend ContextDev::Internal::Type::Enum
+
+            PHOTOGRAPHY: :photography
+            ILLUSTRATION: :illustration
+            LOGO: :logo
+            WORDMARK: :wordmark
+            ICON: :icon
+            PATTERN: :pattern
+            GRAPHIC: :graphic
+            OTHER: :other
+
+            def self?.values: -> ::Array[ContextDev::Models::WebScrapeResponse::Images::Data::classification]
+          end
+        end
+      end
+
+      type markdown = { data: String?, requested: bool }
+
+      class Markdown < ContextDev::Internal::Type::BaseModel
+        attr_accessor data: String?
+
+        attr_accessor requested: bool
+
+        def initialize: (data: String?, requested: bool) -> void
+
+        def to_hash: -> { data: String?, requested: bool }
+      end
+
+      type metadata =
+        {
+          additional_meta: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::additional_meta],
+          alternates: ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Alternate],
+          author: String,
+          canonical_url: String,
+          description: String,
+          favicon: String,
+          headings: ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Heading],
+          image: String,
+          json_ld: ::Array[::Hash[Symbol, top]],
+          keywords: ::Array[String],
+          language: String,
+          modified_time: String,
+          open_graph: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::open_graph],
+          published_time: String,
+          robots: String,
+          site_name: String,
+          title: String,
+          twitter: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::twitter]
+        }
+
+      class Metadata < ContextDev::Internal::Type::BaseModel
+        attr_reader additional_meta: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::additional_meta]?
+
+        def additional_meta=: (
+          ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::additional_meta]
+        ) -> ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::additional_meta]
+
+        attr_reader alternates: ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Alternate]?
+
+        def alternates=: (
+          ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Alternate]
+        ) -> ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Alternate]
+
+        attr_reader author: String?
+
+        def author=: (String) -> String
+
+        attr_reader canonical_url: String?
+
+        def canonical_url=: (String) -> String
+
+        attr_reader description: String?
+
+        def description=: (String) -> String
+
+        attr_reader favicon: String?
+
+        def favicon=: (String) -> String
+
+        attr_reader headings: ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Heading]?
+
+        def headings=: (
+          ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Heading]
+        ) -> ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Heading]
+
+        attr_reader image: String?
+
+        def image=: (String) -> String
+
+        attr_reader json_ld: ::Array[::Hash[Symbol, top]]?
+
+        def json_ld=: (
+          ::Array[::Hash[Symbol, top]]
+        ) -> ::Array[::Hash[Symbol, top]]
+
+        attr_reader keywords: ::Array[String]?
+
+        def keywords=: (::Array[String]) -> ::Array[String]
+
+        attr_reader language: String?
+
+        def language=: (String) -> String
+
+        attr_reader modified_time: String?
+
+        def modified_time=: (String) -> String
+
+        attr_reader open_graph: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::open_graph]?
+
+        def open_graph=: (
+          ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::open_graph]
+        ) -> ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::open_graph]
+
+        attr_reader published_time: String?
+
+        def published_time=: (String) -> String
+
+        attr_reader robots: String?
+
+        def robots=: (String) -> String
+
+        attr_reader site_name: String?
+
+        def site_name=: (String) -> String
+
+        attr_reader title: String?
+
+        def title=: (String) -> String
+
+        attr_reader twitter: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::twitter]?
+
+        def twitter=: (
+          ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::twitter]
+        ) -> ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::twitter]
+
+        def initialize: (
+          ?additional_meta: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::additional_meta],
+          ?alternates: ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Alternate],
+          ?author: String,
+          ?canonical_url: String,
+          ?description: String,
+          ?favicon: String,
+          ?headings: ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Heading],
+          ?image: String,
+          ?json_ld: ::Array[::Hash[Symbol, top]],
+          ?keywords: ::Array[String],
+          ?language: String,
+          ?modified_time: String,
+          ?open_graph: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::open_graph],
+          ?published_time: String,
+          ?robots: String,
+          ?site_name: String,
+          ?title: String,
+          ?twitter: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::twitter]
+        ) -> void
+
+        def to_hash: -> {
+          additional_meta: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::additional_meta],
+          alternates: ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Alternate],
+          author: String,
+          canonical_url: String,
+          description: String,
+          favicon: String,
+          headings: ::Array[ContextDev::Models::WebScrapeResponse::Metadata::Heading],
+          image: String,
+          json_ld: ::Array[::Hash[Symbol, top]],
+          keywords: ::Array[String],
+          language: String,
+          modified_time: String,
+          open_graph: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::open_graph],
+          published_time: String,
+          robots: String,
+          site_name: String,
+          title: String,
+          twitter: ::Hash[Symbol, ContextDev::Models::WebScrapeResponse::Metadata::twitter]
+        }
+
+        type additional_meta = String | ::Array[String]
+
+        module AdditionalMeta
+          extend ContextDev::Internal::Type::Union
+
+          def self?.variants: -> ::Array[ContextDev::Models::WebScrapeResponse::Metadata::additional_meta]
+
+          StringArray: ContextDev::Internal::Type::Converter
+        end
+
+        type alternate =
+          { href: String, hreflang: String, title: String, type: String }
+
+        class Alternate < ContextDev::Internal::Type::BaseModel
+          attr_accessor href: String
+
+          attr_reader hreflang: String?
+
+          def hreflang=: (String) -> String
+
+          attr_reader title: String?
+
+          def title=: (String) -> String
+
+          attr_reader type: String?
+
+          def type=: (String) -> String
+
+          def initialize: (
+            href: String,
+            ?hreflang: String,
+            ?title: String,
+            ?type: String
+          ) -> void
+
+          def to_hash: -> {
+            href: String,
+            hreflang: String,
+            title: String,
+            type: String
+          }
+        end
+
+        type heading = { level: Integer, text: String }
+
+        class Heading < ContextDev::Internal::Type::BaseModel
+          attr_accessor level: Integer
+
+          attr_accessor text: String
+
+          def initialize: (level: Integer, text: String) -> void
+
+          def to_hash: -> { level: Integer, text: String }
+        end
+
+        type open_graph = String | ::Array[String]
+
+        module OpenGraph
+          extend ContextDev::Internal::Type::Union
+
+          def self?.variants: -> ::Array[ContextDev::Models::WebScrapeResponse::Metadata::open_graph]
+
+          StringArray: ContextDev::Internal::Type::Converter
+        end
+
+        type twitter = String | ::Array[String]
+
+        module Twitter
+          extend ContextDev::Internal::Type::Union
+
+          def self?.variants: -> ::Array[ContextDev::Models::WebScrapeResponse::Metadata::twitter]
+
+          StringArray: ContextDev::Internal::Type::Converter
+        end
+      end
+
+      type parsed = { data: ::Hash[Symbol, top]?, requested: bool }
+
+      class Parsed < ContextDev::Internal::Type::BaseModel
+        attr_accessor data: ::Hash[Symbol, top]?
+
+        attr_accessor requested: bool
+
+        def initialize: (data: ::Hash[Symbol, top]?, requested: bool) -> void
+
+        def to_hash: -> { data: ::Hash[Symbol, top]?, requested: bool }
+      end
+
+      type screenshot = { data: String?, requested: bool }
+
+      class Screenshot < ContextDev::Internal::Type::BaseModel
+        attr_accessor data: String?
+
+        attr_accessor requested: bool
+
+        def initialize: (data: String?, requested: bool) -> void
+
+        def to_hash: -> { data: String?, requested: bool }
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end

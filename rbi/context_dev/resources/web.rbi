@@ -269,6 +269,58 @@ module ContextDev
       )
       end
 
+      # Capture the requested formats from one page visit. Shared settings apply once.
+      # HTML-only requests use the existing fast acquisition path. One credit per
+      # capture, or two with browser actions; PDF OCR adds one credit per recovered
+      # page. Original response bytes and screenshots are limited to 20 MiB each,
+      # screenshots to 40 megapixels, and the combined browser capture to 60 MiB.
+      sig do
+        params(
+          formats: ContextDev::WebScrapeParams::Formats::OrHash,
+          url: String,
+          image_params: ContextDev::WebScrapeParams::ImageParams::OrHash,
+          markdown_params: ContextDev::WebScrapeParams::MarkdownParams::OrHash,
+          max_age_ms: Integer,
+          parse_params: ContextDev::WebScrapeParams::ParseParams::OrHash,
+          screenshot_params:
+            ContextDev::WebScrapeParams::ScreenshotParams::OrHash,
+          shared_params: ContextDev::WebScrapeParams::SharedParams::OrHash,
+          tags: T::Array[String],
+          timeout_ms: Integer,
+          zdr: ContextDev::WebScrapeParams::Zdr::OrSymbol,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::WebScrapeResponse)
+      end
+      def scrape(
+        # Outputs to return. Enable at least one; omitted formats are false.
+        formats:,
+        # The URL to scrape.
+        url:,
+        # Image options. Requires formats.images: true.
+        image_params: nil,
+        # Markdown options. Requires formats.markdown: true.
+        markdown_params: nil,
+        # Maximum age for the entire capture, including bytes. Defaults to 1 day; 0
+        # fetches fresh. Captures with hosted image files refresh after 23 hours.
+        max_age_ms: nil,
+        # Required when formats.parse is true.
+        parse_params: nil,
+        # Screenshot options. Requires formats.screenshot: true.
+        screenshot_params: nil,
+        # Shared browser and content settings. Content filters leave screenshots and
+        # original bytes unchanged.
+        shared_params: nil,
+        # Labels for tracking request usage. Not retained when zdr is enabled.
+        tags: nil,
+        # Total deadline, including navigation, actions, waiting, and all outputs.
+        timeout_ms: nil,
+        # Zero data retention. Bypasses caches and uploads; excludes request/response
+        # content and tags from logs. Must be enabled for your organization.
+        zdr: nil,
+        request_options: {}
+      )
+      end
+
       # Capture a screenshot of a website.
       sig do
         params(
