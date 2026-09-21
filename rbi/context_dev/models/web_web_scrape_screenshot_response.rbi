@@ -38,8 +38,8 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Public image URL for standard requests, or an in-memory data URL when ZDR is
-      # enabled.
+      # Public image URL for standard requests, or an in-memory data URL when ZDR or
+      # non-empty custom headers are supplied.
       sig { returns(String) }
       attr_accessor :screenshot
 
@@ -116,8 +116,8 @@ module ContextDev
         # Unique id of this API call, also sent in the X-Request-Id response header. Quote
         # it when contacting support about a failed request.
         request_id:,
-        # Public image URL for standard requests, or an in-memory data URL when ZDR is
-        # enabled.
+        # Public image URL for standard requests, or an in-memory data URL when ZDR or
+        # non-empty custom headers are supplied.
         screenshot:,
         # The requested page URL.
         url:,

@@ -89,8 +89,8 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # Public image URL for standard requests, or an in-memory data URL when ZDR is
-      # enabled.
+      # Public image URL for standard requests, or an in-memory data URL when ZDR or
+      # non-empty custom headers are supplied.
       sig { returns(T.nilable(String)) }
       attr_reader :screenshot
 
@@ -170,8 +170,8 @@ module ContextDev
         height: nil,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil,
-        # Public image URL for standard requests, or an in-memory data URL when ZDR is
-        # enabled.
+        # Public image URL for standard requests, or an in-memory data URL when ZDR or
+        # non-empty custom headers are supplied.
         screenshot: nil,
         # Type of screenshot that was captured
         screenshot_type: nil,

@@ -56,8 +56,8 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::WebScreenshotResponse::KeyMetadata }
 
       # @!attribute screenshot
-      #   Public image URL for standard requests, or an in-memory data URL when ZDR is
-      #   enabled.
+      #   Public image URL for standard requests, or an in-memory data URL when ZDR or
+      #   non-empty custom headers are supplied.
       #
       #   @return [String, nil]
       optional :screenshot, String
@@ -100,7 +100,7 @@ module ContextDev
       #
       #   @param key_metadata [ContextDev::Models::WebScreenshotResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
       #
-      #   @param screenshot [String] Public image URL for standard requests, or an in-memory data URL when ZDR is ena
+      #   @param screenshot [String] Public image URL for standard requests, or an in-memory data URL when ZDR or non
       #
       #   @param screenshot_type [Symbol, ContextDev::Models::WebScreenshotResponse::ScreenshotType] Type of screenshot that was captured
       #

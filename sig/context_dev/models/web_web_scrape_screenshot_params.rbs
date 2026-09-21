@@ -8,6 +8,7 @@ module ContextDev
         country: ContextDev::Models::WebWebScrapeScreenshotParams::country,
         full_screenshot: ContextDev::Models::WebWebScrapeScreenshotParams::full_screenshot,
         handle_cookie_popup: bool,
+        headers: ::Hash[Symbol, String],
         max_age_ms: Integer?,
         scroll_offset: Integer?,
         tags: ::Array[String],
@@ -50,6 +51,10 @@ module ContextDev
 
       def handle_cookie_popup=: (bool) -> bool
 
+      attr_reader headers: ::Hash[Symbol, String]?
+
+      def headers=: (::Hash[Symbol, String]) -> ::Hash[Symbol, String]
+
       attr_accessor max_age_ms: Integer?
 
       attr_accessor scroll_offset: Integer?
@@ -85,6 +90,7 @@ module ContextDev
         ?country: ContextDev::Models::WebWebScrapeScreenshotParams::country,
         ?full_screenshot: ContextDev::Models::WebWebScrapeScreenshotParams::full_screenshot,
         ?handle_cookie_popup: bool,
+        ?headers: ::Hash[Symbol, String],
         ?max_age_ms: Integer?,
         ?scroll_offset: Integer?,
         ?tags: ::Array[String],
@@ -102,6 +108,7 @@ module ContextDev
         country: ContextDev::Models::WebWebScrapeScreenshotParams::country,
         full_screenshot: ContextDev::Models::WebWebScrapeScreenshotParams::full_screenshot,
         handle_cookie_popup: bool,
+        headers: ::Hash[Symbol, String],
         max_age_ms: Integer?,
         scroll_offset: Integer?,
         tags: ::Array[String],

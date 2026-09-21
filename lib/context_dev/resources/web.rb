@@ -223,7 +223,7 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(clear_popups: nil, color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload screenshot(clear_popups: nil, color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, headers: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param clear_popups [Boolean] Optional parameter for comprehensive popup cleanup. If 'true', the browser dismi
       #
@@ -238,6 +238,8 @@ module ContextDev
       # @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
       # @param handle_cookie_popup [Boolean] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
+      #
+      # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers, using the same JSON object or deep-object query
       #
       # @param max_age_ms [Integer, nil] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
@@ -682,7 +684,7 @@ module ContextDev
       # the page rendered so far may be returned; inspect finalDOMState to identify an
       # incomplete render. Successful requests cost 1 credit; errors are not billed.
       #
-      # @overload web_scrape_screenshot(url:, clear_popups: nil, color_scheme: nil, country: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_screenshot(url:, clear_popups: nil, color_scheme: nil, country: nil, full_screenshot: nil, handle_cookie_popup: nil, headers: nil, max_age_ms: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String]
       #
@@ -695,6 +697,8 @@ module ContextDev
       # @param full_screenshot [Symbol, ContextDev::Models::WebWebScrapeScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
       # @param handle_cookie_popup [Boolean] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
+      #
+      # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers, using the same JSON object or deep-object query
       #
       # @param max_age_ms [Integer, nil] Return a cached screenshot if a prior screenshot for the same parameters exists
       #

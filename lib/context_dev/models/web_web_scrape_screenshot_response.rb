@@ -26,8 +26,8 @@ module ContextDev
       required :request_id, String
 
       # @!attribute screenshot
-      #   Public image URL for standard requests, or an in-memory data URL when ZDR is
-      #   enabled.
+      #   Public image URL for standard requests, or an in-memory data URL when ZDR or
+      #   non-empty custom headers are supplied.
       #
       #   @return [String]
       required :screenshot, String
@@ -72,7 +72,7 @@ module ContextDev
       #
       #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
-      #   @param screenshot [String] Public image URL for standard requests, or an in-memory data URL when ZDR is ena
+      #   @param screenshot [String] Public image URL for standard requests, or an in-memory data URL when ZDR or non
       #
       #   @param url [String] The requested page URL.
       #
