@@ -87,6 +87,8 @@ module ContextDev
 
   module Webhooks = ContextDev::Models::Webhooks
 
+  class WebScrapeParams = ContextDev::Models::WebScrapeParams
+
   class WebScreenshotParams = ContextDev::Models::WebScreenshotParams
 
   class WebSearchParams = ContextDev::Models::WebSearchParams

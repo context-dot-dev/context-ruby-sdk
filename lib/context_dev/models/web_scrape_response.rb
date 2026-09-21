@@ -1,0 +1,637 @@
+# frozen_string_literal: true
+
+module ContextDev
+  module Models
+    # @see ContextDev::Resources::Web#scrape
+    class WebScrapeResponse < ContextDev::Internal::Type::BaseModel
+      # @!attribute bytes
+      #   Original HTTP response body. Waiting, actions, and content filters never change
+      #   it.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::Bytes]
+      required :bytes, -> { ContextDev::Models::WebScrapeResponse::Bytes }
+
+      # @!attribute cache_metadata
+      #   Cache outcome for this response. Composite responses are hits only when every
+      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+      #   oldest contributing hit.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::CacheMetadata]
+      required :cache_metadata, -> { ContextDev::Models::WebScrapeResponse::CacheMetadata }
+
+      # @!attribute html
+      #   Rendered HTML after content filters.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::HTML]
+      required :html, -> { ContextDev::Models::WebScrapeResponse::HTML }
+
+      # @!attribute images
+      #   Images after content filters. Empty when none are found.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::Images]
+      required :images, -> { ContextDev::Models::WebScrapeResponse::Images }
+
+      # @!attribute markdown
+      #   Markdown after content filters.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::Markdown]
+      required :markdown, -> { ContextDev::Models::WebScrapeResponse::Markdown }
+
+      # @!attribute metadata
+      #   Page details, when available.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::Metadata]
+      required :metadata, -> { ContextDev::Models::WebScrapeResponse::Metadata }
+
+      # @!attribute parsed
+      #   Fields produced by parseParams.rules, after shared content filters.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::Parsed]
+      required :parsed, -> { ContextDev::Models::WebScrapeResponse::Parsed }
+
+      # @!attribute request_id
+      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   it when contacting support about a failed request.
+      #
+      #   @return [String]
+      required :request_id, String
+
+      # @!attribute screenshot
+      #   An image data URL. Use directly as an image src.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::Screenshot]
+      required :screenshot, -> { ContextDev::Models::WebScrapeResponse::Screenshot }
+
+      # @!attribute url
+      #   Final URL after redirects and browser actions.
+      #
+      #   @return [String]
+      required :url, String
+
+      # @!attribute key_metadata
+      #   Credit usage, included whenever a valid API key is provided.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::WebScrapeResponse::KeyMetadata }
+
+      # @!method initialize(bytes:, cache_metadata:, html:, images:, markdown:, metadata:, parsed:, request_id:, screenshot:, url:, key_metadata: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::WebScrapeResponse} for more details.
+      #
+      #   @param bytes [ContextDev::Models::WebScrapeResponse::Bytes] Original HTTP response body. Waiting, actions, and content filters never change
+      #
+      #   @param cache_metadata [ContextDev::Models::WebScrapeResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #
+      #   @param html [ContextDev::Models::WebScrapeResponse::HTML] Rendered HTML after content filters.
+      #
+      #   @param images [ContextDev::Models::WebScrapeResponse::Images] Images after content filters. Empty when none are found.
+      #
+      #   @param markdown [ContextDev::Models::WebScrapeResponse::Markdown] Markdown after content filters.
+      #
+      #   @param metadata [ContextDev::Models::WebScrapeResponse::Metadata] Page details, when available.
+      #
+      #   @param parsed [ContextDev::Models::WebScrapeResponse::Parsed] Fields produced by parseParams.rules, after shared content filters.
+      #
+      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #
+      #   @param screenshot [ContextDev::Models::WebScrapeResponse::Screenshot] An image data URL. Use directly as an image src.
+      #
+      #   @param url [String] Final URL after redirects and browser actions.
+      #
+      #   @param key_metadata [ContextDev::Models::WebScrapeResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+
+      # @see ContextDev::Models::WebScrapeResponse#bytes
+      class Bytes < ContextDev::Internal::Type::BaseModel
+        # @!attribute data
+        #
+        #   @return [ContextDev::Models::WebScrapeResponse::Bytes::Data, nil]
+        required :data, -> { ContextDev::Models::WebScrapeResponse::Bytes::Data }, nil?: true
+
+        # @!attribute requested
+        #
+        #   @return [Boolean]
+        required :requested, ContextDev::Internal::Type::Boolean
+
+        # @!method initialize(data:, requested:)
+        #   Original HTTP response body. Waiting, actions, and content filters never change
+        #   it.
+        #
+        #   @param data [ContextDev::Models::WebScrapeResponse::Bytes::Data, nil]
+        #   @param requested [Boolean]
+
+        # @see ContextDev::Models::WebScrapeResponse::Bytes#data
+        class Data < ContextDev::Internal::Type::BaseModel
+          # @!attribute base64
+          #   Original response body as base64, after HTTP decompression. Maximum decoded
+          #   size: 20 MiB.
+          #
+          #   @return [String]
+          required :base64, String
+
+          # @!attribute content_type
+          #
+          #   @return [String]
+          required :content_type, String, api_name: :contentType
+
+          # @!method initialize(base64:, content_type:)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::WebScrapeResponse::Bytes::Data} for more details.
+          #
+          #   @param base64 [String] Original response body as base64, after HTTP decompression. Maximum decoded size
+          #
+          #   @param content_type [String]
+        end
+      end
+
+      # @see ContextDev::Models::WebScrapeResponse#cache_metadata
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute age_ms
+        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @return [Integer]
+        required :age_ms, Integer
+
+        # @!attribute status
+        #   Whether the response was served from cache, required fresh work, or honored
+        #   zero-data-retention cache bypass.
+        #
+        #   @return [Symbol, ContextDev::Models::WebScrapeResponse::CacheMetadata::Status]
+        required :status, enum: -> { ContextDev::Models::WebScrapeResponse::CacheMetadata::Status }
+
+        # @!method initialize(age_ms:, status:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScrapeResponse::CacheMetadata} for more details.
+        #
+        #   Cache outcome for this response. Composite responses are hits only when every
+        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
+        #   oldest contributing hit.
+        #
+        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #
+        #   @param status [Symbol, ContextDev::Models::WebScrapeResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        #
+        # @see ContextDev::Models::WebScrapeResponse::CacheMetadata#status
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT = :hit
+          MISS = :miss
+          ZDR = :zdr
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
+
+      # @see ContextDev::Models::WebScrapeResponse#html
+      class HTML < ContextDev::Internal::Type::BaseModel
+        # @!attribute data
+        #
+        #   @return [String, nil]
+        required :data, String, nil?: true
+
+        # @!attribute requested
+        #
+        #   @return [Boolean]
+        required :requested, ContextDev::Internal::Type::Boolean
+
+        # @!method initialize(data:, requested:)
+        #   Rendered HTML after content filters.
+        #
+        #   @param data [String, nil]
+        #   @param requested [Boolean]
+      end
+
+      # @see ContextDev::Models::WebScrapeResponse#images
+      class Images < ContextDev::Internal::Type::BaseModel
+        # @!attribute data
+        #
+        #   @return [Array<ContextDev::Models::WebScrapeResponse::Images::Data>, nil]
+        required :data,
+                 -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebScrapeResponse::Images::Data] },
+                 nil?: true
+
+        # @!attribute requested
+        #
+        #   @return [Boolean]
+        required :requested, ContextDev::Internal::Type::Boolean
+
+        # @!method initialize(data:, requested:)
+        #   Images after content filters. Empty when none are found.
+        #
+        #   @param data [Array<ContextDev::Models::WebScrapeResponse::Images::Data>, nil]
+        #   @param requested [Boolean]
+
+        class Data < ContextDev::Internal::Type::BaseModel
+          # @!attribute alt
+          #   Alt text, if present.
+          #
+          #   @return [String, nil]
+          required :alt, String, nil?: true
+
+          # @!attribute url
+          #   Image URL, or a data URI for inline images.
+          #
+          #   @return [String]
+          required :url, String
+
+          # @!attribute classification
+          #
+          #   @return [Symbol, ContextDev::Models::WebScrapeResponse::Images::Data::Classification, nil]
+          optional :classification, enum: -> { ContextDev::Models::WebScrapeResponse::Images::Data::Classification }
+
+          # @!attribute file_url
+          #   Hosted copy when file enrichment is requested and zdr is disabled. Valid for 24
+          #   hours from the original capture.
+          #
+          #   @return [String, nil]
+          optional :file_url, String, api_name: :fileUrl
+
+          # @!attribute height
+          #
+          #   @return [Integer, nil]
+          optional :height, Integer
+
+          # @!attribute width
+          #
+          #   @return [Integer, nil]
+          optional :width, Integer
+
+          # @!method initialize(alt:, url:, classification: nil, file_url: nil, height: nil, width: nil)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::WebScrapeResponse::Images::Data} for more details.
+          #
+          #   @param alt [String, nil] Alt text, if present.
+          #
+          #   @param url [String] Image URL, or a data URI for inline images.
+          #
+          #   @param classification [Symbol, ContextDev::Models::WebScrapeResponse::Images::Data::Classification]
+          #
+          #   @param file_url [String] Hosted copy when file enrichment is requested and zdr is disabled. Valid for 24
+          #
+          #   @param height [Integer]
+          #
+          #   @param width [Integer]
+
+          # @see ContextDev::Models::WebScrapeResponse::Images::Data#classification
+          module Classification
+            extend ContextDev::Internal::Type::Enum
+
+            PHOTOGRAPHY = :photography
+            ILLUSTRATION = :illustration
+            LOGO = :logo
+            WORDMARK = :wordmark
+            ICON = :icon
+            PATTERN = :pattern
+            GRAPHIC = :graphic
+            OTHER = :other
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
+        end
+      end
+
+      # @see ContextDev::Models::WebScrapeResponse#markdown
+      class Markdown < ContextDev::Internal::Type::BaseModel
+        # @!attribute data
+        #
+        #   @return [String, nil]
+        required :data, String, nil?: true
+
+        # @!attribute requested
+        #
+        #   @return [Boolean]
+        required :requested, ContextDev::Internal::Type::Boolean
+
+        # @!method initialize(data:, requested:)
+        #   Markdown after content filters.
+        #
+        #   @param data [String, nil]
+        #   @param requested [Boolean]
+      end
+
+      # @see ContextDev::Models::WebScrapeResponse#metadata
+      class Metadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute additional_meta
+        #   Additional non-social meta tags not promoted to top-level metadata fields.
+        #
+        #   @return [Hash{Symbol=>String, Array<String>}, nil]
+        optional :additional_meta,
+                 -> { ContextDev::Internal::Type::HashOf[union: ContextDev::Models::WebScrapeResponse::Metadata::AdditionalMeta] },
+                 api_name: :additionalMeta
+
+        # @!attribute alternates
+        #   Resolved alternate links from link rel=alternate tags.
+        #
+        #   @return [Array<ContextDev::Models::WebScrapeResponse::Metadata::Alternate>, nil]
+        optional :alternates,
+                 -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebScrapeResponse::Metadata::Alternate] }
+
+        # @!attribute author
+        #   Author metadata, when present.
+        #
+        #   @return [String, nil]
+        optional :author, String
+
+        # @!attribute canonical_url
+        #   Resolved canonical URL, when present.
+        #
+        #   @return [String, nil]
+        optional :canonical_url, String, api_name: :canonicalUrl
+
+        # @!attribute description
+        #   Best description extracted from standard, Open Graph, or Twitter metadata.
+        #
+        #   @return [String, nil]
+        optional :description, String
+
+        # @!attribute favicon
+        #   Resolved favicon URL, when present.
+        #
+        #   @return [String, nil]
+        optional :favicon, String
+
+        # @!attribute headings
+        #   Page headings (h1–h6) in document order, extracted from the unfiltered document.
+        #   Capped at the first 500 headings. Omitted when the page has none.
+        #
+        #   @return [Array<ContextDev::Models::WebScrapeResponse::Metadata::Heading>, nil]
+        optional :headings,
+                 -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebScrapeResponse::Metadata::Heading] }
+
+        # @!attribute image
+        #   Primary resolved preview image from Open Graph, Twitter, or image metadata.
+        #
+        #   @return [String, nil]
+        optional :image, String
+
+        # @!attribute json_ld
+        #   JSON-LD structured data blocks parsed from the page.
+        #
+        #   @return [Array<Hash{Symbol=>Object}>, nil]
+        optional :json_ld,
+                 ContextDev::Internal::Type::ArrayOf[ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]],
+                 api_name: :jsonLd
+
+        # @!attribute keywords
+        #   Keywords extracted from the page's keywords meta tag.
+        #
+        #   @return [Array<String>, nil]
+        optional :keywords, ContextDev::Internal::Type::ArrayOf[String]
+
+        # @!attribute language
+        #   Language extracted from html lang or language meta tags.
+        #
+        #   @return [String, nil]
+        optional :language, String
+
+        # @!attribute modified_time
+        #   Modified timestamp/date from page metadata, when present.
+        #
+        #   @return [String, nil]
+        optional :modified_time, String, api_name: :modifiedTime
+
+        # @!attribute open_graph
+        #   Open Graph metadata with the og: prefix removed and keys camel-cased.
+        #
+        #   @return [Hash{Symbol=>String, Array<String>}, nil]
+        optional :open_graph,
+                 -> { ContextDev::Internal::Type::HashOf[union: ContextDev::Models::WebScrapeResponse::Metadata::OpenGraph] },
+                 api_name: :openGraph
+
+        # @!attribute published_time
+        #   Published timestamp/date from page metadata, when present.
+        #
+        #   @return [String, nil]
+        optional :published_time, String, api_name: :publishedTime
+
+        # @!attribute robots
+        #   Robots meta directive, when present.
+        #
+        #   @return [String, nil]
+        optional :robots, String
+
+        # @!attribute site_name
+        #   Site or application name from page metadata.
+        #
+        #   @return [String, nil]
+        optional :site_name, String, api_name: :siteName
+
+        # @!attribute title
+        #   Best title extracted from the page.
+        #
+        #   @return [String, nil]
+        optional :title, String
+
+        # @!attribute twitter
+        #   Twitter card metadata with the twitter: prefix removed and keys camel-cased.
+        #
+        #   @return [Hash{Symbol=>String, Array<String>}, nil]
+        optional :twitter,
+                 -> { ContextDev::Internal::Type::HashOf[union: ContextDev::Models::WebScrapeResponse::Metadata::Twitter] }
+
+        # @!method initialize(additional_meta: nil, alternates: nil, author: nil, canonical_url: nil, description: nil, favicon: nil, headings: nil, image: nil, json_ld: nil, keywords: nil, language: nil, modified_time: nil, open_graph: nil, published_time: nil, robots: nil, site_name: nil, title: nil, twitter: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScrapeResponse::Metadata} for more details.
+        #
+        #   Page details, when available.
+        #
+        #   @param additional_meta [Hash{Symbol=>String, Array<String>}] Additional non-social meta tags not promoted to top-level metadata fields.
+        #
+        #   @param alternates [Array<ContextDev::Models::WebScrapeResponse::Metadata::Alternate>] Resolved alternate links from link rel=alternate tags.
+        #
+        #   @param author [String] Author metadata, when present.
+        #
+        #   @param canonical_url [String] Resolved canonical URL, when present.
+        #
+        #   @param description [String] Best description extracted from standard, Open Graph, or Twitter metadata.
+        #
+        #   @param favicon [String] Resolved favicon URL, when present.
+        #
+        #   @param headings [Array<ContextDev::Models::WebScrapeResponse::Metadata::Heading>] Page headings (h1–h6) in document order, extracted from the unfiltered document.
+        #
+        #   @param image [String] Primary resolved preview image from Open Graph, Twitter, or image metadata.
+        #
+        #   @param json_ld [Array<Hash{Symbol=>Object}>] JSON-LD structured data blocks parsed from the page.
+        #
+        #   @param keywords [Array<String>] Keywords extracted from the page's keywords meta tag.
+        #
+        #   @param language [String] Language extracted from html lang or language meta tags.
+        #
+        #   @param modified_time [String] Modified timestamp/date from page metadata, when present.
+        #
+        #   @param open_graph [Hash{Symbol=>String, Array<String>}] Open Graph metadata with the og: prefix removed and keys camel-cased.
+        #
+        #   @param published_time [String] Published timestamp/date from page metadata, when present.
+        #
+        #   @param robots [String] Robots meta directive, when present.
+        #
+        #   @param site_name [String] Site or application name from page metadata.
+        #
+        #   @param title [String] Best title extracted from the page.
+        #
+        #   @param twitter [Hash{Symbol=>String, Array<String>}] Twitter card metadata with the twitter: prefix removed and keys camel-cased.
+
+        module AdditionalMeta
+          extend ContextDev::Internal::Type::Union
+
+          variant String
+
+          variant -> { ContextDev::Models::WebScrapeResponse::Metadata::AdditionalMeta::StringArray }
+
+          # @!method self.variants
+          #   @return [Array(String, Array<String>)]
+
+          # @type [ContextDev::Internal::Type::Converter]
+          StringArray = ContextDev::Internal::Type::ArrayOf[String]
+        end
+
+        class Alternate < ContextDev::Internal::Type::BaseModel
+          # @!attribute href
+          #   Resolved alternate URL.
+          #
+          #   @return [String]
+          required :href, String
+
+          # @!attribute hreflang
+          #   Language or locale for the alternate URL, when present.
+          #
+          #   @return [String, nil]
+          optional :hreflang, String
+
+          # @!attribute title
+          #   Alternate resource title, when present.
+          #
+          #   @return [String, nil]
+          optional :title, String
+
+          # @!attribute type
+          #   Alternate resource MIME type, when present.
+          #
+          #   @return [String, nil]
+          optional :type, String
+
+          # @!method initialize(href:, hreflang: nil, title: nil, type: nil)
+          #   @param href [String] Resolved alternate URL.
+          #
+          #   @param hreflang [String] Language or locale for the alternate URL, when present.
+          #
+          #   @param title [String] Alternate resource title, when present.
+          #
+          #   @param type [String] Alternate resource MIME type, when present.
+        end
+
+        class Heading < ContextDev::Internal::Type::BaseModel
+          # @!attribute level
+          #   Heading level, 1–6 (from h1–h6).
+          #
+          #   @return [Integer]
+          required :level, Integer
+
+          # @!attribute text
+          #   Heading text with whitespace collapsed, truncated to 1000 characters.
+          #
+          #   @return [String]
+          required :text, String
+
+          # @!method initialize(level:, text:)
+          #   @param level [Integer] Heading level, 1–6 (from h1–h6).
+          #
+          #   @param text [String] Heading text with whitespace collapsed, truncated to 1000 characters.
+        end
+
+        module OpenGraph
+          extend ContextDev::Internal::Type::Union
+
+          variant String
+
+          variant -> { ContextDev::Models::WebScrapeResponse::Metadata::OpenGraph::StringArray }
+
+          # @!method self.variants
+          #   @return [Array(String, Array<String>)]
+
+          # @type [ContextDev::Internal::Type::Converter]
+          StringArray = ContextDev::Internal::Type::ArrayOf[String]
+        end
+
+        module Twitter
+          extend ContextDev::Internal::Type::Union
+
+          variant String
+
+          variant -> { ContextDev::Models::WebScrapeResponse::Metadata::Twitter::StringArray }
+
+          # @!method self.variants
+          #   @return [Array(String, Array<String>)]
+
+          # @type [ContextDev::Internal::Type::Converter]
+          StringArray = ContextDev::Internal::Type::ArrayOf[String]
+        end
+      end
+
+      # @see ContextDev::Models::WebScrapeResponse#parsed
+      class Parsed < ContextDev::Internal::Type::BaseModel
+        # @!attribute data
+        #
+        #   @return [Hash{Symbol=>Object}, nil]
+        required :data, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown], nil?: true
+
+        # @!attribute requested
+        #
+        #   @return [Boolean]
+        required :requested, ContextDev::Internal::Type::Boolean
+
+        # @!method initialize(data:, requested:)
+        #   Fields produced by parseParams.rules, after shared content filters.
+        #
+        #   @param data [Hash{Symbol=>Object}, nil]
+        #   @param requested [Boolean]
+      end
+
+      # @see ContextDev::Models::WebScrapeResponse#screenshot
+      class Screenshot < ContextDev::Internal::Type::BaseModel
+        # @!attribute data
+        #
+        #   @return [String, nil]
+        required :data, String, nil?: true
+
+        # @!attribute requested
+        #
+        #   @return [Boolean]
+        required :requested, ContextDev::Internal::Type::Boolean
+
+        # @!method initialize(data:, requested:)
+        #   An image data URL. Use directly as an image src.
+        #
+        #   @param data [String, nil]
+        #   @param requested [Boolean]
+      end
+
+      # @see ContextDev::Models::WebScrapeResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   Credits used by this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   Credits remaining for your organization.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Credit usage, included whenever a valid API key is provided.
+        #
+        #   @param credits_consumed [Integer] Credits used by this request.
+        #
+        #   @param credits_remaining [Integer] Credits remaining for your organization.
+      end
+    end
+  end
+end
