@@ -223,7 +223,7 @@ module ContextDev
       #
       # Capture a screenshot of a website.
       #
-      # @overload screenshot(clear_popups: nil, color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload screenshot(clear_popups: nil, color_scheme: nil, country: nil, direct_url: nil, domain: nil, full_screenshot: nil, handle_cookie_popup: nil, headers: nil, max_age_ms: nil, page: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param clear_popups [Boolean] Optional parameter for comprehensive popup cleanup. If 'true', the browser dismi
       #
@@ -238,6 +238,8 @@ module ContextDev
       # @param full_screenshot [Symbol, ContextDev::Models::WebScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
       # @param handle_cookie_popup [Boolean] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
+      #
+      # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers, using the same JSON object or deep-object query
       #
       # @param max_age_ms [Integer, nil] Return a cached screenshot if a prior screenshot for the same parameters exists
       #
@@ -396,18 +398,25 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebWebScrapeBytesParams} for more details.
       #
-      # Downloads a resource and returns its bytes as base64. Supports images, PDFs,
-      # HTML pages, and any other content type without image conversion, text
-      # extraction, or character-encoding changes. HTTP compression is decoded before
-      # base64 encoding. HTML is the original HTTP response; JavaScript is not rendered.
+      # Downloads a resource and returns its bytes as base64. Without waitForMs, returns
+      # the original HTTP response without image conversion, text extraction, or
+      # character-encoding changes. HTTP compression is decoded before base64 encoding.
+      # Supply waitForMs to render HTML with JavaScript in the browser and return the
+      # resulting HTML as UTF-8 bytes after the wait. Non-HTML resources, including
+      # images and PDFs, keep their original bytes and do not incur a browser wait.
       # Follows public redirects and retries failed downloads through ISP and
       # residential proxies, with a direct fallback. When country is specified, only a
       # residential proxy in that country is used. Supply headers such as Referer for
-      # images that require a referring page. Downloads are not cached. Maximum decoded
-      # resource size: 20 MiB (20971520 bytes), before base64 encoding. Successful
-      # requests cost 1 credit; errors are not billed.
+      # images that require a referring page. Cached results are reused according to
+      # maxAgeMs (default: 1 day; maximum: 30 days). Set maxAgeMs=0 to fetch fresh and
+      # refresh the cache. Cache identity includes the exact URL, country, waitForMs,
+      # and normalized outbound headers. Credential-bearing headers and zero data
+      # retention bypass cache reads and writes. cache_metadata reports hit, miss, or
+      # zdr and the cached result age in milliseconds. Maximum decoded resource size: 20
+      # MiB (20971520 bytes), before base64 encoding. Successful requests cost 1 credit;
+      # errors are not billed.
       #
-      # @overload web_scrape_bytes(url:, country: nil, headers: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_bytes(url:, country: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Full HTTP(S) URL of the resource to download, such as an image, PDF, or page.
       #
@@ -415,9 +424,13 @@ module ContextDev
       #
       # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers, such as Referer, Cookie, or Authorization. Send
       #
+      # @param max_age_ms [Integer, nil] Return a cached result if a prior scrape for the same parameters exists and is y
+      #
       # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
       #
       # @param timeout_opts [ContextDev::Models::WebWebScrapeBytesParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #
+      # @param wait_for_ms [Integer, nil] Optional browser wait time after initial page load, in milliseconds (0–30000; 0
       #
       # @param zdr [Symbol, ContextDev::Models::WebWebScrapeBytesParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
       #
@@ -432,7 +445,11 @@ module ContextDev
         @client.request(
           method: :get,
           path: "web/scrape/bytes",
-          query: query.transform_keys(timeout_opts: "timeoutOpts"),
+          query: query.transform_keys(
+            max_age_ms: "maxAgeMs",
+            timeout_opts: "timeoutOpts",
+            wait_for_ms: "waitForMs"
+          ),
           model: ContextDev::Models::WebWebScrapeBytesResponse,
           options: options
         )
@@ -522,11 +539,13 @@ module ContextDev
       # enrichment is enabled, the entire call costs 5 credits, including requests that
       # also use actions.
       #
-      # @overload web_scrape_images(url:, actions: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_images(url:, actions: nil, country: nil, dedupe: nil, enrichment: nil, headers: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Page URL to inspect. Must include http:// or https://.
       #
       # @param actions [Array<ContextDev::Models::WebWebScrapeImagesParams::Action::Wait, ContextDev::Models::WebWebScrapeImagesParams::Action::Perform, ContextDev::Models::WebWebScrapeImagesParams::Action::Scroll>, nil] Optional browser actions executed in array order after the page loads and before
+      #
+      # @param country [Symbol, ContextDev::Models::WebWebScrapeImagesParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
       #
       # @param dedupe [Boolean] When true, visually duplicate images are removed: every image is loaded and perc
       #
@@ -678,7 +697,7 @@ module ContextDev
       # the page rendered so far may be returned; inspect finalDOMState to identify an
       # incomplete render. Successful requests cost 1 credit; errors are not billed.
       #
-      # @overload web_scrape_screenshot(url:, clear_popups: nil, color_scheme: nil, country: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload web_scrape_screenshot(url:, clear_popups: nil, color_scheme: nil, country: nil, full_screenshot: nil, handle_cookie_popup: nil, headers: nil, max_age_ms: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String]
       #
@@ -691,6 +710,8 @@ module ContextDev
       # @param full_screenshot [Symbol, ContextDev::Models::WebWebScrapeScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
       # @param handle_cookie_popup [Boolean] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
+      #
+      # @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers, using the same JSON object or deep-object query
       #
       # @param max_age_ms [Integer, nil] Return a cached screenshot if a prior screenshot for the same parameters exists
       #

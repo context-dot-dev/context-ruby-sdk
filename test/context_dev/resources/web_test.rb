@@ -199,6 +199,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         bytes: String,
+        cache_metadata: ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata,
         content_length: Integer,
         content_type: String,
         encoding: ContextDev::Models::WebWebScrapeBytesResponse::Encoding,

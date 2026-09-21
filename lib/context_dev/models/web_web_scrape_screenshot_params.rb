@@ -52,6 +52,18 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :handle_cookie_popup, ContextDev::Internal::Type::Boolean
 
+      # @!attribute headers
+      #   Optional outbound HTTP headers, using the same JSON object or deep-object query
+      #   format as other scrape endpoints (for example headers[Authorization]=Bearer
+      #   token). Headers are scoped to the target origin during capture. For domain/page
+      #   requests, discovery receives no custom headers and only pages on the resolved
+      #   origin are eligible. Non-empty headers bypass screenshot caching and return an
+      #   in-memory data URL; no screenshot is uploaded. Empty objects behave like omitted
+      #   headers.
+      #
+      #   @return [Hash{Symbol=>String}, nil]
+      optional :headers, ContextDev::Internal::Type::HashOf[String]
+
       # @!attribute max_age_ms
       #   Return a cached screenshot if a prior screenshot for the same parameters exists
       #   and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
@@ -112,7 +124,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebWebScrapeScreenshotParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebWebScrapeScreenshotParams::Zdr }
 
-      # @!method initialize(url:, clear_popups: nil, color_scheme: nil, country: nil, full_screenshot: nil, handle_cookie_popup: nil, max_age_ms: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @!method initialize(url:, clear_popups: nil, color_scheme: nil, country: nil, full_screenshot: nil, handle_cookie_popup: nil, headers: nil, max_age_ms: nil, scroll_offset: nil, tags: nil, timeout_opts: nil, viewport: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebScrapeScreenshotParams} for more details.
       #
@@ -127,6 +139,8 @@ module ContextDev
       #   @param full_screenshot [Symbol, ContextDev::Models::WebWebScrapeScreenshotParams::FullScreenshot] Optional parameter to determine screenshot type. If 'true', takes a full page sc
       #
       #   @param handle_cookie_popup [Boolean] Optional parameter to control cookie/consent popup handling. If 'true', we dismi
+      #
+      #   @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers, using the same JSON object or deep-object query
       #
       #   @param max_age_ms [Integer, nil] Return a cached screenshot if a prior screenshot for the same parameters exists
       #

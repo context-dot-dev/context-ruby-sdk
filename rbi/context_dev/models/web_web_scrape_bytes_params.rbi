@@ -38,12 +38,19 @@ module ContextDev
       # as a JSON object or deep-object query params such as
       # headers[Referer]=https://example.com/. Host, Content-Length, and hop-by-hop
       # transport headers are rejected. Authorization and cookies are removed when a
-      # redirect changes origin.
+      # redirect changes origin. Credential-bearing headers bypass cache reads and
+      # writes; other headers are included in the cache key.
       sig { returns(T.nilable(T::Hash[Symbol, String])) }
       attr_reader :headers
 
       sig { params(headers: T::Hash[Symbol, String]).void }
       attr_writer :headers
+
+      # Return a cached result if a prior scrape for the same parameters exists and is
+      # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+      # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+      sig { returns(T.nilable(Integer)) }
+      attr_accessor :max_age_ms
 
       # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
       # characters.
@@ -68,6 +75,15 @@ module ContextDev
       end
       attr_writer :timeout_opts
 
+      # Optional browser wait time after initial page load, in milliseconds (0–30000; 0
+      # uses 500). When supplied, HTML is rendered with JavaScript and returned as UTF-8
+      # bytes. Other resources keep their original bytes without a browser wait. Omit to
+      # download the original HTTP response. When combined with timeoutOpts,
+      # timeoutOpts.milliseconds must be at least waitForMs + 10000 ms; a shorter
+      # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+      sig { returns(T.nilable(Integer)) }
+      attr_accessor :wait_for_ms
+
       # Set to enabled to bypass shared caches and omit request and response content
       # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
       # omitted. Requires zero data retention to be enabled for your organization
@@ -88,9 +104,11 @@ module ContextDev
           url: String,
           country: ContextDev::WebWebScrapeBytesParams::Country::OrSymbol,
           headers: T::Hash[Symbol, String],
+          max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
           timeout_opts:
             ContextDev::WebWebScrapeBytesParams::TimeoutOpts::OrHash,
+          wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeBytesParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
@@ -105,8 +123,13 @@ module ContextDev
         # as a JSON object or deep-object query params such as
         # headers[Referer]=https://example.com/. Host, Content-Length, and hop-by-hop
         # transport headers are rejected. Authorization and cookies are removed when a
-        # redirect changes origin.
+        # redirect changes origin. Credential-bearing headers bypass cache reads and
+        # writes; other headers are included in the cache key.
         headers: nil,
+        # Return a cached result if a prior scrape for the same parameters exists and is
+        # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+        # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+        max_age_ms: nil,
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
@@ -114,6 +137,13 @@ module ContextDev
         # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
         # timeoutOpts object.
         timeout_opts: nil,
+        # Optional browser wait time after initial page load, in milliseconds (0–30000; 0
+        # uses 500). When supplied, HTML is rendered with JavaScript and returned as UTF-8
+        # bytes. Other resources keep their original bytes without a browser wait. Omit to
+        # download the original HTTP response. When combined with timeoutOpts,
+        # timeoutOpts.milliseconds must be at least waitForMs + 10000 ms; a shorter
+        # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+        wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
         # omitted. Requires zero data retention to be enabled for your organization
@@ -130,8 +160,10 @@ module ContextDev
             url: String,
             country: ContextDev::WebWebScrapeBytesParams::Country::OrSymbol,
             headers: T::Hash[Symbol, String],
+            max_age_ms: T.nilable(Integer),
             tags: T::Array[String],
             timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
+            wait_for_ms: T.nilable(Integer),
             zdr: ContextDev::WebWebScrapeBytesParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
           }

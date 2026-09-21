@@ -95,6 +95,19 @@ module ContextDev
       sig { params(handle_cookie_popup: T::Boolean).void }
       attr_writer :handle_cookie_popup
 
+      # Optional outbound HTTP headers, using the same JSON object or deep-object query
+      # format as other scrape endpoints (for example headers[Authorization]=Bearer
+      # token). Headers are scoped to the target origin during capture. For domain/page
+      # requests, discovery receives no custom headers and only pages on the resolved
+      # origin are eligible. Non-empty headers bypass screenshot caching and return an
+      # in-memory data URL; no screenshot is uploaded. Empty objects behave like omitted
+      # headers.
+      sig { returns(T.nilable(T::Hash[Symbol, String])) }
+      attr_reader :headers
+
+      sig { params(headers: T::Hash[Symbol, String]).void }
+      attr_writer :headers
+
       # Return a cached screenshot if a prior screenshot for the same parameters exists
       # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
       # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
@@ -182,6 +195,7 @@ module ContextDev
           full_screenshot:
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
           handle_cookie_popup: T::Boolean,
+          headers: T::Hash[Symbol, String],
           max_age_ms: T.nilable(Integer),
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           scroll_offset: T.nilable(Integer),
@@ -222,6 +236,14 @@ module ContextDev
         # dismiss cookie banner before capture. If 'false' or not provided, captures the
         # page without that step.
         handle_cookie_popup: nil,
+        # Optional outbound HTTP headers, using the same JSON object or deep-object query
+        # format as other scrape endpoints (for example headers[Authorization]=Bearer
+        # token). Headers are scoped to the target origin during capture. For domain/page
+        # requests, discovery receives no custom headers and only pages on the resolved
+        # origin are eligible. Non-empty headers bypass screenshot caching and return an
+        # in-memory data URL; no screenshot is uploaded. Empty objects behave like omitted
+        # headers.
+        headers: nil,
         # Return a cached screenshot if a prior screenshot for the same parameters exists
         # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
@@ -276,6 +298,7 @@ module ContextDev
             full_screenshot:
               ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
             handle_cookie_popup: T::Boolean,
+            headers: T::Hash[Symbol, String],
             max_age_ms: T.nilable(Integer),
             page: ContextDev::WebScreenshotParams::Page::OrSymbol,
             scroll_offset: T.nilable(Integer),

@@ -5,8 +5,10 @@ module ContextDev
         url: String,
         country: ContextDev::Models::WebWebScrapeBytesParams::country,
         headers: ::Hash[Symbol, String],
+        max_age_ms: Integer?,
         tags: ::Array[String],
         timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
+        wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
@@ -27,6 +29,8 @@ module ContextDev
 
       def headers=: (::Hash[Symbol, String]) -> ::Hash[Symbol, String]
 
+      attr_accessor max_age_ms: Integer?
+
       attr_reader tags: ::Array[String]?
 
       def tags=: (::Array[String]) -> ::Array[String]
@@ -36,6 +40,8 @@ module ContextDev
       def timeout_opts=: (
         ContextDev::WebWebScrapeBytesParams::TimeoutOpts
       ) -> ContextDev::WebWebScrapeBytesParams::TimeoutOpts
+
+      attr_accessor wait_for_ms: Integer?
 
       attr_reader zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr?
 
@@ -47,8 +53,10 @@ module ContextDev
         url: String,
         ?country: ContextDev::Models::WebWebScrapeBytesParams::country,
         ?headers: ::Hash[Symbol, String],
+        ?max_age_ms: Integer?,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
+        ?wait_for_ms: Integer?,
         ?zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
@@ -57,8 +65,10 @@ module ContextDev
         url: String,
         country: ContextDev::Models::WebWebScrapeBytesParams::country,
         headers: ::Hash[Symbol, String],
+        max_age_ms: Integer?,
         tags: ::Array[String],
         timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
+        wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr,
         request_options: ContextDev::RequestOptions
       }

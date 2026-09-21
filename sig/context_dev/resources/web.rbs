@@ -69,6 +69,7 @@ module ContextDev
         ?domain: String,
         ?full_screenshot: ContextDev::Models::WebScreenshotParams::full_screenshot,
         ?handle_cookie_popup: bool,
+        ?headers: ::Hash[Symbol, String],
         ?max_age_ms: Integer?,
         ?page: ContextDev::Models::WebScreenshotParams::page,
         ?scroll_offset: Integer?,
@@ -124,8 +125,10 @@ module ContextDev
         url: String,
         ?country: ContextDev::Models::WebWebScrapeBytesParams::country,
         ?headers: ::Hash[Symbol, String],
+        ?max_age_ms: Integer?,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
+        ?wait_for_ms: Integer?,
         ?zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebScrapeBytesResponse
@@ -153,6 +156,7 @@ module ContextDev
       def web_scrape_images: (
         url: String,
         ?actions: ::Array[ContextDev::Models::WebWebScrapeImagesParams::action]?,
+        ?country: ContextDev::Models::WebWebScrapeImagesParams::country,
         ?dedupe: bool,
         ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment?,
         ?headers: ::Hash[Symbol, String],
@@ -194,6 +198,7 @@ module ContextDev
         ?country: ContextDev::Models::WebWebScrapeScreenshotParams::country,
         ?full_screenshot: ContextDev::Models::WebWebScrapeScreenshotParams::full_screenshot,
         ?handle_cookie_popup: bool,
+        ?headers: ::Hash[Symbol, String],
         ?max_age_ms: Integer?,
         ?scroll_offset: Integer?,
         ?tags: ::Array[String],

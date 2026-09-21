@@ -16,6 +16,22 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :bytes
 
+      # Cache outcome for this response. Composite responses are hits only when every
+      # cache-controlled fetch contributing to the output was a hit; age_ms is the
+      # oldest contributing hit.
+      sig do
+        returns(ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata)
+      end
+      attr_reader :cache_metadata
+
+      sig do
+        params(
+          cache_metadata:
+            ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::OrHash
+        ).void
+      end
+      attr_writer :cache_metadata
+
       # Number of decoded resource bytes, before base64 encoding.
       sig { returns(Integer) }
       attr_accessor :content_length
@@ -75,6 +91,8 @@ module ContextDev
       sig do
         params(
           bytes: String,
+          cache_metadata:
+            ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::OrHash,
           content_length: Integer,
           content_type: String,
           encoding:
@@ -93,6 +111,10 @@ module ContextDev
         # Base64-encoded resource bytes, without a data URI prefix. Decode this field to
         # recover the downloaded file.
         bytes:,
+        # Cache outcome for this response. Composite responses are hits only when every
+        # cache-controlled fetch contributing to the output was a hit; age_ms is the
+        # oldest contributing hit.
+        cache_metadata:,
         # Number of decoded resource bytes, before base64 encoding.
         content_length:,
         # The Content-Type returned by the origin, including any charset. Defaults to
@@ -118,6 +140,8 @@ module ContextDev
         override.returns(
           {
             bytes: String,
+            cache_metadata:
+              ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata,
             content_length: Integer,
             content_type: String,
             encoding:
@@ -134,6 +158,101 @@ module ContextDev
         )
       end
       def to_hash
+      end
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        sig { returns(Integer) }
+        attr_accessor :age_ms
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        sig do
+          returns(
+            ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::Status::TaggedSymbol
+          )
+        end
+        attr_accessor :status
+
+        # Cache outcome for this response. Composite responses are hits only when every
+        # cache-controlled fetch contributing to the output was a hit; age_ms is the
+        # oldest contributing hit.
+        sig do
+          params(
+            age_ms: Integer,
+            status:
+              ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::Status::OrSymbol
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+          age_ms:,
+          # Whether the response was served from cache, required fresh work, or honored
+          # zero-data-retention cache bypass.
+          status:
+        )
+        end
+
+        sig do
+          override.returns(
+            {
+              age_ms: Integer,
+              status:
+                ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::Status::TaggedSymbol
+            }
+          )
+        end
+        def to_hash
+        end
+
+        # Whether the response was served from cache, required fresh work, or honored
+        # zero-data-retention cache bypass.
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::Status
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          HIT =
+            T.let(
+              :hit,
+              ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::Status::TaggedSymbol
+            )
+          MISS =
+            T.let(
+              :miss,
+              ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::Status::TaggedSymbol
+            )
+          ZDR =
+            T.let(
+              :zdr,
+              ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::Status::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::Status::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
+          end
+        end
       end
 
       module Encoding

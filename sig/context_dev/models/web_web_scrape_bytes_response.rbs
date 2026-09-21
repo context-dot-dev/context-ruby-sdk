@@ -3,6 +3,7 @@ module ContextDev
     type web_web_scrape_bytes_response =
       {
         bytes: String,
+        cache_metadata: ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata,
         content_length: Integer,
         content_type: String,
         encoding: ContextDev::Models::WebWebScrapeBytesResponse::encoding,
@@ -16,6 +17,8 @@ module ContextDev
 
     class WebWebScrapeBytesResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor bytes: String
+
+      attr_accessor cache_metadata: ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata
 
       attr_accessor content_length: Integer
 
@@ -41,6 +44,7 @@ module ContextDev
 
       def initialize: (
         bytes: String,
+        cache_metadata: ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata,
         content_length: Integer,
         content_type: String,
         encoding: ContextDev::Models::WebWebScrapeBytesResponse::encoding,
@@ -54,6 +58,7 @@ module ContextDev
 
       def to_hash: -> {
         bytes: String,
+        cache_metadata: ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata,
         content_length: Integer,
         content_type: String,
         encoding: ContextDev::Models::WebWebScrapeBytesResponse::encoding,
@@ -64,6 +69,40 @@ module ContextDev
         url: String,
         key_metadata: ContextDev::Models::WebWebScrapeBytesResponse::KeyMetadata
       }
+
+      type cache_metadata =
+        {
+          age_ms: Integer,
+          status: ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::status
+        }
+
+      class CacheMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor age_ms: Integer
+
+        attr_accessor status: ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::status
+
+        def initialize: (
+          age_ms: Integer,
+          status: ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::status
+        ) -> void
+
+        def to_hash: -> {
+          age_ms: Integer,
+          status: ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::status
+        }
+
+        type status = :hit | :miss | :zdr
+
+        module Status
+          extend ContextDev::Internal::Type::Enum
+
+          HIT: :hit
+          MISS: :miss
+          ZDR: :zdr
+
+          def self?.values: -> ::Array[ContextDev::Models::WebWebScrapeBytesResponse::CacheMetadata::status]
+        end
+      end
 
       type encoding = :base64
 

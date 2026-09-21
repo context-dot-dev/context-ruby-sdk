@@ -280,6 +280,7 @@ module ContextDev
           full_screenshot:
             ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol,
           handle_cookie_popup: T::Boolean,
+          headers: T::Hash[Symbol, String],
           max_age_ms: T.nilable(Integer),
           page: ContextDev::WebScreenshotParams::Page::OrSymbol,
           scroll_offset: T.nilable(Integer),
@@ -320,6 +321,14 @@ module ContextDev
         # dismiss cookie banner before capture. If 'false' or not provided, captures the
         # page without that step.
         handle_cookie_popup: nil,
+        # Optional outbound HTTP headers, using the same JSON object or deep-object query
+        # format as other scrape endpoints (for example headers[Authorization]=Bearer
+        # token). Headers are scoped to the target origin during capture. For domain/page
+        # requests, discovery receives no custom headers and only pages on the resolved
+        # origin are eligible. Non-empty headers bypass screenshot caching and return an
+        # in-memory data URL; no screenshot is uploaded. Empty objects behave like omitted
+        # headers.
+        headers: nil,
         # Return a cached screenshot if a prior screenshot for the same parameters exists
         # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
@@ -518,24 +527,33 @@ module ContextDev
       )
       end
 
-      # Downloads a resource and returns its bytes as base64. Supports images, PDFs,
-      # HTML pages, and any other content type without image conversion, text
-      # extraction, or character-encoding changes. HTTP compression is decoded before
-      # base64 encoding. HTML is the original HTTP response; JavaScript is not rendered.
+      # Downloads a resource and returns its bytes as base64. Without waitForMs, returns
+      # the original HTTP response without image conversion, text extraction, or
+      # character-encoding changes. HTTP compression is decoded before base64 encoding.
+      # Supply waitForMs to render HTML with JavaScript in the browser and return the
+      # resulting HTML as UTF-8 bytes after the wait. Non-HTML resources, including
+      # images and PDFs, keep their original bytes and do not incur a browser wait.
       # Follows public redirects and retries failed downloads through ISP and
       # residential proxies, with a direct fallback. When country is specified, only a
       # residential proxy in that country is used. Supply headers such as Referer for
-      # images that require a referring page. Downloads are not cached. Maximum decoded
-      # resource size: 20 MiB (20971520 bytes), before base64 encoding. Successful
-      # requests cost 1 credit; errors are not billed.
+      # images that require a referring page. Cached results are reused according to
+      # maxAgeMs (default: 1 day; maximum: 30 days). Set maxAgeMs=0 to fetch fresh and
+      # refresh the cache. Cache identity includes the exact URL, country, waitForMs,
+      # and normalized outbound headers. Credential-bearing headers and zero data
+      # retention bypass cache reads and writes. cache_metadata reports hit, miss, or
+      # zdr and the cached result age in milliseconds. Maximum decoded resource size: 20
+      # MiB (20971520 bytes), before base64 encoding. Successful requests cost 1 credit;
+      # errors are not billed.
       sig do
         params(
           url: String,
           country: ContextDev::WebWebScrapeBytesParams::Country::OrSymbol,
           headers: T::Hash[Symbol, String],
+          max_age_ms: T.nilable(Integer),
           tags: T::Array[String],
           timeout_opts:
             ContextDev::WebWebScrapeBytesParams::TimeoutOpts::OrHash,
+          wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebScrapeBytesParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebScrapeBytesResponse)
@@ -550,8 +568,13 @@ module ContextDev
         # as a JSON object or deep-object query params such as
         # headers[Referer]=https://example.com/. Host, Content-Length, and hop-by-hop
         # transport headers are rejected. Authorization and cookies are removed when a
-        # redirect changes origin.
+        # redirect changes origin. Credential-bearing headers bypass cache reads and
+        # writes; other headers are included in the cache key.
         headers: nil,
+        # Return a cached result if a prior scrape for the same parameters exists and is
+        # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
+        # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+        max_age_ms: nil,
         # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
         # characters.
         tags: nil,
@@ -559,6 +582,13 @@ module ContextDev
         # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
         # timeoutOpts object.
         timeout_opts: nil,
+        # Optional browser wait time after initial page load, in milliseconds (0–30000; 0
+        # uses 500). When supplied, HTML is rendered with JavaScript and returned as UTF-8
+        # bytes. Other resources keep their original bytes without a browser wait. Omit to
+        # download the original HTTP response. When combined with timeoutOpts,
+        # timeoutOpts.milliseconds must be at least waitForMs + 10000 ms; a shorter
+        # deadline is rejected with 400 TIMEOUT_TOO_SHORT_FOR_WAIT.
+        wait_for_ms: nil,
         # Set to enabled to bypass shared caches and omit request and response content
         # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
         # omitted. Requires zero data retention to be enabled for your organization
@@ -702,6 +732,7 @@ module ContextDev
                 )
               ]
             ),
+          country: ContextDev::WebWebScrapeImagesParams::Country::OrSymbol,
           dedupe: T::Boolean,
           enrichment:
             T.nilable(ContextDev::WebWebScrapeImagesParams::Enrichment::OrHash),
@@ -722,6 +753,9 @@ module ContextDev
         # content is captured. Requires a paid plan. Send a JSON array in the query
         # parameter. Maximum: 5 actions.
         actions: nil,
+        # Fetch the target page through a residential proxy in this country (ISO 3166-1
+        # alpha-2).
+        country: nil,
         # When true, visually duplicate images are removed: every image is loaded and
         # perceptually hashed, and only the highest-resolution copy of each duplicate
         # group is kept. Images that cannot be downloaded or hashed are kept. Default:
@@ -908,6 +942,7 @@ module ContextDev
           full_screenshot:
             ContextDev::WebWebScrapeScreenshotParams::FullScreenshot::OrSymbol,
           handle_cookie_popup: T::Boolean,
+          headers: T::Hash[Symbol, String],
           max_age_ms: T.nilable(Integer),
           scroll_offset: T.nilable(Integer),
           tags: T::Array[String],
@@ -941,6 +976,14 @@ module ContextDev
         # dismiss cookie banner before capture. If 'false' or not provided, captures the
         # page without that step.
         handle_cookie_popup: nil,
+        # Optional outbound HTTP headers, using the same JSON object or deep-object query
+        # format as other scrape endpoints (for example headers[Authorization]=Bearer
+        # token). Headers are scoped to the target origin during capture. For domain/page
+        # requests, discovery receives no custom headers and only pages on the resolved
+        # origin are eligible. Non-empty headers bypass screenshot caching and return an
+        # in-memory data URL; no screenshot is uploaded. Empty objects behave like omitted
+        # headers.
+        headers: nil,
         # Return a cached screenshot if a prior screenshot for the same parameters exists
         # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
         # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
