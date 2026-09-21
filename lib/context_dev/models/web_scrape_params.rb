@@ -32,8 +32,10 @@ module ContextDev
       optional :markdown_params, -> { ContextDev::WebScrapeParams::MarkdownParams }, api_name: :markdownParams
 
       # @!attribute max_age_ms
-      #   Maximum age for the entire capture, including bytes. Defaults to 1 day; 0
-      #   fetches fresh. Captures with hosted image files refresh after 23 hours.
+      #   Maximum age of each cached output. Defaults to 1 day; 0 fetches fresh and
+      #   updates the requested outputs. Compatible outputs are shared with the individual
+      #   scrape endpoints. Image results with hosted files refresh after 23 hours; other
+      #   outputs retain their own freshness.
       #
       #   @return [Integer, nil]
       optional :max_age_ms, Integer, api_name: :maxAgeMs
@@ -90,7 +92,7 @@ module ContextDev
       #
       #   @param markdown_params [ContextDev::Models::WebScrapeParams::MarkdownParams] Markdown options. Requires formats.markdown: true.
       #
-      #   @param max_age_ms [Integer] Maximum age for the entire capture, including bytes. Defaults to 1 day; 0 fetche
+      #   @param max_age_ms [Integer] Maximum age of each cached output. Defaults to 1 day; 0 fetches fresh and update
       #
       #   @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams] Required when formats.parse is true.
       #
