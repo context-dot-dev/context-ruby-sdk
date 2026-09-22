@@ -29,41 +29,6 @@ module ContextDev
       )
       end
 
-      # Returns a simplified version of brand data containing only essential
-      # information: domain, title, colors, logos, and backdrops. Optimized for faster
-      # responses and reduced data transfer.
-      sig do
-        params(
-          domain: String,
-          max_age_ms: T.nilable(Integer),
-          tags: T::Array[String],
-          theme: ContextDev::BrandRetrieveSimplifiedParams::Theme::OrSymbol,
-          timeout_opts:
-            ContextDev::BrandRetrieveSimplifiedParams::TimeoutOpts::OrHash,
-          request_options: ContextDev::RequestOptions::OrHash
-        ).returns(ContextDev::Models::BrandRetrieveSimplifiedResponse)
-      end
-      def retrieve_simplified(
-        # Domain name to retrieve simplified brand data for
-        domain:,
-        # Maximum age in milliseconds for cached brand data before the API performs a hard
-        # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-        # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-        # are clamped to 1 year.
-        max_age_ms: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
-        tags: nil,
-        # Optional theme preference used when selecting brand assets.
-        theme: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
-        timeout_opts: nil,
-        request_options: {}
-      )
-      end
-
       # Search indexed brands by name or domain
       sig do
         params(

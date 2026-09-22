@@ -311,6 +311,30 @@ module ContextDev
       def retrieve_change(change_id, request_options: {})
       end
 
+      # Fetches one run for a monitor, including lifecycle status, timing, credits
+      # charged, and any detected change.
+      sig do
+        params(
+          run_id: String,
+          monitor_id: String,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::MonitorRetrieveRunResponse)
+      end
+      def retrieve_run(run_id, monitor_id:, request_options: {})
+      end
+
+      # Generates a new signing secret for the monitor's webhook and returns the updated
+      # monitor (including the new `webhook.secret`). The previous secret stops signing
+      # deliveries immediately, so update your endpoint before rotating.
+      sig do
+        params(
+          monitor_id: String,
+          request_options: ContextDev::RequestOptions::OrHash
+        ).returns(ContextDev::Models::MonitorRotateWebhookSecretResponse)
+      end
+      def rotate_webhook_secret(monitor_id, request_options: {})
+      end
+
       # Triggers an immediate run of the monitor outside its normal schedule. The run is
       # queued and processed asynchronously.
       sig do

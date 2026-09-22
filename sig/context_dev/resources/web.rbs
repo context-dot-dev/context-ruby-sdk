@@ -11,27 +11,6 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebAnswersResponse
 
-      def extract: (
-        schema: ::Hash[Symbol, top],
-        url: String,
-        ?actions: ::Array[ContextDev::Models::WebExtractParams::action],
-        ?fact_check: bool,
-        ?follow_subdomains: bool,
-        ?include_frames: bool,
-        ?instructions: String,
-        ?max_age_ms: Integer,
-        ?max_depth: Integer,
-        ?max_pages: Integer,
-        ?pdf: ContextDev::WebExtractParams::Pdf,
-        ?settle_animations: bool,
-        ?stop_after_ms: Integer,
-        ?tags: ::Array[String],
-        ?timeout_opts: ContextDev::WebExtractParams::TimeoutOpts,
-        ?wait_for_ms: Integer,
-        ?zdr: ContextDev::Models::WebExtractParams::zdr,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::WebExtractResponse
-
       def extract_competitors: (
         domain: String,
         ?num_competitors: Integer,
@@ -40,15 +19,6 @@ module ContextDev
         ?zdr: ContextDev::Models::WebExtractCompetitorsParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractCompetitorsResponse
-
-      def extract_fonts: (
-        ?direct_url: String,
-        ?domain: String,
-        ?max_age_ms: Integer?,
-        ?tags: ::Array[String],
-        ?timeout_opts: ContextDev::WebExtractFontsParams::TimeoutOpts,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::WebExtractFontsResponse
 
       def extract_styleguide: (
         ?color_scheme: ContextDev::Models::WebExtractStyleguideParams::color_scheme,
@@ -61,6 +31,20 @@ module ContextDev
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebExtractStyleguideResponse
 
+      def map_urls: (
+        domain: String,
+        ?headers: ::Hash[Symbol, String],
+        ?include_subdomains: bool,
+        ?max_links: Integer,
+        ?search: String,
+        ?sitemap_url: String,
+        ?tags: ::Array[String],
+        ?timeout_opts: ContextDev::WebMapURLsParams::TimeoutOpts,
+        ?url_regex: String,
+        ?zdr: ContextDev::Models::WebMapURLsParams::zdr,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::WebMapURLsResponse
+
       def scrape: (
         formats: ContextDev::WebScrapeParams::Formats,
         url: String,
@@ -71,7 +55,7 @@ module ContextDev
         ?screenshot_params: ContextDev::WebScrapeParams::ScreenshotParams,
         ?shared_params: ContextDev::WebScrapeParams::SharedParams,
         ?tags: ::Array[String],
-        ?timeout_ms: Integer,
+        ?timeout_opts: ContextDev::WebScrapeParams::TimeoutOpts,
         ?zdr: ContextDev::Models::WebScrapeParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebScrapeResponse
@@ -135,108 +119,6 @@ module ContextDev
         ?zdr: ContextDev::Models::WebWebCrawlMdParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::WebWebCrawlMdResponse
-
-      def web_scrape_bytes: (
-        url: String,
-        ?country: ContextDev::Models::WebWebScrapeBytesParams::country,
-        ?headers: ::Hash[Symbol, String],
-        ?max_age_ms: Integer?,
-        ?tags: ::Array[String],
-        ?timeout_opts: ContextDev::WebWebScrapeBytesParams::TimeoutOpts,
-        ?wait_for_ms: Integer?,
-        ?zdr: ContextDev::Models::WebWebScrapeBytesParams::zdr,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::WebWebScrapeBytesResponse
-
-      def web_scrape_html: (
-        url: String,
-        ?actions: ::Array[ContextDev::Models::WebWebScrapeHTMLParams::action]?,
-        ?country: ContextDev::Models::WebWebScrapeHTMLParams::country,
-        ?exclude_selectors: ::Array[String]?,
-        ?extract_rules: ::Hash[Symbol, ContextDev::Models::WebWebScrapeHTMLParams::extract_rule],
-        ?headers: ::Hash[Symbol, String],
-        ?include_frames: bool,
-        ?include_selectors: ::Array[String]?,
-        ?max_age_ms: Integer?,
-        ?pdf: ContextDev::WebWebScrapeHTMLParams::Pdf,
-        ?settle_animations: bool,
-        ?tags: ::Array[String],
-        ?timeout_opts: ContextDev::WebWebScrapeHTMLParams::TimeoutOpts,
-        ?use_main_content_only: bool,
-        ?wait_for_ms: Integer?,
-        ?zdr: ContextDev::Models::WebWebScrapeHTMLParams::zdr,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::WebWebScrapeHTMLResponse
-
-      def web_scrape_images: (
-        url: String,
-        ?actions: ::Array[ContextDev::Models::WebWebScrapeImagesParams::action]?,
-        ?country: ContextDev::Models::WebWebScrapeImagesParams::country,
-        ?dedupe: bool,
-        ?enrichment: ContextDev::WebWebScrapeImagesParams::Enrichment?,
-        ?headers: ::Hash[Symbol, String],
-        ?max_age_ms: Integer?,
-        ?tags: ::Array[String],
-        ?timeout_opts: ContextDev::WebWebScrapeImagesParams::TimeoutOpts,
-        ?wait_for_ms: Integer?,
-        ?zdr: ContextDev::Models::WebWebScrapeImagesParams::zdr,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::WebWebScrapeImagesResponse
-
-      def web_scrape_md: (
-        url: String,
-        ?actions: ::Array[ContextDev::Models::WebWebScrapeMdParams::action]?,
-        ?country: ContextDev::Models::WebWebScrapeMdParams::country,
-        ?exclude_selectors: ::Array[String]?,
-        ?headers: ::Hash[Symbol, String],
-        ?include_frames: bool,
-        ?include_html: bool,
-        ?include_images: bool,
-        ?include_links: bool,
-        ?include_selectors: ::Array[String]?,
-        ?max_age_ms: Integer?,
-        ?pdf: ContextDev::WebWebScrapeMdParams::Pdf,
-        ?settle_animations: bool,
-        ?shorten_base64_images: bool,
-        ?tags: ::Array[String],
-        ?timeout_opts: ContextDev::WebWebScrapeMdParams::TimeoutOpts,
-        ?use_main_content_only: bool,
-        ?wait_for_ms: Integer?,
-        ?zdr: ContextDev::Models::WebWebScrapeMdParams::zdr,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::WebWebScrapeMdResponse
-
-      def web_scrape_screenshot: (
-        url: String,
-        ?clear_popups: bool,
-        ?color_scheme: ContextDev::Models::WebWebScrapeScreenshotParams::color_scheme,
-        ?country: ContextDev::Models::WebWebScrapeScreenshotParams::country,
-        ?full_screenshot: ContextDev::Models::WebWebScrapeScreenshotParams::full_screenshot,
-        ?handle_cookie_popup: bool,
-        ?headers: ::Hash[Symbol, String],
-        ?max_age_ms: Integer?,
-        ?scroll_offset: Integer?,
-        ?tags: ::Array[String],
-        ?timeout_opts: ContextDev::WebWebScrapeScreenshotParams::TimeoutOpts,
-        ?viewport: ContextDev::WebWebScrapeScreenshotParams::Viewport,
-        ?wait_for_ms: Integer?,
-        ?zdr: ContextDev::Models::WebWebScrapeScreenshotParams::zdr,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::WebWebScrapeScreenshotResponse
-
-      def web_scrape_sitemap: (
-        domain: String,
-        ?headers: ::Hash[Symbol, String],
-        ?include_subdomains: bool,
-        ?max_links: Integer,
-        ?search: String,
-        ?sitemap_url: String,
-        ?tags: ::Array[String],
-        ?timeout_opts: ContextDev::WebWebScrapeSitemapParams::TimeoutOpts,
-        ?url_regex: String,
-        ?zdr: ContextDev::Models::WebWebScrapeSitemapParams::zdr,
-        ?request_options: ContextDev::request_opts
-      ) -> ContextDev::Models::WebWebScrapeSitemapResponse
 
       def initialize: (client: ContextDev::Client) -> void
     end

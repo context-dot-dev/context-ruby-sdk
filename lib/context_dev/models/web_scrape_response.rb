@@ -68,13 +68,20 @@ module ContextDev
       #   @return [String]
       required :url, String
 
+      # @!attribute is_partial
+      #   Present when return-partial captures a page that is still loading or returns
+      #   images before image processing finishes. Partial responses are not cached.
+      #
+      #   @return [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial, nil]
+      optional :is_partial, enum: -> { ContextDev::Models::WebScrapeResponse::IsPartial }, api_name: :isPartial
+
       # @!attribute key_metadata
       #   Credit usage, included whenever a valid API key is provided.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebScrapeResponse::KeyMetadata }
 
-      # @!method initialize(bytes:, cache_metadata:, html:, images:, markdown:, metadata:, parsed:, request_id:, screenshot:, url:, key_metadata: nil)
+      # @!method initialize(bytes:, cache_metadata:, html:, images:, markdown:, metadata:, parsed:, request_id:, screenshot:, url:, is_partial: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScrapeResponse} for more details.
       #
@@ -97,6 +104,8 @@ module ContextDev
       #   @param screenshot [ContextDev::Models::WebScrapeResponse::Screenshot] An image data URL. Use directly as an image src.
       #
       #   @param url [String] Final URL after redirects and browser actions.
+      #
+      #   @param is_partial [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial] Present when return-partial captures a page that is still loading or returns ima
       #
       #   @param key_metadata [ContextDev::Models::WebScrapeResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
 
@@ -609,6 +618,19 @@ module ContextDev
         #
         #   @param data [String, nil]
         #   @param requested [Boolean]
+      end
+
+      # Present when return-partial captures a page that is still loading or returns
+      # images before image processing finishes. Partial responses are not cached.
+      #
+      # @see ContextDev::Models::WebScrapeResponse#is_partial
+      module IsPartial
+        extend ContextDev::Internal::Type::Enum
+
+        TRUE = true
+
+        # @!method self.values
+        #   @return [Array<Boolean>]
       end
 
       # @see ContextDev::Models::WebScrapeResponse#key_metadata

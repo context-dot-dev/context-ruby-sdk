@@ -360,6 +360,53 @@ module ContextDev
         )
       end
 
+      # Fetches one run for a monitor, including lifecycle status, timing, credits
+      # charged, and any detected change.
+      #
+      # @overload retrieve_run(run_id, monitor_id:, request_options: {})
+      #
+      # @param run_id [String]
+      # @param monitor_id [String]
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorRetrieveRunResponse]
+      #
+      # @see ContextDev::Models::MonitorRetrieveRunParams
+      def retrieve_run(run_id, params)
+        parsed, options = ContextDev::MonitorRetrieveRunParams.dump_request(params)
+        monitor_id =
+          parsed.delete(:monitor_id) do
+            raise ArgumentError.new("missing required path argument #{_1}")
+          end
+        @client.request(
+          method: :get,
+          path: ["monitors/%1$s/runs/%2$s", monitor_id, run_id],
+          model: ContextDev::Models::MonitorRetrieveRunResponse,
+          options: options
+        )
+      end
+
+      # Generates a new signing secret for the monitor's webhook and returns the updated
+      # monitor (including the new `webhook.secret`). The previous secret stops signing
+      # deliveries immediately, so update your endpoint before rotating.
+      #
+      # @overload rotate_webhook_secret(monitor_id, request_options: {})
+      #
+      # @param monitor_id [String]
+      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
+      #
+      # @return [ContextDev::Models::MonitorRotateWebhookSecretResponse]
+      #
+      # @see ContextDev::Models::MonitorRotateWebhookSecretParams
+      def rotate_webhook_secret(monitor_id, params = {})
+        @client.request(
+          method: :post,
+          path: ["monitors/%1$s/webhook/rotate-secret", monitor_id],
+          model: ContextDev::Models::MonitorRotateWebhookSecretResponse,
+          options: params[:request_options]
+        )
+      end
+
       # Triggers an immediate run of the monitor outside its normal schedule. The run is
       # queued and processed asynchronously.
       #

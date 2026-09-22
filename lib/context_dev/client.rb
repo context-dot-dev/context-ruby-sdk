@@ -24,9 +24,6 @@ module ContextDev
     # @return [ContextDev::Resources::Web]
     attr_reader :web
 
-    # @return [ContextDev::Resources::AI]
-    attr_reader :ai
-
     # @return [ContextDev::Resources::Brand]
     attr_reader :brand
 
@@ -125,7 +122,6 @@ module ContextDev
 
       @parse = ContextDev::Resources::Parse.new(client: self)
       @web = ContextDev::Resources::Web.new(client: self)
-      @ai = ContextDev::Resources::AI.new(client: self)
       @brand = ContextDev::Resources::Brand.new(client: self)
       @industry = ContextDev::Resources::Industry.new(client: self)
       @utility = ContextDev::Resources::Utility.new(client: self)

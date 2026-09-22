@@ -108,6 +108,25 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
+      # Present when return-partial captures a page that is still loading or returns
+      # images before image processing finishes. Partial responses are not cached.
+      sig do
+        returns(
+          T.nilable(
+            ContextDev::Models::WebScrapeResponse::IsPartial::TaggedBoolean
+          )
+        )
+      end
+      attr_reader :is_partial
+
+      sig do
+        params(
+          is_partial:
+            ContextDev::Models::WebScrapeResponse::IsPartial::OrBoolean
+        ).void
+      end
+      attr_writer :is_partial
+
       # Credit usage, included whenever a valid API key is provided.
       sig do
         returns(T.nilable(ContextDev::Models::WebScrapeResponse::KeyMetadata))
@@ -135,6 +154,8 @@ module ContextDev
           request_id: String,
           screenshot: ContextDev::Models::WebScrapeResponse::Screenshot::OrHash,
           url: String,
+          is_partial:
+            ContextDev::Models::WebScrapeResponse::IsPartial::OrBoolean,
           key_metadata:
             ContextDev::Models::WebScrapeResponse::KeyMetadata::OrHash
         ).returns(T.attached_class)
@@ -164,6 +185,9 @@ module ContextDev
         screenshot:,
         # Final URL after redirects and browser actions.
         url:,
+        # Present when return-partial captures a page that is still loading or returns
+        # images before image processing finishes. Partial responses are not cached.
+        is_partial: nil,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil
       )
@@ -183,6 +207,8 @@ module ContextDev
             request_id: String,
             screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
             url: String,
+            is_partial:
+              ContextDev::Models::WebScrapeResponse::IsPartial::TaggedBoolean,
             key_metadata: ContextDev::Models::WebScrapeResponse::KeyMetadata
           }
         )
@@ -1215,6 +1241,34 @@ module ContextDev
           override.returns({ data: T.nilable(String), requested: T::Boolean })
         end
         def to_hash
+        end
+      end
+
+      # Present when return-partial captures a page that is still loading or returns
+      # images before image processing finishes. Partial responses are not cached.
+      module IsPartial
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedBoolean =
+          T.type_alias do
+            T.all(T::Boolean, ContextDev::Models::WebScrapeResponse::IsPartial)
+          end
+        OrBoolean = T.type_alias { T::Boolean }
+
+        TRUE =
+          T.let(
+            true,
+            ContextDev::Models::WebScrapeResponse::IsPartial::TaggedBoolean
+          )
+
+        sig do
+          override.returns(
+            T::Array[
+              ContextDev::Models::WebScrapeResponse::IsPartial::TaggedBoolean
+            ]
+          )
+        end
+        def self.values
         end
       end
 

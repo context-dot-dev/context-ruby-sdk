@@ -25,28 +25,6 @@ class ContextDev::Test::Resources::BrandTest < ContextDev::Test::ResourceTest
     end
   end
 
-  def test_retrieve_simplified_required_params
-    skip("Mock server tests are disabled")
-
-    response = @context_dev.brand.retrieve_simplified(domain: "xxx")
-
-    assert_pattern do
-      response => ContextDev::Models::BrandRetrieveSimplifiedResponse
-    end
-
-    assert_pattern do
-      response => {
-        brand: ContextDev::Models::BrandRetrieveSimplifiedResponse::Brand,
-        cache_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::CacheMetadata,
-        code: Integer,
-        request_id: String,
-        status: String,
-        key_metadata: ContextDev::Models::BrandRetrieveSimplifiedResponse::KeyMetadata | nil,
-        partial: ContextDev::Internal::Type::Boolean | nil
-      }
-    end
-  end
-
   def test_search_required_params
     skip("Mock server tests are disabled")
 
