@@ -1,0 +1,125 @@
+module ContextDev
+  module Models
+    type web_map_urls_response =
+      {
+        domain: String,
+        request_id: String,
+        success: ContextDev::Models::WebMapURLsResponse::success,
+        urls: ::Array[ContextDev::Models::WebMapURLsResponse::URL],
+        key_metadata: ContextDev::Models::WebMapURLsResponse::KeyMetadata,
+        partial: bool
+      }
+
+    class WebMapURLsResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor domain: String
+
+      attr_accessor request_id: String
+
+      attr_accessor success: ContextDev::Models::WebMapURLsResponse::success
+
+      attr_accessor urls: ::Array[ContextDev::Models::WebMapURLsResponse::URL]
+
+      attr_reader key_metadata: ContextDev::Models::WebMapURLsResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::WebMapURLsResponse::KeyMetadata
+      ) -> ContextDev::Models::WebMapURLsResponse::KeyMetadata
+
+      attr_reader partial: bool?
+
+      def partial=: (bool) -> bool
+
+      def initialize: (
+        domain: String,
+        request_id: String,
+        success: ContextDev::Models::WebMapURLsResponse::success,
+        urls: ::Array[ContextDev::Models::WebMapURLsResponse::URL],
+        ?key_metadata: ContextDev::Models::WebMapURLsResponse::KeyMetadata,
+        ?partial: bool
+      ) -> void
+
+      def to_hash: -> {
+        domain: String,
+        request_id: String,
+        success: ContextDev::Models::WebMapURLsResponse::success,
+        urls: ::Array[ContextDev::Models::WebMapURLsResponse::URL],
+        key_metadata: ContextDev::Models::WebMapURLsResponse::KeyMetadata,
+        partial: bool
+      }
+
+      type success = true
+
+      module Success
+        extend ContextDev::Internal::Type::Enum
+
+        TRUE: true
+
+        def self?.values: -> ::Array[ContextDev::Models::WebMapURLsResponse::success]
+      end
+
+      type url =
+        {
+          url: String,
+          description: String,
+          keywords: ::Array[String],
+          language: String,
+          title: String
+        }
+
+      class URL < ContextDev::Internal::Type::BaseModel
+        attr_accessor url: String
+
+        attr_reader description: String?
+
+        def description=: (String) -> String
+
+        attr_reader keywords: ::Array[String]?
+
+        def keywords=: (::Array[String]) -> ::Array[String]
+
+        attr_reader language: String?
+
+        def language=: (String) -> String
+
+        attr_reader title: String?
+
+        def title=: (String) -> String
+
+        def initialize: (
+          url: String,
+          ?description: String,
+          ?keywords: ::Array[String],
+          ?language: String,
+          ?title: String
+        ) -> void
+
+        def to_hash: -> {
+          url: String,
+          description: String,
+          keywords: ::Array[String],
+          language: String,
+          title: String
+        }
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end

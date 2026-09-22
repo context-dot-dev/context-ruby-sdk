@@ -97,11 +97,21 @@ module ContextDev
       attr_writer :tags
 
       # Total deadline, including navigation, actions, waiting, and all outputs.
-      sig { returns(T.nilable(Integer)) }
-      attr_reader :timeout_ms
+      # Defaults to 60000 milliseconds with behavior fail. Use return-partial to capture
+      # the current page state and return captured images if image processing cannot
+      # finish before the deadline; these responses set isPartial and are not cached.
+      # Every requested format must still be available. Fixed waits must fit before a
+      # response reserve of up to 5000 milliseconds (at most one quarter of the timeout)
+      # when using return-partial.
+      sig { returns(T.nilable(ContextDev::WebScrapeParams::TimeoutOpts)) }
+      attr_reader :timeout_opts
 
-      sig { params(timeout_ms: Integer).void }
-      attr_writer :timeout_ms
+      sig do
+        params(
+          timeout_opts: ContextDev::WebScrapeParams::TimeoutOpts::OrHash
+        ).void
+      end
+      attr_writer :timeout_opts
 
       # Zero data retention. Bypasses caches and uploads; excludes request/response
       # content and tags from logs. Must be enabled for your organization.
@@ -123,7 +133,7 @@ module ContextDev
             ContextDev::WebScrapeParams::ScreenshotParams::OrHash,
           shared_params: ContextDev::WebScrapeParams::SharedParams::OrHash,
           tags: T::Array[String],
-          timeout_ms: Integer,
+          timeout_opts: ContextDev::WebScrapeParams::TimeoutOpts::OrHash,
           zdr: ContextDev::WebScrapeParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
@@ -152,7 +162,13 @@ module ContextDev
         # Labels for tracking request usage. Not retained when zdr is enabled.
         tags: nil,
         # Total deadline, including navigation, actions, waiting, and all outputs.
-        timeout_ms: nil,
+        # Defaults to 60000 milliseconds with behavior fail. Use return-partial to capture
+        # the current page state and return captured images if image processing cannot
+        # finish before the deadline; these responses set isPartial and are not cached.
+        # Every requested format must still be available. Fixed waits must fit before a
+        # response reserve of up to 5000 milliseconds (at most one quarter of the timeout)
+        # when using return-partial.
+        timeout_opts: nil,
         # Zero data retention. Bypasses caches and uploads; excludes request/response
         # content and tags from logs. Must be enabled for your organization.
         zdr: nil,
@@ -172,7 +188,7 @@ module ContextDev
             screenshot_params: ContextDev::WebScrapeParams::ScreenshotParams,
             shared_params: ContextDev::WebScrapeParams::SharedParams,
             tags: T::Array[String],
-            timeout_ms: Integer,
+            timeout_opts: ContextDev::WebScrapeParams::TimeoutOpts,
             zdr: ContextDev::WebScrapeParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
           }
@@ -301,7 +317,9 @@ module ContextDev
         end
         attr_writer :dedupe
 
-        # Add dimensions, a visual category, or a hosted file URL.
+        # Add dimensions, a visual category, or a hosted file URL. Each image has a
+        # maximum processing time of 30000 milliseconds, bounded by the remaining request
+        # deadline.
         sig do
           returns(
             T.nilable(
@@ -336,7 +354,9 @@ module ContextDev
         def self.new(
           # For visual duplicates, keep the largest image.
           dedupe: nil,
-          # Add dimensions, a visual category, or a hosted file URL.
+          # Add dimensions, a visual category, or a hosted file URL. Each image has a
+          # maximum processing time of 30000 milliseconds, bounded by the remaining request
+          # deadline.
           enrich: nil
         )
         end
@@ -1839,6 +1859,116 @@ module ContextDev
             )
           end
           def self.variants
+          end
+        end
+      end
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::WebScrapeParams::TimeoutOpts,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        sig { returns(Integer) }
+        attr_accessor :milliseconds
+
+        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        # credits. "return-partial" returns usable results collected so far; if none are
+        # available, the request still fails without charging credits. Partial results are
+        # not cached as complete results. "return-partial" requires milliseconds of at
+        # least 5000.
+        sig do
+          returns(
+            T.nilable(
+              ContextDev::WebScrapeParams::TimeoutOpts::Behavior::OrSymbol
+            )
+          )
+        end
+        attr_reader :behavior
+
+        sig do
+          params(
+            behavior:
+              ContextDev::WebScrapeParams::TimeoutOpts::Behavior::OrSymbol
+          ).void
+        end
+        attr_writer :behavior
+
+        # Total deadline, including navigation, actions, waiting, and all outputs.
+        # Defaults to 60000 milliseconds with behavior fail. Use return-partial to capture
+        # the current page state and return captured images if image processing cannot
+        # finish before the deadline; these responses set isPartial and are not cached.
+        # Every requested format must still be available. Fixed waits must fit before a
+        # response reserve of up to 5000 milliseconds (at most one quarter of the timeout)
+        # when using return-partial.
+        sig do
+          params(
+            milliseconds: Integer,
+            behavior:
+              ContextDev::WebScrapeParams::TimeoutOpts::Behavior::OrSymbol
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          milliseconds:,
+          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+          # credits. "return-partial" returns usable results collected so far; if none are
+          # available, the request still fails without charging credits. Partial results are
+          # not cached as complete results. "return-partial" requires milliseconds of at
+          # least 5000.
+          behavior: nil
+        )
+        end
+
+        sig do
+          override.returns(
+            {
+              milliseconds: Integer,
+              behavior:
+                ContextDev::WebScrapeParams::TimeoutOpts::Behavior::OrSymbol
+            }
+          )
+        end
+        def to_hash
+        end
+
+        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        # credits. "return-partial" returns usable results collected so far; if none are
+        # available, the request still fails without charging credits. Partial results are
+        # not cached as complete results. "return-partial" requires milliseconds of at
+        # least 5000.
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(Symbol, ContextDev::WebScrapeParams::TimeoutOpts::Behavior)
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          FAIL =
+            T.let(
+              :fail,
+              ContextDev::WebScrapeParams::TimeoutOpts::Behavior::TaggedSymbol
+            )
+          RETURN_PARTIAL =
+            T.let(
+              :"return-partial",
+              ContextDev::WebScrapeParams::TimeoutOpts::Behavior::TaggedSymbol
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::WebScrapeParams::TimeoutOpts::Behavior::TaggedSymbol
+              ]
+            )
+          end
+          def self.values
           end
         end
       end

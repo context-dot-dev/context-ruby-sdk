@@ -67,11 +67,17 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!attribute timeout_ms
+      # @!attribute timeout_opts
       #   Total deadline, including navigation, actions, waiting, and all outputs.
+      #   Defaults to 60000 milliseconds with behavior fail. Use return-partial to capture
+      #   the current page state and return captured images if image processing cannot
+      #   finish before the deadline; these responses set isPartial and are not cached.
+      #   Every requested format must still be available. Fixed waits must fit before a
+      #   response reserve of up to 5000 milliseconds (at most one quarter of the timeout)
+      #   when using return-partial.
       #
-      #   @return [Integer, nil]
-      optional :timeout_ms, Integer, api_name: :timeoutMs
+      #   @return [ContextDev::Models::WebScrapeParams::TimeoutOpts, nil]
+      optional :timeout_opts, -> { ContextDev::WebScrapeParams::TimeoutOpts }, api_name: :timeoutOpts
 
       # @!attribute zdr
       #   Zero data retention. Bypasses caches and uploads; excludes request/response
@@ -80,7 +86,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebScrapeParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebScrapeParams::Zdr }
 
-      # @!method initialize(formats:, url:, image_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_ms: nil, zdr: nil, request_options: {})
+      # @!method initialize(formats:, url:, image_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScrapeParams} for more details.
       #
@@ -102,7 +108,7 @@ module ContextDev
       #
       #   @param tags [Array<String>] Labels for tracking request usage. Not retained when zdr is enabled.
       #
-      #   @param timeout_ms [Integer] Total deadline, including navigation, actions, waiting, and all outputs.
+      #   @param timeout_opts [ContextDev::Models::WebScrapeParams::TimeoutOpts] Total deadline, including navigation, actions, waiting, and all outputs. Default
       #
       #   @param zdr [Symbol, ContextDev::Models::WebScrapeParams::Zdr] Zero data retention. Bypasses caches and uploads; excludes request/response cont
       #
@@ -169,18 +175,23 @@ module ContextDev
         optional :dedupe, enum: -> { ContextDev::WebScrapeParams::ImageParams::Dedupe }
 
         # @!attribute enrich
-        #   Add dimensions, a visual category, or a hosted file URL.
+        #   Add dimensions, a visual category, or a hosted file URL. Each image has a
+        #   maximum processing time of 30000 milliseconds, bounded by the remaining request
+        #   deadline.
         #
         #   @return [Array<Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Enrich>, nil]
         optional :enrich,
                  -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::WebScrapeParams::ImageParams::Enrich] }
 
         # @!method initialize(dedupe: nil, enrich: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScrapeParams::ImageParams} for more details.
+        #
         #   Image options. Requires formats.images: true.
         #
         #   @param dedupe [Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Dedupe] For visual duplicates, keep the largest image.
         #
-        #   @param enrich [Array<Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Enrich>] Add dimensions, a visual category, or a hosted file URL.
+        #   @param enrich [Array<Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Enrich>] Add dimensions, a visual category, or a hosted file URL. Each image has a maximu
 
         # For visual duplicates, keep the largest image.
         #
@@ -825,6 +836,57 @@ module ContextDev
 
           # @!method self.variants
           #   @return [Array(Integer, String)]
+        end
+      end
+
+      class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+        # @!attribute milliseconds
+        #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #
+        #   @return [Integer]
+        required :milliseconds, Integer
+
+        # @!attribute behavior
+        #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        #   credits. "return-partial" returns usable results collected so far; if none are
+        #   available, the request still fails without charging credits. Partial results are
+        #   not cached as complete results. "return-partial" requires milliseconds of at
+        #   least 5000.
+        #
+        #   @return [Symbol, ContextDev::Models::WebScrapeParams::TimeoutOpts::Behavior, nil]
+        optional :behavior, enum: -> { ContextDev::WebScrapeParams::TimeoutOpts::Behavior }
+
+        # @!method initialize(milliseconds:, behavior: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScrapeParams::TimeoutOpts} for more details.
+        #
+        #   Total deadline, including navigation, actions, waiting, and all outputs.
+        #   Defaults to 60000 milliseconds with behavior fail. Use return-partial to capture
+        #   the current page state and return captured images if image processing cannot
+        #   finish before the deadline; these responses set isPartial and are not cached.
+        #   Every requested format must still be available. Fixed waits must fit before a
+        #   response reserve of up to 5000 milliseconds (at most one quarter of the timeout)
+        #   when using return-partial.
+        #
+        #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #
+        #   @param behavior [Symbol, ContextDev::Models::WebScrapeParams::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+
+        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        # credits. "return-partial" returns usable results collected so far; if none are
+        # available, the request still fails without charging credits. Partial results are
+        # not cached as complete results. "return-partial" requires milliseconds of at
+        # least 5000.
+        #
+        # @see ContextDev::Models::WebScrapeParams::TimeoutOpts#behavior
+        module Behavior
+          extend ContextDev::Internal::Type::Enum
+
+          FAIL = :fail
+          RETURN_PARTIAL = :"return-partial"
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
         end
       end
 

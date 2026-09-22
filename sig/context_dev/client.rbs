@@ -14,8 +14,6 @@ module ContextDev
 
     attr_reader web: ContextDev::Resources::Web
 
-    attr_reader ai: ContextDev::Resources::AI
-
     attr_reader brand: ContextDev::Resources::Brand
 
     attr_reader industry: ContextDev::Resources::Industry

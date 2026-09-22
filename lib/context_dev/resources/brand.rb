@@ -30,42 +30,6 @@ module ContextDev
       end
 
       # Some parameter documentations has been truncated, see
-      # {ContextDev::Models::BrandRetrieveSimplifiedParams} for more details.
-      #
-      # Returns a simplified version of brand data containing only essential
-      # information: domain, title, colors, logos, and backdrops. Optimized for faster
-      # responses and reduced data transfer.
-      #
-      # @overload retrieve_simplified(domain:, max_age_ms: nil, tags: nil, theme: nil, timeout_opts: nil, request_options: {})
-      #
-      # @param domain [String] Domain name to retrieve simplified brand data for
-      #
-      # @param max_age_ms [Integer, nil] Maximum age in milliseconds for cached brand data before the API performs a hard
-      #
-      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
-      #
-      # @param theme [Symbol, ContextDev::Models::BrandRetrieveSimplifiedParams::Theme] Optional theme preference used when selecting brand assets.
-      #
-      # @param timeout_opts [ContextDev::Models::BrandRetrieveSimplifiedParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
-      #
-      # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
-      #
-      # @return [ContextDev::Models::BrandRetrieveSimplifiedResponse]
-      #
-      # @see ContextDev::Models::BrandRetrieveSimplifiedParams
-      def retrieve_simplified(params)
-        parsed, options = ContextDev::BrandRetrieveSimplifiedParams.dump_request(params)
-        query = ContextDev::Internal::Util.encode_query_params(parsed)
-        @client.request(
-          method: :get,
-          path: "brand/retrieve-simplified",
-          query: query.transform_keys(max_age_ms: "maxAgeMs", timeout_opts: "timeoutOpts"),
-          model: ContextDev::Models::BrandRetrieveSimplifiedResponse,
-          options: options
-        )
-      end
-
-      # Some parameter documentations has been truncated, see
       # {ContextDev::Models::BrandSearchParams} for more details.
       #
       # Search indexed brands by name or domain

@@ -1,10 +1,6 @@
 # typed: strong
 
 module ContextDev
-  AIExtractProductParams = ContextDev::Models::AIExtractProductParams
-
-  AIExtractProductsParams = ContextDev::Models::AIExtractProductsParams
-
   BatchCancelParams = ContextDev::Models::BatchCancelParams
 
   BatchDeleteParams = ContextDev::Models::BatchDeleteParams
@@ -18,9 +14,6 @@ module ContextDev
   BatchSubmitParams = ContextDev::Models::BatchSubmitParams
 
   BrandRetrieveParams = ContextDev::Models::BrandRetrieveParams
-
-  BrandRetrieveSimplifiedParams =
-    ContextDev::Models::BrandRetrieveSimplifiedParams
 
   BrandSearchParams = ContextDev::Models::BrandSearchParams
 
@@ -62,6 +55,11 @@ module ContextDev
 
   MonitorRetrieveParams = ContextDev::Models::MonitorRetrieveParams
 
+  MonitorRetrieveRunParams = ContextDev::Models::MonitorRetrieveRunParams
+
+  MonitorRotateWebhookSecretParams =
+    ContextDev::Models::MonitorRotateWebhookSecretParams
+
   MonitorRunParams = ContextDev::Models::MonitorRunParams
 
   MonitorUpdateParams = ContextDev::Models::MonitorUpdateParams
@@ -82,15 +80,13 @@ module ContextDev
 
   WebExtractCompetitorsParams = ContextDev::Models::WebExtractCompetitorsParams
 
-  WebExtractFontsParams = ContextDev::Models::WebExtractFontsParams
-
-  WebExtractParams = ContextDev::Models::WebExtractParams
-
   WebExtractStyleguideParams = ContextDev::Models::WebExtractStyleguideParams
 
   WebhookDelivery = ContextDev::Models::WebhookDelivery
 
   Webhooks = ContextDev::Models::Webhooks
+
+  WebMapURLsParams = ContextDev::Models::WebMapURLsParams
 
   WebScrapeParams = ContextDev::Models::WebScrapeParams
 
@@ -99,17 +95,4 @@ module ContextDev
   WebSearchParams = ContextDev::Models::WebSearchParams
 
   WebWebCrawlMdParams = ContextDev::Models::WebWebCrawlMdParams
-
-  WebWebScrapeBytesParams = ContextDev::Models::WebWebScrapeBytesParams
-
-  WebWebScrapeHTMLParams = ContextDev::Models::WebWebScrapeHTMLParams
-
-  WebWebScrapeImagesParams = ContextDev::Models::WebWebScrapeImagesParams
-
-  WebWebScrapeMdParams = ContextDev::Models::WebWebScrapeMdParams
-
-  WebWebScrapeScreenshotParams =
-    ContextDev::Models::WebWebScrapeScreenshotParams
-
-  WebWebScrapeSitemapParams = ContextDev::Models::WebWebScrapeSitemapParams
 end

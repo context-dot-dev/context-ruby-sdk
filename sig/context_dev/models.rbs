@@ -1,8 +1,4 @@
 module ContextDev
-  class AIExtractProductParams = ContextDev::Models::AIExtractProductParams
-
-  class AIExtractProductsParams = ContextDev::Models::AIExtractProductsParams
-
   class BatchCancelParams = ContextDev::Models::BatchCancelParams
 
   class BatchDeleteParams = ContextDev::Models::BatchDeleteParams
@@ -16,8 +12,6 @@ module ContextDev
   class BatchSubmitParams = ContextDev::Models::BatchSubmitParams
 
   class BrandRetrieveParams = ContextDev::Models::BrandRetrieveParams
-
-  class BrandRetrieveSimplifiedParams = ContextDev::Models::BrandRetrieveSimplifiedParams
 
   class BrandSearchParams = ContextDev::Models::BrandSearchParams
 
@@ -57,6 +51,10 @@ module ContextDev
 
   class MonitorRetrieveParams = ContextDev::Models::MonitorRetrieveParams
 
+  class MonitorRetrieveRunParams = ContextDev::Models::MonitorRetrieveRunParams
+
+  class MonitorRotateWebhookSecretParams = ContextDev::Models::MonitorRotateWebhookSecretParams
+
   class MonitorRunParams = ContextDev::Models::MonitorRunParams
 
   class MonitorUpdateParams = ContextDev::Models::MonitorUpdateParams
@@ -77,15 +75,13 @@ module ContextDev
 
   class WebExtractCompetitorsParams = ContextDev::Models::WebExtractCompetitorsParams
 
-  class WebExtractFontsParams = ContextDev::Models::WebExtractFontsParams
-
-  class WebExtractParams = ContextDev::Models::WebExtractParams
-
   class WebExtractStyleguideParams = ContextDev::Models::WebExtractStyleguideParams
 
   class WebhookDelivery = ContextDev::Models::WebhookDelivery
 
   module Webhooks = ContextDev::Models::Webhooks
+
+  class WebMapURLsParams = ContextDev::Models::WebMapURLsParams
 
   class WebScrapeParams = ContextDev::Models::WebScrapeParams
 
@@ -94,16 +90,4 @@ module ContextDev
   class WebSearchParams = ContextDev::Models::WebSearchParams
 
   class WebWebCrawlMdParams = ContextDev::Models::WebWebCrawlMdParams
-
-  class WebWebScrapeBytesParams = ContextDev::Models::WebWebScrapeBytesParams
-
-  class WebWebScrapeHTMLParams = ContextDev::Models::WebWebScrapeHTMLParams
-
-  class WebWebScrapeImagesParams = ContextDev::Models::WebWebScrapeImagesParams
-
-  class WebWebScrapeMdParams = ContextDev::Models::WebWebScrapeMdParams
-
-  class WebWebScrapeScreenshotParams = ContextDev::Models::WebWebScrapeScreenshotParams
-
-  class WebWebScrapeSitemapParams = ContextDev::Models::WebWebScrapeSitemapParams
 end

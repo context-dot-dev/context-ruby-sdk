@@ -284,6 +284,70 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
     end
   end
 
+  def test_retrieve_run_required_params
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.monitors.retrieve_run("run_123", monitor_id: "mon_123")
+
+    assert_pattern do
+      response => ContextDev::Models::MonitorRetrieveRunResponse
+    end
+
+    assert_pattern do
+      response => {
+        id: String,
+        baseline_created: ContextDev::Internal::Type::Boolean,
+        change_detected: ContextDev::Internal::Type::Boolean,
+        change_detection_type: ContextDev::Models::MonitorRetrieveRunResponse::ChangeDetectionType,
+        credits_charged: Integer,
+        monitor_id: String,
+        run_type: ContextDev::Models::MonitorRetrieveRunResponse::RunType,
+        status: ContextDev::Models::MonitorRetrieveRunResponse::Status,
+        target_type: ContextDev::Models::MonitorRetrieveRunResponse::TargetType,
+        change_id: String | nil,
+        completed_at: Time | nil,
+        error: ContextDev::Models::MonitorRetrieveRunResponse::Error | nil,
+        skip_reason: ContextDev::Models::MonitorRetrieveRunResponse::SkipReason | nil,
+        started_at: Time | nil,
+        webhook_deliveries: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::WebhookDelivery]) | nil,
+        webhook_delivery: ContextDev::WebhookDelivery | nil,
+        webhook_delivery_ids: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil
+      }
+    end
+  end
+
+  def test_rotate_webhook_secret
+    skip("Mock server tests are disabled")
+
+    response = @context_dev.monitors.rotate_webhook_secret("mon_123")
+
+    assert_pattern do
+      response => ContextDev::Models::MonitorRotateWebhookSecretResponse
+    end
+
+    assert_pattern do
+      response => {
+        id: String,
+        change_detection: ContextDev::Models::MonitorRotateWebhookSecretResponse::ChangeDetection,
+        created_at: Time,
+        mode: ContextDev::Models::MonitorRotateWebhookSecretResponse::Mode,
+        name: String,
+        schedule: ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule,
+        status: ContextDev::Models::MonitorRotateWebhookSecretResponse::Status,
+        target: ContextDev::Models::MonitorRotateWebhookSecretResponse::Target,
+        updated_at: Time,
+        baseline: ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline | nil,
+        last_change_at: Time | nil,
+        last_error: ContextDev::Models::MonitorRotateWebhookSecretResponse::LastError | nil,
+        last_run_at: Time | nil,
+        next_run_at: Time | nil,
+        tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
+        webhook: ContextDev::Models::MonitorRotateWebhookSecretResponse::Webhook | nil,
+        webhook_failure: ContextDev::Models::MonitorRotateWebhookSecretResponse::WebhookFailure | nil
+      }
+    end
+  end
+
   def test_run
     skip("Mock server tests are disabled")
 

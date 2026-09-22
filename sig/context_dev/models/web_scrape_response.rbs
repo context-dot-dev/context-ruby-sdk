@@ -12,6 +12,7 @@ module ContextDev
         request_id: String,
         screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
         url: String,
+        is_partial: ContextDev::Models::WebScrapeResponse::is_partial,
         key_metadata: ContextDev::Models::WebScrapeResponse::KeyMetadata
       }
 
@@ -36,6 +37,12 @@ module ContextDev
 
       attr_accessor url: String
 
+      attr_reader is_partial: ContextDev::Models::WebScrapeResponse::is_partial?
+
+      def is_partial=: (
+        ContextDev::Models::WebScrapeResponse::is_partial
+      ) -> ContextDev::Models::WebScrapeResponse::is_partial
+
       attr_reader key_metadata: ContextDev::Models::WebScrapeResponse::KeyMetadata?
 
       def key_metadata=: (
@@ -53,6 +60,7 @@ module ContextDev
         request_id: String,
         screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
         url: String,
+        ?is_partial: ContextDev::Models::WebScrapeResponse::is_partial,
         ?key_metadata: ContextDev::Models::WebScrapeResponse::KeyMetadata
       ) -> void
 
@@ -67,6 +75,7 @@ module ContextDev
         request_id: String,
         screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
         url: String,
+        is_partial: ContextDev::Models::WebScrapeResponse::is_partial,
         key_metadata: ContextDev::Models::WebScrapeResponse::KeyMetadata
       }
 
@@ -508,6 +517,16 @@ module ContextDev
         def initialize: (data: String?, requested: bool) -> void
 
         def to_hash: -> { data: String?, requested: bool }
+      end
+
+      type is_partial = true
+
+      module IsPartial
+        extend ContextDev::Internal::Type::Enum
+
+        TRUE: true
+
+        def self?.values: -> ::Array[ContextDev::Models::WebScrapeResponse::is_partial]
       end
 
       type key_metadata =
