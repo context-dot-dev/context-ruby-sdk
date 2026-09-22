@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.19.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.18.0...v2.19.0) (2026-09-22)
+
+
+### Features
+
+* **billing:** charge for 404s and skip fraud accounting ([#1152](https://github.com/context-dot-dev/context-ruby-sdk/issues/1152)) ([d1fa73e](https://github.com/context-dot-dev/context-ruby-sdk/commit/d1fa73e0809ce7acb5668f413f40b902e539fe72))
+* **scrape:** add cache age support to byte downloads ([#1171](https://github.com/context-dot-dev/context-ruby-sdk/issues/1171)) ([9b2704f](https://github.com/context-dot-dev/context-ruby-sdk/commit/9b2704f21f51249319a1536a535b881769da0864))
+* **scrape:** add unified scrape API ([#1182](https://github.com/context-dot-dev/context-ruby-sdk/issues/1182)) ([f96de1a](https://github.com/context-dot-dev/context-ruby-sdk/commit/f96de1aceca6305f47851701708cba674ed5c30b))
+* **scrape:** align timeout options and public SDK methods ([#1207](https://github.com/context-dot-dev/context-ruby-sdk/issues/1207)) ([f1f8442](https://github.com/context-dot-dev/context-ruby-sdk/commit/f1f84420192e0b686f973187d2efdadd4a1509cd))
+* **scrape:** support country for image scraping ([#1172](https://github.com/context-dot-dev/context-ruby-sdk/issues/1172)) ([9b2704f](https://github.com/context-dot-dev/context-ruby-sdk/commit/9b2704f21f51249319a1536a535b881769da0864))
+* **scrape:** support custom screenshot headers ([#1169](https://github.com/context-dot-dev/context-ruby-sdk/issues/1169)) ([ea364f2](https://github.com/context-dot-dev/context-ruby-sdk/commit/ea364f242b9120982ee69006305a1929464d4dfe))
+* **scrape:** support waitForMs for byte downloads ([#1170](https://github.com/context-dot-dev/context-ruby-sdk/issues/1170)) ([267301b](https://github.com/context-dot-dev/context-ruby-sdk/commit/267301b3da971db51c63102242ed0dece4ba6630))
+
+
+### Bug Fixes
+
+* **scrape:** reuse legacy caches across all output formats ([#1197](https://github.com/context-dot-dev/context-ruby-sdk/issues/1197)) ([007ad3f](https://github.com/context-dot-dev/context-ruby-sdk/commit/007ad3f81ba753e74093d5ee05dfe8df2db06be9))
+
 ## [2.18.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.17.1...v2.18.0) (2026-09-18)
 
 
