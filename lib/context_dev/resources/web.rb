@@ -183,18 +183,20 @@ module ContextDev
       #
       # Reuse cached outputs independently and capture missing formats in one page
       # visit. Each cache key includes only the settings that affect that output. HTML
-      # is shared with Markdown, parsed fields, highlights, and JSON extraction. Cached
-      # outputs can come from different visits within maxAgeMs; use 0 for a fresh
-      # capture. HTML-only requests use the existing fast acquisition path. Highlights
-      # return the plain-text passages most relevant to highlightsParams.query. One
-      # credit per request, including cache hits and missing pages, or two with browser
-      # actions; highlights add 3 credits when passages are returned; JSON extraction
-      # adds four credits and runs an LLM over the page Markdown on every request that
-      # has text to extract; PDF OCR adds one credit per recovered page on fresh
-      # extraction. Original response bytes and screenshots are limited to 20 MiB each,
-      # screenshots to 40 megapixels, and the combined browser capture to 60 MiB.
+      # is shared with Markdown, parsed fields, product data, highlights, and JSON
+      # extraction. Cached outputs can come from different visits within maxAgeMs; use 0
+      # for a fresh capture. HTML-only requests use the existing fast acquisition path.
+      # Highlights return the plain-text passages most relevant to
+      # highlightsParams.query. One credit per request, including cache hits and missing
+      # pages, or two with browser actions; highlights add 3 credits when passages are
+      # returned; JSON extraction adds four credits and runs an LLM over the page
+      # Markdown on every request that has text to extract; PDF OCR adds one credit per
+      # recovered page on fresh extraction; the product output adds one credit, plus six
+      # more when the specialized model is used. Original response bytes and screenshots
+      # are limited to 20 MiB each, screenshots to 40 megapixels, and the combined
+      # browser capture to 60 MiB.
       #
-      # @overload scrape(formats:, url:, highlights_params: nil, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @overload scrape(formats:, url:, highlights_params: nil, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, product_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param formats [ContextDev::Models::WebScrapeParams::Formats] Outputs to return. Enable at least one; omitted formats are false.
       #
@@ -211,6 +213,8 @@ module ContextDev
       # @param max_age_ms [Integer] Maximum age of each cached output. Defaults to 1 day; 0 fetches fresh and update
       #
       # @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams] Required when formats.parse is true.
+      #
+      # @param product_params [ContextDev::Models::WebScrapeParams::ProductParams] Product options. Requires formats.product: true.
       #
       # @param screenshot_params [ContextDev::Models::WebScrapeParams::ScreenshotParams] Screenshot options. Requires formats.screenshot: true.
       #

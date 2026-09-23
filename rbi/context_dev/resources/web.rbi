@@ -201,16 +201,18 @@ module ContextDev
 
       # Reuse cached outputs independently and capture missing formats in one page
       # visit. Each cache key includes only the settings that affect that output. HTML
-      # is shared with Markdown, parsed fields, highlights, and JSON extraction. Cached
-      # outputs can come from different visits within maxAgeMs; use 0 for a fresh
-      # capture. HTML-only requests use the existing fast acquisition path. Highlights
-      # return the plain-text passages most relevant to highlightsParams.query. One
-      # credit per request, including cache hits and missing pages, or two with browser
-      # actions; highlights add 3 credits when passages are returned; JSON extraction
-      # adds four credits and runs an LLM over the page Markdown on every request that
-      # has text to extract; PDF OCR adds one credit per recovered page on fresh
-      # extraction. Original response bytes and screenshots are limited to 20 MiB each,
-      # screenshots to 40 megapixels, and the combined browser capture to 60 MiB.
+      # is shared with Markdown, parsed fields, product data, highlights, and JSON
+      # extraction. Cached outputs can come from different visits within maxAgeMs; use 0
+      # for a fresh capture. HTML-only requests use the existing fast acquisition path.
+      # Highlights return the plain-text passages most relevant to
+      # highlightsParams.query. One credit per request, including cache hits and missing
+      # pages, or two with browser actions; highlights add 3 credits when passages are
+      # returned; JSON extraction adds four credits and runs an LLM over the page
+      # Markdown on every request that has text to extract; PDF OCR adds one credit per
+      # recovered page on fresh extraction; the product output adds one credit, plus six
+      # more when the specialized model is used. Original response bytes and screenshots
+      # are limited to 20 MiB each, screenshots to 40 megapixels, and the combined
+      # browser capture to 60 MiB.
       sig do
         params(
           formats: ContextDev::WebScrapeParams::Formats::OrHash,
@@ -222,6 +224,7 @@ module ContextDev
           markdown_params: ContextDev::WebScrapeParams::MarkdownParams::OrHash,
           max_age_ms: Integer,
           parse_params: ContextDev::WebScrapeParams::ParseParams::OrHash,
+          product_params: ContextDev::WebScrapeParams::ProductParams::OrHash,
           screenshot_params:
             ContextDev::WebScrapeParams::ScreenshotParams::OrHash,
           shared_params: ContextDev::WebScrapeParams::SharedParams::OrHash,
@@ -251,6 +254,8 @@ module ContextDev
         max_age_ms: nil,
         # Required when formats.parse is true.
         parse_params: nil,
+        # Product options. Requires formats.product: true.
+        product_params: nil,
         # Screenshot options. Requires formats.screenshot: true.
         screenshot_params: nil,
         # Shared browser and content settings. Content filters leave screenshots and

@@ -60,6 +60,12 @@ module ContextDev
       #   @return [ContextDev::Models::WebScrapeParams::ParseParams, nil]
       optional :parse_params, -> { ContextDev::WebScrapeParams::ParseParams }, api_name: :parseParams
 
+      # @!attribute product_params
+      #   Product options. Requires formats.product: true.
+      #
+      #   @return [ContextDev::Models::WebScrapeParams::ProductParams, nil]
+      optional :product_params, -> { ContextDev::WebScrapeParams::ProductParams }, api_name: :productParams
+
       # @!attribute screenshot_params
       #   Screenshot options. Requires formats.screenshot: true.
       #
@@ -101,7 +107,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebScrapeParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebScrapeParams::Zdr }
 
-      # @!method initialize(formats:, url:, highlights_params: nil, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(formats:, url:, highlights_params: nil, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, product_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScrapeParams} for more details.
       #
@@ -120,6 +126,8 @@ module ContextDev
       #   @param max_age_ms [Integer] Maximum age of each cached output. Defaults to 1 day; 0 fetches fresh and update
       #
       #   @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams] Required when formats.parse is true.
+      #
+      #   @param product_params [ContextDev::Models::WebScrapeParams::ProductParams] Product options. Requires formats.product: true.
       #
       #   @param screenshot_params [ContextDev::Models::WebScrapeParams::ScreenshotParams] Screenshot options. Requires formats.screenshot: true.
       #
@@ -181,13 +189,19 @@ module ContextDev
         #   @return [Boolean, nil]
         optional :parse, ContextDev::Internal::Type::Boolean
 
+        # @!attribute product
+        #   Structured product data for product detail pages. Adds one credit.
+        #
+        #   @return [Boolean, nil]
+        optional :product, ContextDev::Internal::Type::Boolean
+
         # @!attribute screenshot
         #   An inline image of the page.
         #
         #   @return [Boolean, nil]
         optional :screenshot, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(bytes: nil, highlights: nil, html: nil, images: nil, json: nil, markdown: nil, parse: nil, screenshot: nil)
+        # @!method initialize(bytes: nil, highlights: nil, html: nil, images: nil, json: nil, markdown: nil, parse: nil, product: nil, screenshot: nil)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeParams::Formats} for more details.
         #
@@ -206,6 +220,8 @@ module ContextDev
         #   @param markdown [Boolean] Page content as Markdown.
         #
         #   @param parse [Boolean] Fields selected by parseParams.rules.
+        #
+        #   @param product [Boolean] Structured product data for product detail pages. Adds one credit.
         #
         #   @param screenshot [Boolean] An inline image of the page.
       end
@@ -446,6 +462,25 @@ module ContextDev
           # @!method self.variants
           #   @return [Array(String, ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1)]
         end
+      end
+
+      class ProductParams < ContextDev::Internal::Type::BaseModel
+        # @!attribute use_ai_fallback
+        #   Extract the product with a specialized model when the page has no structured
+        #   product data. Adds six credits when the model returns a verdict. If the fallback
+        #   fails, returns a partial response with the deterministic result and no fallback
+        #   charge. Request deadlines and client disconnects still apply.
+        #
+        #   @return [Boolean, nil]
+        optional :use_ai_fallback, ContextDev::Internal::Type::Boolean, api_name: :useAIFallback
+
+        # @!method initialize(use_ai_fallback: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScrapeParams::ProductParams} for more details.
+        #
+        #   Product options. Requires formats.product: true.
+        #
+        #   @param use_ai_fallback [Boolean] Extract the product with a specialized model when the page has no structured pro
       end
 
       class ScreenshotParams < ContextDev::Internal::Type::BaseModel

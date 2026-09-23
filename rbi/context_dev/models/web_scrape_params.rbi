@@ -88,6 +88,17 @@ module ContextDev
       end
       attr_writer :parse_params
 
+      # Product options. Requires formats.product: true.
+      sig { returns(T.nilable(ContextDev::WebScrapeParams::ProductParams)) }
+      attr_reader :product_params
+
+      sig do
+        params(
+          product_params: ContextDev::WebScrapeParams::ProductParams::OrHash
+        ).void
+      end
+      attr_writer :product_params
+
       # Screenshot options. Requires formats.screenshot: true.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::ScreenshotParams)) }
       attr_reader :screenshot_params
@@ -156,6 +167,7 @@ module ContextDev
           markdown_params: ContextDev::WebScrapeParams::MarkdownParams::OrHash,
           max_age_ms: Integer,
           parse_params: ContextDev::WebScrapeParams::ParseParams::OrHash,
+          product_params: ContextDev::WebScrapeParams::ProductParams::OrHash,
           screenshot_params:
             ContextDev::WebScrapeParams::ScreenshotParams::OrHash,
           shared_params: ContextDev::WebScrapeParams::SharedParams::OrHash,
@@ -185,6 +197,8 @@ module ContextDev
         max_age_ms: nil,
         # Required when formats.parse is true.
         parse_params: nil,
+        # Product options. Requires formats.product: true.
+        product_params: nil,
         # Screenshot options. Requires formats.screenshot: true.
         screenshot_params: nil,
         # Shared browser and content settings. Content filters leave screenshots and
@@ -219,6 +233,7 @@ module ContextDev
             markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
             max_age_ms: Integer,
             parse_params: ContextDev::WebScrapeParams::ParseParams,
+            product_params: ContextDev::WebScrapeParams::ProductParams,
             screenshot_params: ContextDev::WebScrapeParams::ScreenshotParams,
             shared_params: ContextDev::WebScrapeParams::SharedParams,
             tags: T::Array[String],
@@ -294,6 +309,13 @@ module ContextDev
         sig { params(parse: T::Boolean).void }
         attr_writer :parse
 
+        # Structured product data for product detail pages. Adds one credit.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_reader :product
+
+        sig { params(product: T::Boolean).void }
+        attr_writer :product
+
         # An inline image of the page.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :screenshot
@@ -311,6 +333,7 @@ module ContextDev
             json: T::Boolean,
             markdown: T::Boolean,
             parse: T::Boolean,
+            product: T::Boolean,
             screenshot: T::Boolean
           ).returns(T.attached_class)
         end
@@ -334,6 +357,8 @@ module ContextDev
           markdown: nil,
           # Fields selected by parseParams.rules.
           parse: nil,
+          # Structured product data for product detail pages. Adds one credit.
+          product: nil,
           # An inline image of the page.
           screenshot: nil
         )
@@ -349,6 +374,7 @@ module ContextDev
               json: T::Boolean,
               markdown: T::Boolean,
               parse: T::Boolean,
+              product: T::Boolean,
               screenshot: T::Boolean
             }
           )
@@ -954,6 +980,41 @@ module ContextDev
           end
           def self.variants
           end
+        end
+      end
+
+      class ProductParams < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::WebScrapeParams::ProductParams,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Extract the product with a specialized model when the page has no structured
+        # product data. Adds six credits when the model returns a verdict. If the fallback
+        # fails, returns a partial response with the deterministic result and no fallback
+        # charge. Request deadlines and client disconnects still apply.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_reader :use_ai_fallback
+
+        sig { params(use_ai_fallback: T::Boolean).void }
+        attr_writer :use_ai_fallback
+
+        # Product options. Requires formats.product: true.
+        sig { params(use_ai_fallback: T::Boolean).returns(T.attached_class) }
+        def self.new(
+          # Extract the product with a specialized model when the page has no structured
+          # product data. Adds six credits when the model returns a verdict. If the fallback
+          # fails, returns a partial response with the deterministic result and no fallback
+          # charge. Request deadlines and client disconnects still apply.
+          use_ai_fallback: nil
+        )
+        end
+
+        sig { override.returns({ use_ai_fallback: T::Boolean }) }
+        def to_hash
         end
       end
 

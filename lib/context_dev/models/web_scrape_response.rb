@@ -66,6 +66,12 @@ module ContextDev
       #   @return [ContextDev::Models::WebScrapeResponse::Parsed]
       required :parsed, -> { ContextDev::Models::WebScrapeResponse::Parsed }
 
+      # @!attribute product
+      #   Product detail page classification and the extracted product.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::Product]
+      required :product, -> { ContextDev::Models::WebScrapeResponse::Product }
+
       # @!attribute request_id
       #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #   it when contacting support about a failed request.
@@ -86,8 +92,10 @@ module ContextDev
       required :url, String
 
       # @!attribute is_partial
-      #   Present when return-partial captures a page that is still loading or returns
-      #   images before image processing finishes. Partial responses are not cached.
+      #   Present when return-partial captures a page that is still loading, returns
+      #   images before image processing finishes, or cuts product AI extraction short.
+      #   Also present if the optional product AI fallback fails. Partial responses are
+      #   not cached.
       #
       #   @return [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial, nil]
       optional :is_partial, enum: -> { ContextDev::Models::WebScrapeResponse::IsPartial }, api_name: :isPartial
@@ -98,7 +106,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebScrapeResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebScrapeResponse::KeyMetadata }
 
-      # @!method initialize(bytes:, cache_metadata:, highlights:, html:, images:, json:, markdown:, metadata:, parsed:, request_id:, screenshot:, url:, is_partial: nil, key_metadata: nil)
+      # @!method initialize(bytes:, cache_metadata:, highlights:, html:, images:, json:, markdown:, metadata:, parsed:, product:, request_id:, screenshot:, url:, is_partial: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScrapeResponse} for more details.
       #
@@ -120,13 +128,15 @@ module ContextDev
       #
       #   @param parsed [ContextDev::Models::WebScrapeResponse::Parsed] Fields produced by parseParams.rules, after shared content filters.
       #
+      #   @param product [ContextDev::Models::WebScrapeResponse::Product] Product detail page classification and the extracted product.
+      #
       #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
       #   @param screenshot [ContextDev::Models::WebScrapeResponse::Screenshot] An image data URL. Use directly as an image src.
       #
       #   @param url [String] Final URL after redirects and browser actions.
       #
-      #   @param is_partial [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial] Present when return-partial captures a page that is still loading or returns ima
+      #   @param is_partial [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial] Present when return-partial captures a page that is still loading, returns image
       #
       #   @param key_metadata [ContextDev::Models::WebScrapeResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
 
@@ -665,6 +675,245 @@ module ContextDev
         #   @param requested [Boolean]
       end
 
+      # @see ContextDev::Models::WebScrapeResponse#product
+      class Product < ContextDev::Internal::Type::BaseModel
+        # @!attribute data
+        #
+        #   @return [ContextDev::Models::WebScrapeResponse::Product::Data, nil]
+        required :data, -> { ContextDev::Models::WebScrapeResponse::Product::Data }, nil?: true
+
+        # @!attribute requested
+        #
+        #   @return [Boolean]
+        required :requested, ContextDev::Internal::Type::Boolean
+
+        # @!method initialize(data:, requested:)
+        #   Product detail page classification and the extracted product.
+        #
+        #   @param data [ContextDev::Models::WebScrapeResponse::Product::Data, nil]
+        #   @param requested [Boolean]
+
+        # @see ContextDev::Models::WebScrapeResponse::Product#data
+        class Data < ContextDev::Internal::Type::BaseModel
+          # @!attribute is_product_page
+          #   Whether the page is a product detail page.
+          #
+          #   @return [Boolean]
+          required :is_product_page, ContextDev::Internal::Type::Boolean, api_name: :isProductPage
+
+          # @!attribute product
+          #   The extracted product, or null when the page is not a product detail page.
+          #
+          #   @return [ContextDev::Models::WebScrapeResponse::Product::Data::Product, nil]
+          required :product, -> { ContextDev::Models::WebScrapeResponse::Product::Data::Product }, nil?: true
+
+          # @!method initialize(is_product_page:, product:)
+          #   @param is_product_page [Boolean] Whether the page is a product detail page.
+          #
+          #   @param product [ContextDev::Models::WebScrapeResponse::Product::Data::Product, nil] The extracted product, or null when the page is not a product detail page.
+
+          # @see ContextDev::Models::WebScrapeResponse::Product::Data#product
+          class Product < ContextDev::Internal::Type::BaseModel
+            # @!attribute availability
+            #   Stock or ordering availability.
+            #
+            #   @return [Symbol, ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability, nil]
+            required :availability,
+                     enum: -> { ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability },
+                     nil?: true
+
+            # @!attribute brand
+            #   Brand or vendor.
+            #
+            #   @return [String, nil]
+            required :brand, String, nil?: true
+
+            # @!attribute category
+            #   Product category.
+            #
+            #   @return [String, nil]
+            required :category, String, nil?: true
+
+            # @!attribute currency
+            #   ISO 4217 currency code.
+            #
+            #   @return [String, nil]
+            required :currency, String, nil?: true
+
+            # @!attribute description
+            #   Product description.
+            #
+            #   @return [String, nil]
+            required :description, String, nil?: true
+
+            # @!attribute dimensions
+            #   Product dimensions as shown on the page.
+            #
+            #   @return [Array<String>]
+            required :dimensions, ContextDev::Internal::Type::ArrayOf[String]
+
+            # @!attribute features
+            #   Key features and specifications.
+            #
+            #   @return [Array<String>]
+            required :features, ContextDev::Internal::Type::ArrayOf[String]
+
+            # @!attribute images
+            #   Product image URLs, main image first.
+            #
+            #   @return [Array<String>]
+            required :images, ContextDev::Internal::Type::ArrayOf[String]
+
+            # @!attribute image_url
+            #   Main product image URL.
+            #
+            #   @return [String, nil]
+            required :image_url, String, api_name: :imageUrl, nil?: true
+
+            # @!attribute name
+            #   Product name.
+            #
+            #   @return [String]
+            required :name, String
+
+            # @!attribute price
+            #   Current price.
+            #
+            #   @return [Float, nil]
+            required :price, Float, nil?: true
+
+            # @!attribute regular_price
+            #   List price before any discount.
+            #
+            #   @return [Float, nil]
+            required :regular_price, Float, api_name: :regularPrice, nil?: true
+
+            # @!attribute sku
+            #   Product identifier such as a SKU or model number.
+            #
+            #   @return [String, nil]
+            required :sku, String, nil?: true
+
+            # @!attribute tags
+            #   Product tags.
+            #
+            #   @return [Array<String>]
+            required :tags, ContextDev::Internal::Type::ArrayOf[String]
+
+            # @!attribute target_audience
+            #   Intended audience.
+            #
+            #   @return [Array<String>]
+            required :target_audience, ContextDev::Internal::Type::ArrayOf[String], api_name: :targetAudience
+
+            # @!attribute variants
+            #   Product variations, such as different colors or sizes, with their attributes and
+            #   images. Empty if none are found. May not include every variation offered by the
+            #   store.
+            #
+            #   @return [Array<ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant>]
+            required :variants,
+                     -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant] }
+
+            # @!method initialize(availability:, brand:, category:, currency:, description:, dimensions:, features:, images:, image_url:, name:, price:, regular_price:, sku:, tags:, target_audience:, variants:)
+            #   Some parameter documentations has been truncated, see
+            #   {ContextDev::Models::WebScrapeResponse::Product::Data::Product} for more
+            #   details.
+            #
+            #   The extracted product, or null when the page is not a product detail page.
+            #
+            #   @param availability [Symbol, ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability, nil] Stock or ordering availability.
+            #
+            #   @param brand [String, nil] Brand or vendor.
+            #
+            #   @param category [String, nil] Product category.
+            #
+            #   @param currency [String, nil] ISO 4217 currency code.
+            #
+            #   @param description [String, nil] Product description.
+            #
+            #   @param dimensions [Array<String>] Product dimensions as shown on the page.
+            #
+            #   @param features [Array<String>] Key features and specifications.
+            #
+            #   @param images [Array<String>] Product image URLs, main image first.
+            #
+            #   @param image_url [String, nil] Main product image URL.
+            #
+            #   @param name [String] Product name.
+            #
+            #   @param price [Float, nil] Current price.
+            #
+            #   @param regular_price [Float, nil] List price before any discount.
+            #
+            #   @param sku [String, nil] Product identifier such as a SKU or model number.
+            #
+            #   @param tags [Array<String>] Product tags.
+            #
+            #   @param target_audience [Array<String>] Intended audience.
+            #
+            #   @param variants [Array<ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant>] Product variations, such as different colors or sizes, with their attributes and
+
+            # Stock or ordering availability.
+            #
+            # @see ContextDev::Models::WebScrapeResponse::Product::Data::Product#availability
+            module Availability
+              extend ContextDev::Internal::Type::Enum
+
+              IN_STOCK = :in_stock
+              OUT_OF_STOCK = :out_of_stock
+              LIMITED_AVAILABILITY = :limited_availability
+              PREORDER = :preorder
+              BACKORDER = :backorder
+              MADE_TO_ORDER = :made_to_order
+              DISCONTINUED = :discontinued
+
+              # @!method self.values
+              #   @return [Array<Symbol>]
+            end
+
+            class Variant < ContextDev::Internal::Type::BaseModel
+              # @!attribute attributes
+              #   Explicit variant attributes such as color, size, material, pattern and
+              #   properties declared by page.
+              #
+              #   @return [Hash{Symbol=>String}]
+              required :attributes, ContextDev::Internal::Type::HashOf[String]
+
+              # @!attribute images
+              #   Original source image URLs explicitly attached to this variant.
+              #
+              #   @return [Array<String>]
+              required :images, ContextDev::Internal::Type::ArrayOf[String]
+
+              # @!attribute sku
+              #
+              #   @return [String, nil]
+              required :sku, String, nil?: true
+
+              # @!attribute url
+              #   Variant or offer URL when provided by the source. May be shared by variants.
+              #
+              #   @return [String, nil]
+              required :url, String, nil?: true
+
+              # @!method initialize(attributes:, images:, sku:, url:)
+              #   Some parameter documentations has been truncated, see
+              #   {ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant} for
+              #   more details.
+              #
+              #   @param attributes [Hash{Symbol=>String}] Explicit variant attributes such as color, size, material, pattern and propertie
+              #
+              #   @param images [Array<String>] Original source image URLs explicitly attached to this variant.
+              #
+              #   @param sku [String, nil]
+              #
+              #   @param url [String, nil] Variant or offer URL when provided by the source. May be shared by variants.
+            end
+          end
+        end
+      end
+
       # @see ContextDev::Models::WebScrapeResponse#screenshot
       class Screenshot < ContextDev::Internal::Type::BaseModel
         # @!attribute data
@@ -684,8 +933,10 @@ module ContextDev
         #   @param requested [Boolean]
       end
 
-      # Present when return-partial captures a page that is still loading or returns
-      # images before image processing finishes. Partial responses are not cached.
+      # Present when return-partial captures a page that is still loading, returns
+      # images before image processing finishes, or cuts product AI extraction short.
+      # Also present if the optional product AI fallback fails. Partial responses are
+      # not cached.
       #
       # @see ContextDev::Models::WebScrapeResponse#is_partial
       module IsPartial

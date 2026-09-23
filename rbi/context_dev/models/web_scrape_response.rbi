@@ -113,6 +113,17 @@ module ContextDev
       end
       attr_writer :parsed
 
+      # Product detail page classification and the extracted product.
+      sig { returns(ContextDev::Models::WebScrapeResponse::Product) }
+      attr_reader :product
+
+      sig do
+        params(
+          product: ContextDev::Models::WebScrapeResponse::Product::OrHash
+        ).void
+      end
+      attr_writer :product
+
       # Unique id of this API call, also sent in the X-Request-Id response header. Quote
       # it when contacting support about a failed request.
       sig { returns(String) }
@@ -133,8 +144,10 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
-      # Present when return-partial captures a page that is still loading or returns
-      # images before image processing finishes. Partial responses are not cached.
+      # Present when return-partial captures a page that is still loading, returns
+      # images before image processing finishes, or cuts product AI extraction short.
+      # Also present if the optional product AI fallback fails. Partial responses are
+      # not cached.
       sig do
         returns(
           T.nilable(
@@ -178,6 +191,7 @@ module ContextDev
           markdown: ContextDev::Models::WebScrapeResponse::Markdown::OrHash,
           metadata: ContextDev::Models::WebScrapeResponse::Metadata::OrHash,
           parsed: ContextDev::Models::WebScrapeResponse::Parsed::OrHash,
+          product: ContextDev::Models::WebScrapeResponse::Product::OrHash,
           request_id: String,
           screenshot: ContextDev::Models::WebScrapeResponse::Screenshot::OrHash,
           url: String,
@@ -214,6 +228,8 @@ module ContextDev
         metadata:,
         # Fields produced by parseParams.rules, after shared content filters.
         parsed:,
+        # Product detail page classification and the extracted product.
+        product:,
         # Unique id of this API call, also sent in the X-Request-Id response header. Quote
         # it when contacting support about a failed request.
         request_id:,
@@ -221,8 +237,10 @@ module ContextDev
         screenshot:,
         # Final URL after redirects and browser actions.
         url:,
-        # Present when return-partial captures a page that is still loading or returns
-        # images before image processing finishes. Partial responses are not cached.
+        # Present when return-partial captures a page that is still loading, returns
+        # images before image processing finishes, or cuts product AI extraction short.
+        # Also present if the optional product AI fallback fails. Partial responses are
+        # not cached.
         is_partial: nil,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil
@@ -242,6 +260,7 @@ module ContextDev
             markdown: ContextDev::Models::WebScrapeResponse::Markdown,
             metadata: ContextDev::Models::WebScrapeResponse::Metadata,
             parsed: ContextDev::Models::WebScrapeResponse::Parsed,
+            product: ContextDev::Models::WebScrapeResponse::Product,
             request_id: String,
             screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
             url: String,
@@ -1327,6 +1346,429 @@ module ContextDev
         end
       end
 
+      class Product < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::WebScrapeResponse::Product,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        sig do
+          returns(
+            T.nilable(ContextDev::Models::WebScrapeResponse::Product::Data)
+          )
+        end
+        attr_reader :data
+
+        sig do
+          params(
+            data:
+              T.nilable(
+                ContextDev::Models::WebScrapeResponse::Product::Data::OrHash
+              )
+          ).void
+        end
+        attr_writer :data
+
+        sig { returns(T::Boolean) }
+        attr_accessor :requested
+
+        # Product detail page classification and the extracted product.
+        sig do
+          params(
+            data:
+              T.nilable(
+                ContextDev::Models::WebScrapeResponse::Product::Data::OrHash
+              ),
+            requested: T::Boolean
+          ).returns(T.attached_class)
+        end
+        def self.new(data:, requested:)
+        end
+
+        sig do
+          override.returns(
+            {
+              data:
+                T.nilable(ContextDev::Models::WebScrapeResponse::Product::Data),
+              requested: T::Boolean
+            }
+          )
+        end
+        def to_hash
+        end
+
+        class Data < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::WebScrapeResponse::Product::Data,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Whether the page is a product detail page.
+          sig { returns(T::Boolean) }
+          attr_accessor :is_product_page
+
+          # The extracted product, or null when the page is not a product detail page.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::Models::WebScrapeResponse::Product::Data::Product
+              )
+            )
+          end
+          attr_reader :product
+
+          sig do
+            params(
+              product:
+                T.nilable(
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product::OrHash
+                )
+            ).void
+          end
+          attr_writer :product
+
+          sig do
+            params(
+              is_product_page: T::Boolean,
+              product:
+                T.nilable(
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product::OrHash
+                )
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            # Whether the page is a product detail page.
+            is_product_page:,
+            # The extracted product, or null when the page is not a product detail page.
+            product:
+          )
+          end
+
+          sig do
+            override.returns(
+              {
+                is_product_page: T::Boolean,
+                product:
+                  T.nilable(
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product
+                  )
+              }
+            )
+          end
+          def to_hash
+          end
+
+          class Product < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # Stock or ordering availability.
+            sig do
+              returns(
+                T.nilable(
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability::TaggedSymbol
+                )
+              )
+            end
+            attr_accessor :availability
+
+            # Brand or vendor.
+            sig { returns(T.nilable(String)) }
+            attr_accessor :brand
+
+            # Product category.
+            sig { returns(T.nilable(String)) }
+            attr_accessor :category
+
+            # ISO 4217 currency code.
+            sig { returns(T.nilable(String)) }
+            attr_accessor :currency
+
+            # Product description.
+            sig { returns(T.nilable(String)) }
+            attr_accessor :description
+
+            # Product dimensions as shown on the page.
+            sig { returns(T::Array[String]) }
+            attr_accessor :dimensions
+
+            # Key features and specifications.
+            sig { returns(T::Array[String]) }
+            attr_accessor :features
+
+            # Product image URLs, main image first.
+            sig { returns(T::Array[String]) }
+            attr_accessor :images
+
+            # Main product image URL.
+            sig { returns(T.nilable(String)) }
+            attr_accessor :image_url
+
+            # Product name.
+            sig { returns(String) }
+            attr_accessor :name
+
+            # Current price.
+            sig { returns(T.nilable(Float)) }
+            attr_accessor :price
+
+            # List price before any discount.
+            sig { returns(T.nilable(Float)) }
+            attr_accessor :regular_price
+
+            # Product identifier such as a SKU or model number.
+            sig { returns(T.nilable(String)) }
+            attr_accessor :sku
+
+            # Product tags.
+            sig { returns(T::Array[String]) }
+            attr_accessor :tags
+
+            # Intended audience.
+            sig { returns(T::Array[String]) }
+            attr_accessor :target_audience
+
+            # Product variations, such as different colors or sizes, with their attributes and
+            # images. Empty if none are found. May not include every variation offered by the
+            # store.
+            sig do
+              returns(
+                T::Array[
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant
+                ]
+              )
+            end
+            attr_accessor :variants
+
+            # The extracted product, or null when the page is not a product detail page.
+            sig do
+              params(
+                availability:
+                  T.nilable(
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability::OrSymbol
+                  ),
+                brand: T.nilable(String),
+                category: T.nilable(String),
+                currency: T.nilable(String),
+                description: T.nilable(String),
+                dimensions: T::Array[String],
+                features: T::Array[String],
+                images: T::Array[String],
+                image_url: T.nilable(String),
+                name: String,
+                price: T.nilable(Float),
+                regular_price: T.nilable(Float),
+                sku: T.nilable(String),
+                tags: T::Array[String],
+                target_audience: T::Array[String],
+                variants:
+                  T::Array[
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::OrHash
+                  ]
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # Stock or ordering availability.
+              availability:,
+              # Brand or vendor.
+              brand:,
+              # Product category.
+              category:,
+              # ISO 4217 currency code.
+              currency:,
+              # Product description.
+              description:,
+              # Product dimensions as shown on the page.
+              dimensions:,
+              # Key features and specifications.
+              features:,
+              # Product image URLs, main image first.
+              images:,
+              # Main product image URL.
+              image_url:,
+              # Product name.
+              name:,
+              # Current price.
+              price:,
+              # List price before any discount.
+              regular_price:,
+              # Product identifier such as a SKU or model number.
+              sku:,
+              # Product tags.
+              tags:,
+              # Intended audience.
+              target_audience:,
+              # Product variations, such as different colors or sizes, with their attributes and
+              # images. Empty if none are found. May not include every variation offered by the
+              # store.
+              variants:
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  availability:
+                    T.nilable(
+                      ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability::TaggedSymbol
+                    ),
+                  brand: T.nilable(String),
+                  category: T.nilable(String),
+                  currency: T.nilable(String),
+                  description: T.nilable(String),
+                  dimensions: T::Array[String],
+                  features: T::Array[String],
+                  images: T::Array[String],
+                  image_url: T.nilable(String),
+                  name: String,
+                  price: T.nilable(Float),
+                  regular_price: T.nilable(Float),
+                  sku: T.nilable(String),
+                  tags: T::Array[String],
+                  target_audience: T::Array[String],
+                  variants:
+                    T::Array[
+                      ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant
+                    ]
+                }
+              )
+            end
+            def to_hash
+            end
+
+            # Stock or ordering availability.
+            module Availability
+              extend ContextDev::Internal::Type::Enum
+
+              TaggedSymbol =
+                T.type_alias do
+                  T.all(
+                    Symbol,
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability
+                  )
+                end
+              OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+              IN_STOCK =
+                T.let(
+                  :in_stock,
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability::TaggedSymbol
+                )
+              OUT_OF_STOCK =
+                T.let(
+                  :out_of_stock,
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability::TaggedSymbol
+                )
+              LIMITED_AVAILABILITY =
+                T.let(
+                  :limited_availability,
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability::TaggedSymbol
+                )
+              PREORDER =
+                T.let(
+                  :preorder,
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability::TaggedSymbol
+                )
+              BACKORDER =
+                T.let(
+                  :backorder,
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability::TaggedSymbol
+                )
+              MADE_TO_ORDER =
+                T.let(
+                  :made_to_order,
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability::TaggedSymbol
+                )
+              DISCONTINUED =
+                T.let(
+                  :discontinued,
+                  ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability::TaggedSymbol
+                )
+
+              sig do
+                override.returns(
+                  T::Array[
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Availability::TaggedSymbol
+                  ]
+                )
+              end
+              def self.values
+              end
+            end
+
+            class Variant < ContextDev::Internal::Type::BaseModel
+              OrHash =
+                T.type_alias do
+                  T.any(
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant,
+                    ContextDev::Internal::AnyHash
+                  )
+                end
+
+              # Explicit variant attributes such as color, size, material, pattern and
+              # properties declared by page.
+              sig { returns(T::Hash[Symbol, String]) }
+              attr_accessor :attributes
+
+              # Original source image URLs explicitly attached to this variant.
+              sig { returns(T::Array[String]) }
+              attr_accessor :images
+
+              sig { returns(T.nilable(String)) }
+              attr_accessor :sku
+
+              # Variant or offer URL when provided by the source. May be shared by variants.
+              sig { returns(T.nilable(String)) }
+              attr_accessor :url
+
+              sig do
+                params(
+                  attributes: T::Hash[Symbol, String],
+                  images: T::Array[String],
+                  sku: T.nilable(String),
+                  url: T.nilable(String)
+                ).returns(T.attached_class)
+              end
+              def self.new(
+                # Explicit variant attributes such as color, size, material, pattern and
+                # properties declared by page.
+                attributes:,
+                # Original source image URLs explicitly attached to this variant.
+                images:,
+                sku:,
+                # Variant or offer URL when provided by the source. May be shared by variants.
+                url:
+              )
+              end
+
+              sig do
+                override.returns(
+                  {
+                    attributes: T::Hash[Symbol, String],
+                    images: T::Array[String],
+                    sku: T.nilable(String),
+                    url: T.nilable(String)
+                  }
+                )
+              end
+              def to_hash
+              end
+            end
+          end
+        end
+      end
+
       class Screenshot < ContextDev::Internal::Type::BaseModel
         OrHash =
           T.type_alias do
@@ -1358,8 +1800,10 @@ module ContextDev
         end
       end
 
-      # Present when return-partial captures a page that is still loading or returns
-      # images before image processing finishes. Partial responses are not cached.
+      # Present when return-partial captures a page that is still loading, returns
+      # images before image processing finishes, or cuts product AI extraction short.
+      # Also present if the optional product AI fallback fails. Partial responses are
+      # not cached.
       module IsPartial
         extend ContextDev::Internal::Type::Enum
 

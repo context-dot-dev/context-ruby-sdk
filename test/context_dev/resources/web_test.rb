@@ -108,6 +108,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         markdown: ContextDev::Models::WebScrapeResponse::Markdown,
         metadata: ContextDev::Models::WebScrapeResponse::Metadata,
         parsed: ContextDev::Models::WebScrapeResponse::Parsed,
+        product: ContextDev::Models::WebScrapeResponse::Product,
         request_id: String,
         screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
         url: String,
