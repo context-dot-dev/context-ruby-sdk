@@ -22,6 +22,18 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
+      # Highlight options. Requires formats.highlights: true.
+      sig { returns(T.nilable(ContextDev::WebScrapeParams::HighlightsParams)) }
+      attr_reader :highlights_params
+
+      sig do
+        params(
+          highlights_params:
+            ContextDev::WebScrapeParams::HighlightsParams::OrHash
+        ).void
+      end
+      attr_writer :highlights_params
+
       # Image options. Requires formats.images: true.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::ImageParams)) }
       attr_reader :image_params
@@ -125,7 +137,8 @@ module ContextDev
       attr_writer :timeout_opts
 
       # Zero data retention. Bypasses caches and uploads; excludes request/response
-      # content and tags from logs. Must be enabled for your organization.
+      # content and tags from logs. Must be enabled for your organization. Not available
+      # with the highlights output.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::Zdr::OrSymbol)) }
       attr_reader :zdr
 
@@ -136,6 +149,8 @@ module ContextDev
         params(
           formats: ContextDev::WebScrapeParams::Formats::OrHash,
           url: String,
+          highlights_params:
+            ContextDev::WebScrapeParams::HighlightsParams::OrHash,
           image_params: ContextDev::WebScrapeParams::ImageParams::OrHash,
           json_params: ContextDev::WebScrapeParams::JsonParams::OrHash,
           markdown_params: ContextDev::WebScrapeParams::MarkdownParams::OrHash,
@@ -155,6 +170,8 @@ module ContextDev
         formats:,
         # The URL to scrape.
         url:,
+        # Highlight options. Requires formats.highlights: true.
+        highlights_params: nil,
         # Image options. Requires formats.images: true.
         image_params: nil,
         # Required when formats.json is true.
@@ -184,7 +201,8 @@ module ContextDev
         # when using return-partial.
         timeout_opts: nil,
         # Zero data retention. Bypasses caches and uploads; excludes request/response
-        # content and tags from logs. Must be enabled for your organization.
+        # content and tags from logs. Must be enabled for your organization. Not available
+        # with the highlights output.
         zdr: nil,
         request_options: {}
       )
@@ -195,6 +213,7 @@ module ContextDev
           {
             formats: ContextDev::WebScrapeParams::Formats,
             url: String,
+            highlights_params: ContextDev::WebScrapeParams::HighlightsParams,
             image_params: ContextDev::WebScrapeParams::ImageParams,
             json_params: ContextDev::WebScrapeParams::JsonParams,
             markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
@@ -227,6 +246,15 @@ module ContextDev
 
         sig { params(bytes: T::Boolean).void }
         attr_writer :bytes
+
+        # Plain-text passages from the page that are most relevant to
+        # highlightsParams.query, each prefixed with its section heading. Adds 3 credits.
+        # Not available with zdr enabled.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_reader :highlights
+
+        sig { params(highlights: T::Boolean).void }
+        attr_writer :highlights
 
         # Rendered HTML.
         sig { returns(T.nilable(T::Boolean)) }
@@ -277,6 +305,7 @@ module ContextDev
         sig do
           params(
             bytes: T::Boolean,
+            highlights: T::Boolean,
             html: T::Boolean,
             images: T::Boolean,
             json: T::Boolean,
@@ -288,6 +317,10 @@ module ContextDev
         def self.new(
           # The original HTTP response body.
           bytes: nil,
+          # Plain-text passages from the page that are most relevant to
+          # highlightsParams.query, each prefixed with its section heading. Adds 3 credits.
+          # Not available with zdr enabled.
+          highlights: nil,
           # Rendered HTML.
           html: nil,
           # Images found on the page.
@@ -310,6 +343,7 @@ module ContextDev
           override.returns(
             {
               bytes: T::Boolean,
+              highlights: T::Boolean,
               html: T::Boolean,
               images: T::Boolean,
               json: T::Boolean,
@@ -319,6 +353,45 @@ module ContextDev
             }
           )
         end
+        def to_hash
+        end
+      end
+
+      class HighlightsParams < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::WebScrapeParams::HighlightsParams,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # The question or topic to find passages for.
+        sig { returns(String) }
+        attr_accessor :query
+
+        # Maximum combined length of the returned passages, in characters.
+        sig { returns(T.nilable(Integer)) }
+        attr_reader :max_characters
+
+        sig { params(max_characters: Integer).void }
+        attr_writer :max_characters
+
+        # Highlight options. Requires formats.highlights: true.
+        sig do
+          params(query: String, max_characters: Integer).returns(
+            T.attached_class
+          )
+        end
+        def self.new(
+          # The question or topic to find passages for.
+          query:,
+          # Maximum combined length of the returned passages, in characters.
+          max_characters: nil
+        )
+        end
+
+        sig { override.returns({ query: String, max_characters: Integer }) }
         def to_hash
         end
       end
@@ -2060,7 +2133,8 @@ module ContextDev
       end
 
       # Zero data retention. Bypasses caches and uploads; excludes request/response
-      # content and tags from logs. Must be enabled for your organization.
+      # content and tags from logs. Must be enabled for your organization. Not available
+      # with the highlights output.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

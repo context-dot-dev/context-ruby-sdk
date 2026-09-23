@@ -201,18 +201,22 @@ module ContextDev
 
       # Reuse cached outputs independently and capture missing formats in one page
       # visit. Each cache key includes only the settings that affect that output. HTML
-      # is shared with Markdown, parsed fields, and JSON extraction. Cached outputs can
-      # come from different visits within maxAgeMs; use 0 for a fresh capture. HTML-only
-      # requests use the existing fast acquisition path. One credit per request,
-      # including cache hits and missing pages, or two with browser actions; JSON
-      # extraction adds four credits and runs an LLM over the page Markdown on every
-      # request that has text to extract; PDF OCR adds one credit per recovered page on
-      # fresh extraction. Original response bytes and screenshots are limited to 20 MiB
-      # each, screenshots to 40 megapixels, and the combined browser capture to 60 MiB.
+      # is shared with Markdown, parsed fields, highlights, and JSON extraction. Cached
+      # outputs can come from different visits within maxAgeMs; use 0 for a fresh
+      # capture. HTML-only requests use the existing fast acquisition path. Highlights
+      # return the plain-text passages most relevant to highlightsParams.query. One
+      # credit per request, including cache hits and missing pages, or two with browser
+      # actions; highlights add 3 credits when passages are returned; JSON extraction
+      # adds four credits and runs an LLM over the page Markdown on every request that
+      # has text to extract; PDF OCR adds one credit per recovered page on fresh
+      # extraction. Original response bytes and screenshots are limited to 20 MiB each,
+      # screenshots to 40 megapixels, and the combined browser capture to 60 MiB.
       sig do
         params(
           formats: ContextDev::WebScrapeParams::Formats::OrHash,
           url: String,
+          highlights_params:
+            ContextDev::WebScrapeParams::HighlightsParams::OrHash,
           image_params: ContextDev::WebScrapeParams::ImageParams::OrHash,
           json_params: ContextDev::WebScrapeParams::JsonParams::OrHash,
           markdown_params: ContextDev::WebScrapeParams::MarkdownParams::OrHash,
@@ -232,6 +236,8 @@ module ContextDev
         formats:,
         # The URL to scrape.
         url:,
+        # Highlight options. Requires formats.highlights: true.
+        highlights_params: nil,
         # Image options. Requires formats.images: true.
         image_params: nil,
         # Required when formats.json is true.
@@ -261,7 +267,8 @@ module ContextDev
         # when using return-partial.
         timeout_opts: nil,
         # Zero data retention. Bypasses caches and uploads; excludes request/response
-        # content and tags from logs. Must be enabled for your organization.
+        # content and tags from logs. Must be enabled for your organization. Not available
+        # with the highlights output.
         zdr: nil,
         request_options: {}
       )

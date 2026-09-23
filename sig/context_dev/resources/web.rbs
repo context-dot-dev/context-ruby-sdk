@@ -48,6 +48,7 @@ module ContextDev
       def scrape: (
         formats: ContextDev::WebScrapeParams::Formats,
         url: String,
+        ?highlights_params: ContextDev::WebScrapeParams::HighlightsParams,
         ?image_params: ContextDev::WebScrapeParams::ImageParams,
         ?json_params: ContextDev::WebScrapeParams::JsonParams,
         ?markdown_params: ContextDev::WebScrapeParams::MarkdownParams,

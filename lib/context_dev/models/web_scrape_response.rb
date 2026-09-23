@@ -19,6 +19,14 @@ module ContextDev
       #   @return [ContextDev::Models::WebScrapeResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebScrapeResponse::CacheMetadata }
 
+      # @!attribute highlights
+      #   Plain-text passages relevant to highlightsParams.query, in page order, each
+      #   prefixed with its section heading in square brackets. Empty when the page has no
+      #   text.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::Highlights]
+      required :highlights, -> { ContextDev::Models::WebScrapeResponse::Highlights }
+
       # @!attribute html
       #   Rendered HTML after content filters.
       #
@@ -90,13 +98,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebScrapeResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebScrapeResponse::KeyMetadata }
 
-      # @!method initialize(bytes:, cache_metadata:, html:, images:, json:, markdown:, metadata:, parsed:, request_id:, screenshot:, url:, is_partial: nil, key_metadata: nil)
+      # @!method initialize(bytes:, cache_metadata:, highlights:, html:, images:, json:, markdown:, metadata:, parsed:, request_id:, screenshot:, url:, is_partial: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScrapeResponse} for more details.
       #
       #   @param bytes [ContextDev::Models::WebScrapeResponse::Bytes] Original HTTP response body. Waiting, actions, and content filters never change
       #
       #   @param cache_metadata [ContextDev::Models::WebScrapeResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #
+      #   @param highlights [ContextDev::Models::WebScrapeResponse::Highlights] Plain-text passages relevant to highlightsParams.query, in page order, each pref
       #
       #   @param html [ContextDev::Models::WebScrapeResponse::HTML] Rendered HTML after content filters.
       #
@@ -204,6 +214,27 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      # @see ContextDev::Models::WebScrapeResponse#highlights
+      class Highlights < ContextDev::Internal::Type::BaseModel
+        # @!attribute data
+        #
+        #   @return [Array<String>, nil]
+        required :data, ContextDev::Internal::Type::ArrayOf[String], nil?: true
+
+        # @!attribute requested
+        #
+        #   @return [Boolean]
+        required :requested, ContextDev::Internal::Type::Boolean
+
+        # @!method initialize(data:, requested:)
+        #   Plain-text passages relevant to highlightsParams.query, in page order, each
+        #   prefixed with its section heading in square brackets. Empty when the page has no
+        #   text.
+        #
+        #   @param data [Array<String>, nil]
+        #   @param requested [Boolean]
       end
 
       # @see ContextDev::Models::WebScrapeResponse#html

@@ -101,6 +101,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
       response => {
         bytes: ContextDev::Models::WebScrapeResponse::Bytes,
         cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata,
+        highlights: ContextDev::Models::WebScrapeResponse::Highlights,
         html: ContextDev::Models::WebScrapeResponse::HTML,
         images: ContextDev::Models::WebScrapeResponse::Images,
         json: ContextDev::Models::WebScrapeResponse::Json,

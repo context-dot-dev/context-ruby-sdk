@@ -19,6 +19,14 @@ module ContextDev
       #   @return [String]
       required :url, String
 
+      # @!attribute highlights_params
+      #   Highlight options. Requires formats.highlights: true.
+      #
+      #   @return [ContextDev::Models::WebScrapeParams::HighlightsParams, nil]
+      optional :highlights_params,
+               -> { ContextDev::WebScrapeParams::HighlightsParams },
+               api_name: :highlightsParams
+
       # @!attribute image_params
       #   Image options. Requires formats.images: true.
       #
@@ -87,18 +95,21 @@ module ContextDev
 
       # @!attribute zdr
       #   Zero data retention. Bypasses caches and uploads; excludes request/response
-      #   content and tags from logs. Must be enabled for your organization.
+      #   content and tags from logs. Must be enabled for your organization. Not available
+      #   with the highlights output.
       #
       #   @return [Symbol, ContextDev::Models::WebScrapeParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebScrapeParams::Zdr }
 
-      # @!method initialize(formats:, url:, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(formats:, url:, highlights_params: nil, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScrapeParams} for more details.
       #
       #   @param formats [ContextDev::Models::WebScrapeParams::Formats] Outputs to return. Enable at least one; omitted formats are false.
       #
       #   @param url [String] The URL to scrape.
+      #
+      #   @param highlights_params [ContextDev::Models::WebScrapeParams::HighlightsParams] Highlight options. Requires formats.highlights: true.
       #
       #   @param image_params [ContextDev::Models::WebScrapeParams::ImageParams] Image options. Requires formats.images: true.
       #
@@ -128,6 +139,14 @@ module ContextDev
         #
         #   @return [Boolean, nil]
         optional :bytes, ContextDev::Internal::Type::Boolean
+
+        # @!attribute highlights
+        #   Plain-text passages from the page that are most relevant to
+        #   highlightsParams.query, each prefixed with its section heading. Adds 3 credits.
+        #   Not available with zdr enabled.
+        #
+        #   @return [Boolean, nil]
+        optional :highlights, ContextDev::Internal::Type::Boolean
 
         # @!attribute html
         #   Rendered HTML.
@@ -168,13 +187,15 @@ module ContextDev
         #   @return [Boolean, nil]
         optional :screenshot, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(bytes: nil, html: nil, images: nil, json: nil, markdown: nil, parse: nil, screenshot: nil)
+        # @!method initialize(bytes: nil, highlights: nil, html: nil, images: nil, json: nil, markdown: nil, parse: nil, screenshot: nil)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeParams::Formats} for more details.
         #
         #   Outputs to return. Enable at least one; omitted formats are false.
         #
         #   @param bytes [Boolean] The original HTTP response body.
+        #
+        #   @param highlights [Boolean] Plain-text passages from the page that are most relevant to highlightsParams.que
         #
         #   @param html [Boolean] Rendered HTML.
         #
@@ -187,6 +208,27 @@ module ContextDev
         #   @param parse [Boolean] Fields selected by parseParams.rules.
         #
         #   @param screenshot [Boolean] An inline image of the page.
+      end
+
+      class HighlightsParams < ContextDev::Internal::Type::BaseModel
+        # @!attribute query
+        #   The question or topic to find passages for.
+        #
+        #   @return [String]
+        required :query, String
+
+        # @!attribute max_characters
+        #   Maximum combined length of the returned passages, in characters.
+        #
+        #   @return [Integer, nil]
+        optional :max_characters, Integer, api_name: :maxCharacters
+
+        # @!method initialize(query:, max_characters: nil)
+        #   Highlight options. Requires formats.highlights: true.
+        #
+        #   @param query [String] The question or topic to find passages for.
+        #
+        #   @param max_characters [Integer] Maximum combined length of the returned passages, in characters.
       end
 
       class ImageParams < ContextDev::Internal::Type::BaseModel
@@ -942,7 +984,8 @@ module ContextDev
       end
 
       # Zero data retention. Bypasses caches and uploads; excludes request/response
-      # content and tags from logs. Must be enabled for your organization.
+      # content and tags from logs. Must be enabled for your organization. Not available
+      # with the highlights output.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

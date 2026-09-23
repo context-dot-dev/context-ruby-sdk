@@ -4,6 +4,7 @@ module ContextDev
       {
         bytes: ContextDev::Models::WebScrapeResponse::Bytes,
         cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata,
+        highlights: ContextDev::Models::WebScrapeResponse::Highlights,
         html: ContextDev::Models::WebScrapeResponse::HTML,
         images: ContextDev::Models::WebScrapeResponse::Images,
         json: ContextDev::Models::WebScrapeResponse::Json,
@@ -21,6 +22,8 @@ module ContextDev
       attr_accessor bytes: ContextDev::Models::WebScrapeResponse::Bytes
 
       attr_accessor cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata
+
+      attr_accessor highlights: ContextDev::Models::WebScrapeResponse::Highlights
 
       attr_accessor html: ContextDev::Models::WebScrapeResponse::HTML
 
@@ -55,6 +58,7 @@ module ContextDev
       def initialize: (
         bytes: ContextDev::Models::WebScrapeResponse::Bytes,
         cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata,
+        highlights: ContextDev::Models::WebScrapeResponse::Highlights,
         html: ContextDev::Models::WebScrapeResponse::HTML,
         images: ContextDev::Models::WebScrapeResponse::Images,
         json: ContextDev::Models::WebScrapeResponse::Json,
@@ -71,6 +75,7 @@ module ContextDev
       def to_hash: -> {
         bytes: ContextDev::Models::WebScrapeResponse::Bytes,
         cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata,
+        highlights: ContextDev::Models::WebScrapeResponse::Highlights,
         html: ContextDev::Models::WebScrapeResponse::HTML,
         images: ContextDev::Models::WebScrapeResponse::Images,
         json: ContextDev::Models::WebScrapeResponse::Json,
@@ -150,6 +155,18 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::WebScrapeResponse::CacheMetadata::status]
         end
+      end
+
+      type highlights = { data: ::Array[String]?, requested: bool }
+
+      class Highlights < ContextDev::Internal::Type::BaseModel
+        attr_accessor data: ::Array[String]?
+
+        attr_accessor requested: bool
+
+        def initialize: (data: ::Array[String]?, requested: bool) -> void
+
+        def to_hash: -> { data: ::Array[String]?, requested: bool }
       end
 
       type html = { data: String?, requested: bool }
