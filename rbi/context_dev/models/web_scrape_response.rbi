@@ -35,7 +35,9 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
-      # Relevant passages for your question or topic.
+      # Relevant passages for your question or topic, in page order. A heading in square
+      # brackets is included when needed to interpret a passage. Empty when the page has
+      # no text.
       sig { returns(ContextDev::Models::WebScrapeResponse::Highlights) }
       attr_reader :highlights
 
@@ -204,7 +206,9 @@ module ContextDev
         # cache-controlled fetch contributing to the output was a hit; age_ms is the
         # oldest contributing hit.
         cache_metadata:,
-        # Relevant passages for your question or topic.
+        # Relevant passages for your question or topic, in page order. A heading in square
+        # brackets is included when needed to interpret a passage. Empty when the page has
+        # no text.
         highlights:,
         # Rendered HTML after content filters.
         html:,
@@ -462,7 +466,9 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # Relevant passages for your question or topic.
+        # Relevant passages for your question or topic, in page order. A heading in square
+        # brackets is included when needed to interpret a passage. Empty when the page has
+        # no text.
         sig do
           params(
             data: T.nilable(T::Array[String]),
