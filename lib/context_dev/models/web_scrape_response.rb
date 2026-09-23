@@ -20,7 +20,9 @@ module ContextDev
       required :cache_metadata, -> { ContextDev::Models::WebScrapeResponse::CacheMetadata }
 
       # @!attribute highlights
-      #   Relevant passages for your question or topic.
+      #   Relevant passages for your question or topic, in page order. A heading in square
+      #   brackets is included when needed to interpret a passage. Empty when the page has
+      #   no text.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Highlights]
       required :highlights, -> { ContextDev::Models::WebScrapeResponse::Highlights }
@@ -109,7 +111,7 @@ module ContextDev
       #
       #   @param cache_metadata [ContextDev::Models::WebScrapeResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
-      #   @param highlights [ContextDev::Models::WebScrapeResponse::Highlights] Relevant passages for your question or topic.
+      #   @param highlights [ContextDev::Models::WebScrapeResponse::Highlights] Relevant passages for your question or topic, in page order. A heading in square
       #
       #   @param html [ContextDev::Models::WebScrapeResponse::HTML] Rendered HTML after content filters.
       #
@@ -234,7 +236,9 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!method initialize(data:, requested:)
-        #   Relevant passages for your question or topic.
+        #   Relevant passages for your question or topic, in page order. A heading in square
+        #   brackets is included when needed to interpret a passage. Empty when the page has
+        #   no text.
         #
         #   @param data [Array<String>, nil]
         #   @param requested [Boolean]

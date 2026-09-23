@@ -148,7 +148,8 @@ module ContextDev
         optional :bytes, ContextDev::Internal::Type::Boolean
 
         # @!attribute highlights
-        #   Relevant passages for your question or topic. Adds 3 credits.
+        #   Relevant passages for your question or topic, with headings included when needed
+        #   for context. Adds 3 credits.
         #
         #   @return [Boolean, nil]
         optional :highlights, ContextDev::Internal::Type::Boolean
@@ -196,11 +197,14 @@ module ContextDev
         optional :screenshot, ContextDev::Internal::Type::Boolean
 
         # @!method initialize(bytes: nil, highlights: nil, html: nil, images: nil, json: nil, markdown: nil, parse: nil, product: nil, screenshot: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScrapeParams::Formats} for more details.
+        #
         #   Outputs to return. Enable at least one; omitted formats are false.
         #
         #   @param bytes [Boolean] The original HTTP response body.
         #
-        #   @param highlights [Boolean] Relevant passages for your question or topic. Adds 3 credits.
+        #   @param highlights [Boolean] Relevant passages for your question or topic, with headings included when needed
         #
         #   @param html [Boolean] Rendered HTML.
         #

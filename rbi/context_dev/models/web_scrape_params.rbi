@@ -260,7 +260,8 @@ module ContextDev
         sig { params(bytes: T::Boolean).void }
         attr_writer :bytes
 
-        # Relevant passages for your question or topic. Adds 3 credits.
+        # Relevant passages for your question or topic, with headings included when needed
+        # for context. Adds 3 credits.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :highlights
 
@@ -333,7 +334,8 @@ module ContextDev
         def self.new(
           # The original HTTP response body.
           bytes: nil,
-          # Relevant passages for your question or topic. Adds 3 credits.
+          # Relevant passages for your question or topic, with headings included when needed
+          # for context. Adds 3 credits.
           highlights: nil,
           # Rendered HTML.
           html: nil,
