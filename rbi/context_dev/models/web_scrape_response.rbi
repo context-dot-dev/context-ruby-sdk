@@ -55,6 +55,18 @@ module ContextDev
       end
       attr_writer :images
 
+      # Page data extracted into jsonParams.schema, after shared content filters. Values
+      # are grounded in the page; optional fields the page does not state are omitted,
+      # or null when their type allows null. An empty object when the filters leave no
+      # text.
+      sig { returns(ContextDev::Models::WebScrapeResponse::Json) }
+      attr_reader :json
+
+      sig do
+        params(json: ContextDev::Models::WebScrapeResponse::Json::OrHash).void
+      end
+      attr_writer :json
+
       # Markdown after content filters.
       sig { returns(ContextDev::Models::WebScrapeResponse::Markdown) }
       attr_reader :markdown
@@ -148,6 +160,7 @@ module ContextDev
             ContextDev::Models::WebScrapeResponse::CacheMetadata::OrHash,
           html: ContextDev::Models::WebScrapeResponse::HTML::OrHash,
           images: ContextDev::Models::WebScrapeResponse::Images::OrHash,
+          json: ContextDev::Models::WebScrapeResponse::Json::OrHash,
           markdown: ContextDev::Models::WebScrapeResponse::Markdown::OrHash,
           metadata: ContextDev::Models::WebScrapeResponse::Metadata::OrHash,
           parsed: ContextDev::Models::WebScrapeResponse::Parsed::OrHash,
@@ -172,6 +185,11 @@ module ContextDev
         html:,
         # Images after content filters. Empty when none are found.
         images:,
+        # Page data extracted into jsonParams.schema, after shared content filters. Values
+        # are grounded in the page; optional fields the page does not state are omitted,
+        # or null when their type allows null. An empty object when the filters leave no
+        # text.
+        json:,
         # Markdown after content filters.
         markdown:,
         # Page details, when available.
@@ -201,6 +219,7 @@ module ContextDev
               ContextDev::Models::WebScrapeResponse::CacheMetadata,
             html: ContextDev::Models::WebScrapeResponse::HTML,
             images: ContextDev::Models::WebScrapeResponse::Images,
+            json: ContextDev::Models::WebScrapeResponse::Json,
             markdown: ContextDev::Models::WebScrapeResponse::Markdown,
             metadata: ContextDev::Models::WebScrapeResponse::Metadata,
             parsed: ContextDev::Models::WebScrapeResponse::Parsed,
@@ -639,6 +658,46 @@ module ContextDev
             def self.values
             end
           end
+        end
+      end
+
+      class Json < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::WebScrapeResponse::Json,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
+        attr_accessor :data
+
+        sig { returns(T::Boolean) }
+        attr_accessor :requested
+
+        # Page data extracted into jsonParams.schema, after shared content filters. Values
+        # are grounded in the page; optional fields the page does not state are omitted,
+        # or null when their type allows null. An empty object when the filters leave no
+        # text.
+        sig do
+          params(
+            data: T.nilable(T::Hash[Symbol, T.anything]),
+            requested: T::Boolean
+          ).returns(T.attached_class)
+        end
+        def self.new(data:, requested:)
+        end
+
+        sig do
+          override.returns(
+            {
+              data: T.nilable(T::Hash[Symbol, T.anything]),
+              requested: T::Boolean
+            }
+          )
+        end
+        def to_hash
         end
       end
 

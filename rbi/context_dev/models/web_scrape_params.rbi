@@ -33,6 +33,17 @@ module ContextDev
       end
       attr_writer :image_params
 
+      # Required when formats.json is true.
+      sig { returns(T.nilable(ContextDev::WebScrapeParams::JsonParams)) }
+      attr_reader :json_params
+
+      sig do
+        params(
+          json_params: ContextDev::WebScrapeParams::JsonParams::OrHash
+        ).void
+      end
+      attr_writer :json_params
+
       # Markdown options. Requires formats.markdown: true.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::MarkdownParams)) }
       attr_reader :markdown_params
@@ -126,6 +137,7 @@ module ContextDev
           formats: ContextDev::WebScrapeParams::Formats::OrHash,
           url: String,
           image_params: ContextDev::WebScrapeParams::ImageParams::OrHash,
+          json_params: ContextDev::WebScrapeParams::JsonParams::OrHash,
           markdown_params: ContextDev::WebScrapeParams::MarkdownParams::OrHash,
           max_age_ms: Integer,
           parse_params: ContextDev::WebScrapeParams::ParseParams::OrHash,
@@ -145,6 +157,8 @@ module ContextDev
         url:,
         # Image options. Requires formats.images: true.
         image_params: nil,
+        # Required when formats.json is true.
+        json_params: nil,
         # Markdown options. Requires formats.markdown: true.
         markdown_params: nil,
         # Maximum age of each cached output. Defaults to 1 day; 0 fetches fresh and
@@ -182,6 +196,7 @@ module ContextDev
             formats: ContextDev::WebScrapeParams::Formats,
             url: String,
             image_params: ContextDev::WebScrapeParams::ImageParams,
+            json_params: ContextDev::WebScrapeParams::JsonParams,
             markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
             max_age_ms: Integer,
             parse_params: ContextDev::WebScrapeParams::ParseParams,
@@ -227,6 +242,16 @@ module ContextDev
         sig { params(images: T::Boolean).void }
         attr_writer :images
 
+        # Page data extracted by an LLM from the page Markdown into jsonParams.schema;
+        # values carried only in attributes or CSS classes need formats.parse instead.
+        # Adds four credits when the page has text to extract; when shared content filters
+        # leave no text the result is an empty object and only the base price applies.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_reader :json
+
+        sig { params(json: T::Boolean).void }
+        attr_writer :json
+
         # Page content as Markdown.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :markdown
@@ -254,6 +279,7 @@ module ContextDev
             bytes: T::Boolean,
             html: T::Boolean,
             images: T::Boolean,
+            json: T::Boolean,
             markdown: T::Boolean,
             parse: T::Boolean,
             screenshot: T::Boolean
@@ -266,6 +292,11 @@ module ContextDev
           html: nil,
           # Images found on the page.
           images: nil,
+          # Page data extracted by an LLM from the page Markdown into jsonParams.schema;
+          # values carried only in attributes or CSS classes need formats.parse instead.
+          # Adds four credits when the page has text to extract; when shared content filters
+          # leave no text the result is an empty object and only the base price applies.
+          json: nil,
           # Page content as Markdown.
           markdown: nil,
           # Fields selected by parseParams.rules.
@@ -281,6 +312,7 @@ module ContextDev
               bytes: T::Boolean,
               html: T::Boolean,
               images: T::Boolean,
+              json: T::Boolean,
               markdown: T::Boolean,
               parse: T::Boolean,
               screenshot: T::Boolean
@@ -442,6 +474,60 @@ module ContextDev
           end
           def self.values
           end
+        end
+      end
+
+      class JsonParams < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::WebScrapeParams::JsonParams,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # JSON Schema for the returned object. Must describe a top-level object; at most
+        # 50 KB serialized. Optional fields the page does not state are omitted, or null
+        # when their type allows null, while required non-nullable fields always receive a
+        # best-effort value, so prefer nullable or optional fields for data a page may
+        # omit. Zod users can pass the output of z.toJSONSchema().
+        sig { returns(T::Hash[Symbol, T.anything]) }
+        attr_accessor :schema
+
+        # Optional guidance on which facts to prioritize or how to interpret schema
+        # fields.
+        sig { returns(T.nilable(String)) }
+        attr_reader :instructions
+
+        sig { params(instructions: String).void }
+        attr_writer :instructions
+
+        # Required when formats.json is true.
+        sig do
+          params(
+            schema: T::Hash[Symbol, T.anything],
+            instructions: String
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # JSON Schema for the returned object. Must describe a top-level object; at most
+          # 50 KB serialized. Optional fields the page does not state are omitted, or null
+          # when their type allows null, while required non-nullable fields always receive a
+          # best-effort value, so prefer nullable or optional fields for data a page may
+          # omit. Zod users can pass the output of z.toJSONSchema().
+          schema:,
+          # Optional guidance on which facts to prioritize or how to interpret schema
+          # fields.
+          instructions: nil
+        )
+        end
+
+        sig do
+          override.returns(
+            { schema: T::Hash[Symbol, T.anything], instructions: String }
+          )
+        end
+        def to_hash
         end
       end
 

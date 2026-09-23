@@ -103,6 +103,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
         cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata,
         html: ContextDev::Models::WebScrapeResponse::HTML,
         images: ContextDev::Models::WebScrapeResponse::Images,
+        json: ContextDev::Models::WebScrapeResponse::Json,
         markdown: ContextDev::Models::WebScrapeResponse::Markdown,
         metadata: ContextDev::Models::WebScrapeResponse::Metadata,
         parsed: ContextDev::Models::WebScrapeResponse::Parsed,
