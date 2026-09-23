@@ -35,6 +35,19 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
+      # Plain-text passages relevant to highlightsParams.query, in page order, each
+      # prefixed with its section heading in square brackets. Empty when the page has no
+      # text.
+      sig { returns(ContextDev::Models::WebScrapeResponse::Highlights) }
+      attr_reader :highlights
+
+      sig do
+        params(
+          highlights: ContextDev::Models::WebScrapeResponse::Highlights::OrHash
+        ).void
+      end
+      attr_writer :highlights
+
       # Rendered HTML after content filters.
       sig { returns(ContextDev::Models::WebScrapeResponse::HTML) }
       attr_reader :html
@@ -158,6 +171,7 @@ module ContextDev
           bytes: ContextDev::Models::WebScrapeResponse::Bytes::OrHash,
           cache_metadata:
             ContextDev::Models::WebScrapeResponse::CacheMetadata::OrHash,
+          highlights: ContextDev::Models::WebScrapeResponse::Highlights::OrHash,
           html: ContextDev::Models::WebScrapeResponse::HTML::OrHash,
           images: ContextDev::Models::WebScrapeResponse::Images::OrHash,
           json: ContextDev::Models::WebScrapeResponse::Json::OrHash,
@@ -181,6 +195,10 @@ module ContextDev
         # cache-controlled fetch contributing to the output was a hit; age_ms is the
         # oldest contributing hit.
         cache_metadata:,
+        # Plain-text passages relevant to highlightsParams.query, in page order, each
+        # prefixed with its section heading in square brackets. Empty when the page has no
+        # text.
+        highlights:,
         # Rendered HTML after content filters.
         html:,
         # Images after content filters. Empty when none are found.
@@ -217,6 +235,7 @@ module ContextDev
             bytes: ContextDev::Models::WebScrapeResponse::Bytes,
             cache_metadata:
               ContextDev::Models::WebScrapeResponse::CacheMetadata,
+            highlights: ContextDev::Models::WebScrapeResponse::Highlights,
             html: ContextDev::Models::WebScrapeResponse::HTML,
             images: ContextDev::Models::WebScrapeResponse::Images,
             json: ContextDev::Models::WebScrapeResponse::Json,
@@ -416,6 +435,42 @@ module ContextDev
           end
           def self.values
           end
+        end
+      end
+
+      class Highlights < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::WebScrapeResponse::Highlights,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        sig { returns(T.nilable(T::Array[String])) }
+        attr_accessor :data
+
+        sig { returns(T::Boolean) }
+        attr_accessor :requested
+
+        # Plain-text passages relevant to highlightsParams.query, in page order, each
+        # prefixed with its section heading in square brackets. Empty when the page has no
+        # text.
+        sig do
+          params(
+            data: T.nilable(T::Array[String]),
+            requested: T::Boolean
+          ).returns(T.attached_class)
+        end
+        def self.new(data:, requested:)
+        end
+
+        sig do
+          override.returns(
+            { data: T.nilable(T::Array[String]), requested: T::Boolean }
+          )
+        end
+        def to_hash
         end
       end
 

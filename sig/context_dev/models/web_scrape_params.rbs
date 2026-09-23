@@ -4,6 +4,7 @@ module ContextDev
       {
         formats: ContextDev::WebScrapeParams::Formats,
         url: String,
+        highlights_params: ContextDev::WebScrapeParams::HighlightsParams,
         image_params: ContextDev::WebScrapeParams::ImageParams,
         json_params: ContextDev::WebScrapeParams::JsonParams,
         markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
@@ -24,6 +25,12 @@ module ContextDev
       attr_accessor formats: ContextDev::WebScrapeParams::Formats
 
       attr_accessor url: String
+
+      attr_reader highlights_params: ContextDev::WebScrapeParams::HighlightsParams?
+
+      def highlights_params=: (
+        ContextDev::WebScrapeParams::HighlightsParams
+      ) -> ContextDev::WebScrapeParams::HighlightsParams
 
       attr_reader image_params: ContextDev::WebScrapeParams::ImageParams?
 
@@ -84,6 +91,7 @@ module ContextDev
       def initialize: (
         formats: ContextDev::WebScrapeParams::Formats,
         url: String,
+        ?highlights_params: ContextDev::WebScrapeParams::HighlightsParams,
         ?image_params: ContextDev::WebScrapeParams::ImageParams,
         ?json_params: ContextDev::WebScrapeParams::JsonParams,
         ?markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
@@ -100,6 +108,7 @@ module ContextDev
       def to_hash: -> {
         formats: ContextDev::WebScrapeParams::Formats,
         url: String,
+        highlights_params: ContextDev::WebScrapeParams::HighlightsParams,
         image_params: ContextDev::WebScrapeParams::ImageParams,
         json_params: ContextDev::WebScrapeParams::JsonParams,
         markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
@@ -116,6 +125,7 @@ module ContextDev
       type formats =
         {
           bytes: bool,
+          highlights: bool,
           html: bool,
           images: bool,
           json: bool,
@@ -128,6 +138,10 @@ module ContextDev
         attr_reader bytes: bool?
 
         def bytes=: (bool) -> bool
+
+        attr_reader highlights: bool?
+
+        def highlights=: (bool) -> bool
 
         attr_reader html: bool?
 
@@ -155,6 +169,7 @@ module ContextDev
 
         def initialize: (
           ?bytes: bool,
+          ?highlights: bool,
           ?html: bool,
           ?images: bool,
           ?json: bool,
@@ -165,6 +180,7 @@ module ContextDev
 
         def to_hash: -> {
           bytes: bool,
+          highlights: bool,
           html: bool,
           images: bool,
           json: bool,
@@ -172,6 +188,20 @@ module ContextDev
           parse: bool,
           screenshot: bool
         }
+      end
+
+      type highlights_params = { query: String, max_characters: Integer }
+
+      class HighlightsParams < ContextDev::Internal::Type::BaseModel
+        attr_accessor query: String
+
+        attr_reader max_characters: Integer?
+
+        def max_characters=: (Integer) -> Integer
+
+        def initialize: (query: String, ?max_characters: Integer) -> void
+
+        def to_hash: -> { query: String, max_characters: Integer }
       end
 
       type image_params =
