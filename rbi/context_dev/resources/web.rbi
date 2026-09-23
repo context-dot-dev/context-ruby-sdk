@@ -272,8 +272,7 @@ module ContextDev
         # when using return-partial.
         timeout_opts: nil,
         # Zero data retention. Bypasses caches and uploads; excludes request/response
-        # content and tags from logs. Must be enabled for your organization. Not available
-        # with the highlights output.
+        # content and tags from logs. Must be enabled for your organization.
         zdr: nil,
         request_options: {}
       )

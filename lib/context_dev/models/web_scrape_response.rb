@@ -20,9 +20,7 @@ module ContextDev
       required :cache_metadata, -> { ContextDev::Models::WebScrapeResponse::CacheMetadata }
 
       # @!attribute highlights
-      #   Plain-text passages relevant to highlightsParams.query, in page order, each
-      #   prefixed with its section heading in square brackets. Empty when the page has no
-      #   text.
+      #   Relevant passages for your question or topic.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Highlights]
       required :highlights, -> { ContextDev::Models::WebScrapeResponse::Highlights }
@@ -40,10 +38,7 @@ module ContextDev
       required :images, -> { ContextDev::Models::WebScrapeResponse::Images }
 
       # @!attribute json
-      #   Page data extracted into jsonParams.schema, after shared content filters. Values
-      #   are grounded in the page; optional fields the page does not state are omitted,
-      #   or null when their type allows null. An empty object when the filters leave no
-      #   text.
+      #   Page data extracted using your schema.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Json]
       required :json, -> { ContextDev::Models::WebScrapeResponse::Json }
@@ -67,7 +62,7 @@ module ContextDev
       required :parsed, -> { ContextDev::Models::WebScrapeResponse::Parsed }
 
       # @!attribute product
-      #   Product detail page classification and the extracted product.
+      #   Product details found on the page.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Product]
       required :product, -> { ContextDev::Models::WebScrapeResponse::Product }
@@ -114,13 +109,13 @@ module ContextDev
       #
       #   @param cache_metadata [ContextDev::Models::WebScrapeResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
-      #   @param highlights [ContextDev::Models::WebScrapeResponse::Highlights] Plain-text passages relevant to highlightsParams.query, in page order, each pref
+      #   @param highlights [ContextDev::Models::WebScrapeResponse::Highlights] Relevant passages for your question or topic.
       #
       #   @param html [ContextDev::Models::WebScrapeResponse::HTML] Rendered HTML after content filters.
       #
       #   @param images [ContextDev::Models::WebScrapeResponse::Images] Images after content filters. Empty when none are found.
       #
-      #   @param json [ContextDev::Models::WebScrapeResponse::Json] Page data extracted into jsonParams.schema, after shared content filters. Values
+      #   @param json [ContextDev::Models::WebScrapeResponse::Json] Page data extracted using your schema.
       #
       #   @param markdown [ContextDev::Models::WebScrapeResponse::Markdown] Markdown after content filters.
       #
@@ -128,7 +123,7 @@ module ContextDev
       #
       #   @param parsed [ContextDev::Models::WebScrapeResponse::Parsed] Fields produced by parseParams.rules, after shared content filters.
       #
-      #   @param product [ContextDev::Models::WebScrapeResponse::Product] Product detail page classification and the extracted product.
+      #   @param product [ContextDev::Models::WebScrapeResponse::Product] Product details found on the page.
       #
       #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
       #
@@ -239,9 +234,7 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!method initialize(data:, requested:)
-        #   Plain-text passages relevant to highlightsParams.query, in page order, each
-        #   prefixed with its section heading in square brackets. Empty when the page has no
-        #   text.
+        #   Relevant passages for your question or topic.
         #
         #   @param data [Array<String>, nil]
         #   @param requested [Boolean]
@@ -369,10 +362,7 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!method initialize(data:, requested:)
-        #   Page data extracted into jsonParams.schema, after shared content filters. Values
-        #   are grounded in the page; optional fields the page does not state are omitted,
-        #   or null when their type allows null. An empty object when the filters leave no
-        #   text.
+        #   Page data extracted using your schema.
         #
         #   @param data [Hash{Symbol=>Object}, nil]
         #   @param requested [Boolean]
@@ -688,7 +678,7 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!method initialize(data:, requested:)
-        #   Product detail page classification and the extracted product.
+        #   Product details found on the page.
         #
         #   @param data [ContextDev::Models::WebScrapeResponse::Product::Data, nil]
         #   @param requested [Boolean]

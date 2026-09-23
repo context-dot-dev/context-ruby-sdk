@@ -35,9 +35,7 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
-      # Plain-text passages relevant to highlightsParams.query, in page order, each
-      # prefixed with its section heading in square brackets. Empty when the page has no
-      # text.
+      # Relevant passages for your question or topic.
       sig { returns(ContextDev::Models::WebScrapeResponse::Highlights) }
       attr_reader :highlights
 
@@ -68,10 +66,7 @@ module ContextDev
       end
       attr_writer :images
 
-      # Page data extracted into jsonParams.schema, after shared content filters. Values
-      # are grounded in the page; optional fields the page does not state are omitted,
-      # or null when their type allows null. An empty object when the filters leave no
-      # text.
+      # Page data extracted using your schema.
       sig { returns(ContextDev::Models::WebScrapeResponse::Json) }
       attr_reader :json
 
@@ -113,7 +108,7 @@ module ContextDev
       end
       attr_writer :parsed
 
-      # Product detail page classification and the extracted product.
+      # Product details found on the page.
       sig { returns(ContextDev::Models::WebScrapeResponse::Product) }
       attr_reader :product
 
@@ -209,18 +204,13 @@ module ContextDev
         # cache-controlled fetch contributing to the output was a hit; age_ms is the
         # oldest contributing hit.
         cache_metadata:,
-        # Plain-text passages relevant to highlightsParams.query, in page order, each
-        # prefixed with its section heading in square brackets. Empty when the page has no
-        # text.
+        # Relevant passages for your question or topic.
         highlights:,
         # Rendered HTML after content filters.
         html:,
         # Images after content filters. Empty when none are found.
         images:,
-        # Page data extracted into jsonParams.schema, after shared content filters. Values
-        # are grounded in the page; optional fields the page does not state are omitted,
-        # or null when their type allows null. An empty object when the filters leave no
-        # text.
+        # Page data extracted using your schema.
         json:,
         # Markdown after content filters.
         markdown:,
@@ -228,7 +218,7 @@ module ContextDev
         metadata:,
         # Fields produced by parseParams.rules, after shared content filters.
         parsed:,
-        # Product detail page classification and the extracted product.
+        # Product details found on the page.
         product:,
         # Unique id of this API call, also sent in the X-Request-Id response header. Quote
         # it when contacting support about a failed request.
@@ -472,9 +462,7 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # Plain-text passages relevant to highlightsParams.query, in page order, each
-        # prefixed with its section heading in square brackets. Empty when the page has no
-        # text.
+        # Relevant passages for your question or topic.
         sig do
           params(
             data: T.nilable(T::Array[String]),
@@ -750,10 +738,7 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # Page data extracted into jsonParams.schema, after shared content filters. Values
-        # are grounded in the page; optional fields the page does not state are omitted,
-        # or null when their type allows null. An empty object when the filters leave no
-        # text.
+        # Page data extracted using your schema.
         sig do
           params(
             data: T.nilable(T::Hash[Symbol, T.anything]),
@@ -1375,7 +1360,7 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # Product detail page classification and the extracted product.
+        # Product details found on the page.
         sig do
           params(
             data:
