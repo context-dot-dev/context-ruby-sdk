@@ -5,6 +5,7 @@ module ContextDev
         formats: ContextDev::WebScrapeParams::Formats,
         url: String,
         image_params: ContextDev::WebScrapeParams::ImageParams,
+        json_params: ContextDev::WebScrapeParams::JsonParams,
         markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
         max_age_ms: Integer,
         parse_params: ContextDev::WebScrapeParams::ParseParams,
@@ -29,6 +30,12 @@ module ContextDev
       def image_params=: (
         ContextDev::WebScrapeParams::ImageParams
       ) -> ContextDev::WebScrapeParams::ImageParams
+
+      attr_reader json_params: ContextDev::WebScrapeParams::JsonParams?
+
+      def json_params=: (
+        ContextDev::WebScrapeParams::JsonParams
+      ) -> ContextDev::WebScrapeParams::JsonParams
 
       attr_reader markdown_params: ContextDev::WebScrapeParams::MarkdownParams?
 
@@ -78,6 +85,7 @@ module ContextDev
         formats: ContextDev::WebScrapeParams::Formats,
         url: String,
         ?image_params: ContextDev::WebScrapeParams::ImageParams,
+        ?json_params: ContextDev::WebScrapeParams::JsonParams,
         ?markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
         ?max_age_ms: Integer,
         ?parse_params: ContextDev::WebScrapeParams::ParseParams,
@@ -93,6 +101,7 @@ module ContextDev
         formats: ContextDev::WebScrapeParams::Formats,
         url: String,
         image_params: ContextDev::WebScrapeParams::ImageParams,
+        json_params: ContextDev::WebScrapeParams::JsonParams,
         markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
         max_age_ms: Integer,
         parse_params: ContextDev::WebScrapeParams::ParseParams,
@@ -109,6 +118,7 @@ module ContextDev
           bytes: bool,
           html: bool,
           images: bool,
+          json: bool,
           markdown: bool,
           parse: bool,
           screenshot: bool
@@ -127,6 +137,10 @@ module ContextDev
 
         def images=: (bool) -> bool
 
+        attr_reader json: bool?
+
+        def json=: (bool) -> bool
+
         attr_reader markdown: bool?
 
         def markdown=: (bool) -> bool
@@ -143,6 +157,7 @@ module ContextDev
           ?bytes: bool,
           ?html: bool,
           ?images: bool,
+          ?json: bool,
           ?markdown: bool,
           ?parse: bool,
           ?screenshot: bool
@@ -152,6 +167,7 @@ module ContextDev
           bytes: bool,
           html: bool,
           images: bool,
+          json: bool,
           markdown: bool,
           parse: bool,
           screenshot: bool
@@ -209,6 +225,23 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::WebScrapeParams::ImageParams::enrich]
         end
+      end
+
+      type json_params = { schema: ::Hash[Symbol, top], instructions: String }
+
+      class JsonParams < ContextDev::Internal::Type::BaseModel
+        attr_accessor schema: ::Hash[Symbol, top]
+
+        attr_reader instructions: String?
+
+        def instructions=: (String) -> String
+
+        def initialize: (
+          schema: ::Hash[Symbol, top],
+          ?instructions: String
+        ) -> void
+
+        def to_hash: -> { schema: ::Hash[Symbol, top], instructions: String }
       end
 
       type markdown_params =

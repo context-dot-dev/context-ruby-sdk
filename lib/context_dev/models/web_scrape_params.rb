@@ -25,6 +25,12 @@ module ContextDev
       #   @return [ContextDev::Models::WebScrapeParams::ImageParams, nil]
       optional :image_params, -> { ContextDev::WebScrapeParams::ImageParams }, api_name: :imageParams
 
+      # @!attribute json_params
+      #   Required when formats.json is true.
+      #
+      #   @return [ContextDev::Models::WebScrapeParams::JsonParams, nil]
+      optional :json_params, -> { ContextDev::WebScrapeParams::JsonParams }, api_name: :jsonParams
+
       # @!attribute markdown_params
       #   Markdown options. Requires formats.markdown: true.
       #
@@ -86,7 +92,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebScrapeParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebScrapeParams::Zdr }
 
-      # @!method initialize(formats:, url:, image_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(formats:, url:, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScrapeParams} for more details.
       #
@@ -95,6 +101,8 @@ module ContextDev
       #   @param url [String] The URL to scrape.
       #
       #   @param image_params [ContextDev::Models::WebScrapeParams::ImageParams] Image options. Requires formats.images: true.
+      #
+      #   @param json_params [ContextDev::Models::WebScrapeParams::JsonParams] Required when formats.json is true.
       #
       #   @param markdown_params [ContextDev::Models::WebScrapeParams::MarkdownParams] Markdown options. Requires formats.markdown: true.
       #
@@ -133,6 +141,15 @@ module ContextDev
         #   @return [Boolean, nil]
         optional :images, ContextDev::Internal::Type::Boolean
 
+        # @!attribute json
+        #   Page data extracted by an LLM from the page Markdown into jsonParams.schema;
+        #   values carried only in attributes or CSS classes need formats.parse instead.
+        #   Adds four credits when the page has text to extract; when shared content filters
+        #   leave no text the result is an empty object and only the base price applies.
+        #
+        #   @return [Boolean, nil]
+        optional :json, ContextDev::Internal::Type::Boolean
+
         # @!attribute markdown
         #   Page content as Markdown.
         #
@@ -151,7 +168,10 @@ module ContextDev
         #   @return [Boolean, nil]
         optional :screenshot, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(bytes: nil, html: nil, images: nil, markdown: nil, parse: nil, screenshot: nil)
+        # @!method initialize(bytes: nil, html: nil, images: nil, json: nil, markdown: nil, parse: nil, screenshot: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScrapeParams::Formats} for more details.
+        #
         #   Outputs to return. Enable at least one; omitted formats are false.
         #
         #   @param bytes [Boolean] The original HTTP response body.
@@ -159,6 +179,8 @@ module ContextDev
         #   @param html [Boolean] Rendered HTML.
         #
         #   @param images [Boolean] Images found on the page.
+        #
+        #   @param json [Boolean] Page data extracted by an LLM from the page Markdown into jsonParams.schema; val
         #
         #   @param markdown [Boolean] Page content as Markdown.
         #
@@ -216,6 +238,35 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      class JsonParams < ContextDev::Internal::Type::BaseModel
+        # @!attribute schema
+        #   JSON Schema for the returned object. Must describe a top-level object; at most
+        #   50 KB serialized. Optional fields the page does not state are omitted, or null
+        #   when their type allows null, while required non-nullable fields always receive a
+        #   best-effort value, so prefer nullable or optional fields for data a page may
+        #   omit. Zod users can pass the output of z.toJSONSchema().
+        #
+        #   @return [Hash{Symbol=>Object}]
+        required :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
+
+        # @!attribute instructions
+        #   Optional guidance on which facts to prioritize or how to interpret schema
+        #   fields.
+        #
+        #   @return [String, nil]
+        optional :instructions, String
+
+        # @!method initialize(schema:, instructions: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScrapeParams::JsonParams} for more details.
+        #
+        #   Required when formats.json is true.
+        #
+        #   @param schema [Hash{Symbol=>Object}] JSON Schema for the returned object. Must describe a top-level object; at most 5
+        #
+        #   @param instructions [String] Optional guidance on which facts to prioritize or how to interpret schema fields
       end
 
       class MarkdownParams < ContextDev::Internal::Type::BaseModel

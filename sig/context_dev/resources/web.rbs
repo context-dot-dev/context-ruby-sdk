@@ -49,6 +49,7 @@ module ContextDev
         formats: ContextDev::WebScrapeParams::Formats,
         url: String,
         ?image_params: ContextDev::WebScrapeParams::ImageParams,
+        ?json_params: ContextDev::WebScrapeParams::JsonParams,
         ?markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
         ?max_age_ms: Integer,
         ?parse_params: ContextDev::WebScrapeParams::ParseParams,

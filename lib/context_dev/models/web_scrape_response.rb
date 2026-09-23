@@ -31,6 +31,15 @@ module ContextDev
       #   @return [ContextDev::Models::WebScrapeResponse::Images]
       required :images, -> { ContextDev::Models::WebScrapeResponse::Images }
 
+      # @!attribute json
+      #   Page data extracted into jsonParams.schema, after shared content filters. Values
+      #   are grounded in the page; optional fields the page does not state are omitted,
+      #   or null when their type allows null. An empty object when the filters leave no
+      #   text.
+      #
+      #   @return [ContextDev::Models::WebScrapeResponse::Json]
+      required :json, -> { ContextDev::Models::WebScrapeResponse::Json }
+
       # @!attribute markdown
       #   Markdown after content filters.
       #
@@ -81,7 +90,7 @@ module ContextDev
       #   @return [ContextDev::Models::WebScrapeResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebScrapeResponse::KeyMetadata }
 
-      # @!method initialize(bytes:, cache_metadata:, html:, images:, markdown:, metadata:, parsed:, request_id:, screenshot:, url:, is_partial: nil, key_metadata: nil)
+      # @!method initialize(bytes:, cache_metadata:, html:, images:, json:, markdown:, metadata:, parsed:, request_id:, screenshot:, url:, is_partial: nil, key_metadata: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScrapeResponse} for more details.
       #
@@ -92,6 +101,8 @@ module ContextDev
       #   @param html [ContextDev::Models::WebScrapeResponse::HTML] Rendered HTML after content filters.
       #
       #   @param images [ContextDev::Models::WebScrapeResponse::Images] Images after content filters. Empty when none are found.
+      #
+      #   @param json [ContextDev::Models::WebScrapeResponse::Json] Page data extracted into jsonParams.schema, after shared content filters. Values
       #
       #   @param markdown [ContextDev::Models::WebScrapeResponse::Markdown] Markdown after content filters.
       #
@@ -302,6 +313,28 @@ module ContextDev
             #   @return [Array<Symbol>]
           end
         end
+      end
+
+      # @see ContextDev::Models::WebScrapeResponse#json
+      class Json < ContextDev::Internal::Type::BaseModel
+        # @!attribute data
+        #
+        #   @return [Hash{Symbol=>Object}, nil]
+        required :data, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown], nil?: true
+
+        # @!attribute requested
+        #
+        #   @return [Boolean]
+        required :requested, ContextDev::Internal::Type::Boolean
+
+        # @!method initialize(data:, requested:)
+        #   Page data extracted into jsonParams.schema, after shared content filters. Values
+        #   are grounded in the page; optional fields the page does not state are omitted,
+        #   or null when their type allows null. An empty object when the filters leave no
+        #   text.
+        #
+        #   @param data [Hash{Symbol=>Object}, nil]
+        #   @param requested [Boolean]
       end
 
       # @see ContextDev::Models::WebScrapeResponse#markdown

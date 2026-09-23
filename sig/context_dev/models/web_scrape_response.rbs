@@ -6,6 +6,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata,
         html: ContextDev::Models::WebScrapeResponse::HTML,
         images: ContextDev::Models::WebScrapeResponse::Images,
+        json: ContextDev::Models::WebScrapeResponse::Json,
         markdown: ContextDev::Models::WebScrapeResponse::Markdown,
         metadata: ContextDev::Models::WebScrapeResponse::Metadata,
         parsed: ContextDev::Models::WebScrapeResponse::Parsed,
@@ -24,6 +25,8 @@ module ContextDev
       attr_accessor html: ContextDev::Models::WebScrapeResponse::HTML
 
       attr_accessor images: ContextDev::Models::WebScrapeResponse::Images
+
+      attr_accessor json: ContextDev::Models::WebScrapeResponse::Json
 
       attr_accessor markdown: ContextDev::Models::WebScrapeResponse::Markdown
 
@@ -54,6 +57,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata,
         html: ContextDev::Models::WebScrapeResponse::HTML,
         images: ContextDev::Models::WebScrapeResponse::Images,
+        json: ContextDev::Models::WebScrapeResponse::Json,
         markdown: ContextDev::Models::WebScrapeResponse::Markdown,
         metadata: ContextDev::Models::WebScrapeResponse::Metadata,
         parsed: ContextDev::Models::WebScrapeResponse::Parsed,
@@ -69,6 +73,7 @@ module ContextDev
         cache_metadata: ContextDev::Models::WebScrapeResponse::CacheMetadata,
         html: ContextDev::Models::WebScrapeResponse::HTML,
         images: ContextDev::Models::WebScrapeResponse::Images,
+        json: ContextDev::Models::WebScrapeResponse::Json,
         markdown: ContextDev::Models::WebScrapeResponse::Markdown,
         metadata: ContextDev::Models::WebScrapeResponse::Metadata,
         parsed: ContextDev::Models::WebScrapeResponse::Parsed,
@@ -256,6 +261,18 @@ module ContextDev
             def self?.values: -> ::Array[ContextDev::Models::WebScrapeResponse::Images::Data::classification]
           end
         end
+      end
+
+      type json = { data: ::Hash[Symbol, top]?, requested: bool }
+
+      class Json < ContextDev::Internal::Type::BaseModel
+        attr_accessor data: ::Hash[Symbol, top]?
+
+        attr_accessor requested: bool
+
+        def initialize: (data: ::Hash[Symbol, top]?, requested: bool) -> void
+
+        def to_hash: -> { data: ::Hash[Symbol, top]?, requested: bool }
       end
 
       type markdown = { data: String?, requested: bool }

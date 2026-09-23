@@ -201,10 +201,12 @@ module ContextDev
 
       # Reuse cached outputs independently and capture missing formats in one page
       # visit. Each cache key includes only the settings that affect that output. HTML
-      # is shared with Markdown and parsed fields. Cached outputs can come from
-      # different visits within maxAgeMs; use 0 for a fresh capture. HTML-only requests
-      # use the existing fast acquisition path. One credit per request, including cache
-      # hits, or two with browser actions; PDF OCR adds one credit per recovered page on
+      # is shared with Markdown, parsed fields, and JSON extraction. Cached outputs can
+      # come from different visits within maxAgeMs; use 0 for a fresh capture. HTML-only
+      # requests use the existing fast acquisition path. One credit per request,
+      # including cache hits and missing pages, or two with browser actions; JSON
+      # extraction adds four credits and runs an LLM over the page Markdown on every
+      # request that has text to extract; PDF OCR adds one credit per recovered page on
       # fresh extraction. Original response bytes and screenshots are limited to 20 MiB
       # each, screenshots to 40 megapixels, and the combined browser capture to 60 MiB.
       sig do
@@ -212,6 +214,7 @@ module ContextDev
           formats: ContextDev::WebScrapeParams::Formats::OrHash,
           url: String,
           image_params: ContextDev::WebScrapeParams::ImageParams::OrHash,
+          json_params: ContextDev::WebScrapeParams::JsonParams::OrHash,
           markdown_params: ContextDev::WebScrapeParams::MarkdownParams::OrHash,
           max_age_ms: Integer,
           parse_params: ContextDev::WebScrapeParams::ParseParams::OrHash,
@@ -231,6 +234,8 @@ module ContextDev
         url:,
         # Image options. Requires formats.images: true.
         image_params: nil,
+        # Required when formats.json is true.
+        json_params: nil,
         # Markdown options. Requires formats.markdown: true.
         markdown_params: nil,
         # Maximum age of each cached output. Defaults to 1 day; 0 fetches fresh and
