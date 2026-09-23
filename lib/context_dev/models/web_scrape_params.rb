@@ -101,8 +101,7 @@ module ContextDev
 
       # @!attribute zdr
       #   Zero data retention. Bypasses caches and uploads; excludes request/response
-      #   content and tags from logs. Must be enabled for your organization. Not available
-      #   with the highlights output.
+      #   content and tags from logs. Must be enabled for your organization.
       #
       #   @return [Symbol, ContextDev::Models::WebScrapeParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebScrapeParams::Zdr }
@@ -149,9 +148,7 @@ module ContextDev
         optional :bytes, ContextDev::Internal::Type::Boolean
 
         # @!attribute highlights
-        #   Plain-text passages from the page that are most relevant to
-        #   highlightsParams.query, each prefixed with its section heading. Adds 3 credits.
-        #   Not available with zdr enabled.
+        #   Relevant passages for your question or topic. Adds 3 credits.
         #
         #   @return [Boolean, nil]
         optional :highlights, ContextDev::Internal::Type::Boolean
@@ -169,10 +166,7 @@ module ContextDev
         optional :images, ContextDev::Internal::Type::Boolean
 
         # @!attribute json
-        #   Page data extracted by an LLM from the page Markdown into jsonParams.schema;
-        #   values carried only in attributes or CSS classes need formats.parse instead.
-        #   Adds four credits when the page has text to extract; when shared content filters
-        #   leave no text the result is an empty object and only the base price applies.
+        #   Page data extracted using your schema. Adds 4 credits.
         #
         #   @return [Boolean, nil]
         optional :json, ContextDev::Internal::Type::Boolean
@@ -190,7 +184,7 @@ module ContextDev
         optional :parse, ContextDev::Internal::Type::Boolean
 
         # @!attribute product
-        #   Structured product data for product detail pages. Adds one credit.
+        #   Product details such as name, price, and availability. Adds 1 credit.
         #
         #   @return [Boolean, nil]
         optional :product, ContextDev::Internal::Type::Boolean
@@ -202,26 +196,23 @@ module ContextDev
         optional :screenshot, ContextDev::Internal::Type::Boolean
 
         # @!method initialize(bytes: nil, highlights: nil, html: nil, images: nil, json: nil, markdown: nil, parse: nil, product: nil, screenshot: nil)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::WebScrapeParams::Formats} for more details.
-        #
         #   Outputs to return. Enable at least one; omitted formats are false.
         #
         #   @param bytes [Boolean] The original HTTP response body.
         #
-        #   @param highlights [Boolean] Plain-text passages from the page that are most relevant to highlightsParams.que
+        #   @param highlights [Boolean] Relevant passages for your question or topic. Adds 3 credits.
         #
         #   @param html [Boolean] Rendered HTML.
         #
         #   @param images [Boolean] Images found on the page.
         #
-        #   @param json [Boolean] Page data extracted by an LLM from the page Markdown into jsonParams.schema; val
+        #   @param json [Boolean] Page data extracted using your schema. Adds 4 credits.
         #
         #   @param markdown [Boolean] Page content as Markdown.
         #
         #   @param parse [Boolean] Fields selected by parseParams.rules.
         #
-        #   @param product [Boolean] Structured product data for product detail pages. Adds one credit.
+        #   @param product [Boolean] Product details such as name, price, and availability. Adds 1 credit.
         #
         #   @param screenshot [Boolean] An inline image of the page.
       end
@@ -1019,8 +1010,7 @@ module ContextDev
       end
 
       # Zero data retention. Bypasses caches and uploads; excludes request/response
-      # content and tags from logs. Must be enabled for your organization. Not available
-      # with the highlights output.
+      # content and tags from logs. Must be enabled for your organization.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 
