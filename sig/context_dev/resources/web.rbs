@@ -54,6 +54,7 @@ module ContextDev
         ?markdown_params: ContextDev::WebScrapeParams::MarkdownParams,
         ?max_age_ms: Integer,
         ?parse_params: ContextDev::WebScrapeParams::ParseParams,
+        ?product_params: ContextDev::WebScrapeParams::ProductParams,
         ?screenshot_params: ContextDev::WebScrapeParams::ScreenshotParams,
         ?shared_params: ContextDev::WebScrapeParams::SharedParams,
         ?tags: ::Array[String],

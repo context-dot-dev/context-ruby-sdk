@@ -11,6 +11,7 @@ module ContextDev
         markdown: ContextDev::Models::WebScrapeResponse::Markdown,
         metadata: ContextDev::Models::WebScrapeResponse::Metadata,
         parsed: ContextDev::Models::WebScrapeResponse::Parsed,
+        product: ContextDev::Models::WebScrapeResponse::Product,
         request_id: String,
         screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
         url: String,
@@ -36,6 +37,8 @@ module ContextDev
       attr_accessor metadata: ContextDev::Models::WebScrapeResponse::Metadata
 
       attr_accessor parsed: ContextDev::Models::WebScrapeResponse::Parsed
+
+      attr_accessor product: ContextDev::Models::WebScrapeResponse::Product
 
       attr_accessor request_id: String
 
@@ -65,6 +68,7 @@ module ContextDev
         markdown: ContextDev::Models::WebScrapeResponse::Markdown,
         metadata: ContextDev::Models::WebScrapeResponse::Metadata,
         parsed: ContextDev::Models::WebScrapeResponse::Parsed,
+        product: ContextDev::Models::WebScrapeResponse::Product,
         request_id: String,
         screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
         url: String,
@@ -82,6 +86,7 @@ module ContextDev
         markdown: ContextDev::Models::WebScrapeResponse::Markdown,
         metadata: ContextDev::Models::WebScrapeResponse::Metadata,
         parsed: ContextDev::Models::WebScrapeResponse::Parsed,
+        product: ContextDev::Models::WebScrapeResponse::Product,
         request_id: String,
         screenshot: ContextDev::Models::WebScrapeResponse::Screenshot,
         url: String,
@@ -539,6 +544,197 @@ module ContextDev
         def initialize: (data: ::Hash[Symbol, top]?, requested: bool) -> void
 
         def to_hash: -> { data: ::Hash[Symbol, top]?, requested: bool }
+      end
+
+      type product =
+        {
+          data: ContextDev::Models::WebScrapeResponse::Product::Data?,
+          requested: bool
+        }
+
+      class Product < ContextDev::Internal::Type::BaseModel
+        attr_accessor data: ContextDev::Models::WebScrapeResponse::Product::Data?
+
+        attr_accessor requested: bool
+
+        def initialize: (
+          data: ContextDev::Models::WebScrapeResponse::Product::Data?,
+          requested: bool
+        ) -> void
+
+        def to_hash: -> {
+          data: ContextDev::Models::WebScrapeResponse::Product::Data?,
+          requested: bool
+        }
+
+        type data =
+          {
+            is_product_page: bool,
+            product: ContextDev::Models::WebScrapeResponse::Product::Data::Product?
+          }
+
+        class Data < ContextDev::Internal::Type::BaseModel
+          attr_accessor is_product_page: bool
+
+          attr_accessor product: ContextDev::Models::WebScrapeResponse::Product::Data::Product?
+
+          def initialize: (
+            is_product_page: bool,
+            product: ContextDev::Models::WebScrapeResponse::Product::Data::Product?
+          ) -> void
+
+          def to_hash: -> {
+            is_product_page: bool,
+            product: ContextDev::Models::WebScrapeResponse::Product::Data::Product?
+          }
+
+          type product =
+            {
+              availability: ContextDev::Models::WebScrapeResponse::Product::Data::Product::availability?,
+              brand: String?,
+              category: String?,
+              currency: String?,
+              description: String?,
+              dimensions: ::Array[String],
+              features: ::Array[String],
+              images: ::Array[String],
+              image_url: String?,
+              name: String,
+              price: Float?,
+              regular_price: Float?,
+              sku: String?,
+              tags: ::Array[String],
+              target_audience: ::Array[String],
+              variants: ::Array[ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant]
+            }
+
+          class Product < ContextDev::Internal::Type::BaseModel
+            attr_accessor availability: ContextDev::Models::WebScrapeResponse::Product::Data::Product::availability?
+
+            attr_accessor brand: String?
+
+            attr_accessor category: String?
+
+            attr_accessor currency: String?
+
+            attr_accessor description: String?
+
+            attr_accessor dimensions: ::Array[String]
+
+            attr_accessor features: ::Array[String]
+
+            attr_accessor images: ::Array[String]
+
+            attr_accessor image_url: String?
+
+            attr_accessor name: String
+
+            attr_accessor price: Float?
+
+            attr_accessor regular_price: Float?
+
+            attr_accessor sku: String?
+
+            attr_accessor tags: ::Array[String]
+
+            attr_accessor target_audience: ::Array[String]
+
+            attr_accessor variants: ::Array[ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant]
+
+            def initialize: (
+              availability: ContextDev::Models::WebScrapeResponse::Product::Data::Product::availability?,
+              brand: String?,
+              category: String?,
+              currency: String?,
+              description: String?,
+              dimensions: ::Array[String],
+              features: ::Array[String],
+              images: ::Array[String],
+              image_url: String?,
+              name: String,
+              price: Float?,
+              regular_price: Float?,
+              sku: String?,
+              tags: ::Array[String],
+              target_audience: ::Array[String],
+              variants: ::Array[ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant]
+            ) -> void
+
+            def to_hash: -> {
+              availability: ContextDev::Models::WebScrapeResponse::Product::Data::Product::availability?,
+              brand: String?,
+              category: String?,
+              currency: String?,
+              description: String?,
+              dimensions: ::Array[String],
+              features: ::Array[String],
+              images: ::Array[String],
+              image_url: String?,
+              name: String,
+              price: Float?,
+              regular_price: Float?,
+              sku: String?,
+              tags: ::Array[String],
+              target_audience: ::Array[String],
+              variants: ::Array[ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant]
+            }
+
+            type availability =
+              :in_stock
+              | :out_of_stock
+              | :limited_availability
+              | :preorder
+              | :backorder
+              | :made_to_order
+              | :discontinued
+
+            module Availability
+              extend ContextDev::Internal::Type::Enum
+
+              IN_STOCK: :in_stock
+              OUT_OF_STOCK: :out_of_stock
+              LIMITED_AVAILABILITY: :limited_availability
+              PREORDER: :preorder
+              BACKORDER: :backorder
+              MADE_TO_ORDER: :made_to_order
+              DISCONTINUED: :discontinued
+
+              def self?.values: -> ::Array[ContextDev::Models::WebScrapeResponse::Product::Data::Product::availability]
+            end
+
+            type variant =
+              {
+                attributes: ::Hash[Symbol, String],
+                images: ::Array[String],
+                sku: String?,
+                url: String?
+              }
+
+            class Variant < ContextDev::Internal::Type::BaseModel
+              attr_accessor attributes: ::Hash[Symbol, String]
+
+              attr_accessor images: ::Array[String]
+
+              attr_accessor sku: String?
+
+              attr_accessor url: String?
+
+              def initialize: (
+                attributes: ::Hash[Symbol, String],
+                images: ::Array[String],
+                sku: String?,
+                url: String?
+              ) -> void
+
+              def to_hash: -> {
+                attributes: ::Hash[Symbol, String],
+                images: ::Array[String],
+                sku: String?,
+                url: String?
+              }
+            end
+          end
+        end
       end
 
       type screenshot = { data: String?, requested: bool }
