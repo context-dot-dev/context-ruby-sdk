@@ -131,12 +131,16 @@ module ContextDev
       attr_writer :tags
 
       # Total deadline, including navigation, actions, waiting, and all outputs.
-      # Defaults to 60000 milliseconds with behavior fail. Use return-partial to capture
-      # the current page state and return captured images if image processing cannot
-      # finish before the deadline; these responses set isPartial and are not cached.
-      # Every requested format must still be available. Fixed waits must fit before a
-      # response reserve of up to 5000 milliseconds (at most one quarter of the timeout)
-      # when using return-partial.
+      # Defaults to 60000 milliseconds with behavior fail. Individual outputs have
+      # internal deadlines that reserve time to return completed outputs; timed-out
+      # outputs have success: false and data: null under either behavior. The overall
+      # request deadline remains enforced: fail returns an error if that deadline is
+      # reached. Use return-partial to allow the current page state and available
+      # outputs when the page is still loading. Partial responses set isPartial. Failed
+      # retrievals and incomplete captures are not cached; valid captured pieces may be
+      # cached independently. Fixed waits must fit before a response reserve of up to
+      # 5000 milliseconds (at most one quarter of the timeout) when using
+      # return-partial.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::TimeoutOpts)) }
       attr_reader :timeout_opts
 
@@ -206,12 +210,16 @@ module ContextDev
         # Labels for tracking request usage. Not retained when zdr is enabled.
         tags: nil,
         # Total deadline, including navigation, actions, waiting, and all outputs.
-        # Defaults to 60000 milliseconds with behavior fail. Use return-partial to capture
-        # the current page state and return captured images if image processing cannot
-        # finish before the deadline; these responses set isPartial and are not cached.
-        # Every requested format must still be available. Fixed waits must fit before a
-        # response reserve of up to 5000 milliseconds (at most one quarter of the timeout)
-        # when using return-partial.
+        # Defaults to 60000 milliseconds with behavior fail. Individual outputs have
+        # internal deadlines that reserve time to return completed outputs; timed-out
+        # outputs have success: false and data: null under either behavior. The overall
+        # request deadline remains enforced: fail returns an error if that deadline is
+        # reached. Use return-partial to allow the current page state and available
+        # outputs when the page is still loading. Partial responses set isPartial. Failed
+        # retrievals and incomplete captures are not cached; valid captured pieces may be
+        # cached independently. Fixed waits must fit before a response reserve of up to
+        # 5000 milliseconds (at most one quarter of the timeout) when using
+        # return-partial.
         timeout_opts: nil,
         # Zero data retention. Bypasses caches and uploads; excludes request/response
         # content and tags from logs. Must be enabled for your organization.
@@ -261,7 +269,7 @@ module ContextDev
         attr_writer :bytes
 
         # Relevant passages for your question or topic, with headings included when needed
-        # for context. Adds 3 credits.
+        # for context. Adds 3 credits when passages are returned.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :highlights
 
@@ -282,7 +290,8 @@ module ContextDev
         sig { params(images: T::Boolean).void }
         attr_writer :images
 
-        # Page data extracted using your schema. Adds 4 credits.
+        # Page data extracted using your schema. Adds 4 credits when extraction succeeds
+        # and its result is returned.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :json
 
@@ -303,7 +312,8 @@ module ContextDev
         sig { params(parse: T::Boolean).void }
         attr_writer :parse
 
-        # Product details such as name, price, and availability. Adds 1 credit.
+        # Product details such as name, price, and availability. Adds 1 credit when its
+        # successful result is returned or the target page is missing.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :product
 
@@ -335,19 +345,21 @@ module ContextDev
           # The original HTTP response body.
           bytes: nil,
           # Relevant passages for your question or topic, with headings included when needed
-          # for context. Adds 3 credits.
+          # for context. Adds 3 credits when passages are returned.
           highlights: nil,
           # Rendered HTML.
           html: nil,
           # Images found on the page.
           images: nil,
-          # Page data extracted using your schema. Adds 4 credits.
+          # Page data extracted using your schema. Adds 4 credits when extraction succeeds
+          # and its result is returned.
           json: nil,
           # Page content as Markdown.
           markdown: nil,
           # Fields selected by parseParams.rules.
           parse: nil,
-          # Product details such as name, price, and availability. Adds 1 credit.
+          # Product details such as name, price, and availability. Adds 1 credit when its
+          # successful result is returned or the target page is missing.
           product: nil,
           # An inline image of the page.
           screenshot: nil
@@ -983,9 +995,10 @@ module ContextDev
           end
 
         # Extract the product with a specialized model when the page has no structured
-        # product data. Adds six credits when the model returns a verdict. If the fallback
-        # fails, returns a partial response with the deterministic result and no fallback
-        # charge. Request deadlines and client disconnects still apply.
+        # product data. Adds six credits when the model verdict is returned successfully.
+        # If the fallback fails, the product output has success: false and data: null with
+        # no fallback charge; other outputs remain available. Request deadlines and client
+        # disconnects still apply.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :use_ai_fallback
 
@@ -996,9 +1009,10 @@ module ContextDev
         sig { params(use_ai_fallback: T::Boolean).returns(T.attached_class) }
         def self.new(
           # Extract the product with a specialized model when the page has no structured
-          # product data. Adds six credits when the model returns a verdict. If the fallback
-          # fails, returns a partial response with the deterministic result and no fallback
-          # charge. Request deadlines and client disconnects still apply.
+          # product data. Adds six credits when the model verdict is returned successfully.
+          # If the fallback fails, the product output has success: false and data: null with
+          # no fallback charge; other outputs remain available. Request deadlines and client
+          # disconnects still apply.
           use_ai_fallback: nil
         )
         end
@@ -2109,12 +2123,16 @@ module ContextDev
         attr_writer :behavior
 
         # Total deadline, including navigation, actions, waiting, and all outputs.
-        # Defaults to 60000 milliseconds with behavior fail. Use return-partial to capture
-        # the current page state and return captured images if image processing cannot
-        # finish before the deadline; these responses set isPartial and are not cached.
-        # Every requested format must still be available. Fixed waits must fit before a
-        # response reserve of up to 5000 milliseconds (at most one quarter of the timeout)
-        # when using return-partial.
+        # Defaults to 60000 milliseconds with behavior fail. Individual outputs have
+        # internal deadlines that reserve time to return completed outputs; timed-out
+        # outputs have success: false and data: null under either behavior. The overall
+        # request deadline remains enforced: fail returns an error if that deadline is
+        # reached. Use return-partial to allow the current page state and available
+        # outputs when the page is still loading. Partial responses set isPartial. Failed
+        # retrievals and incomplete captures are not cached; valid captured pieces may be
+        # cached independently. Fixed waits must fit before a response reserve of up to
+        # 5000 milliseconds (at most one quarter of the timeout) when using
+        # return-partial.
         sig do
           params(
             milliseconds: Integer,

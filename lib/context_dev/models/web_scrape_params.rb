@@ -89,12 +89,16 @@ module ContextDev
 
       # @!attribute timeout_opts
       #   Total deadline, including navigation, actions, waiting, and all outputs.
-      #   Defaults to 60000 milliseconds with behavior fail. Use return-partial to capture
-      #   the current page state and return captured images if image processing cannot
-      #   finish before the deadline; these responses set isPartial and are not cached.
-      #   Every requested format must still be available. Fixed waits must fit before a
-      #   response reserve of up to 5000 milliseconds (at most one quarter of the timeout)
-      #   when using return-partial.
+      #   Defaults to 60000 milliseconds with behavior fail. Individual outputs have
+      #   internal deadlines that reserve time to return completed outputs; timed-out
+      #   outputs have success: false and data: null under either behavior. The overall
+      #   request deadline remains enforced: fail returns an error if that deadline is
+      #   reached. Use return-partial to allow the current page state and available
+      #   outputs when the page is still loading. Partial responses set isPartial. Failed
+      #   retrievals and incomplete captures are not cached; valid captured pieces may be
+      #   cached independently. Fixed waits must fit before a response reserve of up to
+      #   5000 milliseconds (at most one quarter of the timeout) when using
+      #   return-partial.
       #
       #   @return [ContextDev::Models::WebScrapeParams::TimeoutOpts, nil]
       optional :timeout_opts, -> { ContextDev::WebScrapeParams::TimeoutOpts }, api_name: :timeoutOpts
@@ -149,7 +153,7 @@ module ContextDev
 
         # @!attribute highlights
         #   Relevant passages for your question or topic, with headings included when needed
-        #   for context. Adds 3 credits.
+        #   for context. Adds 3 credits when passages are returned.
         #
         #   @return [Boolean, nil]
         optional :highlights, ContextDev::Internal::Type::Boolean
@@ -167,7 +171,8 @@ module ContextDev
         optional :images, ContextDev::Internal::Type::Boolean
 
         # @!attribute json
-        #   Page data extracted using your schema. Adds 4 credits.
+        #   Page data extracted using your schema. Adds 4 credits when extraction succeeds
+        #   and its result is returned.
         #
         #   @return [Boolean, nil]
         optional :json, ContextDev::Internal::Type::Boolean
@@ -185,7 +190,8 @@ module ContextDev
         optional :parse, ContextDev::Internal::Type::Boolean
 
         # @!attribute product
-        #   Product details such as name, price, and availability. Adds 1 credit.
+        #   Product details such as name, price, and availability. Adds 1 credit when its
+        #   successful result is returned or the target page is missing.
         #
         #   @return [Boolean, nil]
         optional :product, ContextDev::Internal::Type::Boolean
@@ -210,13 +216,13 @@ module ContextDev
         #
         #   @param images [Boolean] Images found on the page.
         #
-        #   @param json [Boolean] Page data extracted using your schema. Adds 4 credits.
+        #   @param json [Boolean] Page data extracted using your schema. Adds 4 credits when extraction succeeds a
         #
         #   @param markdown [Boolean] Page content as Markdown.
         #
         #   @param parse [Boolean] Fields selected by parseParams.rules.
         #
-        #   @param product [Boolean] Product details such as name, price, and availability. Adds 1 credit.
+        #   @param product [Boolean] Product details such as name, price, and availability. Adds 1 credit when its su
         #
         #   @param screenshot [Boolean] An inline image of the page.
       end
@@ -462,9 +468,10 @@ module ContextDev
       class ProductParams < ContextDev::Internal::Type::BaseModel
         # @!attribute use_ai_fallback
         #   Extract the product with a specialized model when the page has no structured
-        #   product data. Adds six credits when the model returns a verdict. If the fallback
-        #   fails, returns a partial response with the deterministic result and no fallback
-        #   charge. Request deadlines and client disconnects still apply.
+        #   product data. Adds six credits when the model verdict is returned successfully.
+        #   If the fallback fails, the product output has success: false and data: null with
+        #   no fallback charge; other outputs remain available. Request deadlines and client
+        #   disconnects still apply.
         #
         #   @return [Boolean, nil]
         optional :use_ai_fallback, ContextDev::Internal::Type::Boolean, api_name: :useAIFallback
@@ -984,12 +991,16 @@ module ContextDev
         #   {ContextDev::Models::WebScrapeParams::TimeoutOpts} for more details.
         #
         #   Total deadline, including navigation, actions, waiting, and all outputs.
-        #   Defaults to 60000 milliseconds with behavior fail. Use return-partial to capture
-        #   the current page state and return captured images if image processing cannot
-        #   finish before the deadline; these responses set isPartial and are not cached.
-        #   Every requested format must still be available. Fixed waits must fit before a
-        #   response reserve of up to 5000 milliseconds (at most one quarter of the timeout)
-        #   when using return-partial.
+        #   Defaults to 60000 milliseconds with behavior fail. Individual outputs have
+        #   internal deadlines that reserve time to return completed outputs; timed-out
+        #   outputs have success: false and data: null under either behavior. The overall
+        #   request deadline remains enforced: fail returns an error if that deadline is
+        #   reached. Use return-partial to allow the current page state and available
+        #   outputs when the page is still loading. Partial responses set isPartial. Failed
+        #   retrievals and incomplete captures are not cached; valid captured pieces may be
+        #   cached independently. Fixed waits must fit before a response reserve of up to
+        #   5000 milliseconds (at most one quarter of the timeout) when using
+        #   return-partial.
         #
         #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
         #

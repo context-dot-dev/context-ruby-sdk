@@ -141,10 +141,11 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
-      # Present when return-partial captures a page that is still loading, returns
-      # images before image processing finishes, or cuts product AI extraction short.
-      # Also present if the optional product AI fallback fails. Partial responses are
-      # not cached.
+      # Present when a requested output fails, capture returns a page that is still
+      # loading, images return before processing finishes, or the optional product AI
+      # fallback fails or is cut short. Check each output's success field for its
+      # result. Valid captured pieces may be cached independently; failed retrievals and
+      # incomplete captures are not cached.
       sig do
         returns(
           T.nilable(
@@ -231,10 +232,11 @@ module ContextDev
         screenshot:,
         # Final URL after redirects and browser actions.
         url:,
-        # Present when return-partial captures a page that is still loading, returns
-        # images before image processing finishes, or cuts product AI extraction short.
-        # Also present if the optional product AI fallback fails. Partial responses are
-        # not cached.
+        # Present when a requested output fails, capture returns a page that is still
+        # loading, images return before processing finishes, or the optional product AI
+        # fallback fails or is cut short. Check each output's success field for its
+        # result. Valid captured pieces may be cached independently; failed retrievals and
+        # incomplete captures are not cached.
         is_partial: nil,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil
@@ -294,6 +296,10 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
+        # True when retrieved, false when retrieval failed, and null when not requested.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_accessor :success
+
         # Original HTTP response body. Waiting, actions, and content filters never change
         # it.
         sig do
@@ -302,10 +308,16 @@ module ContextDev
               T.nilable(
                 ContextDev::Models::WebScrapeResponse::Bytes::Data::OrHash
               ),
-            requested: T::Boolean
+            requested: T::Boolean,
+            success: T.nilable(T::Boolean)
           ).returns(T.attached_class)
         end
-        def self.new(data:, requested:)
+        def self.new(
+          data:,
+          requested:,
+          # True when retrieved, false when retrieval failed, and null when not requested.
+          success:
+        )
         end
 
         sig do
@@ -313,7 +325,8 @@ module ContextDev
             {
               data:
                 T.nilable(ContextDev::Models::WebScrapeResponse::Bytes::Data),
-              requested: T::Boolean
+              requested: T::Boolean,
+              success: T.nilable(T::Boolean)
             }
           )
         end
@@ -466,21 +479,35 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
+        # True when retrieved, false when retrieval failed, and null when not requested.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_accessor :success
+
         # Relevant passages for your question or topic, in page order. A heading in square
         # brackets is included when needed to interpret a passage. Empty when the page has
         # no text.
         sig do
           params(
             data: T.nilable(T::Array[String]),
-            requested: T::Boolean
+            requested: T::Boolean,
+            success: T.nilable(T::Boolean)
           ).returns(T.attached_class)
         end
-        def self.new(data:, requested:)
+        def self.new(
+          data:,
+          requested:,
+          # True when retrieved, false when retrieval failed, and null when not requested.
+          success:
+        )
         end
 
         sig do
           override.returns(
-            { data: T.nilable(T::Array[String]), requested: T::Boolean }
+            {
+              data: T.nilable(T::Array[String]),
+              requested: T::Boolean,
+              success: T.nilable(T::Boolean)
+            }
           )
         end
         def to_hash
@@ -502,17 +529,34 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
+        # True when retrieved, false when retrieval failed, and null when not requested.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_accessor :success
+
         # Rendered HTML after content filters.
         sig do
-          params(data: T.nilable(String), requested: T::Boolean).returns(
-            T.attached_class
-          )
+          params(
+            data: T.nilable(String),
+            requested: T::Boolean,
+            success: T.nilable(T::Boolean)
+          ).returns(T.attached_class)
         end
-        def self.new(data:, requested:)
+        def self.new(
+          data:,
+          requested:,
+          # True when retrieved, false when retrieval failed, and null when not requested.
+          success:
+        )
         end
 
         sig do
-          override.returns({ data: T.nilable(String), requested: T::Boolean })
+          override.returns(
+            {
+              data: T.nilable(String),
+              requested: T::Boolean,
+              success: T.nilable(T::Boolean)
+            }
+          )
         end
         def to_hash
         end
@@ -539,6 +583,10 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
+        # True when retrieved, false when retrieval failed, and null when not requested.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_accessor :success
+
         # Images after content filters. Empty when none are found.
         sig do
           params(
@@ -548,10 +596,16 @@ module ContextDev
                   ContextDev::Models::WebScrapeResponse::Images::Data::OrHash
                 ]
               ),
-            requested: T::Boolean
+            requested: T::Boolean,
+            success: T.nilable(T::Boolean)
           ).returns(T.attached_class)
         end
-        def self.new(data:, requested:)
+        def self.new(
+          data:,
+          requested:,
+          # True when retrieved, false when retrieval failed, and null when not requested.
+          success:
+        )
         end
 
         sig do
@@ -561,7 +615,8 @@ module ContextDev
                 T.nilable(
                   T::Array[ContextDev::Models::WebScrapeResponse::Images::Data]
                 ),
-              requested: T::Boolean
+              requested: T::Boolean,
+              success: T.nilable(T::Boolean)
             }
           )
         end
@@ -744,21 +799,32 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
+        # True when retrieved, false when retrieval failed, and null when not requested.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_accessor :success
+
         # Page data extracted using your schema.
         sig do
           params(
             data: T.nilable(T::Hash[Symbol, T.anything]),
-            requested: T::Boolean
+            requested: T::Boolean,
+            success: T.nilable(T::Boolean)
           ).returns(T.attached_class)
         end
-        def self.new(data:, requested:)
+        def self.new(
+          data:,
+          requested:,
+          # True when retrieved, false when retrieval failed, and null when not requested.
+          success:
+        )
         end
 
         sig do
           override.returns(
             {
               data: T.nilable(T::Hash[Symbol, T.anything]),
-              requested: T::Boolean
+              requested: T::Boolean,
+              success: T.nilable(T::Boolean)
             }
           )
         end
@@ -781,17 +847,34 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
+        # True when retrieved, false when retrieval failed, and null when not requested.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_accessor :success
+
         # Markdown after content filters.
         sig do
-          params(data: T.nilable(String), requested: T::Boolean).returns(
-            T.attached_class
-          )
+          params(
+            data: T.nilable(String),
+            requested: T::Boolean,
+            success: T.nilable(T::Boolean)
+          ).returns(T.attached_class)
         end
-        def self.new(data:, requested:)
+        def self.new(
+          data:,
+          requested:,
+          # True when retrieved, false when retrieval failed, and null when not requested.
+          success:
+        )
         end
 
         sig do
-          override.returns({ data: T.nilable(String), requested: T::Boolean })
+          override.returns(
+            {
+              data: T.nilable(String),
+              requested: T::Boolean,
+              success: T.nilable(T::Boolean)
+            }
+          )
         end
         def to_hash
         end
@@ -1315,21 +1398,32 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
+        # True when retrieved, false when retrieval failed, and null when not requested.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_accessor :success
+
         # Fields produced by parseParams.rules, after shared content filters.
         sig do
           params(
             data: T.nilable(T::Hash[Symbol, T.anything]),
-            requested: T::Boolean
+            requested: T::Boolean,
+            success: T.nilable(T::Boolean)
           ).returns(T.attached_class)
         end
-        def self.new(data:, requested:)
+        def self.new(
+          data:,
+          requested:,
+          # True when retrieved, false when retrieval failed, and null when not requested.
+          success:
+        )
         end
 
         sig do
           override.returns(
             {
               data: T.nilable(T::Hash[Symbol, T.anything]),
-              requested: T::Boolean
+              requested: T::Boolean,
+              success: T.nilable(T::Boolean)
             }
           )
         end
@@ -1366,6 +1460,10 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
+        # True when retrieved, false when retrieval failed, and null when not requested.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_accessor :success
+
         # Product details found on the page.
         sig do
           params(
@@ -1373,10 +1471,16 @@ module ContextDev
               T.nilable(
                 ContextDev::Models::WebScrapeResponse::Product::Data::OrHash
               ),
-            requested: T::Boolean
+            requested: T::Boolean,
+            success: T.nilable(T::Boolean)
           ).returns(T.attached_class)
         end
-        def self.new(data:, requested:)
+        def self.new(
+          data:,
+          requested:,
+          # True when retrieved, false when retrieval failed, and null when not requested.
+          success:
+        )
         end
 
         sig do
@@ -1384,7 +1488,8 @@ module ContextDev
             {
               data:
                 T.nilable(ContextDev::Models::WebScrapeResponse::Product::Data),
-              requested: T::Boolean
+              requested: T::Boolean,
+              success: T.nilable(T::Boolean)
             }
           )
         end
@@ -1775,26 +1880,44 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
+        # True when retrieved, false when retrieval failed, and null when not requested.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_accessor :success
+
         # An image data URL. Use directly as an image src.
         sig do
-          params(data: T.nilable(String), requested: T::Boolean).returns(
-            T.attached_class
-          )
+          params(
+            data: T.nilable(String),
+            requested: T::Boolean,
+            success: T.nilable(T::Boolean)
+          ).returns(T.attached_class)
         end
-        def self.new(data:, requested:)
+        def self.new(
+          data:,
+          requested:,
+          # True when retrieved, false when retrieval failed, and null when not requested.
+          success:
+        )
         end
 
         sig do
-          override.returns({ data: T.nilable(String), requested: T::Boolean })
+          override.returns(
+            {
+              data: T.nilable(String),
+              requested: T::Boolean,
+              success: T.nilable(T::Boolean)
+            }
+          )
         end
         def to_hash
         end
       end
 
-      # Present when return-partial captures a page that is still loading, returns
-      # images before image processing finishes, or cuts product AI extraction short.
-      # Also present if the optional product AI fallback fails. Partial responses are
-      # not cached.
+      # Present when a requested output fails, capture returns a page that is still
+      # loading, images return before processing finishes, or the optional product AI
+      # fallback fails or is cut short. Check each output's success field for its
+      # result. Valid captured pieces may be cached independently; failed retrievals and
+      # incomplete captures are not cached.
       module IsPartial
         extend ContextDev::Internal::Type::Enum
 
