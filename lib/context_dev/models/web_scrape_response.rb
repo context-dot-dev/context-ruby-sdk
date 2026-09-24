@@ -89,10 +89,11 @@ module ContextDev
       required :url, String
 
       # @!attribute is_partial
-      #   Present when return-partial captures a page that is still loading, returns
-      #   images before image processing finishes, or cuts product AI extraction short.
-      #   Also present if the optional product AI fallback fails. Partial responses are
-      #   not cached.
+      #   Present when a requested output fails, capture returns a page that is still
+      #   loading, images return before processing finishes, or the optional product AI
+      #   fallback fails or is cut short. Check each output's success field for its
+      #   result. Valid captured pieces may be cached independently; failed retrievals and
+      #   incomplete captures are not cached.
       #
       #   @return [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial, nil]
       optional :is_partial, enum: -> { ContextDev::Models::WebScrapeResponse::IsPartial }, api_name: :isPartial
@@ -133,7 +134,7 @@ module ContextDev
       #
       #   @param url [String] Final URL after redirects and browser actions.
       #
-      #   @param is_partial [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial] Present when return-partial captures a page that is still loading, returns image
+      #   @param is_partial [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial] Present when a requested output fails, capture returns a page that is still load
       #
       #   @param key_metadata [ContextDev::Models::WebScrapeResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
 
@@ -149,12 +150,21 @@ module ContextDev
         #   @return [Boolean]
         required :requested, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(data:, requested:)
+        # @!attribute success
+        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #
+        #   @return [Boolean, nil]
+        required :success, ContextDev::Internal::Type::Boolean, nil?: true
+
+        # @!method initialize(data:, requested:, success:)
         #   Original HTTP response body. Waiting, actions, and content filters never change
         #   it.
         #
         #   @param data [ContextDev::Models::WebScrapeResponse::Bytes::Data, nil]
+        #
         #   @param requested [Boolean]
+        #
+        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
 
         # @see ContextDev::Models::WebScrapeResponse::Bytes#data
         class Data < ContextDev::Internal::Type::BaseModel
@@ -235,13 +245,22 @@ module ContextDev
         #   @return [Boolean]
         required :requested, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(data:, requested:)
+        # @!attribute success
+        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #
+        #   @return [Boolean, nil]
+        required :success, ContextDev::Internal::Type::Boolean, nil?: true
+
+        # @!method initialize(data:, requested:, success:)
         #   Relevant passages for your question or topic, in page order. A heading in square
         #   brackets is included when needed to interpret a passage. Empty when the page has
         #   no text.
         #
         #   @param data [Array<String>, nil]
+        #
         #   @param requested [Boolean]
+        #
+        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#html
@@ -256,11 +275,20 @@ module ContextDev
         #   @return [Boolean]
         required :requested, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(data:, requested:)
+        # @!attribute success
+        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #
+        #   @return [Boolean, nil]
+        required :success, ContextDev::Internal::Type::Boolean, nil?: true
+
+        # @!method initialize(data:, requested:, success:)
         #   Rendered HTML after content filters.
         #
         #   @param data [String, nil]
+        #
         #   @param requested [Boolean]
+        #
+        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#images
@@ -277,11 +305,20 @@ module ContextDev
         #   @return [Boolean]
         required :requested, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(data:, requested:)
+        # @!attribute success
+        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #
+        #   @return [Boolean, nil]
+        required :success, ContextDev::Internal::Type::Boolean, nil?: true
+
+        # @!method initialize(data:, requested:, success:)
         #   Images after content filters. Empty when none are found.
         #
         #   @param data [Array<ContextDev::Models::WebScrapeResponse::Images::Data>, nil]
+        #
         #   @param requested [Boolean]
+        #
+        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
 
         class Data < ContextDev::Internal::Type::BaseModel
           # @!attribute alt
@@ -365,11 +402,20 @@ module ContextDev
         #   @return [Boolean]
         required :requested, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(data:, requested:)
+        # @!attribute success
+        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #
+        #   @return [Boolean, nil]
+        required :success, ContextDev::Internal::Type::Boolean, nil?: true
+
+        # @!method initialize(data:, requested:, success:)
         #   Page data extracted using your schema.
         #
         #   @param data [Hash{Symbol=>Object}, nil]
+        #
         #   @param requested [Boolean]
+        #
+        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#markdown
@@ -384,11 +430,20 @@ module ContextDev
         #   @return [Boolean]
         required :requested, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(data:, requested:)
+        # @!attribute success
+        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #
+        #   @return [Boolean, nil]
+        required :success, ContextDev::Internal::Type::Boolean, nil?: true
+
+        # @!method initialize(data:, requested:, success:)
         #   Markdown after content filters.
         #
         #   @param data [String, nil]
+        #
         #   @param requested [Boolean]
+        #
+        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#metadata
@@ -662,11 +717,20 @@ module ContextDev
         #   @return [Boolean]
         required :requested, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(data:, requested:)
+        # @!attribute success
+        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #
+        #   @return [Boolean, nil]
+        required :success, ContextDev::Internal::Type::Boolean, nil?: true
+
+        # @!method initialize(data:, requested:, success:)
         #   Fields produced by parseParams.rules, after shared content filters.
         #
         #   @param data [Hash{Symbol=>Object}, nil]
+        #
         #   @param requested [Boolean]
+        #
+        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#product
@@ -681,11 +745,20 @@ module ContextDev
         #   @return [Boolean]
         required :requested, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(data:, requested:)
+        # @!attribute success
+        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #
+        #   @return [Boolean, nil]
+        required :success, ContextDev::Internal::Type::Boolean, nil?: true
+
+        # @!method initialize(data:, requested:, success:)
         #   Product details found on the page.
         #
         #   @param data [ContextDev::Models::WebScrapeResponse::Product::Data, nil]
+        #
         #   @param requested [Boolean]
+        #
+        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
 
         # @see ContextDev::Models::WebScrapeResponse::Product#data
         class Data < ContextDev::Internal::Type::BaseModel
@@ -920,17 +993,27 @@ module ContextDev
         #   @return [Boolean]
         required :requested, ContextDev::Internal::Type::Boolean
 
-        # @!method initialize(data:, requested:)
+        # @!attribute success
+        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #
+        #   @return [Boolean, nil]
+        required :success, ContextDev::Internal::Type::Boolean, nil?: true
+
+        # @!method initialize(data:, requested:, success:)
         #   An image data URL. Use directly as an image src.
         #
         #   @param data [String, nil]
+        #
         #   @param requested [Boolean]
+        #
+        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
       end
 
-      # Present when return-partial captures a page that is still loading, returns
-      # images before image processing finishes, or cuts product AI extraction short.
-      # Also present if the optional product AI fallback fails. Partial responses are
-      # not cached.
+      # Present when a requested output fails, capture returns a page that is still
+      # loading, images return before processing finishes, or the optional product AI
+      # fallback fails or is cut short. Check each output's success field for its
+      # result. Valid captured pieces may be cached independently; failed retrievals and
+      # incomplete captures are not cached.
       #
       # @see ContextDev::Models::WebScrapeResponse#is_partial
       module IsPartial

@@ -97,7 +97,8 @@ module ContextDev
       type bytes =
         {
           data: ContextDev::Models::WebScrapeResponse::Bytes::Data?,
-          requested: bool
+          requested: bool,
+          success: bool?
         }
 
       class Bytes < ContextDev::Internal::Type::BaseModel
@@ -105,14 +106,18 @@ module ContextDev
 
         attr_accessor requested: bool
 
+        attr_accessor success: bool?
+
         def initialize: (
           data: ContextDev::Models::WebScrapeResponse::Bytes::Data?,
-          requested: bool
+          requested: bool,
+          success: bool?
         ) -> void
 
         def to_hash: -> {
           data: ContextDev::Models::WebScrapeResponse::Bytes::Data?,
-          requested: bool
+          requested: bool,
+          success: bool?
         }
 
         type data = { :base64 => String, content_type: String }
@@ -162,34 +167,48 @@ module ContextDev
         end
       end
 
-      type highlights = { data: ::Array[String]?, requested: bool }
+      type highlights =
+        { data: ::Array[String]?, requested: bool, success: bool? }
 
       class Highlights < ContextDev::Internal::Type::BaseModel
         attr_accessor data: ::Array[String]?
 
         attr_accessor requested: bool
 
-        def initialize: (data: ::Array[String]?, requested: bool) -> void
+        attr_accessor success: bool?
 
-        def to_hash: -> { data: ::Array[String]?, requested: bool }
+        def initialize: (
+          data: ::Array[String]?,
+          requested: bool,
+          success: bool?
+        ) -> void
+
+        def to_hash: -> {
+          data: ::Array[String]?,
+          requested: bool,
+          success: bool?
+        }
       end
 
-      type html = { data: String?, requested: bool }
+      type html = { data: String?, requested: bool, success: bool? }
 
       class HTML < ContextDev::Internal::Type::BaseModel
         attr_accessor data: String?
 
         attr_accessor requested: bool
 
-        def initialize: (data: String?, requested: bool) -> void
+        attr_accessor success: bool?
 
-        def to_hash: -> { data: String?, requested: bool }
+        def initialize: (data: String?, requested: bool, success: bool?) -> void
+
+        def to_hash: -> { data: String?, requested: bool, success: bool? }
       end
 
       type images =
         {
           data: ::Array[ContextDev::Models::WebScrapeResponse::Images::Data]?,
-          requested: bool
+          requested: bool,
+          success: bool?
         }
 
       class Images < ContextDev::Internal::Type::BaseModel
@@ -197,14 +216,18 @@ module ContextDev
 
         attr_accessor requested: bool
 
+        attr_accessor success: bool?
+
         def initialize: (
           data: ::Array[ContextDev::Models::WebScrapeResponse::Images::Data]?,
-          requested: bool
+          requested: bool,
+          success: bool?
         ) -> void
 
         def to_hash: -> {
           data: ::Array[ContextDev::Models::WebScrapeResponse::Images::Data]?,
-          requested: bool
+          requested: bool,
+          success: bool?
         }
 
         type data =
@@ -285,28 +308,41 @@ module ContextDev
         end
       end
 
-      type json = { data: ::Hash[Symbol, top]?, requested: bool }
+      type json =
+        { data: ::Hash[Symbol, top]?, requested: bool, success: bool? }
 
       class Json < ContextDev::Internal::Type::BaseModel
         attr_accessor data: ::Hash[Symbol, top]?
 
         attr_accessor requested: bool
 
-        def initialize: (data: ::Hash[Symbol, top]?, requested: bool) -> void
+        attr_accessor success: bool?
 
-        def to_hash: -> { data: ::Hash[Symbol, top]?, requested: bool }
+        def initialize: (
+          data: ::Hash[Symbol, top]?,
+          requested: bool,
+          success: bool?
+        ) -> void
+
+        def to_hash: -> {
+          data: ::Hash[Symbol, top]?,
+          requested: bool,
+          success: bool?
+        }
       end
 
-      type markdown = { data: String?, requested: bool }
+      type markdown = { data: String?, requested: bool, success: bool? }
 
       class Markdown < ContextDev::Internal::Type::BaseModel
         attr_accessor data: String?
 
         attr_accessor requested: bool
 
-        def initialize: (data: String?, requested: bool) -> void
+        attr_accessor success: bool?
 
-        def to_hash: -> { data: String?, requested: bool }
+        def initialize: (data: String?, requested: bool, success: bool?) -> void
+
+        def to_hash: -> { data: String?, requested: bool, success: bool? }
       end
 
       type metadata =
@@ -534,22 +570,34 @@ module ContextDev
         end
       end
 
-      type parsed = { data: ::Hash[Symbol, top]?, requested: bool }
+      type parsed =
+        { data: ::Hash[Symbol, top]?, requested: bool, success: bool? }
 
       class Parsed < ContextDev::Internal::Type::BaseModel
         attr_accessor data: ::Hash[Symbol, top]?
 
         attr_accessor requested: bool
 
-        def initialize: (data: ::Hash[Symbol, top]?, requested: bool) -> void
+        attr_accessor success: bool?
 
-        def to_hash: -> { data: ::Hash[Symbol, top]?, requested: bool }
+        def initialize: (
+          data: ::Hash[Symbol, top]?,
+          requested: bool,
+          success: bool?
+        ) -> void
+
+        def to_hash: -> {
+          data: ::Hash[Symbol, top]?,
+          requested: bool,
+          success: bool?
+        }
       end
 
       type product =
         {
           data: ContextDev::Models::WebScrapeResponse::Product::Data?,
-          requested: bool
+          requested: bool,
+          success: bool?
         }
 
       class Product < ContextDev::Internal::Type::BaseModel
@@ -557,14 +605,18 @@ module ContextDev
 
         attr_accessor requested: bool
 
+        attr_accessor success: bool?
+
         def initialize: (
           data: ContextDev::Models::WebScrapeResponse::Product::Data?,
-          requested: bool
+          requested: bool,
+          success: bool?
         ) -> void
 
         def to_hash: -> {
           data: ContextDev::Models::WebScrapeResponse::Product::Data?,
-          requested: bool
+          requested: bool,
+          success: bool?
         }
 
         type data =
@@ -737,16 +789,18 @@ module ContextDev
         end
       end
 
-      type screenshot = { data: String?, requested: bool }
+      type screenshot = { data: String?, requested: bool, success: bool? }
 
       class Screenshot < ContextDev::Internal::Type::BaseModel
         attr_accessor data: String?
 
         attr_accessor requested: bool
 
-        def initialize: (data: String?, requested: bool) -> void
+        attr_accessor success: bool?
 
-        def to_hash: -> { data: String?, requested: bool }
+        def initialize: (data: String?, requested: bool, success: bool?) -> void
+
+        def to_hash: -> { data: String?, requested: bool, success: bool? }
       end
 
       type is_partial = true
