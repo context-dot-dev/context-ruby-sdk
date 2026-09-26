@@ -268,8 +268,9 @@ module ContextDev
         sig { params(bytes: T::Boolean).void }
         attr_writer :bytes
 
-        # Relevant passages for your question or topic, with headings included when needed
-        # for context. Adds 3 credits when passages are returned.
+        # Relevant Markdown excerpts for your question or topic, preserving code, lists,
+        # and tables, with headings included when needed for context. Adds 3 credits when
+        # passages are returned.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :highlights
 
@@ -344,8 +345,9 @@ module ContextDev
         def self.new(
           # The original HTTP response body.
           bytes: nil,
-          # Relevant passages for your question or topic, with headings included when needed
-          # for context. Adds 3 credits when passages are returned.
+          # Relevant Markdown excerpts for your question or topic, preserving code, lists,
+          # and tables, with headings included when needed for context. Adds 3 credits when
+          # passages are returned.
           highlights: nil,
           # Rendered HTML.
           html: nil,

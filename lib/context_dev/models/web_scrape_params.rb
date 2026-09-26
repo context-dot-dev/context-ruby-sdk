@@ -152,8 +152,9 @@ module ContextDev
         optional :bytes, ContextDev::Internal::Type::Boolean
 
         # @!attribute highlights
-        #   Relevant passages for your question or topic, with headings included when needed
-        #   for context. Adds 3 credits when passages are returned.
+        #   Relevant Markdown excerpts for your question or topic, preserving code, lists,
+        #   and tables, with headings included when needed for context. Adds 3 credits when
+        #   passages are returned.
         #
         #   @return [Boolean, nil]
         optional :highlights, ContextDev::Internal::Type::Boolean
@@ -210,7 +211,7 @@ module ContextDev
         #
         #   @param bytes [Boolean] The original HTTP response body.
         #
-        #   @param highlights [Boolean] Relevant passages for your question or topic, with headings included when needed
+        #   @param highlights [Boolean] Relevant Markdown excerpts for your question or topic, preserving code, lists, a
         #
         #   @param html [Boolean] Rendered HTML.
         #
