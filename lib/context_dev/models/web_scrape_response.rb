@@ -20,9 +20,9 @@ module ContextDev
       required :cache_metadata, -> { ContextDev::Models::WebScrapeResponse::CacheMetadata }
 
       # @!attribute highlights
-      #   Relevant passages for your question or topic, in page order. A heading in square
-      #   brackets is included when needed to interpret a passage. Empty when the page has
-      #   no text.
+      #   Relevant Markdown excerpts for your question or topic, in page order. Headings
+      #   in square brackets supply necessary context; ellipses mark omitted portions.
+      #   Empty when the page has no text.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Highlights]
       required :highlights, -> { ContextDev::Models::WebScrapeResponse::Highlights }
@@ -112,7 +112,7 @@ module ContextDev
       #
       #   @param cache_metadata [ContextDev::Models::WebScrapeResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
       #
-      #   @param highlights [ContextDev::Models::WebScrapeResponse::Highlights] Relevant passages for your question or topic, in page order. A heading in square
+      #   @param highlights [ContextDev::Models::WebScrapeResponse::Highlights] Relevant Markdown excerpts for your question or topic, in page order. Headings i
       #
       #   @param html [ContextDev::Models::WebScrapeResponse::HTML] Rendered HTML after content filters.
       #
@@ -252,9 +252,9 @@ module ContextDev
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
         # @!method initialize(data:, requested:, success:)
-        #   Relevant passages for your question or topic, in page order. A heading in square
-        #   brackets is included when needed to interpret a passage. Empty when the page has
-        #   no text.
+        #   Relevant Markdown excerpts for your question or topic, in page order. Headings
+        #   in square brackets supply necessary context; ellipses mark omitted portions.
+        #   Empty when the page has no text.
         #
         #   @param data [Array<String>, nil]
         #
