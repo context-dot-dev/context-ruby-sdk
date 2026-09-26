@@ -20,7 +20,9 @@ module ContextDev
       optional :cursor, String, nil?: true
 
       # @!attribute filter_by
-      #   Optional result filters.
+      #   Optional result filters. Use at most one of sourceDomain, sourceCountry,
+      #   articleLanguage, or articleType. A date range may accompany that category;
+      #   date.from must not exceed date.to.
       #
       #   @return [ContextDev::Models::NewsSearchParams::FilterBy, nil]
       optional :filter_by, -> { ContextDev::NewsSearchParams::FilterBy }, api_name: :filterBy
@@ -44,11 +46,14 @@ module ContextDev
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!method initialize(search_by:, cursor: nil, filter_by: nil, limit: nil, sort_by: nil, tags: nil, request_options: {})
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::NewsSearchParams} for more details.
+      #
       #   @param search_by [ContextDev::Models::NewsSearchParams::SearchBy] What to search for.
       #
       #   @param cursor [String, nil] Opaque next_cursor from the previous response, or null for the first page.
       #
-      #   @param filter_by [ContextDev::Models::NewsSearchParams::FilterBy] Optional result filters.
+      #   @param filter_by [ContextDev::Models::NewsSearchParams::FilterBy] Optional result filters. Use at most one of sourceDomain, sourceCountry, article
       #
       #   @param limit [Integer] Maximum results to return. Defaults to 10.
       #
@@ -314,7 +319,7 @@ module ContextDev
                  api_name: :articleType
 
         # @!attribute date
-        #   Published-at window in epoch milliseconds.
+        #   Published-at window in epoch milliseconds. from must be before or equal to to.
         #
         #   @return [ContextDev::Models::NewsSearchParams::FilterBy::Date, nil]
         optional :date, -> { ContextDev::NewsSearchParams::FilterBy::Date }
@@ -336,13 +341,15 @@ module ContextDev
         optional :source_domain, ContextDev::Internal::Type::ArrayOf[String], api_name: :sourceDomain
 
         # @!method initialize(article_language: nil, article_type: nil, date: nil, source_country: nil, source_domain: nil)
-        #   Optional result filters.
+        #   Optional result filters. Use at most one of sourceDomain, sourceCountry,
+        #   articleLanguage, or articleType. A date range may accompany that category;
+        #   date.from must not exceed date.to.
         #
         #   @param article_language [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::ArticleLanguage>] Article languages to include. Up to 3.
         #
         #   @param article_type [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::ArticleType>] Article types to include. Up to 3.
         #
-        #   @param date [ContextDev::Models::NewsSearchParams::FilterBy::Date] Published-at window in epoch milliseconds.
+        #   @param date [ContextDev::Models::NewsSearchParams::FilterBy::Date] Published-at window in epoch milliseconds. from must be before or equal to to.
         #
         #   @param source_country [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::SourceCountry>] Publisher countries to include, as lowercase ISO 3166-1 alpha-2 codes. Up to 3.
         #
@@ -396,7 +403,7 @@ module ContextDev
           optional :to, Integer
 
           # @!method initialize(from: nil, to: nil)
-          #   Published-at window in epoch milliseconds.
+          #   Published-at window in epoch milliseconds. from must be before or equal to to.
           #
           #   @param from [Integer] Inclusive start of the published-at window, in epoch milliseconds.
           #

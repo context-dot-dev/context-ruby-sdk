@@ -24,7 +24,9 @@ module ContextDev
       sig { returns(T.nilable(String)) }
       attr_accessor :cursor
 
-      # Optional result filters.
+      # Optional result filters. Use at most one of sourceDomain, sourceCountry,
+      # articleLanguage, or articleType. A date range may accompany that category;
+      # date.from must not exceed date.to.
       sig { returns(T.nilable(ContextDev::NewsSearchParams::FilterBy)) }
       attr_reader :filter_by
 
@@ -70,7 +72,9 @@ module ContextDev
         search_by:,
         # Opaque next_cursor from the previous response, or null for the first page.
         cursor: nil,
-        # Optional result filters.
+        # Optional result filters. Use at most one of sourceDomain, sourceCountry,
+        # articleLanguage, or articleType. A date range may accompany that category;
+        # date.from must not exceed date.to.
         filter_by: nil,
         # Maximum results to return. Defaults to 10.
         limit: nil,
@@ -812,7 +816,7 @@ module ContextDev
         end
         attr_writer :article_type
 
-        # Published-at window in epoch milliseconds.
+        # Published-at window in epoch milliseconds. from must be before or equal to to.
         sig { returns(T.nilable(ContextDev::NewsSearchParams::FilterBy::Date)) }
         attr_reader :date
 
@@ -852,7 +856,9 @@ module ContextDev
         sig { params(source_domain: T::Array[String]).void }
         attr_writer :source_domain
 
-        # Optional result filters.
+        # Optional result filters. Use at most one of sourceDomain, sourceCountry,
+        # articleLanguage, or articleType. A date range may accompany that category;
+        # date.from must not exceed date.to.
         sig do
           params(
             article_language:
@@ -876,7 +882,7 @@ module ContextDev
           article_language: nil,
           # Article types to include. Up to 3.
           article_type: nil,
-          # Published-at window in epoch milliseconds.
+          # Published-at window in epoch milliseconds. from must be before or equal to to.
           date: nil,
           # Publisher countries to include, as lowercase ISO 3166-1 alpha-2 codes. Up to 3.
           source_country: nil,
@@ -1061,7 +1067,7 @@ module ContextDev
           sig { params(to: Integer).void }
           attr_writer :to
 
-          # Published-at window in epoch milliseconds.
+          # Published-at window in epoch milliseconds. from must be before or equal to to.
           sig { params(from: Integer, to: Integer).returns(T.attached_class) }
           def self.new(
             # Inclusive start of the published-at window, in epoch milliseconds.
