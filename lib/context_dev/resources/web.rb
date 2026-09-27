@@ -171,8 +171,8 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebScrapeParams} for more details.
       #
-      # Returns the outputs you enable in `formats` from one visit to a URL. Each output
-      # reports its own `success`, so a failed output does not fail the request.
+      # Scrape anything from a URL on the internet. Returns the outputs you enable in
+      # formats. Handles PDFs, DOCX, PPT, XLSX, and 40 other file formats.
       #
       # @overload scrape(formats:, url:, highlights_params: nil, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, product_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
