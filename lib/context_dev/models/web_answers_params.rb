@@ -8,7 +8,8 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute task
-      #   Research task. Name a domain to have it read before searching.
+      #   Research task. The agent selects company/profile lookups, web searches, or page
+      #   reads. Include domains or URLs to focus the research.
       #
       #   @return [String]
       required :task, String
@@ -21,7 +22,8 @@ module ContextDev
       optional :json_format, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
 
       # @!attribute mode
-      #   `fast` for short tasks; `ultra` for deeper research (default).
+      #   `fast` prioritizes speed, with extra verification for people and companies;
+      #   `ultra` supports deeper research (default).
       #
       #   @return [Symbol, ContextDev::Models::WebAnswersParams::Mode, nil]
       optional :mode, enum: -> { ContextDev::WebAnswersParams::Mode }
@@ -49,11 +51,11 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebAnswersParams} for more details.
       #
-      #   @param task [String] Research task. Name a domain to have it read before searching.
+      #   @param task [String] Research task. The agent selects company/profile lookups, web searches, or page
       #
       #   @param json_format [Hash{Symbol=>Object}] Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000 ch
       #
-      #   @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] `fast` for short tasks; `ultra` for deeper research (default).
+      #   @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] `fast` prioritizes speed, with extra verification for people and companies; `ult
       #
       #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
@@ -63,7 +65,8 @@ module ContextDev
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # `fast` for short tasks; `ultra` for deeper research (default).
+      # `fast` prioritizes speed, with extra verification for people and companies;
+      # `ultra` supports deeper research (default).
       module Mode
         extend ContextDev::Internal::Type::Enum
 

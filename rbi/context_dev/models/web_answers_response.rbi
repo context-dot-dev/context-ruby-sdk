@@ -15,8 +15,9 @@ module ContextDev
       sig { returns(T::Hash[Symbol, T.anything]) }
       attr_accessor :json_content
 
-      # URLs that supplied search results or readable page content, in first-seen order.
-      # Unreadable pages are excluded.
+      # Public evidence URLs from searches, pages, or company/profile records, in
+      # first-seen order. A listed URL may identify a record without its page being
+      # read.
       sig { returns(T::Array[String]) }
       attr_accessor :sources
 
@@ -54,8 +55,9 @@ module ContextDev
       def self.new(
         # The answer, in the shape requested by json_format.
         json_content:,
-        # URLs that supplied search results or readable page content, in first-seen order.
-        # Unreadable pages are excluded.
+        # Public evidence URLs from searches, pages, or company/profile records, in
+        # first-seen order. A listed URL may identify a record without its page being
+        # read.
         sources:,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
