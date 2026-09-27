@@ -394,7 +394,19 @@ module ContextDev
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
-        # @!method initialize(data:, requested:, success:)
+        # @!attribute error_code
+        #   Cause of a failed JSON extraction, when available.
+        #
+        #   @return [String, nil]
+        optional :error_code, String
+
+        # @!attribute message
+        #   Explanation of the JSON extraction failure and possible next steps.
+        #
+        #   @return [String, nil]
+        optional :message, String
+
+        # @!method initialize(data:, requested:, success:, error_code: nil, message: nil)
         #   Object matching `jsonParams.schema`.
         #
         #   @param data [Hash{Symbol=>Object}, nil]
@@ -402,6 +414,10 @@ module ContextDev
         #   @param requested [Boolean]
         #
         #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
+        #
+        #   @param error_code [String] Cause of a failed JSON extraction, when available.
+        #
+        #   @param message [String] Explanation of the JSON extraction failure and possible next steps.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#markdown

@@ -785,19 +785,39 @@ module ContextDev
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
+        # Cause of a failed JSON extraction, when available.
+        sig { returns(T.nilable(String)) }
+        attr_reader :error_code
+
+        sig { params(error_code: String).void }
+        attr_writer :error_code
+
+        # Explanation of the JSON extraction failure and possible next steps.
+        sig { returns(T.nilable(String)) }
+        attr_reader :message
+
+        sig { params(message: String).void }
+        attr_writer :message
+
         # Object matching `jsonParams.schema`.
         sig do
           params(
             data: T.nilable(T::Hash[Symbol, T.anything]),
             requested: T::Boolean,
-            success: T.nilable(T::Boolean)
+            success: T.nilable(T::Boolean),
+            error_code: String,
+            message: String
           ).returns(T.attached_class)
         end
         def self.new(
           data:,
           requested:,
           # `true` if returned, `false` if it failed, `null` if not requested.
-          success:
+          success:,
+          # Cause of a failed JSON extraction, when available.
+          error_code: nil,
+          # Explanation of the JSON extraction failure and possible next steps.
+          message: nil
         )
         end
 
@@ -806,7 +826,9 @@ module ContextDev
             {
               data: T.nilable(T::Hash[Symbol, T.anything]),
               requested: T::Boolean,
-              success: T.nilable(T::Boolean)
+              success: T.nilable(T::Boolean),
+              error_code: String,
+              message: String
             }
           )
         end
