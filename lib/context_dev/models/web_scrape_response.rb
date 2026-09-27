@@ -89,11 +89,11 @@ module ContextDev
       required :url, String
 
       # @!attribute is_partial
-      #   Present when a requested output fails, capture returns a page that is still
-      #   loading, images return before processing finishes, or the optional product AI
-      #   fallback fails or is cut short. Check each output's success field for its
-      #   result. Valid captured pieces may be cached independently; failed retrievals and
-      #   incomplete captures are not cached.
+      #   Present when at least one requested output succeeds while another fails, or when
+      #   successful outputs come from a page that is still loading or images returned
+      #   before processing finished. Absent when every requested output fails. Check each
+      #   output's success field for its result. Valid captured pieces may be cached
+      #   independently; failed retrievals and incomplete captures are not cached.
       #
       #   @return [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial, nil]
       optional :is_partial, enum: -> { ContextDev::Models::WebScrapeResponse::IsPartial }, api_name: :isPartial
@@ -134,7 +134,7 @@ module ContextDev
       #
       #   @param url [String] Final URL after redirects and browser actions.
       #
-      #   @param is_partial [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial] Present when a requested output fails, capture returns a page that is still load
+      #   @param is_partial [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial] Present when at least one requested output succeeds while another fails, or when
       #
       #   @param key_metadata [ContextDev::Models::WebScrapeResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
 
@@ -1009,11 +1009,11 @@ module ContextDev
         #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
       end
 
-      # Present when a requested output fails, capture returns a page that is still
-      # loading, images return before processing finishes, or the optional product AI
-      # fallback fails or is cut short. Check each output's success field for its
-      # result. Valid captured pieces may be cached independently; failed retrievals and
-      # incomplete captures are not cached.
+      # Present when at least one requested output succeeds while another fails, or when
+      # successful outputs come from a page that is still loading or images returned
+      # before processing finished. Absent when every requested output fails. Check each
+      # output's success field for its result. Valid captured pieces may be cached
+      # independently; failed retrievals and incomplete captures are not cached.
       #
       # @see ContextDev::Models::WebScrapeResponse#is_partial
       module IsPartial

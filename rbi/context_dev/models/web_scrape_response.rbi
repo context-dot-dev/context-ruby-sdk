@@ -141,11 +141,11 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
-      # Present when a requested output fails, capture returns a page that is still
-      # loading, images return before processing finishes, or the optional product AI
-      # fallback fails or is cut short. Check each output's success field for its
-      # result. Valid captured pieces may be cached independently; failed retrievals and
-      # incomplete captures are not cached.
+      # Present when at least one requested output succeeds while another fails, or when
+      # successful outputs come from a page that is still loading or images returned
+      # before processing finished. Absent when every requested output fails. Check each
+      # output's success field for its result. Valid captured pieces may be cached
+      # independently; failed retrievals and incomplete captures are not cached.
       sig do
         returns(
           T.nilable(
@@ -232,11 +232,11 @@ module ContextDev
         screenshot:,
         # Final URL after redirects and browser actions.
         url:,
-        # Present when a requested output fails, capture returns a page that is still
-        # loading, images return before processing finishes, or the optional product AI
-        # fallback fails or is cut short. Check each output's success field for its
-        # result. Valid captured pieces may be cached independently; failed retrievals and
-        # incomplete captures are not cached.
+        # Present when at least one requested output succeeds while another fails, or when
+        # successful outputs come from a page that is still loading or images returned
+        # before processing finished. Absent when every requested output fails. Check each
+        # output's success field for its result. Valid captured pieces may be cached
+        # independently; failed retrievals and incomplete captures are not cached.
         is_partial: nil,
         # Credit usage, included whenever a valid API key is provided.
         key_metadata: nil
@@ -1913,11 +1913,11 @@ module ContextDev
         end
       end
 
-      # Present when a requested output fails, capture returns a page that is still
-      # loading, images return before processing finishes, or the optional product AI
-      # fallback fails or is cut short. Check each output's success field for its
-      # result. Valid captured pieces may be cached independently; failed retrievals and
-      # incomplete captures are not cached.
+      # Present when at least one requested output succeeds while another fails, or when
+      # successful outputs come from a page that is still loading or images returned
+      # before processing finished. Absent when every requested output fails. Check each
+      # output's success field for its result. Valid captured pieces may be cached
+      # independently; failed retrievals and incomplete captures are not cached.
       module IsPartial
         extend ContextDev::Internal::Type::Enum
 
