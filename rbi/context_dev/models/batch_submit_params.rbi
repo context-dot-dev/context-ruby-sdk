@@ -385,7 +385,8 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :include_selectors
 
-                # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                # year (31536000000 ms). `0` fetches fresh.
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
@@ -470,7 +471,8 @@ module ContextDev
                   # Keep only elements matching these CSS selectors. Filtered pages ignore
                   # `maxAgeMs`.
                   include_selectors: nil,
-                  # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                  # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                  # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
                   # PDF parsing controls. Use start/end to limit text extraction and embedded-image
                   # detection/OCR to an inclusive 1-based page range.
@@ -1807,7 +1809,8 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :include_selectors
 
-                # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                # year (31536000000 ms). `0` fetches fresh.
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
@@ -1875,7 +1878,8 @@ module ContextDev
                   # Keep only elements matching these CSS selectors. Filtered pages ignore
                   # `maxAgeMs`.
                   include_selectors: nil,
-                  # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                  # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                  # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
                   # PDF parsing controls. Use start/end to limit text extraction and embedded-image
                   # detection/OCR to an inclusive 1-based page range.
@@ -3533,7 +3537,8 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :include_selectors
 
-                # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                # year (31536000000 ms). `0` fetches fresh.
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
@@ -3618,7 +3623,8 @@ module ContextDev
                   # Keep only elements matching these CSS selectors. Filtered pages ignore
                   # `maxAgeMs`.
                   include_selectors: nil,
-                  # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                  # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                  # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
                   # PDF parsing controls. Use start/end to limit text extraction and embedded-image
                   # detection/OCR to an inclusive 1-based page range.
@@ -5179,7 +5185,8 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :include_selectors
 
-                # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                # year (31536000000 ms). `0` fetches fresh.
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
@@ -5247,7 +5254,8 @@ module ContextDev
                   # Keep only elements matching these CSS selectors. Filtered pages ignore
                   # `maxAgeMs`.
                   include_selectors: nil,
-                  # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                  # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                  # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
                   # PDF parsing controls. Use start/end to limit text extraction and embedded-image
                   # detection/OCR to an inclusive 1-based page range.

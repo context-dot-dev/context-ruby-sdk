@@ -186,7 +186,7 @@ module ContextDev
         # Markdown options. Requires `formats.markdown`.
         markdown_params: nil,
         # Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
-        # 1 day.
+        # 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
         max_age_ms: nil,
         # Required when formats.parse is true.
         parse_params: nil,
