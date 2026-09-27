@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.21.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.20.0...v2.21.0) (2026-09-27)
+
+
+### Features
+
+* **feedback:** add agent feedback endpoint ([#1322](https://github.com/context-dot-dev/context-ruby-sdk/issues/1322)) ([f3a9dce](https://github.com/context-dot-dev/context-ruby-sdk/commit/f3a9dce10e0f8a20977d0133e387fe20a9e11d18))
+* **highlights:** preserve Markdown structure in scrape excerpts ([#1236](https://github.com/context-dot-dev/context-ruby-sdk/issues/1236)) ([d3c383a](https://github.com/context-dot-dev/context-ruby-sdk/commit/d3c383a7ccfcea00a01c9c85955d62e871227ceb))
+* **scrape:** enable highlights with zero data retention ([#1246](https://github.com/context-dot-dev/context-ruby-sdk/issues/1246)) ([487a289](https://github.com/context-dot-dev/context-ruby-sdk/commit/487a2897d19d15d5164d0e69c2700f511b223216))
+
+
+### Bug Fixes
+
+* **openapi:** document exclusive news filters ([#1265](https://github.com/context-dot-dev/context-ruby-sdk/issues/1265)) ([5b7c79d](https://github.com/context-dot-dev/context-ruby-sdk/commit/5b7c79de83fd209760bfb5738670229024480206))
+* **scrape:** only flag partial success when a requested format succeeds ([#1325](https://github.com/context-dot-dev/context-ruby-sdk/issues/1325)) ([1120d93](https://github.com/context-dot-dev/context-ruby-sdk/commit/1120d9344525c6fc1ffb60403df75790ea6bbf1c))
+* **scrape:** preserve successful formats when other outputs fail ([#1263](https://github.com/context-dot-dev/context-ruby-sdk/issues/1263)) ([e2ccfa7](https://github.com/context-dot-dev/context-ruby-sdk/commit/e2ccfa7ea613221d3c6ad755aec93e01c58ca402))
+* **scrape:** retain highlight headings only when needed ([#1245](https://github.com/context-dot-dev/context-ruby-sdk/issues/1245)) ([492a305](https://github.com/context-dot-dev/context-ruby-sdk/commit/492a3058c77fd4d2edad2be9007c010e1745cfc9))
+
 ## [2.20.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.19.0...v2.20.0) (2026-09-23)
 
 
