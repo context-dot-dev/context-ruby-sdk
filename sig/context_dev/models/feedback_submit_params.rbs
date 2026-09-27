@@ -1,0 +1,73 @@
+module ContextDev
+  module Models
+    type feedback_submit_params =
+      {
+        category: ContextDev::Models::FeedbackSubmitParams::category,
+        note: String,
+        request_id: String,
+        tags: ::Array[String],
+        url: String
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class FeedbackSubmitParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor category: ContextDev::Models::FeedbackSubmitParams::category
+
+      attr_accessor note: String
+
+      attr_reader request_id: String?
+
+      def request_id=: (String) -> String
+
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
+      attr_reader url: String?
+
+      def url=: (String) -> String
+
+      def initialize: (
+        category: ContextDev::Models::FeedbackSubmitParams::category,
+        note: String,
+        ?request_id: String,
+        ?tags: ::Array[String],
+        ?url: String,
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        category: ContextDev::Models::FeedbackSubmitParams::category,
+        note: String,
+        request_id: String,
+        tags: ::Array[String],
+        url: String,
+        request_options: ContextDev::RequestOptions
+      }
+
+      type category =
+        :bug
+        | :docs_mismatch
+        | :friction
+        | :feature_gap
+        | :quality_degradation
+        | :other
+
+      module Category
+        extend ContextDev::Internal::Type::Enum
+
+        BUG: :bug
+        DOCS_MISMATCH: :docs_mismatch
+        FRICTION: :friction
+        FEATURE_GAP: :feature_gap
+        QUALITY_DEGRADATION: :quality_degradation
+        OTHER: :other
+
+        def self?.values: -> ::Array[ContextDev::Models::FeedbackSubmitParams::category]
+      end
+    end
+  end
+end

@@ -1,0 +1,16 @@
+module ContextDev
+  module Resources
+    class Feedback
+      def submit: (
+        category: ContextDev::Models::FeedbackSubmitParams::category,
+        note: String,
+        ?request_id: String,
+        ?tags: ::Array[String],
+        ?url: String,
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::FeedbackSubmitResponse
+
+      def initialize: (client: ContextDev::Client) -> void
+    end
+  end
+end
