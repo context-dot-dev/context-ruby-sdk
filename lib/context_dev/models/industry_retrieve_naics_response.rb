@@ -5,8 +5,8 @@ module ContextDev
     # @see ContextDev::Resources::Industry#retrieve_naics
     class IndustryRetrieveNaicsResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -25,7 +25,7 @@ module ContextDev
       optional :domain, String
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata }
@@ -38,7 +38,7 @@ module ContextDev
       optional :partial, ContextDev::Internal::Type::Boolean
 
       # @!attribute status
-      #   Status of the response, e.g., 'ok'
+      #   Always `ok` on success.
       #
       #   @return [String, nil]
       optional :status, String
@@ -53,17 +53,17 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::IndustryRetrieveNaicsResponse} for more details.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param codes [Array<ContextDev::Models::IndustryRetrieveNaicsResponse::Code>] Array of NAICS codes and titles.
       #
       #   @param domain [String] Domain found for the brand
       #
-      #   @param key_metadata [ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::IndustryRetrieveNaicsResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param partial [Boolean] True when the timeout ended processing and this response contains only usable re
       #
-      #   @param status [String] Status of the response, e.g., 'ok'
+      #   @param status [String] Always `ok` on success.
       #
       #   @param type [String] Industry classification type, for naics api it will be `naics`
 
@@ -111,7 +111,7 @@ module ContextDev
       # @see ContextDev::Models::IndustryRetrieveNaicsResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -123,9 +123,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

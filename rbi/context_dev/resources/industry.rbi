@@ -3,7 +3,7 @@
 module ContextDev
   module Resources
     class Industry
-      # Classify any brand into 2022 NAICS industry codes from its domain or name.
+      # Classify a company into NAICS industry codes.
       sig do
         params(
           input: String,
@@ -26,26 +26,18 @@ module ContextDev
         max_results: nil,
         # Minimum number of NAICS codes to return. Must be at least 1. Defaults to 1.
         min_results: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
       end
 
-      # Classify any brand into Standard Industrial Classification (SIC) codes from its
-      # domain or name. Choose between the original SIC system (`original_sic`) or the
-      # latest SIC list maintained by the SEC (`latest_sec`).
+      # Classify a company into SIC industry codes.
       sig do
         params(
           input: String,
@@ -68,22 +60,14 @@ module ContextDev
         max_results: nil,
         # Minimum number of SIC codes to return. Must be at least 1. Defaults to 1.
         min_results: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Which SIC dataset to classify against. `original_sic` uses the 1987 Standard
-        # Industrial Classification system; `latest_sec` uses the current SIC list as
-        # published by the SEC. Defaults to `original_sic`.
+        # SIC dataset: `original_sic` (1987) or `latest_sec` (current SEC list).
         type: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )

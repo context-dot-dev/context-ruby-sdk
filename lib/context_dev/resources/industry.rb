@@ -6,7 +6,7 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::IndustryRetrieveNaicsParams} for more details.
       #
-      # Classify any brand into 2022 NAICS industry codes from its domain or name.
+      # Classify a company into NAICS industry codes.
       #
       # @overload retrieve_naics(input:, max_results: nil, min_results: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
@@ -16,11 +16,11 @@ module ContextDev
       #
       # @param min_results [Integer] Minimum number of NAICS codes to return. Must be at least 1. Defaults to 1.
       #
-      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
+      # @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
-      # @param timeout_opts [ContextDev::Models::IndustryRetrieveNaicsParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      # @param timeout_opts [ContextDev::Models::IndustryRetrieveNaicsParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
-      # @param zdr [Symbol, ContextDev::Models::IndustryRetrieveNaicsParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      # @param zdr [Symbol, ContextDev::Models::IndustryRetrieveNaicsParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -46,9 +46,7 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::IndustryRetrieveSicParams} for more details.
       #
-      # Classify any brand into Standard Industrial Classification (SIC) codes from its
-      # domain or name. Choose between the original SIC system (`original_sic`) or the
-      # latest SIC list maintained by the SEC (`latest_sec`).
+      # Classify a company into SIC industry codes.
       #
       # @overload retrieve_sic(input:, max_results: nil, min_results: nil, tags: nil, timeout_opts: nil, type: nil, zdr: nil, request_options: {})
       #
@@ -58,13 +56,13 @@ module ContextDev
       #
       # @param min_results [Integer] Minimum number of SIC codes to return. Must be at least 1. Defaults to 1.
       #
-      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
+      # @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
-      # @param timeout_opts [ContextDev::Models::IndustryRetrieveSicParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      # @param timeout_opts [ContextDev::Models::IndustryRetrieveSicParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
-      # @param type [Symbol, ContextDev::Models::IndustryRetrieveSicParams::Type] Which SIC dataset to classify against. `original_sic` uses the 1987 Standard Ind
+      # @param type [Symbol, ContextDev::Models::IndustryRetrieveSicParams::Type] SIC dataset: `original_sic` (1987) or `latest_sec` (current SEC list).
       #
-      # @param zdr [Symbol, ContextDev::Models::IndustryRetrieveSicParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      # @param zdr [Symbol, ContextDev::Models::IndustryRetrieveSicParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

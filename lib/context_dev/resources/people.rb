@@ -6,30 +6,28 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::PersonEnrichParams} for more details.
       #
-      # Finds and normalizes the best available person candidate from additive identity
-      # clues, then assigns an identity match score from 0 to 100. Available on all paid
-      # plans. Successful requests cost 20 credits. Disposable and free email addresses
-      # (like gmail.com, yahoo.com) will throw a 422 error.
+      # Find a person from identity clues and return their profile with a match score.
+      # Requires a paid plan; free or disposable email addresses return 422.
       #
       # @overload enrich(company: nil, education: nil, email: nil, location: nil, name: nil, social_urls: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
-      # @param company [ContextDev::Models::PersonEnrichParams::Company]
+      # @param company [ContextDev::Models::PersonEnrichParams::Company] Company context to help identify the person. Provide a name or domain.
       #
-      # @param education [Array<ContextDev::Models::PersonEnrichParams::Education>]
+      # @param education [Array<ContextDev::Models::PersonEnrichParams::Education>] Education history to help distinguish people with similar names.
       #
-      # @param email [String]
+      # @param email [String] Email address of the person to find.
       #
-      # @param location [ContextDev::Models::PersonEnrichParams::Location]
+      # @param location [ContextDev::Models::PersonEnrichParams::Location] Location context to help identify the person. Provide a city, region, or country
       #
-      # @param name [ContextDev::Models::PersonEnrichParams::Name]
+      # @param name [ContextDev::Models::PersonEnrichParams::Name] Person name. Without an email or person-profile URL, provide both first and last
       #
-      # @param social_urls [Array<String>]
+      # @param social_urls [Array<String>] Public profile URLs for the person. A person-profile URL can identify the person
       #
-      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      # @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
-      # @param timeout_opts [ContextDev::Models::PersonEnrichParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      # @param timeout_opts [ContextDev::Models::PersonEnrichParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
-      # @param zdr [Symbol, ContextDev::Models::PersonEnrichParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      # @param zdr [Symbol, ContextDev::Models::PersonEnrichParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

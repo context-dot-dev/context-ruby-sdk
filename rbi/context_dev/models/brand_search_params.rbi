@@ -40,8 +40,7 @@ module ContextDev
       end
       attr_writer :query_by
 
-      # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-      # characters.
+      # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -76,8 +75,7 @@ module ContextDev
         # Fields to match the search term against, as a comma-separated list or repeated
         # parameter: 'name', 'domain', or both. Defaults to both.
         query_by: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
         # Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
         # typo tolerance).

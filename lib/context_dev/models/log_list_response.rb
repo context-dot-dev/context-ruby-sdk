@@ -29,14 +29,14 @@ module ContextDev
       required :page, Integer
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::LogListResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::LogListResponse::KeyMetadata }
@@ -53,9 +53,9 @@ module ContextDev
       #
       #   @param page [Integer] Current page number.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param key_metadata [ContextDev::Models::LogListResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::LogListResponse::KeyMetadata] Credits this request used and your remaining balance.
 
       class Data < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_used
@@ -83,7 +83,8 @@ module ContextDev
         required :latency_ms, Float
 
         # @!attribute method_
-        #   HTTP method.
+        #   HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement
+        #   entries.
         #
         #   @return [String]
         required :method_, String, api_name: :method
@@ -125,6 +126,9 @@ module ContextDev
         required :zdr, ContextDev::Internal::Type::Boolean
 
         # @!method initialize(credits_used:, error_code:, key_id:, latency_ms:, method_:, path:, request_id:, status_code:, tags:, timestamp:, zdr:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::LogListResponse::Data} for more details.
+        #
         #   @param credits_used [Integer] Credits charged for this request.
         #
         #   @param error_code [String, nil] The `error_code` from the response, or null on success.
@@ -133,7 +137,7 @@ module ContextDev
         #
         #   @param latency_ms [Float] Server-side processing time in milliseconds.
         #
-        #   @param method_ [String] HTTP method.
+        #   @param method_ [String] HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement entries
         #
         #   @param path [String] Endpoint path as called.
         #
@@ -151,7 +155,7 @@ module ContextDev
       # @see ContextDev::Models::LogListResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -163,9 +167,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

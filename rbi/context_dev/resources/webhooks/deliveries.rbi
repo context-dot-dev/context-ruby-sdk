@@ -3,9 +3,9 @@
 module ContextDev
   module Resources
     class Webhooks
-      # Inspect and retry webhook deliveries. These endpoints cost no credits.
+      # Inspect and retry batch and monitor webhook deliveries.
       class Deliveries
-        # Get a webhook delivery, including its status and latest attempt.
+        # Retrieve a webhook delivery’s status and original payload.
         sig do
           params(
             delivery_id: String,
@@ -16,14 +16,13 @@ module ContextDev
         def retrieve(
           # Delivery ID.
           delivery_id,
-          # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-          # characters.
+          # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
           tags: nil,
           request_options: {}
         )
         end
 
-        # List your batch or monitor webhook deliveries, newest first.
+        # List batch and monitor webhook deliveries from the last 30 days.
         sig do
           params(
             body:
@@ -37,7 +36,7 @@ module ContextDev
         def list(body:, request_options: {})
         end
 
-        # List delivery attempts, newest first.
+        # List a delivery’s attempts, newest first.
         sig do
           params(
             delivery_id: String,
@@ -54,14 +53,14 @@ module ContextDev
           cursor: nil,
           # Number of attempts to return.
           limit: nil,
-          # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-          # characters.
+          # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
           tags: nil,
           request_options: {}
         )
         end
 
-        # Retry a webhook delivery within seven days of creation.
+        # Resend the original payload using the source’s current URL and secret. Available
+        # for 7 days after the event.
         sig do
           params(
             delivery_id: String,
@@ -74,10 +73,9 @@ module ContextDev
         def retry_(
           # Path param: Delivery ID.
           delivery_id,
-          # Body param: Resend a delivery that already succeeded.
+          # Body param: Resend even if the delivery already succeeded. Defaults to false.
           force: nil,
-          # Body param: Optional tags for tracking usage. Up to 20 tags, each 1 to 50
-          # characters.
+          # Body param: Labels for filtering usage in the dashboard.
           tags: nil,
           # Header param: Unique key to prevent duplicate retry requests.
           idempotency_key: nil,

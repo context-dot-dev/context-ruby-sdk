@@ -14,9 +14,11 @@ module ContextDev
           )
         end
 
+      # ID of the monitor.
       sig { returns(String) }
       attr_accessor :monitor_id
 
+      # ID of the monitor run.
       sig { returns(String) }
       attr_accessor :run_id
 
@@ -27,7 +29,13 @@ module ContextDev
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
-      def self.new(monitor_id:, run_id:, request_options: {})
+      def self.new(
+        # ID of the monitor.
+        monitor_id:,
+        # ID of the monitor run.
+        run_id:,
+        request_options: {}
+      )
       end
 
       sig do

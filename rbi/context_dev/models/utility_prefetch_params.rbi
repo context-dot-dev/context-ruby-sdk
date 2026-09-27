@@ -25,21 +25,18 @@ module ContextDev
       end
       attr_accessor :identifier
 
-      # What to prefetch: 'brand' warms the brand data cache, 'styleguide' warms the
-      # styleguide cache.
+      # Data to prefetch.
       sig { returns(ContextDev::UtilityPrefetchParams::Type::OrSymbol) }
       attr_accessor :type
 
-      # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      # Labels for filtering usage in the dashboard.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Optional request deadline and behavior on timeout. For GET requests, use
-      # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-      # timeoutOpts object.
+      # Request deadline and what to return when it passes.
       sig { returns(T.nilable(ContextDev::UtilityPrefetchParams::TimeoutOpts)) }
       attr_reader :timeout_opts
 
@@ -66,14 +63,11 @@ module ContextDev
       def self.new(
         # Identifier of the target to prefetch. Provide exactly one of domain or email.
         identifier:,
-        # What to prefetch: 'brand' warms the brand data cache, 'styleguide' warms the
-        # styleguide cache.
+        # Data to prefetch.
         type:,
-        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
         request_options: {}
       )
@@ -118,14 +112,14 @@ module ContextDev
               )
             end
 
-          # Domain name to prefetch data for
+          # Domain, e.g. `stripe.com`.
           sig { returns(String) }
           attr_accessor :domain
 
           # Prefetch by domain.
           sig { params(domain: String).returns(T.attached_class) }
           def self.new(
-            # Domain name to prefetch data for
+            # Domain, e.g. `stripe.com`.
             domain:
           )
           end
@@ -174,8 +168,7 @@ module ContextDev
         end
       end
 
-      # What to prefetch: 'brand' warms the brand data cache, 'styleguide' warms the
-      # styleguide cache.
+      # Data to prefetch.
       module Type
         extend ContextDev::Internal::Type::Enum
 
@@ -211,12 +204,11 @@ module ContextDev
             )
           end
 
-        # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        # Deadline in milliseconds.
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # What to do at the deadline. This endpoint supports "fail": return 408
-        # REQUEST_TIMEOUT without charging credits.
+        # Only "fail" is supported: return 408 at the deadline.
         sig do
           returns(
             T.nilable(
@@ -234,9 +226,7 @@ module ContextDev
         end
         attr_writer :behavior
 
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         sig do
           params(
             milliseconds: Integer,
@@ -245,10 +235,9 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          # Deadline in milliseconds.
           milliseconds:,
-          # What to do at the deadline. This endpoint supports "fail": return 408
-          # REQUEST_TIMEOUT without charging credits.
+          # Only "fail" is supported: return 408 at the deadline.
           behavior: nil
         )
         end
@@ -265,8 +254,7 @@ module ContextDev
         def to_hash
         end
 
-        # What to do at the deadline. This endpoint supports "fail": return 408
-        # REQUEST_TIMEOUT without charging credits.
+        # Only "fail" is supported: return 408 at the deadline.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 

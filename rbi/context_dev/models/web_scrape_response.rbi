@@ -11,8 +11,7 @@ module ContextDev
           )
         end
 
-      # Original HTTP response body. Waiting, actions, and content filters never change
-      # it.
+      # The original HTTP response body, unchanged by waits, actions, and filters.
       sig { returns(ContextDev::Models::WebScrapeResponse::Bytes) }
       attr_reader :bytes
 
@@ -21,9 +20,7 @@ module ContextDev
       end
       attr_writer :bytes
 
-      # Cache outcome for this response. Composite responses are hits only when every
-      # cache-controlled fetch contributing to the output was a hit; age_ms is the
-      # oldest contributing hit.
+      # Whether this response came from cache.
       sig { returns(ContextDev::Models::WebScrapeResponse::CacheMetadata) }
       attr_reader :cache_metadata
 
@@ -35,9 +32,8 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
-      # Relevant Markdown excerpts for your question or topic, in page order. Headings
-      # in square brackets supply necessary context; ellipses mark omitted portions.
-      # Empty when the page has no text.
+      # Relevant Markdown excerpts in page order. `[Heading]` adds context; `…` marks
+      # omitted text.
       sig { returns(ContextDev::Models::WebScrapeResponse::Highlights) }
       attr_reader :highlights
 
@@ -57,7 +53,7 @@ module ContextDev
       end
       attr_writer :html
 
-      # Images after content filters. Empty when none are found.
+      # Images after content filters. `[]` when none are found.
       sig { returns(ContextDev::Models::WebScrapeResponse::Images) }
       attr_reader :images
 
@@ -68,7 +64,7 @@ module ContextDev
       end
       attr_writer :images
 
-      # Page data extracted using your schema.
+      # Object matching `jsonParams.schema`.
       sig { returns(ContextDev::Models::WebScrapeResponse::Json) }
       attr_reader :json
 
@@ -88,7 +84,7 @@ module ContextDev
       end
       attr_writer :markdown
 
-      # Page details, when available.
+      # Page metadata. Fields are omitted when not found.
       sig { returns(ContextDev::Models::WebScrapeResponse::Metadata) }
       attr_reader :metadata
 
@@ -99,7 +95,8 @@ module ContextDev
       end
       attr_writer :metadata
 
-      # Fields produced by parseParams.rules, after shared content filters.
+      # Fields from `parseParams.rules`, after content filters. Unmatched fields are
+      # `null` (`[]` for lists).
       sig { returns(ContextDev::Models::WebScrapeResponse::Parsed) }
       attr_reader :parsed
 
@@ -121,12 +118,12 @@ module ContextDev
       end
       attr_writer :product
 
-      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      # it when contacting support about a failed request.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
       sig { returns(String) }
       attr_accessor :request_id
 
-      # An image data URL. Use directly as an image src.
+      # Screenshot as a base64 image data URL.
       sig { returns(ContextDev::Models::WebScrapeResponse::Screenshot) }
       attr_reader :screenshot
 
@@ -141,11 +138,8 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
-      # Present when at least one requested output succeeds while another fails, or when
-      # successful outputs come from a page that is still loading or images returned
-      # before processing finished. Absent when every requested output fails. Check each
-      # output's success field for its result. Valid captured pieces may be cached
-      # independently; failed retrievals and incomplete captures are not cached.
+      # True when at least one requested output succeeds but the response has failed or
+      # incomplete outputs. Absent when all requested outputs fail.
       sig do
         returns(
           T.nilable(
@@ -163,7 +157,7 @@ module ContextDev
       end
       attr_writer :is_partial
 
-      # Credit usage, included whenever a valid API key is provided.
+      # Credits this request used and your remaining balance.
       sig do
         returns(T.nilable(ContextDev::Models::WebScrapeResponse::KeyMetadata))
       end
@@ -200,45 +194,39 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Original HTTP response body. Waiting, actions, and content filters never change
-        # it.
+        # The original HTTP response body, unchanged by waits, actions, and filters.
         bytes:,
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         cache_metadata:,
-        # Relevant Markdown excerpts for your question or topic, in page order. Headings
-        # in square brackets supply necessary context; ellipses mark omitted portions.
-        # Empty when the page has no text.
+        # Relevant Markdown excerpts in page order. `[Heading]` adds context; `…` marks
+        # omitted text.
         highlights:,
         # Rendered HTML after content filters.
         html:,
-        # Images after content filters. Empty when none are found.
+        # Images after content filters. `[]` when none are found.
         images:,
-        # Page data extracted using your schema.
+        # Object matching `jsonParams.schema`.
         json:,
         # Markdown after content filters.
         markdown:,
-        # Page details, when available.
+        # Page metadata. Fields are omitted when not found.
         metadata:,
-        # Fields produced by parseParams.rules, after shared content filters.
+        # Fields from `parseParams.rules`, after content filters. Unmatched fields are
+        # `null` (`[]` for lists).
         parsed:,
         # Product details found on the page.
         product:,
-        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        # it when contacting support about a failed request.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
         request_id:,
-        # An image data URL. Use directly as an image src.
+        # Screenshot as a base64 image data URL.
         screenshot:,
         # Final URL after redirects and browser actions.
         url:,
-        # Present when at least one requested output succeeds while another fails, or when
-        # successful outputs come from a page that is still loading or images returned
-        # before processing finished. Absent when every requested output fails. Check each
-        # output's success field for its result. Valid captured pieces may be cached
-        # independently; failed retrievals and incomplete captures are not cached.
+        # True when at least one requested output succeeds but the response has failed or
+        # incomplete outputs. Absent when all requested outputs fail.
         is_partial: nil,
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         key_metadata: nil
       )
       end
@@ -296,12 +284,11 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # True when retrieved, false when retrieval failed, and null when not requested.
+        # `true` if returned, `false` if it failed, `null` if not requested.
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
-        # Original HTTP response body. Waiting, actions, and content filters never change
-        # it.
+        # The original HTTP response body, unchanged by waits, actions, and filters.
         sig do
           params(
             data:
@@ -315,7 +302,7 @@ module ContextDev
         def self.new(
           data:,
           requested:,
-          # True when retrieved, false when retrieval failed, and null when not requested.
+          # `true` if returned, `false` if it failed, `null` if not requested.
           success:
         )
         end
@@ -342,8 +329,7 @@ module ContextDev
               )
             end
 
-          # Original response body as base64, after HTTP decompression. Maximum decoded
-          # size: 20 MiB.
+          # Body as base64, after HTTP decompression. Up to 20 MiB decoded.
           sig { returns(String) }
           attr_accessor :base64
 
@@ -356,8 +342,7 @@ module ContextDev
             )
           end
           def self.new(
-            # Original response body as base64, after HTTP decompression. Maximum decoded
-            # size: 20 MiB.
+            # Body as base64, after HTTP decompression. Up to 20 MiB decoded.
             base64:,
             content_type:
           )
@@ -391,9 +376,7 @@ module ContextDev
         end
         attr_accessor :status
 
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         sig do
           params(
             age_ms: Integer,
@@ -479,13 +462,12 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # True when retrieved, false when retrieval failed, and null when not requested.
+        # `true` if returned, `false` if it failed, `null` if not requested.
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
-        # Relevant Markdown excerpts for your question or topic, in page order. Headings
-        # in square brackets supply necessary context; ellipses mark omitted portions.
-        # Empty when the page has no text.
+        # Relevant Markdown excerpts in page order. `[Heading]` adds context; `…` marks
+        # omitted text.
         sig do
           params(
             data: T.nilable(T::Array[String]),
@@ -496,7 +478,7 @@ module ContextDev
         def self.new(
           data:,
           requested:,
-          # True when retrieved, false when retrieval failed, and null when not requested.
+          # `true` if returned, `false` if it failed, `null` if not requested.
           success:
         )
         end
@@ -529,7 +511,7 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # True when retrieved, false when retrieval failed, and null when not requested.
+        # `true` if returned, `false` if it failed, `null` if not requested.
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
@@ -544,7 +526,7 @@ module ContextDev
         def self.new(
           data:,
           requested:,
-          # True when retrieved, false when retrieval failed, and null when not requested.
+          # `true` if returned, `false` if it failed, `null` if not requested.
           success:
         )
         end
@@ -583,11 +565,11 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # True when retrieved, false when retrieval failed, and null when not requested.
+        # `true` if returned, `false` if it failed, `null` if not requested.
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
-        # Images after content filters. Empty when none are found.
+        # Images after content filters. `[]` when none are found.
         sig do
           params(
             data:
@@ -603,7 +585,7 @@ module ContextDev
         def self.new(
           data:,
           requested:,
-          # True when retrieved, false when retrieval failed, and null when not requested.
+          # `true` if returned, `false` if it failed, `null` if not requested.
           success:
         )
         end
@@ -657,8 +639,8 @@ module ContextDev
           end
           attr_writer :classification
 
-          # Hosted copy when file enrichment is requested and zdr is disabled. Valid for 24
-          # hours from the original capture.
+          # Hosted image URL, valid for 24 hours after capture. Requires `file` enrichment
+          # and ZDR disabled.
           sig { returns(T.nilable(String)) }
           attr_reader :file_url
 
@@ -694,8 +676,8 @@ module ContextDev
             # Image URL, or a data URI for inline images.
             url:,
             classification: nil,
-            # Hosted copy when file enrichment is requested and zdr is disabled. Valid for 24
-            # hours from the original capture.
+            # Hosted image URL, valid for 24 hours after capture. Requires `file` enrichment
+            # and ZDR disabled.
             file_url: nil,
             height: nil,
             width: nil
@@ -799,11 +781,11 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # True when retrieved, false when retrieval failed, and null when not requested.
+        # `true` if returned, `false` if it failed, `null` if not requested.
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
-        # Page data extracted using your schema.
+        # Object matching `jsonParams.schema`.
         sig do
           params(
             data: T.nilable(T::Hash[Symbol, T.anything]),
@@ -814,7 +796,7 @@ module ContextDev
         def self.new(
           data:,
           requested:,
-          # True when retrieved, false when retrieval failed, and null when not requested.
+          # `true` if returned, `false` if it failed, `null` if not requested.
           success:
         )
         end
@@ -847,7 +829,7 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # True when retrieved, false when retrieval failed, and null when not requested.
+        # `true` if returned, `false` if it failed, `null` if not requested.
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
@@ -862,7 +844,7 @@ module ContextDev
         def self.new(
           data:,
           requested:,
-          # True when retrieved, false when retrieval failed, and null when not requested.
+          # `true` if returned, `false` if it failed, `null` if not requested.
           success:
         )
         end
@@ -963,8 +945,7 @@ module ContextDev
         sig { params(favicon: String).void }
         attr_writer :favicon
 
-        # Page headings (h1–h6) in document order, extracted from the unfiltered document.
-        # Capped at the first 500 headings. Omitted when the page has none.
+        # Up to 500 h1–h6 headings in document order, before content filtering.
         sig do
           returns(
             T.nilable(
@@ -1095,7 +1076,7 @@ module ContextDev
         end
         attr_writer :twitter
 
-        # Page details, when available.
+        # Page metadata. Fields are omitted when not found.
         sig do
           params(
             additional_meta:
@@ -1149,8 +1130,7 @@ module ContextDev
           description: nil,
           # Resolved favicon URL, when present.
           favicon: nil,
-          # Page headings (h1–h6) in document order, extracted from the unfiltered document.
-          # Capped at the first 500 headings. Omitted when the page has none.
+          # Up to 500 h1–h6 headings in document order, before content filtering.
           headings: nil,
           # Primary resolved preview image from Open Graph, Twitter, or image metadata.
           image: nil,
@@ -1398,11 +1378,12 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # True when retrieved, false when retrieval failed, and null when not requested.
+        # `true` if returned, `false` if it failed, `null` if not requested.
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
-        # Fields produced by parseParams.rules, after shared content filters.
+        # Fields from `parseParams.rules`, after content filters. Unmatched fields are
+        # `null` (`[]` for lists).
         sig do
           params(
             data: T.nilable(T::Hash[Symbol, T.anything]),
@@ -1413,7 +1394,7 @@ module ContextDev
         def self.new(
           data:,
           requested:,
-          # True when retrieved, false when retrieval failed, and null when not requested.
+          # `true` if returned, `false` if it failed, `null` if not requested.
           success:
         )
         end
@@ -1460,7 +1441,7 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # True when retrieved, false when retrieval failed, and null when not requested.
+        # `true` if returned, `false` if it failed, `null` if not requested.
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
@@ -1478,7 +1459,7 @@ module ContextDev
         def self.new(
           data:,
           requested:,
-          # True when retrieved, false when retrieval failed, and null when not requested.
+          # `true` if returned, `false` if it failed, `null` if not requested.
           success:
         )
         end
@@ -1880,11 +1861,11 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :requested
 
-        # True when retrieved, false when retrieval failed, and null when not requested.
+        # `true` if returned, `false` if it failed, `null` if not requested.
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
-        # An image data URL. Use directly as an image src.
+        # Screenshot as a base64 image data URL.
         sig do
           params(
             data: T.nilable(String),
@@ -1895,7 +1876,7 @@ module ContextDev
         def self.new(
           data:,
           requested:,
-          # True when retrieved, false when retrieval failed, and null when not requested.
+          # `true` if returned, `false` if it failed, `null` if not requested.
           success:
         )
         end
@@ -1913,11 +1894,8 @@ module ContextDev
         end
       end
 
-      # Present when at least one requested output succeeds while another fails, or when
-      # successful outputs come from a page that is still loading or images returned
-      # before processing finished. Absent when every requested output fails. Check each
-      # output's success field for its result. Valid captured pieces may be cached
-      # independently; failed retrievals and incomplete captures are not cached.
+      # True when at least one requested output succeeds but the response has failed or
+      # incomplete outputs. Absent when all requested outputs fail.
       module IsPartial
         extend ContextDev::Internal::Type::Enum
 
@@ -1953,7 +1931,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -1961,14 +1939,14 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         sig do
           params(credits_consumed: Integer, credits_remaining: Integer).returns(
             T.attached_class
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:

@@ -4,7 +4,8 @@ module ContextDev
   module Resources
     # Scrape many pages or crawl a site asynchronously.
     class Batch
-      # Check progress, and get download links once the batch finishes.
+      # Get batch progress and result download links. Result files are deleted 7 days
+      # after the batch finishes.
       sig do
         params(
           batch_id: String,
@@ -12,14 +13,13 @@ module ContextDev
         ).returns(ContextDev::Models::BatchRetrieveResponse)
       end
       def retrieve(
-        # ID of the batch to retrieve or cancel.
+        # Batch ID.
         batch_id,
         request_options: {}
       )
       end
 
-      # List your batches from newest to oldest. Filter by status or continue with a
-      # cursor.
+      # List your batches, newest first, with optional filters.
       sig do
         params(
           cursor: String,
@@ -50,8 +50,8 @@ module ContextDev
       )
       end
 
-      # Permanently delete a finished batch and its stored results. Active batches must
-      # settle first.
+      # Permanently delete a finished batch and its results. Its webhook deliveries can
+      # no longer be retried.
       sig do
         params(
           batch_id: String,
@@ -59,14 +59,14 @@ module ContextDev
         ).returns(ContextDev::Models::BatchDeleteResponse)
       end
       def delete(
-        # ID of the batch to retrieve or cancel.
+        # Batch ID.
         batch_id,
         request_options: {}
       )
       end
 
-      # Stop a batch from starting new pages. In-progress pages finish, and unused
-      # credits are refunded.
+      # Stop a batch from starting new pages. Pages already in progress finish before
+      # the batch becomes cancelled.
       sig do
         params(
           batch_id: String,
@@ -74,14 +74,14 @@ module ContextDev
         ).returns(ContextDev::Models::BatchCancelResponse)
       end
       def cancel(
-        # ID of the batch to retrieve or cancel.
+        # Batch ID.
         batch_id,
         request_options: {}
       )
       end
 
-      # Page through a finished batch's results as JSON instead of downloading the
-      # NDJSON files.
+      # Page through a finished batch’s results as JSON. Results remain available for 7
+      # days.
       sig do
         params(
           batch_id: String,
@@ -91,7 +91,7 @@ module ContextDev
         ).returns(ContextDev::Models::BatchGetResultsResponse)
       end
       def get_results(
-        # ID of the batch to retrieve or cancel.
+        # Batch ID.
         batch_id,
         # next_cursor from the previous page.
         cursor: nil,
@@ -102,7 +102,8 @@ module ContextDev
       )
       end
 
-      # Scrape 25K URLs or crawl large websites asynchronously.
+      # Scrape up to 25,000 URLs, or crawl a site, asynchronously. Poll the batch ID or
+      # receive a webhook when it finishes.
       sig do
         params(
           input:
@@ -122,14 +123,14 @@ module ContextDev
         input:,
         # Body param: Tags stored on the batch. Filter the batch list by them later.
         tags: nil,
-        # Body param: Completion webhook settings. Cannot be combined with webhookUrl.
-        # Omitting retry preserves legacy delivery; retry: {} opts into durable retries.
+        # Body param: Where to send the batch's final-status event. Omit `retry` for one
+        # attempt; `{}` uses the default retry schedule.
         webhook: nil,
         # Body param: Legacy URL notified when the batch finishes. Preserves one
         # best-effort attempt. Cannot be combined with webhook.
         webhook_url: nil,
-        # Header param: Any string unique to this submission. Retries with the same key
-        # return the original batch.
+        # Header param: Unique key per submission. Retrying with the same key and body
+        # returns the original batch; a different body returns `409`.
         idempotency_key: nil,
         request_options: {}
       )

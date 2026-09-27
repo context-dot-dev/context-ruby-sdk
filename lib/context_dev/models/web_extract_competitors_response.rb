@@ -18,8 +18,8 @@ module ContextDev
       required :domain, String
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -37,7 +37,7 @@ module ContextDev
       required :target, -> { ContextDev::Models::WebExtractCompetitorsResponse::Target }
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata }
@@ -57,13 +57,13 @@ module ContextDev
       #
       #   @param domain [String] Normalized input domain.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param status [Symbol, ContextDev::Models::WebExtractCompetitorsResponse::Status] Status of the response.
       #
       #   @param target [ContextDev::Models::WebExtractCompetitorsResponse::Target] Target company profile inferred from the landing page.
       #
-      #   @param key_metadata [ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::WebExtractCompetitorsResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param partial [Boolean] True when the timeout ended processing and this response contains only usable re
 
@@ -185,7 +185,7 @@ module ContextDev
       # @see ContextDev::Models::WebExtractCompetitorsResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -197,9 +197,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

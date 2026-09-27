@@ -30,8 +30,7 @@ module ContextDev
       sig { returns(T.nilable(String)) }
       attr_accessor :url_pattern
 
-      # The crawl controls as submitted, so the limits requested can be compared against
-      # what the crawl reached.
+      # Crawl settings as submitted.
       sig do
         params(
           follow_subdomains: T::Boolean,

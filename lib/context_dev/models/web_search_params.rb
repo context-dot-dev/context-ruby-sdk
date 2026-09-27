@@ -56,31 +56,26 @@ module ContextDev
       optional :num_results, Integer, api_name: :numResults
 
       # @!attribute query_fanout
-      #   Expand the query into multiple parallel variants for broader recall.
+      #   Currently has no effect.
       #
       #   @return [Boolean, nil]
       optional :query_fanout, ContextDev::Internal::Type::Boolean, api_name: :queryFanout
 
       # @!attribute tags
-      #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #   Labels for filtering usage in the dashboard.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timeout_opts
-      #   Optional request deadline and behavior on timeout. For GET requests, use
-      #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-      #   timeoutOpts object.
+      #   Request deadline and what to return when it passes.
       #
       #   @return [ContextDev::Models::WebSearchParams::TimeoutOpts, nil]
       optional :timeout_opts, -> { ContextDev::WebSearchParams::TimeoutOpts }, api_name: :timeoutOpts
 
       # @!attribute zdr
-      #   Set to enabled to bypass shared caches and omit request and response content
-      #   from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      #   omitted. Requires zero data retention to be enabled for your organization
-      #   (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      #   Successful ZDR responses include X-Context-ZDR: true.
+      #   `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      #   your organization has ZDR.
       #
       #   @return [Symbol, ContextDev::Models::WebSearchParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebSearchParams::Zdr }
@@ -103,13 +98,13 @@ module ContextDev
       #
       #   @param num_results [Integer] Number of results to request and return (10–100). Defaults to 10.
       #
-      #   @param query_fanout [Boolean] Expand the query into multiple parallel variants for broader recall.
+      #   @param query_fanout [Boolean] Currently has no effect.
       #
-      #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
-      #   @param timeout_opts [ContextDev::Models::WebSearchParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #   @param timeout_opts [ContextDev::Models::WebSearchParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
-      #   @param zdr [Symbol, ContextDev::Models::WebSearchParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      #   @param zdr [Symbol, ContextDev::Models::WebSearchParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -420,9 +415,7 @@ module ContextDev
         optional :shorten_base64_images, ContextDev::Internal::Type::Boolean, api_name: :shortenBase64Images
 
         # @!attribute timeout_opts
-        #   Optional request deadline and behavior on timeout. For GET requests, use
-        #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        #   timeoutOpts object.
+        #   Request deadline and what to return when it passes.
         #
         #   @return [ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts, nil]
         optional :timeout_opts,
@@ -462,7 +455,7 @@ module ContextDev
         #
         #   @param shorten_base64_images [Boolean] Truncate inline base64 image payloads to keep responses small.
         #
-        #   @param timeout_opts [ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+        #   @param timeout_opts [ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts] Request deadline and what to return when it passes.
         #
         #   @param use_main_content_only [Boolean] Strip nav, header, footer, and sidebar — keep only the primary article content.
         #
@@ -505,17 +498,14 @@ module ContextDev
         # @see ContextDev::Models::WebSearchParams::MarkdownOptions#timeout_opts
         class TimeoutOpts < ContextDev::Internal::Type::BaseModel
           # @!attribute milliseconds
-          #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          #   Deadline in milliseconds.
           #
           #   @return [Integer]
           required :milliseconds, Integer
 
           # @!attribute behavior
-          #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-          #   credits. "return-partial" returns usable results collected so far; if none are
-          #   available, the request still fails without charging credits. Partial results are
-          #   not cached as complete results. "return-partial" requires milliseconds of at
-          #   least 5000.
+          #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+          #   inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
           #
           #   @return [Symbol, ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::Behavior, nil]
           optional :behavior, enum: -> { ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts::Behavior }
@@ -525,19 +515,14 @@ module ContextDev
           #   {ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts} for more
           #   details.
           #
-          #   Optional request deadline and behavior on timeout. For GET requests, use
-          #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          #   timeoutOpts object.
+          #   Request deadline and what to return when it passes.
           #
-          #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          #   @param milliseconds [Integer] Deadline in milliseconds.
           #
-          #   @param behavior [Symbol, ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+          #   @param behavior [Symbol, ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-          # credits. "return-partial" returns usable results collected so far; if none are
-          # available, the request still fails without charging credits. Partial results are
-          # not cached as complete results. "return-partial" requires milliseconds of at
-          # least 5000.
+          # "fail" returns 408 at the deadline. "return-partial" returns available results;
+          # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
           #
           # @see ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts#behavior
           module Behavior
@@ -554,16 +539,14 @@ module ContextDev
 
       class TimeoutOpts < ContextDev::Internal::Type::BaseModel
         # @!attribute milliseconds
-        #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   Deadline in milliseconds.
         #
         #   @return [Integer]
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        #   credits. "return-partial" returns usable results collected so far; if none are
-        #   available, the request still fails without charging credits. Partial results are
-        #   not cached as complete results.
+        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   inspect the response’s partial flag.
         #
         #   @return [Symbol, ContextDev::Models::WebSearchParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebSearchParams::TimeoutOpts::Behavior }
@@ -572,18 +555,14 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebSearchParams::TimeoutOpts} for more details.
         #
-        #   Optional request deadline and behavior on timeout. For GET requests, use
-        #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        #   timeoutOpts object.
+        #   Request deadline and what to return when it passes.
         #
-        #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebSearchParams::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        #   @param behavior [Symbol, ContextDev::Models::WebSearchParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         #
         # @see ContextDev::Models::WebSearchParams::TimeoutOpts#behavior
         module Behavior
@@ -597,11 +576,8 @@ module ContextDev
         end
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

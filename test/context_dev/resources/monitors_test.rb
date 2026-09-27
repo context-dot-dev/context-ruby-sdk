@@ -24,15 +24,17 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         initial_run_id: String | nil,
         mode: ContextDev::Models::MonitorCreateResponse::Mode,
         name: String,
-        schedule: ContextDev::Models::MonitorCreateResponse::Schedule,
+        request_id: String,
         status: ContextDev::Models::MonitorCreateResponse::Status,
         target: ContextDev::Models::MonitorCreateResponse::Target,
         updated_at: Time,
         baseline: ContextDev::Models::MonitorCreateResponse::Baseline | nil,
+        key_metadata: ContextDev::Models::MonitorCreateResponse::KeyMetadata | nil,
         last_change_at: Time | nil,
         last_error: ContextDev::Models::MonitorCreateResponse::LastError | nil,
         last_run_at: Time | nil,
         next_run_at: Time | nil,
+        schedule: ContextDev::Models::MonitorCreateResponse::Schedule | nil,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
         webhook: ContextDev::Models::MonitorCreateResponse::Webhook | nil,
         webhook_failure: ContextDev::Models::MonitorCreateResponse::WebhookFailure | nil
@@ -56,15 +58,17 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         created_at: Time,
         mode: ContextDev::Models::MonitorRetrieveResponse::Mode,
         name: String,
-        schedule: ContextDev::Models::MonitorRetrieveResponse::Schedule,
+        request_id: String,
         status: ContextDev::Models::MonitorRetrieveResponse::Status,
         target: ContextDev::Models::MonitorRetrieveResponse::Target,
         updated_at: Time,
         baseline: ContextDev::Models::MonitorRetrieveResponse::Baseline | nil,
+        key_metadata: ContextDev::Models::MonitorRetrieveResponse::KeyMetadata | nil,
         last_change_at: Time | nil,
         last_error: ContextDev::Models::MonitorRetrieveResponse::LastError | nil,
         last_run_at: Time | nil,
         next_run_at: Time | nil,
+        schedule: ContextDev::Models::MonitorRetrieveResponse::Schedule | nil,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
         webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook | nil,
         webhook_failure: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure | nil
@@ -88,15 +92,17 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         created_at: Time,
         mode: ContextDev::Models::MonitorUpdateResponse::Mode,
         name: String,
-        schedule: ContextDev::Models::MonitorUpdateResponse::Schedule,
+        request_id: String,
         status: ContextDev::Models::MonitorUpdateResponse::Status,
         target: ContextDev::Models::MonitorUpdateResponse::Target,
         updated_at: Time,
         baseline: ContextDev::Models::MonitorUpdateResponse::Baseline | nil,
+        key_metadata: ContextDev::Models::MonitorUpdateResponse::KeyMetadata | nil,
         last_change_at: Time | nil,
         last_error: ContextDev::Models::MonitorUpdateResponse::LastError | nil,
         last_run_at: Time | nil,
         next_run_at: Time | nil,
+        schedule: ContextDev::Models::MonitorUpdateResponse::Schedule | nil,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
         webhook: ContextDev::Models::MonitorUpdateResponse::Webhook | nil,
         webhook_failure: ContextDev::Models::MonitorUpdateResponse::WebhookFailure | nil
@@ -117,7 +123,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
       response => {
         data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorListResponse::Data]),
         has_more: ContextDev::Internal::Type::Boolean,
-        next_cursor: String | nil
+        next_cursor: String | nil,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorListResponse::KeyMetadata | nil
       }
     end
   end
@@ -134,7 +142,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         id: String,
-        deleted: ContextDev::Internal::Type::Boolean
+        deleted: ContextDev::Internal::Type::Boolean,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorDeleteResponse::KeyMetadata | nil
       }
     end
   end
@@ -151,7 +161,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
     assert_pattern do
       response => {
         data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorGetCreditUsageResponse::Data]),
-        total_credits: Integer
+        request_id: String,
+        total_credits: Integer,
+        key_metadata: ContextDev::Models::MonitorGetCreditUsageResponse::KeyMetadata | nil
       }
     end
   end
@@ -169,7 +181,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
       response => {
         monitors_limit: Integer,
         monitors_used: Integer,
-        plan: ContextDev::Models::MonitorGetLimitsResponse::Plan
+        plan: ContextDev::Models::MonitorGetLimitsResponse::Plan,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata | nil
       }
     end
   end
@@ -187,7 +201,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
       response => {
         data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorListAccountChangesResponse::Data]),
         has_more: ContextDev::Internal::Type::Boolean,
-        next_cursor: String | nil
+        next_cursor: String | nil,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorListAccountChangesResponse::KeyMetadata | nil
       }
     end
   end
@@ -205,7 +221,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
       response => {
         data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorListAccountRunsResponse::Data]),
         has_more: ContextDev::Internal::Type::Boolean,
-        next_cursor: String | nil
+        next_cursor: String | nil,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorListAccountRunsResponse::KeyMetadata | nil
       }
     end
   end
@@ -223,7 +241,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
       response => {
         data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorListChangesResponse::Data]),
         has_more: ContextDev::Internal::Type::Boolean,
-        next_cursor: String | nil
+        next_cursor: String | nil,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorListChangesResponse::KeyMetadata | nil
       }
     end
   end
@@ -241,7 +261,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
       response => {
         data: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorListRunsResponse::Data]),
         has_more: ContextDev::Internal::Type::Boolean,
-        next_cursor: String | nil
+        next_cursor: String | nil,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorListRunsResponse::KeyMetadata | nil
       }
     end
   end
@@ -262,6 +284,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         detected_at: Time,
         mode: ContextDev::Models::MonitorRetrieveChangeResponse::Mode,
         monitor_id: String,
+        request_id: String,
         run_id: String,
         summary: String,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]),
@@ -276,6 +299,7 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         diff: String | nil,
         evidence: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorRetrieveChangeResponse::Evidence]) | nil,
         importance: ContextDev::Models::MonitorRetrieveChangeResponse::Importance | nil,
+        key_metadata: ContextDev::Models::MonitorRetrieveChangeResponse::KeyMetadata | nil,
         matched_url_count: Integer | nil,
         matched_urls: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
         removed_url_count: Integer | nil,
@@ -301,12 +325,14 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         change_detection_type: ContextDev::Models::MonitorRetrieveRunResponse::ChangeDetectionType,
         credits_charged: Integer,
         monitor_id: String,
+        request_id: String,
         run_type: ContextDev::Models::MonitorRetrieveRunResponse::RunType,
         status: ContextDev::Models::MonitorRetrieveRunResponse::Status,
         target_type: ContextDev::Models::MonitorRetrieveRunResponse::TargetType,
         change_id: String | nil,
         completed_at: Time | nil,
         error: ContextDev::Models::MonitorRetrieveRunResponse::Error | nil,
+        key_metadata: ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata | nil,
         skip_reason: ContextDev::Models::MonitorRetrieveRunResponse::SkipReason | nil,
         started_at: Time | nil,
         webhook_deliveries: ^(ContextDev::Internal::Type::ArrayOf[ContextDev::WebhookDelivery]) | nil,
@@ -332,15 +358,17 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
         created_at: Time,
         mode: ContextDev::Models::MonitorRotateWebhookSecretResponse::Mode,
         name: String,
-        schedule: ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule,
+        request_id: String,
         status: ContextDev::Models::MonitorRotateWebhookSecretResponse::Status,
         target: ContextDev::Models::MonitorRotateWebhookSecretResponse::Target,
         updated_at: Time,
         baseline: ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline | nil,
+        key_metadata: ContextDev::Models::MonitorRotateWebhookSecretResponse::KeyMetadata | nil,
         last_change_at: Time | nil,
         last_error: ContextDev::Models::MonitorRotateWebhookSecretResponse::LastError | nil,
         last_run_at: Time | nil,
         next_run_at: Time | nil,
+        schedule: ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule | nil,
         tags: ^(ContextDev::Internal::Type::ArrayOf[String]) | nil,
         webhook: ContextDev::Models::MonitorRotateWebhookSecretResponse::Webhook | nil,
         webhook_failure: ContextDev::Models::MonitorRotateWebhookSecretResponse::WebhookFailure | nil
@@ -361,7 +389,9 @@ class ContextDev::Test::Resources::MonitorsTest < ContextDev::Test::ResourceTest
       response => {
         monitor_id: String,
         queued: ContextDev::Internal::Type::Boolean,
-        run_id: String
+        request_id: String,
+        run_id: String,
+        key_metadata: ContextDev::Models::MonitorRunResponse::KeyMetadata | nil
       }
     end
   end

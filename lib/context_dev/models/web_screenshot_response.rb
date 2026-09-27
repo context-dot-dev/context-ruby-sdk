@@ -5,16 +5,14 @@ module ContextDev
     # @see ContextDev::Resources::Web#screenshot
     class WebScreenshotResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute cache_metadata
-      #   Cache outcome for this response. Composite responses are hits only when every
-      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-      #   oldest contributing hit.
+      #   Whether this response came from cache.
       #
       #   @return [ContextDev::Models::WebScreenshotResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebScreenshotResponse::CacheMetadata }
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -32,11 +30,8 @@ module ContextDev
       optional :domain, String
 
       # @!attribute final_dom_state
-      #   How complete the returned content is. `loaded` means the page finished the waits
-      #   the request asked for. `still-loading` only occurs with
-      #   timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-      #   reached first, so the content reflects the DOM at that moment and late-rendering
-      #   parts may be missing. Partial results are billed at the base request cost.
+      #   `loaded`, or `still-loading` when capture ended before the page finished
+      #   loading.
       #
       #   @return [Symbol, ContextDev::Models::WebScreenshotResponse::FinalDomState, nil]
       optional :final_dom_state,
@@ -50,7 +45,7 @@ module ContextDev
       optional :height, Integer
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::WebScreenshotResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebScreenshotResponse::KeyMetadata }
@@ -71,7 +66,7 @@ module ContextDev
                api_name: :screenshotType
 
       # @!attribute status
-      #   Status of the response, e.g., 'ok'
+      #   Always `ok` on success.
       #
       #   @return [String, nil]
       optional :status, String
@@ -86,25 +81,25 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScreenshotResponse} for more details.
       #
-      #   @param cache_metadata [ContextDev::Models::WebScreenshotResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #   @param cache_metadata [ContextDev::Models::WebScreenshotResponse::CacheMetadata] Whether this response came from cache.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param code [Integer] HTTP status code
       #
       #   @param domain [String] The normalized domain that was processed
       #
-      #   @param final_dom_state [Symbol, ContextDev::Models::WebScreenshotResponse::FinalDomState] How complete the returned content is. `loaded` means the page finished the waits
+      #   @param final_dom_state [Symbol, ContextDev::Models::WebScreenshotResponse::FinalDomState] `loaded`, or `still-loading` when capture ended before the page finished loading
       #
       #   @param height [Integer] Height in pixels of the returned screenshot image
       #
-      #   @param key_metadata [ContextDev::Models::WebScreenshotResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::WebScreenshotResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param screenshot [String] Public image URL for standard requests, or an in-memory data URL when ZDR or non
       #
       #   @param screenshot_type [Symbol, ContextDev::Models::WebScreenshotResponse::ScreenshotType] Type of screenshot that was captured
       #
-      #   @param status [String] Status of the response, e.g., 'ok'
+      #   @param status [String] Always `ok` on success.
       #
       #   @param width [Integer] Width in pixels of the returned screenshot image
 
@@ -127,9 +122,7 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScreenshotResponse::CacheMetadata} for more details.
         #
-        #   Cache outcome for this response. Composite responses are hits only when every
-        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-        #   oldest contributing hit.
+        #   Whether this response came from cache.
         #
         #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
         #
@@ -151,11 +144,8 @@ module ContextDev
         end
       end
 
-      # How complete the returned content is. `loaded` means the page finished the waits
-      # the request asked for. `still-loading` only occurs with
-      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-      # reached first, so the content reflects the DOM at that moment and late-rendering
-      # parts may be missing. Partial results are billed at the base request cost.
+      # `loaded`, or `still-loading` when capture ended before the page finished
+      # loading.
       #
       # @see ContextDev::Models::WebScreenshotResponse#final_dom_state
       module FinalDomState
@@ -171,7 +161,7 @@ module ContextDev
       # @see ContextDev::Models::WebScreenshotResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -183,9 +173,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

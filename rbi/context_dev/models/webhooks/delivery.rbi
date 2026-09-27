@@ -63,7 +63,7 @@ module ContextDev
         sig { params(retry_: ContextDev::RetryConfig::OrHash).void }
         attr_writer :retry_
 
-        # Manual retry deadline, seven days after event creation.
+        # Last time you can retry manually (7 days after the event).
         sig { returns(Time) }
         attr_accessor :retry_expires_at
 
@@ -71,7 +71,8 @@ module ContextDev
         sig { returns(ContextDev::Webhooks::Delivery::Source::Variants) }
         attr_accessor :source
 
-        # Current delivery status.
+        # `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled`
+        # (source or its webhook was removed).
         sig { returns(ContextDev::Webhooks::Delivery::Status::TaggedSymbol) }
         attr_accessor :status
 
@@ -120,11 +121,12 @@ module ContextDev
           next_attempt_at:,
           # Webhook retry settings. Use {} for the default schedule.
           retry_:,
-          # Manual retry deadline, seven days after event creation.
+          # Last time you can retry manually (7 days after the event).
           retry_expires_at:,
           # Batch or monitor run that produced the event.
           source:,
-          # Current delivery status.
+          # `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled`
+          # (source or its webhook was removed).
           status:,
           # Webhook destination URL.
           url:
@@ -257,7 +259,7 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :batch_id
 
-            # Delivery source.
+            # Which deliveries to list: `batch` or `monitor`.
             sig do
               returns(
                 ContextDev::Webhooks::Delivery::Source::Batch::Type::TaggedSymbol
@@ -275,7 +277,7 @@ module ContextDev
             def self.new(
               # Batch ID.
               batch_id:,
-              # Delivery source.
+              # Which deliveries to list: `batch` or `monitor`.
               type:
             )
             end
@@ -292,7 +294,7 @@ module ContextDev
             def to_hash
             end
 
-            # Delivery source.
+            # Which deliveries to list: `batch` or `monitor`.
             module Type
               extend ContextDev::Internal::Type::Enum
 
@@ -340,7 +342,7 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :run_id
 
-            # Delivery source.
+            # Which deliveries to list: `batch` or `monitor`.
             sig do
               returns(
                 ContextDev::Webhooks::Delivery::Source::Monitor::Type::TaggedSymbol
@@ -361,7 +363,7 @@ module ContextDev
               monitor_id:,
               # Monitor run ID.
               run_id:,
-              # Delivery source.
+              # Which deliveries to list: `batch` or `monitor`.
               type:
             )
             end
@@ -379,7 +381,7 @@ module ContextDev
             def to_hash
             end
 
-            # Delivery source.
+            # Which deliveries to list: `batch` or `monitor`.
             module Type
               extend ContextDev::Internal::Type::Enum
 
@@ -419,7 +421,8 @@ module ContextDev
           end
         end
 
-        # Current delivery status.
+        # `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled`
+        # (source or its webhook was removed).
         module Status
           extend ContextDev::Internal::Type::Enum
 

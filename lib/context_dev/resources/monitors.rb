@@ -2,33 +2,29 @@
 
 module ContextDev
   module Resources
-    # Monitor pages, sitemaps, and extracted website data for exact or semantic
-    # changes. Webhook payloads are documented by the
-    # MonitorsChangeDetectedWebhookPayload and MonitorsRunCompletedWebhookPayload
-    # schemas.
+    # Watch websites for exact or meaningful changes.
     class Monitors
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::MonitorCreateParams} for more details.
       #
-      # Creates a monitor. The request body is a union of the supported target/change
-      # detection combinations. The monitor runs immediately after creation to create
-      # its initial baseline.
+      # Watch a page, URL inventory, or extracted website data on a schedule. A run
+      # starts immediately to capture the baseline.
       #
       # @overload create(name:, target:, change_detection: nil, mode: nil, schedule: nil, tags: nil, webhook: nil, request_options: {})
       #
-      # @param name [String]
+      # @param name [String] Display name for the monitor.
       #
-      # @param target [ContextDev::Models::MonitorCreateParams::Target::Page, ContextDev::Models::MonitorCreateParams::Target::Sitemap, ContextDev::Models::MonitorCreateParams::Target::Extract] Discriminated union describing what the monitor watches.
+      # @param target [ContextDev::Models::MonitorCreateParams::Target::Page, ContextDev::Models::MonitorCreateParams::Target::Sitemap, ContextDev::Models::MonitorCreateParams::Target::Extract] What to watch: a page, a sitemap, or data extracted from a site.
       #
-      # @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] Discriminated union describing how changes are detected.
+      # @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract targets and page targ
       #
-      # @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Top-level monitor category. Always `web` today; the concrete behavior is describ
+      # @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Always `web`. Optional.
       #
       # @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #
-      # @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes. Duplica
+      # @param tags [Array<String>] Labels for filtering monitors, their changes, and their usage.
       #
-      # @param webhook [ContextDev::Models::MonitorCreateParams::Webhook, nil]
+      # @param webhook [ContextDev::Models::MonitorCreateParams::Webhook, nil] Webhook destination and delivery settings. Null means no webhook is configured.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -46,11 +42,12 @@ module ContextDev
         )
       end
 
-      # Get a monitor
+      # Retrieve a monitor’s configuration and current state.
       #
       # @overload retrieve(monitor_id, request_options: {})
       #
-      # @param monitor_id [String]
+      # @param monitor_id [String] ID of the monitor.
+      #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
       # @return [ContextDev::Models::MonitorRetrieveResponse]
@@ -68,27 +65,26 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::MonitorUpdateParams} for more details.
       #
-      # Updates a monitor. If `target` or `change_detection` changes, the monitor
-      # creates a new baseline. Unsupported target/change detection combinations are
-      # rejected.
+      # Update a monitor. Changing its target or change detection replaces the baseline
+      # and queues a new baseline run.
       #
       # @overload update(monitor_id, change_detection: nil, name: nil, schedule: nil, status: nil, tags: nil, target: nil, webhook: nil, request_options: {})
       #
-      # @param monitor_id [String]
+      # @param monitor_id [String] ID of the monitor.
       #
-      # @param change_detection [ContextDev::Models::MonitorUpdateParams::ChangeDetection::Exact, ContextDev::Models::MonitorUpdateParams::ChangeDetection::Semantic] Discriminated union describing how changes are detected.
+      # @param change_detection [ContextDev::Models::MonitorUpdateParams::ChangeDetection::Exact, ContextDev::Models::MonitorUpdateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract targets and page targ
       #
-      # @param name [String]
+      # @param name [String] Display name for the monitor.
       #
       # @param schedule [ContextDev::Models::MonitorUpdateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #
-      # @param status [Symbol, ContextDev::Models::MonitorUpdateParams::Status]
+      # @param status [Symbol, ContextDev::Models::MonitorUpdateParams::Status] Set `paused` to stop scheduled runs or `active` to resume them.
       #
-      # @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes. Duplica
+      # @param tags [Array<String>] Labels for filtering monitors, their changes, and their usage.
       #
-      # @param target [ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract] Discriminated union describing what the monitor watches.
+      # @param target [ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract] What to watch: a page, a sitemap, or data extracted from a site.
       #
-      # @param webhook [ContextDev::Models::MonitorUpdateParams::Webhook, nil] Set to null to remove the webhook.
+      # @param webhook [ContextDev::Models::MonitorUpdateParams::Webhook, nil] Set to null to remove the webhook. Changing `url` issues a new secret.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -109,9 +105,7 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::MonitorListParams} for more details.
       #
-      # Lists monitors for the authenticated organization. Supports free-text search
-      # (`q` over `search_by` fields, `prefix` or `exact` via `search_type`) plus
-      # status/type/tag filters. Results are paginated via the opaque `cursor`.
+      # List your monitors with optional search and filters.
       #
       # @overload list(change_detection_type: nil, cursor: nil, limit: nil, q: nil, search_by: nil, search_type: nil, status: nil, tag: nil, tags: nil, target_type: nil, request_options: {})
       #
@@ -123,7 +117,7 @@ module ContextDev
       #
       # @param q [String] Free-text search term, matched against the fields named in `search_by`.
       #
-      # @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil] Comma-separated fields to search with `q`. Defaults to all of them. Note `instru
+      # @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil] Fields to search with `q`. Defaults to all fields; page and extract targets can
       #
       # @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
       #
@@ -152,11 +146,12 @@ module ContextDev
         )
       end
 
-      # Delete a monitor
+      # Delete a monitor and stop future runs and webhook retries.
       #
       # @overload delete(monitor_id, request_options: {})
       #
-      # @param monitor_id [String]
+      # @param monitor_id [String] ID of the monitor.
+      #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
       # @return [ContextDev::Models::MonitorDeleteResponse]
@@ -171,8 +166,8 @@ module ContextDev
         )
       end
 
-      # Returns credits charged per monitor over an optional [since, until] window,
-      # newest spenders first.
+      # Return usage per monitor, highest first, for up to the 10,000 most recent runs
+      # in the requested window.
       #
       # @overload get_credit_usage(since: nil, until_: nil, request_options: {})
       #
@@ -197,7 +192,7 @@ module ContextDev
         )
       end
 
-      # Returns how many monitors the account has and the maximum it allows.
+      # Retrieve your organization’s monitor allowance and usage.
       #
       # @overload get_limits(request_options: {})
       #
@@ -215,7 +210,7 @@ module ContextDev
         )
       end
 
-      # Returns an account-wide feed of detected changes across monitors.
+      # List full change records across your monitors, newest first.
       #
       # @overload list_account_changes(change_detection_type: nil, cursor: nil, limit: nil, monitor_id: nil, since: nil, tag: nil, target_type: nil, until_: nil, request_options: {})
       #
@@ -252,7 +247,7 @@ module ContextDev
         )
       end
 
-      # Returns an account-wide feed of monitor runs across all monitors.
+      # List runs across your monitors, newest first.
       #
       # @overload list_account_runs(cursor: nil, limit: nil, status: nil, request_options: {})
       #
@@ -279,11 +274,11 @@ module ContextDev
         )
       end
 
-      # List changes for a monitor
+      # List full change records for a monitor, newest first.
       #
       # @overload list_changes(monitor_id, cursor: nil, limit: nil, since: nil, tag: nil, until_: nil, request_options: {})
       #
-      # @param monitor_id [String]
+      # @param monitor_id [String] ID of the monitor.
       #
       # @param cursor [String] Opaque pagination cursor from a previous response.
       #
@@ -312,11 +307,11 @@ module ContextDev
         )
       end
 
-      # List monitor runs
+      # List a monitor’s runs, newest first.
       #
       # @overload list_runs(monitor_id, cursor: nil, limit: nil, status: nil, request_options: {})
       #
-      # @param monitor_id [String]
+      # @param monitor_id [String] ID of the monitor.
       #
       # @param cursor [String] Opaque pagination cursor from a previous response.
       #
@@ -341,11 +336,12 @@ module ContextDev
         )
       end
 
-      # Get a change
+      # Retrieve a detected change, including its diff and available evidence.
       #
       # @overload retrieve_change(change_id, request_options: {})
       #
-      # @param change_id [String]
+      # @param change_id [String] ID of the detected change.
+      #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
       # @return [ContextDev::Models::MonitorRetrieveChangeResponse]
@@ -360,13 +356,14 @@ module ContextDev
         )
       end
 
-      # Fetches one run for a monitor, including lifecycle status, timing, credits
-      # charged, and any detected change.
+      # Retrieve the status, timing, and results of one monitor run.
       #
       # @overload retrieve_run(run_id, monitor_id:, request_options: {})
       #
-      # @param run_id [String]
-      # @param monitor_id [String]
+      # @param run_id [String] ID of the monitor run.
+      #
+      # @param monitor_id [String] ID of the monitor.
+      #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
       # @return [ContextDev::Models::MonitorRetrieveRunResponse]
@@ -386,13 +383,13 @@ module ContextDev
         )
       end
 
-      # Generates a new signing secret for the monitor's webhook and returns the updated
-      # monitor (including the new `webhook.secret`). The previous secret stops signing
-      # deliveries immediately, so update your endpoint before rotating.
+      # Generate and return a new signing secret. It takes effect immediately for all
+      # subsequent delivery attempts.
       #
       # @overload rotate_webhook_secret(monitor_id, request_options: {})
       #
-      # @param monitor_id [String]
+      # @param monitor_id [String] ID of the monitor.
+      #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
       # @return [ContextDev::Models::MonitorRotateWebhookSecretResponse]
@@ -407,12 +404,12 @@ module ContextDev
         )
       end
 
-      # Triggers an immediate run of the monitor outside its normal schedule. The run is
-      # queued and processed asynchronously.
+      # Queue a run without changing the regular schedule. Paused monitors return 409.
       #
       # @overload run(monitor_id, request_options: {})
       #
-      # @param monitor_id [String]
+      # @param monitor_id [String] ID of the monitor.
+      #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
       # @return [ContextDev::Models::MonitorRunResponse]

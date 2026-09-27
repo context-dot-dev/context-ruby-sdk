@@ -15,9 +15,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :id
 
-      # Cache outcome for this response. Composite responses are hits only when every
-      # cache-controlled fetch contributing to the output was a hit; age_ms is the
-      # oldest contributing hit.
+      # Whether this response came from cache.
       sig { returns(ContextDev::Models::BatchSubmitResponse::CacheMetadata) }
       attr_reader :cache_metadata
 
@@ -29,8 +27,7 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
-      # The crawl controls as submitted, so the limits requested can be compared against
-      # what the crawl reached.
+      # Crawl settings as submitted.
       sig { returns(T.nilable(ContextDev::CrawlControls)) }
       attr_reader :crawl
 
@@ -58,14 +55,14 @@ module ContextDev
       end
       attr_accessor :format_
 
-      # What submission took in, and what it charged for.
+      # What the submission accepted.
       sig { returns(ContextDev::Intake) }
       attr_reader :input
 
       sig { params(input: ContextDev::Intake::OrHash).void }
       attr_writer :input
 
-      # Rejected URLs, up to 100. These are not charged.
+      # Rejected URLs (first 100).
       sig do
         returns(T::Array[ContextDev::Models::BatchSubmitResponse::InvalidURL])
       end
@@ -77,8 +74,8 @@ module ContextDev
       end
       attr_accessor :mode
 
-      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      # it when contacting support about a failed request.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
       sig { returns(String) }
       attr_accessor :request_id
 
@@ -106,8 +103,7 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # Signing secret for the completion webhook, returned only here and never again.
-      # Store it now; it is not repeated by GET /batch/{batch_id}.
+      # Secret for verifying `X-Context-Signature`. Only submit returns it, so store it.
       sig { returns(T.nilable(String)) }
       attr_reader :webhook_secret
 
@@ -140,12 +136,9 @@ module ContextDev
       def self.new(
         # Batch ID. Poll GET /batch/{batch_id} with it.
         id:,
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         cache_metadata:,
-        # The crawl controls as submitted, so the limits requested can be compared against
-        # what the crawl reached.
+        # Crawl settings as submitted.
         crawl:,
         # When the batch was created.
         created_at:,
@@ -153,14 +146,14 @@ module ContextDev
         credits:,
         # What each page will be returned as.
         format_:,
-        # What submission took in, and what it charged for.
+        # What the submission accepted.
         input:,
-        # Rejected URLs, up to 100. These are not charged.
+        # Rejected URLs (first 100).
         invalid_urls:,
         # How pages will be selected.
         mode:,
-        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        # it when contacting support about a failed request.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
         request_id:,
         # Always `queued`. An accepted batch has not started yet.
         status:,
@@ -168,8 +161,7 @@ module ContextDev
         tags:,
         # API key usage for this request.
         key_metadata: nil,
-        # Signing secret for the completion webhook, returned only here and never again.
-        # Store it now; it is not repeated by GET /batch/{batch_id}.
+        # Secret for verifying `X-Context-Signature`. Only submit returns it, so store it.
         webhook_secret: nil
       )
       end
@@ -223,9 +215,7 @@ module ContextDev
         end
         attr_accessor :status
 
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         sig do
           params(
             age_ms: Integer,
@@ -305,16 +295,14 @@ module ContextDev
             )
           end
 
-        # Credits just debited from your balance. Whatever the batch does not spend is
-        # refunded when it settles.
+        # Credits held at submission.
         sig { returns(Integer) }
         attr_accessor :reserved
 
         # What accepting this batch cost.
         sig { params(reserved: Integer).returns(T.attached_class) }
         def self.new(
-          # Credits just debited from your balance. Whatever the batch does not spend is
-          # refunded when it settles.
+          # Credits held at submission.
           reserved:
         )
         end
@@ -455,7 +443,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -470,7 +458,7 @@ module ContextDev
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:

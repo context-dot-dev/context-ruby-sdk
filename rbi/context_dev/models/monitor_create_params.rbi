@@ -11,10 +11,11 @@ module ContextDev
           T.any(ContextDev::MonitorCreateParams, ContextDev::Internal::AnyHash)
         end
 
+      # Display name for the monitor.
       sig { returns(String) }
       attr_accessor :name
 
-      # Discriminated union describing what the monitor watches.
+      # What to watch: a page, a sitemap, or data extracted from a site.
       sig do
         returns(
           T.any(
@@ -26,7 +27,8 @@ module ContextDev
       end
       attr_accessor :target
 
-      # Discriminated union describing how changes are detected.
+      # How changes are judged. Defaults to `semantic` for extract targets and page
+      # targets with `instructions`, otherwise `exact`.
       sig do
         returns(
           T.nilable(
@@ -50,8 +52,7 @@ module ContextDev
       end
       attr_writer :change_detection
 
-      # Top-level monitor category. Always `web` today; the concrete behavior is
-      # described by `target` and `change_detection`.
+      # Always `web`. Optional.
       sig do
         returns(T.nilable(ContextDev::MonitorCreateParams::Mode::OrSymbol))
       end
@@ -71,14 +72,14 @@ module ContextDev
       end
       attr_writer :schedule
 
-      # User-defined tags for grouping and filtering monitors and their changes.
-      # Duplicates are removed.
+      # Labels for filtering monitors, their changes, and their usage.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
+      # Webhook destination and delivery settings. Null means no webhook is configured.
       sig { returns(T.nilable(ContextDev::MonitorCreateParams::Webhook)) }
       attr_reader :webhook
 
@@ -111,21 +112,22 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Display name for the monitor.
         name:,
-        # Discriminated union describing what the monitor watches.
+        # What to watch: a page, a sitemap, or data extracted from a site.
         target:,
-        # Discriminated union describing how changes are detected.
+        # How changes are judged. Defaults to `semantic` for extract targets and page
+        # targets with `instructions`, otherwise `exact`.
         change_detection: nil,
-        # Top-level monitor category. Always `web` today; the concrete behavior is
-        # described by `target` and `change_detection`.
+        # Always `web`. Optional.
         mode: nil,
         # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
         # every 6 hours or every 2 days. The total interval (frequency × unit) must be
         # between 10 minutes and 1 year.
         schedule: nil,
-        # User-defined tags for grouping and filtering monitors and their changes.
-        # Duplicates are removed.
+        # Labels for filtering monitors, their changes, and their usage.
         tags: nil,
+        # Webhook destination and delivery settings. Null means no webhook is configured.
         webhook: nil,
         request_options: {}
       )
@@ -157,7 +159,7 @@ module ContextDev
       def to_hash
       end
 
-      # Discriminated union describing what the monitor watches.
+      # What to watch: a page, a sitemap, or data extracted from a site.
       module Target
         extend ContextDev::Internal::Type::Union
 
@@ -179,27 +181,23 @@ module ContextDev
               )
             end
 
+          # Use `page` to watch one web page.
           sig { returns(Symbol) }
           attr_accessor :type
 
+          # Public HTTP(S) page URL to monitor.
           sig { returns(String) }
           attr_accessor :url
 
-          # CSS selectors for HTML regions to remove before text extraction. Applied after
-          # include_selectors; exclusion takes precedence when an element matches both. Omit
-          # or pass an empty array to apply no explicit exclusions. Changing these selectors
-          # creates a new baseline.
+          # Remove matching regions after inclusions. Changes create a new baseline.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :exclude_selectors
 
           sig { params(exclude_selectors: T::Array[String]).void }
           attr_writer :exclude_selectors
 
-          # CSS selectors defining the HTML regions to monitor. Matching subtrees are
-          # combined in document order before text extraction, instead of automatic
-          # main-content selection. Omit or pass an empty array to use automatic
-          # main-content extraction. If the filtered page has no usable text, the run fails
-          # without replacing the baseline. Changing these selectors creates a new baseline.
+          # Monitor these CSS-selected regions. Empty or omitted uses main content. Changes
+          # create a new baseline.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :include_selectors
 
@@ -234,23 +232,19 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
+            # Public HTTP(S) page URL to monitor.
             url:,
-            # CSS selectors for HTML regions to remove before text extraction. Applied after
-            # include_selectors; exclusion takes precedence when an element matches both. Omit
-            # or pass an empty array to apply no explicit exclusions. Changing these selectors
-            # creates a new baseline.
+            # Remove matching regions after inclusions. Changes create a new baseline.
             exclude_selectors: nil,
-            # CSS selectors defining the HTML regions to monitor. Matching subtrees are
-            # combined in document order before text extraction, instead of automatic
-            # main-content selection. Omit or pass an empty array to use automatic
-            # main-content extraction. If the filtered page has no usable text, the run fails
-            # without replacing the baseline. Changing these selectors creates a new baseline.
+            # Monitor these CSS-selected regions. Empty or omitted uses main content. Changes
+            # create a new baseline.
             include_selectors: nil,
             # Plain-language goal describing which page changes matter. When provided without
             # change_detection, semantic detection is inferred.
             instructions: nil,
             # Normalize whitespace before comparing or analyzing text.
             normalize_whitespace: nil,
+            # Use `page` to watch one web page.
             type: :page
           )
           end
@@ -280,6 +274,7 @@ module ContextDev
               )
             end
 
+          # Use `sitemap` to watch a site for added or removed URLs.
           sig { returns(Symbol) }
           attr_accessor :type
 
@@ -308,11 +303,7 @@ module ContextDev
           sig { params(max_urls: Integer).void }
           attr_writer :max_urls
 
-          # Watch a sitemap for URL additions and removals. Crawled URLs are normalized
-          # (lowercased host, no trailing slash/fragment) and scoped to the monitored site
-          # and its subdomains before comparison. On a detected difference the sitemap is
-          # re-fetched within the same run and only URLs both observations agree on are
-          # reported, suppressing transient crawl flaps.
+          # Watch a site’s URL inventory for confirmed additions and removals.
           sig do
             params(
               url: String,
@@ -331,6 +322,7 @@ module ContextDev
             include: nil,
             # Maximum number of sitemap URLs to track (capped at 10,000).
             max_urls: nil,
+            # Use `sitemap` to watch a site for added or removed URLs.
             type: :sitemap
           )
           end
@@ -364,6 +356,7 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :instructions
 
+          # Use `extract` to watch structured data across selected pages.
           sig { returns(Symbol) }
           attr_accessor :type
 
@@ -371,6 +364,7 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :url
 
+          # Allow page discovery on subdomains of the target site.
           sig { returns(T.nilable(T::Boolean)) }
           attr_reader :follow_subdomains
 
@@ -391,25 +385,16 @@ module ContextDev
           sig { params(max_pages: Integer).void }
           attr_writer :max_pages
 
-          # JSON Schema describing the data you care about. It is used three ways: it guides
-          # which pages are selected for tracking, it gives the change judge extra context
-          # on which changes matter (alongside `instructions`), and it defines the shape of
-          # the baseline `data` snapshot on GET /monitors/{monitor_id} (refreshed at most
-          # about once a day). It is not a response format for changes: change events and
-          # webhook payloads always contain diffs, summaries, and evidence excerpts — never
-          # data in this schema's shape. If omitted, a default summary + key-points schema
-          # is used.
+          # JSON Schema for page selection and the baseline snapshot. Changes return diffs
+          # and evidence.
           sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
           attr_reader :schema
 
           sig { params(schema: T::Hash[Symbol, T.anything]).void }
           attr_writer :schema
 
-          # Watch the monitor-relevant pages of a site for meaningful changes. A crawl
-          # guided by `schema`/`instructions` selects up to `max_pages` relevant pages to
-          # track; each run re-checks exactly those pages, and confirmed content changes are
-          # judged for relevance against the monitor's `instructions` (and `schema`, when
-          # provided). The tracked page set is refreshed by a periodic re-discovery crawl.
+          # Track relevant pages selected by `schema` and `instructions`; refresh the page
+          # set periodically.
           sig do
             params(
               instructions: String,
@@ -427,20 +412,16 @@ module ContextDev
             instructions:,
             # Root URL to extract structured data from.
             url:,
+            # Allow page discovery on subdomains of the target site.
             follow_subdomains: nil,
             # Optional maximum link depth from the starting URL (0 = only the starting page).
             max_depth: nil,
             # Maximum number of pages to track.
             max_pages: nil,
-            # JSON Schema describing the data you care about. It is used three ways: it guides
-            # which pages are selected for tracking, it gives the change judge extra context
-            # on which changes matter (alongside `instructions`), and it defines the shape of
-            # the baseline `data` snapshot on GET /monitors/{monitor_id} (refreshed at most
-            # about once a day). It is not a response format for changes: change events and
-            # webhook payloads always contain diffs, summaries, and evidence excerpts — never
-            # data in this schema's shape. If omitted, a default summary + key-points schema
-            # is used.
+            # JSON Schema for page selection and the baseline snapshot. Changes return diffs
+            # and evidence.
             schema: nil,
+            # Use `extract` to watch structured data across selected pages.
             type: :extract
           )
           end
@@ -471,7 +452,8 @@ module ContextDev
         end
       end
 
-      # Discriminated union describing how changes are detected.
+      # How changes are judged. Defaults to `semantic` for extract targets and page
+      # targets with `instructions`, otherwise `exact`.
       module ChangeDetection
         extend ContextDev::Internal::Type::Union
 
@@ -492,13 +474,17 @@ module ContextDev
               )
             end
 
+          # Use `exact` to compare visible text or sitemap URLs.
           sig { returns(Symbol) }
           attr_accessor :type
 
           # Detect exact changes. For page targets, this means visible text diffs. For
           # sitemap targets, this means URL additions and removals.
           sig { params(type: Symbol).returns(T.attached_class) }
-          def self.new(type: :exact)
+          def self.new(
+            # Use `exact` to compare visible text or sitemap URLs.
+            type: :exact
+          )
           end
 
           sig { override.returns({ type: Symbol }) }
@@ -515,25 +501,30 @@ module ContextDev
               )
             end
 
+          # Use `semantic` to judge changes against the target instructions.
           sig { returns(Symbol) }
           attr_accessor :type
 
+          # Minimum confidence required to report a meaningful change, from 0 to 1.
           sig { returns(T.nilable(Float)) }
           attr_reader :confidence_threshold
 
           sig { params(confidence_threshold: Float).void }
           attr_writer :confidence_threshold
 
-          # Detect meaning-level changes to page content, ignoring cosmetic or
-          # instruction-irrelevant differences. Which changes are meaningful is judged
-          # against the page or extract target's `instructions` (and an extract target's
-          # `schema`, when provided).
+          # Detect meaningful content changes using the target’s instructions and optional
+          # schema.
           sig do
             params(confidence_threshold: Float, type: Symbol).returns(
               T.attached_class
             )
           end
-          def self.new(confidence_threshold: nil, type: :semantic)
+          def self.new(
+            # Minimum confidence required to report a meaningful change, from 0 to 1.
+            confidence_threshold: nil,
+            # Use `semantic` to judge changes against the target instructions.
+            type: :semantic
+          )
           end
 
           sig do
@@ -552,8 +543,7 @@ module ContextDev
         end
       end
 
-      # Top-level monitor category. Always `web` today; the concrete behavior is
-      # described by `target` and `change_detection`.
+      # Always `web`. Optional.
       module Mode
         extend ContextDev::Internal::Type::Enum
 
@@ -587,11 +577,13 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :frequency
 
+        # Use `interval` to run on a repeating schedule.
         sig do
           returns(ContextDev::MonitorCreateParams::Schedule::Type::OrSymbol)
         end
         attr_accessor :type
 
+        # Time unit used with `frequency` to set the run interval.
         sig do
           returns(ContextDev::MonitorCreateParams::Schedule::Unit::OrSymbol)
         end
@@ -612,7 +604,9 @@ module ContextDev
           # at least 10 minutes and at most 1 year (e.g. minimum 10 when unit is minutes;
           # maximum 365 when unit is days).
           frequency:,
+          # Use `interval` to run on a repeating schedule.
           type:,
+          # Time unit used with `frequency` to set the run interval.
           unit:
         )
         end
@@ -629,6 +623,7 @@ module ContextDev
         def to_hash
         end
 
+        # Use `interval` to run on a repeating schedule.
         module Type
           extend ContextDev::Internal::Type::Enum
 
@@ -655,6 +650,7 @@ module ContextDev
           end
         end
 
+        # Time unit used with `frequency` to set the run interval.
         module Unit
           extend ContextDev::Internal::Type::Enum
 
@@ -701,15 +697,13 @@ module ContextDev
             )
           end
 
-        # Webhook URL events are delivered to. Slack incoming webhook URLs are
-        # automatically formatted as Slack messages.
+        # Public HTTP(S) URL that receives events. Slack and GovSlack URLs get formatted
+        # messages.
         sig { returns(String) }
         attr_accessor :url
 
-        # Events delivered to this endpoint. `change.detected` fires only when a run
-        # detects a change; `run.completed` fires on every completed run — including runs
-        # that detected no change — and embeds the change when one was detected. Defaults
-        # to `["change.detected"]` when omitted.
+        # Events to deliver. Defaults to `change.detected`; `run.completed` also includes
+        # unchanged runs.
         sig do
           returns(
             T.nilable(
@@ -738,6 +732,7 @@ module ContextDev
         sig { params(retry_: ContextDev::RetryConfig::OrHash).void }
         attr_writer :retry_
 
+        # Webhook destination and delivery settings. Null means no webhook is configured.
         sig do
           params(
             url: String,
@@ -749,13 +744,11 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Webhook URL events are delivered to. Slack incoming webhook URLs are
-          # automatically formatted as Slack messages.
+          # Public HTTP(S) URL that receives events. Slack and GovSlack URLs get formatted
+          # messages.
           url:,
-          # Events delivered to this endpoint. `change.detected` fires only when a run
-          # detects a change; `run.completed` fires on every completed run — including runs
-          # that detected no change — and embeds the change when one was detected. Defaults
-          # to `["change.detected"]` when omitted.
+          # Events to deliver. Defaults to `change.detected`; `run.completed` also includes
+          # unchanged runs.
           events: nil,
           # Webhook retry settings. Use {} for the default schedule.
           retry_: nil

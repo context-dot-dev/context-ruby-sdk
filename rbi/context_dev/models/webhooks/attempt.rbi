@@ -36,7 +36,7 @@ module ContextDev
         sig { returns(Time) }
         attr_accessor :started_at
 
-        # What started this attempt.
+        # `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
         sig { returns(ContextDev::Webhooks::Attempt::Trigger::TaggedSymbol) }
         attr_accessor :trigger
 
@@ -66,7 +66,7 @@ module ContextDev
           http_status:,
           # Attempt start time.
           started_at:,
-          # What started this attempt.
+          # `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
           trigger:,
           # URL used for this attempt.
           url:
@@ -123,7 +123,7 @@ module ContextDev
           end
         end
 
-        # What started this attempt.
+        # `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
         module Trigger
           extend ContextDev::Internal::Type::Enum
 

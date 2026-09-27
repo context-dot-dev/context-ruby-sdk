@@ -24,14 +24,14 @@ module ContextDev
         required :next_cursor, String, nil?: true
 
         # @!attribute request_id
-        #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        #   it when contacting support about a failed request.
+        #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        #   support.
         #
         #   @return [String]
         required :request_id, String
 
         # @!attribute key_metadata
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
         #   @return [ContextDev::Models::Webhooks::DeliveryListAttemptsResponse::KeyMetadata, nil]
         optional :key_metadata, -> { ContextDev::Models::Webhooks::DeliveryListAttemptsResponse::KeyMetadata }
@@ -46,14 +46,14 @@ module ContextDev
         #
         #   @param next_cursor [String, nil] Next page cursor, or null on the last page.
         #
-        #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+        #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
         #
-        #   @param key_metadata [ContextDev::Models::Webhooks::DeliveryListAttemptsResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+        #   @param key_metadata [ContextDev::Models::Webhooks::DeliveryListAttemptsResponse::KeyMetadata] Credits this request used and your remaining balance.
 
         # @see ContextDev::Models::Webhooks::DeliveryListAttemptsResponse#key_metadata
         class KeyMetadata < ContextDev::Internal::Type::BaseModel
           # @!attribute credits_consumed
-          #   Credits used by this request.
+          #   Credits charged for this request.
           #
           #   @return [Integer]
           required :credits_consumed, Integer
@@ -65,9 +65,9 @@ module ContextDev
           required :credits_remaining, Integer
 
           # @!method initialize(credits_consumed:, credits_remaining:)
-          #   Credit usage, included whenever a valid API key is provided.
+          #   Credits this request used and your remaining balance.
           #
-          #   @param credits_consumed [Integer] Credits used by this request.
+          #   @param credits_consumed [Integer] Credits charged for this request.
           #
           #   @param credits_remaining [Integer] Credits remaining for your organization.
         end

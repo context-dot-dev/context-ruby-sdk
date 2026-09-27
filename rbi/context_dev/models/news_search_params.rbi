@@ -49,7 +49,7 @@ module ContextDev
       sig { params(sort_by: ContextDev::NewsSearchParams::SortBy::OrHash).void }
       attr_writer :sort_by
 
-      # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      # Labels for filtering usage in the dashboard.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -80,7 +80,7 @@ module ContextDev
         limit: nil,
         # Result ordering. Defaults to newest.
         sort_by: nil,
-        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
         request_options: {}
       )
@@ -193,6 +193,7 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :name
 
+            # Use `name` to identify the company by name.
             sig { returns(Symbol) }
             attr_accessor :type
 
@@ -201,6 +202,7 @@ module ContextDev
             def self.new(
               # Company name.
               name:,
+              # Use `name` to identify the company by name.
               type: :name
             )
             end
@@ -223,6 +225,7 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :domain
 
+            # Use `domain` to identify the company by website domain.
             sig { returns(Symbol) }
             attr_accessor :type
 
@@ -233,6 +236,7 @@ module ContextDev
             def self.new(
               # Company website domain, such as apple.com.
               domain:,
+              # Use `domain` to identify the company by website domain.
               type: :domain
             )
             end
@@ -255,6 +259,7 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :ticker
 
+            # Use `ticker` to identify a publicly traded company.
             sig { returns(Symbol) }
             attr_accessor :type
 
@@ -292,6 +297,7 @@ module ContextDev
               # Stock exchange the ticker trades on, used to disambiguate tickers listed on
               # multiple exchanges.
               exchange: nil,
+              # Use `ticker` to identify a publicly traded company.
               type: :ticker
             )
             end
@@ -709,6 +715,7 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :isin
 
+            # Use `isin` to identify the company by its securities identifier.
             sig { returns(Symbol) }
             attr_accessor :type
 
@@ -717,6 +724,7 @@ module ContextDev
             def self.new(
               # International Securities Identification Number.
               isin:,
+              # Use `isin` to identify the company by its securities identifier.
               type: :isin
             )
             end

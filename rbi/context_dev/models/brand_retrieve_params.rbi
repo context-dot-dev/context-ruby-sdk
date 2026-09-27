@@ -11,7 +11,7 @@ module ContextDev
           T.any(ContextDev::BrandRetrieveParams, ContextDev::Internal::AnyHash)
         end
 
-      # Exactly one lookup type must be provided.
+      # One lookup, chosen by `type`.
       sig do
         returns(
           T.any(
@@ -41,7 +41,7 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Exactly one lookup type must be provided.
+        # One lookup, chosen by `type`.
         body:,
         request_options: {}
       )
@@ -66,7 +66,7 @@ module ContextDev
       def to_hash
       end
 
-      # Exactly one lookup type must be provided.
+      # One lookup, chosen by `type`.
       module Body
         extend ContextDev::Internal::Type::Union
 
@@ -108,10 +108,8 @@ module ContextDev
           end
           attr_accessor :force_language
 
-          # Maximum age in milliseconds for cached brand data before the API performs a hard
-          # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-          # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-          # are clamped to 1 year.
+          # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+          # year. `0` refreshes.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
@@ -127,16 +125,14 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Optional request deadline and behavior on timeout. For GET requests, use
-          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          # timeoutOpts object.
+          # Request deadline and what to return when it passes.
           sig do
             returns(
               T.nilable(
@@ -174,20 +170,16 @@ module ContextDev
             # Domain name to retrieve brand data for (e.g., 'stripe.com').
             domain:,
             force_language: nil,
-            # Maximum age in milliseconds for cached brand data before the API performs a hard
-            # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-            # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-            # are clamped to 1 year.
+            # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+            # year. `0` refreshes.
             max_age_ms: nil,
             # Optional parameter to optimize the API call for maximum speed. When set to true,
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            # Labels for filtering usage in the dashboard.
             tags: nil,
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             timeout_opts: nil,
             # Discriminator for domain-based brand retrieval.
             type: :by_domain
@@ -847,14 +839,12 @@ module ContextDev
                 )
               end
 
-            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            # Deadline in milliseconds.
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             sig do
               returns(
                 T.nilable(
@@ -872,9 +862,7 @@ module ContextDev
             end
             attr_writer :behavior
 
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             sig do
               params(
                 milliseconds: Integer,
@@ -883,12 +871,10 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              # Deadline in milliseconds.
               milliseconds:,
-              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-              # credits. "return-partial" returns usable results collected so far; if none are
-              # available, the request still fails without charging credits. Partial results are
-              # not cached as complete results.
+              # "fail" returns 408 at the deadline. "return-partial" returns available results;
+              # inspect the response’s partial flag.
               behavior: nil
             )
             end
@@ -905,10 +891,8 @@ module ContextDev
             def to_hash
             end
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 
@@ -979,10 +963,8 @@ module ContextDev
           end
           attr_accessor :force_language
 
-          # Maximum age in milliseconds for cached brand data before the API performs a hard
-          # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-          # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-          # are clamped to 1 year.
+          # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+          # year. `0` refreshes.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
@@ -998,16 +980,14 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Optional request deadline and behavior on timeout. For GET requests, use
-          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          # timeoutOpts object.
+          # Request deadline and what to return when it passes.
           sig do
             returns(
               T.nilable(
@@ -1050,20 +1030,16 @@ module ContextDev
             # by company name.
             country_gl: nil,
             force_language: nil,
-            # Maximum age in milliseconds for cached brand data before the API performs a hard
-            # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-            # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-            # are clamped to 1 year.
+            # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+            # year. `0` refreshes.
             max_age_ms: nil,
             # Optional parameter to optimize the API call for maximum speed. When set to true,
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            # Labels for filtering usage in the dashboard.
             tags: nil,
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             timeout_opts: nil,
             # Discriminator for name-based brand retrieval.
             type: :by_name
@@ -1724,14 +1700,12 @@ module ContextDev
                 )
               end
 
-            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            # Deadline in milliseconds.
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             sig do
               returns(
                 T.nilable(
@@ -1749,9 +1723,7 @@ module ContextDev
             end
             attr_writer :behavior
 
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             sig do
               params(
                 milliseconds: Integer,
@@ -1760,12 +1732,10 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              # Deadline in milliseconds.
               milliseconds:,
-              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-              # credits. "return-partial" returns usable results collected so far; if none are
-              # available, the request still fails without charging credits. Partial results are
-              # not cached as complete results.
+              # "fail" returns 408 at the deadline. "return-partial" returns available results;
+              # inspect the response’s partial flag.
               behavior: nil
             )
             end
@@ -1782,10 +1752,8 @@ module ContextDev
             def to_hash
             end
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 
@@ -1848,10 +1816,8 @@ module ContextDev
           end
           attr_accessor :force_language
 
-          # Maximum age in milliseconds for cached brand data before the API performs a hard
-          # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-          # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-          # are clamped to 1 year.
+          # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+          # year. `0` refreshes.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
@@ -1867,16 +1833,14 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Optional request deadline and behavior on timeout. For GET requests, use
-          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          # timeoutOpts object.
+          # Request deadline and what to return when it passes.
           sig do
             returns(
               T.nilable(
@@ -1916,20 +1880,16 @@ module ContextDev
             # Email address to retrieve brand data for (e.g., 'jane@stripe.com').
             email:,
             force_language: nil,
-            # Maximum age in milliseconds for cached brand data before the API performs a hard
-            # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-            # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-            # are clamped to 1 year.
+            # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+            # year. `0` refreshes.
             max_age_ms: nil,
             # Optional parameter to optimize the API call for maximum speed. When set to true,
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            # Labels for filtering usage in the dashboard.
             tags: nil,
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             timeout_opts: nil,
             # Discriminator for email-based brand retrieval.
             type: :by_email
@@ -2589,14 +2549,12 @@ module ContextDev
                 )
               end
 
-            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            # Deadline in milliseconds.
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             sig do
               returns(
                 T.nilable(
@@ -2614,9 +2572,7 @@ module ContextDev
             end
             attr_writer :behavior
 
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             sig do
               params(
                 milliseconds: Integer,
@@ -2625,12 +2581,10 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              # Deadline in milliseconds.
               milliseconds:,
-              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-              # credits. "return-partial" returns usable results collected so far; if none are
-              # available, the request still fails without charging credits. Partial results are
-              # not cached as complete results.
+              # "fail" returns 408 at the deadline. "return-partial" returns available results;
+              # inspect the response’s partial flag.
               behavior: nil
             )
             end
@@ -2647,10 +2601,8 @@ module ContextDev
             def to_hash
             end
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 
@@ -2713,10 +2665,8 @@ module ContextDev
           end
           attr_accessor :force_language
 
-          # Maximum age in milliseconds for cached brand data before the API performs a hard
-          # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-          # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-          # are clamped to 1 year.
+          # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+          # year. `0` refreshes.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
@@ -2732,7 +2682,7 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -2746,9 +2696,7 @@ module ContextDev
           sig { params(ticker_exchange: String).void }
           attr_writer :ticker_exchange
 
-          # Optional request deadline and behavior on timeout. For GET requests, use
-          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          # timeoutOpts object.
+          # Request deadline and what to return when it passes.
           sig do
             returns(
               T.nilable(
@@ -2788,22 +2736,18 @@ module ContextDev
             # Stock ticker symbol to retrieve brand data for (e.g., 'AAPL').
             ticker:,
             force_language: nil,
-            # Maximum age in milliseconds for cached brand data before the API performs a hard
-            # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-            # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-            # are clamped to 1 year.
+            # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+            # year. `0` refreshes.
             max_age_ms: nil,
             # Optional parameter to optimize the API call for maximum speed. When set to true,
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            # Labels for filtering usage in the dashboard.
             tags: nil,
             # Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
             ticker_exchange: nil,
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             timeout_opts: nil,
             # Discriminator for ticker-based brand retrieval.
             type: :by_ticker
@@ -3464,14 +3408,12 @@ module ContextDev
                 )
               end
 
-            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            # Deadline in milliseconds.
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             sig do
               returns(
                 T.nilable(
@@ -3489,9 +3431,7 @@ module ContextDev
             end
             attr_writer :behavior
 
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             sig do
               params(
                 milliseconds: Integer,
@@ -3500,12 +3440,10 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              # Deadline in milliseconds.
               milliseconds:,
-              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-              # credits. "return-partial" returns usable results collected so far; if none are
-              # available, the request still fails without charging credits. Partial results are
-              # not cached as complete results.
+              # "fail" returns 408 at the deadline. "return-partial" returns available results;
+              # inspect the response’s partial flag.
               behavior: nil
             )
             end
@@ -3522,10 +3460,8 @@ module ContextDev
             def to_hash
             end
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 
@@ -3581,16 +3517,14 @@ module ContextDev
           sig { returns(Symbol) }
           attr_accessor :type
 
-          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Optional request deadline and behavior on timeout. For GET requests, use
-          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          # timeoutOpts object.
+          # Request deadline and what to return when it passes.
           sig do
             returns(
               T.nilable(
@@ -3608,11 +3542,8 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
-          # Retrieve brand data by fetching the provided URL directly. Note: if you use
-          # this, brand data is fetched only from the provided URL — not from the entire
-          # internet — so results are limited to what that single page contains. No domain
-          # resolution, database lookup, or cross-source enrichment is performed. Cannot be
-          # combined with domain, name, email, or ticker.
+          # Retrieve brand data from this exact URL. Cross-site enrichment and other lookup
+          # identifiers are excluded.
           sig do
             params(
               direct_url: String,
@@ -3627,11 +3558,9 @@ module ContextDev
             # 'https://stripe.com/enterprise'). Only this URL is fetched — not the entire
             # internet.
             direct_url:,
-            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            # Labels for filtering usage in the dashboard.
             tags: nil,
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             timeout_opts: nil,
             # Discriminator for direct-URL-based brand retrieval.
             type: :by_direct_url
@@ -3661,14 +3590,12 @@ module ContextDev
                 )
               end
 
-            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            # Deadline in milliseconds.
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             sig do
               returns(
                 T.nilable(
@@ -3686,9 +3613,7 @@ module ContextDev
             end
             attr_writer :behavior
 
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             sig do
               params(
                 milliseconds: Integer,
@@ -3697,12 +3622,10 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              # Deadline in milliseconds.
               milliseconds:,
-              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-              # credits. "return-partial" returns usable results collected so far; if none are
-              # available, the request still fails without charging credits. Partial results are
-              # not cached as complete results.
+              # "fail" returns 408 at the deadline. "return-partial" returns available results;
+              # inspect the response’s partial flag.
               behavior: nil
             )
             end
@@ -3719,10 +3642,8 @@ module ContextDev
             def to_hash
             end
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 
@@ -3854,16 +3775,14 @@ module ContextDev
           end
           attr_writer :phone
 
-          # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Optional request deadline and behavior on timeout. For GET requests, use
-          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          # timeoutOpts object.
+          # Request deadline and what to return when it passes.
           sig do
             returns(
               T.nilable(
@@ -3925,11 +3844,9 @@ module ContextDev
             mcc: nil,
             # Optional phone number from the transaction to help verify brand match.
             phone: nil,
-            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            # Labels for filtering usage in the dashboard.
             tags: nil,
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             timeout_opts: nil,
             # Discriminator for transaction-based brand retrieval.
             type: :by_transaction
@@ -4630,14 +4547,12 @@ module ContextDev
                 )
               end
 
-            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            # Deadline in milliseconds.
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             sig do
               returns(
                 T.nilable(
@@ -4655,9 +4570,7 @@ module ContextDev
             end
             attr_writer :behavior
 
-            # Optional request deadline and behavior on timeout. For GET requests, use
-            # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            # timeoutOpts object.
+            # Request deadline and what to return when it passes.
             sig do
               params(
                 milliseconds: Integer,
@@ -4666,12 +4579,10 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+              # Deadline in milliseconds.
               milliseconds:,
-              # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-              # credits. "return-partial" returns usable results collected so far; if none are
-              # available, the request still fails without charging credits. Partial results are
-              # not cached as complete results.
+              # "fail" returns 408 at the deadline. "return-partial" returns available results;
+              # inspect the response’s partial flag.
               behavior: nil
             )
             end
@@ -4688,10 +4599,8 @@ module ContextDev
             def to_hash
             end
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 

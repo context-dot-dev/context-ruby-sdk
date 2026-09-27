@@ -21,8 +21,7 @@ module ContextDev
       required :detected_at, Time
 
       # @!attribute mode
-      #   Top-level monitor category. Always `web` today; the concrete behavior is
-      #   described by `target` and `change_detection`.
+      #   Always `web`. Optional.
       #
       #   @return [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::Mode]
       required :mode, enum: -> { ContextDev::Models::MonitorRetrieveChangeResponse::Mode }
@@ -31,6 +30,13 @@ module ContextDev
       #
       #   @return [String]
       required :monitor_id, String
+
+      # @!attribute request_id
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
+      #
+      #   @return [String]
+      required :request_id, String
 
       # @!attribute run_id
       #   The run that detected this change.
@@ -44,8 +50,7 @@ module ContextDev
       required :summary, String
 
       # @!attribute tags
-      #   User-defined tags for grouping and filtering monitors and their changes.
-      #   Duplicates are removed.
+      #   Labels for filtering monitors, their changes, and their usage.
       #
       #   @return [Array<String>]
       required :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -108,6 +113,12 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::Importance, nil]
       optional :importance, enum: -> { ContextDev::Models::MonitorRetrieveChangeResponse::Importance }
 
+      # @!attribute key_metadata
+      #   Credits this request used and your remaining balance.
+      #
+      #   @return [ContextDev::Models::MonitorRetrieveChangeResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::MonitorRetrieveChangeResponse::KeyMetadata }
+
       # @!attribute matched_url_count
       #
       #   @return [Integer, nil]
@@ -130,15 +141,9 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :removed_urls, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!method initialize(id:, change_detection_type:, detected_at:, mode:, monitor_id:, run_id:, summary:, tags:, target_type:, title:, url:, added_url_count: nil, added_urls: nil, after_text_excerpt: nil, before_text_excerpt: nil, confidence: nil, diff: nil, evidence: nil, importance: nil, matched_url_count: nil, matched_urls: nil, removed_url_count: nil, removed_urls: nil)
+      # @!method initialize(id:, change_detection_type:, detected_at:, mode:, monitor_id:, request_id:, run_id:, summary:, tags:, target_type:, title:, url:, added_url_count: nil, added_urls: nil, after_text_excerpt: nil, before_text_excerpt: nil, confidence: nil, diff: nil, evidence: nil, importance: nil, key_metadata: nil, matched_url_count: nil, matched_urls: nil, removed_url_count: nil, removed_urls: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorRetrieveChangeResponse} for more details.
-      #
-      #   A detected change. `mode` is the constant `web`; `target_type` and
-      #   `change_detection_type` describe the change, and which optional fields are
-      #   present depends on them (page: `diff` + excerpts; sitemap:
-      #   `added_urls`/`removed_urls`; semantic:
-      #   `confidence`/`importance`/`evidence`/`matched_urls`).
       #
       #   @param id [String]
       #
@@ -146,15 +151,17 @@ module ContextDev
       #
       #   @param detected_at [Time]
       #
-      #   @param mode [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::Mode] Top-level monitor category. Always `web` today; the concrete behavior is describ
+      #   @param mode [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::Mode] Always `web`. Optional.
       #
       #   @param monitor_id [String]
+      #
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param run_id [String] The run that detected this change.
       #
       #   @param summary [String]
       #
-      #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes. Duplica
+      #   @param tags [Array<String>] Labels for filtering monitors, their changes, and their usage.
       #
       #   @param target_type [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::TargetType]
       #
@@ -178,6 +185,8 @@ module ContextDev
       #
       #   @param importance [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::Importance]
       #
+      #   @param key_metadata [ContextDev::Models::MonitorRetrieveChangeResponse::KeyMetadata] Credits this request used and your remaining balance.
+      #
       #   @param matched_url_count [Integer]
       #
       #   @param matched_urls [Array<String>] At most 500 URLs are included; the corresponding count field is always exact.
@@ -197,8 +206,7 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Top-level monitor category. Always `web` today; the concrete behavior is
-      # described by `target` and `change_detection`.
+      # Always `web`. Optional.
       #
       # @see ContextDev::Models::MonitorRetrieveChangeResponse#mode
       module Mode
@@ -259,6 +267,28 @@ module ContextDev
 
         # @!method self.values
         #   @return [Array<Symbol>]
+      end
+
+      # @see ContextDev::Models::MonitorRetrieveChangeResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   Credits charged for this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   Credits remaining for your organization.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Credits this request used and your remaining balance.
+        #
+        #   @param credits_consumed [Integer] Credits charged for this request.
+        #
+        #   @param credits_remaining [Integer] Credits remaining for your organization.
       end
     end
   end

@@ -5,9 +5,7 @@ module ContextDev
     # @see ContextDev::Resources::Web#search
     class WebSearchResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute cache_metadata
-      #   Cache outcome for this response. Composite responses are hits only when every
-      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-      #   oldest contributing hit.
+      #   Whether this response came from cache.
       #
       #   @return [ContextDev::Models::WebSearchResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebSearchResponse::CacheMetadata }
@@ -19,8 +17,8 @@ module ContextDev
       required :query, String
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -32,7 +30,7 @@ module ContextDev
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebSearchResponse::Result] }
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::WebSearchResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebSearchResponse::KeyMetadata }
@@ -49,15 +47,15 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebSearchResponse} for more details.
       #
-      #   @param cache_metadata [ContextDev::Models::WebSearchResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #   @param cache_metadata [ContextDev::Models::WebSearchResponse::CacheMetadata] Whether this response came from cache.
       #
       #   @param query [String] Echo of the original query (useful when fanout was enabled).
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param results [Array<ContextDev::Models::WebSearchResponse::Result>]
       #
-      #   @param key_metadata [ContextDev::Models::WebSearchResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::WebSearchResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param partial [Boolean] True when timeoutOpts.behavior=return-partial returned the usable results collec
 
@@ -80,9 +78,7 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebSearchResponse::CacheMetadata} for more details.
         #
-        #   Cache outcome for this response. Composite responses are hits only when every
-        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-        #   oldest contributing hit.
+        #   Whether this response came from cache.
         #
         #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
         #
@@ -166,11 +162,8 @@ module ContextDev
           required :markdown, String, nil?: true
 
           # @!attribute final_dom_state
-          #   How complete the returned content is. `loaded` means the page finished the waits
-          #   the request asked for. `still-loading` only occurs with
-          #   timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-          #   reached first, so the content reflects the DOM at that moment and late-rendering
-          #   parts may be missing. Partial results are billed at the base request cost.
+          #   `loaded`, or `still-loading` when capture ended before the page finished
+          #   loading.
           #
           #   @return [Symbol, ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState, nil]
           optional :final_dom_state,
@@ -187,7 +180,7 @@ module ContextDev
           #
           #   @param markdown [String, nil] GFM Markdown of the page. Null unless markdownOptions.enabled is true and scrapi
           #
-          #   @param final_dom_state [Symbol, ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState] How complete the returned content is. `loaded` means the page finished the waits
+          #   @param final_dom_state [Symbol, ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState] `loaded`, or `still-loading` when capture ended before the page finished loading
 
           # Per-result scrape outcome. Inspect this before reading `markdown`.
           #
@@ -206,11 +199,8 @@ module ContextDev
             #   @return [Array<Symbol>]
           end
 
-          # How complete the returned content is. `loaded` means the page finished the waits
-          # the request asked for. `still-loading` only occurs with
-          # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-          # reached first, so the content reflects the DOM at that moment and late-rendering
-          # parts may be missing. Partial results are billed at the base request cost.
+          # `loaded`, or `still-loading` when capture ended before the page finished
+          # loading.
           #
           # @see ContextDev::Models::WebSearchResponse::Result::Markdown#final_dom_state
           module FinalDomState
@@ -242,7 +232,7 @@ module ContextDev
       # @see ContextDev::Models::WebSearchResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -254,9 +244,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

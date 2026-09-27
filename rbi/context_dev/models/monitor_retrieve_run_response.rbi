@@ -36,7 +36,12 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :monitor_id
 
-      # The first run after monitor creation is a baseline run.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
+      sig { returns(String) }
+      attr_accessor :request_id
+
+      # A baseline run follows creation or a target or detection change.
       sig do
         returns(
           ContextDev::Models::MonitorRetrieveRunResponse::RunType::TaggedSymbol
@@ -83,6 +88,22 @@ module ContextDev
       end
       attr_writer :error
 
+      # Credits this request used and your remaining balance.
+      sig do
+        returns(
+          T.nilable(ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata)
+        )
+      end
+      attr_reader :key_metadata
+
+      sig do
+        params(
+          key_metadata:
+            ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata::OrHash
+        ).void
+      end
+      attr_writer :key_metadata
+
       # Why a skipped run never executed; null unless status is `skipped`.
       sig do
         returns(
@@ -109,9 +130,7 @@ module ContextDev
       end
       attr_writer :webhook_deliveries
 
-      # Deprecated: use `webhook_deliveries`, which records every attempt now that a run
-      # can deliver multiple events. Omitted when no webhook was attempted, including
-      # historical runs created before delivery tracking was added.
+      # Deprecated. Use `webhook_deliveries` for all attempts.
       sig { returns(T.nilable(ContextDev::WebhookDelivery)) }
       attr_reader :webhook_delivery
 
@@ -134,6 +153,7 @@ module ContextDev
             ContextDev::Models::MonitorRetrieveRunResponse::ChangeDetectionType::OrSymbol,
           credits_charged: Integer,
           monitor_id: String,
+          request_id: String,
           run_type:
             ContextDev::Models::MonitorRetrieveRunResponse::RunType::OrSymbol,
           status:
@@ -146,6 +166,8 @@ module ContextDev
             T.nilable(
               ContextDev::Models::MonitorRetrieveRunResponse::Error::OrHash
             ),
+          key_metadata:
+            ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata::OrHash,
           skip_reason:
             T.nilable(
               ContextDev::Models::MonitorRetrieveRunResponse::SkipReason::OrSymbol
@@ -166,7 +188,10 @@ module ContextDev
         # Credits charged for this run (0 for skipped/failed runs).
         credits_charged:,
         monitor_id:,
-        # The first run after monitor creation is a baseline run.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
+        request_id:,
+        # A baseline run follows creation or a target or detection change.
         run_type:,
         # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
         # (insufficient credits, monitor paused, or superseded by a concurrent run).
@@ -175,6 +200,8 @@ module ContextDev
         change_id: nil,
         completed_at: nil,
         error: nil,
+        # Credits this request used and your remaining balance.
+        key_metadata: nil,
         # Why a skipped run never executed; null unless status is `skipped`.
         skip_reason: nil,
         started_at: nil,
@@ -182,9 +209,7 @@ module ContextDev
         # fired. Omitted when no webhook was attempted, including runs created before
         # event selection was added.
         webhook_deliveries: nil,
-        # Deprecated: use `webhook_deliveries`, which records every attempt now that a run
-        # can deliver multiple events. Omitted when no webhook was attempted, including
-        # historical runs created before delivery tracking was added.
+        # Deprecated. Use `webhook_deliveries` for all attempts.
         webhook_delivery: nil,
         # Webhook delivery IDs for this run.
         webhook_delivery_ids: nil
@@ -201,6 +226,7 @@ module ContextDev
               ContextDev::Models::MonitorRetrieveRunResponse::ChangeDetectionType::TaggedSymbol,
             credits_charged: Integer,
             monitor_id: String,
+            request_id: String,
             run_type:
               ContextDev::Models::MonitorRetrieveRunResponse::RunType::TaggedSymbol,
             status:
@@ -211,6 +237,8 @@ module ContextDev
             completed_at: T.nilable(Time),
             error:
               T.nilable(ContextDev::Models::MonitorRetrieveRunResponse::Error),
+            key_metadata:
+              ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata,
             skip_reason:
               T.nilable(
                 ContextDev::Models::MonitorRetrieveRunResponse::SkipReason::TaggedSymbol
@@ -259,7 +287,7 @@ module ContextDev
         end
       end
 
-      # The first run after monitor creation is a baseline run.
+      # A baseline run follows creation or a target or detection change.
       module RunType
         extend ContextDev::Internal::Type::Enum
 
@@ -404,6 +432,46 @@ module ContextDev
         end
 
         sig { override.returns({ code: String, message: String }) }
+        def to_hash
+        end
+      end
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Credits charged for this request.
+        sig { returns(Integer) }
+        attr_accessor :credits_consumed
+
+        # Credits remaining for your organization.
+        sig { returns(Integer) }
+        attr_accessor :credits_remaining
+
+        # Credits this request used and your remaining balance.
+        sig do
+          params(credits_consumed: Integer, credits_remaining: Integer).returns(
+            T.attached_class
+          )
+        end
+        def self.new(
+          # Credits charged for this request.
+          credits_consumed:,
+          # Credits remaining for your organization.
+          credits_remaining:
+        )
+        end
+
+        sig do
+          override.returns(
+            { credits_consumed: Integer, credits_remaining: Integer }
+          )
+        end
         def to_hash
         end
       end

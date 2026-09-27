@@ -5,8 +5,8 @@ module ContextDev
     # @see ContextDev::Resources::Industry#retrieve_sic
     class IndustryRetrieveSicResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -33,7 +33,7 @@ module ContextDev
       optional :domain, String
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata }
@@ -46,7 +46,7 @@ module ContextDev
       optional :partial, ContextDev::Internal::Type::Boolean
 
       # @!attribute status
-      #   Status of the response, e.g., 'ok'
+      #   Always `ok` on success.
       #
       #   @return [String, nil]
       optional :status, String
@@ -61,7 +61,7 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::IndustryRetrieveSicResponse} for more details.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param classification [Symbol, ContextDev::Models::IndustryRetrieveSicResponse::Classification] Echoes back which SIC dataset was used to classify the brand.
       #
@@ -69,11 +69,11 @@ module ContextDev
       #
       #   @param domain [String] Domain found for the brand
       #
-      #   @param key_metadata [ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::IndustryRetrieveSicResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param partial [Boolean] True when the timeout ended processing and this response contains only usable re
       #
-      #   @param status [String] Status of the response, e.g., 'ok'
+      #   @param status [String] Always `ok` on success.
       #
       #   @param type [String] Industry classification type, for sic api it will be `sic`
 
@@ -164,7 +164,7 @@ module ContextDev
       # @see ContextDev::Models::IndustryRetrieveSicResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -176,9 +176,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

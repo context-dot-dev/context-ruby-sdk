@@ -14,6 +14,7 @@ module ContextDev
           )
         end
 
+      # ID of the monitor.
       sig { returns(String) }
       attr_accessor :monitor_id
 
@@ -52,6 +53,7 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # ID of the monitor.
         monitor_id:,
         # Opaque pagination cursor from a previous response.
         cursor: nil,

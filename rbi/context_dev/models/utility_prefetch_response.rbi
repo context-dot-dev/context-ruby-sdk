@@ -11,8 +11,8 @@ module ContextDev
           )
         end
 
-      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      # it when contacting support about a failed request.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
       sig { returns(String) }
       attr_accessor :request_id
 
@@ -23,7 +23,7 @@ module ContextDev
       sig { params(domain: String).void }
       attr_writer :domain
 
-      # Credit usage, included whenever a valid API key is provided.
+      # Credits this request used and your remaining balance.
       sig do
         returns(
           T.nilable(ContextDev::Models::UtilityPrefetchResponse::KeyMetadata)
@@ -46,7 +46,7 @@ module ContextDev
       sig { params(message: String).void }
       attr_writer :message
 
-      # Status of the response, e.g., 'ok'
+      # Always `ok` on success.
       sig { returns(T.nilable(String)) }
       attr_reader :status
 
@@ -82,16 +82,16 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        # it when contacting support about a failed request.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
         request_id:,
         # The domain that was queued for prefetching
         domain: nil,
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         key_metadata: nil,
         # Success message
         message: nil,
-        # Status of the response, e.g., 'ok'
+        # Always `ok` on success.
         status: nil,
         # The type of prefetch that was queued, echoed from the request
         type: nil
@@ -124,7 +124,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -132,14 +132,14 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         sig do
           params(credits_consumed: Integer, credits_remaining: Integer).returns(
             T.attached_class
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:

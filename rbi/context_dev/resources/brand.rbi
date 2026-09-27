@@ -3,11 +3,8 @@
 module ContextDev
   module Resources
     class Brand
-      # Retrieve logos, backdrops, colors, industry, description, and more. Provide
-      # exactly one lookup identifier in the request body: a domain, company name, email
-      # address, stock ticker, transaction descriptor, or direct URL. Note:
-      # `by_direct_url` fetches brand data only from the provided URL — not from the
-      # entire internet.
+      # Retrieve logos, colors, company details, and social links using one lookup
+      # identifier. A direct URL limits extraction to that page.
       sig do
         params(
           body:
@@ -23,13 +20,14 @@ module ContextDev
         ).returns(ContextDev::Models::BrandRetrieveResponse)
       end
       def retrieve(
-        # Exactly one lookup type must be provided.
+        # One lookup, chosen by `type`.
         body:,
         request_options: {}
       )
       end
 
-      # Search indexed brands by name or domain
+      # Find up to 10 brands by name or domain, ordered by popularity. Use the returned
+      # domain to retrieve a full brand profile.
       sig do
         params(
           query: String,
@@ -50,8 +48,7 @@ module ContextDev
         # Fields to match the search term against, as a comma-separated list or repeated
         # parameter: 'name', 'domain', or both. Defaults to both.
         query_by: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
         # Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
         # typo tolerance).

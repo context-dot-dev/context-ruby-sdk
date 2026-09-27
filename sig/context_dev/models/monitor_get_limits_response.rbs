@@ -4,7 +4,9 @@ module ContextDev
       {
         monitors_limit: Integer,
         monitors_used: Integer,
-        plan: ContextDev::Models::MonitorGetLimitsResponse::plan
+        plan: ContextDev::Models::MonitorGetLimitsResponse::plan,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata
       }
 
     class MonitorGetLimitsResponse < ContextDev::Internal::Type::BaseModel
@@ -14,16 +16,28 @@ module ContextDev
 
       attr_accessor plan: ContextDev::Models::MonitorGetLimitsResponse::plan
 
+      attr_accessor request_id: String
+
+      attr_reader key_metadata: ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata
+      ) -> ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata
+
       def initialize: (
         monitors_limit: Integer,
         monitors_used: Integer,
-        plan: ContextDev::Models::MonitorGetLimitsResponse::plan
+        plan: ContextDev::Models::MonitorGetLimitsResponse::plan,
+        request_id: String,
+        ?key_metadata: ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata
       ) -> void
 
       def to_hash: -> {
         monitors_limit: Integer,
         monitors_used: Integer,
-        plan: ContextDev::Models::MonitorGetLimitsResponse::plan
+        plan: ContextDev::Models::MonitorGetLimitsResponse::plan,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata
       }
 
       type plan = :free | :starter | :pro | :scale
@@ -37,6 +51,25 @@ module ContextDev
         SCALE: :scale
 
         def self?.values: -> ::Array[ContextDev::Models::MonitorGetLimitsResponse::plan]
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
       end
     end
   end

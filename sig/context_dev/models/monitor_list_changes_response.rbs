@@ -4,7 +4,9 @@ module ContextDev
       {
         data: ::Array[ContextDev::Models::MonitorListChangesResponse::Data],
         has_more: bool,
-        next_cursor: String?
+        next_cursor: String?,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorListChangesResponse::KeyMetadata
       }
 
     class MonitorListChangesResponse < ContextDev::Internal::Type::BaseModel
@@ -14,16 +16,28 @@ module ContextDev
 
       attr_accessor next_cursor: String?
 
+      attr_accessor request_id: String
+
+      attr_reader key_metadata: ContextDev::Models::MonitorListChangesResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::MonitorListChangesResponse::KeyMetadata
+      ) -> ContextDev::Models::MonitorListChangesResponse::KeyMetadata
+
       def initialize: (
         data: ::Array[ContextDev::Models::MonitorListChangesResponse::Data],
         has_more: bool,
-        next_cursor: String?
+        next_cursor: String?,
+        request_id: String,
+        ?key_metadata: ContextDev::Models::MonitorListChangesResponse::KeyMetadata
       ) -> void
 
       def to_hash: -> {
         data: ::Array[ContextDev::Models::MonitorListChangesResponse::Data],
         has_more: bool,
-        next_cursor: String?
+        next_cursor: String?,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorListChangesResponse::KeyMetadata
       }
 
       type data =
@@ -33,16 +47,24 @@ module ContextDev
           detected_at: Time,
           mode: ContextDev::Models::MonitorListChangesResponse::Data::mode,
           monitor_id: String,
+          run_id: String,
           summary: String,
+          tags: ::Array[String],
           target_type: ContextDev::Models::MonitorListChangesResponse::Data::target_type,
           title: String,
           url: String,
           added_url_count: Integer,
+          added_urls: ::Array[String],
+          after_text_excerpt: String,
+          before_text_excerpt: String,
           confidence: Float,
+          diff: String,
+          evidence: ::Array[ContextDev::Models::MonitorListChangesResponse::Data::Evidence],
           importance: ContextDev::Models::MonitorListChangesResponse::Data::importance,
           matched_url_count: Integer,
+          matched_urls: ::Array[String],
           removed_url_count: Integer,
-          tags: ::Array[String]
+          removed_urls: ::Array[String]
         }
 
       class Data < ContextDev::Internal::Type::BaseModel
@@ -56,7 +78,11 @@ module ContextDev
 
         attr_accessor monitor_id: String
 
+        attr_accessor run_id: String
+
         attr_accessor summary: String
+
+        attr_accessor tags: ::Array[String]
 
         attr_accessor target_type: ContextDev::Models::MonitorListChangesResponse::Data::target_type
 
@@ -68,9 +94,31 @@ module ContextDev
 
         def added_url_count=: (Integer) -> Integer
 
+        attr_reader added_urls: ::Array[String]?
+
+        def added_urls=: (::Array[String]) -> ::Array[String]
+
+        attr_reader after_text_excerpt: String?
+
+        def after_text_excerpt=: (String) -> String
+
+        attr_reader before_text_excerpt: String?
+
+        def before_text_excerpt=: (String) -> String
+
         attr_reader confidence: Float?
 
         def confidence=: (Float) -> Float
+
+        attr_reader diff: String?
+
+        def diff=: (String) -> String
+
+        attr_reader evidence: ::Array[ContextDev::Models::MonitorListChangesResponse::Data::Evidence]?
+
+        def evidence=: (
+          ::Array[ContextDev::Models::MonitorListChangesResponse::Data::Evidence]
+        ) -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::Evidence]
 
         attr_reader importance: ContextDev::Models::MonitorListChangesResponse::Data::importance?
 
@@ -82,13 +130,17 @@ module ContextDev
 
         def matched_url_count=: (Integer) -> Integer
 
+        attr_reader matched_urls: ::Array[String]?
+
+        def matched_urls=: (::Array[String]) -> ::Array[String]
+
         attr_reader removed_url_count: Integer?
 
         def removed_url_count=: (Integer) -> Integer
 
-        attr_reader tags: ::Array[String]?
+        attr_reader removed_urls: ::Array[String]?
 
-        def tags=: (::Array[String]) -> ::Array[String]
+        def removed_urls=: (::Array[String]) -> ::Array[String]
 
         def initialize: (
           id: String,
@@ -96,16 +148,24 @@ module ContextDev
           detected_at: Time,
           mode: ContextDev::Models::MonitorListChangesResponse::Data::mode,
           monitor_id: String,
+          run_id: String,
           summary: String,
+          tags: ::Array[String],
           target_type: ContextDev::Models::MonitorListChangesResponse::Data::target_type,
           title: String,
           url: String,
           ?added_url_count: Integer,
+          ?added_urls: ::Array[String],
+          ?after_text_excerpt: String,
+          ?before_text_excerpt: String,
           ?confidence: Float,
+          ?diff: String,
+          ?evidence: ::Array[ContextDev::Models::MonitorListChangesResponse::Data::Evidence],
           ?importance: ContextDev::Models::MonitorListChangesResponse::Data::importance,
           ?matched_url_count: Integer,
+          ?matched_urls: ::Array[String],
           ?removed_url_count: Integer,
-          ?tags: ::Array[String]
+          ?removed_urls: ::Array[String]
         ) -> void
 
         def to_hash: -> {
@@ -114,16 +174,24 @@ module ContextDev
           detected_at: Time,
           mode: ContextDev::Models::MonitorListChangesResponse::Data::mode,
           monitor_id: String,
+          run_id: String,
           summary: String,
+          tags: ::Array[String],
           target_type: ContextDev::Models::MonitorListChangesResponse::Data::target_type,
           title: String,
           url: String,
           added_url_count: Integer,
+          added_urls: ::Array[String],
+          after_text_excerpt: String,
+          before_text_excerpt: String,
           confidence: Float,
+          diff: String,
+          evidence: ::Array[ContextDev::Models::MonitorListChangesResponse::Data::Evidence],
           importance: ContextDev::Models::MonitorListChangesResponse::Data::importance,
           matched_url_count: Integer,
+          matched_urls: ::Array[String],
           removed_url_count: Integer,
-          tags: ::Array[String]
+          removed_urls: ::Array[String]
         }
 
         type change_detection_type = :exact | :semantic
@@ -159,6 +227,22 @@ module ContextDev
           def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::target_type]
         end
 
+        type evidence = { after: String, before: String, url: String }
+
+        class Evidence < ContextDev::Internal::Type::BaseModel
+          attr_accessor after: String
+
+          attr_accessor before: String
+
+          attr_reader url: String?
+
+          def url=: (String) -> String
+
+          def initialize: (after: String, before: String, ?url: String) -> void
+
+          def to_hash: -> { after: String, before: String, url: String }
+        end
+
         type importance = :low | :medium | :high
 
         module Importance
@@ -170,6 +254,25 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::MonitorListChangesResponse::Data::importance]
         end
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
       end
     end
   end

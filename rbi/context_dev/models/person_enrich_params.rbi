@@ -11,6 +11,7 @@ module ContextDev
           T.any(ContextDev::PersonEnrichParams, ContextDev::Internal::AnyHash)
         end
 
+      # Company context to help identify the person. Provide a name or domain.
       sig { returns(T.nilable(ContextDev::PersonEnrichParams::Company)) }
       attr_reader :company
 
@@ -19,6 +20,7 @@ module ContextDev
       end
       attr_writer :company
 
+      # Education history to help distinguish people with similar names.
       sig do
         returns(T.nilable(T::Array[ContextDev::PersonEnrichParams::Education]))
       end
@@ -31,12 +33,15 @@ module ContextDev
       end
       attr_writer :education
 
+      # Email address of the person to find.
       sig { returns(T.nilable(String)) }
       attr_reader :email
 
       sig { params(email: String).void }
       attr_writer :email
 
+      # Location context to help identify the person. Provide a city, region, or
+      # country.
       sig { returns(T.nilable(ContextDev::PersonEnrichParams::Location)) }
       attr_reader :location
 
@@ -45,28 +50,30 @@ module ContextDev
       end
       attr_writer :location
 
+      # Person name. Without an email or person-profile URL, provide both first and last
+      # name plus company, education, or location.
       sig { returns(T.nilable(ContextDev::PersonEnrichParams::Name)) }
       attr_reader :name
 
       sig { params(name: ContextDev::PersonEnrichParams::Name::OrHash).void }
       attr_writer :name
 
+      # Public profile URLs for the person. A person-profile URL can identify the person
+      # without a name.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :social_urls
 
       sig { params(social_urls: T::Array[String]).void }
       attr_writer :social_urls
 
-      # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      # Labels for filtering usage in the dashboard.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Optional request deadline and behavior on timeout. For GET requests, use
-      # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-      # timeoutOpts object.
+      # Request deadline and what to return when it passes.
       sig { returns(T.nilable(ContextDev::PersonEnrichParams::TimeoutOpts)) }
       attr_reader :timeout_opts
 
@@ -77,11 +84,8 @@ module ContextDev
       end
       attr_writer :timeout_opts
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       sig { returns(T.nilable(ContextDev::PersonEnrichParams::Zdr::OrSymbol)) }
       attr_reader :zdr
 
@@ -104,23 +108,27 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Company context to help identify the person. Provide a name or domain.
         company: nil,
+        # Education history to help distinguish people with similar names.
         education: nil,
+        # Email address of the person to find.
         email: nil,
+        # Location context to help identify the person. Provide a city, region, or
+        # country.
         location: nil,
+        # Person name. Without an email or person-profile URL, provide both first and last
+        # name plus company, education, or location.
         name: nil,
+        # Public profile URLs for the person. A person-profile URL can identify the person
+        # without a name.
         social_urls: nil,
-        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
@@ -154,20 +162,28 @@ module ContextDev
             )
           end
 
+        # Website domain of a company associated with the person.
         sig { returns(T.nilable(String)) }
         attr_reader :domain
 
         sig { params(domain: String).void }
         attr_writer :domain
 
+        # Name of a company associated with the person.
         sig { returns(T.nilable(String)) }
         attr_reader :name
 
         sig { params(name: String).void }
         attr_writer :name
 
+        # Company context to help identify the person. Provide a name or domain.
         sig { params(domain: String, name: String).returns(T.attached_class) }
-        def self.new(domain: nil, name: nil)
+        def self.new(
+          # Website domain of a company associated with the person.
+          domain: nil,
+          # Name of a company associated with the person.
+          name: nil
+        )
         end
 
         sig { override.returns({ domain: String, name: String }) }
@@ -184,24 +200,28 @@ module ContextDev
             )
           end
 
+        # Degree or qualification earned.
         sig { returns(T.nilable(String)) }
         attr_reader :degree
 
         sig { params(degree: String).void }
         attr_writer :degree
 
+        # Subject or major studied.
         sig { returns(T.nilable(String)) }
         attr_reader :field_of_study
 
         sig { params(field_of_study: String).void }
         attr_writer :field_of_study
 
+        # Four-digit graduation year.
         sig { returns(T.nilable(Integer)) }
         attr_reader :graduation_year
 
         sig { params(graduation_year: Integer).void }
         attr_writer :graduation_year
 
+        # School or university, identified by name or domain.
         sig do
           returns(
             T.nilable(ContextDev::PersonEnrichParams::Education::Institution)
@@ -227,9 +247,13 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
+          # Degree or qualification earned.
           degree: nil,
+          # Subject or major studied.
           field_of_study: nil,
+          # Four-digit graduation year.
           graduation_year: nil,
+          # School or university, identified by name or domain.
           institution: nil
         )
         end
@@ -257,20 +281,28 @@ module ContextDev
               )
             end
 
+          # Website domain of the school or university.
           sig { returns(T.nilable(String)) }
           attr_reader :domain
 
           sig { params(domain: String).void }
           attr_writer :domain
 
+          # Name of the school or university.
           sig { returns(T.nilable(String)) }
           attr_reader :name
 
           sig { params(name: String).void }
           attr_writer :name
 
+          # School or university, identified by name or domain.
           sig { params(domain: String, name: String).returns(T.attached_class) }
-          def self.new(domain: nil, name: nil)
+          def self.new(
+            # Website domain of the school or university.
+            domain: nil,
+            # Name of the school or university.
+            name: nil
+          )
           end
 
           sig { override.returns({ domain: String, name: String }) }
@@ -288,30 +320,42 @@ module ContextDev
             )
           end
 
+        # City associated with the person.
         sig { returns(T.nilable(String)) }
         attr_reader :city
 
         sig { params(city: String).void }
         attr_writer :city
 
+        # Country associated with the person.
         sig { returns(T.nilable(String)) }
         attr_reader :country
 
         sig { params(country: String).void }
         attr_writer :country
 
+        # State, province, or region associated with the person.
         sig { returns(T.nilable(String)) }
         attr_reader :region
 
         sig { params(region: String).void }
         attr_writer :region
 
+        # Location context to help identify the person. Provide a city, region, or
+        # country.
         sig do
           params(city: String, country: String, region: String).returns(
             T.attached_class
           )
         end
-        def self.new(city: nil, country: nil, region: nil)
+        def self.new(
+          # City associated with the person.
+          city: nil,
+          # Country associated with the person.
+          country: nil,
+          # State, province, or region associated with the person.
+          region: nil
+        )
         end
 
         sig do
@@ -330,20 +374,29 @@ module ContextDev
             )
           end
 
+        # First or given name.
         sig { returns(T.nilable(String)) }
         attr_reader :first
 
         sig { params(first: String).void }
         attr_writer :first
 
+        # Last or family name.
         sig { returns(T.nilable(String)) }
         attr_reader :last
 
         sig { params(last: String).void }
         attr_writer :last
 
+        # Person name. Without an email or person-profile URL, provide both first and last
+        # name plus company, education, or location.
         sig { params(first: String, last: String).returns(T.attached_class) }
-        def self.new(first: nil, last: nil)
+        def self.new(
+          # First or given name.
+          first: nil,
+          # Last or family name.
+          last: nil
+        )
         end
 
         sig { override.returns({ first: String, last: String }) }
@@ -360,14 +413,12 @@ module ContextDev
             )
           end
 
-        # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        # Deadline in milliseconds.
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         sig do
           returns(
             T.nilable(
@@ -385,9 +436,7 @@ module ContextDev
         end
         attr_writer :behavior
 
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         sig do
           params(
             milliseconds: Integer,
@@ -396,12 +445,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          # Deadline in milliseconds.
           milliseconds:,
-          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-          # credits. "return-partial" returns usable results collected so far; if none are
-          # available, the request still fails without charging credits. Partial results are
-          # not cached as complete results.
+          # "fail" returns 408 at the deadline. "return-partial" returns available results;
+          # inspect the response’s partial flag.
           behavior: nil
         )
         end
@@ -418,10 +465,8 @@ module ContextDev
         def to_hash
         end
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 
@@ -457,11 +502,8 @@ module ContextDev
         end
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

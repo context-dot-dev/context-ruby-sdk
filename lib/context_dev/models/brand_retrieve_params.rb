@@ -8,17 +8,17 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute body
-      #   Exactly one lookup type must be provided.
+      #   One lookup, chosen by `type`.
       #
       #   @return [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction]
       required :body, union: -> { ContextDev::BrandRetrieveParams::Body }
 
       # @!method initialize(body:, request_options: {})
-      #   @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] Exactly one lookup type must be provided.
+      #   @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] One lookup, chosen by `type`.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Exactly one lookup type must be provided.
+      # One lookup, chosen by `type`.
       module Body
         extend ContextDev::Internal::Type::Union
 
@@ -36,7 +36,7 @@ module ContextDev
         # Retrieve brand data by stock ticker. Cannot be combined with domain, name, or email.
         variant :by_ticker, -> { ContextDev::BrandRetrieveParams::Body::ByTicker }
 
-        # Retrieve brand data by fetching the provided URL directly. Note: if you use this, brand data is fetched only from the provided URL — not from the entire internet — so results are limited to what that single page contains. No domain resolution, database lookup, or cross-source enrichment is performed. Cannot be combined with domain, name, email, or ticker.
+        # Retrieve brand data from this exact URL. Cross-site enrichment and other lookup identifiers are excluded.
         variant :by_direct_url, -> { ContextDev::BrandRetrieveParams::Body::ByDirectURL }
 
         # Identify brand data from a transaction descriptor. Cannot be combined with domain, name, email, or ticker.
@@ -63,10 +63,8 @@ module ContextDev
                    nil?: true
 
           # @!attribute max_age_ms
-          #   Maximum age in milliseconds for cached brand data before the API performs a hard
-          #   refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-          #   refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-          #   are clamped to 1 year.
+          #   Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+          #   year. `0` refreshes.
           #
           #   @return [Integer, nil]
           optional :max_age_ms, Integer, api_name: :maxAgeMs
@@ -80,15 +78,13 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute tags
-          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   Labels for filtering usage in the dashboard.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute timeout_opts
-          #   Optional request deadline and behavior on timeout. For GET requests, use
-          #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          #   timeoutOpts object.
+          #   Request deadline and what to return when it passes.
           #
           #   @return [ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts, nil]
           optional :timeout_opts,
@@ -105,13 +101,13 @@ module ContextDev
           #
           #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage, nil]
           #
-          #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
+          #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
-          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts] Request deadline and what to return when it passes.
           #
           #   @param type [Symbol, :by_domain] Discriminator for domain-based brand retrieval.
 
@@ -247,16 +243,14 @@ module ContextDev
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByDomain#timeout_opts
           class TimeoutOpts < ContextDev::Internal::Type::BaseModel
             # @!attribute milliseconds
-            #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   Deadline in milliseconds.
             #
             #   @return [Integer]
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            #   credits. "return-partial" returns usable results collected so far; if none are
-            #   available, the request still fails without charging credits. Partial results are
-            #   not cached as complete results.
+            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   inspect the response’s partial flag.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior, nil]
             optional :behavior, enum: -> { ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior }
@@ -266,18 +260,14 @@ module ContextDev
             #   {ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts} for more
             #   details.
             #
-            #   Optional request deadline and behavior on timeout. For GET requests, use
-            #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            #   timeoutOpts object.
+            #   Request deadline and what to return when it passes.
             #
-            #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts#behavior
             module Behavior
@@ -320,10 +310,8 @@ module ContextDev
                    nil?: true
 
           # @!attribute max_age_ms
-          #   Maximum age in milliseconds for cached brand data before the API performs a hard
-          #   refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-          #   refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-          #   are clamped to 1 year.
+          #   Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+          #   year. `0` refreshes.
           #
           #   @return [Integer, nil]
           optional :max_age_ms, Integer, api_name: :maxAgeMs
@@ -337,15 +325,13 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute tags
-          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   Labels for filtering usage in the dashboard.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute timeout_opts
-          #   Optional request deadline and behavior on timeout. For GET requests, use
-          #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          #   timeoutOpts object.
+          #   Request deadline and what to return when it passes.
           #
           #   @return [ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts, nil]
           optional :timeout_opts,
@@ -365,13 +351,13 @@ module ContextDev
           #
           #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage, nil]
           #
-          #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
+          #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
-          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts] Request deadline and what to return when it passes.
           #
           #   @param type [Symbol, :by_name] Discriminator for name-based brand retrieval.
 
@@ -507,16 +493,14 @@ module ContextDev
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByName#timeout_opts
           class TimeoutOpts < ContextDev::Internal::Type::BaseModel
             # @!attribute milliseconds
-            #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   Deadline in milliseconds.
             #
             #   @return [Integer]
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            #   credits. "return-partial" returns usable results collected so far; if none are
-            #   available, the request still fails without charging credits. Partial results are
-            #   not cached as complete results.
+            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   inspect the response’s partial flag.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior, nil]
             optional :behavior, enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior }
@@ -526,18 +510,14 @@ module ContextDev
             #   {ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts} for more
             #   details.
             #
-            #   Optional request deadline and behavior on timeout. For GET requests, use
-            #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            #   timeoutOpts object.
+            #   Request deadline and what to return when it passes.
             #
-            #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts#behavior
             module Behavior
@@ -573,10 +553,8 @@ module ContextDev
                    nil?: true
 
           # @!attribute max_age_ms
-          #   Maximum age in milliseconds for cached brand data before the API performs a hard
-          #   refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-          #   refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-          #   are clamped to 1 year.
+          #   Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+          #   year. `0` refreshes.
           #
           #   @return [Integer, nil]
           optional :max_age_ms, Integer, api_name: :maxAgeMs
@@ -590,15 +568,13 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute tags
-          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   Labels for filtering usage in the dashboard.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute timeout_opts
-          #   Optional request deadline and behavior on timeout. For GET requests, use
-          #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          #   timeoutOpts object.
+          #   Request deadline and what to return when it passes.
           #
           #   @return [ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts, nil]
           optional :timeout_opts,
@@ -617,13 +593,13 @@ module ContextDev
           #
           #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage, nil]
           #
-          #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
+          #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
-          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts] Request deadline and what to return when it passes.
           #
           #   @param type [Symbol, :by_email] Discriminator for email-based brand retrieval.
 
@@ -759,16 +735,14 @@ module ContextDev
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByEmail#timeout_opts
           class TimeoutOpts < ContextDev::Internal::Type::BaseModel
             # @!attribute milliseconds
-            #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   Deadline in milliseconds.
             #
             #   @return [Integer]
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            #   credits. "return-partial" returns usable results collected so far; if none are
-            #   available, the request still fails without charging credits. Partial results are
-            #   not cached as complete results.
+            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   inspect the response’s partial flag.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior, nil]
             optional :behavior, enum: -> { ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior }
@@ -778,18 +752,14 @@ module ContextDev
             #   {ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts} for more
             #   details.
             #
-            #   Optional request deadline and behavior on timeout. For GET requests, use
-            #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            #   timeoutOpts object.
+            #   Request deadline and what to return when it passes.
             #
-            #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts#behavior
             module Behavior
@@ -825,10 +795,8 @@ module ContextDev
                    nil?: true
 
           # @!attribute max_age_ms
-          #   Maximum age in milliseconds for cached brand data before the API performs a hard
-          #   refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-          #   refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-          #   are clamped to 1 year.
+          #   Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+          #   year. `0` refreshes.
           #
           #   @return [Integer, nil]
           optional :max_age_ms, Integer, api_name: :maxAgeMs
@@ -842,7 +810,7 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute tags
-          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   Labels for filtering usage in the dashboard.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -854,9 +822,7 @@ module ContextDev
           optional :ticker_exchange, String
 
           # @!attribute timeout_opts
-          #   Optional request deadline and behavior on timeout. For GET requests, use
-          #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          #   timeoutOpts object.
+          #   Request deadline and what to return when it passes.
           #
           #   @return [ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts, nil]
           optional :timeout_opts,
@@ -874,15 +840,15 @@ module ContextDev
           #
           #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage, nil]
           #
-          #   @param max_age_ms [Integer] Maximum age in milliseconds for cached brand data before the API performs a hard
+          #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
           #   @param ticker_exchange [String] Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
           #
-          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts] Request deadline and what to return when it passes.
           #
           #   @param type [Symbol, :by_ticker] Discriminator for ticker-based brand retrieval.
 
@@ -1018,16 +984,14 @@ module ContextDev
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTicker#timeout_opts
           class TimeoutOpts < ContextDev::Internal::Type::BaseModel
             # @!attribute milliseconds
-            #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   Deadline in milliseconds.
             #
             #   @return [Integer]
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            #   credits. "return-partial" returns usable results collected so far; if none are
-            #   available, the request still fails without charging credits. Partial results are
-            #   not cached as complete results.
+            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   inspect the response’s partial flag.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior, nil]
             optional :behavior, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior }
@@ -1037,18 +1001,14 @@ module ContextDev
             #   {ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts} for more
             #   details.
             #
-            #   Optional request deadline and behavior on timeout. For GET requests, use
-            #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            #   timeoutOpts object.
+            #   Request deadline and what to return when it passes.
             #
-            #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts#behavior
             module Behavior
@@ -1079,15 +1039,13 @@ module ContextDev
           required :type, const: :by_direct_url
 
           # @!attribute tags
-          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   Labels for filtering usage in the dashboard.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute timeout_opts
-          #   Optional request deadline and behavior on timeout. For GET requests, use
-          #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          #   timeoutOpts object.
+          #   Request deadline and what to return when it passes.
           #
           #   @return [ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts, nil]
           optional :timeout_opts,
@@ -1098,33 +1056,28 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL} for more details.
           #
-          #   Retrieve brand data by fetching the provided URL directly. Note: if you use
-          #   this, brand data is fetched only from the provided URL — not from the entire
-          #   internet — so results are limited to what that single page contains. No domain
-          #   resolution, database lookup, or cross-source enrichment is performed. Cannot be
-          #   combined with domain, name, email, or ticker.
+          #   Retrieve brand data from this exact URL. Cross-site enrichment and other lookup
+          #   identifiers are excluded.
           #
           #   @param direct_url [String] Full http(s) URL to fetch brand data from (e.g., 'https://stripe.com/enterprise'
           #
-          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
-          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts] Request deadline and what to return when it passes.
           #
           #   @param type [Symbol, :by_direct_url] Discriminator for direct-URL-based brand retrieval.
 
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL#timeout_opts
           class TimeoutOpts < ContextDev::Internal::Type::BaseModel
             # @!attribute milliseconds
-            #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   Deadline in milliseconds.
             #
             #   @return [Integer]
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            #   credits. "return-partial" returns usable results collected so far; if none are
-            #   available, the request still fails without charging credits. Partial results are
-            #   not cached as complete results.
+            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   inspect the response’s partial flag.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior, nil]
             optional :behavior, enum: -> { ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior }
@@ -1134,18 +1087,14 @@ module ContextDev
             #   {ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts} for
             #   more details.
             #
-            #   Optional request deadline and behavior on timeout. For GET requests, use
-            #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            #   timeoutOpts object.
+            #   Request deadline and what to return when it passes.
             #
-            #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts#behavior
             module Behavior
@@ -1222,15 +1171,13 @@ module ContextDev
           optional :phone, union: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone }
 
           # @!attribute tags
-          #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   Labels for filtering usage in the dashboard.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute timeout_opts
-          #   Optional request deadline and behavior on timeout. For GET requests, use
-          #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          #   timeoutOpts object.
+          #   Request deadline and what to return when it passes.
           #
           #   @return [ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts, nil]
           optional :timeout_opts,
@@ -1260,9 +1207,9 @@ module ContextDev
           #
           #   @param phone [String, Float] Optional phone number from the transaction to help verify brand match.
           #
-          #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
-          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+          #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts] Request deadline and what to return when it passes.
           #
           #   @param type [Symbol, :by_transaction] Discriminator for transaction-based brand retrieval.
 
@@ -1427,16 +1374,14 @@ module ContextDev
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#timeout_opts
           class TimeoutOpts < ContextDev::Internal::Type::BaseModel
             # @!attribute milliseconds
-            #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   Deadline in milliseconds.
             #
             #   @return [Integer]
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            #   credits. "return-partial" returns usable results collected so far; if none are
-            #   available, the request still fails without charging credits. Partial results are
-            #   not cached as complete results.
+            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   inspect the response’s partial flag.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior, nil]
             optional :behavior,
@@ -1447,18 +1392,14 @@ module ContextDev
             #   {ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts} for
             #   more details.
             #
-            #   Optional request deadline and behavior on timeout. For GET requests, use
-            #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-            #   timeoutOpts object.
+            #   Request deadline and what to return when it passes.
             #
-            #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts#behavior
             module Behavior

@@ -11,14 +11,14 @@ module ContextDev
       required :match, union: -> { ContextDev::Models::PersonEnrichResponse::Match }
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::PersonEnrichResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::PersonEnrichResponse::KeyMetadata }
@@ -36,9 +36,9 @@ module ContextDev
       #
       #   @param match [ContextDev::Models::PersonEnrichResponse::Match::Candidate, ContextDev::Models::PersonEnrichResponse::Match::NotFound] The highest-scoring person candidate.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param key_metadata [ContextDev::Models::PersonEnrichResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::PersonEnrichResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param partial [Boolean] True when the timeout ended processing and this response contains the usable dat
 
@@ -634,7 +634,7 @@ module ContextDev
       # @see ContextDev::Models::PersonEnrichResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -646,9 +646,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

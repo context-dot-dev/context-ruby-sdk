@@ -35,9 +35,7 @@ module ContextDev
       sig { returns(T.nilable(Integer)) }
       attr_accessor :http_status
 
-      # Delivery outcome. delivered means any 2xx response; rejected means a non-2xx
-      # response; failed means no HTTP response was received; skipped_unsafe_url means
-      # the URL failed the public-endpoint safety check.
+      # Outcome of the delivery attempt. Any 2xx response counts as delivered.
       sig { returns(ContextDev::WebhookDelivery::Status::TaggedSymbol) }
       attr_accessor :status
 
@@ -70,9 +68,7 @@ module ContextDev
         # The endpoint's final HTTP response status, or null when no response was
         # received.
         http_status:,
-        # Delivery outcome. delivered means any 2xx response; rejected means a non-2xx
-        # response; failed means no HTTP response was received; skipped_unsafe_url means
-        # the URL failed the public-endpoint safety check.
+        # Outcome of the delivery attempt. Any 2xx response counts as delivered.
         status:,
         # Delivery ID for status checks and retries, when available.
         delivery_id: nil
@@ -148,9 +144,7 @@ module ContextDev
         end
       end
 
-      # Delivery outcome. delivered means any 2xx response; rejected means a non-2xx
-      # response; failed means no HTTP response was received; skipped_unsafe_url means
-      # the URL failed the public-endpoint safety check.
+      # Outcome of the delivery attempt. Any 2xx response counts as delivered.
       module Status
         extend ContextDev::Internal::Type::Enum
 

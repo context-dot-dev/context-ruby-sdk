@@ -14,6 +14,7 @@ module ContextDev
           )
         end
 
+      # ID of the detected change.
       sig { returns(String) }
       attr_accessor :change_id
 
@@ -23,7 +24,11 @@ module ContextDev
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
-      def self.new(change_id:, request_options: {})
+      def self.new(
+        # ID of the detected change.
+        change_id:,
+        request_options: {}
+      )
       end
 
       sig do

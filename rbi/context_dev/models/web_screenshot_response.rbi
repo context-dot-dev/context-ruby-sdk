@@ -11,9 +11,7 @@ module ContextDev
           )
         end
 
-      # Cache outcome for this response. Composite responses are hits only when every
-      # cache-controlled fetch contributing to the output was a hit; age_ms is the
-      # oldest contributing hit.
+      # Whether this response came from cache.
       sig { returns(ContextDev::Models::WebScreenshotResponse::CacheMetadata) }
       attr_reader :cache_metadata
 
@@ -25,8 +23,8 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
-      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      # it when contacting support about a failed request.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
       sig { returns(String) }
       attr_accessor :request_id
 
@@ -44,11 +42,8 @@ module ContextDev
       sig { params(domain: String).void }
       attr_writer :domain
 
-      # How complete the returned content is. `loaded` means the page finished the waits
-      # the request asked for. `still-loading` only occurs with
-      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-      # reached first, so the content reflects the DOM at that moment and late-rendering
-      # parts may be missing. Partial results are billed at the base request cost.
+      # `loaded`, or `still-loading` when capture ended before the page finished
+      # loading.
       sig do
         returns(
           T.nilable(
@@ -73,7 +68,7 @@ module ContextDev
       sig { params(height: Integer).void }
       attr_writer :height
 
-      # Credit usage, included whenever a valid API key is provided.
+      # Credits this request used and your remaining balance.
       sig do
         returns(
           T.nilable(ContextDev::Models::WebScreenshotResponse::KeyMetadata)
@@ -115,7 +110,7 @@ module ContextDev
       end
       attr_writer :screenshot_type
 
-      # Status of the response, e.g., 'ok'
+      # Always `ok` on success.
       sig { returns(T.nilable(String)) }
       attr_reader :status
 
@@ -149,33 +144,28 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         cache_metadata:,
-        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        # it when contacting support about a failed request.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
         request_id:,
         # HTTP status code
         code: nil,
         # The normalized domain that was processed
         domain: nil,
-        # How complete the returned content is. `loaded` means the page finished the waits
-        # the request asked for. `still-loading` only occurs with
-        # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-        # reached first, so the content reflects the DOM at that moment and late-rendering
-        # parts may be missing. Partial results are billed at the base request cost.
+        # `loaded`, or `still-loading` when capture ended before the page finished
+        # loading.
         final_dom_state: nil,
         # Height in pixels of the returned screenshot image
         height: nil,
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         key_metadata: nil,
         # Public image URL for standard requests, or an in-memory data URL when ZDR or
         # non-empty custom headers are supplied.
         screenshot: nil,
         # Type of screenshot that was captured
         screenshot_type: nil,
-        # Status of the response, e.g., 'ok'
+        # Always `ok` on success.
         status: nil,
         # Width in pixels of the returned screenshot image
         width: nil
@@ -228,9 +218,7 @@ module ContextDev
         end
         attr_accessor :status
 
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         sig do
           params(
             age_ms: Integer,
@@ -301,11 +289,8 @@ module ContextDev
         end
       end
 
-      # How complete the returned content is. `loaded` means the page finished the waits
-      # the request asked for. `still-loading` only occurs with
-      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-      # reached first, so the content reflects the DOM at that moment and late-rendering
-      # parts may be missing. Partial results are billed at the base request cost.
+      # `loaded`, or `still-loading` when capture ended before the page finished
+      # loading.
       module FinalDomState
         extend ContextDev::Internal::Type::Enum
 
@@ -349,7 +334,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -357,14 +342,14 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         sig do
           params(credits_consumed: Integer, credits_remaining: Integer).returns(
             T.attached_class
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:

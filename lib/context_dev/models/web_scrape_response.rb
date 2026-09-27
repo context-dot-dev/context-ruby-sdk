@@ -5,24 +5,20 @@ module ContextDev
     # @see ContextDev::Resources::Web#scrape
     class WebScrapeResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute bytes
-      #   Original HTTP response body. Waiting, actions, and content filters never change
-      #   it.
+      #   The original HTTP response body, unchanged by waits, actions, and filters.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Bytes]
       required :bytes, -> { ContextDev::Models::WebScrapeResponse::Bytes }
 
       # @!attribute cache_metadata
-      #   Cache outcome for this response. Composite responses are hits only when every
-      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-      #   oldest contributing hit.
+      #   Whether this response came from cache.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebScrapeResponse::CacheMetadata }
 
       # @!attribute highlights
-      #   Relevant Markdown excerpts for your question or topic, in page order. Headings
-      #   in square brackets supply necessary context; ellipses mark omitted portions.
-      #   Empty when the page has no text.
+      #   Relevant Markdown excerpts in page order. `[Heading]` adds context; `…` marks
+      #   omitted text.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Highlights]
       required :highlights, -> { ContextDev::Models::WebScrapeResponse::Highlights }
@@ -34,13 +30,13 @@ module ContextDev
       required :html, -> { ContextDev::Models::WebScrapeResponse::HTML }
 
       # @!attribute images
-      #   Images after content filters. Empty when none are found.
+      #   Images after content filters. `[]` when none are found.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Images]
       required :images, -> { ContextDev::Models::WebScrapeResponse::Images }
 
       # @!attribute json
-      #   Page data extracted using your schema.
+      #   Object matching `jsonParams.schema`.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Json]
       required :json, -> { ContextDev::Models::WebScrapeResponse::Json }
@@ -52,13 +48,14 @@ module ContextDev
       required :markdown, -> { ContextDev::Models::WebScrapeResponse::Markdown }
 
       # @!attribute metadata
-      #   Page details, when available.
+      #   Page metadata. Fields are omitted when not found.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Metadata]
       required :metadata, -> { ContextDev::Models::WebScrapeResponse::Metadata }
 
       # @!attribute parsed
-      #   Fields produced by parseParams.rules, after shared content filters.
+      #   Fields from `parseParams.rules`, after content filters. Unmatched fields are
+      #   `null` (`[]` for lists).
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Parsed]
       required :parsed, -> { ContextDev::Models::WebScrapeResponse::Parsed }
@@ -70,14 +67,14 @@ module ContextDev
       required :product, -> { ContextDev::Models::WebScrapeResponse::Product }
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
 
       # @!attribute screenshot
-      #   An image data URL. Use directly as an image src.
+      #   Screenshot as a base64 image data URL.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Screenshot]
       required :screenshot, -> { ContextDev::Models::WebScrapeResponse::Screenshot }
@@ -89,17 +86,14 @@ module ContextDev
       required :url, String
 
       # @!attribute is_partial
-      #   Present when at least one requested output succeeds while another fails, or when
-      #   successful outputs come from a page that is still loading or images returned
-      #   before processing finished. Absent when every requested output fails. Check each
-      #   output's success field for its result. Valid captured pieces may be cached
-      #   independently; failed retrievals and incomplete captures are not cached.
+      #   True when at least one requested output succeeds but the response has failed or
+      #   incomplete outputs. Absent when all requested outputs fail.
       #
       #   @return [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial, nil]
       optional :is_partial, enum: -> { ContextDev::Models::WebScrapeResponse::IsPartial }, api_name: :isPartial
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebScrapeResponse::KeyMetadata }
@@ -108,35 +102,35 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScrapeResponse} for more details.
       #
-      #   @param bytes [ContextDev::Models::WebScrapeResponse::Bytes] Original HTTP response body. Waiting, actions, and content filters never change
+      #   @param bytes [ContextDev::Models::WebScrapeResponse::Bytes] The original HTTP response body, unchanged by waits, actions, and filters.
       #
-      #   @param cache_metadata [ContextDev::Models::WebScrapeResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #   @param cache_metadata [ContextDev::Models::WebScrapeResponse::CacheMetadata] Whether this response came from cache.
       #
-      #   @param highlights [ContextDev::Models::WebScrapeResponse::Highlights] Relevant Markdown excerpts for your question or topic, in page order. Headings i
+      #   @param highlights [ContextDev::Models::WebScrapeResponse::Highlights] Relevant Markdown excerpts in page order. `[Heading]` adds context; `…` marks om
       #
       #   @param html [ContextDev::Models::WebScrapeResponse::HTML] Rendered HTML after content filters.
       #
-      #   @param images [ContextDev::Models::WebScrapeResponse::Images] Images after content filters. Empty when none are found.
+      #   @param images [ContextDev::Models::WebScrapeResponse::Images] Images after content filters. `[]` when none are found.
       #
-      #   @param json [ContextDev::Models::WebScrapeResponse::Json] Page data extracted using your schema.
+      #   @param json [ContextDev::Models::WebScrapeResponse::Json] Object matching `jsonParams.schema`.
       #
       #   @param markdown [ContextDev::Models::WebScrapeResponse::Markdown] Markdown after content filters.
       #
-      #   @param metadata [ContextDev::Models::WebScrapeResponse::Metadata] Page details, when available.
+      #   @param metadata [ContextDev::Models::WebScrapeResponse::Metadata] Page metadata. Fields are omitted when not found.
       #
-      #   @param parsed [ContextDev::Models::WebScrapeResponse::Parsed] Fields produced by parseParams.rules, after shared content filters.
+      #   @param parsed [ContextDev::Models::WebScrapeResponse::Parsed] Fields from `parseParams.rules`, after content filters. Unmatched fields are `nu
       #
       #   @param product [ContextDev::Models::WebScrapeResponse::Product] Product details found on the page.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param screenshot [ContextDev::Models::WebScrapeResponse::Screenshot] An image data URL. Use directly as an image src.
+      #   @param screenshot [ContextDev::Models::WebScrapeResponse::Screenshot] Screenshot as a base64 image data URL.
       #
       #   @param url [String] Final URL after redirects and browser actions.
       #
-      #   @param is_partial [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial] Present when at least one requested output succeeds while another fails, or when
+      #   @param is_partial [Boolean, ContextDev::Models::WebScrapeResponse::IsPartial] True when at least one requested output succeeds but the response has failed or
       #
-      #   @param key_metadata [ContextDev::Models::WebScrapeResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::WebScrapeResponse::KeyMetadata] Credits this request used and your remaining balance.
 
       # @see ContextDev::Models::WebScrapeResponse#bytes
       class Bytes < ContextDev::Internal::Type::BaseModel
@@ -151,26 +145,24 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!attribute success
-        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #   `true` if returned, `false` if it failed, `null` if not requested.
         #
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
         # @!method initialize(data:, requested:, success:)
-        #   Original HTTP response body. Waiting, actions, and content filters never change
-        #   it.
+        #   The original HTTP response body, unchanged by waits, actions, and filters.
         #
         #   @param data [ContextDev::Models::WebScrapeResponse::Bytes::Data, nil]
         #
         #   @param requested [Boolean]
         #
-        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
+        #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
 
         # @see ContextDev::Models::WebScrapeResponse::Bytes#data
         class Data < ContextDev::Internal::Type::BaseModel
           # @!attribute base64
-          #   Original response body as base64, after HTTP decompression. Maximum decoded
-          #   size: 20 MiB.
+          #   Body as base64, after HTTP decompression. Up to 20 MiB decoded.
           #
           #   @return [String]
           required :base64, String
@@ -181,10 +173,7 @@ module ContextDev
           required :content_type, String, api_name: :contentType
 
           # @!method initialize(base64:, content_type:)
-          #   Some parameter documentations has been truncated, see
-          #   {ContextDev::Models::WebScrapeResponse::Bytes::Data} for more details.
-          #
-          #   @param base64 [String] Original response body as base64, after HTTP decompression. Maximum decoded size
+          #   @param base64 [String] Body as base64, after HTTP decompression. Up to 20 MiB decoded.
           #
           #   @param content_type [String]
         end
@@ -209,9 +198,7 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeResponse::CacheMetadata} for more details.
         #
-        #   Cache outcome for this response. Composite responses are hits only when every
-        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-        #   oldest contributing hit.
+        #   Whether this response came from cache.
         #
         #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
         #
@@ -246,21 +233,20 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!attribute success
-        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #   `true` if returned, `false` if it failed, `null` if not requested.
         #
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
         # @!method initialize(data:, requested:, success:)
-        #   Relevant Markdown excerpts for your question or topic, in page order. Headings
-        #   in square brackets supply necessary context; ellipses mark omitted portions.
-        #   Empty when the page has no text.
+        #   Relevant Markdown excerpts in page order. `[Heading]` adds context; `…` marks
+        #   omitted text.
         #
         #   @param data [Array<String>, nil]
         #
         #   @param requested [Boolean]
         #
-        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
+        #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#html
@@ -276,7 +262,7 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!attribute success
-        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #   `true` if returned, `false` if it failed, `null` if not requested.
         #
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
@@ -288,7 +274,7 @@ module ContextDev
         #
         #   @param requested [Boolean]
         #
-        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
+        #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#images
@@ -306,19 +292,19 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!attribute success
-        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #   `true` if returned, `false` if it failed, `null` if not requested.
         #
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
         # @!method initialize(data:, requested:, success:)
-        #   Images after content filters. Empty when none are found.
+        #   Images after content filters. `[]` when none are found.
         #
         #   @param data [Array<ContextDev::Models::WebScrapeResponse::Images::Data>, nil]
         #
         #   @param requested [Boolean]
         #
-        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
+        #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
 
         class Data < ContextDev::Internal::Type::BaseModel
           # @!attribute alt
@@ -339,8 +325,8 @@ module ContextDev
           optional :classification, enum: -> { ContextDev::Models::WebScrapeResponse::Images::Data::Classification }
 
           # @!attribute file_url
-          #   Hosted copy when file enrichment is requested and zdr is disabled. Valid for 24
-          #   hours from the original capture.
+          #   Hosted image URL, valid for 24 hours after capture. Requires `file` enrichment
+          #   and ZDR disabled.
           #
           #   @return [String, nil]
           optional :file_url, String, api_name: :fileUrl
@@ -365,7 +351,7 @@ module ContextDev
           #
           #   @param classification [Symbol, ContextDev::Models::WebScrapeResponse::Images::Data::Classification]
           #
-          #   @param file_url [String] Hosted copy when file enrichment is requested and zdr is disabled. Valid for 24
+          #   @param file_url [String] Hosted image URL, valid for 24 hours after capture. Requires `file` enrichment a
           #
           #   @param height [Integer]
           #
@@ -403,19 +389,19 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!attribute success
-        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #   `true` if returned, `false` if it failed, `null` if not requested.
         #
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
         # @!method initialize(data:, requested:, success:)
-        #   Page data extracted using your schema.
+        #   Object matching `jsonParams.schema`.
         #
         #   @param data [Hash{Symbol=>Object}, nil]
         #
         #   @param requested [Boolean]
         #
-        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
+        #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#markdown
@@ -431,7 +417,7 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!attribute success
-        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #   `true` if returned, `false` if it failed, `null` if not requested.
         #
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
@@ -443,7 +429,7 @@ module ContextDev
         #
         #   @param requested [Boolean]
         #
-        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
+        #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#metadata
@@ -488,8 +474,7 @@ module ContextDev
         optional :favicon, String
 
         # @!attribute headings
-        #   Page headings (h1–h6) in document order, extracted from the unfiltered document.
-        #   Capped at the first 500 headings. Omitted when the page has none.
+        #   Up to 500 h1–h6 headings in document order, before content filtering.
         #
         #   @return [Array<ContextDev::Models::WebScrapeResponse::Metadata::Heading>, nil]
         optional :headings,
@@ -567,10 +552,7 @@ module ContextDev
                  -> { ContextDev::Internal::Type::HashOf[union: ContextDev::Models::WebScrapeResponse::Metadata::Twitter] }
 
         # @!method initialize(additional_meta: nil, alternates: nil, author: nil, canonical_url: nil, description: nil, favicon: nil, headings: nil, image: nil, json_ld: nil, keywords: nil, language: nil, modified_time: nil, open_graph: nil, published_time: nil, robots: nil, site_name: nil, title: nil, twitter: nil)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::WebScrapeResponse::Metadata} for more details.
-        #
-        #   Page details, when available.
+        #   Page metadata. Fields are omitted when not found.
         #
         #   @param additional_meta [Hash{Symbol=>String, Array<String>}] Additional non-social meta tags not promoted to top-level metadata fields.
         #
@@ -584,7 +566,7 @@ module ContextDev
         #
         #   @param favicon [String] Resolved favicon URL, when present.
         #
-        #   @param headings [Array<ContextDev::Models::WebScrapeResponse::Metadata::Heading>] Page headings (h1–h6) in document order, extracted from the unfiltered document.
+        #   @param headings [Array<ContextDev::Models::WebScrapeResponse::Metadata::Heading>] Up to 500 h1–h6 headings in document order, before content filtering.
         #
         #   @param image [String] Primary resolved preview image from Open Graph, Twitter, or image metadata.
         #
@@ -718,19 +700,20 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!attribute success
-        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #   `true` if returned, `false` if it failed, `null` if not requested.
         #
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
         # @!method initialize(data:, requested:, success:)
-        #   Fields produced by parseParams.rules, after shared content filters.
+        #   Fields from `parseParams.rules`, after content filters. Unmatched fields are
+        #   `null` (`[]` for lists).
         #
         #   @param data [Hash{Symbol=>Object}, nil]
         #
         #   @param requested [Boolean]
         #
-        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
+        #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#product
@@ -746,7 +729,7 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!attribute success
-        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #   `true` if returned, `false` if it failed, `null` if not requested.
         #
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
@@ -758,7 +741,7 @@ module ContextDev
         #
         #   @param requested [Boolean]
         #
-        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
+        #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
 
         # @see ContextDev::Models::WebScrapeResponse::Product#data
         class Data < ContextDev::Internal::Type::BaseModel
@@ -994,26 +977,23 @@ module ContextDev
         required :requested, ContextDev::Internal::Type::Boolean
 
         # @!attribute success
-        #   True when retrieved, false when retrieval failed, and null when not requested.
+        #   `true` if returned, `false` if it failed, `null` if not requested.
         #
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
         # @!method initialize(data:, requested:, success:)
-        #   An image data URL. Use directly as an image src.
+        #   Screenshot as a base64 image data URL.
         #
         #   @param data [String, nil]
         #
         #   @param requested [Boolean]
         #
-        #   @param success [Boolean, nil] True when retrieved, false when retrieval failed, and null when not requested.
+        #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
       end
 
-      # Present when at least one requested output succeeds while another fails, or when
-      # successful outputs come from a page that is still loading or images returned
-      # before processing finished. Absent when every requested output fails. Check each
-      # output's success field for its result. Valid captured pieces may be cached
-      # independently; failed retrievals and incomplete captures are not cached.
+      # True when at least one requested output succeeds but the response has failed or
+      # incomplete outputs. Absent when all requested outputs fail.
       #
       # @see ContextDev::Models::WebScrapeResponse#is_partial
       module IsPartial
@@ -1028,7 +1008,7 @@ module ContextDev
       # @see ContextDev::Models::WebScrapeResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -1040,9 +1020,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

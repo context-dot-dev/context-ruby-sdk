@@ -6,8 +6,7 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::ParseHandleParams} for more details.
       #
-      # Converts raw text, source code, web/data, PDF, Microsoft Office, and image bytes
-      # into LLM-usable Markdown.
+      # Convert uploaded file bytes into Markdown and optional HTML.
       #
       # @overload handle(body:, client: nil, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, zdr: nil, request_options: {})
       #
@@ -21,17 +20,17 @@ module ContextDev
       #
       # @param include_links [Boolean] Query param: Preserve hyperlinks in Markdown output
       #
-      # @param ocr [Boolean] Query param: When true for PDF inputs, OCR the selected pages that have no usabl
+      # @param ocr [Boolean] Query param: Read text from images and scanned PDF pages. PDF page ranges still
       #
       # @param pdf [ContextDev::Models::ParseHandleParams::Pdf] Query param: PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5
       #
       # @param shorten_base64_images [Boolean] Query param: Shorten base64-encoded image data in the Markdown output
       #
-      # @param tags [Array<String>] Query param: Comma-separated tags for tracking request usage. Up to 20 tags, eac
+      # @param tags [Array<String>] Query param: Comma-separated labels for filtering usage, e.g. `production,team-a
       #
       # @param use_main_content_only [Boolean] Query param: Extract only the main content from HTML-like inputs
       #
-      # @param zdr [Symbol, ContextDev::Models::ParseHandleParams::Zdr] Query param: Set to enabled to bypass shared caches and omit request and respons
+      # @param zdr [Symbol, ContextDev::Models::ParseHandleParams::Zdr] Query param: `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLE
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

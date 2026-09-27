@@ -2,14 +2,10 @@
 
 module ContextDev
   module Resources
-    # Monitor pages, sitemaps, and extracted website data for exact or semantic
-    # changes. Webhook payloads are documented by the
-    # MonitorsChangeDetectedWebhookPayload and MonitorsRunCompletedWebhookPayload
-    # schemas.
+    # Watch websites for exact or meaningful changes.
     class Monitors
-      # Creates a monitor. The request body is a union of the supported target/change
-      # detection combinations. The monitor runs immediately after creation to create
-      # its initial baseline.
+      # Watch a page, URL inventory, or extracted website data on a schedule. A run
+      # starts immediately to capture the baseline.
       sig do
         params(
           name: String,
@@ -32,39 +28,43 @@ module ContextDev
         ).returns(ContextDev::Models::MonitorCreateResponse)
       end
       def create(
+        # Display name for the monitor.
         name:,
-        # Discriminated union describing what the monitor watches.
+        # What to watch: a page, a sitemap, or data extracted from a site.
         target:,
-        # Discriminated union describing how changes are detected.
+        # How changes are judged. Defaults to `semantic` for extract targets and page
+        # targets with `instructions`, otherwise `exact`.
         change_detection: nil,
-        # Top-level monitor category. Always `web` today; the concrete behavior is
-        # described by `target` and `change_detection`.
+        # Always `web`. Optional.
         mode: nil,
         # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
         # every 6 hours or every 2 days. The total interval (frequency × unit) must be
         # between 10 minutes and 1 year.
         schedule: nil,
-        # User-defined tags for grouping and filtering monitors and their changes.
-        # Duplicates are removed.
+        # Labels for filtering monitors, their changes, and their usage.
         tags: nil,
+        # Webhook destination and delivery settings. Null means no webhook is configured.
         webhook: nil,
         request_options: {}
       )
       end
 
-      # Get a monitor
+      # Retrieve a monitor’s configuration and current state.
       sig do
         params(
           monitor_id: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::MonitorRetrieveResponse)
       end
-      def retrieve(monitor_id, request_options: {})
+      def retrieve(
+        # ID of the monitor.
+        monitor_id,
+        request_options: {}
+      )
       end
 
-      # Updates a monitor. If `target` or `change_detection` changes, the monitor
-      # creates a new baseline. Unsupported target/change detection combinations are
-      # rejected.
+      # Update a monitor. Changing its target or change detection replaces the baseline
+      # and queues a new baseline run.
       sig do
         params(
           monitor_id: String,
@@ -88,29 +88,30 @@ module ContextDev
         ).returns(ContextDev::Models::MonitorUpdateResponse)
       end
       def update(
+        # ID of the monitor.
         monitor_id,
-        # Discriminated union describing how changes are detected.
+        # How changes are judged. Defaults to `semantic` for extract targets and page
+        # targets with `instructions`, otherwise `exact`.
         change_detection: nil,
+        # Display name for the monitor.
         name: nil,
         # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
         # every 6 hours or every 2 days. The total interval (frequency × unit) must be
         # between 10 minutes and 1 year.
         schedule: nil,
+        # Set `paused` to stop scheduled runs or `active` to resume them.
         status: nil,
-        # User-defined tags for grouping and filtering monitors and their changes.
-        # Duplicates are removed.
+        # Labels for filtering monitors, their changes, and their usage.
         tags: nil,
-        # Discriminated union describing what the monitor watches.
+        # What to watch: a page, a sitemap, or data extracted from a site.
         target: nil,
-        # Set to null to remove the webhook.
+        # Set to null to remove the webhook. Changing `url` issues a new secret.
         webhook: nil,
         request_options: {}
       )
       end
 
-      # Lists monitors for the authenticated organization. Supports free-text search
-      # (`q` over `search_by` fields, `prefix` or `exact` via `search_type`) plus
-      # status/type/tag filters. Results are paginated via the opaque `cursor`.
+      # List your monitors with optional search and filters.
       sig do
         params(
           change_detection_type:
@@ -139,8 +140,8 @@ module ContextDev
         limit: nil,
         # Free-text search term, matched against the fields named in `search_by`.
         q: nil,
-        # Comma-separated fields to search with `q`. Defaults to all of them. Note
-        # `instructions` only exists on extract monitors.
+        # Fields to search with `q`. Defaults to all fields; page and extract targets can
+        # have instructions.
         search_by: nil,
         # `prefix` for as-you-type prefix matching (default), `exact` for full-token
         # matching.
@@ -157,18 +158,22 @@ module ContextDev
       )
       end
 
-      # Delete a monitor
+      # Delete a monitor and stop future runs and webhook retries.
       sig do
         params(
           monitor_id: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::MonitorDeleteResponse)
       end
-      def delete(monitor_id, request_options: {})
+      def delete(
+        # ID of the monitor.
+        monitor_id,
+        request_options: {}
+      )
       end
 
-      # Returns credits charged per monitor over an optional [since, until] window,
-      # newest spenders first.
+      # Return usage per monitor, highest first, for up to the 10,000 most recent runs
+      # in the requested window.
       sig do
         params(
           since: Time,
@@ -185,7 +190,7 @@ module ContextDev
       )
       end
 
-      # Returns how many monitors the account has and the maximum it allows.
+      # Retrieve your organization’s monitor allowance and usage.
       sig do
         params(request_options: ContextDev::RequestOptions::OrHash).returns(
           ContextDev::Models::MonitorGetLimitsResponse
@@ -194,7 +199,7 @@ module ContextDev
       def get_limits(request_options: {})
       end
 
-      # Returns an account-wide feed of detected changes across monitors.
+      # List full change records across your monitors, newest first.
       sig do
         params(
           change_detection_type:
@@ -231,7 +236,7 @@ module ContextDev
       )
       end
 
-      # Returns an account-wide feed of monitor runs across all monitors.
+      # List runs across your monitors, newest first.
       sig do
         params(
           cursor: String,
@@ -251,7 +256,7 @@ module ContextDev
       )
       end
 
-      # List changes for a monitor
+      # List full change records for a monitor, newest first.
       sig do
         params(
           monitor_id: String,
@@ -264,6 +269,7 @@ module ContextDev
         ).returns(ContextDev::Models::MonitorListChangesResponse)
       end
       def list_changes(
+        # ID of the monitor.
         monitor_id,
         # Opaque pagination cursor from a previous response.
         cursor: nil,
@@ -279,7 +285,7 @@ module ContextDev
       )
       end
 
-      # List monitor runs
+      # List a monitor’s runs, newest first.
       sig do
         params(
           monitor_id: String,
@@ -290,6 +296,7 @@ module ContextDev
         ).returns(ContextDev::Models::MonitorListRunsResponse)
       end
       def list_runs(
+        # ID of the monitor.
         monitor_id,
         # Opaque pagination cursor from a previous response.
         cursor: nil,
@@ -301,18 +308,21 @@ module ContextDev
       )
       end
 
-      # Get a change
+      # Retrieve a detected change, including its diff and available evidence.
       sig do
         params(
           change_id: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::MonitorRetrieveChangeResponse)
       end
-      def retrieve_change(change_id, request_options: {})
+      def retrieve_change(
+        # ID of the detected change.
+        change_id,
+        request_options: {}
+      )
       end
 
-      # Fetches one run for a monitor, including lifecycle status, timing, credits
-      # charged, and any detected change.
+      # Retrieve the status, timing, and results of one monitor run.
       sig do
         params(
           run_id: String,
@@ -320,30 +330,42 @@ module ContextDev
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::MonitorRetrieveRunResponse)
       end
-      def retrieve_run(run_id, monitor_id:, request_options: {})
+      def retrieve_run(
+        # ID of the monitor run.
+        run_id,
+        # ID of the monitor.
+        monitor_id:,
+        request_options: {}
+      )
       end
 
-      # Generates a new signing secret for the monitor's webhook and returns the updated
-      # monitor (including the new `webhook.secret`). The previous secret stops signing
-      # deliveries immediately, so update your endpoint before rotating.
+      # Generate and return a new signing secret. It takes effect immediately for all
+      # subsequent delivery attempts.
       sig do
         params(
           monitor_id: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::MonitorRotateWebhookSecretResponse)
       end
-      def rotate_webhook_secret(monitor_id, request_options: {})
+      def rotate_webhook_secret(
+        # ID of the monitor.
+        monitor_id,
+        request_options: {}
+      )
       end
 
-      # Triggers an immediate run of the monitor outside its normal schedule. The run is
-      # queued and processed asynchronously.
+      # Queue a run without changing the regular schedule. Paused monitors return 409.
       sig do
         params(
           monitor_id: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::MonitorRunResponse)
       end
-      def run(monitor_id, request_options: {})
+      def run(
+        # ID of the monitor.
+        monitor_id,
+        request_options: {}
+      )
       end
 
       # @api private

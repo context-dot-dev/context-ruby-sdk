@@ -22,15 +22,48 @@ module ContextDev
       sig { returns(T.nilable(String)) }
       attr_accessor :next_cursor
 
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
+      sig { returns(String) }
+      attr_accessor :request_id
+
+      # Credits this request used and your remaining balance.
+      sig do
+        returns(
+          T.nilable(ContextDev::Models::MonitorListRunsResponse::KeyMetadata)
+        )
+      end
+      attr_reader :key_metadata
+
+      sig do
+        params(
+          key_metadata:
+            ContextDev::Models::MonitorListRunsResponse::KeyMetadata::OrHash
+        ).void
+      end
+      attr_writer :key_metadata
+
       sig do
         params(
           data:
             T::Array[ContextDev::Models::MonitorListRunsResponse::Data::OrHash],
           has_more: T::Boolean,
-          next_cursor: T.nilable(String)
+          next_cursor: T.nilable(String),
+          request_id: String,
+          key_metadata:
+            ContextDev::Models::MonitorListRunsResponse::KeyMetadata::OrHash
         ).returns(T.attached_class)
       end
-      def self.new(data:, has_more:, next_cursor:)
+      def self.new(
+        data:,
+        has_more:,
+        next_cursor:,
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
+        request_id:,
+        # Credits this request used and your remaining balance.
+        key_metadata: nil
+      )
       end
 
       sig do
@@ -38,7 +71,10 @@ module ContextDev
           {
             data: T::Array[ContextDev::Models::MonitorListRunsResponse::Data],
             has_more: T::Boolean,
-            next_cursor: T.nilable(String)
+            next_cursor: T.nilable(String),
+            request_id: String,
+            key_metadata:
+              ContextDev::Models::MonitorListRunsResponse::KeyMetadata
           }
         )
       end
@@ -79,7 +115,7 @@ module ContextDev
         sig { returns(String) }
         attr_accessor :monitor_id
 
-        # The first run after monitor creation is a baseline run.
+        # A baseline run follows creation or a target or detection change.
         sig do
           returns(
             ContextDev::Models::MonitorListRunsResponse::Data::RunType::TaggedSymbol
@@ -152,9 +188,7 @@ module ContextDev
         end
         attr_writer :webhook_deliveries
 
-        # Deprecated: use `webhook_deliveries`, which records every attempt now that a run
-        # can deliver multiple events. Omitted when no webhook was attempted, including
-        # historical runs created before delivery tracking was added.
+        # Deprecated. Use `webhook_deliveries` for all attempts.
         sig { returns(T.nilable(ContextDev::WebhookDelivery)) }
         attr_reader :webhook_delivery
 
@@ -211,7 +245,7 @@ module ContextDev
           # Credits charged for this run (0 for skipped/failed runs).
           credits_charged:,
           monitor_id:,
-          # The first run after monitor creation is a baseline run.
+          # A baseline run follows creation or a target or detection change.
           run_type:,
           # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
           # (insufficient credits, monitor paused, or superseded by a concurrent run).
@@ -227,9 +261,7 @@ module ContextDev
           # fired. Omitted when no webhook was attempted, including runs created before
           # event selection was added.
           webhook_deliveries: nil,
-          # Deprecated: use `webhook_deliveries`, which records every attempt now that a run
-          # can deliver multiple events. Omitted when no webhook was attempted, including
-          # historical runs created before delivery tracking was added.
+          # Deprecated. Use `webhook_deliveries` for all attempts.
           webhook_delivery: nil,
           # Webhook delivery IDs for this run.
           webhook_delivery_ids: nil
@@ -306,7 +338,7 @@ module ContextDev
           end
         end
 
-        # The first run after monitor creation is a baseline run.
+        # A baseline run follows creation or a target or detection change.
         module RunType
           extend ContextDev::Internal::Type::Enum
 
@@ -495,6 +527,46 @@ module ContextDev
           end
           def self.values
           end
+        end
+      end
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::MonitorListRunsResponse::KeyMetadata,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Credits charged for this request.
+        sig { returns(Integer) }
+        attr_accessor :credits_consumed
+
+        # Credits remaining for your organization.
+        sig { returns(Integer) }
+        attr_accessor :credits_remaining
+
+        # Credits this request used and your remaining balance.
+        sig do
+          params(credits_consumed: Integer, credits_remaining: Integer).returns(
+            T.attached_class
+          )
+        end
+        def self.new(
+          # Credits charged for this request.
+          credits_consumed:,
+          # Credits remaining for your organization.
+          credits_remaining:
+        )
+        end
+
+        sig do
+          override.returns(
+            { credits_consumed: Integer, credits_remaining: Integer }
+          )
+        end
+        def to_hash
         end
       end
     end

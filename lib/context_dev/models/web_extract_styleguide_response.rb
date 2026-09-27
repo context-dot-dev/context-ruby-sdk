@@ -5,16 +5,14 @@ module ContextDev
     # @see ContextDev::Resources::Web#extract_styleguide
     class WebExtractStyleguideResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute cache_metadata
-      #   Cache outcome for this response. Composite responses are hits only when every
-      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-      #   oldest contributing hit.
+      #   Whether this response came from cache.
       #
       #   @return [ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata }
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -32,11 +30,8 @@ module ContextDev
       optional :domain, String
 
       # @!attribute final_dom_state
-      #   How complete the returned content is. `loaded` means the page finished the waits
-      #   the request asked for. `still-loading` only occurs with
-      #   timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-      #   reached first, so the content reflects the DOM at that moment and late-rendering
-      #   parts may be missing. Partial results are billed at the base request cost.
+      #   `loaded`, or `still-loading` when capture ended before the page finished
+      #   loading.
       #
       #   @return [Symbol, ContextDev::Models::WebExtractStyleguideResponse::FinalDomState, nil]
       optional :final_dom_state,
@@ -44,13 +39,13 @@ module ContextDev
                api_name: :finalDOMState
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata }
 
       # @!attribute status
-      #   Status of the response, e.g., 'ok'
+      #   Always `ok` on success.
       #
       #   @return [String, nil]
       optional :status, String
@@ -65,19 +60,19 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractStyleguideResponse} for more details.
       #
-      #   @param cache_metadata [ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #   @param cache_metadata [ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata] Whether this response came from cache.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param code [Integer] HTTP status code
       #
       #   @param domain [String] The normalized domain that was processed
       #
-      #   @param final_dom_state [Symbol, ContextDev::Models::WebExtractStyleguideResponse::FinalDomState] How complete the returned content is. `loaded` means the page finished the waits
+      #   @param final_dom_state [Symbol, ContextDev::Models::WebExtractStyleguideResponse::FinalDomState] `loaded`, or `still-loading` when capture ended before the page finished loading
       #
-      #   @param key_metadata [ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::WebExtractStyleguideResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param status [String] Status of the response, e.g., 'ok'
+      #   @param status [String] Always `ok` on success.
       #
       #   @param styleguide [ContextDev::Models::WebExtractStyleguideResponse::Styleguide] Comprehensive styleguide data extracted from the website
 
@@ -101,9 +96,7 @@ module ContextDev
         #   {ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata} for more
         #   details.
         #
-        #   Cache outcome for this response. Composite responses are hits only when every
-        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-        #   oldest contributing hit.
+        #   Whether this response came from cache.
         #
         #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
         #
@@ -125,11 +118,8 @@ module ContextDev
         end
       end
 
-      # How complete the returned content is. `loaded` means the page finished the waits
-      # the request asked for. `still-loading` only occurs with
-      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-      # reached first, so the content reflects the DOM at that moment and late-rendering
-      # parts may be missing. Partial results are billed at the base request cost.
+      # `loaded`, or `still-loading` when capture ended before the page finished
+      # loading.
       #
       # @see ContextDev::Models::WebExtractStyleguideResponse#final_dom_state
       module FinalDomState
@@ -145,7 +135,7 @@ module ContextDev
       # @see ContextDev::Models::WebExtractStyleguideResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -157,9 +147,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end
@@ -375,7 +365,7 @@ module ContextDev
               required :min_height, String, api_name: :minHeight
 
               # @!attribute min_width
-              #   Sampled minimum width of the button box (typically px)
+              #   Minimum width (usually px).
               #
               #   @return [String]
               required :min_width, String, api_name: :minWidth
@@ -435,7 +425,7 @@ module ContextDev
               #
               #   @param min_height [String] Sampled minimum height of the button box (typically px)
               #
-              #   @param min_width [String] Sampled minimum width of the button box (typically px)
+              #   @param min_width [String] Minimum width (usually px).
               #
               #   @param padding [String]
               #
@@ -511,7 +501,7 @@ module ContextDev
               required :min_height, String, api_name: :minHeight
 
               # @!attribute min_width
-              #   Sampled minimum width of the button box (typically px)
+              #   Minimum width (usually px).
               #
               #   @return [String]
               required :min_width, String, api_name: :minWidth
@@ -571,7 +561,7 @@ module ContextDev
               #
               #   @param min_height [String] Sampled minimum height of the button box (typically px)
               #
-              #   @param min_width [String] Sampled minimum width of the button box (typically px)
+              #   @param min_width [String] Minimum width (usually px).
               #
               #   @param padding [String]
               #
@@ -647,7 +637,7 @@ module ContextDev
               required :min_height, String, api_name: :minHeight
 
               # @!attribute min_width
-              #   Sampled minimum width of the button box (typically px)
+              #   Minimum width (usually px).
               #
               #   @return [String]
               required :min_width, String, api_name: :minWidth
@@ -707,7 +697,7 @@ module ContextDev
               #
               #   @param min_height [String] Sampled minimum height of the button box (typically px)
               #
-              #   @param min_width [String] Sampled minimum width of the button box (typically px)
+              #   @param min_width [String] Minimum width (usually px).
               #
               #   @param padding [String]
               #
@@ -1004,7 +994,7 @@ module ContextDev
               required :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
 
               # @!attribute font_family
-              #   Primary face (first family in the computed stack)
+              #   First font in the stack.
               #
               #   @return [String]
               required :font_family, String, api_name: :fontFamily
@@ -1032,7 +1022,7 @@ module ContextDev
               # @!method initialize(font_fallbacks:, font_family:, font_size:, font_weight:, letter_spacing:, line_height:)
               #   @param font_fallbacks [Array<String>] Full ordered font list from resolved computed font-family
               #
-              #   @param font_family [String] Primary face (first family in the computed stack)
+              #   @param font_family [String] First font in the stack.
               #
               #   @param font_size [String]
               #
@@ -1052,7 +1042,7 @@ module ContextDev
               required :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
 
               # @!attribute font_family
-              #   Primary face (first family in the computed stack)
+              #   First font in the stack.
               #
               #   @return [String]
               required :font_family, String, api_name: :fontFamily
@@ -1080,7 +1070,7 @@ module ContextDev
               # @!method initialize(font_fallbacks:, font_family:, font_size:, font_weight:, letter_spacing:, line_height:)
               #   @param font_fallbacks [Array<String>] Full ordered font list from resolved computed font-family
               #
-              #   @param font_family [String] Primary face (first family in the computed stack)
+              #   @param font_family [String] First font in the stack.
               #
               #   @param font_size [String]
               #
@@ -1100,7 +1090,7 @@ module ContextDev
               required :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
 
               # @!attribute font_family
-              #   Primary face (first family in the computed stack)
+              #   First font in the stack.
               #
               #   @return [String]
               required :font_family, String, api_name: :fontFamily
@@ -1128,7 +1118,7 @@ module ContextDev
               # @!method initialize(font_fallbacks:, font_family:, font_size:, font_weight:, letter_spacing:, line_height:)
               #   @param font_fallbacks [Array<String>] Full ordered font list from resolved computed font-family
               #
-              #   @param font_family [String] Primary face (first family in the computed stack)
+              #   @param font_family [String] First font in the stack.
               #
               #   @param font_size [String]
               #
@@ -1148,7 +1138,7 @@ module ContextDev
               required :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
 
               # @!attribute font_family
-              #   Primary face (first family in the computed stack)
+              #   First font in the stack.
               #
               #   @return [String]
               required :font_family, String, api_name: :fontFamily
@@ -1176,7 +1166,7 @@ module ContextDev
               # @!method initialize(font_fallbacks:, font_family:, font_size:, font_weight:, letter_spacing:, line_height:)
               #   @param font_fallbacks [Array<String>] Full ordered font list from resolved computed font-family
               #
-              #   @param font_family [String] Primary face (first family in the computed stack)
+              #   @param font_family [String] First font in the stack.
               #
               #   @param font_size [String]
               #
@@ -1197,7 +1187,7 @@ module ContextDev
             required :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
 
             # @!attribute font_family
-            #   Primary face (first family in the computed stack)
+            #   First font in the stack.
             #
             #   @return [String]
             required :font_family, String, api_name: :fontFamily
@@ -1225,7 +1215,7 @@ module ContextDev
             # @!method initialize(font_fallbacks:, font_family:, font_size:, font_weight:, letter_spacing:, line_height:)
             #   @param font_fallbacks [Array<String>] Full ordered font list from resolved computed font-family
             #
-            #   @param font_family [String] Primary face (first family in the computed stack)
+            #   @param font_family [String] First font in the stack.
             #
             #   @param font_size [String]
             #

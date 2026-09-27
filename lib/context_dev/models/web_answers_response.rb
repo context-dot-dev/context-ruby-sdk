@@ -18,7 +18,7 @@ module ContextDev
       required :sources, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::WebAnswersResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebAnswersResponse::KeyMetadata }
@@ -38,14 +38,14 @@ module ContextDev
       #
       #   @param sources [Array<String>] URLs that supplied search results or readable page content, in first-seen order.
       #
-      #   @param key_metadata [ContextDev::Models::WebAnswersResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::WebAnswersResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param partial [Boolean] True when the request deadline ended research and the answer uses the evidence c
 
       # @see ContextDev::Models::WebAnswersResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -57,9 +57,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

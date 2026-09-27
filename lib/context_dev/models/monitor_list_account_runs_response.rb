@@ -20,10 +20,32 @@ module ContextDev
       #   @return [String, nil]
       required :next_cursor, String, nil?: true
 
-      # @!method initialize(data:, has_more:, next_cursor:)
+      # @!attribute request_id
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
+      #
+      #   @return [String]
+      required :request_id, String
+
+      # @!attribute key_metadata
+      #   Credits this request used and your remaining balance.
+      #
+      #   @return [ContextDev::Models::MonitorListAccountRunsResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::MonitorListAccountRunsResponse::KeyMetadata }
+
+      # @!method initialize(data:, has_more:, next_cursor:, request_id:, key_metadata: nil)
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::MonitorListAccountRunsResponse} for more details.
+      #
       #   @param data [Array<ContextDev::Models::MonitorListAccountRunsResponse::Data>]
+      #
       #   @param has_more [Boolean]
+      #
       #   @param next_cursor [String, nil]
+      #
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
+      #
+      #   @param key_metadata [ContextDev::Models::MonitorListAccountRunsResponse::KeyMetadata] Credits this request used and your remaining balance.
 
       class Data < ContextDev::Internal::Type::BaseModel
         # @!attribute id
@@ -61,7 +83,7 @@ module ContextDev
         required :monitor_id, String
 
         # @!attribute run_type
-        #   The first run after monitor creation is a baseline run.
+        #   A baseline run follows creation or a target or detection change.
         #
         #   @return [Symbol, ContextDev::Models::MonitorListAccountRunsResponse::Data::RunType]
         required :run_type, enum: -> { ContextDev::Models::MonitorListAccountRunsResponse::Data::RunType }
@@ -117,9 +139,7 @@ module ContextDev
         # @!attribute webhook_delivery
         #   @deprecated
         #
-        #   Deprecated: use `webhook_deliveries`, which records every attempt now that a run
-        #   can deliver multiple events. Omitted when no webhook was attempted, including
-        #   historical runs created before delivery tracking was added.
+        #   Deprecated. Use `webhook_deliveries` for all attempts.
         #
         #   @return [ContextDev::Models::WebhookDelivery, nil]
         optional :webhook_delivery, -> { ContextDev::WebhookDelivery }
@@ -146,7 +166,7 @@ module ContextDev
         #
         #   @param monitor_id [String]
         #
-        #   @param run_type [Symbol, ContextDev::Models::MonitorListAccountRunsResponse::Data::RunType] The first run after monitor creation is a baseline run.
+        #   @param run_type [Symbol, ContextDev::Models::MonitorListAccountRunsResponse::Data::RunType] A baseline run follows creation or a target or detection change.
         #
         #   @param status [Symbol, ContextDev::Models::MonitorListAccountRunsResponse::Data::Status] Lifecycle status of a run. `skipped` runs never executed — see `skip_reason` (in
         #
@@ -164,7 +184,7 @@ module ContextDev
         #
         #   @param webhook_deliveries [Array<ContextDev::Models::WebhookDelivery>] All webhook deliveries attempted by this run — one per subscribed event that fir
         #
-        #   @param webhook_delivery [ContextDev::Models::WebhookDelivery] Deprecated: use `webhook_deliveries`, which records every attempt now that a run
+        #   @param webhook_delivery [ContextDev::Models::WebhookDelivery] Deprecated. Use `webhook_deliveries` for all attempts.
         #
         #   @param webhook_delivery_ids [Array<String>] Webhook delivery IDs for this run.
 
@@ -179,7 +199,7 @@ module ContextDev
           #   @return [Array<Symbol>]
         end
 
-        # The first run after monitor creation is a baseline run.
+        # A baseline run follows creation or a target or detection change.
         #
         # @see ContextDev::Models::MonitorListAccountRunsResponse::Data#run_type
         module RunType
@@ -251,6 +271,28 @@ module ContextDev
           # @!method self.values
           #   @return [Array<Symbol>]
         end
+      end
+
+      # @see ContextDev::Models::MonitorListAccountRunsResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   Credits charged for this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   Credits remaining for your organization.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Credits this request used and your remaining balance.
+        #
+        #   @param credits_consumed [Integer] Credits charged for this request.
+        #
+        #   @param credits_remaining [Integer] Credits remaining for your organization.
       end
     end
   end

@@ -5,9 +5,7 @@ module ContextDev
     # @see ContextDev::Resources::Web#web_crawl_md
     class WebWebCrawlMdResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute cache_metadata
-      #   Cache outcome for this response. Composite responses are hits only when every
-      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-      #   oldest contributing hit.
+      #   Whether this response came from cache.
       #
       #   @return [ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata }
@@ -18,8 +16,8 @@ module ContextDev
       required :metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::Metadata }
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -31,7 +29,7 @@ module ContextDev
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebCrawlMdResponse::Result] }
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata }
@@ -48,15 +46,15 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdResponse} for more details.
       #
-      #   @param cache_metadata [ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #   @param cache_metadata [ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata] Whether this response came from cache.
       #
       #   @param metadata [ContextDev::Models::WebWebCrawlMdResponse::Metadata]
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param results [Array<ContextDev::Models::WebWebCrawlMdResponse::Result>]
       #
-      #   @param key_metadata [ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param partial [Boolean] True when timeoutOpts.behavior=return-partial returned the usable results collec
 
@@ -79,9 +77,7 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata} for more details.
         #
-        #   Cache outcome for this response. Composite responses are hits only when every
-        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-        #   oldest contributing hit.
+        #   Whether this response came from cache.
         #
         #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
         #
@@ -478,7 +474,7 @@ module ContextDev
       # @see ContextDev::Models::WebWebCrawlMdResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -490,9 +486,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

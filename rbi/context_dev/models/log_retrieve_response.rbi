@@ -19,12 +19,12 @@ module ContextDev
       end
       attr_writer :data
 
-      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      # it when contacting support about a failed request.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Credit usage, included whenever a valid API key is provided.
+      # Credits this request used and your remaining balance.
       sig do
         returns(T.nilable(ContextDev::Models::LogRetrieveResponse::KeyMetadata))
       end
@@ -48,10 +48,10 @@ module ContextDev
       end
       def self.new(
         data:,
-        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        # it when contacting support about a failed request.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
         request_id:,
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         key_metadata: nil
       )
       end
@@ -104,7 +104,8 @@ module ContextDev
         sig { returns(Float) }
         attr_accessor :latency_ms
 
-        # HTTP method.
+        # HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement
+        # entries.
         sig { returns(String) }
         attr_accessor :method_
 
@@ -136,24 +137,6 @@ module ContextDev
         sig { returns(T::Boolean) }
         attr_accessor :zdr
 
-        # Credit usage, included whenever a valid API key is provided.
-        sig do
-          returns(
-            T.nilable(
-              ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata
-            )
-          )
-        end
-        attr_reader :key_metadata
-
-        sig do
-          params(
-            key_metadata:
-              ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata::OrHash
-          ).void
-        end
-        attr_writer :key_metadata
-
         # The retained JSON response with credentials redacted, or null when unavailable.
         sig { returns(T.nilable(T.anything)) }
         attr_reader :response
@@ -176,8 +159,6 @@ module ContextDev
             timestamp: Time,
             user_agent: T.nilable(String),
             zdr: T::Boolean,
-            key_metadata:
-              ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata::OrHash,
             response: T.anything
           ).returns(T.attached_class)
         end
@@ -192,7 +173,8 @@ module ContextDev
           key_id:,
           # Server-side processing time in milliseconds.
           latency_ms:,
-          # HTTP method.
+          # HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement
+          # entries.
           method_:,
           # Endpoint path as called.
           path:,
@@ -208,8 +190,6 @@ module ContextDev
           user_agent:,
           # Whether the request was made under zero data retention.
           zdr:,
-          # Credit usage, included whenever a valid API key is provided.
-          key_metadata: nil,
           # The retained JSON response with credentials redacted, or null when unavailable.
           response: nil
         )
@@ -231,8 +211,6 @@ module ContextDev
               timestamp: Time,
               user_agent: T.nilable(String),
               zdr: T::Boolean,
-              key_metadata:
-                ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata,
               response: T.anything
             }
           )
@@ -283,47 +261,6 @@ module ContextDev
           def to_hash
           end
         end
-
-        class KeyMetadata < ContextDev::Internal::Type::BaseModel
-          OrHash =
-            T.type_alias do
-              T.any(
-                ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata,
-                ContextDev::Internal::AnyHash
-              )
-            end
-
-          # Credits used by this request.
-          sig { returns(Integer) }
-          attr_accessor :credits_consumed
-
-          # Credits remaining for your organization.
-          sig { returns(Integer) }
-          attr_accessor :credits_remaining
-
-          # Credit usage, included whenever a valid API key is provided.
-          sig do
-            params(
-              credits_consumed: Integer,
-              credits_remaining: Integer
-            ).returns(T.attached_class)
-          end
-          def self.new(
-            # Credits used by this request.
-            credits_consumed:,
-            # Credits remaining for your organization.
-            credits_remaining:
-          )
-          end
-
-          sig do
-            override.returns(
-              { credits_consumed: Integer, credits_remaining: Integer }
-            )
-          end
-          def to_hash
-          end
-        end
       end
 
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
@@ -335,7 +272,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -343,14 +280,14 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         sig do
           params(credits_consumed: Integer, credits_remaining: Integer).returns(
             T.attached_class
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:

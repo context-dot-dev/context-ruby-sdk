@@ -6,7 +6,8 @@ class ContextDev::Test::Resources::NewsTest < ContextDev::Test::ResourceTest
   def test_search_required_params
     skip("Mock server tests are disabled")
 
-    response = @context_dev.news.search(search_by: {entity: {name: "xx", type: :name}, type: :entity})
+    response =
+      @context_dev.news.search(search_by: {entity: {domain: "stripe.com", type: :domain}, type: :entity})
 
     assert_pattern do
       response => ContextDev::Models::NewsSearchResponse

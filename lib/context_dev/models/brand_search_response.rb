@@ -5,8 +5,8 @@ module ContextDev
     # @see ContextDev::Resources::Brand#search
     class BrandSearchResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -20,7 +20,7 @@ module ContextDev
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BrandSearchResponse::Result] }
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::BrandSearchResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::BrandSearchResponse::KeyMetadata }
@@ -29,11 +29,11 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BrandSearchResponse} for more details.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param results [Array<ContextDev::Models::BrandSearchResponse::Result>] Up to 10 matching brands, name matches first, then domain matches, most popular
       #
-      #   @param key_metadata [ContextDev::Models::BrandSearchResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::BrandSearchResponse::KeyMetadata] Credits this request used and your remaining balance.
 
       class Result < ContextDev::Internal::Type::BaseModel
         # @!attribute domain
@@ -69,7 +69,7 @@ module ContextDev
       # @see ContextDev::Models::BrandSearchResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -81,9 +81,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

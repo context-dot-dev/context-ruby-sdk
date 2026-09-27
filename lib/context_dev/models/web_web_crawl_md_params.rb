@@ -8,22 +8,19 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute url
-      #   The starting URL for the crawl (must include http:// or https:// protocol)
+      #   Start URL, including `http://` or `https://`.
       #
       #   @return [String]
       required :url, String
 
       # @!attribute country
-      #   Fetch the target page through a residential proxy in this country (ISO 3166-1
-      #   alpha-2).
+      #   Fetch from this country (ISO 3166-1 alpha-2).
       #
       #   @return [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country, nil]
       optional :country, enum: -> { ContextDev::WebWebCrawlMdParams::Country }
 
       # @!attribute exclude_selectors
-      #   CSS selectors to remove before each crawled page is converted to Markdown.
-      #   Applied after includeSelectors. Exclusion takes precedence: an element matching
-      #   both is removed. Examples: "nav", "footer", ".ad-banner", "[aria-hidden=true]".
+      #   Remove matching elements after inclusions. Exclusions take precedence.
       #
       #   @return [Array<String>, nil]
       optional :exclude_selectors, ContextDev::Internal::Type::ArrayOf[String], api_name: :excludeSelectors
@@ -56,18 +53,13 @@ module ContextDev
       optional :include_links, ContextDev::Internal::Type::Boolean, api_name: :includeLinks
 
       # @!attribute include_selectors
-      #   CSS selectors. When provided, only matching HTML subtrees (and their
-      #   descendants) are kept before each crawled page is converted to Markdown. When
-      #   omitted, the entire document is kept. Examples: "article.main", "#content",
-      #   "[role=main]".
+      #   Keep matching HTML subtrees before converting each page to Markdown.
       #
       #   @return [Array<String>, nil]
       optional :include_selectors, ContextDev::Internal::Type::ArrayOf[String], api_name: :includeSelectors
 
       # @!attribute max_age_ms
-      #   Return a cached result if a prior scrape for the same parameters exists and is
-      #   younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-      #   omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+      #   Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
       #
       #   @return [Integer, nil]
       optional :max_age_ms, Integer, api_name: :maxAgeMs
@@ -79,22 +71,20 @@ module ContextDev
       optional :max_depth, Integer, api_name: :maxDepth
 
       # @!attribute max_pages
-      #   Maximum number of pages to crawl. Hard cap: 500.
+      #   Maximum pages to crawl.
       #
       #   @return [Integer, nil]
       optional :max_pages, Integer, api_name: :maxPages
 
       # @!attribute pdf
-      #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
-      #   detection/OCR to an inclusive 1-based page range.
+      #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
       #
       #   @return [ContextDev::Models::WebWebCrawlMdParams::Pdf, nil]
       optional :pdf, -> { ContextDev::WebWebCrawlMdParams::Pdf }
 
       # @!attribute settle_animations
-      #   When true, waits briefly for CSS and transition animations to settle before
-      #   extracting each crawled page. Defaults to false. This adds a bit of latency in
-      #   exchange for more stable output on animated pages.
+      #   Wait briefly for CSS animations and transitions to settle before reading each
+      #   page.
       #
       #   @return [Boolean, nil]
       optional :settle_animations, ContextDev::Internal::Type::Boolean, api_name: :settleAnimations
@@ -106,24 +96,20 @@ module ContextDev
       optional :shorten_base64_images, ContextDev::Internal::Type::Boolean, api_name: :shortenBase64Images
 
       # @!attribute stop_after_ms
-      #   Soft time budget for the crawl in milliseconds. After each scrape, the crawler
-      #   checks the elapsed time and, if exceeded, returns the pages collected so far
-      #   instead of continuing. Min: 10000 (10s). Max: 110000 (110s). Default: 80000
-      #   (80s).
+      #   Soft crawl deadline in milliseconds. Returns pages collected before the next
+      #   deadline check.
       #
       #   @return [Integer, nil]
       optional :stop_after_ms, Integer, api_name: :stopAfterMs
 
       # @!attribute tags
-      #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #   Labels for filtering usage in the dashboard.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timeout_opts
-      #   Optional request deadline and behavior on timeout. For GET requests, use
-      #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-      #   timeoutOpts object.
+      #   Request deadline and what to return when it passes.
       #
       #   @return [ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts, nil]
       optional :timeout_opts, -> { ContextDev::WebWebCrawlMdParams::TimeoutOpts }, api_name: :timeoutOpts
@@ -151,10 +137,8 @@ module ContextDev
       optional :wait_for_ms, Integer, api_name: :waitForMs
 
       # @!attribute zdr
-      #   Set to enabled to bypass shared caches and omit request and response content
-      #   from retained usage logs. Requires zero data retention to be enabled for your
-      #   organization (contact support@context.dev), otherwise the request fails with
-      #   ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      #   `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      #   your organization has ZDR.
       #
       #   @return [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebWebCrawlMdParams::Zdr }
@@ -163,11 +147,11 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
-      #   @param url [String] The starting URL for the crawl (must include http:// or https:// protocol)
+      #   @param url [String] Start URL, including `http://` or `https://`.
       #
-      #   @param country [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
+      #   @param country [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country] Fetch from this country (ISO 3166-1 alpha-2).
       #
-      #   @param exclude_selectors [Array<String>] CSS selectors to remove before each crawled page is converted to Markdown. Appli
+      #   @param exclude_selectors [Array<String>] Remove matching elements after inclusions. Exclusions take precedence.
       #
       #   @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
       #
@@ -177,25 +161,25 @@ module ContextDev
       #
       #   @param include_links [Boolean] Preserve hyperlinks in the Markdown output
       #
-      #   @param include_selectors [Array<String>] CSS selectors. When provided, only matching HTML subtrees (and their descendants
+      #   @param include_selectors [Array<String>] Keep matching HTML subtrees before converting each page to Markdown.
       #
-      #   @param max_age_ms [Integer] Return a cached result if a prior scrape for the same parameters exists and is y
+      #   @param max_age_ms [Integer] Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
       #
       #   @param max_depth [Integer] Maximum link depth from the starting URL (0 = only the starting page)
       #
-      #   @param max_pages [Integer] Maximum number of pages to crawl. Hard cap: 500.
+      #   @param max_pages [Integer] Maximum pages to crawl.
       #
-      #   @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
+      #   @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
       #
-      #   @param settle_animations [Boolean] When true, waits briefly for CSS and transition animations to settle before extr
+      #   @param settle_animations [Boolean] Wait briefly for CSS animations and transitions to settle before reading each pa
       #
       #   @param shorten_base64_images [Boolean] Truncate base64-encoded image data in the Markdown output
       #
-      #   @param stop_after_ms [Integer] Soft time budget for the crawl in milliseconds. After each scrape, the crawler c
+      #   @param stop_after_ms [Integer] Soft crawl deadline in milliseconds. Returns pages collected before the next dea
       #
-      #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
-      #   @param timeout_opts [ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #   @param timeout_opts [ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
       #   @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped. An
       #
@@ -203,12 +187,11 @@ module ContextDev
       #
       #   @param wait_for_ms [Integer] Browser wait time in milliseconds after initial page load for each crawled page.
       #
-      #   @param zdr [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      #   @param zdr [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Fetch the target page through a residential proxy in this country (ISO 3166-1
-      # alpha-2).
+      # Fetch from this country (ISO 3166-1 alpha-2).
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -430,10 +413,7 @@ module ContextDev
         optional :end_, Integer, api_name: :end
 
         # @!attribute ocr
-        #   When true, OCR the selected PDF pages that have no usable text layer (scans),
-        #   replacing each recovered page's text with the OCR result while pages with a real
-        #   text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-        #   of the base request cost.
+        #   Read scanned PDF pages with OCR; preserve pages that already contain text.
         #
         #   @return [Boolean, nil]
         optional :ocr, ContextDev::Internal::Type::Boolean
@@ -455,12 +435,11 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebWebCrawlMdParams::Pdf} for more details.
         #
-        #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
-        #   detection/OCR to an inclusive 1-based page range.
+        #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         #
         #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
         #
-        #   @param ocr [Boolean] When true, OCR the selected PDF pages that have no usable text layer (scans), re
+        #   @param ocr [Boolean] Read scanned PDF pages with OCR; preserve pages that already contain text.
         #
         #   @param should_parse [Boolean] When true, PDF pages are fetched and parsed. When false, PDF pages are skipped e
         #
@@ -469,16 +448,14 @@ module ContextDev
 
       class TimeoutOpts < ContextDev::Internal::Type::BaseModel
         # @!attribute milliseconds
-        #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   Deadline in milliseconds.
         #
         #   @return [Integer]
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        #   credits. "return-partial" returns usable results collected so far; if none are
-        #   available, the request still fails without charging credits. Partial results are
-        #   not cached as complete results.
+        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   inspect the response’s partial flag.
         #
         #   @return [Symbol, ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebWebCrawlMdParams::TimeoutOpts::Behavior }
@@ -487,18 +464,14 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts} for more details.
         #
-        #   Optional request deadline and behavior on timeout. For GET requests, use
-        #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        #   timeoutOpts object.
+        #   Request deadline and what to return when it passes.
         #
-        #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        #   @param behavior [Symbol, ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         #
         # @see ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts#behavior
         module Behavior
@@ -512,10 +485,8 @@ module ContextDev
         end
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Requires zero data retention to be enabled for your
-      # organization (contact support@context.dev), otherwise the request fails with
-      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

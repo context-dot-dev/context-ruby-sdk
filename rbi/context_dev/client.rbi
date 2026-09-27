@@ -28,10 +28,7 @@ module ContextDev
     sig { returns(ContextDev::Resources::Utility) }
     attr_reader :utility
 
-    # Monitor pages, sitemaps, and extracted website data for exact or semantic
-    # changes. Webhook payloads are documented by the
-    # MonitorsChangeDetectedWebhookPayload and MonitorsRunCompletedWebhookPayload
-    # schemas.
+    # Watch websites for exact or meaningful changes.
     sig { returns(ContextDev::Resources::Monitors) }
     attr_reader :monitors
 
@@ -45,17 +42,15 @@ module ContextDev
     sig { returns(ContextDev::Resources::People) }
     attr_reader :people
 
-    # Search live first-party RSS and free historical news data by company identity.
+    # Search live and historical news about a company.
     sig { returns(ContextDev::Resources::News) }
     attr_reader :news
 
-    # Read your organization's API request logs to debug failed calls. These endpoints
-    # cost no credits and use a separate rate limit.
+    # Read your organization's API request logs.
     sig { returns(ContextDev::Resources::Logs) }
     attr_reader :logs
 
-    # Report bugs, docs mismatches, and friction with any Context.dev API. Submissions
-    # cost no credits and use a separate rate limit.
+    # Report API issues and documentation mismatches.
     sig { returns(ContextDev::Resources::Feedback) }
     attr_reader :feedback
 

@@ -11,9 +11,7 @@ module ContextDev
           )
         end
 
-      # Cache outcome for this response. Composite responses are hits only when every
-      # cache-controlled fetch contributing to the output was a hit; age_ms is the
-      # oldest contributing hit.
+      # Whether this response came from cache.
       sig { returns(ContextDev::Models::WebSearchResponse::CacheMetadata) }
       attr_reader :cache_metadata
 
@@ -29,15 +27,15 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :query
 
-      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      # it when contacting support about a failed request.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
       sig { returns(String) }
       attr_accessor :request_id
 
       sig { returns(T::Array[ContextDev::Models::WebSearchResponse::Result]) }
       attr_accessor :results
 
-      # Credit usage, included whenever a valid API key is provided.
+      # Credits this request used and your remaining balance.
       sig do
         returns(T.nilable(ContextDev::Models::WebSearchResponse::KeyMetadata))
       end
@@ -74,17 +72,15 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         cache_metadata:,
         # Echo of the original query (useful when fanout was enabled).
         query:,
-        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        # it when contacting support about a failed request.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
         request_id:,
         results:,
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         key_metadata: nil,
         # True when timeoutOpts.behavior=return-partial returned the usable results
         # collected before the deadline. Partial collections are not cached as complete
@@ -131,9 +127,7 @@ module ContextDev
         end
         attr_accessor :status
 
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         sig do
           params(
             age_ms: Integer,
@@ -309,11 +303,8 @@ module ContextDev
           sig { returns(T.nilable(String)) }
           attr_accessor :markdown
 
-          # How complete the returned content is. `loaded` means the page finished the waits
-          # the request asked for. `still-loading` only occurs with
-          # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-          # reached first, so the content reflects the DOM at that moment and late-rendering
-          # parts may be missing. Partial results are billed at the base request cost.
+          # `loaded`, or `still-loading` when capture ended before the page finished
+          # loading.
           sig do
             returns(
               T.nilable(
@@ -347,11 +338,8 @@ module ContextDev
             # GFM Markdown of the page. Null unless markdownOptions.enabled is true and
             # scraping succeeded.
             markdown:,
-            # How complete the returned content is. `loaded` means the page finished the waits
-            # the request asked for. `still-loading` only occurs with
-            # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-            # reached first, so the content reflects the DOM at that moment and late-rendering
-            # parts may be missing. Partial results are billed at the base request cost.
+            # `loaded`, or `still-loading` when capture ended before the page finished
+            # loading.
             final_dom_state: nil
           )
           end
@@ -425,11 +413,8 @@ module ContextDev
             end
           end
 
-          # How complete the returned content is. `loaded` means the page finished the waits
-          # the request asked for. `still-loading` only occurs with
-          # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-          # reached first, so the content reflects the DOM at that moment and late-rendering
-          # parts may be missing. Partial results are billed at the base request cost.
+          # `loaded`, or `still-loading` when capture ended before the page finished
+          # loading.
           module FinalDomState
             extend ContextDev::Internal::Type::Enum
 
@@ -515,7 +500,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -523,14 +508,14 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         sig do
           params(credits_consumed: Integer, credits_remaining: Integer).returns(
             T.attached_class
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:

@@ -8,19 +8,19 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute formats
-      #   Outputs to return. Enable at least one; omitted formats are false.
+      #   Outputs to return. Set at least one to `true`.
       #
       #   @return [ContextDev::Models::WebScrapeParams::Formats]
       required :formats, -> { ContextDev::WebScrapeParams::Formats }
 
       # @!attribute url
-      #   The URL to scrape.
+      #   Public HTTP or HTTPS URL to scrape.
       #
       #   @return [String]
       required :url, String
 
       # @!attribute highlights_params
-      #   Highlight options. Requires formats.highlights: true.
+      #   Required when `formats.highlights` is `true`.
       #
       #   @return [ContextDev::Models::WebScrapeParams::HighlightsParams, nil]
       optional :highlights_params,
@@ -40,16 +40,14 @@ module ContextDev
       optional :json_params, -> { ContextDev::WebScrapeParams::JsonParams }, api_name: :jsonParams
 
       # @!attribute markdown_params
-      #   Markdown options. Requires formats.markdown: true.
+      #   Markdown options. Requires `formats.markdown`.
       #
       #   @return [ContextDev::Models::WebScrapeParams::MarkdownParams, nil]
       optional :markdown_params, -> { ContextDev::WebScrapeParams::MarkdownParams }, api_name: :markdownParams
 
       # @!attribute max_age_ms
-      #   Maximum age of each cached output. Defaults to 1 day; 0 fetches fresh and
-      #   updates the requested outputs. Compatible outputs are shared with the individual
-      #   scrape endpoints. Image results with hosted files refresh after 23 hours; other
-      #   outputs retain their own freshness.
+      #   Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
+      #   1 day.
       #
       #   @return [Integer, nil]
       optional :max_age_ms, Integer, api_name: :maxAgeMs
@@ -75,8 +73,7 @@ module ContextDev
                api_name: :screenshotParams
 
       # @!attribute shared_params
-      #   Shared browser and content settings. Content filters leave screenshots and
-      #   original bytes unchanged.
+      #   Browser and content settings shared by all outputs.
       #
       #   @return [ContextDev::Models::WebScrapeParams::SharedParams, nil]
       optional :shared_params, -> { ContextDev::WebScrapeParams::SharedParams }, api_name: :sharedParams
@@ -88,24 +85,14 @@ module ContextDev
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timeout_opts
-      #   Total deadline, including navigation, actions, waiting, and all outputs.
-      #   Defaults to 60000 milliseconds with behavior fail. Individual outputs have
-      #   internal deadlines that reserve time to return completed outputs; timed-out
-      #   outputs have success: false and data: null under either behavior. The overall
-      #   request deadline remains enforced: fail returns an error if that deadline is
-      #   reached. Use return-partial to allow the current page state and available
-      #   outputs when the page is still loading. Partial responses set isPartial. Failed
-      #   retrievals and incomplete captures are not cached; valid captured pieces may be
-      #   cached independently. Fixed waits must fit before a response reserve of up to
-      #   5000 milliseconds (at most one quarter of the timeout) when using
-      #   return-partial.
+      #   Deadline for the whole request. Defaults to 60000 ms with `fail`. Fixed waits
+      #   must end before it.
       #
       #   @return [ContextDev::Models::WebScrapeParams::TimeoutOpts, nil]
       optional :timeout_opts, -> { ContextDev::WebScrapeParams::TimeoutOpts }, api_name: :timeoutOpts
 
       # @!attribute zdr
-      #   Zero data retention. Bypasses caches and uploads; excludes request/response
-      #   content and tags from logs. Must be enabled for your organization.
+      #   `enabled` turns on zero data retention. Your organization must have ZDR enabled.
       #
       #   @return [Symbol, ContextDev::Models::WebScrapeParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebScrapeParams::Zdr }
@@ -114,19 +101,19 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScrapeParams} for more details.
       #
-      #   @param formats [ContextDev::Models::WebScrapeParams::Formats] Outputs to return. Enable at least one; omitted formats are false.
+      #   @param formats [ContextDev::Models::WebScrapeParams::Formats] Outputs to return. Set at least one to `true`.
       #
-      #   @param url [String] The URL to scrape.
+      #   @param url [String] Public HTTP or HTTPS URL to scrape.
       #
-      #   @param highlights_params [ContextDev::Models::WebScrapeParams::HighlightsParams] Highlight options. Requires formats.highlights: true.
+      #   @param highlights_params [ContextDev::Models::WebScrapeParams::HighlightsParams] Required when `formats.highlights` is `true`.
       #
       #   @param image_params [ContextDev::Models::WebScrapeParams::ImageParams] Image options. Requires formats.images: true.
       #
       #   @param json_params [ContextDev::Models::WebScrapeParams::JsonParams] Required when formats.json is true.
       #
-      #   @param markdown_params [ContextDev::Models::WebScrapeParams::MarkdownParams] Markdown options. Requires formats.markdown: true.
+      #   @param markdown_params [ContextDev::Models::WebScrapeParams::MarkdownParams] Markdown options. Requires `formats.markdown`.
       #
-      #   @param max_age_ms [Integer] Maximum age of each cached output. Defaults to 1 day; 0 fetches fresh and update
+      #   @param max_age_ms [Integer] Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
       #
       #   @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams] Required when formats.parse is true.
       #
@@ -134,13 +121,13 @@ module ContextDev
       #
       #   @param screenshot_params [ContextDev::Models::WebScrapeParams::ScreenshotParams] Screenshot options. Requires formats.screenshot: true.
       #
-      #   @param shared_params [ContextDev::Models::WebScrapeParams::SharedParams] Shared browser and content settings. Content filters leave screenshots and origi
+      #   @param shared_params [ContextDev::Models::WebScrapeParams::SharedParams] Browser and content settings shared by all outputs.
       #
       #   @param tags [Array<String>] Labels for tracking request usage. Not retained when zdr is enabled.
       #
-      #   @param timeout_opts [ContextDev::Models::WebScrapeParams::TimeoutOpts] Total deadline, including navigation, actions, waiting, and all outputs. Default
+      #   @param timeout_opts [ContextDev::Models::WebScrapeParams::TimeoutOpts] Deadline for the whole request. Defaults to 60000 ms with `fail`. Fixed waits mu
       #
-      #   @param zdr [Symbol, ContextDev::Models::WebScrapeParams::Zdr] Zero data retention. Bypasses caches and uploads; excludes request/response cont
+      #   @param zdr [Symbol, ContextDev::Models::WebScrapeParams::Zdr] `enabled` turns on zero data retention. Your organization must have ZDR enabled.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -152,9 +139,7 @@ module ContextDev
         optional :bytes, ContextDev::Internal::Type::Boolean
 
         # @!attribute highlights
-        #   Relevant Markdown excerpts for your question or topic, preserving code, lists,
-        #   and tables, with headings included when needed for context. Adds 3 credits when
-        #   passages are returned.
+        #   Markdown excerpts relevant to `highlightsParams.query`.
         #
         #   @return [Boolean, nil]
         optional :highlights, ContextDev::Internal::Type::Boolean
@@ -172,8 +157,7 @@ module ContextDev
         optional :images, ContextDev::Internal::Type::Boolean
 
         # @!attribute json
-        #   Page data extracted using your schema. Adds 4 credits when extraction succeeds
-        #   and its result is returned.
+        #   An object matching `jsonParams.schema`, extracted from the page.
         #
         #   @return [Boolean, nil]
         optional :json, ContextDev::Internal::Type::Boolean
@@ -185,47 +169,43 @@ module ContextDev
         optional :markdown, ContextDev::Internal::Type::Boolean
 
         # @!attribute parse
-        #   Fields selected by parseParams.rules.
+        #   Fields extracted with `parseParams.rules`, returned as `parsed`.
         #
         #   @return [Boolean, nil]
         optional :parse, ContextDev::Internal::Type::Boolean
 
         # @!attribute product
-        #   Product details such as name, price, and availability. Adds 1 credit when its
-        #   successful result is returned or the target page is missing.
+        #   Product details such as name, price, and availability.
         #
         #   @return [Boolean, nil]
         optional :product, ContextDev::Internal::Type::Boolean
 
         # @!attribute screenshot
-        #   An inline image of the page.
+        #   A screenshot of the page.
         #
         #   @return [Boolean, nil]
         optional :screenshot, ContextDev::Internal::Type::Boolean
 
         # @!method initialize(bytes: nil, highlights: nil, html: nil, images: nil, json: nil, markdown: nil, parse: nil, product: nil, screenshot: nil)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::WebScrapeParams::Formats} for more details.
-        #
-        #   Outputs to return. Enable at least one; omitted formats are false.
+        #   Outputs to return. Set at least one to `true`.
         #
         #   @param bytes [Boolean] The original HTTP response body.
         #
-        #   @param highlights [Boolean] Relevant Markdown excerpts for your question or topic, preserving code, lists, a
+        #   @param highlights [Boolean] Markdown excerpts relevant to `highlightsParams.query`.
         #
         #   @param html [Boolean] Rendered HTML.
         #
         #   @param images [Boolean] Images found on the page.
         #
-        #   @param json [Boolean] Page data extracted using your schema. Adds 4 credits when extraction succeeds a
+        #   @param json [Boolean] An object matching `jsonParams.schema`, extracted from the page.
         #
         #   @param markdown [Boolean] Page content as Markdown.
         #
-        #   @param parse [Boolean] Fields selected by parseParams.rules.
+        #   @param parse [Boolean] Fields extracted with `parseParams.rules`, returned as `parsed`.
         #
-        #   @param product [Boolean] Product details such as name, price, and availability. Adds 1 credit when its su
+        #   @param product [Boolean] Product details such as name, price, and availability.
         #
-        #   @param screenshot [Boolean] An inline image of the page.
+        #   @param screenshot [Boolean] A screenshot of the page.
       end
 
       class HighlightsParams < ContextDev::Internal::Type::BaseModel
@@ -236,46 +216,41 @@ module ContextDev
         required :query, String
 
         # @!attribute max_characters
-        #   Maximum combined length of the returned passages, in characters.
+        #   Maximum combined length of returned passages.
         #
         #   @return [Integer, nil]
         optional :max_characters, Integer, api_name: :maxCharacters
 
         # @!method initialize(query:, max_characters: nil)
-        #   Highlight options. Requires formats.highlights: true.
+        #   Required when `formats.highlights` is `true`.
         #
         #   @param query [String] The question or topic to find passages for.
         #
-        #   @param max_characters [Integer] Maximum combined length of the returned passages, in characters.
+        #   @param max_characters [Integer] Maximum combined length of returned passages.
       end
 
       class ImageParams < ContextDev::Internal::Type::BaseModel
         # @!attribute dedupe
-        #   For visual duplicates, keep the largest image.
+        #   Set `visual` to drop visual duplicates, keeping the largest copy.
         #
         #   @return [Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Dedupe, nil]
         optional :dedupe, enum: -> { ContextDev::WebScrapeParams::ImageParams::Dedupe }
 
         # @!attribute enrich
-        #   Add dimensions, a visual category, or a hosted file URL. Each image has a
-        #   maximum processing time of 30000 milliseconds, bounded by the remaining request
-        #   deadline.
+        #   Extra data per image: `dimensions`, `classification`, or a hosted `file` URL.
         #
         #   @return [Array<Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Enrich>, nil]
         optional :enrich,
                  -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::WebScrapeParams::ImageParams::Enrich] }
 
         # @!method initialize(dedupe: nil, enrich: nil)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::WebScrapeParams::ImageParams} for more details.
-        #
         #   Image options. Requires formats.images: true.
         #
-        #   @param dedupe [Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Dedupe] For visual duplicates, keep the largest image.
+        #   @param dedupe [Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Dedupe] Set `visual` to drop visual duplicates, keeping the largest copy.
         #
-        #   @param enrich [Array<Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Enrich>] Add dimensions, a visual category, or a hosted file URL. Each image has a maximu
+        #   @param enrich [Array<Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Enrich>] Extra data per image: `dimensions`, `classification`, or a hosted `file` URL.
 
-        # For visual duplicates, keep the largest image.
+        # Set `visual` to drop visual duplicates, keeping the largest copy.
         #
         # @see ContextDev::Models::WebScrapeParams::ImageParams#dedupe
         module Dedupe
@@ -302,18 +277,14 @@ module ContextDev
 
       class JsonParams < ContextDev::Internal::Type::BaseModel
         # @!attribute schema
-        #   JSON Schema for the returned object. Must describe a top-level object; at most
-        #   50 KB serialized. Optional fields the page does not state are omitted, or null
-        #   when their type allows null, while required non-nullable fields always receive a
-        #   best-effort value, so prefer nullable or optional fields for data a page may
-        #   omit. Zod users can pass the output of z.toJSONSchema().
+        #   JSON Schema for a top-level object, up to 50 KB. Use optional or nullable fields
+        #   for missing facts.
         #
         #   @return [Hash{Symbol=>Object}]
         required :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
 
         # @!attribute instructions
-        #   Optional guidance on which facts to prioritize or how to interpret schema
-        #   fields.
+        #   Extra guidance, such as which facts to prefer or how to read a field.
         #
         #   @return [String, nil]
         optional :instructions, String
@@ -324,24 +295,27 @@ module ContextDev
         #
         #   Required when formats.json is true.
         #
-        #   @param schema [Hash{Symbol=>Object}] JSON Schema for the returned object. Must describe a top-level object; at most 5
+        #   @param schema [Hash{Symbol=>Object}] JSON Schema for a top-level object, up to 50 KB. Use optional or nullable fields
         #
-        #   @param instructions [String] Optional guidance on which facts to prioritize or how to interpret schema fields
+        #   @param instructions [String] Extra guidance, such as which facts to prefer or how to read a field.
       end
 
       class MarkdownParams < ContextDev::Internal::Type::BaseModel
         # @!attribute include_images
+        #   Include images in the Markdown using image syntax with URLs and alt text.
         #
         #   @return [Boolean, nil]
         optional :include_images, ContextDev::Internal::Type::Boolean, api_name: :includeImages
 
         # @!attribute include_links
+        #   Keep link URLs in the Markdown. Set false to return link text without URLs.
         #
         #   @return [Boolean, nil]
         optional :include_links, ContextDev::Internal::Type::Boolean, api_name: :includeLinks
 
         # @!attribute inline_images
-        #   Base64 images use placeholders by default. Requires includeImages: true.
+        #   How base64 images appear: `placeholder` (default) or `preserve`. Requires
+        #   `includeImages`.
         #
         #   @return [Symbol, ContextDev::Models::WebScrapeParams::MarkdownParams::InlineImages, nil]
         optional :inline_images,
@@ -349,15 +323,19 @@ module ContextDev
                  api_name: :inlineImages
 
         # @!method initialize(include_images: nil, include_links: nil, inline_images: nil)
-        #   Markdown options. Requires formats.markdown: true.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScrapeParams::MarkdownParams} for more details.
         #
-        #   @param include_images [Boolean]
+        #   Markdown options. Requires `formats.markdown`.
         #
-        #   @param include_links [Boolean]
+        #   @param include_images [Boolean] Include images in the Markdown using image syntax with URLs and alt text.
         #
-        #   @param inline_images [Symbol, ContextDev::Models::WebScrapeParams::MarkdownParams::InlineImages] Base64 images use placeholders by default. Requires includeImages: true.
+        #   @param include_links [Boolean] Keep link URLs in the Markdown. Set false to return link text without URLs.
+        #
+        #   @param inline_images [Symbol, ContextDev::Models::WebScrapeParams::MarkdownParams::InlineImages] How base64 images appear: `placeholder` (default) or `preserve`. Requires `inclu
 
-        # Base64 images use placeholders by default. Requires includeImages: true.
+        # How base64 images appear: `placeholder` (default) or `preserve`. Requires
+        # `includeImages`.
         #
         # @see ContextDev::Models::WebScrapeParams::MarkdownParams#inline_images
         module InlineImages
@@ -373,8 +351,8 @@ module ContextDev
 
       class ParseParams < ContextDev::Internal::Type::BaseModel
         # @!attribute rules
-        #   Map field names to CSS selectors or rules. Missing items return null; missing
-        #   lists return [].
+        #   Field names mapped to CSS selectors (`h1`, `a@href`) or rule objects. Max 100
+        #   fields, 5 levels.
         #
         #   @return [Hash{Symbol=>String, ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1}]
         required :rules,
@@ -386,7 +364,7 @@ module ContextDev
         #
         #   Required when formats.parse is true.
         #
-        #   @param rules [Hash{Symbol=>String, ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1}] Map field names to CSS selectors or rules. Missing items return null; missing li
+        #   @param rules [Hash{Symbol=>String, ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1}] Field names mapped to CSS selectors (`h1`, `a@href`) or rule objects. Max 100 fi
 
         module Rule
           extend ContextDev::Internal::Type::Union
@@ -397,25 +375,38 @@ module ContextDev
 
           class UnionMember1 < ContextDev::Internal::Type::BaseModel
             # @!attribute selector
+            #   CSS selector to match within the current page or parent rule.
             #
             #   @return [String]
             required :selector, String
 
             # @!attribute output
+            #   Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
+            #   to text.
             #
             #   @return [Symbol, String, Object, ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::Output, nil]
             optional :output, union: -> { ContextDev::WebScrapeParams::ParseParams::Rule::UnionMember1::Output }
 
             # @!attribute type
+            #   Return the first match with `item` or all matches with `list`.
             #
             #   @return [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::Type, nil]
             optional :type, enum: -> { ContextDev::WebScrapeParams::ParseParams::Rule::UnionMember1::Type }
 
             # @!method initialize(selector:, output: nil, type: nil)
-            #   @param selector [String]
-            #   @param output [Symbol, String, Object, ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::Output]
-            #   @param type [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::Type]
+            #   Some parameter documentations has been truncated, see
+            #   {ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1} for more
+            #   details.
+            #
+            #   @param selector [String] CSS selector to match within the current page or parent rule.
+            #
+            #   @param output [Symbol, String, Object, ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::Output] Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
+            #
+            #   @param type [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1::Type] Return the first match with `item` or all matches with `list`.
 
+            # Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
+            # to text.
+            #
             # @see ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1#output
             module Output
               extend ContextDev::Internal::Type::Union
@@ -449,6 +440,8 @@ module ContextDev
               # @!endgroup
             end
 
+            # Return the first match with `item` or all matches with `list`.
+            #
             # @see ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1#type
             module Type
               extend ContextDev::Internal::Type::Enum
@@ -468,32 +461,27 @@ module ContextDev
 
       class ProductParams < ContextDev::Internal::Type::BaseModel
         # @!attribute use_ai_fallback
-        #   Extract the product with a specialized model when the page has no structured
-        #   product data. Adds six credits when the model verdict is returned successfully.
-        #   If the fallback fails, the product output has success: false and data: null with
-        #   no fallback charge; other outputs remain available. Request deadlines and client
-        #   disconnects still apply.
+        #   Use an AI model when the page has no structured product data.
         #
         #   @return [Boolean, nil]
         optional :use_ai_fallback, ContextDev::Internal::Type::Boolean, api_name: :useAIFallback
 
         # @!method initialize(use_ai_fallback: nil)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::WebScrapeParams::ProductParams} for more details.
-        #
         #   Product options. Requires formats.product: true.
         #
-        #   @param use_ai_fallback [Boolean] Extract the product with a specialized model when the page has no structured pro
+        #   @param use_ai_fallback [Boolean] Use an AI model when the page has no structured product data.
       end
 
       class ScreenshotParams < ContextDev::Internal::Type::BaseModel
         # @!attribute area
-        #   Viewport, full page, one visible element, or a rectangle. Maximum 40 megapixels.
+        #   What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
+        #   megapixels.
         #
         #   @return [Symbol, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Page, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Element, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Rectangle, nil]
         optional :area, union: -> { ContextDev::WebScrapeParams::ScreenshotParams::Area }
 
         # @!attribute format_
+        #   Image format for the screenshot.
         #
         #   @return [Symbol, ContextDev::Models::WebScrapeParams::ScreenshotParams::Format, nil]
         optional :format_,
@@ -508,11 +496,12 @@ module ContextDev
         #
         #   Screenshot options. Requires formats.screenshot: true.
         #
-        #   @param area [Symbol, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Page, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Element, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Rectangle] Viewport, full page, one visible element, or a rectangle. Maximum 40 megapixels.
+        #   @param area [Symbol, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Page, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Element, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Rectangle] What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40 meg
         #
-        #   @param format_ [Symbol, ContextDev::Models::WebScrapeParams::ScreenshotParams::Format]
+        #   @param format_ [Symbol, ContextDev::Models::WebScrapeParams::ScreenshotParams::Format] Image format for the screenshot.
 
-        # Viewport, full page, one visible element, or a rectangle. Maximum 40 megapixels.
+        # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
+        # megapixels.
         #
         # @see ContextDev::Models::WebScrapeParams::ScreenshotParams#area
         module Area
@@ -537,32 +526,36 @@ module ContextDev
 
           class Element < ContextDev::Internal::Type::BaseModel
             # @!attribute selector
-            #   Must match one visible element.
+            #   CSS selector matching exactly one visible element.
             #
             #   @return [String]
             required :selector, String
 
             # @!method initialize(selector:)
-            #   @param selector [String] Must match one visible element.
+            #   @param selector [String] CSS selector matching exactly one visible element.
           end
 
           class Rectangle < ContextDev::Internal::Type::BaseModel
             # @!attribute height
+            #   Height of the capture in pixels.
             #
             #   @return [Integer]
             required :height, Integer
 
             # @!attribute width
+            #   Width of the capture in pixels.
             #
             #   @return [Integer]
             required :width, Integer
 
             # @!attribute x
+            #   Left edge of the capture, in pixels from the document origin.
             #
             #   @return [Integer]
             required :x, Integer
 
             # @!attribute y_
+            #   Top edge of the capture, in pixels from the document origin.
             #
             #   @return [Integer]
             required :y_, Integer, api_name: :y
@@ -570,16 +563,21 @@ module ContextDev
             # @!method initialize(height:, width:, x:, y_:)
             #   Pixels from the document origin.
             #
-            #   @param height [Integer]
-            #   @param width [Integer]
-            #   @param x [Integer]
-            #   @param y_ [Integer]
+            #   @param height [Integer] Height of the capture in pixels.
+            #
+            #   @param width [Integer] Width of the capture in pixels.
+            #
+            #   @param x [Integer] Left edge of the capture, in pixels from the document origin.
+            #
+            #   @param y_ [Integer] Top edge of the capture, in pixels from the document origin.
           end
 
           # @!method self.variants
           #   @return [Array(Symbol, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Page, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Element, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Rectangle)]
         end
 
+        # Image format for the screenshot.
+        #
         # @see ContextDev::Models::WebScrapeParams::ScreenshotParams#format_
         module Format
           extend ContextDev::Internal::Type::Enum
@@ -595,59 +593,58 @@ module ContextDev
 
       class SharedParams < ContextDev::Internal::Type::BaseModel
         # @!attribute actions
-        #   Run in order before capture. A failed action fails the request. Bypasses
-        #   caching.
+        #   Browser steps run in order before capture. Requires a paid plan. Skips the
+        #   cache.
         #
         #   @return [Array<ContextDev::Models::WebScrapeParams::SharedParams::Action::Perform, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll, ContextDev::Models::WebScrapeParams::SharedParams::Action::Wait, ContextDev::Models::WebScrapeParams::SharedParams::Action::WaitFor>, nil]
         optional :actions,
                  -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::WebScrapeParams::SharedParams::Action] }
 
         # @!attribute country
-        #   Supported two-letter country code, case-insensitive. Applies to every output,
-        #   including image downloads.
+        #   Proxy country as a two-letter code, such as `US`. Case-insensitive.
         #
         #   @return [String, nil]
         optional :country, String
 
         # @!attribute dismiss_cookies
-        #   Dismiss cookie banners by accepting cookies before actions.
+        #   Accept cookie banners before actions and capture.
         #
         #   @return [Boolean, nil]
         optional :dismiss_cookies, ContextDev::Internal::Type::Boolean, api_name: :dismissCookies
 
         # @!attribute dismiss_popups
-        #   Dismiss other popups before actions.
+        #   Close other popups before actions and capture.
         #
         #   @return [Boolean, nil]
         optional :dismiss_popups, ContextDev::Internal::Type::Boolean, api_name: :dismissPopups
 
         # @!attribute exclude_selectors
-        #   Remove matching content. Exclusions win.
+        #   Remove elements matching these CSS selectors. Overrides `includeSelectors`.
         #
         #   @return [Array<String>, nil]
         optional :exclude_selectors, ContextDev::Internal::Type::ArrayOf[String], api_name: :excludeSelectors
 
         # @!attribute headers
-        #   Headers for the target origin. Requests with custom headers bypass caching.
+        #   HTTP headers to send to the target site. Requests with headers skip the cache.
         #
         #   @return [Hash{Symbol=>String}, nil]
         optional :headers, ContextDev::Internal::Type::HashOf[String]
 
         # @!attribute include_frames
-        #   Include iframe content in extraction. Screenshots show visible frames
-        #   regardless.
+        #   Include iframe content in HTML and text outputs. Screenshots always show visible
+        #   frames.
         #
         #   @return [Boolean, nil]
         optional :include_frames, ContextDev::Internal::Type::Boolean, api_name: :includeFrames
 
         # @!attribute include_selectors
-        #   Keep matching content after mainContentOnly.
+        #   Keep only elements matching these CSS selectors.
         #
         #   @return [Array<String>, nil]
         optional :include_selectors, ContextDev::Internal::Type::ArrayOf[String], api_name: :includeSelectors
 
         # @!attribute main_content_only
-        #   Keep only main content in HTML, Markdown, images, and parsed fields.
+        #   Keep only the main content. Doesn't affect `screenshot`, `bytes`, or `product`.
         #
         #   @return [Boolean, nil]
         optional :main_content_only, ContextDev::Internal::Type::Boolean, api_name: :mainContentOnly
@@ -659,27 +656,28 @@ module ContextDev
         optional :parsers, -> { ContextDev::WebScrapeParams::SharedParams::Parsers }
 
         # @!attribute settle_animations
-        #   Settle animations before capture. Defaults to true with screenshots, otherwise
-        #   false.
+        #   Wait for CSS animations to finish before capture. Defaults to `true` when
+        #   `screenshot` is requested.
         #
         #   @return [Boolean, nil]
         optional :settle_animations, ContextDev::Internal::Type::Boolean, api_name: :settleAnimations
 
         # @!attribute theme
-        #   Override the browser color scheme.
+        #   Emulate a light or dark color scheme.
         #
         #   @return [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Theme, nil]
         optional :theme, enum: -> { ContextDev::WebScrapeParams::SharedParams::Theme }
 
         # @!attribute viewport
-        #   Browser dimensions in pixels.
+        #   Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
+        #   default to 1440 × 900.
         #
         #   @return [ContextDev::Models::WebScrapeParams::SharedParams::Viewport, nil]
         optional :viewport, -> { ContextDev::WebScrapeParams::SharedParams::Viewport }
 
         # @!attribute wait_for
-        #   After actions, wait this many milliseconds or until a CSS selector is visible.
-        #   Defaults to 500 ms, or 2000 ms with frames or an XML URL. Set 0 to skip.
+        #   Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
+        #   (2000 with frames or XML).
         #
         #   @return [Integer, String, nil]
         optional :wait_for,
@@ -692,36 +690,35 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeParams::SharedParams} for more details.
         #
-        #   Shared browser and content settings. Content filters leave screenshots and
-        #   original bytes unchanged.
+        #   Browser and content settings shared by all outputs.
         #
-        #   @param actions [Array<ContextDev::Models::WebScrapeParams::SharedParams::Action::Perform, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll, ContextDev::Models::WebScrapeParams::SharedParams::Action::Wait, ContextDev::Models::WebScrapeParams::SharedParams::Action::WaitFor>] Run in order before capture. A failed action fails the request. Bypasses caching
+        #   @param actions [Array<ContextDev::Models::WebScrapeParams::SharedParams::Action::Perform, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll, ContextDev::Models::WebScrapeParams::SharedParams::Action::Wait, ContextDev::Models::WebScrapeParams::SharedParams::Action::WaitFor>] Browser steps run in order before capture. Requires a paid plan. Skips the cache
         #
-        #   @param country [String] Supported two-letter country code, case-insensitive. Applies to every output, in
+        #   @param country [String] Proxy country as a two-letter code, such as `US`. Case-insensitive.
         #
-        #   @param dismiss_cookies [Boolean] Dismiss cookie banners by accepting cookies before actions.
+        #   @param dismiss_cookies [Boolean] Accept cookie banners before actions and capture.
         #
-        #   @param dismiss_popups [Boolean] Dismiss other popups before actions.
+        #   @param dismiss_popups [Boolean] Close other popups before actions and capture.
         #
-        #   @param exclude_selectors [Array<String>] Remove matching content. Exclusions win.
+        #   @param exclude_selectors [Array<String>] Remove elements matching these CSS selectors. Overrides `includeSelectors`.
         #
-        #   @param headers [Hash{Symbol=>String}] Headers for the target origin. Requests with custom headers bypass caching.
+        #   @param headers [Hash{Symbol=>String}] HTTP headers to send to the target site. Requests with headers skip the cache.
         #
-        #   @param include_frames [Boolean] Include iframe content in extraction. Screenshots show visible frames regardless
+        #   @param include_frames [Boolean] Include iframe content in HTML and text outputs. Screenshots always show visible
         #
-        #   @param include_selectors [Array<String>] Keep matching content after mainContentOnly.
+        #   @param include_selectors [Array<String>] Keep only elements matching these CSS selectors.
         #
-        #   @param main_content_only [Boolean] Keep only main content in HTML, Markdown, images, and parsed fields.
+        #   @param main_content_only [Boolean] Keep only the main content. Doesn't affect `screenshot`, `bytes`, or `product`.
         #
         #   @param parsers [ContextDev::Models::WebScrapeParams::SharedParams::Parsers] Document parsing options.
         #
-        #   @param settle_animations [Boolean] Settle animations before capture. Defaults to true with screenshots, otherwise f
+        #   @param settle_animations [Boolean] Wait for CSS animations to finish before capture. Defaults to `true` when `scree
         #
-        #   @param theme [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Theme] Override the browser color scheme.
+        #   @param theme [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Theme] Emulate a light or dark color scheme.
         #
-        #   @param viewport [ContextDev::Models::WebScrapeParams::SharedParams::Viewport] Browser dimensions in pixels.
+        #   @param viewport [ContextDev::Models::WebScrapeParams::SharedParams::Viewport] Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
         #
-        #   @param wait_for [Integer, String] After actions, wait this many milliseconds or until a CSS selector is visible. D
+        #   @param wait_for [Integer, String] Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500 (200
 
         module Action
           extend ContextDev::Internal::Type::Union
@@ -738,37 +735,44 @@ module ContextDev
 
           class Perform < ContextDev::Internal::Type::BaseModel
             # @!attribute action
+            #   One browser instruction, such as clicking a button or entering text.
             #
             #   @return [String]
             required :action, String
 
             # @!attribute type
+            #   Use `perform` for a plain-language browser instruction.
             #
             #   @return [Symbol, :perform]
             required :type, const: :perform
 
             # @!method initialize(action:, type: :perform)
-            #   @param action [String]
-            #   @param type [Symbol, :perform]
+            #   @param action [String] One browser instruction, such as clicking a button or entering text.
+            #
+            #   @param type [Symbol, :perform] Use `perform` for a plain-language browser instruction.
           end
 
           class Scroll < ContextDev::Internal::Type::BaseModel
             # @!attribute type
+            #   Use `scroll` to move through the page or a container.
             #
             #   @return [Symbol, :scroll]
             required :type, const: :scroll
 
             # @!attribute amount
+            #   Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
             #
             #   @return [Integer, Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::Amount, nil]
             optional :amount, union: -> { ContextDev::WebScrapeParams::SharedParams::Action::Scroll::Amount }
 
             # @!attribute direction
+            #   Direction to scroll.
             #
             #   @return [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::Direction, nil]
             optional :direction, enum: -> { ContextDev::WebScrapeParams::SharedParams::Action::Scroll::Direction }
 
             # @!attribute max_scrolls
+            #   Maximum number of scroll steps for this action.
             #
             #   @return [Integer, nil]
             optional :max_scrolls, Integer, api_name: :maxScrolls
@@ -780,16 +784,18 @@ module ContextDev
             optional :selector, String
 
             # @!method initialize(amount: nil, direction: nil, max_scrolls: nil, selector: nil, type: :scroll)
-            #   @param amount [Integer, Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::Amount]
+            #   @param amount [Integer, Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::Amount] Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
             #
-            #   @param direction [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::Direction]
+            #   @param direction [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::Direction] Direction to scroll.
             #
-            #   @param max_scrolls [Integer]
+            #   @param max_scrolls [Integer] Maximum number of scroll steps for this action.
             #
             #   @param selector [String] Scroll this container. Omit to scroll the page.
             #
-            #   @param type [Symbol, :scroll]
+            #   @param type [Symbol, :scroll] Use `scroll` to move through the page or a container.
 
+            # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
+            #
             # @see ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll#amount
             module Amount
               extend ContextDev::Internal::Type::Union
@@ -815,6 +821,8 @@ module ContextDev
               # @!endgroup
             end
 
+            # Direction to scroll.
+            #
             # @see ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll#direction
             module Direction
               extend ContextDev::Internal::Type::Enum
@@ -831,34 +839,40 @@ module ContextDev
 
           class Wait < ContextDev::Internal::Type::BaseModel
             # @!attribute milliseconds
+            #   Time to pause in milliseconds before the next action.
             #
             #   @return [Integer]
             required :milliseconds, Integer
 
             # @!attribute type
+            #   Use `wait` to pause for a fixed duration.
             #
             #   @return [Symbol, :wait]
             required :type, const: :wait
 
             # @!method initialize(milliseconds:, type: :wait)
-            #   @param milliseconds [Integer]
-            #   @param type [Symbol, :wait]
+            #   @param milliseconds [Integer] Time to pause in milliseconds before the next action.
+            #
+            #   @param type [Symbol, :wait] Use `wait` to pause for a fixed duration.
           end
 
           class WaitFor < ContextDev::Internal::Type::BaseModel
             # @!attribute selector
+            #   CSS selector to wait for before continuing.
             #
             #   @return [String]
             required :selector, String
 
             # @!attribute type
+            #   Use `waitFor` to wait for a matching element.
             #
             #   @return [Symbol, :waitFor]
             required :type, const: :waitFor
 
             # @!method initialize(selector:, type: :waitFor)
-            #   @param selector [String]
-            #   @param type [Symbol, :waitFor]
+            #   @param selector [String] CSS selector to wait for before continuing.
+            #
+            #   @param type [Symbol, :waitFor] Use `waitFor` to wait for a matching element.
           end
 
           # @!method self.variants
@@ -868,7 +882,7 @@ module ContextDev
         # @see ContextDev::Models::WebScrapeParams::SharedParams#parsers
         class Parsers < ContextDev::Internal::Type::BaseModel
           # @!attribute pdf
-          #   PDF text options for HTML, Markdown, and parsed fields.
+          #   PDF page range and OCR.
           #
           #   @return [ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf, nil]
           optional :pdf, -> { ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf }
@@ -876,18 +890,18 @@ module ContextDev
           # @!method initialize(pdf: nil)
           #   Document parsing options.
           #
-          #   @param pdf [ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf] PDF text options for HTML, Markdown, and parsed fields.
+          #   @param pdf [ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf] PDF page range and OCR.
 
           # @see ContextDev::Models::WebScrapeParams::SharedParams::Parsers#pdf
           class Pdf < ContextDev::Internal::Type::BaseModel
             # @!attribute end_page
-            #   Last page to parse. Must be at least startPage.
+            #   Last page to parse. Must be at least `startPage`.
             #
             #   @return [Integer, nil]
             optional :end_page, Integer, api_name: :endPage
 
             # @!attribute ocr
-            #   Read text from scanned pages.
+            #   Set `auto` to read scanned pages with OCR.
             #
             #   @return [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::Ocr, nil]
             optional :ocr, enum: -> { ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf::Ocr }
@@ -899,15 +913,15 @@ module ContextDev
             optional :start_page, Integer, api_name: :startPage
 
             # @!method initialize(end_page: nil, ocr: nil, start_page: nil)
-            #   PDF text options for HTML, Markdown, and parsed fields.
+            #   PDF page range and OCR.
             #
-            #   @param end_page [Integer] Last page to parse. Must be at least startPage.
+            #   @param end_page [Integer] Last page to parse. Must be at least `startPage`.
             #
-            #   @param ocr [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::Ocr] Read text from scanned pages.
+            #   @param ocr [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::Ocr] Set `auto` to read scanned pages with OCR.
             #
             #   @param start_page [Integer] First page to parse, starting at 1.
 
-            # Read text from scanned pages.
+            # Set `auto` to read scanned pages with OCR.
             #
             # @see ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf#ocr
             module Ocr
@@ -922,7 +936,7 @@ module ContextDev
           end
         end
 
-        # Override the browser color scheme.
+        # Emulate a light or dark color scheme.
         #
         # @see ContextDev::Models::WebScrapeParams::SharedParams#theme
         module Theme
@@ -938,24 +952,28 @@ module ContextDev
         # @see ContextDev::Models::WebScrapeParams::SharedParams#viewport
         class Viewport < ContextDev::Internal::Type::BaseModel
           # @!attribute height
+          #   Browser viewport height in pixels.
           #
           #   @return [Integer, nil]
           optional :height, Integer
 
           # @!attribute width
+          #   Browser viewport width in pixels.
           #
           #   @return [Integer, nil]
           optional :width, Integer
 
           # @!method initialize(height: nil, width: nil)
-          #   Browser dimensions in pixels.
+          #   Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
+          #   default to 1440 × 900.
           #
-          #   @param height [Integer]
-          #   @param width [Integer]
+          #   @param height [Integer] Browser viewport height in pixels.
+          #
+          #   @param width [Integer] Browser viewport width in pixels.
         end
 
-        # After actions, wait this many milliseconds or until a CSS selector is visible.
-        # Defaults to 500 ms, or 2000 ms with frames or an XML URL. Set 0 to skip.
+        # Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
+        # (2000 with frames or XML).
         #
         # @see ContextDev::Models::WebScrapeParams::SharedParams#wait_for
         module WaitFor
@@ -972,17 +990,14 @@ module ContextDev
 
       class TimeoutOpts < ContextDev::Internal::Type::BaseModel
         # @!attribute milliseconds
-        #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   Deadline in milliseconds.
         #
         #   @return [Integer]
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        #   credits. "return-partial" returns usable results collected so far; if none are
-        #   available, the request still fails without charging credits. Partial results are
-        #   not cached as complete results. "return-partial" requires milliseconds of at
-        #   least 5000.
+        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
         #
         #   @return [Symbol, ContextDev::Models::WebScrapeParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebScrapeParams::TimeoutOpts::Behavior }
@@ -991,27 +1006,15 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeParams::TimeoutOpts} for more details.
         #
-        #   Total deadline, including navigation, actions, waiting, and all outputs.
-        #   Defaults to 60000 milliseconds with behavior fail. Individual outputs have
-        #   internal deadlines that reserve time to return completed outputs; timed-out
-        #   outputs have success: false and data: null under either behavior. The overall
-        #   request deadline remains enforced: fail returns an error if that deadline is
-        #   reached. Use return-partial to allow the current page state and available
-        #   outputs when the page is still loading. Partial responses set isPartial. Failed
-        #   retrievals and incomplete captures are not cached; valid captured pieces may be
-        #   cached independently. Fixed waits must fit before a response reserve of up to
-        #   5000 milliseconds (at most one quarter of the timeout) when using
-        #   return-partial.
+        #   Deadline for the whole request. Defaults to 60000 ms with `fail`. Fixed waits
+        #   must end before it.
         #
-        #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebScrapeParams::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        #   @param behavior [Symbol, ContextDev::Models::WebScrapeParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results. "return-partial" requires milliseconds of at
-        # least 5000.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
         #
         # @see ContextDev::Models::WebScrapeParams::TimeoutOpts#behavior
         module Behavior
@@ -1025,8 +1028,7 @@ module ContextDev
         end
       end
 
-      # Zero data retention. Bypasses caches and uploads; excludes request/response
-      # content and tags from logs. Must be enabled for your organization.
+      # `enabled` turns on zero data retention. Your organization must have ZDR enabled.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

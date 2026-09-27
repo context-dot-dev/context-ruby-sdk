@@ -70,7 +70,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
   def test_map_urls_required_params
     skip("Mock server tests are disabled")
 
-    response = @context_dev.web.map_urls(domain: "xxx")
+    response = @context_dev.web.map_urls(domain: "stripe.com")
 
     assert_pattern do
       response => ContextDev::Models::WebMapURLsResponse
@@ -147,7 +147,7 @@ class ContextDev::Test::Resources::WebTest < ContextDev::Test::ResourceTest
   def test_search_required_params
     skip("Mock server tests are disabled")
 
-    response = @context_dev.web.search(query: "x")
+    response = @context_dev.web.search(query: "Stripe API authentication")
 
     assert_pattern do
       response => ContextDev::Models::WebSearchResponse

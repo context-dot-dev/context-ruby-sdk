@@ -20,7 +20,7 @@ module ContextDev
       sig { returns(T::Array[String]) }
       attr_accessor :sources
 
-      # Credit usage, included whenever a valid API key is provided.
+      # Credits this request used and your remaining balance.
       sig do
         returns(T.nilable(ContextDev::Models::WebAnswersResponse::KeyMetadata))
       end
@@ -57,7 +57,7 @@ module ContextDev
         # URLs that supplied search results or readable page content, in first-seen order.
         # Unreadable pages are excluded.
         sources:,
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         key_metadata: nil,
         # True when the request deadline ended research and the answer uses the evidence
         # collected so far.
@@ -87,7 +87,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -95,14 +95,14 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         sig do
           params(credits_consumed: Integer, credits_remaining: Integer).returns(
             T.attached_class
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:

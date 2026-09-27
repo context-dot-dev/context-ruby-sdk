@@ -5,20 +5,19 @@ module ContextDev
     # @see ContextDev::Resources::Batch#retrieve
     class BatchRetrieveResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute id
-      #   Batch ID used to retrieve or cancel the job.
+      #   Batch ID.
       #
       #   @return [String]
       required :id, String
 
       # @!attribute crawl
-      #   The crawl controls as submitted, so the limits requested can be compared against
-      #   what the crawl reached.
+      #   Crawl settings as submitted.
       #
       #   @return [ContextDev::Models::CrawlControls, nil]
       required :crawl, -> { ContextDev::CrawlControls }, nil?: true
 
       # @!attribute credits
-      #   What this batch has done to your credit balance.
+      #   Batch credit usage and settlement.
       #
       #   @return [ContextDev::Models::BatchRetrieveResponse::Credits]
       required :credits, -> { ContextDev::Models::BatchRetrieveResponse::Credits }
@@ -38,20 +37,20 @@ module ContextDev
       required :format_, enum: -> { ContextDev::Models::BatchRetrieveResponse::Format }, api_name: :format
 
       # @!attribute input
-      #   What submission took in, and what it charged for.
+      #   What the submission accepted.
       #
       #   @return [ContextDev::Models::Intake]
       required :input, -> { ContextDev::Intake }
 
       # @!attribute invalid_urls
-      #   Rejected URLs, up to 100. These are not charged.
+      #   Rejected URLs (first 100).
       #
       #   @return [Array<ContextDev::Models::BatchRetrieveResponse::InvalidURL>]
       required :invalid_urls,
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchRetrieveResponse::InvalidURL] }
 
       # @!attribute mode
-      #   How pages were selected. Matches `input.mode` on the submit request.
+      #   `scrape` (URL list) or `crawl`.
       #
       #   @return [Symbol, ContextDev::Models::BatchRetrieveResponse::Mode]
       required :mode, enum: -> { ContextDev::Models::BatchRetrieveResponse::Mode }
@@ -70,15 +69,15 @@ module ContextDev
       required :progress, -> { ContextDev::Models::BatchRetrieveResponse::Progress }
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
 
       # @!attribute results
-      #   Download links, available once the batch reaches a final status and null before
-      #   then. GET /batch/{batch_id}/results serves the same records as paginated JSON.
+      #   Result download links; null until the batch finishes. Files are deleted 7 days
+      #   after the batch finishes.
       #
       #   @return [ContextDev::Models::BatchRetrieveResponse::Results, nil]
       required :results, -> { ContextDev::Models::BatchRetrieveResponse::Results }, nil?: true
@@ -116,30 +115,30 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchRetrieveResponse} for more details.
       #
-      #   @param id [String] Batch ID used to retrieve or cancel the job.
+      #   @param id [String] Batch ID.
       #
-      #   @param crawl [ContextDev::Models::CrawlControls, nil] The crawl controls as submitted, so the limits requested can be compared against
+      #   @param crawl [ContextDev::Models::CrawlControls, nil] Crawl settings as submitted.
       #
-      #   @param credits [ContextDev::Models::BatchRetrieveResponse::Credits] What this batch has done to your credit balance.
+      #   @param credits [ContextDev::Models::BatchRetrieveResponse::Credits] Batch credit usage and settlement.
       #
       #   @param failure [ContextDev::Models::Failure, nil] A failure of the batch as a whole, distinct from the per-page failures in
       #   `page\_
       #
       #   @param format_ [Symbol, ContextDev::Models::BatchRetrieveResponse::Format] What each page is returned as. Matches `input.data.format` on the submit request
       #
-      #   @param input [ContextDev::Models::Intake] What submission took in, and what it charged for.
+      #   @param input [ContextDev::Models::Intake] What the submission accepted.
       #
-      #   @param invalid_urls [Array<ContextDev::Models::BatchRetrieveResponse::InvalidURL>] Rejected URLs, up to 100. These are not charged.
+      #   @param invalid_urls [Array<ContextDev::Models::BatchRetrieveResponse::InvalidURL>] Rejected URLs (first 100).
       #
-      #   @param mode [Symbol, ContextDev::Models::BatchRetrieveResponse::Mode] How pages were selected. Matches `input.mode` on the submit request.
+      #   @param mode [Symbol, ContextDev::Models::BatchRetrieveResponse::Mode] `scrape` (URL list) or `crawl`.
       #
       #   @param page_errors [Array<ContextDev::Models::PageErrorCount>] Individual page failures grouped by error code, sorted by count. Unrelated to `f
       #
       #   @param progress [ContextDev::Models::BatchRetrieveResponse::Progress] Pages attempted so far. Use `status` to check completion.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param results [ContextDev::Models::BatchRetrieveResponse::Results, nil] Download links, available once the batch reaches a final status and null before
+      #   @param results [ContextDev::Models::BatchRetrieveResponse::Results, nil] Result download links; null until the batch finishes. Files are deleted 7 days a
       #
       #   @param status [Symbol, ContextDev::Models::BatchRetrieveResponse::Status] Current state. `completed`, `cancelled`, and `failed` are final.
       #
@@ -154,46 +153,39 @@ module ContextDev
       # @see ContextDev::Models::BatchRetrieveResponse#credits
       class Credits < ContextDev::Internal::Type::BaseModel
         # @!attribute net
-        #   `reserved` minus `refunded` plus `ocr_charged` — what the batch has cost so far.
-        #   Equal to `reserved` until the batch settles.
+        #   `reserved` minus `refunded` plus `ocr_charged`.
         #
         #   @return [Integer]
         required :net, Integer
 
         # @!attribute ocr_charged
-        #   Credits charged for PDF pages recovered by OCR (pdf.ocr=true), 1 per recovered
-        #   page, on top of `reserved`. Stays 0 until the batch settles.
+        #   OCR usage charged when the batch settles.
         #
         #   @return [Integer]
         required :ocr_charged, Integer
 
         # @!attribute refunded
-        #   Credits returned for pages that did not succeed. Stays 0 until the batch reaches
-        #   a final status, then settles in one movement.
+        #   Credits returned for unsuccessful pages when the batch settles.
         #
         #   @return [Integer]
         required :refunded, Integer
 
         # @!attribute reserved
-        #   Credits debited from your balance the moment the batch was accepted. This is a
-        #   charge, not a forecast — the whole amount leaves the balance up front.
+        #   Credits held when the batch was accepted.
         #
         #   @return [Integer]
         required :reserved, Integer
 
         # @!method initialize(net:, ocr_charged:, refunded:, reserved:)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::BatchRetrieveResponse::Credits} for more details.
+        #   Batch credit usage and settlement.
         #
-        #   What this batch has done to your credit balance.
+        #   @param net [Integer] `reserved` minus `refunded` plus `ocr_charged`.
         #
-        #   @param net [Integer] `reserved` minus `refunded` plus `ocr_charged` — what the batch has cost so far.
+        #   @param ocr_charged [Integer] OCR usage charged when the batch settles.
         #
-        #   @param ocr_charged [Integer] Credits charged for PDF pages recovered by OCR (pdf.ocr=true), 1 per recovered p
+        #   @param refunded [Integer] Credits returned for unsuccessful pages when the batch settles.
         #
-        #   @param refunded [Integer] Credits returned for pages that did not succeed. Stays 0 until the batch reaches
-        #
-        #   @param reserved [Integer] Credits debited from your balance the moment the batch was accepted. This is a c
+        #   @param reserved [Integer] Credits held when the batch was accepted.
       end
 
       # What each page is returned as. Matches `input.data.format` on the submit
@@ -229,7 +221,7 @@ module ContextDev
         #   @param url [String] Rejected URL.
       end
 
-      # How pages were selected. Matches `input.mode` on the submit request.
+      # `scrape` (URL list) or `crawl`.
       #
       # @see ContextDev::Models::BatchRetrieveResponse#mode
       module Mode
@@ -251,9 +243,8 @@ module ContextDev
         required :failed, Integer
 
         # @!attribute pending
-        #   Reserved pages not yet attempted. A cancelled batch keeps reporting the URLs it
-        #   never reached; a crawl whose `input.reserved_is_ceiling` is true reports 0 once
-        #   final, because its unspent budget was never real pages.
+        #   Accepted pages not yet attempted. Unused crawl capacity is excluded after
+        #   completion.
         #
         #   @return [Integer]
         required :pending, Integer
@@ -272,7 +263,7 @@ module ContextDev
         #
         #   @param failed [Integer] Pages that could not be scraped.
         #
-        #   @param pending [Integer] Reserved pages not yet attempted. A cancelled batch keeps reporting the URLs it
+        #   @param pending [Integer] Accepted pages not yet attempted. Unused crawl capacity is excluded after comple
         #
         #   @param succeeded [Integer] Pages scraped successfully.
       end
@@ -280,7 +271,7 @@ module ContextDev
       # @see ContextDev::Models::BatchRetrieveResponse#results
       class Results < ContextDev::Internal::Type::BaseModel
         # @!attribute expires_at
-        #   When the download URLs expire.
+        #   When these links expire (24 hours after this response).
         #
         #   @return [String]
         required :expires_at, String
@@ -293,10 +284,10 @@ module ContextDev
                  -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchRetrieveResponse::Results::File] }
 
         # @!method initialize(expires_at:, files:)
-        #   Download links, available once the batch reaches a final status and null before
-        #   then. GET /batch/{batch_id}/results serves the same records as paginated JSON.
+        #   Result download links; null until the batch finishes. Files are deleted 7 days
+        #   after the batch finishes.
         #
-        #   @param expires_at [String] When the download URLs expire.
+        #   @param expires_at [String] When these links expire (24 hours after this response).
         #
         #   @param files [Array<ContextDev::Models::BatchRetrieveResponse::Results::File>] Result files. Order is not guaranteed.
 
@@ -376,7 +367,7 @@ module ContextDev
       # @see ContextDev::Models::BatchRetrieveResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -390,7 +381,7 @@ module ContextDev
         # @!method initialize(credits_consumed:, credits_remaining:)
         #   API key usage for this request.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

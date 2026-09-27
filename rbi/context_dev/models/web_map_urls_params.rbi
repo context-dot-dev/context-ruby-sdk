@@ -11,63 +11,54 @@ module ContextDev
           T.any(ContextDev::WebMapURLsParams, ContextDev::Internal::AnyHash)
         end
 
-      # Domain to build a sitemap for
+      # Domain to map, e.g. `stripe.com`.
       sig { returns(String) }
       attr_accessor :domain
 
-      # Optional outbound HTTP headers forwarded only to the target URL, sent as
-      # deep-object query params such as headers[X-Custom]=value. When provided, caching
-      # is bypassed: the result is neither read from nor written to cache.
+      # HTTP headers for the target origin. Non-empty headers bypass caching.
       sig { returns(T.nilable(T::Hash[Symbol, String])) }
       attr_reader :headers
 
       sig { params(headers: T::Hash[Symbol, String]).void }
       attr_writer :headers
 
-      # When true, discover and include public pages and sitemaps on subdomains of the
-      # requested domain. Defaults to false.
+      # Include URLs on subdomains.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :include_subdomains
 
       sig { params(include_subdomains: T::Boolean).void }
       attr_writer :include_subdomains
 
-      # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
-      # Minimum is 1, maximum is 100,000.
+      # Maximum number of URLs to return.
       sig { returns(T.nilable(Integer)) }
       attr_reader :max_links
 
       sig { params(max_links: Integer).void }
       attr_writer :max_links
 
-      # Optional search phrase. When provided, the crawled sitemap is filtered to the
-      # pages whose URLs are about that phrase, most relevant first, and the request
-      # costs 2 credits instead of 1.
+      # Filter URLs by a topic or phrase, most relevant first.
       sig { returns(T.nilable(String)) }
       attr_reader :search
 
       sig { params(search: String).void }
       attr_writer :search
 
-      # Optional explicit sitemap URL. When provided, exactly this sitemap is crawled
-      # instead of discovering the domain's sitemaps.
+      # Fetch this sitemap instead of discovering sitemaps. Must belong to the domain or
+      # a subdomain.
       sig { returns(T.nilable(String)) }
       attr_reader :sitemap_url
 
       sig { params(sitemap_url: String).void }
       attr_writer :sitemap_url
 
-      # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-      # characters.
+      # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Optional request deadline and behavior on timeout. For GET requests, use
-      # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-      # timeoutOpts object.
+      # Request deadline and what to return when it passes.
       sig { returns(T.nilable(ContextDev::WebMapURLsParams::TimeoutOpts)) }
       attr_reader :timeout_opts
 
@@ -86,11 +77,8 @@ module ContextDev
       sig { params(url_regex: String).void }
       attr_writer :url_regex
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       sig { returns(T.nilable(ContextDev::WebMapURLsParams::Zdr::OrSymbol)) }
       attr_reader :zdr
 
@@ -113,40 +101,28 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Domain to build a sitemap for
+        # Domain to map, e.g. `stripe.com`.
         domain:,
-        # Optional outbound HTTP headers forwarded only to the target URL, sent as
-        # deep-object query params such as headers[X-Custom]=value. When provided, caching
-        # is bypassed: the result is neither read from nor written to cache.
+        # HTTP headers for the target origin. Non-empty headers bypass caching.
         headers: nil,
-        # When true, discover and include public pages and sitemaps on subdomains of the
-        # requested domain. Defaults to false.
+        # Include URLs on subdomains.
         include_subdomains: nil,
-        # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
-        # Minimum is 1, maximum is 100,000.
+        # Maximum number of URLs to return.
         max_links: nil,
-        # Optional search phrase. When provided, the crawled sitemap is filtered to the
-        # pages whose URLs are about that phrase, most relevant first, and the request
-        # costs 2 credits instead of 1.
+        # Filter URLs by a topic or phrase, most relevant first.
         search: nil,
-        # Optional explicit sitemap URL. When provided, exactly this sitemap is crawled
-        # instead of discovering the domain's sitemaps.
+        # Fetch this sitemap instead of discovering sitemaps. Must belong to the domain or
+        # a subdomain.
         sitemap_url: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
         # Optional RE2-compatible regex pattern. Only URLs matching this pattern are
         # returned and counted against maxLinks.
         url_regex: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
@@ -181,14 +157,12 @@ module ContextDev
             )
           end
 
-        # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        # Deadline in milliseconds.
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         sig do
           returns(
             T.nilable(
@@ -206,9 +180,7 @@ module ContextDev
         end
         attr_writer :behavior
 
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         sig do
           params(
             milliseconds: Integer,
@@ -217,12 +189,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          # Deadline in milliseconds.
           milliseconds:,
-          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-          # credits. "return-partial" returns usable results collected so far; if none are
-          # available, the request still fails without charging credits. Partial results are
-          # not cached as complete results.
+          # "fail" returns 408 at the deadline. "return-partial" returns available results;
+          # inspect the response’s partial flag.
           behavior: nil
         )
         end
@@ -239,10 +209,8 @@ module ContextDev
         def to_hash
         end
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 
@@ -275,11 +243,8 @@ module ContextDev
         end
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

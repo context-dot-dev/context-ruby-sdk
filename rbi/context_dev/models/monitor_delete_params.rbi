@@ -11,6 +11,7 @@ module ContextDev
           T.any(ContextDev::MonitorDeleteParams, ContextDev::Internal::AnyHash)
         end
 
+      # ID of the monitor.
       sig { returns(String) }
       attr_accessor :monitor_id
 
@@ -20,7 +21,11 @@ module ContextDev
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
-      def self.new(monitor_id:, request_options: {})
+      def self.new(
+        # ID of the monitor.
+        monitor_id:,
+        request_options: {}
+      )
       end
 
       sig do
