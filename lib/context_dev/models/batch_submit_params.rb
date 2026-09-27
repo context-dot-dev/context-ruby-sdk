@@ -213,7 +213,8 @@ module ContextDev
                          nil?: true
 
                 # @!attribute max_age_ms
-                #   Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                #   Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                #   year (31536000000 ms). `0` fetches fresh.
                 #
                 #   @return [Integer, nil]
                 optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
@@ -272,7 +273,7 @@ module ContextDev
                 #
                 #   @param include_selectors [Array<String>, nil] Keep only elements matching these CSS selectors. Filtered pages ignore `maxAgeMs
                 #
-                #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                 #
                 #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
                 #
@@ -637,7 +638,8 @@ module ContextDev
                          nil?: true
 
                 # @!attribute max_age_ms
-                #   Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                #   Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                #   year (31536000000 ms). `0` fetches fresh.
                 #
                 #   @return [Integer, nil]
                 optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
@@ -682,7 +684,7 @@ module ContextDev
                 #
                 #   @param include_selectors [Array<String>, nil] Keep only elements matching these CSS selectors. Filtered pages ignore `maxAgeMs
                 #
-                #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                 #
                 #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
                 #
@@ -1216,7 +1218,8 @@ module ContextDev
                          nil?: true
 
                 # @!attribute max_age_ms
-                #   Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                #   Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                #   year (31536000000 ms). `0` fetches fresh.
                 #
                 #   @return [Integer, nil]
                 optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
@@ -1275,7 +1278,7 @@ module ContextDev
                 #
                 #   @param include_selectors [Array<String>, nil] Keep only elements matching these CSS selectors. Filtered pages ignore `maxAgeMs
                 #
-                #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                 #
                 #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
                 #
@@ -1753,7 +1756,8 @@ module ContextDev
                          nil?: true
 
                 # @!attribute max_age_ms
-                #   Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                #   Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
+                #   year (31536000000 ms). `0` fetches fresh.
                 #
                 #   @return [Integer, nil]
                 optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
@@ -1798,7 +1802,7 @@ module ContextDev
                 #
                 #   @param include_selectors [Array<String>, nil] Keep only elements matching these CSS selectors. Filtered pages ignore `maxAgeMs
                 #
-                #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
+                #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                 #
                 #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
                 #
