@@ -11,7 +11,8 @@ module ContextDev
           T.any(ContextDev::WebAnswersParams, ContextDev::Internal::AnyHash)
         end
 
-      # Research task. Name a domain to have it read before searching.
+      # Research task. The agent selects company/profile lookups, web searches, or page
+      # reads. Include domains or URLs to focus the research.
       sig { returns(String) }
       attr_accessor :task
 
@@ -23,7 +24,8 @@ module ContextDev
       sig { params(json_format: T::Hash[Symbol, T.anything]).void }
       attr_writer :json_format
 
-      # `fast` for short tasks; `ultra` for deeper research (default).
+      # `fast` prioritizes speed, with extra verification for people and companies;
+      # `ultra` supports deeper research (default).
       sig { returns(T.nilable(ContextDev::WebAnswersParams::Mode::OrSymbol)) }
       attr_reader :mode
 
@@ -68,12 +70,14 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Research task. Name a domain to have it read before searching.
+        # Research task. The agent selects company/profile lookups, web searches, or page
+        # reads. Include domains or URLs to focus the research.
         task:,
         # Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
         # characters; unknowns may be null.
         json_format: nil,
-        # `fast` for short tasks; `ultra` for deeper research (default).
+        # `fast` prioritizes speed, with extra verification for people and companies;
+        # `ultra` supports deeper research (default).
         mode: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
@@ -102,7 +106,8 @@ module ContextDev
       def to_hash
       end
 
-      # `fast` for short tasks; `ultra` for deeper research (default).
+      # `fast` prioritizes speed, with extra verification for people and companies;
+      # `ultra` supports deeper research (default).
       module Mode
         extend ContextDev::Internal::Type::Enum
 

@@ -11,11 +11,11 @@ module ContextDev
       #
       # @overload answers(task:, json_format: nil, mode: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
-      # @param task [String] Research task. Name a domain to have it read before searching.
+      # @param task [String] Research task. The agent selects company/profile lookups, web searches, or page
       #
       # @param json_format [Hash{Symbol=>Object}] Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000 ch
       #
-      # @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] `fast` for short tasks; `ultra` for deeper research (default).
+      # @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] `fast` prioritizes speed, with extra verification for people and companies; `ult
       #
       # @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #

@@ -17,12 +17,14 @@ module ContextDev
         ).returns(ContextDev::Models::WebAnswersResponse)
       end
       def answers(
-        # Research task. Name a domain to have it read before searching.
+        # Research task. The agent selects company/profile lookups, web searches, or page
+        # reads. Include domains or URLs to focus the research.
         task:,
         # Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
         # characters; unknowns may be null.
         json_format: nil,
-        # `fast` for short tasks; `ultra` for deeper research (default).
+        # `fast` prioritizes speed, with extra verification for people and companies;
+        # `ultra` supports deeper research (default).
         mode: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
