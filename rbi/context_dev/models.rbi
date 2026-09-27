@@ -21,6 +21,8 @@ module ContextDev
 
   Failure = ContextDev::Models::Failure
 
+  FeedbackSubmitParams = ContextDev::Models::FeedbackSubmitParams
+
   IndustryRetrieveNaicsParams = ContextDev::Models::IndustryRetrieveNaicsParams
 
   IndustryRetrieveSicParams = ContextDev::Models::IndustryRetrieveSicParams

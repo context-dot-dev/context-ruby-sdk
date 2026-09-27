@@ -32,6 +32,8 @@ module ContextDev
 
     attr_reader logs: ContextDev::Resources::Logs
 
+    attr_reader feedback: ContextDev::Resources::Feedback
+
     private def auth_headers: -> ::Hash[String, String]
 
     def initialize: (

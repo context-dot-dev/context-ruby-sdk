@@ -54,6 +54,11 @@ module ContextDev
     sig { returns(ContextDev::Resources::Logs) }
     attr_reader :logs
 
+    # Report bugs, docs mismatches, and friction with any Context.dev API. Submissions
+    # cost no credits and use a separate rate limit.
+    sig { returns(ContextDev::Resources::Feedback) }
+    attr_reader :feedback
+
     # @api private
     sig { override.returns(T::Hash[String, String]) }
     private def auth_headers

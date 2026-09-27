@@ -59,6 +59,11 @@ module ContextDev
     # @return [ContextDev::Resources::Logs]
     attr_reader :logs
 
+    # Report bugs, docs mismatches, and friction with any Context.dev API. Submissions
+    # cost no credits and use a separate rate limit.
+    # @return [ContextDev::Resources::Feedback]
+    attr_reader :feedback
+
     # @api private
     #
     # @return [Hash{String=>String}]
@@ -131,6 +136,7 @@ module ContextDev
       @people = ContextDev::Resources::People.new(client: self)
       @news = ContextDev::Resources::News.new(client: self)
       @logs = ContextDev::Resources::Logs.new(client: self)
+      @feedback = ContextDev::Resources::Feedback.new(client: self)
     end
   end
 end
