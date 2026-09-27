@@ -38,8 +38,7 @@ module ContextDev
       end
       attr_writer :color_scheme
 
-      # Fetch the target page through a residential proxy in this country (ISO 3166-1
-      # alpha-2).
+      # Fetch from this country (ISO 3166-1 alpha-2).
       sig do
         returns(T.nilable(ContextDev::WebScreenshotParams::Country::OrSymbol))
       end
@@ -136,17 +135,14 @@ module ContextDev
       sig { returns(T.nilable(Integer)) }
       attr_accessor :scroll_offset
 
-      # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-      # characters.
+      # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Optional request deadline and behavior on timeout. For GET requests, use
-      # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-      # timeoutOpts object.
+      # Request deadline and what to return when it passes.
       sig { returns(T.nilable(ContextDev::WebScreenshotParams::TimeoutOpts)) }
       attr_reader :timeout_opts
 
@@ -174,11 +170,8 @@ module ContextDev
       sig { returns(T.nilable(Integer)) }
       attr_accessor :wait_for_ms
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       sig { returns(T.nilable(ContextDev::WebScreenshotParams::Zdr::OrSymbol)) }
       attr_reader :zdr
 
@@ -217,8 +210,7 @@ module ContextDev
         # Optional parameter to choose the site's visual theme in the screenshot. Use
         # 'light' or 'dark' when the site offers both appearances.
         color_scheme: nil,
-        # Fetch the target page through a residential proxy in this country (ISO 3166-1
-        # alpha-2).
+        # Fetch from this country (ISO 3166-1 alpha-2).
         country: nil,
         # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
         # 'https://example.com/pricing'). When provided, the screenshot is taken of this
@@ -261,12 +253,9 @@ module ContextDev
         # top to bottom). The final slice may be shorter than the viewport height. Takes
         # precedence over fullScreenshot. Max: 100000.
         scroll_offset: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
         # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
         viewport: nil,
@@ -276,11 +265,8 @@ module ContextDev
         # least waitForMs + 10000 ms; a shorter deadline is rejected with 400
         # TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
@@ -345,8 +331,7 @@ module ContextDev
         end
       end
 
-      # Fetch the target page through a residential proxy in this country (ISO 3166-1
-      # alpha-2).
+      # Fetch from this country (ISO 3166-1 alpha-2).
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -650,15 +635,12 @@ module ContextDev
             )
           end
 
-        # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        # Deadline in milliseconds.
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results. "return-partial" requires milliseconds of at
-        # least 5000.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
         sig do
           returns(
             T.nilable(
@@ -676,9 +658,7 @@ module ContextDev
         end
         attr_writer :behavior
 
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         sig do
           params(
             milliseconds: Integer,
@@ -687,13 +667,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          # Deadline in milliseconds.
           milliseconds:,
-          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-          # credits. "return-partial" returns usable results collected so far; if none are
-          # available, the request still fails without charging credits. Partial results are
-          # not cached as complete results. "return-partial" requires milliseconds of at
-          # least 5000.
+          # "fail" returns 408 at the deadline. "return-partial" returns available results;
+          # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
           behavior: nil
         )
         end
@@ -710,11 +687,8 @@ module ContextDev
         def to_hash
         end
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results. "return-partial" requires milliseconds of at
-        # least 5000.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 
@@ -790,11 +764,8 @@ module ContextDev
         end
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

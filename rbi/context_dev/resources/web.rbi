@@ -3,11 +3,8 @@
 module ContextDev
   module Resources
     class Web
-      # Researches the live web and returns a sourced answer in your requested JSON
-      # shape. Select fast for a smaller research budget at 10 credits or ultra for
-      # deeper reasoning at 100 credits. Defaults to ultra. Fast research is limited to
-      # 30 seconds and ultra to 50 seconds; timeoutOpts.milliseconds can shorten either
-      # deadline.
+      # Research the web and return a sourced answer in your JSON shape. Choose `fast`
+      # for a short task or `ultra` for deeper research.
       sig do
         params(
           task: String,
@@ -20,30 +17,19 @@ module ContextDev
         ).returns(ContextDev::Models::WebAnswersResponse)
       end
       def answers(
-        # What to research and answer, in plain language. Naming a domain in the task (for
-        # example "pricing on context.dev") makes the agent read that site before it
-        # searches.
+        # Research task. Name a domain to have it read before searching.
         task:,
-        # An example object with placeholder values (for example {"pricing_page_url": "",
-        # "plans": [{"name": "", "price": 0}]}). Object keys and value types are
-        # preserved; unknown values may be null. Empty arrays accept any JSON items.
-        # Defaults to {"result": ""}. Maximum 8 levels, 500 values, and 16000 characters.
+        # Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
+        # characters; unknowns may be null.
         json_format: nil,
-        # Research level: fast uses a smaller model and research budget for 10 credits;
-        # ultra uses deeper reasoning and research for 100 credits. Defaults to ultra.
-        # Only successful requests consume credits.
+        # `fast` for short tasks; `ultra` for deeper research (default).
         mode: nil,
-        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
@@ -68,25 +54,18 @@ module ContextDev
         domain:,
         # Exact number of direct competitors to return. Defaults to 5.
         num_competitors: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
       end
 
-      # Extract a comprehensive design system from a website including colors,
-      # typography, spacing, shadows, and UI components.
+      # Extract colors, typography, spacing, and component styles from a website.
       sig do
         params(
           color_scheme:
@@ -105,45 +84,28 @@ module ContextDev
         # Optional browser color scheme to emulate for websites that respond to
         # prefers-color-scheme. This value is part of the styleguide cache key.
         color_scheme: nil,
-        # A specific URL to fetch the styleguide from directly, bypassing domain
-        # resolution (e.g., 'https://example.com/design-system'). When provided, the
-        # styleguide is extracted from this exact URL. You must provide either 'domain' or
-        # 'directUrl', but not both.
+        # Exact URL to inspect. Provide either `domain` or `directUrl`, not both.
         direct_url: nil,
         # Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
         # domain will be automatically normalized and validated. You must provide either
         # 'domain' or 'directUrl', but not both.
         domain: nil,
-        # Maximum age in milliseconds for cached brand data before the API performs a hard
-        # refresh. Defaults to 3 months (7776000000 ms). Set to 0 to always perform a hard
-        # refresh. Negative values are clamped to 0; values above 1 year (31536000000 ms)
-        # are clamped to 1 year.
+        # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
+        # year. `0` refreshes.
         max_age_ms: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
       end
 
-      # Discovers URLs using the same sitemap crawl, filters, and limits as
-      # /web/scrape/sitemap. Each URL includes its available title, description,
-      # keywords, and language. URLs without stored enrichment are returned immediately
-      # with only the URL and queued for background HTML scraping, so later requests can
-      # include their metadata. Responses are never cached as a whole; every request
-      # reads the current per-URL enrichment. Zero data retention and credential-bearing
-      # discovery requests return URLs without reading or storing shared enrichment or
-      # queuing background scrapes. Costs 1 credit, or 2 credits with search.
+      # Discover a site's URLs, with page titles, descriptions, keywords, and language
+      # when available. Metadata can be missing on newly discovered URLs.
       sig do
         params(
           domain: String,
@@ -160,65 +122,35 @@ module ContextDev
         ).returns(ContextDev::Models::WebMapURLsResponse)
       end
       def map_urls(
-        # Domain to build a sitemap for
+        # Domain to map, e.g. `stripe.com`.
         domain:,
-        # Optional outbound HTTP headers forwarded only to the target URL, sent as
-        # deep-object query params such as headers[X-Custom]=value. When provided, caching
-        # is bypassed: the result is neither read from nor written to cache.
+        # HTTP headers for the target origin. Non-empty headers bypass caching.
         headers: nil,
-        # When true, discover and include public pages and sitemaps on subdomains of the
-        # requested domain. Defaults to false.
+        # Include URLs on subdomains.
         include_subdomains: nil,
-        # Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
-        # Minimum is 1, maximum is 100,000.
+        # Maximum number of URLs to return.
         max_links: nil,
-        # Optional search phrase. When provided, the crawled sitemap is filtered to the
-        # pages whose URLs are about that phrase, most relevant first, and the request
-        # costs 2 credits instead of 1.
+        # Filter URLs by a topic or phrase, most relevant first.
         search: nil,
-        # Optional explicit sitemap URL. When provided, exactly this sitemap is crawled
-        # instead of discovering the domain's sitemaps.
+        # Fetch this sitemap instead of discovering sitemaps. Must belong to the domain or
+        # a subdomain.
         sitemap_url: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
         # Optional RE2-compatible regex pattern. Only URLs matching this pattern are
         # returned and counted against maxLinks.
         url_regex: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
       end
 
-      # Reuse cached outputs independently and capture missing formats in one page
-      # visit. Each cache key includes only the settings that affect that output. HTML
-      # is shared with Markdown, parsed fields, product data, highlights, and JSON
-      # extraction. Cached outputs can come from different visits within maxAgeMs; use 0
-      # for a fresh capture. HTML-only requests use the existing fast acquisition path.
-      # Highlights return Markdown excerpts most relevant to highlightsParams.query.
-      # Requests with at least one successful output cost one base credit, including
-      # cache hits, or two with browser actions. All-failed responses are unbilled
-      # except missing pages, which retain the base price and the one-credit product
-      # charge when product was requested. Highlights add 3 credits when passages are
-      # returned. JSON extraction runs an LLM over nonempty page Markdown and adds four
-      # credits only when its result is returned successfully. PDF OCR adds one credit
-      # per recovered page on fresh extraction. Product adds one credit when its
-      # successful result is returned, plus six if that result used the specialized
-      # model. Original response bytes and screenshots are limited to 20 MiB each,
-      # screenshots to 40 megapixels, and the combined response to 60 MiB. An oversized
-      # output has success: false and data: null. If the combined response exceeds its
-      # limit, the largest outputs are marked failed until the remaining outputs fit.
-      # Valid captured pieces may still be cached when omitted to meet the response size
-      # limit.
+      # Returns the outputs you enable in `formats` from one visit to a URL. Each output
+      # reports its own `success`, so a failed output does not fail the request.
       sig do
         params(
           formats: ContextDev::WebScrapeParams::Formats::OrHash,
@@ -241,22 +173,20 @@ module ContextDev
         ).returns(ContextDev::Models::WebScrapeResponse)
       end
       def scrape(
-        # Outputs to return. Enable at least one; omitted formats are false.
+        # Outputs to return. Set at least one to `true`.
         formats:,
-        # The URL to scrape.
+        # Public HTTP or HTTPS URL to scrape.
         url:,
-        # Highlight options. Requires formats.highlights: true.
+        # Required when `formats.highlights` is `true`.
         highlights_params: nil,
         # Image options. Requires formats.images: true.
         image_params: nil,
         # Required when formats.json is true.
         json_params: nil,
-        # Markdown options. Requires formats.markdown: true.
+        # Markdown options. Requires `formats.markdown`.
         markdown_params: nil,
-        # Maximum age of each cached output. Defaults to 1 day; 0 fetches fresh and
-        # updates the requested outputs. Compatible outputs are shared with the individual
-        # scrape endpoints. Image results with hosted files refresh after 23 hours; other
-        # outputs retain their own freshness.
+        # Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
+        # 1 day.
         max_age_ms: nil,
         # Required when formats.parse is true.
         parse_params: nil,
@@ -264,25 +194,14 @@ module ContextDev
         product_params: nil,
         # Screenshot options. Requires formats.screenshot: true.
         screenshot_params: nil,
-        # Shared browser and content settings. Content filters leave screenshots and
-        # original bytes unchanged.
+        # Browser and content settings shared by all outputs.
         shared_params: nil,
         # Labels for tracking request usage. Not retained when zdr is enabled.
         tags: nil,
-        # Total deadline, including navigation, actions, waiting, and all outputs.
-        # Defaults to 60000 milliseconds with behavior fail. Individual outputs have
-        # internal deadlines that reserve time to return completed outputs; timed-out
-        # outputs have success: false and data: null under either behavior. The overall
-        # request deadline remains enforced: fail returns an error if that deadline is
-        # reached. Use return-partial to allow the current page state and available
-        # outputs when the page is still loading. Partial responses set isPartial. Failed
-        # retrievals and incomplete captures are not cached; valid captured pieces may be
-        # cached independently. Fixed waits must fit before a response reserve of up to
-        # 5000 milliseconds (at most one quarter of the timeout) when using
-        # return-partial.
+        # Deadline for the whole request. Defaults to 60000 ms with `fail`. Fixed waits
+        # must end before it.
         timeout_opts: nil,
-        # Zero data retention. Bypasses caches and uploads; excludes request/response
-        # content and tags from logs. Must be enabled for your organization.
+        # `enabled` turns on zero data retention. Your organization must have ZDR enabled.
         zdr: nil,
         request_options: {}
       )
@@ -321,8 +240,7 @@ module ContextDev
         # Optional parameter to choose the site's visual theme in the screenshot. Use
         # 'light' or 'dark' when the site offers both appearances.
         color_scheme: nil,
-        # Fetch the target page through a residential proxy in this country (ISO 3166-1
-        # alpha-2).
+        # Fetch from this country (ISO 3166-1 alpha-2).
         country: nil,
         # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
         # 'https://example.com/pricing'). When provided, the screenshot is taken of this
@@ -365,12 +283,9 @@ module ContextDev
         # top to bottom). The final slice may be shorter than the viewport height. Takes
         # precedence over fullScreenshot. Max: 100000.
         scroll_offset: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
         # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
         viewport: nil,
@@ -380,17 +295,14 @@ module ContextDev
         # least waitForMs + 10000 ms; a shorter deadline is rejected with 400
         # TIMEOUT_TOO_SHORT_FOR_WAIT.
         wait_for_ms: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
       end
 
-      # Search the web and optionally scrape each result to Markdown in one round-trip.
+      # Search the web and optionally return page content with each result.
       sig do
         params(
           query: String,
@@ -427,26 +339,21 @@ module ContextDev
         markdown_options: nil,
         # Number of results to request and return (10–100). Defaults to 10.
         num_results: nil,
-        # Expand the query into multiple parallel variants for broader recall.
+        # Currently has no effect.
         query_fanout: nil,
-        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
       end
 
-      # Performs a crawl starting from a given URL, extracts page content as Markdown,
-      # and returns results for all crawled pages.
+      # Crawl a website and return page content as Markdown. Use a batch for crawls
+      # beyond 500 pages.
       sig do
         params(
           url: String,
@@ -474,14 +381,11 @@ module ContextDev
         ).returns(ContextDev::Models::WebWebCrawlMdResponse)
       end
       def web_crawl_md(
-        # The starting URL for the crawl (must include http:// or https:// protocol)
+        # Start URL, including `http://` or `https://`.
         url:,
-        # Fetch the target page through a residential proxy in this country (ISO 3166-1
-        # alpha-2).
+        # Fetch from this country (ISO 3166-1 alpha-2).
         country: nil,
-        # CSS selectors to remove before each crawled page is converted to Markdown.
-        # Applied after includeSelectors. Exclusion takes precedence: an element matching
-        # both is removed. Examples: "nav", "footer", ".ad-banner", "[aria-hidden=true]".
+        # Remove matching elements after inclusions. Exclusions take precedence.
         exclude_selectors: nil,
         # When true, follow links on subdomains of the starting URL's domain (e.g.
         # docs.example.com when starting from example.com). www and apex are always
@@ -494,38 +398,27 @@ module ContextDev
         include_images: nil,
         # Preserve hyperlinks in the Markdown output
         include_links: nil,
-        # CSS selectors. When provided, only matching HTML subtrees (and their
-        # descendants) are kept before each crawled page is converted to Markdown. When
-        # omitted, the entire document is kept. Examples: "article.main", "#content",
-        # "[role=main]".
+        # Keep matching HTML subtrees before converting each page to Markdown.
         include_selectors: nil,
-        # Return a cached result if a prior scrape for the same parameters exists and is
-        # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-        # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+        # Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
         max_age_ms: nil,
         # Maximum link depth from the starting URL (0 = only the starting page)
         max_depth: nil,
-        # Maximum number of pages to crawl. Hard cap: 500.
+        # Maximum pages to crawl.
         max_pages: nil,
-        # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-        # detection/OCR to an inclusive 1-based page range.
+        # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         pdf: nil,
-        # When true, waits briefly for CSS and transition animations to settle before
-        # extracting each crawled page. Defaults to false. This adds a bit of latency in
-        # exchange for more stable output on animated pages.
+        # Wait briefly for CSS animations and transitions to settle before reading each
+        # page.
         settle_animations: nil,
         # Truncate base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
-        # Soft time budget for the crawl in milliseconds. After each scrape, the crawler
-        # checks the elapsed time and, if exceeded, returns the pages collected so far
-        # instead of continuing. Min: 10000 (10s). Max: 110000 (110s). Default: 80000
-        # (80s).
+        # Soft crawl deadline in milliseconds. Returns pages collected before the next
+        # deadline check.
         stop_after_ms: nil,
-        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
         # Regex pattern. Only URLs matching this pattern will be followed and scraped. An
         # automatic prefix scope in the form ^<starting URL> follows a redirect of the
@@ -537,10 +430,8 @@ module ContextDev
         # Browser wait time in milliseconds after initial page load for each crawled page.
         # Defaults to 3500 (3.5 seconds). Min: 0. Max: 30000 (30 seconds).
         wait_for_ms: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Requires zero data retention to be enabled for your
-        # organization (contact support@context.dev), otherwise the request fails with
-        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )

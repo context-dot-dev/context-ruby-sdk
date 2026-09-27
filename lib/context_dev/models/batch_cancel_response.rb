@@ -11,8 +11,7 @@ module ContextDev
       required :id, String
 
       # @!attribute crawl
-      #   The crawl controls as submitted, so the limits requested can be compared against
-      #   what the crawl reached.
+      #   Crawl settings as submitted.
       #
       #   @return [ContextDev::Models::CrawlControls, nil]
       required :crawl, -> { ContextDev::CrawlControls }, nil?: true
@@ -30,7 +29,7 @@ module ContextDev
       required :format_, enum: -> { ContextDev::Models::BatchCancelResponse::Format }, api_name: :format
 
       # @!attribute input
-      #   What submission took in, and what it charged for.
+      #   What the submission accepted.
       #
       #   @return [ContextDev::Models::Intake]
       required :input, -> { ContextDev::Intake }
@@ -54,8 +53,8 @@ module ContextDev
       required :progress, -> { ContextDev::Models::BatchCancelResponse::Progress }
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -74,7 +73,7 @@ module ContextDev
       required :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timing
-      #   There is no finish time yet — the batch is still winding down.
+      #   Batch timestamps.
       #
       #   @return [ContextDev::Models::BatchCancelResponse::Timing]
       required :timing, -> { ContextDev::Models::BatchCancelResponse::Timing }
@@ -91,13 +90,13 @@ module ContextDev
       #
       #   @param id [String] Batch ID.
       #
-      #   @param crawl [ContextDev::Models::CrawlControls, nil] The crawl controls as submitted, so the limits requested can be compared against
+      #   @param crawl [ContextDev::Models::CrawlControls, nil] Crawl settings as submitted.
       #
       #   @param credits [ContextDev::Models::BatchCancelResponse::Credits] What this batch cost so far.
       #
       #   @param format_ [Symbol, ContextDev::Models::BatchCancelResponse::Format] What each page is returned as.
       #
-      #   @param input [ContextDev::Models::Intake] What submission took in, and what it charged for.
+      #   @param input [ContextDev::Models::Intake] What the submission accepted.
       #
       #   @param mode [Symbol, ContextDev::Models::BatchCancelResponse::Mode] How pages were selected.
       #
@@ -105,32 +104,28 @@ module ContextDev
       #
       #   @param progress [ContextDev::Models::BatchCancelResponse::Progress] How far the batch got before cancellation.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param status [Symbol, ContextDev::Models::BatchCancelResponse::Status] Always `cancelling`. Work already in flight finishes; the batch reaches `cancell
       #
       #   @param tags [Array<String>] Tags stored on the batch at submission.
       #
-      #   @param timing [ContextDev::Models::BatchCancelResponse::Timing] There is no finish time yet — the batch is still winding down.
+      #   @param timing [ContextDev::Models::BatchCancelResponse::Timing] Batch timestamps.
       #
       #   @param key_metadata [ContextDev::Models::BatchCancelResponse::KeyMetadata] API key usage for this request.
 
       # @see ContextDev::Models::BatchCancelResponse#credits
       class Credits < ContextDev::Internal::Type::BaseModel
         # @!attribute reserved
-        #   Credits debited at submission. The unspent remainder is refunded once the batch
-        #   settles — read `credits.refunded` from GET /batch/{batch_id} then.
+        #   Credits held at submission; unused credits are refunded when the batch settles.
         #
         #   @return [Integer]
         required :reserved, Integer
 
         # @!method initialize(reserved:)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::BatchCancelResponse::Credits} for more details.
-        #
         #   What this batch cost so far.
         #
-        #   @param reserved [Integer] Credits debited at submission. The unspent remainder is refunded once the batch
+        #   @param reserved [Integer] Credits held at submission; unused credits are refunded when the batch settles.
       end
 
       # What each page is returned as.
@@ -168,7 +163,7 @@ module ContextDev
         required :failed, Integer
 
         # @!attribute pending
-        #   Reserved pages that will now be skipped, and refunded when the batch settles.
+        #   Pages that will be skipped.
         #
         #   @return [Integer]
         required :pending, Integer
@@ -184,7 +179,7 @@ module ContextDev
         #
         #   @param failed [Integer] Pages that could not be scraped before the request landed.
         #
-        #   @param pending [Integer] Reserved pages that will now be skipped, and refunded when the batch settles.
+        #   @param pending [Integer] Pages that will be skipped.
         #
         #   @param succeeded [Integer] Pages scraped successfully before the request landed.
       end
@@ -217,7 +212,7 @@ module ContextDev
         required :started_at, String, nil?: true
 
         # @!method initialize(created_at:, started_at:)
-        #   There is no finish time yet — the batch is still winding down.
+        #   Batch timestamps.
         #
         #   @param created_at [String] When the batch was created.
         #
@@ -227,7 +222,7 @@ module ContextDev
       # @see ContextDev::Models::BatchCancelResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -241,7 +236,7 @@ module ContextDev
         # @!method initialize(credits_consumed:, credits_remaining:)
         #   API key usage for this request.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

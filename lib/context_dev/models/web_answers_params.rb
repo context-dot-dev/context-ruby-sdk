@@ -8,50 +8,39 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute task
-      #   What to research and answer, in plain language. Naming a domain in the task (for
-      #   example "pricing on context.dev") makes the agent read that site before it
-      #   searches.
+      #   Research task. Name a domain to have it read before searching.
       #
       #   @return [String]
       required :task, String
 
       # @!attribute json_format
-      #   An example object with placeholder values (for example {"pricing_page_url": "",
-      #   "plans": [{"name": "", "price": 0}]}). Object keys and value types are
-      #   preserved; unknown values may be null. Empty arrays accept any JSON items.
-      #   Defaults to {"result": ""}. Maximum 8 levels, 500 values, and 16000 characters.
+      #   Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
+      #   characters; unknowns may be null.
       #
       #   @return [Hash{Symbol=>Object}, nil]
       optional :json_format, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
 
       # @!attribute mode
-      #   Research level: fast uses a smaller model and research budget for 10 credits;
-      #   ultra uses deeper reasoning and research for 100 credits. Defaults to ultra.
-      #   Only successful requests consume credits.
+      #   `fast` for short tasks; `ultra` for deeper research (default).
       #
       #   @return [Symbol, ContextDev::Models::WebAnswersParams::Mode, nil]
       optional :mode, enum: -> { ContextDev::WebAnswersParams::Mode }
 
       # @!attribute tags
-      #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #   Labels for filtering usage in the dashboard.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timeout_opts
-      #   Optional request deadline and behavior on timeout. For GET requests, use
-      #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-      #   timeoutOpts object.
+      #   Request deadline and what to return when it passes.
       #
       #   @return [ContextDev::Models::WebAnswersParams::TimeoutOpts, nil]
       optional :timeout_opts, -> { ContextDev::WebAnswersParams::TimeoutOpts }, api_name: :timeoutOpts
 
       # @!attribute zdr
-      #   Set to enabled to bypass shared caches and omit request and response content
-      #   from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      #   omitted. Requires zero data retention to be enabled for your organization
-      #   (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      #   Successful ZDR responses include X-Context-ZDR: true.
+      #   `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      #   your organization has ZDR.
       #
       #   @return [Symbol, ContextDev::Models::WebAnswersParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebAnswersParams::Zdr }
@@ -60,23 +49,21 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebAnswersParams} for more details.
       #
-      #   @param task [String] What to research and answer, in plain language. Naming a domain in the task (for
+      #   @param task [String] Research task. Name a domain to have it read before searching.
       #
-      #   @param json_format [Hash{Symbol=>Object}] An example object with placeholder values (for example {"pricing_page_url": "",
+      #   @param json_format [Hash{Symbol=>Object}] Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000 ch
       #
-      #   @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] Research level: fast uses a smaller model and research budget for 10 credits; ul
+      #   @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] `fast` for short tasks; `ultra` for deeper research (default).
       #
-      #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
-      #   @param timeout_opts [ContextDev::Models::WebAnswersParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #   @param timeout_opts [ContextDev::Models::WebAnswersParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
-      #   @param zdr [Symbol, ContextDev::Models::WebAnswersParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      #   @param zdr [Symbol, ContextDev::Models::WebAnswersParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Research level: fast uses a smaller model and research budget for 10 credits;
-      # ultra uses deeper reasoning and research for 100 credits. Defaults to ultra.
-      # Only successful requests consume credits.
+      # `fast` for short tasks; `ultra` for deeper research (default).
       module Mode
         extend ContextDev::Internal::Type::Enum
 
@@ -89,16 +76,14 @@ module ContextDev
 
       class TimeoutOpts < ContextDev::Internal::Type::BaseModel
         # @!attribute milliseconds
-        #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   Deadline in milliseconds.
         #
         #   @return [Integer]
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        #   credits. "return-partial" returns usable results collected so far; if none are
-        #   available, the request still fails without charging credits. Partial results are
-        #   not cached as complete results.
+        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   inspect the response’s partial flag.
         #
         #   @return [Symbol, ContextDev::Models::WebAnswersParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebAnswersParams::TimeoutOpts::Behavior }
@@ -107,18 +92,14 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebAnswersParams::TimeoutOpts} for more details.
         #
-        #   Optional request deadline and behavior on timeout. For GET requests, use
-        #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        #   timeoutOpts object.
+        #   Request deadline and what to return when it passes.
         #
-        #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebAnswersParams::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        #   @param behavior [Symbol, ContextDev::Models::WebAnswersParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         #
         # @see ContextDev::Models::WebAnswersParams::TimeoutOpts#behavior
         module Behavior
@@ -132,11 +113,8 @@ module ContextDev
         end
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

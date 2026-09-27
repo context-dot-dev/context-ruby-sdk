@@ -8,7 +8,7 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute batch_id
-      #   ID of the batch to retrieve or cancel.
+      #   Batch ID.
       #
       #   @return [String]
       required :batch_id, String
@@ -30,7 +30,7 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchGetResultsParams} for more details.
       #
-      #   @param batch_id [String] ID of the batch to retrieve or cancel.
+      #   @param batch_id [String] Batch ID.
       #
       #   @param cursor [String] next_cursor from the previous page.
       #

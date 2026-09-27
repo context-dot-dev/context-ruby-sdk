@@ -2,10 +2,9 @@
 
 module ContextDev
   module Resources
-    # Read your organization's API request logs to debug failed calls. These endpoints
-    # cost no credits and use a separate rate limit.
+    # Read your organization's API request logs.
     class Logs
-      # Get one logged API call, including its request input and response body.
+      # Retrieve a request’s metadata, retained input, and response.
       #
       # @overload retrieve(request_id, request_options: {})
       #
@@ -28,8 +27,8 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::LogListParams} for more details.
       #
-      # List your organization's API requests, newest first. Defaults to the last 24
-      # hours.
+      # List your organization’s request logs with filters and pagination. Logs also
+      # include batch settlements and monitor runs.
       #
       # @overload list(error_code: nil, errors_only: nil, from: nil, key_id: nil, limit: nil, page: nil, path: nil, search: nil, status_code: nil, tags: nil, to: nil, request_options: {})
       #

@@ -3,10 +3,8 @@
 module ContextDev
   module Resources
     class People
-      # Finds and normalizes the best available person candidate from additive identity
-      # clues, then assigns an identity match score from 0 to 100. Available on all paid
-      # plans. Successful requests cost 20 credits. Disposable and free email addresses
-      # (like gmail.com, yahoo.com) will throw a 422 error.
+      # Find a person from identity clues and return their profile with a match score.
+      # Requires a paid plan; free or disposable email addresses return 422.
       sig do
         params(
           company: ContextDev::PersonEnrichParams::Company::OrHash,
@@ -23,23 +21,27 @@ module ContextDev
         ).returns(ContextDev::Models::PersonEnrichResponse)
       end
       def enrich(
+        # Company context to help identify the person. Provide a name or domain.
         company: nil,
+        # Education history to help distinguish people with similar names.
         education: nil,
+        # Email address of the person to find.
         email: nil,
+        # Location context to help identify the person. Provide a city, region, or
+        # country.
         location: nil,
+        # Person name. Without an email or person-profile URL, provide both first and last
+        # name plus company, education, or location.
         name: nil,
+        # Public profile URLs for the person. A person-profile URL can identify the person
+        # without a name.
         social_urls: nil,
-        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )

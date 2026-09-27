@@ -8,12 +8,14 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute monitor_id
+      #   ID of the monitor.
       #
       #   @return [String]
       required :monitor_id, String
 
       # @!method initialize(monitor_id:, request_options: {})
-      #   @param monitor_id [String]
+      #   @param monitor_id [String] ID of the monitor.
+      #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
     end
   end

@@ -59,7 +59,7 @@ module ContextDev
         required :retry_, -> { ContextDev::RetryConfig }, api_name: :retry
 
         # @!attribute retry_expires_at
-        #   Manual retry deadline, seven days after event creation.
+        #   Last time you can retry manually (7 days after the event).
         #
         #   @return [Time]
         required :retry_expires_at, Time
@@ -71,7 +71,8 @@ module ContextDev
         required :source, union: -> { ContextDev::Webhooks::Delivery::Source }
 
         # @!attribute status
-        #   Current delivery status.
+        #   `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled`
+        #   (source or its webhook was removed).
         #
         #   @return [Symbol, ContextDev::Models::Webhooks::Delivery::Status]
         required :status, enum: -> { ContextDev::Webhooks::Delivery::Status }
@@ -83,6 +84,9 @@ module ContextDev
         required :url, String
 
         # @!method initialize(id:, created_at:, delivered_at:, event:, event_id:, last_attempt:, last_error:, next_attempt_at:, retry_:, retry_expires_at:, source:, status:, url:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::Webhooks::Delivery} for more details.
+        #
         #   @param id [String] Delivery ID.
         #
         #   @param created_at [Time] Event creation time.
@@ -101,11 +105,11 @@ module ContextDev
         #
         #   @param retry_ [ContextDev::Models::RetryConfig] Webhook retry settings. Use {} for the default schedule.
         #
-        #   @param retry_expires_at [Time] Manual retry deadline, seven days after event creation.
+        #   @param retry_expires_at [Time] Last time you can retry manually (7 days after the event).
         #
         #   @param source [ContextDev::Models::Webhooks::Delivery::Source::Batch, ContextDev::Models::Webhooks::Delivery::Source::Monitor] Batch or monitor run that produced the event.
         #
-        #   @param status [Symbol, ContextDev::Models::Webhooks::Delivery::Status] Current delivery status.
+        #   @param status [Symbol, ContextDev::Models::Webhooks::Delivery::Status] `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled` (sour
         #
         #   @param url [String] Webhook destination URL.
 
@@ -165,7 +169,7 @@ module ContextDev
             required :batch_id, String
 
             # @!attribute type
-            #   Delivery source.
+            #   Which deliveries to list: `batch` or `monitor`.
             #
             #   @return [Symbol, ContextDev::Models::Webhooks::Delivery::Source::Batch::Type]
             required :type, enum: -> { ContextDev::Webhooks::Delivery::Source::Batch::Type }
@@ -173,9 +177,9 @@ module ContextDev
             # @!method initialize(batch_id:, type:)
             #   @param batch_id [String] Batch ID.
             #
-            #   @param type [Symbol, ContextDev::Models::Webhooks::Delivery::Source::Batch::Type] Delivery source.
+            #   @param type [Symbol, ContextDev::Models::Webhooks::Delivery::Source::Batch::Type] Which deliveries to list: `batch` or `monitor`.
 
-            # Delivery source.
+            # Which deliveries to list: `batch` or `monitor`.
             #
             # @see ContextDev::Models::Webhooks::Delivery::Source::Batch#type
             module Type
@@ -202,7 +206,7 @@ module ContextDev
             required :run_id, String
 
             # @!attribute type
-            #   Delivery source.
+            #   Which deliveries to list: `batch` or `monitor`.
             #
             #   @return [Symbol, ContextDev::Models::Webhooks::Delivery::Source::Monitor::Type]
             required :type, enum: -> { ContextDev::Webhooks::Delivery::Source::Monitor::Type }
@@ -212,9 +216,9 @@ module ContextDev
             #
             #   @param run_id [String] Monitor run ID.
             #
-            #   @param type [Symbol, ContextDev::Models::Webhooks::Delivery::Source::Monitor::Type] Delivery source.
+            #   @param type [Symbol, ContextDev::Models::Webhooks::Delivery::Source::Monitor::Type] Which deliveries to list: `batch` or `monitor`.
 
-            # Delivery source.
+            # Which deliveries to list: `batch` or `monitor`.
             #
             # @see ContextDev::Models::Webhooks::Delivery::Source::Monitor#type
             module Type
@@ -231,7 +235,8 @@ module ContextDev
           #   @return [Array(ContextDev::Models::Webhooks::Delivery::Source::Batch, ContextDev::Models::Webhooks::Delivery::Source::Monitor)]
         end
 
-        # Current delivery status.
+        # `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled`
+        # (source or its webhook was removed).
         #
         # @see ContextDev::Models::Webhooks::Delivery#status
         module Status

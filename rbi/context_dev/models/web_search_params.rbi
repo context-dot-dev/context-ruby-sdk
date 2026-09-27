@@ -71,23 +71,21 @@ module ContextDev
       sig { params(num_results: Integer).void }
       attr_writer :num_results
 
-      # Expand the query into multiple parallel variants for broader recall.
+      # Currently has no effect.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :query_fanout
 
       sig { params(query_fanout: T::Boolean).void }
       attr_writer :query_fanout
 
-      # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      # Labels for filtering usage in the dashboard.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Optional request deadline and behavior on timeout. For GET requests, use
-      # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-      # timeoutOpts object.
+      # Request deadline and what to return when it passes.
       sig { returns(T.nilable(ContextDev::WebSearchParams::TimeoutOpts)) }
       attr_reader :timeout_opts
 
@@ -98,11 +96,8 @@ module ContextDev
       end
       attr_writer :timeout_opts
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       sig { returns(T.nilable(ContextDev::WebSearchParams::Zdr::OrSymbol)) }
       attr_reader :zdr
 
@@ -145,19 +140,14 @@ module ContextDev
         markdown_options: nil,
         # Number of results to request and return (10–100). Defaults to 10.
         num_results: nil,
-        # Expand the query into multiple parallel variants for broader recall.
+        # Currently has no effect.
         query_fanout: nil,
-        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
@@ -545,9 +535,7 @@ module ContextDev
         sig { params(shorten_base64_images: T::Boolean).void }
         attr_writer :shorten_base64_images
 
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         sig do
           returns(
             T.nilable(ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts)
@@ -610,9 +598,7 @@ module ContextDev
           pdf: nil,
           # Truncate inline base64 image payloads to keep responses small.
           shorten_base64_images: nil,
-          # Optional request deadline and behavior on timeout. For GET requests, use
-          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          # timeoutOpts object.
+          # Request deadline and what to return when it passes.
           timeout_opts: nil,
           # Strip nav, header, footer, and sidebar — keep only the primary article content.
           use_main_content_only: nil,
@@ -710,15 +696,12 @@ module ContextDev
               )
             end
 
-          # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          # Deadline in milliseconds.
           sig { returns(Integer) }
           attr_accessor :milliseconds
 
-          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-          # credits. "return-partial" returns usable results collected so far; if none are
-          # available, the request still fails without charging credits. Partial results are
-          # not cached as complete results. "return-partial" requires milliseconds of at
-          # least 5000.
+          # "fail" returns 408 at the deadline. "return-partial" returns available results;
+          # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
           sig do
             returns(
               T.nilable(
@@ -736,9 +719,7 @@ module ContextDev
           end
           attr_writer :behavior
 
-          # Optional request deadline and behavior on timeout. For GET requests, use
-          # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-          # timeoutOpts object.
+          # Request deadline and what to return when it passes.
           sig do
             params(
               milliseconds: Integer,
@@ -747,13 +728,10 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+            # Deadline in milliseconds.
             milliseconds:,
-            # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-            # credits. "return-partial" returns usable results collected so far; if none are
-            # available, the request still fails without charging credits. Partial results are
-            # not cached as complete results. "return-partial" requires milliseconds of at
-            # least 5000.
+            # "fail" returns 408 at the deadline. "return-partial" returns available results;
+            # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
             behavior: nil
           )
           end
@@ -770,11 +748,8 @@ module ContextDev
           def to_hash
           end
 
-          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-          # credits. "return-partial" returns usable results collected so far; if none are
-          # available, the request still fails without charging credits. Partial results are
-          # not cached as complete results. "return-partial" requires milliseconds of at
-          # least 5000.
+          # "fail" returns 408 at the deadline. "return-partial" returns available results;
+          # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
           module Behavior
             extend ContextDev::Internal::Type::Enum
 
@@ -820,14 +795,12 @@ module ContextDev
             )
           end
 
-        # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        # Deadline in milliseconds.
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         sig do
           returns(
             T.nilable(
@@ -845,9 +818,7 @@ module ContextDev
         end
         attr_writer :behavior
 
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         sig do
           params(
             milliseconds: Integer,
@@ -856,12 +827,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          # Deadline in milliseconds.
           milliseconds:,
-          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-          # credits. "return-partial" returns usable results collected so far; if none are
-          # available, the request still fails without charging credits. Partial results are
-          # not cached as complete results.
+          # "fail" returns 408 at the deadline. "return-partial" returns available results;
+          # inspect the response’s partial flag.
           behavior: nil
         )
         end
@@ -878,10 +847,8 @@ module ContextDev
         def to_hash
         end
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 
@@ -914,11 +881,8 @@ module ContextDev
         end
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

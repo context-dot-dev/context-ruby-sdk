@@ -11,9 +11,7 @@ module ContextDev
           )
         end
 
-      # Cache outcome for this response. Composite responses are hits only when every
-      # cache-controlled fetch contributing to the output was a hit; age_ms is the
-      # oldest contributing hit.
+      # Whether this response came from cache.
       sig do
         returns(ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata)
       end
@@ -27,8 +25,8 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
-      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      # it when contacting support about a failed request.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
       sig { returns(String) }
       attr_accessor :request_id
 
@@ -46,11 +44,8 @@ module ContextDev
       sig { params(domain: String).void }
       attr_writer :domain
 
-      # How complete the returned content is. `loaded` means the page finished the waits
-      # the request asked for. `still-loading` only occurs with
-      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-      # reached first, so the content reflects the DOM at that moment and late-rendering
-      # parts may be missing. Partial results are billed at the base request cost.
+      # `loaded`, or `still-loading` when capture ended before the page finished
+      # loading.
       sig do
         returns(
           T.nilable(
@@ -68,7 +63,7 @@ module ContextDev
       end
       attr_writer :final_dom_state
 
-      # Credit usage, included whenever a valid API key is provided.
+      # Credits this request used and your remaining balance.
       sig do
         returns(
           T.nilable(
@@ -86,7 +81,7 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # Status of the response, e.g., 'ok'
+      # Always `ok` on success.
       sig { returns(T.nilable(String)) }
       attr_reader :status
 
@@ -128,26 +123,21 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         cache_metadata:,
-        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        # it when contacting support about a failed request.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
         request_id:,
         # HTTP status code
         code: nil,
         # The normalized domain that was processed
         domain: nil,
-        # How complete the returned content is. `loaded` means the page finished the waits
-        # the request asked for. `still-loading` only occurs with
-        # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-        # reached first, so the content reflects the DOM at that moment and late-rendering
-        # parts may be missing. Partial results are billed at the base request cost.
+        # `loaded`, or `still-loading` when capture ended before the page finished
+        # loading.
         final_dom_state: nil,
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         key_metadata: nil,
-        # Status of the response, e.g., 'ok'
+        # Always `ok` on success.
         status: nil,
         # Comprehensive styleguide data extracted from the website
         styleguide: nil
@@ -197,9 +187,7 @@ module ContextDev
         end
         attr_accessor :status
 
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         sig do
           params(
             age_ms: Integer,
@@ -270,11 +258,8 @@ module ContextDev
         end
       end
 
-      # How complete the returned content is. `loaded` means the page finished the waits
-      # the request asked for. `still-loading` only occurs with
-      # timeoutOpts.behavior=return-partial: the timeoutOpts.milliseconds deadline was
-      # reached first, so the content reflects the DOM at that moment and late-rendering
-      # parts may be missing. Partial results are billed at the base request cost.
+      # `loaded`, or `still-loading` when capture ended before the page finished
+      # loading.
       module FinalDomState
         extend ContextDev::Internal::Type::Enum
 
@@ -318,7 +303,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -326,14 +311,14 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         sig do
           params(credits_consumed: Integer, credits_remaining: Integer).returns(
             T.attached_class
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:
@@ -782,7 +767,7 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :min_height
 
-              # Sampled minimum width of the button box (typically px)
+              # Minimum width (usually px).
               sig { returns(String) }
               attr_accessor :min_width
 
@@ -851,7 +836,7 @@ module ContextDev
                 font_weight:,
                 # Sampled minimum height of the button box (typically px)
                 min_height:,
-                # Sampled minimum width of the button box (typically px)
+                # Minimum width (usually px).
                 min_width:,
                 padding:,
                 text_decoration:,
@@ -938,7 +923,7 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :min_height
 
-              # Sampled minimum width of the button box (typically px)
+              # Minimum width (usually px).
               sig { returns(String) }
               attr_accessor :min_width
 
@@ -1007,7 +992,7 @@ module ContextDev
                 font_weight:,
                 # Sampled minimum height of the button box (typically px)
                 min_height:,
-                # Sampled minimum width of the button box (typically px)
+                # Minimum width (usually px).
                 min_width:,
                 padding:,
                 text_decoration:,
@@ -1094,7 +1079,7 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :min_height
 
-              # Sampled minimum width of the button box (typically px)
+              # Minimum width (usually px).
               sig { returns(String) }
               attr_accessor :min_width
 
@@ -1163,7 +1148,7 @@ module ContextDev
                 font_weight:,
                 # Sampled minimum height of the button box (typically px)
                 min_height:,
-                # Sampled minimum width of the button box (typically px)
+                # Minimum width (usually px).
                 min_width:,
                 padding:,
                 text_decoration:,
@@ -1725,7 +1710,7 @@ module ContextDev
               sig { returns(T::Array[String]) }
               attr_accessor :font_fallbacks
 
-              # Primary face (first family in the computed stack)
+              # First font in the stack.
               sig { returns(String) }
               attr_accessor :font_family
 
@@ -1754,7 +1739,7 @@ module ContextDev
               def self.new(
                 # Full ordered font list from resolved computed font-family
                 font_fallbacks:,
-                # Primary face (first family in the computed stack)
+                # First font in the stack.
                 font_family:,
                 font_size:,
                 font_weight:,
@@ -1792,7 +1777,7 @@ module ContextDev
               sig { returns(T::Array[String]) }
               attr_accessor :font_fallbacks
 
-              # Primary face (first family in the computed stack)
+              # First font in the stack.
               sig { returns(String) }
               attr_accessor :font_family
 
@@ -1821,7 +1806,7 @@ module ContextDev
               def self.new(
                 # Full ordered font list from resolved computed font-family
                 font_fallbacks:,
-                # Primary face (first family in the computed stack)
+                # First font in the stack.
                 font_family:,
                 font_size:,
                 font_weight:,
@@ -1859,7 +1844,7 @@ module ContextDev
               sig { returns(T::Array[String]) }
               attr_accessor :font_fallbacks
 
-              # Primary face (first family in the computed stack)
+              # First font in the stack.
               sig { returns(String) }
               attr_accessor :font_family
 
@@ -1888,7 +1873,7 @@ module ContextDev
               def self.new(
                 # Full ordered font list from resolved computed font-family
                 font_fallbacks:,
-                # Primary face (first family in the computed stack)
+                # First font in the stack.
                 font_family:,
                 font_size:,
                 font_weight:,
@@ -1926,7 +1911,7 @@ module ContextDev
               sig { returns(T::Array[String]) }
               attr_accessor :font_fallbacks
 
-              # Primary face (first family in the computed stack)
+              # First font in the stack.
               sig { returns(String) }
               attr_accessor :font_family
 
@@ -1955,7 +1940,7 @@ module ContextDev
               def self.new(
                 # Full ordered font list from resolved computed font-family
                 font_fallbacks:,
-                # Primary face (first family in the computed stack)
+                # First font in the stack.
                 font_family:,
                 font_size:,
                 font_weight:,
@@ -1994,7 +1979,7 @@ module ContextDev
             sig { returns(T::Array[String]) }
             attr_accessor :font_fallbacks
 
-            # Primary face (first family in the computed stack)
+            # First font in the stack.
             sig { returns(String) }
             attr_accessor :font_family
 
@@ -2023,7 +2008,7 @@ module ContextDev
             def self.new(
               # Full ordered font list from resolved computed font-family
               font_fallbacks:,
-              # Primary face (first family in the computed stack)
+              # First font in the stack.
               font_family:,
               font_size:,
               font_weight:,

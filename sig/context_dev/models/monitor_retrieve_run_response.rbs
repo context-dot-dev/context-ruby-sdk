@@ -8,12 +8,14 @@ module ContextDev
         change_detection_type: ContextDev::Models::MonitorRetrieveRunResponse::change_detection_type,
         credits_charged: Integer,
         monitor_id: String,
+        request_id: String,
         run_type: ContextDev::Models::MonitorRetrieveRunResponse::run_type,
         status: ContextDev::Models::MonitorRetrieveRunResponse::status,
         target_type: ContextDev::Models::MonitorRetrieveRunResponse::target_type,
         change_id: String?,
         completed_at: Time?,
         error: ContextDev::Models::MonitorRetrieveRunResponse::Error?,
+        key_metadata: ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata,
         skip_reason: ContextDev::Models::MonitorRetrieveRunResponse::skip_reason?,
         started_at: Time?,
         webhook_deliveries: ::Array[ContextDev::WebhookDelivery],
@@ -34,6 +36,8 @@ module ContextDev
 
       attr_accessor monitor_id: String
 
+      attr_accessor request_id: String
+
       attr_accessor run_type: ContextDev::Models::MonitorRetrieveRunResponse::run_type
 
       attr_accessor status: ContextDev::Models::MonitorRetrieveRunResponse::status
@@ -45,6 +49,12 @@ module ContextDev
       attr_accessor completed_at: Time?
 
       attr_accessor error: ContextDev::Models::MonitorRetrieveRunResponse::Error?
+
+      attr_reader key_metadata: ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata
+      ) -> ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata
 
       attr_accessor skip_reason: ContextDev::Models::MonitorRetrieveRunResponse::skip_reason?
 
@@ -73,12 +83,14 @@ module ContextDev
         change_detection_type: ContextDev::Models::MonitorRetrieveRunResponse::change_detection_type,
         credits_charged: Integer,
         monitor_id: String,
+        request_id: String,
         run_type: ContextDev::Models::MonitorRetrieveRunResponse::run_type,
         status: ContextDev::Models::MonitorRetrieveRunResponse::status,
         target_type: ContextDev::Models::MonitorRetrieveRunResponse::target_type,
         ?change_id: String?,
         ?completed_at: Time?,
         ?error: ContextDev::Models::MonitorRetrieveRunResponse::Error?,
+        ?key_metadata: ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata,
         ?skip_reason: ContextDev::Models::MonitorRetrieveRunResponse::skip_reason?,
         ?started_at: Time?,
         ?webhook_deliveries: ::Array[ContextDev::WebhookDelivery],
@@ -93,12 +105,14 @@ module ContextDev
         change_detection_type: ContextDev::Models::MonitorRetrieveRunResponse::change_detection_type,
         credits_charged: Integer,
         monitor_id: String,
+        request_id: String,
         run_type: ContextDev::Models::MonitorRetrieveRunResponse::run_type,
         status: ContextDev::Models::MonitorRetrieveRunResponse::status,
         target_type: ContextDev::Models::MonitorRetrieveRunResponse::target_type,
         change_id: String?,
         completed_at: Time?,
         error: ContextDev::Models::MonitorRetrieveRunResponse::Error?,
+        key_metadata: ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata,
         skip_reason: ContextDev::Models::MonitorRetrieveRunResponse::skip_reason?,
         started_at: Time?,
         webhook_deliveries: ::Array[ContextDev::WebhookDelivery],
@@ -164,6 +178,25 @@ module ContextDev
         def initialize: (code: String, message: String) -> void
 
         def to_hash: -> { code: String, message: String }
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
       end
 
       type skip_reason = :insufficient_credits | :monitor_paused | :superseded

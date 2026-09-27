@@ -24,8 +24,7 @@ module ContextDev
       sig { returns(Time) }
       attr_accessor :detected_at
 
-      # Top-level monitor category. Always `web` today; the concrete behavior is
-      # described by `target` and `change_detection`.
+      # Always `web`. Optional.
       sig do
         returns(
           ContextDev::Models::MonitorRetrieveChangeResponse::Mode::TaggedSymbol
@@ -36,6 +35,11 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :monitor_id
 
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
+      sig { returns(String) }
+      attr_accessor :request_id
+
       # The run that detected this change.
       sig { returns(String) }
       attr_accessor :run_id
@@ -43,8 +47,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :summary
 
-      # User-defined tags for grouping and filtering monitors and their changes.
-      # Duplicates are removed.
+      # Labels for filtering monitors, their changes, and their usage.
       sig { returns(T::Array[String]) }
       attr_accessor :tags
 
@@ -137,6 +140,24 @@ module ContextDev
       end
       attr_writer :importance
 
+      # Credits this request used and your remaining balance.
+      sig do
+        returns(
+          T.nilable(
+            ContextDev::Models::MonitorRetrieveChangeResponse::KeyMetadata
+          )
+        )
+      end
+      attr_reader :key_metadata
+
+      sig do
+        params(
+          key_metadata:
+            ContextDev::Models::MonitorRetrieveChangeResponse::KeyMetadata::OrHash
+        ).void
+      end
+      attr_writer :key_metadata
+
       sig { returns(T.nilable(Integer)) }
       attr_reader :matched_url_count
 
@@ -163,11 +184,6 @@ module ContextDev
       sig { params(removed_urls: T::Array[String]).void }
       attr_writer :removed_urls
 
-      # A detected change. `mode` is the constant `web`; `target_type` and
-      # `change_detection_type` describe the change, and which optional fields are
-      # present depends on them (page: `diff` + excerpts; sitemap:
-      # `added_urls`/`removed_urls`; semantic:
-      # `confidence`/`importance`/`evidence`/`matched_urls`).
       sig do
         params(
           id: String,
@@ -177,6 +193,7 @@ module ContextDev
           mode:
             ContextDev::Models::MonitorRetrieveChangeResponse::Mode::OrSymbol,
           monitor_id: String,
+          request_id: String,
           run_id: String,
           summary: String,
           tags: T::Array[String],
@@ -196,6 +213,8 @@ module ContextDev
             ],
           importance:
             ContextDev::Models::MonitorRetrieveChangeResponse::Importance::OrSymbol,
+          key_metadata:
+            ContextDev::Models::MonitorRetrieveChangeResponse::KeyMetadata::OrHash,
           matched_url_count: Integer,
           matched_urls: T::Array[String],
           removed_url_count: Integer,
@@ -206,15 +225,16 @@ module ContextDev
         id:,
         change_detection_type:,
         detected_at:,
-        # Top-level monitor category. Always `web` today; the concrete behavior is
-        # described by `target` and `change_detection`.
+        # Always `web`. Optional.
         mode:,
         monitor_id:,
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
+        request_id:,
         # The run that detected this change.
         run_id:,
         summary:,
-        # User-defined tags for grouping and filtering monitors and their changes.
-        # Duplicates are removed.
+        # Labels for filtering monitors, their changes, and their usage.
         tags:,
         target_type:,
         title:,
@@ -229,6 +249,8 @@ module ContextDev
         diff: nil,
         evidence: nil,
         importance: nil,
+        # Credits this request used and your remaining balance.
+        key_metadata: nil,
         matched_url_count: nil,
         # At most 500 URLs are included; the corresponding count field is always exact.
         matched_urls: nil,
@@ -248,6 +270,7 @@ module ContextDev
             mode:
               ContextDev::Models::MonitorRetrieveChangeResponse::Mode::TaggedSymbol,
             monitor_id: String,
+            request_id: String,
             run_id: String,
             summary: String,
             tags: T::Array[String],
@@ -267,6 +290,8 @@ module ContextDev
               ],
             importance:
               ContextDev::Models::MonitorRetrieveChangeResponse::Importance::TaggedSymbol,
+            key_metadata:
+              ContextDev::Models::MonitorRetrieveChangeResponse::KeyMetadata,
             matched_url_count: Integer,
             matched_urls: T::Array[String],
             removed_url_count: Integer,
@@ -311,8 +336,7 @@ module ContextDev
         end
       end
 
-      # Top-level monitor category. Always `web` today; the concrete behavior is
-      # described by `target` and `change_detection`.
+      # Always `web`. Optional.
       module Mode
         extend ContextDev::Internal::Type::Enum
 
@@ -461,6 +485,46 @@ module ContextDev
           )
         end
         def self.values
+        end
+      end
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::MonitorRetrieveChangeResponse::KeyMetadata,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Credits charged for this request.
+        sig { returns(Integer) }
+        attr_accessor :credits_consumed
+
+        # Credits remaining for your organization.
+        sig { returns(Integer) }
+        attr_accessor :credits_remaining
+
+        # Credits this request used and your remaining balance.
+        sig do
+          params(credits_consumed: Integer, credits_remaining: Integer).returns(
+            T.attached_class
+          )
+        end
+        def self.new(
+          # Credits charged for this request.
+          credits_consumed:,
+          # Credits remaining for your organization.
+          credits_remaining:
+        )
+        end
+
+        sig do
+          override.returns(
+            { credits_consumed: Integer, credits_remaining: Integer }
+          )
+        end
+        def to_hash
         end
       end
     end

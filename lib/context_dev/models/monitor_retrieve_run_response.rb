@@ -38,8 +38,15 @@ module ContextDev
       #   @return [String]
       required :monitor_id, String
 
+      # @!attribute request_id
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
+      #
+      #   @return [String]
+      required :request_id, String
+
       # @!attribute run_type
-      #   The first run after monitor creation is a baseline run.
+      #   A baseline run follows creation or a target or detection change.
       #
       #   @return [Symbol, ContextDev::Models::MonitorRetrieveRunResponse::RunType]
       required :run_type, enum: -> { ContextDev::Models::MonitorRetrieveRunResponse::RunType }
@@ -71,6 +78,12 @@ module ContextDev
       #   @return [ContextDev::Models::MonitorRetrieveRunResponse::Error, nil]
       optional :error, -> { ContextDev::Models::MonitorRetrieveRunResponse::Error }, nil?: true
 
+      # @!attribute key_metadata
+      #   Credits this request used and your remaining balance.
+      #
+      #   @return [ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata }
+
       # @!attribute skip_reason
       #   Why a skipped run never executed; null unless status is `skipped`.
       #
@@ -93,9 +106,7 @@ module ContextDev
       # @!attribute webhook_delivery
       #   @deprecated
       #
-      #   Deprecated: use `webhook_deliveries`, which records every attempt now that a run
-      #   can deliver multiple events. Omitted when no webhook was attempted, including
-      #   historical runs created before delivery tracking was added.
+      #   Deprecated. Use `webhook_deliveries` for all attempts.
       #
       #   @return [ContextDev::Models::WebhookDelivery, nil]
       optional :webhook_delivery, -> { ContextDev::WebhookDelivery }
@@ -106,7 +117,7 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :webhook_delivery_ids, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!method initialize(id:, baseline_created:, change_detected:, change_detection_type:, credits_charged:, monitor_id:, run_type:, status:, target_type:, change_id: nil, completed_at: nil, error: nil, skip_reason: nil, started_at: nil, webhook_deliveries: nil, webhook_delivery: nil, webhook_delivery_ids: nil)
+      # @!method initialize(id:, baseline_created:, change_detected:, change_detection_type:, credits_charged:, monitor_id:, request_id:, run_type:, status:, target_type:, change_id: nil, completed_at: nil, error: nil, key_metadata: nil, skip_reason: nil, started_at: nil, webhook_deliveries: nil, webhook_delivery: nil, webhook_delivery_ids: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorRetrieveRunResponse} for more details.
       #
@@ -122,7 +133,9 @@ module ContextDev
       #
       #   @param monitor_id [String]
       #
-      #   @param run_type [Symbol, ContextDev::Models::MonitorRetrieveRunResponse::RunType] The first run after monitor creation is a baseline run.
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
+      #
+      #   @param run_type [Symbol, ContextDev::Models::MonitorRetrieveRunResponse::RunType] A baseline run follows creation or a target or detection change.
       #
       #   @param status [Symbol, ContextDev::Models::MonitorRetrieveRunResponse::Status] Lifecycle status of a run. `skipped` runs never executed — see `skip_reason` (in
       #
@@ -134,13 +147,15 @@ module ContextDev
       #
       #   @param error [ContextDev::Models::MonitorRetrieveRunResponse::Error, nil]
       #
+      #   @param key_metadata [ContextDev::Models::MonitorRetrieveRunResponse::KeyMetadata] Credits this request used and your remaining balance.
+      #
       #   @param skip_reason [Symbol, ContextDev::Models::MonitorRetrieveRunResponse::SkipReason, nil] Why a skipped run never executed; null unless status is `skipped`.
       #
       #   @param started_at [Time, nil]
       #
       #   @param webhook_deliveries [Array<ContextDev::Models::WebhookDelivery>] All webhook deliveries attempted by this run — one per subscribed event that fir
       #
-      #   @param webhook_delivery [ContextDev::Models::WebhookDelivery] Deprecated: use `webhook_deliveries`, which records every attempt now that a run
+      #   @param webhook_delivery [ContextDev::Models::WebhookDelivery] Deprecated. Use `webhook_deliveries` for all attempts.
       #
       #   @param webhook_delivery_ids [Array<String>] Webhook delivery IDs for this run.
 
@@ -155,7 +170,7 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # The first run after monitor creation is a baseline run.
+      # A baseline run follows creation or a target or detection change.
       #
       # @see ContextDev::Models::MonitorRetrieveRunResponse#run_type
       module RunType
@@ -212,6 +227,28 @@ module ContextDev
         # @!method initialize(code:, message:)
         #   @param code [String]
         #   @param message [String]
+      end
+
+      # @see ContextDev::Models::MonitorRetrieveRunResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   Credits charged for this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   Credits remaining for your organization.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Credits this request used and your remaining balance.
+        #
+        #   @param credits_consumed [Integer] Credits charged for this request.
+        #
+        #   @param credits_remaining [Integer] Credits remaining for your organization.
       end
 
       # Why a skipped run never executed; null unless status is `skipped`.

@@ -39,8 +39,7 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::CrawlControls} for more details.
       #
-      #   The crawl controls as submitted, so the limits requested can be compared against
-      #   what the crawl reached.
+      #   Crawl settings as submitted.
       #
       #   @param follow_subdomains [Boolean] Whether links to subdomains were followed. Always false for a sitemap crawl.
       #

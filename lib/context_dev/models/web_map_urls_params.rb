@@ -8,59 +8,50 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute domain
-      #   Domain to build a sitemap for
+      #   Domain to map, e.g. `stripe.com`.
       #
       #   @return [String]
       required :domain, String
 
       # @!attribute headers
-      #   Optional outbound HTTP headers forwarded only to the target URL, sent as
-      #   deep-object query params such as headers[X-Custom]=value. When provided, caching
-      #   is bypassed: the result is neither read from nor written to cache.
+      #   HTTP headers for the target origin. Non-empty headers bypass caching.
       #
       #   @return [Hash{Symbol=>String}, nil]
       optional :headers, ContextDev::Internal::Type::HashOf[String]
 
       # @!attribute include_subdomains
-      #   When true, discover and include public pages and sitemaps on subdomains of the
-      #   requested domain. Defaults to false.
+      #   Include URLs on subdomains.
       #
       #   @return [Boolean, nil]
       optional :include_subdomains, ContextDev::Internal::Type::Boolean
 
       # @!attribute max_links
-      #   Maximum number of links to return from the sitemap crawl. Defaults to 10,000.
-      #   Minimum is 1, maximum is 100,000.
+      #   Maximum number of URLs to return.
       #
       #   @return [Integer, nil]
       optional :max_links, Integer
 
       # @!attribute search
-      #   Optional search phrase. When provided, the crawled sitemap is filtered to the
-      #   pages whose URLs are about that phrase, most relevant first, and the request
-      #   costs 2 credits instead of 1.
+      #   Filter URLs by a topic or phrase, most relevant first.
       #
       #   @return [String, nil]
       optional :search, String
 
       # @!attribute sitemap_url
-      #   Optional explicit sitemap URL. When provided, exactly this sitemap is crawled
-      #   instead of discovering the domain's sitemaps.
+      #   Fetch this sitemap instead of discovering sitemaps. Must belong to the domain or
+      #   a subdomain.
       #
       #   @return [String, nil]
       optional :sitemap_url, String
 
       # @!attribute tags
-      #   Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-      #   characters.
+      #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timeout_opts
-      #   Optional request deadline and behavior on timeout. For GET requests, use
-      #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-      #   timeoutOpts object.
+      #   Request deadline and what to return when it passes.
       #
       #   @return [ContextDev::Models::WebMapURLsParams::TimeoutOpts, nil]
       optional :timeout_opts, -> { ContextDev::WebMapURLsParams::TimeoutOpts }
@@ -73,11 +64,8 @@ module ContextDev
       optional :url_regex, String
 
       # @!attribute zdr
-      #   Set to enabled to bypass shared caches and omit request and response content
-      #   from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      #   omitted. Requires zero data retention to be enabled for your organization
-      #   (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      #   Successful ZDR responses include X-Context-ZDR: true.
+      #   `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      #   your organization has ZDR.
       #
       #   @return [Symbol, ContextDev::Models::WebMapURLsParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebMapURLsParams::Zdr }
@@ -86,40 +74,38 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebMapURLsParams} for more details.
       #
-      #   @param domain [String] Domain to build a sitemap for
+      #   @param domain [String] Domain to map, e.g. `stripe.com`.
       #
-      #   @param headers [Hash{Symbol=>String}] Optional outbound HTTP headers forwarded only to the target URL, sent as deep-ob
+      #   @param headers [Hash{Symbol=>String}] HTTP headers for the target origin. Non-empty headers bypass caching.
       #
-      #   @param include_subdomains [Boolean] When true, discover and include public pages and sitemaps on subdomains of the r
+      #   @param include_subdomains [Boolean] Include URLs on subdomains.
       #
-      #   @param max_links [Integer] Maximum number of links to return from the sitemap crawl. Defaults to 10,000. Mi
+      #   @param max_links [Integer] Maximum number of URLs to return.
       #
-      #   @param search [String] Optional search phrase. When provided, the crawled sitemap is filtered to the pa
+      #   @param search [String] Filter URLs by a topic or phrase, most relevant first.
       #
-      #   @param sitemap_url [String] Optional explicit sitemap URL. When provided, exactly this sitemap is crawled in
+      #   @param sitemap_url [String] Fetch this sitemap instead of discovering sitemaps. Must belong to the domain or
       #
-      #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
+      #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
-      #   @param timeout_opts [ContextDev::Models::WebMapURLsParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #   @param timeout_opts [ContextDev::Models::WebMapURLsParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
       #   @param url_regex [String] Optional RE2-compatible regex pattern. Only URLs matching this pattern are retur
       #
-      #   @param zdr [Symbol, ContextDev::Models::WebMapURLsParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      #   @param zdr [Symbol, ContextDev::Models::WebMapURLsParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
       class TimeoutOpts < ContextDev::Internal::Type::BaseModel
         # @!attribute milliseconds
-        #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   Deadline in milliseconds.
         #
         #   @return [Integer]
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        #   credits. "return-partial" returns usable results collected so far; if none are
-        #   available, the request still fails without charging credits. Partial results are
-        #   not cached as complete results.
+        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   inspect the response’s partial flag.
         #
         #   @return [Symbol, ContextDev::Models::WebMapURLsParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebMapURLsParams::TimeoutOpts::Behavior }
@@ -128,18 +114,14 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebMapURLsParams::TimeoutOpts} for more details.
         #
-        #   Optional request deadline and behavior on timeout. For GET requests, use
-        #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        #   timeoutOpts object.
+        #   Request deadline and what to return when it passes.
         #
-        #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebMapURLsParams::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        #   @param behavior [Symbol, ContextDev::Models::WebMapURLsParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         #
         # @see ContextDev::Models::WebMapURLsParams::TimeoutOpts#behavior
         module Behavior
@@ -153,11 +135,8 @@ module ContextDev
         end
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

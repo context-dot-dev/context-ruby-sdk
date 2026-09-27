@@ -10,7 +10,8 @@ module ContextDev
       required :id, String
 
       # @!attribute change_detection
-      #   Discriminated union describing how changes are detected.
+      #   How changes are judged. Defaults to `semantic` for extract targets and page
+      #   targets with `instructions`, otherwise `exact`.
       #
       #   @return [ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Exact, ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Semantic]
       required :change_detection, union: -> { ContextDev::Models::MonitorRetrieveResponse::ChangeDetection }
@@ -21,8 +22,7 @@ module ContextDev
       required :created_at, Time
 
       # @!attribute mode
-      #   Top-level monitor category. Always `web` today; the concrete behavior is
-      #   described by `target` and `change_detection`.
+      #   Always `web`. Optional.
       #
       #   @return [Symbol, ContextDev::Models::MonitorRetrieveResponse::Mode]
       required :mode, enum: -> { ContextDev::Models::MonitorRetrieveResponse::Mode }
@@ -32,26 +32,22 @@ module ContextDev
       #   @return [String]
       required :name, String
 
-      # @!attribute schedule
-      #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-      #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
-      #   between 10 minutes and 1 year.
+      # @!attribute request_id
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
-      #   @return [ContextDev::Models::MonitorRetrieveResponse::Schedule]
-      required :schedule, -> { ContextDev::Models::MonitorRetrieveResponse::Schedule }
+      #   @return [String]
+      required :request_id, String
 
       # @!attribute status
-      #   Monitor lifecycle status. `failed` means the most recent run failed (see the
-      #   monitor's `last_error`); failed monitors keep running on schedule and flip back
-      #   to `active` on the next successful run. Monitors are auto-`paused` after
-      #   repeated consecutive failures or insufficient-credit skips; resume by PATCHing
-      #   status to `active`.
+      #   Current state. Failed monitors keep running; paused monitors must be resumed
+      #   with `status: "active"`.
       #
       #   @return [Symbol, ContextDev::Models::MonitorRetrieveResponse::Status]
       required :status, enum: -> { ContextDev::Models::MonitorRetrieveResponse::Status }
 
       # @!attribute target
-      #   Discriminated union describing what the monitor watches.
+      #   What to watch: a page, a sitemap, or data extracted from a site.
       #
       #   @return [ContextDev::Models::MonitorRetrieveResponse::Target::Page, ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap, ContextDev::Models::MonitorRetrieveResponse::Target::Extract]
       required :target, union: -> { ContextDev::Models::MonitorRetrieveResponse::Target }
@@ -62,13 +58,17 @@ module ContextDev
       required :updated_at, Time
 
       # @!attribute baseline
-      #   Current baseline: the last observed value the monitor compares new snapshots
-      #   against. Its shape follows `target.type` (page/sitemap/extract). Only populated
-      #   on GET /monitors/{monitor_id}; null until the first baseline run completes (and
-      #   after a target or change_detection update, which resets the baseline).
+      #   Comparison baseline, included on Retrieve. Null until capture completes or after
+      #   target changes.
       #
       #   @return [ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline, nil]
       optional :baseline, union: -> { ContextDev::Models::MonitorRetrieveResponse::Baseline }, nil?: true
+
+      # @!attribute key_metadata
+      #   Credits this request used and your remaining balance.
+      #
+      #   @return [ContextDev::Models::MonitorRetrieveResponse::KeyMetadata, nil]
+      optional :key_metadata, -> { ContextDev::Models::MonitorRetrieveResponse::KeyMetadata }
 
       # @!attribute last_change_at
       #
@@ -87,19 +87,27 @@ module ContextDev
       optional :last_run_at, Time, nil?: true
 
       # @!attribute next_run_at
-      #   When the next scheduled run is due.
+      #   When the next scheduled run is due; null while paused.
       #
       #   @return [Time, nil]
       optional :next_run_at, Time, nil?: true
 
+      # @!attribute schedule
+      #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
+      #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
+      #   between 10 minutes and 1 year.
+      #
+      #   @return [ContextDev::Models::MonitorRetrieveResponse::Schedule, nil]
+      optional :schedule, -> { ContextDev::Models::MonitorRetrieveResponse::Schedule }
+
       # @!attribute tags
-      #   User-defined tags for grouping and filtering monitors and their changes.
-      #   Duplicates are removed.
+      #   Labels for filtering monitors, their changes, and their usage.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute webhook
+      #   Webhook destination and delivery settings. Null means no webhook is configured.
       #
       #   @return [ContextDev::Models::MonitorRetrieveResponse::Webhook, nil]
       optional :webhook, -> { ContextDev::Models::MonitorRetrieveResponse::Webhook }, nil?: true
@@ -112,32 +120,31 @@ module ContextDev
       #   @return [ContextDev::Models::MonitorRetrieveResponse::WebhookFailure, nil]
       optional :webhook_failure, -> { ContextDev::Models::MonitorRetrieveResponse::WebhookFailure }, nil?: true
 
-      # @!method initialize(id:, change_detection:, created_at:, mode:, name:, schedule:, status:, target:, updated_at:, baseline: nil, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, tags: nil, webhook: nil, webhook_failure: nil)
+      # @!method initialize(id:, change_detection:, created_at:, mode:, name:, request_id:, status:, target:, updated_at:, baseline: nil, key_metadata: nil, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, schedule: nil, tags: nil, webhook: nil, webhook_failure: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorRetrieveResponse} for more details.
       #
-      #   A web monitor. `mode` is the constant `web`; behavior is described by `target`
-      #   (page/sitemap/extract) and `change_detection` (exact/semantic).
-      #
       #   @param id [String]
       #
-      #   @param change_detection [ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Exact, ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Semantic] Discriminated union describing how changes are detected.
+      #   @param change_detection [ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Exact, ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract targets and page targ
       #
       #   @param created_at [Time]
       #
-      #   @param mode [Symbol, ContextDev::Models::MonitorRetrieveResponse::Mode] Top-level monitor category. Always `web` today; the concrete behavior is describ
+      #   @param mode [Symbol, ContextDev::Models::MonitorRetrieveResponse::Mode] Always `web`. Optional.
       #
       #   @param name [String]
       #
-      #   @param schedule [ContextDev::Models::MonitorRetrieveResponse::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param status [Symbol, ContextDev::Models::MonitorRetrieveResponse::Status] Monitor lifecycle status. `failed` means the most recent run failed (see the mon
+      #   @param status [Symbol, ContextDev::Models::MonitorRetrieveResponse::Status] Current state. Failed monitors keep running; paused monitors must be resumed wit
       #
-      #   @param target [ContextDev::Models::MonitorRetrieveResponse::Target::Page, ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap, ContextDev::Models::MonitorRetrieveResponse::Target::Extract] Discriminated union describing what the monitor watches.
+      #   @param target [ContextDev::Models::MonitorRetrieveResponse::Target::Page, ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap, ContextDev::Models::MonitorRetrieveResponse::Target::Extract] What to watch: a page, a sitemap, or data extracted from a site.
       #
       #   @param updated_at [Time]
       #
-      #   @param baseline [ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline, nil] Current baseline: the last observed value the monitor compares new snapshots aga
+      #   @param baseline [ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline, nil] Comparison baseline, included on Retrieve. Null until capture completes or after
+      #
+      #   @param key_metadata [ContextDev::Models::MonitorRetrieveResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param last_change_at [Time, nil]
       #
@@ -145,15 +152,18 @@ module ContextDev
       #
       #   @param last_run_at [Time, nil]
       #
-      #   @param next_run_at [Time, nil] When the next scheduled run is due.
+      #   @param next_run_at [Time, nil] When the next scheduled run is due; null while paused.
       #
-      #   @param tags [Array<String>] User-defined tags for grouping and filtering monitors and their changes. Duplica
+      #   @param schedule [ContextDev::Models::MonitorRetrieveResponse::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #
-      #   @param webhook [ContextDev::Models::MonitorRetrieveResponse::Webhook, nil]
+      #   @param tags [Array<String>] Labels for filtering monitors, their changes, and their usage.
+      #
+      #   @param webhook [ContextDev::Models::MonitorRetrieveResponse::Webhook, nil] Webhook destination and delivery settings. Null means no webhook is configured.
       #
       #   @param webhook_failure [ContextDev::Models::MonitorRetrieveResponse::WebhookFailure, nil] Present while webhook deliveries are failing consecutively; null when deliveries
 
-      # Discriminated union describing how changes are detected.
+      # How changes are judged. Defaults to `semantic` for extract targets and page
+      # targets with `instructions`, otherwise `exact`.
       #
       # @see ContextDev::Models::MonitorRetrieveResponse#change_detection
       module ChangeDetection
@@ -164,11 +174,12 @@ module ContextDev
         # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals.
         variant :exact, -> { ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Exact }
 
-        # Detect meaning-level changes to page content, ignoring cosmetic or instruction-irrelevant differences. Which changes are meaningful is judged against the page or extract target's `instructions` (and an extract target's `schema`, when provided).
+        # Detect meaningful content changes using the target’s instructions and optional schema.
         variant :semantic, -> { ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Semantic }
 
         class Exact < ContextDev::Internal::Type::BaseModel
           # @!attribute type
+          #   Use `exact` to compare visible text or sitemap URLs.
           #
           #   @return [Symbol, :exact]
           required :type, const: :exact
@@ -177,36 +188,36 @@ module ContextDev
           #   Detect exact changes. For page targets, this means visible text diffs. For
           #   sitemap targets, this means URL additions and removals.
           #
-          #   @param type [Symbol, :exact]
+          #   @param type [Symbol, :exact] Use `exact` to compare visible text or sitemap URLs.
         end
 
         class Semantic < ContextDev::Internal::Type::BaseModel
           # @!attribute type
+          #   Use `semantic` to judge changes against the target instructions.
           #
           #   @return [Symbol, :semantic]
           required :type, const: :semantic
 
           # @!attribute confidence_threshold
+          #   Minimum confidence required to report a meaningful change, from 0 to 1.
           #
           #   @return [Float, nil]
           optional :confidence_threshold, Float
 
           # @!method initialize(confidence_threshold: nil, type: :semantic)
-          #   Detect meaning-level changes to page content, ignoring cosmetic or
-          #   instruction-irrelevant differences. Which changes are meaningful is judged
-          #   against the page or extract target's `instructions` (and an extract target's
-          #   `schema`, when provided).
+          #   Detect meaningful content changes using the target’s instructions and optional
+          #   schema.
           #
-          #   @param confidence_threshold [Float]
-          #   @param type [Symbol, :semantic]
+          #   @param confidence_threshold [Float] Minimum confidence required to report a meaningful change, from 0 to 1.
+          #
+          #   @param type [Symbol, :semantic] Use `semantic` to judge changes against the target instructions.
         end
 
         # @!method self.variants
         #   @return [Array(ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Exact, ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Semantic)]
       end
 
-      # Top-level monitor category. Always `web` today; the concrete behavior is
-      # described by `target` and `change_detection`.
+      # Always `web`. Optional.
       #
       # @see ContextDev::Models::MonitorRetrieveResponse#mode
       module Mode
@@ -218,68 +229,8 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # @see ContextDev::Models::MonitorRetrieveResponse#schedule
-      class Schedule < ContextDev::Internal::Type::BaseModel
-        # @!attribute frequency
-        #   Number of units between runs. The resulting interval (frequency × unit) must be
-        #   at least 10 minutes and at most 1 year (e.g. minimum 10 when unit is minutes;
-        #   maximum 365 when unit is days).
-        #
-        #   @return [Integer]
-        required :frequency, Integer
-
-        # @!attribute type
-        #
-        #   @return [Symbol, ContextDev::Models::MonitorRetrieveResponse::Schedule::Type]
-        required :type, enum: -> { ContextDev::Models::MonitorRetrieveResponse::Schedule::Type }
-
-        # @!attribute unit
-        #
-        #   @return [Symbol, ContextDev::Models::MonitorRetrieveResponse::Schedule::Unit]
-        required :unit, enum: -> { ContextDev::Models::MonitorRetrieveResponse::Schedule::Unit }
-
-        # @!method initialize(frequency:, type:, unit:)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::MonitorRetrieveResponse::Schedule} for more details.
-        #
-        #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-        #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
-        #   between 10 minutes and 1 year.
-        #
-        #   @param frequency [Integer] Number of units between runs. The resulting interval (frequency × unit) must be
-        #
-        #   @param type [Symbol, ContextDev::Models::MonitorRetrieveResponse::Schedule::Type]
-        #
-        #   @param unit [Symbol, ContextDev::Models::MonitorRetrieveResponse::Schedule::Unit]
-
-        # @see ContextDev::Models::MonitorRetrieveResponse::Schedule#type
-        module Type
-          extend ContextDev::Internal::Type::Enum
-
-          INTERVAL = :interval
-
-          # @!method self.values
-          #   @return [Array<Symbol>]
-        end
-
-        # @see ContextDev::Models::MonitorRetrieveResponse::Schedule#unit
-        module Unit
-          extend ContextDev::Internal::Type::Enum
-
-          MINUTES = :minutes
-          HOURS = :hours
-          DAYS = :days
-
-          # @!method self.values
-          #   @return [Array<Symbol>]
-        end
-      end
-
-      # Monitor lifecycle status. `failed` means the most recent run failed (see the
-      # monitor's `last_error`); failed monitors keep running on schedule and flip back
-      # to `active` on the next successful run. Monitors are auto-`paused` after
-      # repeated consecutive failures or insufficient-credit skips; resume by PATCHing
-      # status to `active`.
+      # Current state. Failed monitors keep running; paused monitors must be resumed
+      # with `status: "active"`.
       #
       # @see ContextDev::Models::MonitorRetrieveResponse#status
       module Status
@@ -293,7 +244,7 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Discriminated union describing what the monitor watches.
+      # What to watch: a page, a sitemap, or data extracted from a site.
       #
       # @see ContextDev::Models::MonitorRetrieveResponse#target
       module Target
@@ -304,38 +255,34 @@ module ContextDev
         # Watch a single web page. Exact detection reports visible-text diffs; semantic detection judges confirmed stable diffs against `instructions`.
         variant :page, -> { ContextDev::Models::MonitorRetrieveResponse::Target::Page }
 
-        # Watch a sitemap for URL additions and removals. Crawled URLs are normalized (lowercased host, no trailing slash/fragment) and scoped to the monitored site and its subdomains before comparison. On a detected difference the sitemap is re-fetched within the same run and only URLs both observations agree on are reported, suppressing transient crawl flaps.
+        # Watch a site’s URL inventory for confirmed additions and removals.
         variant :sitemap, -> { ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap }
 
-        # Watch the monitor-relevant pages of a site for meaningful changes. A crawl guided by `schema`/`instructions` selects up to `max_pages` relevant pages to track; each run re-checks exactly those pages, and confirmed content changes are judged for relevance against the monitor's `instructions` (and `schema`, when provided). The tracked page set is refreshed by a periodic re-discovery crawl.
+        # Track relevant pages selected by `schema` and `instructions`; refresh the page set periodically.
         variant :extract, -> { ContextDev::Models::MonitorRetrieveResponse::Target::Extract }
 
         class Page < ContextDev::Internal::Type::BaseModel
           # @!attribute type
+          #   Use `page` to watch one web page.
           #
           #   @return [Symbol, :page]
           required :type, const: :page
 
           # @!attribute url
+          #   Public HTTP(S) page URL to monitor.
           #
           #   @return [String]
           required :url, String
 
           # @!attribute exclude_selectors
-          #   CSS selectors for HTML regions to remove before text extraction. Applied after
-          #   include_selectors; exclusion takes precedence when an element matches both. Omit
-          #   or pass an empty array to apply no explicit exclusions. Changing these selectors
-          #   creates a new baseline.
+          #   Remove matching regions after inclusions. Changes create a new baseline.
           #
           #   @return [Array<String>, nil]
           optional :exclude_selectors, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute include_selectors
-          #   CSS selectors defining the HTML regions to monitor. Matching subtrees are
-          #   combined in document order before text extraction, instead of automatic
-          #   main-content selection. Omit or pass an empty array to use automatic
-          #   main-content extraction. If the filtered page has no usable text, the run fails
-          #   without replacing the baseline. Changing these selectors creates a new baseline.
+          #   Monitor these CSS-selected regions. Empty or omitted uses main content. Changes
+          #   create a new baseline.
           #
           #   @return [Array<String>, nil]
           optional :include_selectors, ContextDev::Internal::Type::ArrayOf[String]
@@ -360,21 +307,22 @@ module ContextDev
           #   Watch a single web page. Exact detection reports visible-text diffs; semantic
           #   detection judges confirmed stable diffs against `instructions`.
           #
-          #   @param url [String]
+          #   @param url [String] Public HTTP(S) page URL to monitor.
           #
-          #   @param exclude_selectors [Array<String>] CSS selectors for HTML regions to remove before text extraction. Applied after i
+          #   @param exclude_selectors [Array<String>] Remove matching regions after inclusions. Changes create a new baseline.
           #
-          #   @param include_selectors [Array<String>] CSS selectors defining the HTML regions to monitor. Matching subtrees are combin
+          #   @param include_selectors [Array<String>] Monitor these CSS-selected regions. Empty or omitted uses main content. Changes
           #
           #   @param instructions [String] Plain-language goal describing which page changes matter. When provided without
           #
           #   @param normalize_whitespace [Boolean] Normalize whitespace before comparing or analyzing text.
           #
-          #   @param type [Symbol, :page]
+          #   @param type [Symbol, :page] Use `page` to watch one web page.
         end
 
         class Sitemap < ContextDev::Internal::Type::BaseModel
           # @!attribute type
+          #   Use `sitemap` to watch a site for added or removed URLs.
           #
           #   @return [Symbol, :sitemap]
           required :type, const: :sitemap
@@ -404,11 +352,7 @@ module ContextDev
           optional :max_urls, Integer
 
           # @!method initialize(url:, exclude: nil, include: nil, max_urls: nil, type: :sitemap)
-          #   Watch a sitemap for URL additions and removals. Crawled URLs are normalized
-          #   (lowercased host, no trailing slash/fragment) and scoped to the monitored site
-          #   and its subdomains before comparison. On a detected difference the sitemap is
-          #   re-fetched within the same run and only URLs both observations agree on are
-          #   reported, suppressing transient crawl flaps.
+          #   Watch a site’s URL inventory for confirmed additions and removals.
           #
           #   @param url [String] Sitemap URL to monitor.
           #
@@ -418,7 +362,7 @@ module ContextDev
           #
           #   @param max_urls [Integer] Maximum number of sitemap URLs to track (capped at 10,000).
           #
-          #   @param type [Symbol, :sitemap]
+          #   @param type [Symbol, :sitemap] Use `sitemap` to watch a site for added or removed URLs.
         end
 
         class Extract < ContextDev::Internal::Type::BaseModel
@@ -430,6 +374,7 @@ module ContextDev
           required :instructions, String
 
           # @!attribute type
+          #   Use `extract` to watch structured data across selected pages.
           #
           #   @return [Symbol, :extract]
           required :type, const: :extract
@@ -441,6 +386,7 @@ module ContextDev
           required :url, String
 
           # @!attribute follow_subdomains
+          #   Allow page discovery on subdomains of the target site.
           #
           #   @return [Boolean, nil]
           optional :follow_subdomains, ContextDev::Internal::Type::Boolean
@@ -458,14 +404,8 @@ module ContextDev
           optional :max_pages, Integer
 
           # @!attribute schema
-          #   JSON Schema describing the data you care about. It is used three ways: it guides
-          #   which pages are selected for tracking, it gives the change judge extra context
-          #   on which changes matter (alongside `instructions`), and it defines the shape of
-          #   the baseline `data` snapshot on GET /monitors/{monitor_id} (refreshed at most
-          #   about once a day). It is not a response format for changes: change events and
-          #   webhook payloads always contain diffs, summaries, and evidence excerpts — never
-          #   data in this schema's shape. If omitted, a default summary + key-points schema
-          #   is used.
+          #   JSON Schema for page selection and the baseline snapshot. Changes return diffs
+          #   and evidence.
           #
           #   @return [Hash{Symbol=>Object}, nil]
           optional :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
@@ -474,35 +414,30 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorRetrieveResponse::Target::Extract} for more details.
           #
-          #   Watch the monitor-relevant pages of a site for meaningful changes. A crawl
-          #   guided by `schema`/`instructions` selects up to `max_pages` relevant pages to
-          #   track; each run re-checks exactly those pages, and confirmed content changes are
-          #   judged for relevance against the monitor's `instructions` (and `schema`, when
-          #   provided). The tracked page set is refreshed by a periodic re-discovery crawl.
+          #   Track relevant pages selected by `schema` and `instructions`; refresh the page
+          #   set periodically.
           #
           #   @param instructions [String] Natural-language instructions guiding which pages and facts to track and which c
           #
           #   @param url [String] Root URL to extract structured data from.
           #
-          #   @param follow_subdomains [Boolean]
+          #   @param follow_subdomains [Boolean] Allow page discovery on subdomains of the target site.
           #
           #   @param max_depth [Integer] Optional maximum link depth from the starting URL (0 = only the starting page).
           #
           #   @param max_pages [Integer] Maximum number of pages to track.
           #
-          #   @param schema [Hash{Symbol=>Object}] JSON Schema describing the data you care about. It is used three ways: it guides
+          #   @param schema [Hash{Symbol=>Object}] JSON Schema for page selection and the baseline snapshot. Changes return diffs a
           #
-          #   @param type [Symbol, :extract]
+          #   @param type [Symbol, :extract] Use `extract` to watch structured data across selected pages.
         end
 
         # @!method self.variants
         #   @return [Array(ContextDev::Models::MonitorRetrieveResponse::Target::Page, ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap, ContextDev::Models::MonitorRetrieveResponse::Target::Extract)]
       end
 
-      # Current baseline: the last observed value the monitor compares new snapshots
-      # against. Its shape follows `target.type` (page/sitemap/extract). Only populated
-      # on GET /monitors/{monitor_id}; null until the first baseline run completes (and
-      # after a target or change_detection update, which resets the baseline).
+      # Comparison baseline, included on Retrieve. Null until capture completes or after
+      # target changes.
       #
       # @see ContextDev::Models::MonitorRetrieveResponse#baseline
       module Baseline
@@ -576,10 +511,8 @@ module ContextDev
           required :captured_at, Time
 
           # @!attribute data
-          #   The extracted structured data, matching the monitor's extraction schema (same
-          #   shape as the /web/extract endpoint's `data`). Refreshed when the monitor
-          #   re-discovers its page set (at most about once a day); `null` when no extraction
-          #   has been captured yet.
+          #   Latest structured snapshot matching the extraction schema, refreshed at most
+          #   daily; `null` before capture.
           #
           #   @return [Object]
           required :data, ContextDev::Internal::Type::Unknown
@@ -600,13 +533,35 @@ module ContextDev
           #
           #   @param captured_at [Time] When this baseline was last captured or replaced.
           #
-          #   @param data [Object] The extracted structured data, matching the monitor's extraction schema (same sh
+          #   @param data [Object] Latest structured snapshot matching the extraction schema, refreshed at most dai
           #
           #   @param urls_analyzed [Array<String>] The page URLs the monitor tracks and analyzes for changes.
         end
 
         # @!method self.variants
         #   @return [Array(ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline)]
+      end
+
+      # @see ContextDev::Models::MonitorRetrieveResponse#key_metadata
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        # @!attribute credits_consumed
+        #   Credits charged for this request.
+        #
+        #   @return [Integer]
+        required :credits_consumed, Integer
+
+        # @!attribute credits_remaining
+        #   Credits remaining for your organization.
+        #
+        #   @return [Integer]
+        required :credits_remaining, Integer
+
+        # @!method initialize(credits_consumed:, credits_remaining:)
+        #   Credits this request used and your remaining balance.
+        #
+        #   @param credits_consumed [Integer] Credits charged for this request.
+        #
+        #   @param credits_remaining [Integer] Credits remaining for your organization.
       end
 
       # @see ContextDev::Models::MonitorRetrieveResponse#last_error
@@ -628,20 +583,81 @@ module ContextDev
         #   @param message [String]
       end
 
+      # @see ContextDev::Models::MonitorRetrieveResponse#schedule
+      class Schedule < ContextDev::Internal::Type::BaseModel
+        # @!attribute frequency
+        #   Number of units between runs. The resulting interval (frequency × unit) must be
+        #   at least 10 minutes and at most 1 year (e.g. minimum 10 when unit is minutes;
+        #   maximum 365 when unit is days).
+        #
+        #   @return [Integer]
+        required :frequency, Integer
+
+        # @!attribute type
+        #   Use `interval` to run on a repeating schedule.
+        #
+        #   @return [Symbol, ContextDev::Models::MonitorRetrieveResponse::Schedule::Type]
+        required :type, enum: -> { ContextDev::Models::MonitorRetrieveResponse::Schedule::Type }
+
+        # @!attribute unit
+        #   Time unit used with `frequency` to set the run interval.
+        #
+        #   @return [Symbol, ContextDev::Models::MonitorRetrieveResponse::Schedule::Unit]
+        required :unit, enum: -> { ContextDev::Models::MonitorRetrieveResponse::Schedule::Unit }
+
+        # @!method initialize(frequency:, type:, unit:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::MonitorRetrieveResponse::Schedule} for more details.
+        #
+        #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
+        #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
+        #   between 10 minutes and 1 year.
+        #
+        #   @param frequency [Integer] Number of units between runs. The resulting interval (frequency × unit) must be
+        #
+        #   @param type [Symbol, ContextDev::Models::MonitorRetrieveResponse::Schedule::Type] Use `interval` to run on a repeating schedule.
+        #
+        #   @param unit [Symbol, ContextDev::Models::MonitorRetrieveResponse::Schedule::Unit] Time unit used with `frequency` to set the run interval.
+
+        # Use `interval` to run on a repeating schedule.
+        #
+        # @see ContextDev::Models::MonitorRetrieveResponse::Schedule#type
+        module Type
+          extend ContextDev::Internal::Type::Enum
+
+          INTERVAL = :interval
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+
+        # Time unit used with `frequency` to set the run interval.
+        #
+        # @see ContextDev::Models::MonitorRetrieveResponse::Schedule#unit
+        module Unit
+          extend ContextDev::Internal::Type::Enum
+
+          MINUTES = :minutes
+          HOURS = :hours
+          DAYS = :days
+
+          # @!method self.values
+          #   @return [Array<Symbol>]
+        end
+      end
+
       # @see ContextDev::Models::MonitorRetrieveResponse#webhook
       class Webhook < ContextDev::Internal::Type::BaseModel
         # @!attribute url
-        #   Webhook URL events are delivered to. Slack incoming webhook URLs are
-        #   automatically formatted as Slack messages.
+        #   Public HTTP(S) URL that receives events. Slack and GovSlack URLs get formatted
+        #   messages.
         #
         #   @return [String]
         required :url, String
 
         # @!attribute events
-        #   Events delivered to this endpoint. `change.detected` fires only when a run
-        #   detects a change; `run.completed` fires on every completed run — including runs
-        #   that detected no change — and embeds the change when one was detected. Defaults
-        #   to `["change.detected"]` when omitted.
+        #   Events to deliver. Defaults to `change.detected`; `run.completed` also includes
+        #   unchanged runs.
         #
         #   @return [Array<Symbol, ContextDev::Models::MonitorRetrieveResponse::Webhook::Event>, nil]
         optional :events,
@@ -655,12 +671,8 @@ module ContextDev
 
         response_only do
           # @!attribute secret
-          #   Signing secret used to verify webhook authenticity. Omitted unless the API key
-          #   has monitors:write permission or full access. Each delivery includes an
-          #   `X-Context-Signature: t=<unix>,v1=<hmac>` header, where the HMAC is SHA-256 over
-          #   `"{t}.{rawRequestBody}"` keyed by this secret. Recompute it with a constant-time
-          #   compare and reject stale timestamps to prevent replay. Generated by the API;
-          #   cannot be set by clients.
+          #   API-generated signing secret. Visible only with full access or `monitors:write`
+          #   permission.
           #
           #   @return [String, nil]
           optional :secret, String
@@ -670,13 +682,15 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::MonitorRetrieveResponse::Webhook} for more details.
         #
-        #   @param url [String] Webhook URL events are delivered to. Slack incoming webhook URLs are automatical
+        #   Webhook destination and delivery settings. Null means no webhook is configured.
         #
-        #   @param events [Array<Symbol, ContextDev::Models::MonitorRetrieveResponse::Webhook::Event>] Events delivered to this endpoint. `change.detected` fires only when a run detec
+        #   @param url [String] Public HTTP(S) URL that receives events. Slack and GovSlack URLs get formatted m
+        #
+        #   @param events [Array<Symbol, ContextDev::Models::MonitorRetrieveResponse::Webhook::Event>] Events to deliver. Defaults to `change.detected`; `run.completed` also includes
         #
         #   @param retry_ [ContextDev::Models::RetryConfig] Webhook retry settings. Use {} for the default schedule.
         #
-        #   @param secret [String] Signing secret used to verify webhook authenticity. Omitted unless the API key h
+        #   @param secret [String] API-generated signing secret. Visible only with full access or `monitors:write`
 
         module Event
           extend ContextDev::Internal::Type::Enum

@@ -10,14 +10,14 @@ module ContextDev
       required :data, -> { ContextDev::Models::LogRetrieveResponse::Data }
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::LogRetrieveResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::LogRetrieveResponse::KeyMetadata }
@@ -28,9 +28,9 @@ module ContextDev
       #
       #   @param data [ContextDev::Models::LogRetrieveResponse::Data]
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param key_metadata [ContextDev::Models::LogRetrieveResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::LogRetrieveResponse::KeyMetadata] Credits this request used and your remaining balance.
 
       # @see ContextDev::Models::LogRetrieveResponse#data
       class Data < ContextDev::Internal::Type::BaseModel
@@ -65,7 +65,8 @@ module ContextDev
         required :latency_ms, Float
 
         # @!attribute method_
-        #   HTTP method.
+        #   HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement
+        #   entries.
         #
         #   @return [String]
         required :method_, String, api_name: :method
@@ -112,19 +113,16 @@ module ContextDev
         #   @return [Boolean]
         required :zdr, ContextDev::Internal::Type::Boolean
 
-        # @!attribute key_metadata
-        #   Credit usage, included whenever a valid API key is provided.
-        #
-        #   @return [ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata, nil]
-        optional :key_metadata, -> { ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata }
-
         # @!attribute response
         #   The retained JSON response with credentials redacted, or null when unavailable.
         #
         #   @return [Object, nil]
         optional :response, ContextDev::Internal::Type::Unknown
 
-        # @!method initialize(credits_used:, error_code:, input:, key_id:, latency_ms:, method_:, path:, request_id:, status_code:, tags:, timestamp:, user_agent:, zdr:, key_metadata: nil, response: nil)
+        # @!method initialize(credits_used:, error_code:, input:, key_id:, latency_ms:, method_:, path:, request_id:, status_code:, tags:, timestamp:, user_agent:, zdr:, response: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::LogRetrieveResponse::Data} for more details.
+        #
         #   @param credits_used [Integer] Credits charged for this request.
         #
         #   @param error_code [String, nil] The `error_code` from the response, or null on success.
@@ -135,7 +133,7 @@ module ContextDev
         #
         #   @param latency_ms [Float] Server-side processing time in milliseconds.
         #
-        #   @param method_ [String] HTTP method.
+        #   @param method_ [String] HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement entries
         #
         #   @param path [String] Endpoint path as called.
         #
@@ -150,8 +148,6 @@ module ContextDev
         #   @param user_agent [String, nil] User-Agent header of the request.
         #
         #   @param zdr [Boolean] Whether the request was made under zero data retention.
-        #
-        #   @param key_metadata [ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata] Credit usage, included whenever a valid API key is provided.
         #
         #   @param response [Object] The retained JSON response with credentials redacted, or null when unavailable.
 
@@ -176,34 +172,12 @@ module ContextDev
           #
           #   @param body [Object] Request body with credentials and uploaded content redacted.
         end
-
-        # @see ContextDev::Models::LogRetrieveResponse::Data#key_metadata
-        class KeyMetadata < ContextDev::Internal::Type::BaseModel
-          # @!attribute credits_consumed
-          #   Credits used by this request.
-          #
-          #   @return [Integer]
-          required :credits_consumed, Integer
-
-          # @!attribute credits_remaining
-          #   Credits remaining for your organization.
-          #
-          #   @return [Integer]
-          required :credits_remaining, Integer
-
-          # @!method initialize(credits_consumed:, credits_remaining:)
-          #   Credit usage, included whenever a valid API key is provided.
-          #
-          #   @param credits_consumed [Integer] Credits used by this request.
-          #
-          #   @param credits_remaining [Integer] Credits remaining for your organization.
-        end
       end
 
       # @see ContextDev::Models::LogRetrieveResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -215,9 +189,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

@@ -19,8 +19,7 @@ module ContextDev
         sig { returns(String) }
         attr_accessor :delivery_id
 
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :tags
 
@@ -37,8 +36,7 @@ module ContextDev
         def self.new(
           # Delivery ID.
           delivery_id:,
-          # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-          # characters.
+          # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
           tags: nil,
           request_options: {}
         )

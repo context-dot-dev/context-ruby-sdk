@@ -8,6 +8,7 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute monitor_id
+      #   ID of the monitor.
       #
       #   @return [String]
       required :monitor_id, String
@@ -43,7 +44,7 @@ module ContextDev
       optional :until_, Time
 
       # @!method initialize(monitor_id:, cursor: nil, limit: nil, since: nil, tag: nil, until_: nil, request_options: {})
-      #   @param monitor_id [String]
+      #   @param monitor_id [String] ID of the monitor.
       #
       #   @param cursor [String] Opaque pagination cursor from a previous response.
       #

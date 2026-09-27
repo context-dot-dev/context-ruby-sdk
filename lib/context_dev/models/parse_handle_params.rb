@@ -38,11 +38,7 @@ module ContextDev
       optional :include_links, ContextDev::Internal::Type::Boolean
 
       # @!attribute ocr
-      #   When true for PDF inputs, OCR the selected pages that have no usable text layer
-      #   (scans), replacing each recovered page's text with the OCR result while pages
-      #   with a real text layer keep it. pdf.start/pdf.end limit the inclusive page
-      #   range. Billed at 1 credit per page OCR actually recovered, on top of the base
-      #   request cost. When false, no OCR runs.
+      #   Read text from images and scanned PDF pages. PDF page ranges still apply.
       #
       #   @return [Boolean, nil]
       optional :ocr, ContextDev::Internal::Type::Boolean
@@ -60,8 +56,7 @@ module ContextDev
       optional :shorten_base64_images, ContextDev::Internal::Type::Boolean
 
       # @!attribute tags
-      #   Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-      #   characters.
+      #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -73,11 +68,8 @@ module ContextDev
       optional :use_main_content_only, ContextDev::Internal::Type::Boolean
 
       # @!attribute zdr
-      #   Set to enabled to bypass shared caches and omit request and response content
-      #   from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      #   omitted. Requires zero data retention to be enabled for your organization
-      #   (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      #   Successful ZDR responses include X-Context-ZDR: true.
+      #   `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      #   your organization has ZDR.
       #
       #   @return [Symbol, ContextDev::Models::ParseHandleParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::ParseHandleParams::Zdr }
@@ -96,17 +88,17 @@ module ContextDev
       #
       #   @param include_links [Boolean] Preserve hyperlinks in Markdown output
       #
-      #   @param ocr [Boolean] When true for PDF inputs, OCR the selected pages that have no usable text layer
+      #   @param ocr [Boolean] Read text from images and scanned PDF pages. PDF page ranges still apply.
       #
       #   @param pdf [ContextDev::Models::ParseHandleParams::Pdf] PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
       #
       #   @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
       #
-      #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
+      #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
       #   @param use_main_content_only [Boolean] Extract only the main content from HTML-like inputs
       #
-      #   @param zdr [Symbol, ContextDev::Models::ParseHandleParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      #   @param zdr [Symbol, ContextDev::Models::ParseHandleParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -215,11 +207,8 @@ module ContextDev
         #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

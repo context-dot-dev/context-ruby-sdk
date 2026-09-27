@@ -11,12 +11,11 @@ module ContextDev
           T.any(ContextDev::WebWebCrawlMdParams, ContextDev::Internal::AnyHash)
         end
 
-      # The starting URL for the crawl (must include http:// or https:// protocol)
+      # Start URL, including `http://` or `https://`.
       sig { returns(String) }
       attr_accessor :url
 
-      # Fetch the target page through a residential proxy in this country (ISO 3166-1
-      # alpha-2).
+      # Fetch from this country (ISO 3166-1 alpha-2).
       sig do
         returns(T.nilable(ContextDev::WebWebCrawlMdParams::Country::OrSymbol))
       end
@@ -27,9 +26,7 @@ module ContextDev
       end
       attr_writer :country
 
-      # CSS selectors to remove before each crawled page is converted to Markdown.
-      # Applied after includeSelectors. Exclusion takes precedence: an element matching
-      # both is removed. Examples: "nav", "footer", ".ad-banner", "[aria-hidden=true]".
+      # Remove matching elements after inclusions. Exclusions take precedence.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :exclude_selectors
 
@@ -67,19 +64,14 @@ module ContextDev
       sig { params(include_links: T::Boolean).void }
       attr_writer :include_links
 
-      # CSS selectors. When provided, only matching HTML subtrees (and their
-      # descendants) are kept before each crawled page is converted to Markdown. When
-      # omitted, the entire document is kept. Examples: "article.main", "#content",
-      # "[role=main]".
+      # Keep matching HTML subtrees before converting each page to Markdown.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :include_selectors
 
       sig { params(include_selectors: T::Array[String]).void }
       attr_writer :include_selectors
 
-      # Return a cached result if a prior scrape for the same parameters exists and is
-      # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-      # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+      # Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
       sig { returns(T.nilable(Integer)) }
       attr_reader :max_age_ms
 
@@ -93,24 +85,22 @@ module ContextDev
       sig { params(max_depth: Integer).void }
       attr_writer :max_depth
 
-      # Maximum number of pages to crawl. Hard cap: 500.
+      # Maximum pages to crawl.
       sig { returns(T.nilable(Integer)) }
       attr_reader :max_pages
 
       sig { params(max_pages: Integer).void }
       attr_writer :max_pages
 
-      # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-      # detection/OCR to an inclusive 1-based page range.
+      # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
       sig { returns(T.nilable(ContextDev::WebWebCrawlMdParams::Pdf)) }
       attr_reader :pdf
 
       sig { params(pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash).void }
       attr_writer :pdf
 
-      # When true, waits briefly for CSS and transition animations to settle before
-      # extracting each crawled page. Defaults to false. This adds a bit of latency in
-      # exchange for more stable output on animated pages.
+      # Wait briefly for CSS animations and transitions to settle before reading each
+      # page.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :settle_animations
 
@@ -124,26 +114,22 @@ module ContextDev
       sig { params(shorten_base64_images: T::Boolean).void }
       attr_writer :shorten_base64_images
 
-      # Soft time budget for the crawl in milliseconds. After each scrape, the crawler
-      # checks the elapsed time and, if exceeded, returns the pages collected so far
-      # instead of continuing. Min: 10000 (10s). Max: 110000 (110s). Default: 80000
-      # (80s).
+      # Soft crawl deadline in milliseconds. Returns pages collected before the next
+      # deadline check.
       sig { returns(T.nilable(Integer)) }
       attr_reader :stop_after_ms
 
       sig { params(stop_after_ms: Integer).void }
       attr_writer :stop_after_ms
 
-      # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      # Labels for filtering usage in the dashboard.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Optional request deadline and behavior on timeout. For GET requests, use
-      # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-      # timeoutOpts object.
+      # Request deadline and what to return when it passes.
       sig { returns(T.nilable(ContextDev::WebWebCrawlMdParams::TimeoutOpts)) }
       attr_reader :timeout_opts
 
@@ -179,10 +165,8 @@ module ContextDev
       sig { params(wait_for_ms: Integer).void }
       attr_writer :wait_for_ms
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Requires zero data retention to be enabled for your
-      # organization (contact support@context.dev), otherwise the request fails with
-      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       sig { returns(T.nilable(ContextDev::WebWebCrawlMdParams::Zdr::OrSymbol)) }
       attr_reader :zdr
 
@@ -216,14 +200,11 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # The starting URL for the crawl (must include http:// or https:// protocol)
+        # Start URL, including `http://` or `https://`.
         url:,
-        # Fetch the target page through a residential proxy in this country (ISO 3166-1
-        # alpha-2).
+        # Fetch from this country (ISO 3166-1 alpha-2).
         country: nil,
-        # CSS selectors to remove before each crawled page is converted to Markdown.
-        # Applied after includeSelectors. Exclusion takes precedence: an element matching
-        # both is removed. Examples: "nav", "footer", ".ad-banner", "[aria-hidden=true]".
+        # Remove matching elements after inclusions. Exclusions take precedence.
         exclude_selectors: nil,
         # When true, follow links on subdomains of the starting URL's domain (e.g.
         # docs.example.com when starting from example.com). www and apex are always
@@ -236,38 +217,27 @@ module ContextDev
         include_images: nil,
         # Preserve hyperlinks in the Markdown output
         include_links: nil,
-        # CSS selectors. When provided, only matching HTML subtrees (and their
-        # descendants) are kept before each crawled page is converted to Markdown. When
-        # omitted, the entire document is kept. Examples: "article.main", "#content",
-        # "[role=main]".
+        # Keep matching HTML subtrees before converting each page to Markdown.
         include_selectors: nil,
-        # Return a cached result if a prior scrape for the same parameters exists and is
-        # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-        # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+        # Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
         max_age_ms: nil,
         # Maximum link depth from the starting URL (0 = only the starting page)
         max_depth: nil,
-        # Maximum number of pages to crawl. Hard cap: 500.
+        # Maximum pages to crawl.
         max_pages: nil,
-        # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-        # detection/OCR to an inclusive 1-based page range.
+        # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         pdf: nil,
-        # When true, waits briefly for CSS and transition animations to settle before
-        # extracting each crawled page. Defaults to false. This adds a bit of latency in
-        # exchange for more stable output on animated pages.
+        # Wait briefly for CSS animations and transitions to settle before reading each
+        # page.
         settle_animations: nil,
         # Truncate base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
-        # Soft time budget for the crawl in milliseconds. After each scrape, the crawler
-        # checks the elapsed time and, if exceeded, returns the pages collected so far
-        # instead of continuing. Min: 10000 (10s). Max: 110000 (110s). Default: 80000
-        # (80s).
+        # Soft crawl deadline in milliseconds. Returns pages collected before the next
+        # deadline check.
         stop_after_ms: nil,
-        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
         # Regex pattern. Only URLs matching this pattern will be followed and scraped. An
         # automatic prefix scope in the form ^<starting URL> follows a redirect of the
@@ -279,10 +249,8 @@ module ContextDev
         # Browser wait time in milliseconds after initial page load for each crawled page.
         # Defaults to 3500 (3.5 seconds). Min: 0. Max: 30000 (30 seconds).
         wait_for_ms: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Requires zero data retention to be enabled for your
-        # organization (contact support@context.dev), otherwise the request fails with
-        # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
@@ -319,8 +287,7 @@ module ContextDev
       def to_hash
       end
 
-      # Fetch the target page through a residential proxy in this country (ISO 3166-1
-      # alpha-2).
+      # Fetch from this country (ISO 3166-1 alpha-2).
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -561,10 +528,7 @@ module ContextDev
         sig { params(end_: Integer).void }
         attr_writer :end_
 
-        # When true, OCR the selected PDF pages that have no usable text layer (scans),
-        # replacing each recovered page's text with the OCR result while pages with a real
-        # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-        # of the base request cost.
+        # Read scanned PDF pages with OCR; preserve pages that already contain text.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :ocr
 
@@ -586,8 +550,7 @@ module ContextDev
         sig { params(start: Integer).void }
         attr_writer :start
 
-        # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-        # detection/OCR to an inclusive 1-based page range.
+        # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         sig do
           params(
             end_: Integer,
@@ -600,10 +563,7 @@ module ContextDev
           # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
           # Must be greater than or equal to start when both are provided.
           end_: nil,
-          # When true, OCR the selected PDF pages that have no usable text layer (scans),
-          # replacing each recovered page's text with the OCR result while pages with a real
-          # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-          # of the base request cost.
+          # Read scanned PDF pages with OCR; preserve pages that already contain text.
           ocr: nil,
           # When true, PDF pages are fetched and parsed. When false, PDF pages are skipped
           # entirely (not included in results and not counted as failures).
@@ -636,14 +596,12 @@ module ContextDev
             )
           end
 
-        # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        # Deadline in milliseconds.
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         sig do
           returns(
             T.nilable(
@@ -661,9 +619,7 @@ module ContextDev
         end
         attr_writer :behavior
 
-        # Optional request deadline and behavior on timeout. For GET requests, use
-        # timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        # timeoutOpts object.
+        # Request deadline and what to return when it passes.
         sig do
           params(
             milliseconds: Integer,
@@ -672,12 +628,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          # Deadline in milliseconds.
           milliseconds:,
-          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-          # credits. "return-partial" returns usable results collected so far; if none are
-          # available, the request still fails without charging credits. Partial results are
-          # not cached as complete results.
+          # "fail" returns 408 at the deadline. "return-partial" returns available results;
+          # inspect the response’s partial flag.
           behavior: nil
         )
         end
@@ -694,10 +648,8 @@ module ContextDev
         def to_hash
         end
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 
@@ -733,10 +685,8 @@ module ContextDev
         end
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Requires zero data retention to be enabled for your
-      # organization (contact support@context.dev), otherwise the request fails with
-      # ZDR_NOT_ENABLED. Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

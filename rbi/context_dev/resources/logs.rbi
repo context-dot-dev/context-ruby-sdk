@@ -2,10 +2,9 @@
 
 module ContextDev
   module Resources
-    # Read your organization's API request logs to debug failed calls. These endpoints
-    # cost no credits and use a separate rate limit.
+    # Read your organization's API request logs.
     class Logs
-      # Get one logged API call, including its request input and response body.
+      # Retrieve a request’s metadata, retained input, and response.
       sig do
         params(
           request_id: String,
@@ -19,8 +18,8 @@ module ContextDev
       )
       end
 
-      # List your organization's API requests, newest first. Defaults to the last 24
-      # hours.
+      # List your organization’s request logs with filters and pagination. Logs also
+      # include batch settlements and monitor runs.
       sig do
         params(
           error_code: String,

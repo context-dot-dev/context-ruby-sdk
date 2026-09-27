@@ -27,7 +27,7 @@ module ContextDev
       optional :request_id, String
 
       # @!attribute tags
-      #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #   Labels for filtering usage in the dashboard.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -48,7 +48,7 @@ module ContextDev
       #
       #   @param request_id [String] The request_id of the API call the feedback is about, from its response body or
       #
-      #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
       #   @param url [String] The page the feedback is about, such as one page of a crawl or a docs page.
       #

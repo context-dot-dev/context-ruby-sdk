@@ -11,16 +11,13 @@ module ContextDev
       required :id, String
 
       # @!attribute cache_metadata
-      #   Cache outcome for this response. Composite responses are hits only when every
-      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-      #   oldest contributing hit.
+      #   Whether this response came from cache.
       #
       #   @return [ContextDev::Models::BatchSubmitResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::BatchSubmitResponse::CacheMetadata }
 
       # @!attribute crawl
-      #   The crawl controls as submitted, so the limits requested can be compared against
-      #   what the crawl reached.
+      #   Crawl settings as submitted.
       #
       #   @return [ContextDev::Models::CrawlControls, nil]
       required :crawl, -> { ContextDev::CrawlControls }, nil?: true
@@ -44,13 +41,13 @@ module ContextDev
       required :format_, enum: -> { ContextDev::Models::BatchSubmitResponse::Format }, api_name: :format
 
       # @!attribute input
-      #   What submission took in, and what it charged for.
+      #   What the submission accepted.
       #
       #   @return [ContextDev::Models::Intake]
       required :input, -> { ContextDev::Intake }
 
       # @!attribute invalid_urls
-      #   Rejected URLs, up to 100. These are not charged.
+      #   Rejected URLs (first 100).
       #
       #   @return [Array<ContextDev::Models::BatchSubmitResponse::InvalidURL>]
       required :invalid_urls,
@@ -63,8 +60,8 @@ module ContextDev
       required :mode, enum: -> { ContextDev::Models::BatchSubmitResponse::Mode }
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -88,8 +85,7 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::BatchSubmitResponse::KeyMetadata }
 
       # @!attribute webhook_secret
-      #   Signing secret for the completion webhook, returned only here and never again.
-      #   Store it now; it is not repeated by GET /batch/{batch_id}.
+      #   Secret for verifying `X-Context-Signature`. Only submit returns it, so store it.
       #
       #   @return [String, nil]
       optional :webhook_secret, String
@@ -100,9 +96,9 @@ module ContextDev
       #
       #   @param id [String] Batch ID. Poll GET /batch/{batch_id} with it.
       #
-      #   @param cache_metadata [ContextDev::Models::BatchSubmitResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #   @param cache_metadata [ContextDev::Models::BatchSubmitResponse::CacheMetadata] Whether this response came from cache.
       #
-      #   @param crawl [ContextDev::Models::CrawlControls, nil] The crawl controls as submitted, so the limits requested can be compared against
+      #   @param crawl [ContextDev::Models::CrawlControls, nil] Crawl settings as submitted.
       #
       #   @param created_at [String] When the batch was created.
       #
@@ -110,13 +106,13 @@ module ContextDev
       #
       #   @param format_ [Symbol, ContextDev::Models::BatchSubmitResponse::Format] What each page will be returned as.
       #
-      #   @param input [ContextDev::Models::Intake] What submission took in, and what it charged for.
+      #   @param input [ContextDev::Models::Intake] What the submission accepted.
       #
-      #   @param invalid_urls [Array<ContextDev::Models::BatchSubmitResponse::InvalidURL>] Rejected URLs, up to 100. These are not charged.
+      #   @param invalid_urls [Array<ContextDev::Models::BatchSubmitResponse::InvalidURL>] Rejected URLs (first 100).
       #
       #   @param mode [Symbol, ContextDev::Models::BatchSubmitResponse::Mode] How pages will be selected.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param status [Symbol, ContextDev::Models::BatchSubmitResponse::Status] Always `queued`. An accepted batch has not started yet.
       #
@@ -124,7 +120,7 @@ module ContextDev
       #
       #   @param key_metadata [ContextDev::Models::BatchSubmitResponse::KeyMetadata] API key usage for this request.
       #
-      #   @param webhook_secret [String] Signing secret for the completion webhook, returned only here and never again. S
+      #   @param webhook_secret [String] Secret for verifying `X-Context-Signature`. Only submit returns it, so store it.
 
       # @see ContextDev::Models::BatchSubmitResponse#cache_metadata
       class CacheMetadata < ContextDev::Internal::Type::BaseModel
@@ -145,9 +141,7 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::BatchSubmitResponse::CacheMetadata} for more details.
         #
-        #   Cache outcome for this response. Composite responses are hits only when every
-        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-        #   oldest contributing hit.
+        #   Whether this response came from cache.
         #
         #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
         #
@@ -172,19 +166,15 @@ module ContextDev
       # @see ContextDev::Models::BatchSubmitResponse#credits
       class Credits < ContextDev::Internal::Type::BaseModel
         # @!attribute reserved
-        #   Credits just debited from your balance. Whatever the batch does not spend is
-        #   refunded when it settles.
+        #   Credits held at submission.
         #
         #   @return [Integer]
         required :reserved, Integer
 
         # @!method initialize(reserved:)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::BatchSubmitResponse::Credits} for more details.
-        #
         #   What accepting this batch cost.
         #
-        #   @param reserved [Integer] Credits just debited from your balance. Whatever the batch does not spend is ref
+        #   @param reserved [Integer] Credits held at submission.
       end
 
       # What each page will be returned as.
@@ -247,7 +237,7 @@ module ContextDev
       # @see ContextDev::Models::BatchSubmitResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -261,7 +251,7 @@ module ContextDev
         # @!method initialize(credits_consumed:, credits_remaining:)
         #   API key usage for this request.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

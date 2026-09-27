@@ -11,8 +11,8 @@ module ContextDev
           )
         end
 
-      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      # it when contacting support about a failed request.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
       sig { returns(String) }
       attr_accessor :request_id
 
@@ -48,7 +48,7 @@ module ContextDev
       sig { params(has_more: T::Boolean).void }
       attr_writer :has_more
 
-      # Credit usage, included whenever a valid API key is provided.
+      # Credits this request used and your remaining balance.
       sig do
         returns(
           T.nilable(ContextDev::Models::BatchGetResultsResponse::KeyMetadata)
@@ -85,14 +85,14 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        # it when contacting support about a failed request.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
         request_id:,
         # Result records on this page.
         data: nil,
         # Whether another page is available.
         has_more: nil,
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         key_metadata: nil,
         # Cursor for the next page.
         next_cursor: nil
@@ -138,9 +138,7 @@ module ContextDev
               )
             end
 
-          # Cache outcome for this response. Composite responses are hits only when every
-          # cache-controlled fetch contributing to the output was a hit; age_ms is the
-          # oldest contributing hit.
+          # Whether this response came from cache.
           sig do
             returns(
               ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata
@@ -196,7 +194,7 @@ module ContextDev
           sig { params(html: String).void }
           attr_writer :html
 
-          # Caller-supplied identifier echoed from submission.
+          # Your `itemId` from submission.
           sig { returns(T.nilable(String)) }
           attr_reader :item_id
 
@@ -217,8 +215,7 @@ module ContextDev
           sig { params(meta: T::Hash[Symbol, T.anything]).void }
           attr_writer :meta
 
-          # PDF pages of this document recovered by OCR (pdf.ocr=true). Each recovered page
-          # bills 1 credit on top of the page base credit; absent when no OCR ran.
+          # Number of PDF pages recovered by OCR. Omitted when OCR did not run.
           sig { returns(T.nilable(Integer)) }
           attr_reader :ocr_pages
 
@@ -244,9 +241,7 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Cache outcome for this response. Composite responses are hits only when every
-            # cache-controlled fetch contributing to the output was a hit; age_ms is the
-            # oldest contributing hit.
+            # Whether this response came from cache.
             cache_metadata:,
             # URL the content was read from, after redirects.
             final_url:,
@@ -259,14 +254,13 @@ module ContextDev
             # Page HTML. Present on html batches, and on markdown batches submitted with
             # `options.includeHTML`.
             html: nil,
-            # Caller-supplied identifier echoed from submission.
+            # Your `itemId` from submission.
             item_id: nil,
             # Page content as Markdown. Present on markdown batches.
             markdown: nil,
             # Caller-supplied metadata echoed from submission.
             meta: nil,
-            # PDF pages of this document recovered by OCR (pdf.ocr=true). Each recovered page
-            # bills 1 credit on top of the page base credit; absent when no OCR ran.
+            # Number of PDF pages recovered by OCR. Omitted when OCR did not run.
             ocr_pages: nil,
             # The page was scraped.
             status: :ok
@@ -317,9 +311,7 @@ module ContextDev
             end
             attr_accessor :status
 
-            # Cache outcome for this response. Composite responses are hits only when every
-            # cache-controlled fetch contributing to the output was a hit; age_ms is the
-            # oldest contributing hit.
+            # Whether this response came from cache.
             sig do
               params(
                 age_ms: Integer,
@@ -946,7 +938,7 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :url
 
-          # Caller-supplied identifier echoed from submission.
+          # Your `itemId` from submission.
           sig { returns(T.nilable(String)) }
           attr_reader :item_id
 
@@ -978,7 +970,7 @@ module ContextDev
             message:,
             # URL as submitted, or as discovered by the crawl.
             url:,
-            # Caller-supplied identifier echoed from submission.
+            # Your `itemId` from submission.
             item_id: nil,
             # Caller-supplied metadata echoed from submission.
             meta: nil,
@@ -1023,7 +1015,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -1031,14 +1023,14 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         sig do
           params(credits_consumed: Integer, credits_remaining: Integer).returns(
             T.attached_class
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:

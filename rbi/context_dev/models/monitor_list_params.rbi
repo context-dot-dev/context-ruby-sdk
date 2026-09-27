@@ -50,8 +50,8 @@ module ContextDev
       sig { params(q: String).void }
       attr_writer :q
 
-      # Comma-separated fields to search with `q`. Defaults to all of them. Note
-      # `instructions` only exists on extract monitors.
+      # Fields to search with `q`. Defaults to all fields; page and extract targets can
+      # have instructions.
       sig do
         returns(
           T.nilable(T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol])
@@ -136,8 +136,8 @@ module ContextDev
         limit: nil,
         # Free-text search term, matched against the fields named in `search_by`.
         q: nil,
-        # Comma-separated fields to search with `q`. Defaults to all of them. Note
-        # `instructions` only exists on extract monitors.
+        # Fields to search with `q`. Defaults to all fields; page and extract targets can
+        # have instructions.
         search_by: nil,
         # `prefix` for as-you-type prefix matching (default), `exact` for full-token
         # matching.

@@ -30,8 +30,7 @@ module ContextDev
                -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::BrandSearchParams::QueryBy] }
 
       # @!attribute tags
-      #   Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-      #   characters.
+      #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -53,7 +52,7 @@ module ContextDev
       #
       #   @param query_by [Array<Symbol, ContextDev::Models::BrandSearchParams::QueryBy>] Fields to match the search term against, as a comma-separated list or repeated p
       #
-      #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
+      #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
       #   @param typo_tolerance [Integer] Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
       #

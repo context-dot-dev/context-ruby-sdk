@@ -7,15 +7,17 @@ module ContextDev
         created_at: Time,
         mode: ContextDev::Models::MonitorRetrieveResponse::mode,
         name: String,
-        schedule: ContextDev::Models::MonitorRetrieveResponse::Schedule,
+        request_id: String,
         status: ContextDev::Models::MonitorRetrieveResponse::status,
         target: ContextDev::Models::MonitorRetrieveResponse::target,
         updated_at: Time,
         baseline: ContextDev::Models::MonitorRetrieveResponse::baseline?,
+        key_metadata: ContextDev::Models::MonitorRetrieveResponse::KeyMetadata,
         last_change_at: Time?,
         last_error: ContextDev::Models::MonitorRetrieveResponse::LastError?,
         last_run_at: Time?,
         next_run_at: Time?,
+        schedule: ContextDev::Models::MonitorRetrieveResponse::Schedule,
         tags: ::Array[String],
         webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook?,
         webhook_failure: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure?
@@ -32,7 +34,7 @@ module ContextDev
 
       attr_accessor name: String
 
-      attr_accessor schedule: ContextDev::Models::MonitorRetrieveResponse::Schedule
+      attr_accessor request_id: String
 
       attr_accessor status: ContextDev::Models::MonitorRetrieveResponse::status
 
@@ -42,6 +44,12 @@ module ContextDev
 
       attr_accessor baseline: ContextDev::Models::MonitorRetrieveResponse::baseline?
 
+      attr_reader key_metadata: ContextDev::Models::MonitorRetrieveResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::MonitorRetrieveResponse::KeyMetadata
+      ) -> ContextDev::Models::MonitorRetrieveResponse::KeyMetadata
+
       attr_accessor last_change_at: Time?
 
       attr_accessor last_error: ContextDev::Models::MonitorRetrieveResponse::LastError?
@@ -49,6 +57,12 @@ module ContextDev
       attr_accessor last_run_at: Time?
 
       attr_accessor next_run_at: Time?
+
+      attr_reader schedule: ContextDev::Models::MonitorRetrieveResponse::Schedule?
+
+      def schedule=: (
+        ContextDev::Models::MonitorRetrieveResponse::Schedule
+      ) -> ContextDev::Models::MonitorRetrieveResponse::Schedule
 
       attr_reader tags: ::Array[String]?
 
@@ -64,15 +78,17 @@ module ContextDev
         created_at: Time,
         mode: ContextDev::Models::MonitorRetrieveResponse::mode,
         name: String,
-        schedule: ContextDev::Models::MonitorRetrieveResponse::Schedule,
+        request_id: String,
         status: ContextDev::Models::MonitorRetrieveResponse::status,
         target: ContextDev::Models::MonitorRetrieveResponse::target,
         updated_at: Time,
         ?baseline: ContextDev::Models::MonitorRetrieveResponse::baseline?,
+        ?key_metadata: ContextDev::Models::MonitorRetrieveResponse::KeyMetadata,
         ?last_change_at: Time?,
         ?last_error: ContextDev::Models::MonitorRetrieveResponse::LastError?,
         ?last_run_at: Time?,
         ?next_run_at: Time?,
+        ?schedule: ContextDev::Models::MonitorRetrieveResponse::Schedule,
         ?tags: ::Array[String],
         ?webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook?,
         ?webhook_failure: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure?
@@ -84,15 +100,17 @@ module ContextDev
         created_at: Time,
         mode: ContextDev::Models::MonitorRetrieveResponse::mode,
         name: String,
-        schedule: ContextDev::Models::MonitorRetrieveResponse::Schedule,
+        request_id: String,
         status: ContextDev::Models::MonitorRetrieveResponse::status,
         target: ContextDev::Models::MonitorRetrieveResponse::target,
         updated_at: Time,
         baseline: ContextDev::Models::MonitorRetrieveResponse::baseline?,
+        key_metadata: ContextDev::Models::MonitorRetrieveResponse::KeyMetadata,
         last_change_at: Time?,
         last_error: ContextDev::Models::MonitorRetrieveResponse::LastError?,
         last_run_at: Time?,
         next_run_at: Time?,
+        schedule: ContextDev::Models::MonitorRetrieveResponse::Schedule,
         tags: ::Array[String],
         webhook: ContextDev::Models::MonitorRetrieveResponse::Webhook?,
         webhook_failure: ContextDev::Models::MonitorRetrieveResponse::WebhookFailure?
@@ -143,55 +161,6 @@ module ContextDev
         WEB: :web
 
         def self?.values: -> ::Array[ContextDev::Models::MonitorRetrieveResponse::mode]
-      end
-
-      type schedule =
-        {
-          frequency: Integer,
-          type: ContextDev::Models::MonitorRetrieveResponse::Schedule::type_,
-          unit: ContextDev::Models::MonitorRetrieveResponse::Schedule::unit
-        }
-
-      class Schedule < ContextDev::Internal::Type::BaseModel
-        attr_accessor frequency: Integer
-
-        attr_accessor type: ContextDev::Models::MonitorRetrieveResponse::Schedule::type_
-
-        attr_accessor unit: ContextDev::Models::MonitorRetrieveResponse::Schedule::unit
-
-        def initialize: (
-          frequency: Integer,
-          type: ContextDev::Models::MonitorRetrieveResponse::Schedule::type_,
-          unit: ContextDev::Models::MonitorRetrieveResponse::Schedule::unit
-        ) -> void
-
-        def to_hash: -> {
-          frequency: Integer,
-          type: ContextDev::Models::MonitorRetrieveResponse::Schedule::type_,
-          unit: ContextDev::Models::MonitorRetrieveResponse::Schedule::unit
-        }
-
-        type type_ = :interval
-
-        module Type
-          extend ContextDev::Internal::Type::Enum
-
-          INTERVAL: :interval
-
-          def self?.values: -> ::Array[ContextDev::Models::MonitorRetrieveResponse::Schedule::type_]
-        end
-
-        type unit = :minutes | :hours | :days
-
-        module Unit
-          extend ContextDev::Internal::Type::Enum
-
-          MINUTES: :minutes
-          HOURS: :hours
-          DAYS: :days
-
-          def self?.values: -> ::Array[ContextDev::Models::MonitorRetrieveResponse::Schedule::unit]
-        end
       end
 
       type status = :active | :paused | :failed
@@ -434,6 +403,25 @@ module ContextDev
         def self?.variants: -> ::Array[ContextDev::Models::MonitorRetrieveResponse::baseline]
       end
 
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+
       type last_error = { code: String, message: String }
 
       class LastError < ContextDev::Internal::Type::BaseModel
@@ -444,6 +432,55 @@ module ContextDev
         def initialize: (code: String, message: String) -> void
 
         def to_hash: -> { code: String, message: String }
+      end
+
+      type schedule =
+        {
+          frequency: Integer,
+          type: ContextDev::Models::MonitorRetrieveResponse::Schedule::type_,
+          unit: ContextDev::Models::MonitorRetrieveResponse::Schedule::unit
+        }
+
+      class Schedule < ContextDev::Internal::Type::BaseModel
+        attr_accessor frequency: Integer
+
+        attr_accessor type: ContextDev::Models::MonitorRetrieveResponse::Schedule::type_
+
+        attr_accessor unit: ContextDev::Models::MonitorRetrieveResponse::Schedule::unit
+
+        def initialize: (
+          frequency: Integer,
+          type: ContextDev::Models::MonitorRetrieveResponse::Schedule::type_,
+          unit: ContextDev::Models::MonitorRetrieveResponse::Schedule::unit
+        ) -> void
+
+        def to_hash: -> {
+          frequency: Integer,
+          type: ContextDev::Models::MonitorRetrieveResponse::Schedule::type_,
+          unit: ContextDev::Models::MonitorRetrieveResponse::Schedule::unit
+        }
+
+        type type_ = :interval
+
+        module Type
+          extend ContextDev::Internal::Type::Enum
+
+          INTERVAL: :interval
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorRetrieveResponse::Schedule::type_]
+        end
+
+        type unit = :minutes | :hours | :days
+
+        module Unit
+          extend ContextDev::Internal::Type::Enum
+
+          MINUTES: :minutes
+          HOURS: :hours
+          DAYS: :days
+
+          def self?.values: -> ::Array[ContextDev::Models::MonitorRetrieveResponse::Schedule::unit]
+        end
       end
 
       type webhook =

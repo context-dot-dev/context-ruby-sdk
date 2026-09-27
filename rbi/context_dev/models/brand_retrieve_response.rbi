@@ -22,9 +22,7 @@ module ContextDev
       end
       attr_writer :brand
 
-      # Cache outcome for this response. Composite responses are hits only when every
-      # cache-controlled fetch contributing to the output was a hit; age_ms is the
-      # oldest contributing hit.
+      # Whether this response came from cache.
       sig { returns(ContextDev::Models::BrandRetrieveResponse::CacheMetadata) }
       attr_reader :cache_metadata
 
@@ -40,16 +38,16 @@ module ContextDev
       sig { returns(Integer) }
       attr_accessor :code
 
-      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      # it when contacting support about a failed request.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Status of the response, e.g., 'ok'
+      # Always `ok` on success.
       sig { returns(String) }
       attr_accessor :status
 
-      # Credit usage, included whenever a valid API key is provided.
+      # Credits this request used and your remaining balance.
       sig do
         returns(
           T.nilable(ContextDev::Models::BrandRetrieveResponse::KeyMetadata)
@@ -89,18 +87,16 @@ module ContextDev
       def self.new(
         # Detailed brand information
         brand:,
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         cache_metadata:,
         # HTTP status code
         code:,
-        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        # it when contacting support about a failed request.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
         request_id:,
-        # Status of the response, e.g., 'ok'
+        # Always `ok` on success.
         status:,
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         key_metadata: nil,
         # True when the timeout ended processing and this response contains the usable
         # data completed so far. Unfinished fields are omitted.
@@ -302,7 +298,7 @@ module ContextDev
         sig { params(phone: String).void }
         attr_writer :phone
 
-        # Language to force for the retrieved brand data.
+        # Language, e.g. `english`.
         sig do
           returns(
             T.nilable(
@@ -432,7 +428,7 @@ module ContextDev
           logos: nil,
           # Company phone number
           phone: nil,
-          # Language to force for the retrieved brand data.
+          # Language, e.g. `english`.
           primary_language: nil,
           # The brand's slogan
           slogan: nil,
@@ -2573,7 +2569,7 @@ module ContextDev
           end
           attr_writer :type
 
-          # CDN hosted url of the logo (ready for display)
+          # Hosted logo URL.
           sig { returns(T.nilable(String)) }
           attr_reader :url
 
@@ -2606,7 +2602,7 @@ module ContextDev
             resolution: nil,
             # Type of the logo based on resolution (e.g., 'icon', 'logo')
             type: nil,
-            # CDN hosted url of the logo (ready for display)
+            # Hosted logo URL.
             url: nil
           )
           end
@@ -2803,7 +2799,7 @@ module ContextDev
           end
         end
 
-        # Language to force for the retrieved brand data.
+        # Language, e.g. `english`.
         module PrimaryLanguage
           extend ContextDev::Internal::Type::Enum
 
@@ -3734,9 +3730,7 @@ module ContextDev
         end
         attr_accessor :status
 
-        # Cache outcome for this response. Composite responses are hits only when every
-        # cache-controlled fetch contributing to the output was a hit; age_ms is the
-        # oldest contributing hit.
+        # Whether this response came from cache.
         sig do
           params(
             age_ms: Integer,
@@ -3816,7 +3810,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -3824,14 +3818,14 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         sig do
           params(credits_consumed: Integer, credits_remaining: Integer).returns(
             T.attached_class
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:

@@ -4,7 +4,9 @@ module ContextDev
       {
         data: ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data],
         has_more: bool,
-        next_cursor: String?
+        next_cursor: String?,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorListAccountRunsResponse::KeyMetadata
       }
 
     class MonitorListAccountRunsResponse < ContextDev::Internal::Type::BaseModel
@@ -14,16 +16,28 @@ module ContextDev
 
       attr_accessor next_cursor: String?
 
+      attr_accessor request_id: String
+
+      attr_reader key_metadata: ContextDev::Models::MonitorListAccountRunsResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::MonitorListAccountRunsResponse::KeyMetadata
+      ) -> ContextDev::Models::MonitorListAccountRunsResponse::KeyMetadata
+
       def initialize: (
         data: ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data],
         has_more: bool,
-        next_cursor: String?
+        next_cursor: String?,
+        request_id: String,
+        ?key_metadata: ContextDev::Models::MonitorListAccountRunsResponse::KeyMetadata
       ) -> void
 
       def to_hash: -> {
         data: ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data],
         has_more: bool,
-        next_cursor: String?
+        next_cursor: String?,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorListAccountRunsResponse::KeyMetadata
       }
 
       type data =
@@ -203,6 +217,25 @@ module ContextDev
 
           def self?.values: -> ::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data::skip_reason]
         end
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
       end
     end
   end

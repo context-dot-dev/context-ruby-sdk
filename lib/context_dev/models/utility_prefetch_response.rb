@@ -5,8 +5,8 @@ module ContextDev
     # @see ContextDev::Resources::Utility#prefetch
     class UtilityPrefetchResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -18,7 +18,7 @@ module ContextDev
       optional :domain, String
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::UtilityPrefetchResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::UtilityPrefetchResponse::KeyMetadata }
@@ -30,7 +30,7 @@ module ContextDev
       optional :message, String
 
       # @!attribute status
-      #   Status of the response, e.g., 'ok'
+      #   Always `ok` on success.
       #
       #   @return [String, nil]
       optional :status, String
@@ -45,22 +45,22 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::UtilityPrefetchResponse} for more details.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param domain [String] The domain that was queued for prefetching
       #
-      #   @param key_metadata [ContextDev::Models::UtilityPrefetchResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::UtilityPrefetchResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param message [String] Success message
       #
-      #   @param status [String] Status of the response, e.g., 'ok'
+      #   @param status [String] Always `ok` on success.
       #
       #   @param type [Symbol, ContextDev::Models::UtilityPrefetchResponse::Type] The type of prefetch that was queued, echoed from the request
 
       # @see ContextDev::Models::UtilityPrefetchResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -72,9 +72,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

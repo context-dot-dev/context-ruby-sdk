@@ -2,17 +2,13 @@
 
 module ContextDev
   module Resources
-    # Search live first-party RSS and free historical news data by company identity.
+    # Search live and historical news about a company.
     class News
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::NewsSearchParams} for more details.
       #
-      # Searches live and historical company news for one company, identified in
-      # searchBy by name, domain, ticker (optionally disambiguated by exchange), or
-      # ISIN. Results can be filtered by one of publisher domain, publisher country,
-      # article language, or article type, optionally combined with a published-at date
-      # range, and include stable story IDs, source metadata, verified entity relevance,
-      # and cursor pagination.
+      # Find company news by name, domain, ticker, or ISIN. Filter articles and continue
+      # through results with a cursor.
       #
       # @overload search(search_by:, cursor: nil, filter_by: nil, limit: nil, sort_by: nil, tags: nil, request_options: {})
       #
@@ -26,7 +22,7 @@ module ContextDev
       #
       # @param sort_by [ContextDev::Models::NewsSearchParams::SortBy] Result ordering. Defaults to newest.
       #
-      # @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      # @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

@@ -11,9 +11,7 @@ module ContextDev
       required :brand, -> { ContextDev::Models::BrandRetrieveResponse::Brand }
 
       # @!attribute cache_metadata
-      #   Cache outcome for this response. Composite responses are hits only when every
-      #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-      #   oldest contributing hit.
+      #   Whether this response came from cache.
       #
       #   @return [ContextDev::Models::BrandRetrieveResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::BrandRetrieveResponse::CacheMetadata }
@@ -25,20 +23,20 @@ module ContextDev
       required :code, Integer
 
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
 
       # @!attribute status
-      #   Status of the response, e.g., 'ok'
+      #   Always `ok` on success.
       #
       #   @return [String]
       required :status, String
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::BrandRetrieveResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::BrandRetrieveResponse::KeyMetadata }
@@ -56,15 +54,15 @@ module ContextDev
       #
       #   @param brand [ContextDev::Models::BrandRetrieveResponse::Brand] Detailed brand information
       #
-      #   @param cache_metadata [ContextDev::Models::BrandRetrieveResponse::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+      #   @param cache_metadata [ContextDev::Models::BrandRetrieveResponse::CacheMetadata] Whether this response came from cache.
       #
       #   @param code [Integer] HTTP status code
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param status [String] Status of the response, e.g., 'ok'
+      #   @param status [String] Always `ok` on success.
       #
-      #   @param key_metadata [ContextDev::Models::BrandRetrieveResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::BrandRetrieveResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param partial [Boolean] True when the timeout ended processing and this response contains the usable dat
 
@@ -148,7 +146,7 @@ module ContextDev
         optional :phone, String
 
         # @!attribute primary_language
-        #   Language to force for the retrieved brand data.
+        #   Language, e.g. `english`.
         #
         #   @return [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage, nil]
         optional :primary_language,
@@ -211,7 +209,7 @@ module ContextDev
         #
         #   @param phone [String] Company phone number
         #
-        #   @param primary_language [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage, nil] Language to force for the retrieved brand data.
+        #   @param primary_language [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage, nil] Language, e.g. `english`.
         #
         #   @param slogan [String] The brand's slogan
         #
@@ -833,7 +831,7 @@ module ContextDev
           optional :type, enum: -> { ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Type }
 
           # @!attribute url
-          #   CDN hosted url of the logo (ready for display)
+          #   Hosted logo URL.
           #
           #   @return [String, nil]
           optional :url, String
@@ -850,7 +848,7 @@ module ContextDev
           #
           #   @param type [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Type] Type of the logo based on resolution (e.g., 'icon', 'logo')
           #
-          #   @param url [String] CDN hosted url of the logo (ready for display)
+          #   @param url [String] Hosted logo URL.
 
           class Color < ContextDev::Internal::Type::BaseModel
             # @!attribute hex
@@ -931,7 +929,7 @@ module ContextDev
           end
         end
 
-        # Language to force for the retrieved brand data.
+        # Language, e.g. `english`.
         #
         # @see ContextDev::Models::BrandRetrieveResponse::Brand#primary_language
         module PrimaryLanguage
@@ -1166,9 +1164,7 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::BrandRetrieveResponse::CacheMetadata} for more details.
         #
-        #   Cache outcome for this response. Composite responses are hits only when every
-        #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-        #   oldest contributing hit.
+        #   Whether this response came from cache.
         #
         #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
         #
@@ -1193,7 +1189,7 @@ module ContextDev
       # @see ContextDev::Models::BrandRetrieveResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -1205,9 +1201,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

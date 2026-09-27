@@ -35,7 +35,7 @@ module ContextDev
         required :started_at, Time
 
         # @!attribute trigger
-        #   What started this attempt.
+        #   `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
         #
         #   @return [Symbol, ContextDev::Models::Webhooks::Attempt::Trigger]
         required :trigger, enum: -> { ContextDev::Webhooks::Attempt::Trigger }
@@ -57,7 +57,7 @@ module ContextDev
         #
         #   @param started_at [Time] Attempt start time.
         #
-        #   @param trigger [Symbol, ContextDev::Models::Webhooks::Attempt::Trigger] What started this attempt.
+        #   @param trigger [Symbol, ContextDev::Models::Webhooks::Attempt::Trigger] `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
         #
         #   @param url [String] URL used for this attempt.
 
@@ -83,7 +83,7 @@ module ContextDev
           #   @param message [String] Error details.
         end
 
-        # What started this attempt.
+        # `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
         #
         # @see ContextDev::Models::Webhooks::Attempt#trigger
         module Trigger

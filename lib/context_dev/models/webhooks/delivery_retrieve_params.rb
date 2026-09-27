@@ -15,19 +15,15 @@ module ContextDev
         required :delivery_id, String
 
         # @!attribute tags
-        #   Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        #   characters.
+        #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         #
         #   @return [Array<String>, nil]
         optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
         # @!method initialize(delivery_id:, tags: nil, request_options: {})
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::Webhooks::DeliveryRetrieveParams} for more details.
-        #
         #   @param delivery_id [String] Delivery ID.
         #
-        #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
+        #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         #
         #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
       end

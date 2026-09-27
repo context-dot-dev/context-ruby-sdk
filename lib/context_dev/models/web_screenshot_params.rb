@@ -25,8 +25,7 @@ module ContextDev
       optional :color_scheme, enum: -> { ContextDev::WebScreenshotParams::ColorScheme }
 
       # @!attribute country
-      #   Fetch the target page through a residential proxy in this country (ISO 3166-1
-      #   alpha-2).
+      #   Fetch from this country (ISO 3166-1 alpha-2).
       #
       #   @return [Symbol, ContextDev::Models::WebScreenshotParams::Country, nil]
       optional :country, enum: -> { ContextDev::WebScreenshotParams::Country }
@@ -105,16 +104,13 @@ module ContextDev
       optional :scroll_offset, Integer, nil?: true
 
       # @!attribute tags
-      #   Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-      #   characters.
+      #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timeout_opts
-      #   Optional request deadline and behavior on timeout. For GET requests, use
-      #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-      #   timeoutOpts object.
+      #   Request deadline and what to return when it passes.
       #
       #   @return [ContextDev::Models::WebScreenshotParams::TimeoutOpts, nil]
       optional :timeout_opts, -> { ContextDev::WebScreenshotParams::TimeoutOpts }
@@ -136,11 +132,8 @@ module ContextDev
       optional :wait_for_ms, Integer, nil?: true
 
       # @!attribute zdr
-      #   Set to enabled to bypass shared caches and omit request and response content
-      #   from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      #   omitted. Requires zero data retention to be enabled for your organization
-      #   (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      #   Successful ZDR responses include X-Context-ZDR: true.
+      #   `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      #   your organization has ZDR.
       #
       #   @return [Symbol, ContextDev::Models::WebScreenshotParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebScreenshotParams::Zdr }
@@ -153,7 +146,7 @@ module ContextDev
       #
       #   @param color_scheme [Symbol, ContextDev::Models::WebScreenshotParams::ColorScheme] Optional parameter to choose the site's visual theme in the screenshot. Use 'lig
       #
-      #   @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Fetch the target page through a residential proxy in this country (ISO 3166-1 al
+      #   @param country [Symbol, ContextDev::Models::WebScreenshotParams::Country] Fetch from this country (ISO 3166-1 alpha-2).
       #
       #   @param direct_url [String] A specific URL to screenshot directly, bypassing domain resolution (e.g., 'https
       #
@@ -171,15 +164,15 @@ module ContextDev
       #
       #   @param scroll_offset [Integer, nil] Optional vertical scroll offset in pixels for capturing a long page in viewport-
       #
-      #   @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
+      #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
-      #   @param timeout_opts [ContextDev::Models::WebScreenshotParams::TimeoutOpts] Optional request deadline and behavior on timeout. For GET requests, use timeout
+      #   @param timeout_opts [ContextDev::Models::WebScreenshotParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
       #   @param viewport [ContextDev::Models::WebScreenshotParams::Viewport] Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
       #
       #   @param wait_for_ms [Integer, nil] Optional browser wait time in milliseconds after initial page load before taking
       #
-      #   @param zdr [Symbol, ContextDev::Models::WebScreenshotParams::Zdr] Set to enabled to bypass shared caches and omit request and response content fro
+      #   @param zdr [Symbol, ContextDev::Models::WebScreenshotParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -195,8 +188,7 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Fetch the target page through a residential proxy in this country (ISO 3166-1
-      # alpha-2).
+      # Fetch from this country (ISO 3166-1 alpha-2).
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -445,17 +437,14 @@ module ContextDev
 
       class TimeoutOpts < ContextDev::Internal::Type::BaseModel
         # @!attribute milliseconds
-        #   Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   Deadline in milliseconds.
         #
         #   @return [Integer]
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        #   credits. "return-partial" returns usable results collected so far; if none are
-        #   available, the request still fails without charging credits. Partial results are
-        #   not cached as complete results. "return-partial" requires milliseconds of at
-        #   least 5000.
+        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
         #
         #   @return [Symbol, ContextDev::Models::WebScreenshotParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebScreenshotParams::TimeoutOpts::Behavior }
@@ -464,19 +453,14 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScreenshotParams::TimeoutOpts} for more details.
         #
-        #   Optional request deadline and behavior on timeout. For GET requests, use
-        #   timeoutOpts[milliseconds]=30000&timeoutOpts[behavior]=fail or a JSON-encoded
-        #   timeoutOpts object.
+        #   Request deadline and what to return when it passes.
         #
-        #   @param milliseconds [Integer] Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebScreenshotParams::TimeoutOpts::Behavior] What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
+        #   @param behavior [Symbol, ContextDev::Models::WebScreenshotParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results. "return-partial" requires milliseconds of at
-        # least 5000.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
         #
         # @see ContextDev::Models::WebScreenshotParams::TimeoutOpts#behavior
         module Behavior
@@ -511,11 +495,8 @@ module ContextDev
         #   @param width [Integer] Viewport width in pixels.
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

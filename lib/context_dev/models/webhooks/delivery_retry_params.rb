@@ -15,13 +15,13 @@ module ContextDev
         required :delivery_id, String
 
         # @!attribute force
-        #   Resend a delivery that already succeeded.
+        #   Resend even if the delivery already succeeded. Defaults to false.
         #
         #   @return [Boolean, nil]
         optional :force, ContextDev::Internal::Type::Boolean
 
         # @!attribute tags
-        #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        #   Labels for filtering usage in the dashboard.
         #
         #   @return [Array<String>, nil]
         optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -35,9 +35,9 @@ module ContextDev
         # @!method initialize(delivery_id:, force: nil, tags: nil, idempotency_key: nil, request_options: {})
         #   @param delivery_id [String] Delivery ID.
         #
-        #   @param force [Boolean] Resend a delivery that already succeeded.
+        #   @param force [Boolean] Resend even if the delivery already succeeded. Defaults to false.
         #
-        #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
         #
         #   @param idempotency_key [String] Unique key to prevent duplicate retry requests.
         #

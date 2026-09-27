@@ -3,18 +3,15 @@
 module ContextDev
   module Resources
     class Webhooks
-      # Inspect and retry webhook deliveries. These endpoints cost no credits.
+      # Inspect and retry batch and monitor webhook deliveries.
       class Deliveries
-        # Some parameter documentations has been truncated, see
-        # {ContextDev::Models::Webhooks::DeliveryRetrieveParams} for more details.
-        #
-        # Get a webhook delivery, including its status and latest attempt.
+        # Retrieve a webhook delivery’s status and original payload.
         #
         # @overload retrieve(delivery_id, tags: nil, request_options: {})
         #
         # @param delivery_id [String] Delivery ID.
         #
-        # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
+        # @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         #
         # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
         #
@@ -33,7 +30,7 @@ module ContextDev
           )
         end
 
-        # List your batch or monitor webhook deliveries, newest first.
+        # List batch and monitor webhook deliveries from the last 30 days.
         #
         # @overload list(body:, request_options: {})
         #
@@ -54,10 +51,7 @@ module ContextDev
           )
         end
 
-        # Some parameter documentations has been truncated, see
-        # {ContextDev::Models::Webhooks::DeliveryListAttemptsParams} for more details.
-        #
-        # List delivery attempts, newest first.
+        # List a delivery’s attempts, newest first.
         #
         # @overload list_attempts(delivery_id, cursor: nil, limit: nil, tags: nil, request_options: {})
         #
@@ -67,7 +61,7 @@ module ContextDev
         #
         # @param limit [Integer] Number of attempts to return.
         #
-        # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
+        # @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         #
         # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
         #
@@ -86,18 +80,16 @@ module ContextDev
           )
         end
 
-        # Some parameter documentations has been truncated, see
-        # {ContextDev::Models::Webhooks::DeliveryRetryParams} for more details.
-        #
-        # Retry a webhook delivery within seven days of creation.
+        # Resend the original payload using the source’s current URL and secret. Available
+        # for 7 days after the event.
         #
         # @overload retry_(delivery_id, force: nil, tags: nil, idempotency_key: nil, request_options: {})
         #
         # @param delivery_id [String] Path param: Delivery ID.
         #
-        # @param force [Boolean] Body param: Resend a delivery that already succeeded.
+        # @param force [Boolean] Body param: Resend even if the delivery already succeeded. Defaults to false.
         #
-        # @param tags [Array<String>] Body param: Optional tags for tracking usage. Up to 20 tags, each 1 to 50 charac
+        # @param tags [Array<String>] Body param: Labels for filtering usage in the dashboard.
         #
         # @param idempotency_key [String] Header param: Unique key to prevent duplicate retry requests.
         #

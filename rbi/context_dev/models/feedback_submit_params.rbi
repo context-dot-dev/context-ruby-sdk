@@ -27,7 +27,7 @@ module ContextDev
       sig { params(request_id: String).void }
       attr_writer :request_id
 
-      # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      # Labels for filtering usage in the dashboard.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -59,7 +59,7 @@ module ContextDev
         # The request_id of the API call the feedback is about, from its response body or
         # X-Request-Id header.
         request_id: nil,
-        # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
         # The page the feedback is about, such as one page of a crawl or a docs page.
         url: nil,

@@ -3,15 +3,12 @@
 module ContextDev
   module Resources
     class Brand
-      # Retrieve logos, backdrops, colors, industry, description, and more. Provide
-      # exactly one lookup identifier in the request body: a domain, company name, email
-      # address, stock ticker, transaction descriptor, or direct URL. Note:
-      # `by_direct_url` fetches brand data only from the provided URL — not from the
-      # entire internet.
+      # Retrieve logos, colors, company details, and social links using one lookup
+      # identifier. A direct URL limits extraction to that page.
       #
       # @overload retrieve(body:, request_options: {})
       #
-      # @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] Exactly one lookup type must be provided.
+      # @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] One lookup, chosen by `type`.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -32,7 +29,8 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::BrandSearchParams} for more details.
       #
-      # Search indexed brands by name or domain
+      # Find up to 10 brands by name or domain, ordered by popularity. Use the returned
+      # domain to retrieve a full brand profile.
       #
       # @overload search(query:, autocomplete: nil, query_by: nil, tags: nil, typo_tolerance: nil, request_options: {})
       #
@@ -42,7 +40,7 @@ module ContextDev
       #
       # @param query_by [Array<Symbol, ContextDev::Models::BrandSearchParams::QueryBy>] Fields to match the search term against, as a comma-separated list or repeated p
       #
-      # @param tags [Array<String>] Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50 charac
+      # @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
       # @param typo_tolerance [Integer] Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
       #

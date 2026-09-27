@@ -49,11 +49,7 @@ module ContextDev
       sig { params(include_links: T::Boolean).void }
       attr_writer :include_links
 
-      # When true for PDF inputs, OCR the selected pages that have no usable text layer
-      # (scans), replacing each recovered page's text with the OCR result while pages
-      # with a real text layer keep it. pdf.start/pdf.end limit the inclusive page
-      # range. Billed at 1 credit per page OCR actually recovered, on top of the base
-      # request cost. When false, no OCR runs.
+      # Read text from images and scanned PDF pages. PDF page ranges still apply.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :ocr
 
@@ -74,8 +70,7 @@ module ContextDev
       sig { params(shorten_base64_images: T::Boolean).void }
       attr_writer :shorten_base64_images
 
-      # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-      # characters.
+      # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -89,11 +84,8 @@ module ContextDev
       sig { params(use_main_content_only: T::Boolean).void }
       attr_writer :use_main_content_only
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       sig { returns(T.nilable(ContextDev::ParseHandleParams::Zdr::OrSymbol)) }
       attr_reader :zdr
 
@@ -127,26 +119,18 @@ module ContextDev
         include_images: nil,
         # Preserve hyperlinks in Markdown output
         include_links: nil,
-        # When true for PDF inputs, OCR the selected pages that have no usable text layer
-        # (scans), replacing each recovered page's text with the OCR result while pages
-        # with a real text layer keep it. pdf.start/pdf.end limit the inclusive page
-        # range. Billed at 1 credit per page OCR actually recovered, on top of the base
-        # request cost. When false, no OCR runs.
+        # Read text from images and scanned PDF pages. PDF page ranges still apply.
         ocr: nil,
         # PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
         pdf: nil,
         # Shorten base64-encoded image data in the Markdown output
         shorten_base64_images: nil,
-        # Comma-separated tags for tracking request usage. Up to 20 tags, each 1-50
-        # characters.
+        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
         # Extract only the main content from HTML-like inputs
         use_main_content_only: nil,
-        # Set to enabled to bypass shared caches and omit request and response content
-        # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-        # omitted. Requires zero data retention to be enabled for your organization
-        # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-        # Successful ZDR responses include X-Context-ZDR: true.
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
         zdr: nil,
         request_options: {}
       )
@@ -371,11 +355,8 @@ module ContextDev
         end
       end
 
-      # Set to enabled to bypass shared caches and omit request and response content
-      # from retained usage logs. Asset uploads are skipped, so hosted image URLs are
-      # omitted. Requires zero data retention to be enabled for your organization
-      # (contact support@context.dev), otherwise the request fails with ZDR_NOT_ENABLED.
-      # Successful ZDR responses include X-Context-ZDR: true.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

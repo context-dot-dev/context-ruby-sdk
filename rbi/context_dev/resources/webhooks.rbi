@@ -3,7 +3,7 @@
 module ContextDev
   module Resources
     class Webhooks
-      # Inspect and retry webhook deliveries. These endpoints cost no credits.
+      # Inspect and retry batch and monitor webhook deliveries.
       sig { returns(ContextDev::Resources::Webhooks::Deliveries) }
       attr_reader :deliveries
 

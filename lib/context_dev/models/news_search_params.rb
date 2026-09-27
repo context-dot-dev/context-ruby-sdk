@@ -40,7 +40,7 @@ module ContextDev
       optional :sort_by, -> { ContextDev::NewsSearchParams::SortBy }, api_name: :sortBy
 
       # @!attribute tags
-      #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #   Labels for filtering usage in the dashboard.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -59,7 +59,7 @@ module ContextDev
       #
       #   @param sort_by [ContextDev::Models::NewsSearchParams::SortBy] Result ordering. Defaults to newest.
       #
-      #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -111,6 +111,7 @@ module ContextDev
             required :name, String
 
             # @!attribute type
+            #   Use `name` to identify the company by name.
             #
             #   @return [Symbol, :name]
             required :type, const: :name
@@ -120,7 +121,7 @@ module ContextDev
             #
             #   @param name [String] Company name.
             #
-            #   @param type [Symbol, :name]
+            #   @param type [Symbol, :name] Use `name` to identify the company by name.
           end
 
           class Domain < ContextDev::Internal::Type::BaseModel
@@ -131,6 +132,7 @@ module ContextDev
             required :domain, String
 
             # @!attribute type
+            #   Use `domain` to identify the company by website domain.
             #
             #   @return [Symbol, :domain]
             required :type, const: :domain
@@ -140,7 +142,7 @@ module ContextDev
             #
             #   @param domain [String] Company website domain, such as apple.com.
             #
-            #   @param type [Symbol, :domain]
+            #   @param type [Symbol, :domain] Use `domain` to identify the company by website domain.
           end
 
           class Ticker < ContextDev::Internal::Type::BaseModel
@@ -151,6 +153,7 @@ module ContextDev
             required :ticker, String
 
             # @!attribute type
+            #   Use `ticker` to identify a publicly traded company.
             #
             #   @return [Symbol, :ticker]
             required :type, const: :ticker
@@ -173,7 +176,7 @@ module ContextDev
             #
             #   @param exchange [Symbol, ContextDev::Models::NewsSearchParams::SearchBy::Entity::Ticker::Exchange] Stock exchange the ticker trades on, used to disambiguate tickers listed on mult
             #
-            #   @param type [Symbol, :ticker]
+            #   @param type [Symbol, :ticker] Use `ticker` to identify a publicly traded company.
 
             # Stock exchange the ticker trades on, used to disambiguate tickers listed on
             # multiple exchanges.
@@ -268,6 +271,7 @@ module ContextDev
             required :isin, String
 
             # @!attribute type
+            #   Use `isin` to identify the company by its securities identifier.
             #
             #   @return [Symbol, :isin]
             required :type, const: :isin
@@ -277,7 +281,7 @@ module ContextDev
             #
             #   @param isin [String] International Securities Identification Number.
             #
-            #   @param type [Symbol, :isin]
+            #   @param type [Symbol, :isin] Use `isin` to identify the company by its securities identifier.
           end
 
           # @!method self.variants

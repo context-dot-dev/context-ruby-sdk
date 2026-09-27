@@ -15,8 +15,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :id
 
-      # The crawl controls as submitted, so the limits requested can be compared against
-      # what the crawl reached.
+      # Crawl settings as submitted.
       sig { returns(T.nilable(ContextDev::CrawlControls)) }
       attr_reader :crawl
 
@@ -40,7 +39,7 @@ module ContextDev
       end
       attr_accessor :format_
 
-      # What submission took in, and what it charged for.
+      # What the submission accepted.
       sig { returns(ContextDev::Intake) }
       attr_reader :input
 
@@ -68,8 +67,8 @@ module ContextDev
       end
       attr_writer :progress
 
-      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      # it when contacting support about a failed request.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
       sig { returns(String) }
       attr_accessor :request_id
 
@@ -84,7 +83,7 @@ module ContextDev
       sig { returns(T::Array[String]) }
       attr_accessor :tags
 
-      # There is no finish time yet — the batch is still winding down.
+      # Batch timestamps.
       sig { returns(ContextDev::Models::BatchCancelResponse::Timing) }
       attr_reader :timing
 
@@ -130,14 +129,13 @@ module ContextDev
       def self.new(
         # Batch ID.
         id:,
-        # The crawl controls as submitted, so the limits requested can be compared against
-        # what the crawl reached.
+        # Crawl settings as submitted.
         crawl:,
         # What this batch cost so far.
         credits:,
         # What each page is returned as.
         format_:,
-        # What submission took in, and what it charged for.
+        # What the submission accepted.
         input:,
         # How pages were selected.
         mode:,
@@ -145,15 +143,15 @@ module ContextDev
         page_errors:,
         # How far the batch got before cancellation.
         progress:,
-        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        # it when contacting support about a failed request.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
         request_id:,
         # Always `cancelling`. Work already in flight finishes; the batch reaches
         # `cancelled` shortly after.
         status:,
         # Tags stored on the batch at submission.
         tags:,
-        # There is no finish time yet — the batch is still winding down.
+        # Batch timestamps.
         timing:,
         # API key usage for this request.
         key_metadata: nil
@@ -193,16 +191,14 @@ module ContextDev
             )
           end
 
-        # Credits debited at submission. The unspent remainder is refunded once the batch
-        # settles — read `credits.refunded` from GET /batch/{batch_id} then.
+        # Credits held at submission; unused credits are refunded when the batch settles.
         sig { returns(Integer) }
         attr_accessor :reserved
 
         # What this batch cost so far.
         sig { params(reserved: Integer).returns(T.attached_class) }
         def self.new(
-          # Credits debited at submission. The unspent remainder is refunded once the batch
-          # settles — read `credits.refunded` from GET /batch/{batch_id} then.
+          # Credits held at submission; unused credits are refunded when the batch settles.
           reserved:
         )
         end
@@ -289,7 +285,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :failed
 
-        # Reserved pages that will now be skipped, and refunded when the batch settles.
+        # Pages that will be skipped.
         sig { returns(Integer) }
         attr_accessor :pending
 
@@ -306,7 +302,7 @@ module ContextDev
         def self.new(
           # Pages that could not be scraped before the request landed.
           failed:,
-          # Reserved pages that will now be skipped, and refunded when the batch settles.
+          # Pages that will be skipped.
           pending:,
           # Pages scraped successfully before the request landed.
           succeeded:
@@ -367,7 +363,7 @@ module ContextDev
         sig { returns(T.nilable(String)) }
         attr_accessor :started_at
 
-        # There is no finish time yet — the batch is still winding down.
+        # Batch timestamps.
         sig do
           params(created_at: String, started_at: T.nilable(String)).returns(
             T.attached_class
@@ -399,7 +395,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -414,7 +410,7 @@ module ContextDev
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:

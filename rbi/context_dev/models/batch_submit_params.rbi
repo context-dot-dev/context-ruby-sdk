@@ -29,8 +29,8 @@ module ContextDev
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Completion webhook settings. Cannot be combined with webhookUrl. Omitting retry
-      # preserves legacy delivery; retry: {} opts into durable retries.
+      # Where to send the batch's final-status event. Omit `retry` for one attempt; `{}`
+      # uses the default retry schedule.
       sig { returns(T.nilable(ContextDev::BatchSubmitParams::Webhook)) }
       attr_reader :webhook
 
@@ -47,8 +47,8 @@ module ContextDev
       sig { params(webhook_url: String).void }
       attr_writer :webhook_url
 
-      # Any string unique to this submission. Retries with the same key return the
-      # original batch.
+      # Unique key per submission. Retrying with the same key and body returns the
+      # original batch; a different body returns `409`.
       sig { returns(T.nilable(String)) }
       attr_reader :idempotency_key
 
@@ -74,14 +74,14 @@ module ContextDev
         input:,
         # Tags stored on the batch. Filter the batch list by them later.
         tags: nil,
-        # Completion webhook settings. Cannot be combined with webhookUrl. Omitting retry
-        # preserves legacy delivery; retry: {} opts into durable retries.
+        # Where to send the batch's final-status event. Omit `retry` for one attempt; `{}`
+        # uses the default retry schedule.
         webhook: nil,
         # Legacy URL notified when the batch finishes. Preserves one best-effort attempt.
         # Cannot be combined with webhook.
         webhook_url: nil,
-        # Any string unique to this submission. Retries with the same key return the
-        # original batch.
+        # Unique key per submission. Retrying with the same key and body returns the
+        # original batch; a different body returns `409`.
         idempotency_key: nil,
         request_options: {}
       )
@@ -142,7 +142,7 @@ module ContextDev
           sig { returns(Symbol) }
           attr_accessor :mode
 
-          # Scrape up to 25K URLs in one batch.
+          # Scrape a list of up to 25,000 URLs.
           sig do
             params(
               data:
@@ -336,8 +336,7 @@ module ContextDev
                     )
                   end
 
-                # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                # alpha-2).
+                # Fetch from this country (ISO 3166-1 alpha-2).
                 sig do
                   returns(
                     T.nilable(
@@ -360,8 +359,7 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :exclude_selectors
 
-                # Also include each page's HTML in its result record, as an `html` field alongside
-                # the Markdown.
+                # Also return each page's HTML in `html`.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :include_html
 
@@ -382,14 +380,12 @@ module ContextDev
                 sig { params(include_links: T::Boolean).void }
                 attr_writer :include_links
 
-                # Keep only the subtrees matching these CSS selectors. Filtered pages are always
-                # fetched fresh, ignoring `maxAgeMs`.
+                # Keep only elements matching these CSS selectors. Filtered pages ignore
+                # `maxAgeMs`.
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :include_selectors
 
-                # Return a cached result if a prior scrape for the same parameters exists and is
-                # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-                # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+                # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
@@ -412,8 +408,7 @@ module ContextDev
                 end
                 attr_writer :pdf
 
-                # Wait briefly for CSS and transition animations to settle before extraction, on
-                # pages that render in a browser.
+                # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :settle_animations
 
@@ -461,31 +456,26 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                  # alpha-2).
+                  # Fetch from this country (ISO 3166-1 alpha-2).
                   country: nil,
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
                   exclude_selectors: nil,
-                  # Also include each page's HTML in its result record, as an `html` field alongside
-                  # the Markdown.
+                  # Also return each page's HTML in `html`.
                   include_html: nil,
                   # Include image references in the Markdown.
                   include_images: nil,
                   # Include links in the Markdown.
                   include_links: nil,
-                  # Keep only the subtrees matching these CSS selectors. Filtered pages are always
-                  # fetched fresh, ignoring `maxAgeMs`.
+                  # Keep only elements matching these CSS selectors. Filtered pages ignore
+                  # `maxAgeMs`.
                   include_selectors: nil,
-                  # Return a cached result if a prior scrape for the same parameters exists and is
-                  # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-                  # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+                  # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
                   max_age_ms: nil,
                   # PDF parsing controls. Use start/end to limit text extraction and embedded-image
                   # detection/OCR to an inclusive 1-based page range.
                   pdf: nil,
-                  # Wait briefly for CSS and transition animations to settle before extraction, on
-                  # pages that render in a browser.
+                  # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
                   # Shorten inline base64 image data.
                   shorten_base64_images: nil,
@@ -519,8 +509,7 @@ module ContextDev
                 def to_hash
                 end
 
-                # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                # alpha-2).
+                # Fetch from this country (ISO 3166-1 alpha-2).
                 module Country
                   extend ContextDev::Internal::Type::Enum
 
@@ -1582,18 +1571,14 @@ module ContextDev
                   sig { params(end_: Integer).void }
                   attr_writer :end_
 
-                  # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                  # replacing each recovered page's text with the OCR result while pages with a real
-                  # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                  # of the base request cost. When false, no OCR runs.
+                  # Read scanned PDF pages with OCR; preserve pages that already have text.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
                   sig { params(ocr: T::Boolean).void }
                   attr_writer :ocr
 
-                  # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                  # a 400 PDF_SKIPPED is returned.
+                  # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :should_parse
 
@@ -1621,13 +1606,9 @@ module ContextDev
                     # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
                     # Must be greater than or equal to start when both are provided.
                     end_: nil,
-                    # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                    # replacing each recovered page's text with the OCR result while pages with a real
-                    # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                    # of the base request cost. When false, no OCR runs.
+                    # Read scanned PDF pages with OCR; preserve pages that already have text.
                     ocr: nil,
-                    # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                    # a 400 PDF_SKIPPED is returned.
+                    # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
                     # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
                     start: nil
@@ -1798,8 +1779,7 @@ module ContextDev
                     )
                   end
 
-                # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                # alpha-2).
+                # Fetch from this country (ISO 3166-1 alpha-2).
                 sig do
                   returns(
                     T.nilable(
@@ -1822,14 +1802,12 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :exclude_selectors
 
-                # Keep only the subtrees matching these CSS selectors. Filtered pages are always
-                # fetched fresh, ignoring `maxAgeMs`.
+                # Keep only elements matching these CSS selectors. Filtered pages ignore
+                # `maxAgeMs`.
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :include_selectors
 
-                # Return a cached result if a prior scrape for the same parameters exists and is
-                # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-                # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+                # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
@@ -1852,8 +1830,7 @@ module ContextDev
                 end
                 attr_writer :pdf
 
-                # Wait briefly for CSS and transition animations to settle before extraction, on
-                # pages that render in a browser.
+                # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :settle_animations
 
@@ -1890,24 +1867,20 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                  # alpha-2).
+                  # Fetch from this country (ISO 3166-1 alpha-2).
                   country: nil,
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
                   exclude_selectors: nil,
-                  # Keep only the subtrees matching these CSS selectors. Filtered pages are always
-                  # fetched fresh, ignoring `maxAgeMs`.
+                  # Keep only elements matching these CSS selectors. Filtered pages ignore
+                  # `maxAgeMs`.
                   include_selectors: nil,
-                  # Return a cached result if a prior scrape for the same parameters exists and is
-                  # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-                  # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+                  # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
                   max_age_ms: nil,
                   # PDF parsing controls. Use start/end to limit text extraction and embedded-image
                   # detection/OCR to an inclusive 1-based page range.
                   pdf: nil,
-                  # Wait briefly for CSS and transition animations to settle before extraction, on
-                  # pages that render in a browser.
+                  # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
                   # Return the main content without navigation or footers.
                   use_main_content_only: nil,
@@ -1935,8 +1908,7 @@ module ContextDev
                 def to_hash
                 end
 
-                # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                # alpha-2).
+                # Fetch from this country (ISO 3166-1 alpha-2).
                 module Country
                   extend ContextDev::Internal::Type::Enum
 
@@ -2998,18 +2970,14 @@ module ContextDev
                   sig { params(end_: Integer).void }
                   attr_writer :end_
 
-                  # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                  # replacing each recovered page's text with the OCR result while pages with a real
-                  # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                  # of the base request cost. When false, no OCR runs.
+                  # Read scanned PDF pages with OCR; preserve pages that already have text.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
                   sig { params(ocr: T::Boolean).void }
                   attr_writer :ocr
 
-                  # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                  # a 400 PDF_SKIPPED is returned.
+                  # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :should_parse
 
@@ -3037,13 +3005,9 @@ module ContextDev
                     # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
                     # Must be greater than or equal to start when both are provided.
                     end_: nil,
-                    # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                    # replacing each recovered page's text with the OCR result while pages with a real
-                    # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                    # of the base request cost. When false, no OCR runs.
+                    # Read scanned PDF pages with OCR; preserve pages that already have text.
                     ocr: nil,
-                    # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                    # a 400 PDF_SKIPPED is returned.
+                    # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
                     # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
                     start: nil
@@ -3520,8 +3484,7 @@ module ContextDev
                     )
                   end
 
-                # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                # alpha-2).
+                # Fetch from this country (ISO 3166-1 alpha-2).
                 sig do
                   returns(
                     T.nilable(
@@ -3544,8 +3507,7 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :exclude_selectors
 
-                # Also include each page's HTML in its result record, as an `html` field alongside
-                # the Markdown.
+                # Also return each page's HTML in `html`.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :include_html
 
@@ -3566,14 +3528,12 @@ module ContextDev
                 sig { params(include_links: T::Boolean).void }
                 attr_writer :include_links
 
-                # Keep only the subtrees matching these CSS selectors. Filtered pages are always
-                # fetched fresh, ignoring `maxAgeMs`.
+                # Keep only elements matching these CSS selectors. Filtered pages ignore
+                # `maxAgeMs`.
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :include_selectors
 
-                # Return a cached result if a prior scrape for the same parameters exists and is
-                # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-                # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+                # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
@@ -3596,8 +3556,7 @@ module ContextDev
                 end
                 attr_writer :pdf
 
-                # Wait briefly for CSS and transition animations to settle before extraction, on
-                # pages that render in a browser.
+                # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :settle_animations
 
@@ -3645,31 +3604,26 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                  # alpha-2).
+                  # Fetch from this country (ISO 3166-1 alpha-2).
                   country: nil,
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
                   exclude_selectors: nil,
-                  # Also include each page's HTML in its result record, as an `html` field alongside
-                  # the Markdown.
+                  # Also return each page's HTML in `html`.
                   include_html: nil,
                   # Include image references in the Markdown.
                   include_images: nil,
                   # Include links in the Markdown.
                   include_links: nil,
-                  # Keep only the subtrees matching these CSS selectors. Filtered pages are always
-                  # fetched fresh, ignoring `maxAgeMs`.
+                  # Keep only elements matching these CSS selectors. Filtered pages ignore
+                  # `maxAgeMs`.
                   include_selectors: nil,
-                  # Return a cached result if a prior scrape for the same parameters exists and is
-                  # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-                  # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+                  # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
                   max_age_ms: nil,
                   # PDF parsing controls. Use start/end to limit text extraction and embedded-image
                   # detection/OCR to an inclusive 1-based page range.
                   pdf: nil,
-                  # Wait briefly for CSS and transition animations to settle before extraction, on
-                  # pages that render in a browser.
+                  # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
                   # Shorten inline base64 image data.
                   shorten_base64_images: nil,
@@ -3703,8 +3657,7 @@ module ContextDev
                 def to_hash
                 end
 
-                # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                # alpha-2).
+                # Fetch from this country (ISO 3166-1 alpha-2).
                 module Country
                   extend ContextDev::Internal::Type::Enum
 
@@ -4766,18 +4719,14 @@ module ContextDev
                   sig { params(end_: Integer).void }
                   attr_writer :end_
 
-                  # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                  # replacing each recovered page's text with the OCR result while pages with a real
-                  # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                  # of the base request cost. When false, no OCR runs.
+                  # Read scanned PDF pages with OCR; preserve pages that already have text.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
                   sig { params(ocr: T::Boolean).void }
                   attr_writer :ocr
 
-                  # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                  # a 400 PDF_SKIPPED is returned.
+                  # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :should_parse
 
@@ -4805,13 +4754,9 @@ module ContextDev
                     # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
                     # Must be greater than or equal to start when both are provided.
                     end_: nil,
-                    # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                    # replacing each recovered page's text with the OCR result while pages with a real
-                    # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                    # of the base request cost. When false, no OCR runs.
+                    # Read scanned PDF pages with OCR; preserve pages that already have text.
                     ocr: nil,
-                    # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                    # a 400 PDF_SKIPPED is returned.
+                    # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
                     # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
                     start: nil
@@ -5206,8 +5151,7 @@ module ContextDev
                     )
                   end
 
-                # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                # alpha-2).
+                # Fetch from this country (ISO 3166-1 alpha-2).
                 sig do
                   returns(
                     T.nilable(
@@ -5230,14 +5174,12 @@ module ContextDev
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :exclude_selectors
 
-                # Keep only the subtrees matching these CSS selectors. Filtered pages are always
-                # fetched fresh, ignoring `maxAgeMs`.
+                # Keep only elements matching these CSS selectors. Filtered pages ignore
+                # `maxAgeMs`.
                 sig { returns(T.nilable(T::Array[String])) }
                 attr_accessor :include_selectors
 
-                # Return a cached result if a prior scrape for the same parameters exists and is
-                # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-                # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+                # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
@@ -5260,8 +5202,7 @@ module ContextDev
                 end
                 attr_writer :pdf
 
-                # Wait briefly for CSS and transition animations to settle before extraction, on
-                # pages that render in a browser.
+                # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :settle_animations
 
@@ -5298,24 +5239,20 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                  # alpha-2).
+                  # Fetch from this country (ISO 3166-1 alpha-2).
                   country: nil,
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
                   exclude_selectors: nil,
-                  # Keep only the subtrees matching these CSS selectors. Filtered pages are always
-                  # fetched fresh, ignoring `maxAgeMs`.
+                  # Keep only elements matching these CSS selectors. Filtered pages ignore
+                  # `maxAgeMs`.
                   include_selectors: nil,
-                  # Return a cached result if a prior scrape for the same parameters exists and is
-                  # younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-                  # omitted. Max is 30 days (2592000000 ms). Set to 0 to always scrape fresh.
+                  # Maximum cache age in milliseconds. Defaults to 1 day. `0` fetches fresh.
                   max_age_ms: nil,
                   # PDF parsing controls. Use start/end to limit text extraction and embedded-image
                   # detection/OCR to an inclusive 1-based page range.
                   pdf: nil,
-                  # Wait briefly for CSS and transition animations to settle before extraction, on
-                  # pages that render in a browser.
+                  # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
                   # Return the main content without navigation or footers.
                   use_main_content_only: nil,
@@ -5343,8 +5280,7 @@ module ContextDev
                 def to_hash
                 end
 
-                # Fetch the target page through a residential proxy in this country (ISO 3166-1
-                # alpha-2).
+                # Fetch from this country (ISO 3166-1 alpha-2).
                 module Country
                   extend ContextDev::Internal::Type::Enum
 
@@ -6406,18 +6342,14 @@ module ContextDev
                   sig { params(end_: Integer).void }
                   attr_writer :end_
 
-                  # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                  # replacing each recovered page's text with the OCR result while pages with a real
-                  # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                  # of the base request cost. When false, no OCR runs.
+                  # Read scanned PDF pages with OCR; preserve pages that already have text.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
                   sig { params(ocr: T::Boolean).void }
                   attr_writer :ocr
 
-                  # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                  # a 400 PDF_SKIPPED is returned.
+                  # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :should_parse
 
@@ -6445,13 +6377,9 @@ module ContextDev
                     # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
                     # Must be greater than or equal to start when both are provided.
                     end_: nil,
-                    # When true, OCR the selected PDF pages that have no usable text layer (scans),
-                    # replacing each recovered page's text with the OCR result while pages with a real
-                    # text layer keep it. Billed at 1 credit per page OCR actually recovered, on top
-                    # of the base request cost. When false, no OCR runs.
+                    # Read scanned PDF pages with OCR; preserve pages that already have text.
                     ocr: nil,
-                    # When true, PDF URLs are fetched and parsed. When false, PDF URLs are skipped and
-                    # a 400 PDF_SKIPPED is returned.
+                    # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
                     # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
                     start: nil
@@ -6504,6 +6432,8 @@ module ContextDev
             )
           end
 
+        # Public HTTP(S) URL that receives batch completion, failure, or cancellation
+        # events.
         sig { returns(String) }
         attr_accessor :url
 
@@ -6514,14 +6444,16 @@ module ContextDev
         sig { params(retry_: ContextDev::RetryConfig::OrHash).void }
         attr_writer :retry_
 
-        # Completion webhook settings. Cannot be combined with webhookUrl. Omitting retry
-        # preserves legacy delivery; retry: {} opts into durable retries.
+        # Where to send the batch's final-status event. Omit `retry` for one attempt; `{}`
+        # uses the default retry schedule.
         sig do
           params(url: String, retry_: ContextDev::RetryConfig::OrHash).returns(
             T.attached_class
           )
         end
         def self.new(
+          # Public HTTP(S) URL that receives batch completion, failure, or cancellation
+          # events.
           url:,
           # Webhook retry settings. Use {} for the default schedule.
           retry_: nil

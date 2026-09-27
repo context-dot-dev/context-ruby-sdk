@@ -11,8 +11,8 @@ module ContextDev
           )
         end
 
-      # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      # it when contacting support about a failed request.
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
       sig { returns(String) }
       attr_accessor :request_id
 
@@ -38,7 +38,7 @@ module ContextDev
       sig { params(has_more: T::Boolean).void }
       attr_writer :has_more
 
-      # Credit usage, included whenever a valid API key is provided.
+      # Credits this request used and your remaining balance.
       sig do
         returns(T.nilable(ContextDev::Models::BatchListResponse::KeyMetadata))
       end
@@ -67,14 +67,14 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Unique id of this API call, also sent in the X-Request-Id response header. Quote
-        # it when contacting support about a failed request.
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
         request_id:,
         # Batches on this page.
         data: nil,
         # Whether another page is available.
         has_more: nil,
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         key_metadata: nil,
         # Cursor for the next page.
         next_cursor: nil
@@ -104,19 +104,18 @@ module ContextDev
             )
           end
 
-        # Batch ID used to retrieve or cancel the job.
+        # Batch ID.
         sig { returns(String) }
         attr_accessor :id
 
-        # The crawl controls as submitted, so the limits requested can be compared against
-        # what the crawl reached.
+        # Crawl settings as submitted.
         sig { returns(T.nilable(ContextDev::CrawlControls)) }
         attr_reader :crawl
 
         sig { params(crawl: T.nilable(ContextDev::CrawlControls::OrHash)).void }
         attr_writer :crawl
 
-        # What this batch has done to your credit balance.
+        # Batch credit usage and settlement.
         sig { returns(ContextDev::Models::BatchListResponse::Data::Credits) }
         attr_reader :credits
 
@@ -145,14 +144,14 @@ module ContextDev
         end
         attr_accessor :format_
 
-        # What submission took in, and what it charged for.
+        # What the submission accepted.
         sig { returns(ContextDev::Intake) }
         attr_reader :input
 
         sig { params(input: ContextDev::Intake::OrHash).void }
         attr_writer :input
 
-        # How pages were selected. Matches `input.mode` on the submit request.
+        # `scrape` (URL list) or `crawl`.
         sig do
           returns(
             ContextDev::Models::BatchListResponse::Data::Mode::TaggedSymbol
@@ -177,8 +176,8 @@ module ContextDev
         end
         attr_writer :progress
 
-        # Download links, available once the batch reaches a final status and null before
-        # then. GET /batch/{batch_id}/results serves the same records as paginated JSON.
+        # Result download links; null until the batch finishes. Files are deleted 7 days
+        # after the batch finishes.
         sig do
           returns(
             T.nilable(ContextDev::Models::BatchListResponse::Data::Results)
@@ -244,12 +243,11 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Batch ID used to retrieve or cancel the job.
+          # Batch ID.
           id:,
-          # The crawl controls as submitted, so the limits requested can be compared against
-          # what the crawl reached.
+          # Crawl settings as submitted.
           crawl:,
-          # What this batch has done to your credit balance.
+          # Batch credit usage and settlement.
           credits:,
           # A failure of the batch as a whole, distinct from the per-page failures in
           # `page_errors`.
@@ -257,17 +255,17 @@ module ContextDev
           # What each page is returned as. Matches `input.data.format` on the submit
           # request.
           format_:,
-          # What submission took in, and what it charged for.
+          # What the submission accepted.
           input:,
-          # How pages were selected. Matches `input.mode` on the submit request.
+          # `scrape` (URL list) or `crawl`.
           mode:,
           # Individual page failures grouped by error code, sorted by count. Unrelated to
           # `failure`, which is the batch itself failing.
           page_errors:,
           # Pages attempted so far. Use `status` to check completion.
           progress:,
-          # Download links, available once the batch reaches a final status and null before
-          # then. GET /batch/{batch_id}/results serves the same records as paginated JSON.
+          # Result download links; null until the batch finishes. Files are deleted 7 days
+          # after the batch finishes.
           results:,
           # Current state. `completed`, `cancelled`, and `failed` are final.
           status:,
@@ -312,27 +310,23 @@ module ContextDev
               )
             end
 
-          # `reserved` minus `refunded` plus `ocr_charged` — what the batch has cost so far.
-          # Equal to `reserved` until the batch settles.
+          # `reserved` minus `refunded` plus `ocr_charged`.
           sig { returns(Integer) }
           attr_accessor :net
 
-          # Credits charged for PDF pages recovered by OCR (pdf.ocr=true), 1 per recovered
-          # page, on top of `reserved`. Stays 0 until the batch settles.
+          # OCR usage charged when the batch settles.
           sig { returns(Integer) }
           attr_accessor :ocr_charged
 
-          # Credits returned for pages that did not succeed. Stays 0 until the batch reaches
-          # a final status, then settles in one movement.
+          # Credits returned for unsuccessful pages when the batch settles.
           sig { returns(Integer) }
           attr_accessor :refunded
 
-          # Credits debited from your balance the moment the batch was accepted. This is a
-          # charge, not a forecast — the whole amount leaves the balance up front.
+          # Credits held when the batch was accepted.
           sig { returns(Integer) }
           attr_accessor :reserved
 
-          # What this batch has done to your credit balance.
+          # Batch credit usage and settlement.
           sig do
             params(
               net: Integer,
@@ -342,17 +336,13 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # `reserved` minus `refunded` plus `ocr_charged` — what the batch has cost so far.
-            # Equal to `reserved` until the batch settles.
+            # `reserved` minus `refunded` plus `ocr_charged`.
             net:,
-            # Credits charged for PDF pages recovered by OCR (pdf.ocr=true), 1 per recovered
-            # page, on top of `reserved`. Stays 0 until the batch settles.
+            # OCR usage charged when the batch settles.
             ocr_charged:,
-            # Credits returned for pages that did not succeed. Stays 0 until the batch reaches
-            # a final status, then settles in one movement.
+            # Credits returned for unsuccessful pages when the batch settles.
             refunded:,
-            # Credits debited from your balance the moment the batch was accepted. This is a
-            # charge, not a forecast — the whole amount leaves the balance up front.
+            # Credits held when the batch was accepted.
             reserved:
           )
           end
@@ -404,7 +394,7 @@ module ContextDev
           end
         end
 
-        # How pages were selected. Matches `input.mode` on the submit request.
+        # `scrape` (URL list) or `crawl`.
         module Mode
           extend ContextDev::Internal::Type::Enum
 
@@ -449,9 +439,8 @@ module ContextDev
           sig { returns(Integer) }
           attr_accessor :failed
 
-          # Reserved pages not yet attempted. A cancelled batch keeps reporting the URLs it
-          # never reached; a crawl whose `input.reserved_is_ceiling` is true reports 0 once
-          # final, because its unspent budget was never real pages.
+          # Accepted pages not yet attempted. Unused crawl capacity is excluded after
+          # completion.
           sig { returns(Integer) }
           attr_accessor :pending
 
@@ -470,9 +459,8 @@ module ContextDev
           def self.new(
             # Pages that could not be scraped.
             failed:,
-            # Reserved pages not yet attempted. A cancelled batch keeps reporting the URLs it
-            # never reached; a crawl whose `input.reserved_is_ceiling` is true reports 0 once
-            # final, because its unspent budget was never real pages.
+            # Accepted pages not yet attempted. Unused crawl capacity is excluded after
+            # completion.
             pending:,
             # Pages scraped successfully.
             succeeded:
@@ -497,7 +485,7 @@ module ContextDev
               )
             end
 
-          # When the download URLs expire.
+          # When these links expire (24 hours after this response).
           sig { returns(String) }
           attr_accessor :expires_at
 
@@ -511,8 +499,8 @@ module ContextDev
           end
           attr_accessor :files
 
-          # Download links, available once the batch reaches a final status and null before
-          # then. GET /batch/{batch_id}/results serves the same records as paginated JSON.
+          # Result download links; null until the batch finishes. Files are deleted 7 days
+          # after the batch finishes.
           sig do
             params(
               expires_at: String,
@@ -523,7 +511,7 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # When the download URLs expire.
+            # When these links expire (24 hours after this response).
             expires_at:,
             # Result files. Order is not guaranteed.
             files:
@@ -701,7 +689,7 @@ module ContextDev
             )
           end
 
-        # Credits used by this request.
+        # Credits charged for this request.
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
@@ -709,14 +697,14 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
-        # Credit usage, included whenever a valid API key is provided.
+        # Credits this request used and your remaining balance.
         sig do
           params(credits_consumed: Integer, credits_remaining: Integer).returns(
             T.attached_class
           )
         end
         def self.new(
-          # Credits used by this request.
+          # Credits charged for this request.
           credits_consumed:,
           # Credits remaining for your organization.
           credits_remaining:

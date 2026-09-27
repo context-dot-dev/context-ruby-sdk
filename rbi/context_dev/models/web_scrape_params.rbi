@@ -11,18 +11,18 @@ module ContextDev
           T.any(ContextDev::WebScrapeParams, ContextDev::Internal::AnyHash)
         end
 
-      # Outputs to return. Enable at least one; omitted formats are false.
+      # Outputs to return. Set at least one to `true`.
       sig { returns(ContextDev::WebScrapeParams::Formats) }
       attr_reader :formats
 
       sig { params(formats: ContextDev::WebScrapeParams::Formats::OrHash).void }
       attr_writer :formats
 
-      # The URL to scrape.
+      # Public HTTP or HTTPS URL to scrape.
       sig { returns(String) }
       attr_accessor :url
 
-      # Highlight options. Requires formats.highlights: true.
+      # Required when `formats.highlights` is `true`.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::HighlightsParams)) }
       attr_reader :highlights_params
 
@@ -56,7 +56,7 @@ module ContextDev
       end
       attr_writer :json_params
 
-      # Markdown options. Requires formats.markdown: true.
+      # Markdown options. Requires `formats.markdown`.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::MarkdownParams)) }
       attr_reader :markdown_params
 
@@ -67,10 +67,8 @@ module ContextDev
       end
       attr_writer :markdown_params
 
-      # Maximum age of each cached output. Defaults to 1 day; 0 fetches fresh and
-      # updates the requested outputs. Compatible outputs are shared with the individual
-      # scrape endpoints. Image results with hosted files refresh after 23 hours; other
-      # outputs retain their own freshness.
+      # Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
+      # 1 day.
       sig { returns(T.nilable(Integer)) }
       attr_reader :max_age_ms
 
@@ -111,8 +109,7 @@ module ContextDev
       end
       attr_writer :screenshot_params
 
-      # Shared browser and content settings. Content filters leave screenshots and
-      # original bytes unchanged.
+      # Browser and content settings shared by all outputs.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::SharedParams)) }
       attr_reader :shared_params
 
@@ -130,17 +127,8 @@ module ContextDev
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Total deadline, including navigation, actions, waiting, and all outputs.
-      # Defaults to 60000 milliseconds with behavior fail. Individual outputs have
-      # internal deadlines that reserve time to return completed outputs; timed-out
-      # outputs have success: false and data: null under either behavior. The overall
-      # request deadline remains enforced: fail returns an error if that deadline is
-      # reached. Use return-partial to allow the current page state and available
-      # outputs when the page is still loading. Partial responses set isPartial. Failed
-      # retrievals and incomplete captures are not cached; valid captured pieces may be
-      # cached independently. Fixed waits must fit before a response reserve of up to
-      # 5000 milliseconds (at most one quarter of the timeout) when using
-      # return-partial.
+      # Deadline for the whole request. Defaults to 60000 ms with `fail`. Fixed waits
+      # must end before it.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::TimeoutOpts)) }
       attr_reader :timeout_opts
 
@@ -151,8 +139,7 @@ module ContextDev
       end
       attr_writer :timeout_opts
 
-      # Zero data retention. Bypasses caches and uploads; excludes request/response
-      # content and tags from logs. Must be enabled for your organization.
+      # `enabled` turns on zero data retention. Your organization must have ZDR enabled.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::Zdr::OrSymbol)) }
       attr_reader :zdr
 
@@ -181,22 +168,20 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Outputs to return. Enable at least one; omitted formats are false.
+        # Outputs to return. Set at least one to `true`.
         formats:,
-        # The URL to scrape.
+        # Public HTTP or HTTPS URL to scrape.
         url:,
-        # Highlight options. Requires formats.highlights: true.
+        # Required when `formats.highlights` is `true`.
         highlights_params: nil,
         # Image options. Requires formats.images: true.
         image_params: nil,
         # Required when formats.json is true.
         json_params: nil,
-        # Markdown options. Requires formats.markdown: true.
+        # Markdown options. Requires `formats.markdown`.
         markdown_params: nil,
-        # Maximum age of each cached output. Defaults to 1 day; 0 fetches fresh and
-        # updates the requested outputs. Compatible outputs are shared with the individual
-        # scrape endpoints. Image results with hosted files refresh after 23 hours; other
-        # outputs retain their own freshness.
+        # Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
+        # 1 day.
         max_age_ms: nil,
         # Required when formats.parse is true.
         parse_params: nil,
@@ -204,25 +189,14 @@ module ContextDev
         product_params: nil,
         # Screenshot options. Requires formats.screenshot: true.
         screenshot_params: nil,
-        # Shared browser and content settings. Content filters leave screenshots and
-        # original bytes unchanged.
+        # Browser and content settings shared by all outputs.
         shared_params: nil,
         # Labels for tracking request usage. Not retained when zdr is enabled.
         tags: nil,
-        # Total deadline, including navigation, actions, waiting, and all outputs.
-        # Defaults to 60000 milliseconds with behavior fail. Individual outputs have
-        # internal deadlines that reserve time to return completed outputs; timed-out
-        # outputs have success: false and data: null under either behavior. The overall
-        # request deadline remains enforced: fail returns an error if that deadline is
-        # reached. Use return-partial to allow the current page state and available
-        # outputs when the page is still loading. Partial responses set isPartial. Failed
-        # retrievals and incomplete captures are not cached; valid captured pieces may be
-        # cached independently. Fixed waits must fit before a response reserve of up to
-        # 5000 milliseconds (at most one quarter of the timeout) when using
-        # return-partial.
+        # Deadline for the whole request. Defaults to 60000 ms with `fail`. Fixed waits
+        # must end before it.
         timeout_opts: nil,
-        # Zero data retention. Bypasses caches and uploads; excludes request/response
-        # content and tags from logs. Must be enabled for your organization.
+        # `enabled` turns on zero data retention. Your organization must have ZDR enabled.
         zdr: nil,
         request_options: {}
       )
@@ -268,9 +242,7 @@ module ContextDev
         sig { params(bytes: T::Boolean).void }
         attr_writer :bytes
 
-        # Relevant Markdown excerpts for your question or topic, preserving code, lists,
-        # and tables, with headings included when needed for context. Adds 3 credits when
-        # passages are returned.
+        # Markdown excerpts relevant to `highlightsParams.query`.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :highlights
 
@@ -291,8 +263,7 @@ module ContextDev
         sig { params(images: T::Boolean).void }
         attr_writer :images
 
-        # Page data extracted using your schema. Adds 4 credits when extraction succeeds
-        # and its result is returned.
+        # An object matching `jsonParams.schema`, extracted from the page.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :json
 
@@ -306,29 +277,28 @@ module ContextDev
         sig { params(markdown: T::Boolean).void }
         attr_writer :markdown
 
-        # Fields selected by parseParams.rules.
+        # Fields extracted with `parseParams.rules`, returned as `parsed`.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :parse
 
         sig { params(parse: T::Boolean).void }
         attr_writer :parse
 
-        # Product details such as name, price, and availability. Adds 1 credit when its
-        # successful result is returned or the target page is missing.
+        # Product details such as name, price, and availability.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :product
 
         sig { params(product: T::Boolean).void }
         attr_writer :product
 
-        # An inline image of the page.
+        # A screenshot of the page.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :screenshot
 
         sig { params(screenshot: T::Boolean).void }
         attr_writer :screenshot
 
-        # Outputs to return. Enable at least one; omitted formats are false.
+        # Outputs to return. Set at least one to `true`.
         sig do
           params(
             bytes: T::Boolean,
@@ -345,25 +315,21 @@ module ContextDev
         def self.new(
           # The original HTTP response body.
           bytes: nil,
-          # Relevant Markdown excerpts for your question or topic, preserving code, lists,
-          # and tables, with headings included when needed for context. Adds 3 credits when
-          # passages are returned.
+          # Markdown excerpts relevant to `highlightsParams.query`.
           highlights: nil,
           # Rendered HTML.
           html: nil,
           # Images found on the page.
           images: nil,
-          # Page data extracted using your schema. Adds 4 credits when extraction succeeds
-          # and its result is returned.
+          # An object matching `jsonParams.schema`, extracted from the page.
           json: nil,
           # Page content as Markdown.
           markdown: nil,
-          # Fields selected by parseParams.rules.
+          # Fields extracted with `parseParams.rules`, returned as `parsed`.
           parse: nil,
-          # Product details such as name, price, and availability. Adds 1 credit when its
-          # successful result is returned or the target page is missing.
+          # Product details such as name, price, and availability.
           product: nil,
-          # An inline image of the page.
+          # A screenshot of the page.
           screenshot: nil
         )
         end
@@ -400,14 +366,14 @@ module ContextDev
         sig { returns(String) }
         attr_accessor :query
 
-        # Maximum combined length of the returned passages, in characters.
+        # Maximum combined length of returned passages.
         sig { returns(T.nilable(Integer)) }
         attr_reader :max_characters
 
         sig { params(max_characters: Integer).void }
         attr_writer :max_characters
 
-        # Highlight options. Requires formats.highlights: true.
+        # Required when `formats.highlights` is `true`.
         sig do
           params(query: String, max_characters: Integer).returns(
             T.attached_class
@@ -416,7 +382,7 @@ module ContextDev
         def self.new(
           # The question or topic to find passages for.
           query:,
-          # Maximum combined length of the returned passages, in characters.
+          # Maximum combined length of returned passages.
           max_characters: nil
         )
         end
@@ -435,7 +401,7 @@ module ContextDev
             )
           end
 
-        # For visual duplicates, keep the largest image.
+        # Set `visual` to drop visual duplicates, keeping the largest copy.
         sig do
           returns(
             T.nilable(
@@ -452,9 +418,7 @@ module ContextDev
         end
         attr_writer :dedupe
 
-        # Add dimensions, a visual category, or a hosted file URL. Each image has a
-        # maximum processing time of 30000 milliseconds, bounded by the remaining request
-        # deadline.
+        # Extra data per image: `dimensions`, `classification`, or a hosted `file` URL.
         sig do
           returns(
             T.nilable(
@@ -487,11 +451,9 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # For visual duplicates, keep the largest image.
+          # Set `visual` to drop visual duplicates, keeping the largest copy.
           dedupe: nil,
-          # Add dimensions, a visual category, or a hosted file URL. Each image has a
-          # maximum processing time of 30000 milliseconds, bounded by the remaining request
-          # deadline.
+          # Extra data per image: `dimensions`, `classification`, or a hosted `file` URL.
           enrich: nil
         )
         end
@@ -511,7 +473,7 @@ module ContextDev
         def to_hash
         end
 
-        # For visual duplicates, keep the largest image.
+        # Set `visual` to drop visual duplicates, keeping the largest copy.
         module Dedupe
           extend ContextDev::Internal::Type::Enum
 
@@ -589,16 +551,12 @@ module ContextDev
             )
           end
 
-        # JSON Schema for the returned object. Must describe a top-level object; at most
-        # 50 KB serialized. Optional fields the page does not state are omitted, or null
-        # when their type allows null, while required non-nullable fields always receive a
-        # best-effort value, so prefer nullable or optional fields for data a page may
-        # omit. Zod users can pass the output of z.toJSONSchema().
+        # JSON Schema for a top-level object, up to 50 KB. Use optional or nullable fields
+        # for missing facts.
         sig { returns(T::Hash[Symbol, T.anything]) }
         attr_accessor :schema
 
-        # Optional guidance on which facts to prioritize or how to interpret schema
-        # fields.
+        # Extra guidance, such as which facts to prefer or how to read a field.
         sig { returns(T.nilable(String)) }
         attr_reader :instructions
 
@@ -613,14 +571,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # JSON Schema for the returned object. Must describe a top-level object; at most
-          # 50 KB serialized. Optional fields the page does not state are omitted, or null
-          # when their type allows null, while required non-nullable fields always receive a
-          # best-effort value, so prefer nullable or optional fields for data a page may
-          # omit. Zod users can pass the output of z.toJSONSchema().
+          # JSON Schema for a top-level object, up to 50 KB. Use optional or nullable fields
+          # for missing facts.
           schema:,
-          # Optional guidance on which facts to prioritize or how to interpret schema
-          # fields.
+          # Extra guidance, such as which facts to prefer or how to read a field.
           instructions: nil
         )
         end
@@ -643,19 +597,22 @@ module ContextDev
             )
           end
 
+        # Include images in the Markdown using image syntax with URLs and alt text.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :include_images
 
         sig { params(include_images: T::Boolean).void }
         attr_writer :include_images
 
+        # Keep link URLs in the Markdown. Set false to return link text without URLs.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :include_links
 
         sig { params(include_links: T::Boolean).void }
         attr_writer :include_links
 
-        # Base64 images use placeholders by default. Requires includeImages: true.
+        # How base64 images appear: `placeholder` (default) or `preserve`. Requires
+        # `includeImages`.
         sig do
           returns(
             T.nilable(
@@ -673,7 +630,7 @@ module ContextDev
         end
         attr_writer :inline_images
 
-        # Markdown options. Requires formats.markdown: true.
+        # Markdown options. Requires `formats.markdown`.
         sig do
           params(
             include_images: T::Boolean,
@@ -683,9 +640,12 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
+          # Include images in the Markdown using image syntax with URLs and alt text.
           include_images: nil,
+          # Keep link URLs in the Markdown. Set false to return link text without URLs.
           include_links: nil,
-          # Base64 images use placeholders by default. Requires includeImages: true.
+          # How base64 images appear: `placeholder` (default) or `preserve`. Requires
+          # `includeImages`.
           inline_images: nil
         )
         end
@@ -703,7 +663,8 @@ module ContextDev
         def to_hash
         end
 
-        # Base64 images use placeholders by default. Requires includeImages: true.
+        # How base64 images appear: `placeholder` (default) or `preserve`. Requires
+        # `includeImages`.
         module InlineImages
           extend ContextDev::Internal::Type::Enum
 
@@ -748,8 +709,8 @@ module ContextDev
             )
           end
 
-        # Map field names to CSS selectors or rules. Missing items return null; missing
-        # lists return [].
+        # Field names mapped to CSS selectors (`h1`, `a@href`) or rule objects. Max 100
+        # fields, 5 levels.
         sig do
           returns(
             T::Hash[
@@ -777,8 +738,8 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Map field names to CSS selectors or rules. Missing items return null; missing
-          # lists return [].
+          # Field names mapped to CSS selectors (`h1`, `a@href`) or rule objects. Max 100
+          # fields, 5 levels.
           rules:
         )
         end
@@ -820,9 +781,12 @@ module ContextDev
                 )
               end
 
+            # CSS selector to match within the current page or parent rule.
             sig { returns(String) }
             attr_accessor :selector
 
+            # Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
+            # to text.
             sig do
               returns(
                 T.nilable(
@@ -848,6 +812,7 @@ module ContextDev
             end
             attr_writer :output
 
+            # Return the first match with `item` or all matches with `list`.
             sig do
               returns(
                 T.nilable(
@@ -878,7 +843,15 @@ module ContextDev
                   ContextDev::WebScrapeParams::ParseParams::Rule::UnionMember1::Type::OrSymbol
               ).returns(T.attached_class)
             end
-            def self.new(selector:, output: nil, type: nil)
+            def self.new(
+              # CSS selector to match within the current page or parent rule.
+              selector:,
+              # Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
+              # to text.
+              output: nil,
+              # Return the first match with `item` or all matches with `list`.
+              type: nil
+            )
             end
 
             sig do
@@ -899,6 +872,8 @@ module ContextDev
             def to_hash
             end
 
+            # Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
+            # to text.
             module Output
               extend ContextDev::Internal::Type::Union
 
@@ -942,6 +917,7 @@ module ContextDev
                 )
             end
 
+            # Return the first match with `item` or all matches with `list`.
             module Type
               extend ContextDev::Internal::Type::Enum
 
@@ -996,11 +972,7 @@ module ContextDev
             )
           end
 
-        # Extract the product with a specialized model when the page has no structured
-        # product data. Adds six credits when the model verdict is returned successfully.
-        # If the fallback fails, the product output has success: false and data: null with
-        # no fallback charge; other outputs remain available. Request deadlines and client
-        # disconnects still apply.
+        # Use an AI model when the page has no structured product data.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :use_ai_fallback
 
@@ -1010,11 +982,7 @@ module ContextDev
         # Product options. Requires formats.product: true.
         sig { params(use_ai_fallback: T::Boolean).returns(T.attached_class) }
         def self.new(
-          # Extract the product with a specialized model when the page has no structured
-          # product data. Adds six credits when the model verdict is returned successfully.
-          # If the fallback fails, the product output has success: false and data: null with
-          # no fallback charge; other outputs remain available. Request deadlines and client
-          # disconnects still apply.
+          # Use an AI model when the page has no structured product data.
           use_ai_fallback: nil
         )
         end
@@ -1033,7 +1001,8 @@ module ContextDev
             )
           end
 
-        # Viewport, full page, one visible element, or a rectangle. Maximum 40 megapixels.
+        # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
+        # megapixels.
         sig do
           returns(
             T.nilable(
@@ -1059,6 +1028,7 @@ module ContextDev
         end
         attr_writer :area
 
+        # Image format for the screenshot.
         sig do
           returns(
             T.nilable(
@@ -1090,8 +1060,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Viewport, full page, one visible element, or a rectangle. Maximum 40 megapixels.
+          # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
+          # megapixels.
           area: nil,
+          # Image format for the screenshot.
           format_: nil
         )
         end
@@ -1113,7 +1085,8 @@ module ContextDev
         def to_hash
         end
 
-        # Viewport, full page, one visible element, or a rectangle. Maximum 40 megapixels.
+        # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
+        # megapixels.
         module Area
           extend ContextDev::Internal::Type::Union
 
@@ -1169,13 +1142,13 @@ module ContextDev
                 )
               end
 
-            # Must match one visible element.
+            # CSS selector matching exactly one visible element.
             sig { returns(String) }
             attr_accessor :selector
 
             sig { params(selector: String).returns(T.attached_class) }
             def self.new(
-              # Must match one visible element.
+              # CSS selector matching exactly one visible element.
               selector:
             )
             end
@@ -1194,15 +1167,19 @@ module ContextDev
                 )
               end
 
+            # Height of the capture in pixels.
             sig { returns(Integer) }
             attr_accessor :height
 
+            # Width of the capture in pixels.
             sig { returns(Integer) }
             attr_accessor :width
 
+            # Left edge of the capture, in pixels from the document origin.
             sig { returns(Integer) }
             attr_accessor :x
 
+            # Top edge of the capture, in pixels from the document origin.
             sig { returns(Integer) }
             attr_accessor :y_
 
@@ -1215,7 +1192,16 @@ module ContextDev
                 y_: Integer
               ).returns(T.attached_class)
             end
-            def self.new(height:, width:, x:, y_:)
+            def self.new(
+              # Height of the capture in pixels.
+              height:,
+              # Width of the capture in pixels.
+              width:,
+              # Left edge of the capture, in pixels from the document origin.
+              x:,
+              # Top edge of the capture, in pixels from the document origin.
+              y_:
+            )
             end
 
             sig do
@@ -1238,6 +1224,7 @@ module ContextDev
           end
         end
 
+        # Image format for the screenshot.
         module Format
           extend ContextDev::Internal::Type::Enum
 
@@ -1287,8 +1274,8 @@ module ContextDev
             )
           end
 
-        # Run in order before capture. A failed action fails the request. Bypasses
-        # caching.
+        # Browser steps run in order before capture. Requires a paid plan. Skips the
+        # cache.
         sig do
           returns(
             T.nilable(
@@ -1320,58 +1307,57 @@ module ContextDev
         end
         attr_writer :actions
 
-        # Supported two-letter country code, case-insensitive. Applies to every output,
-        # including image downloads.
+        # Proxy country as a two-letter code, such as `US`. Case-insensitive.
         sig { returns(T.nilable(String)) }
         attr_reader :country
 
         sig { params(country: String).void }
         attr_writer :country
 
-        # Dismiss cookie banners by accepting cookies before actions.
+        # Accept cookie banners before actions and capture.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :dismiss_cookies
 
         sig { params(dismiss_cookies: T::Boolean).void }
         attr_writer :dismiss_cookies
 
-        # Dismiss other popups before actions.
+        # Close other popups before actions and capture.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :dismiss_popups
 
         sig { params(dismiss_popups: T::Boolean).void }
         attr_writer :dismiss_popups
 
-        # Remove matching content. Exclusions win.
+        # Remove elements matching these CSS selectors. Overrides `includeSelectors`.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :exclude_selectors
 
         sig { params(exclude_selectors: T::Array[String]).void }
         attr_writer :exclude_selectors
 
-        # Headers for the target origin. Requests with custom headers bypass caching.
+        # HTTP headers to send to the target site. Requests with headers skip the cache.
         sig { returns(T.nilable(T::Hash[Symbol, String])) }
         attr_reader :headers
 
         sig { params(headers: T::Hash[Symbol, String]).void }
         attr_writer :headers
 
-        # Include iframe content in extraction. Screenshots show visible frames
-        # regardless.
+        # Include iframe content in HTML and text outputs. Screenshots always show visible
+        # frames.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :include_frames
 
         sig { params(include_frames: T::Boolean).void }
         attr_writer :include_frames
 
-        # Keep matching content after mainContentOnly.
+        # Keep only elements matching these CSS selectors.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :include_selectors
 
         sig { params(include_selectors: T::Array[String]).void }
         attr_writer :include_selectors
 
-        # Keep only main content in HTML, Markdown, images, and parsed fields.
+        # Keep only the main content. Doesn't affect `screenshot`, `bytes`, or `product`.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :main_content_only
 
@@ -1391,15 +1377,15 @@ module ContextDev
         end
         attr_writer :parsers
 
-        # Settle animations before capture. Defaults to true with screenshots, otherwise
-        # false.
+        # Wait for CSS animations to finish before capture. Defaults to `true` when
+        # `screenshot` is requested.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :settle_animations
 
         sig { params(settle_animations: T::Boolean).void }
         attr_writer :settle_animations
 
-        # Override the browser color scheme.
+        # Emulate a light or dark color scheme.
         sig do
           returns(
             T.nilable(
@@ -1416,7 +1402,8 @@ module ContextDev
         end
         attr_writer :theme
 
-        # Browser dimensions in pixels.
+        # Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
+        # default to 1440 × 900.
         sig do
           returns(
             T.nilable(ContextDev::WebScrapeParams::SharedParams::Viewport)
@@ -1432,8 +1419,8 @@ module ContextDev
         end
         attr_writer :viewport
 
-        # After actions, wait this many milliseconds or until a CSS selector is visible.
-        # Defaults to 500 ms, or 2000 ms with frames or an XML URL. Set 0 to skip.
+        # Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
+        # (2000 with frames or XML).
         sig do
           returns(
             T.nilable(
@@ -1451,8 +1438,7 @@ module ContextDev
         end
         attr_writer :wait_for
 
-        # Shared browser and content settings. Content filters leave screenshots and
-        # original bytes unchanged.
+        # Browser and content settings shared by all outputs.
         sig do
           params(
             actions:
@@ -1482,38 +1468,38 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Run in order before capture. A failed action fails the request. Bypasses
-          # caching.
+          # Browser steps run in order before capture. Requires a paid plan. Skips the
+          # cache.
           actions: nil,
-          # Supported two-letter country code, case-insensitive. Applies to every output,
-          # including image downloads.
+          # Proxy country as a two-letter code, such as `US`. Case-insensitive.
           country: nil,
-          # Dismiss cookie banners by accepting cookies before actions.
+          # Accept cookie banners before actions and capture.
           dismiss_cookies: nil,
-          # Dismiss other popups before actions.
+          # Close other popups before actions and capture.
           dismiss_popups: nil,
-          # Remove matching content. Exclusions win.
+          # Remove elements matching these CSS selectors. Overrides `includeSelectors`.
           exclude_selectors: nil,
-          # Headers for the target origin. Requests with custom headers bypass caching.
+          # HTTP headers to send to the target site. Requests with headers skip the cache.
           headers: nil,
-          # Include iframe content in extraction. Screenshots show visible frames
-          # regardless.
+          # Include iframe content in HTML and text outputs. Screenshots always show visible
+          # frames.
           include_frames: nil,
-          # Keep matching content after mainContentOnly.
+          # Keep only elements matching these CSS selectors.
           include_selectors: nil,
-          # Keep only main content in HTML, Markdown, images, and parsed fields.
+          # Keep only the main content. Doesn't affect `screenshot`, `bytes`, or `product`.
           main_content_only: nil,
           # Document parsing options.
           parsers: nil,
-          # Settle animations before capture. Defaults to true with screenshots, otherwise
-          # false.
+          # Wait for CSS animations to finish before capture. Defaults to `true` when
+          # `screenshot` is requested.
           settle_animations: nil,
-          # Override the browser color scheme.
+          # Emulate a light or dark color scheme.
           theme: nil,
-          # Browser dimensions in pixels.
+          # Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
+          # default to 1440 × 900.
           viewport: nil,
-          # After actions, wait this many milliseconds or until a CSS selector is visible.
-          # Defaults to 500 ms, or 2000 ms with frames or an XML URL. Set 0 to skip.
+          # Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
+          # (2000 with frames or XML).
           wait_for: nil
         )
         end
@@ -1572,16 +1558,23 @@ module ContextDev
                 )
               end
 
+            # One browser instruction, such as clicking a button or entering text.
             sig { returns(String) }
             attr_accessor :action
 
+            # Use `perform` for a plain-language browser instruction.
             sig { returns(Symbol) }
             attr_accessor :type
 
             sig do
               params(action: String, type: Symbol).returns(T.attached_class)
             end
-            def self.new(action:, type: :perform)
+            def self.new(
+              # One browser instruction, such as clicking a button or entering text.
+              action:,
+              # Use `perform` for a plain-language browser instruction.
+              type: :perform
+            )
             end
 
             sig { override.returns({ action: String, type: Symbol }) }
@@ -1598,9 +1591,11 @@ module ContextDev
                 )
               end
 
+            # Use `scroll` to move through the page or a container.
             sig { returns(Symbol) }
             attr_accessor :type
 
+            # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
             sig do
               returns(
                 T.nilable(
@@ -1624,6 +1619,7 @@ module ContextDev
             end
             attr_writer :amount
 
+            # Direction to scroll.
             sig do
               returns(
                 T.nilable(
@@ -1641,6 +1637,7 @@ module ContextDev
             end
             attr_writer :direction
 
+            # Maximum number of scroll steps for this action.
             sig { returns(T.nilable(Integer)) }
             attr_reader :max_scrolls
 
@@ -1669,11 +1666,15 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
+              # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
               amount: nil,
+              # Direction to scroll.
               direction: nil,
+              # Maximum number of scroll steps for this action.
               max_scrolls: nil,
               # Scroll this container. Omit to scroll the page.
               selector: nil,
+              # Use `scroll` to move through the page or a container.
               type: :scroll
             )
             end
@@ -1697,6 +1698,7 @@ module ContextDev
             def to_hash
             end
 
+            # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
             module Amount
               extend ContextDev::Internal::Type::Union
 
@@ -1739,6 +1741,7 @@ module ContextDev
                 )
             end
 
+            # Direction to scroll.
             module Direction
               extend ContextDev::Internal::Type::Enum
 
@@ -1793,9 +1796,11 @@ module ContextDev
                 )
               end
 
+            # Time to pause in milliseconds before the next action.
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
+            # Use `wait` to pause for a fixed duration.
             sig { returns(Symbol) }
             attr_accessor :type
 
@@ -1804,7 +1809,12 @@ module ContextDev
                 T.attached_class
               )
             end
-            def self.new(milliseconds:, type: :wait)
+            def self.new(
+              # Time to pause in milliseconds before the next action.
+              milliseconds:,
+              # Use `wait` to pause for a fixed duration.
+              type: :wait
+            )
             end
 
             sig { override.returns({ milliseconds: Integer, type: Symbol }) }
@@ -1821,16 +1831,23 @@ module ContextDev
                 )
               end
 
+            # CSS selector to wait for before continuing.
             sig { returns(String) }
             attr_accessor :selector
 
+            # Use `waitFor` to wait for a matching element.
             sig { returns(Symbol) }
             attr_accessor :type
 
             sig do
               params(selector: String, type: Symbol).returns(T.attached_class)
             end
-            def self.new(selector:, type: :waitFor)
+            def self.new(
+              # CSS selector to wait for before continuing.
+              selector:,
+              # Use `waitFor` to wait for a matching element.
+              type: :waitFor
+            )
             end
 
             sig { override.returns({ selector: String, type: Symbol }) }
@@ -1858,7 +1875,7 @@ module ContextDev
               )
             end
 
-          # PDF text options for HTML, Markdown, and parsed fields.
+          # PDF page range and OCR.
           sig do
             returns(
               T.nilable(ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf)
@@ -1882,7 +1899,7 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # PDF text options for HTML, Markdown, and parsed fields.
+            # PDF page range and OCR.
             pdf: nil
           )
           end
@@ -1904,14 +1921,14 @@ module ContextDev
                 )
               end
 
-            # Last page to parse. Must be at least startPage.
+            # Last page to parse. Must be at least `startPage`.
             sig { returns(T.nilable(Integer)) }
             attr_reader :end_page
 
             sig { params(end_page: Integer).void }
             attr_writer :end_page
 
-            # Read text from scanned pages.
+            # Set `auto` to read scanned pages with OCR.
             sig do
               returns(
                 T.nilable(
@@ -1936,7 +1953,7 @@ module ContextDev
             sig { params(start_page: Integer).void }
             attr_writer :start_page
 
-            # PDF text options for HTML, Markdown, and parsed fields.
+            # PDF page range and OCR.
             sig do
               params(
                 end_page: Integer,
@@ -1946,9 +1963,9 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Last page to parse. Must be at least startPage.
+              # Last page to parse. Must be at least `startPage`.
               end_page: nil,
-              # Read text from scanned pages.
+              # Set `auto` to read scanned pages with OCR.
               ocr: nil,
               # First page to parse, starting at 1.
               start_page: nil
@@ -1968,7 +1985,7 @@ module ContextDev
             def to_hash
             end
 
-            # Read text from scanned pages.
+            # Set `auto` to read scanned pages with OCR.
             module Ocr
               extend ContextDev::Internal::Type::Enum
 
@@ -2005,7 +2022,7 @@ module ContextDev
           end
         end
 
-        # Override the browser color scheme.
+        # Emulate a light or dark color scheme.
         module Theme
           extend ContextDev::Internal::Type::Enum
 
@@ -2046,23 +2063,31 @@ module ContextDev
               )
             end
 
+          # Browser viewport height in pixels.
           sig { returns(T.nilable(Integer)) }
           attr_reader :height
 
           sig { params(height: Integer).void }
           attr_writer :height
 
+          # Browser viewport width in pixels.
           sig { returns(T.nilable(Integer)) }
           attr_reader :width
 
           sig { params(width: Integer).void }
           attr_writer :width
 
-          # Browser dimensions in pixels.
+          # Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
+          # default to 1440 × 900.
           sig do
             params(height: Integer, width: Integer).returns(T.attached_class)
           end
-          def self.new(height: nil, width: nil)
+          def self.new(
+            # Browser viewport height in pixels.
+            height: nil,
+            # Browser viewport width in pixels.
+            width: nil
+          )
           end
 
           sig { override.returns({ height: Integer, width: Integer }) }
@@ -2070,8 +2095,8 @@ module ContextDev
           end
         end
 
-        # After actions, wait this many milliseconds or until a CSS selector is visible.
-        # Defaults to 500 ms, or 2000 ms with frames or an XML URL. Set 0 to skip.
+        # Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
+        # (2000 with frames or XML).
         module WaitFor
           extend ContextDev::Internal::Type::Union
 
@@ -2098,15 +2123,12 @@ module ContextDev
             )
           end
 
-        # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+        # Deadline in milliseconds.
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results. "return-partial" requires milliseconds of at
-        # least 5000.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
         sig do
           returns(
             T.nilable(
@@ -2124,17 +2146,8 @@ module ContextDev
         end
         attr_writer :behavior
 
-        # Total deadline, including navigation, actions, waiting, and all outputs.
-        # Defaults to 60000 milliseconds with behavior fail. Individual outputs have
-        # internal deadlines that reserve time to return completed outputs; timed-out
-        # outputs have success: false and data: null under either behavior. The overall
-        # request deadline remains enforced: fail returns an error if that deadline is
-        # reached. Use return-partial to allow the current page state and available
-        # outputs when the page is still loading. Partial responses set isPartial. Failed
-        # retrievals and incomplete captures are not cached; valid captured pieces may be
-        # cached independently. Fixed waits must fit before a response reserve of up to
-        # 5000 milliseconds (at most one quarter of the timeout) when using
-        # return-partial.
+        # Deadline for the whole request. Defaults to 60000 ms with `fail`. Fixed waits
+        # must end before it.
         sig do
           params(
             milliseconds: Integer,
@@ -2143,13 +2156,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Request deadline in milliseconds. Maximum: 300000 (5 minutes).
+          # Deadline in milliseconds.
           milliseconds:,
-          # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-          # credits. "return-partial" returns usable results collected so far; if none are
-          # available, the request still fails without charging credits. Partial results are
-          # not cached as complete results. "return-partial" requires milliseconds of at
-          # least 5000.
+          # "fail" returns 408 at the deadline. "return-partial" returns available results;
+          # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
           behavior: nil
         )
         end
@@ -2166,11 +2176,8 @@ module ContextDev
         def to_hash
         end
 
-        # What to do at the deadline. "fail" returns 408 REQUEST_TIMEOUT without charging
-        # credits. "return-partial" returns usable results collected so far; if none are
-        # available, the request still fails without charging credits. Partial results are
-        # not cached as complete results. "return-partial" requires milliseconds of at
-        # least 5000.
+        # "fail" returns 408 at the deadline. "return-partial" returns available results;
+        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 
@@ -2203,8 +2210,7 @@ module ContextDev
         end
       end
 
-      # Zero data retention. Bypasses caches and uploads; excludes request/response
-      # content and tags from logs. Must be enabled for your organization.
+      # `enabled` turns on zero data retention. Your organization must have ZDR enabled.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

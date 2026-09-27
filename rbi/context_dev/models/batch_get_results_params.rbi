@@ -14,7 +14,7 @@ module ContextDev
           )
         end
 
-      # ID of the batch to retrieve or cancel.
+      # Batch ID.
       sig { returns(String) }
       attr_accessor :batch_id
 
@@ -42,7 +42,7 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # ID of the batch to retrieve or cancel.
+        # Batch ID.
         batch_id:,
         # next_cursor from the previous page.
         cursor: nil,

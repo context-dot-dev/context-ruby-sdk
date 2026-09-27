@@ -45,7 +45,6 @@ module ContextDev
           timestamp: Time,
           user_agent: String?,
           zdr: bool,
-          key_metadata: ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata,
           response: top
         }
 
@@ -76,12 +75,6 @@ module ContextDev
 
         attr_accessor zdr: bool
 
-        attr_reader key_metadata: ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata?
-
-        def key_metadata=: (
-          ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata
-        ) -> ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata
-
         attr_reader response: top?
 
         def response=: (top) -> top
@@ -100,7 +93,6 @@ module ContextDev
           timestamp: Time,
           user_agent: String?,
           zdr: bool,
-          ?key_metadata: ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata,
           ?response: top
         ) -> void
 
@@ -118,7 +110,6 @@ module ContextDev
           timestamp: Time,
           user_agent: String?,
           zdr: bool,
-          key_metadata: ContextDev::Models::LogRetrieveResponse::Data::KeyMetadata,
           response: top
         }
 
@@ -134,25 +125,6 @@ module ContextDev
           def initialize: (query: ::Hash[Symbol, top], ?body: top) -> void
 
           def to_hash: -> { query: ::Hash[Symbol, top], body: top }
-        end
-
-        type key_metadata =
-          { credits_consumed: Integer, credits_remaining: Integer }
-
-        class KeyMetadata < ContextDev::Internal::Type::BaseModel
-          attr_accessor credits_consumed: Integer
-
-          attr_accessor credits_remaining: Integer
-
-          def initialize: (
-            credits_consumed: Integer,
-            credits_remaining: Integer
-          ) -> void
-
-          def to_hash: -> {
-            credits_consumed: Integer,
-            credits_remaining: Integer
-          }
         end
       end
 

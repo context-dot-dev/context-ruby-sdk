@@ -5,8 +5,8 @@ module ContextDev
     # @see ContextDev::Resources::Batch#get_results
     class BatchGetResultsResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute request_id
-      #   Unique id of this API call, also sent in the X-Request-Id response header. Quote
-      #   it when contacting support about a failed request.
+      #   Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      #   support.
       #
       #   @return [String]
       required :request_id, String
@@ -25,7 +25,7 @@ module ContextDev
       optional :has_more, ContextDev::Internal::Type::Boolean
 
       # @!attribute key_metadata
-      #   Credit usage, included whenever a valid API key is provided.
+      #   Credits this request used and your remaining balance.
       #
       #   @return [ContextDev::Models::BatchGetResultsResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::BatchGetResultsResponse::KeyMetadata }
@@ -40,13 +40,13 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchGetResultsResponse} for more details.
       #
-      #   @param request_id [String] Unique id of this API call, also sent in the X-Request-Id response header. Quote
+      #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param data [Array<ContextDev::Models::BatchGetResultsResponse::Data::Ok, ContextDev::Models::BatchGetResultsResponse::Data::Error>] Result records on this page.
       #
       #   @param has_more [Boolean] Whether another page is available.
       #
-      #   @param key_metadata [ContextDev::Models::BatchGetResultsResponse::KeyMetadata] Credit usage, included whenever a valid API key is provided.
+      #   @param key_metadata [ContextDev::Models::BatchGetResultsResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
       #   @param next_cursor [String, nil] Cursor for the next page.
 
@@ -64,9 +64,7 @@ module ContextDev
 
         class Ok < ContextDev::Internal::Type::BaseModel
           # @!attribute cache_metadata
-          #   Cache outcome for this response. Composite responses are hits only when every
-          #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-          #   oldest contributing hit.
+          #   Whether this response came from cache.
           #
           #   @return [ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata]
           required :cache_metadata, -> { ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata }
@@ -109,7 +107,7 @@ module ContextDev
           optional :html, String
 
           # @!attribute item_id
-          #   Caller-supplied identifier echoed from submission.
+          #   Your `itemId` from submission.
           #
           #   @return [String, nil]
           optional :item_id, String, api_name: :itemId
@@ -127,8 +125,7 @@ module ContextDev
           optional :meta, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
 
           # @!attribute ocr_pages
-          #   PDF pages of this document recovered by OCR (pdf.ocr=true). Each recovered page
-          #   bills 1 credit on top of the page base credit; absent when no OCR ran.
+          #   Number of PDF pages recovered by OCR. Omitted when OCR did not run.
           #
           #   @return [Integer, nil]
           optional :ocr_pages, Integer
@@ -139,7 +136,7 @@ module ContextDev
           #
           #   A page the batch fetched successfully.
           #
-          #   @param cache_metadata [ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata] Cache outcome for this response. Composite responses are hits only when every ca
+          #   @param cache_metadata [ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata] Whether this response came from cache.
           #
           #   @param final_url [String] URL the content was read from, after redirects.
           #
@@ -151,13 +148,13 @@ module ContextDev
           #
           #   @param html [String] Page HTML. Present on html batches, and on markdown batches submitted with `opti
           #
-          #   @param item_id [String] Caller-supplied identifier echoed from submission.
+          #   @param item_id [String] Your `itemId` from submission.
           #
           #   @param markdown [String] Page content as Markdown. Present on markdown batches.
           #
           #   @param meta [Hash{Symbol=>Object}] Caller-supplied metadata echoed from submission.
           #
-          #   @param ocr_pages [Integer] PDF pages of this document recovered by OCR (pdf.ocr=true). Each recovered page
+          #   @param ocr_pages [Integer] Number of PDF pages recovered by OCR. Omitted when OCR did not run.
           #
           #   @param status [Symbol, :ok] The page was scraped.
 
@@ -182,9 +179,7 @@ module ContextDev
             #   {ContextDev::Models::BatchGetResultsResponse::Data::Ok::CacheMetadata} for more
             #   details.
             #
-            #   Cache outcome for this response. Composite responses are hits only when every
-            #   cache-controlled fetch contributing to the output was a hit; age_ms is the
-            #   oldest contributing hit.
+            #   Whether this response came from cache.
             #
             #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
             #
@@ -510,7 +505,7 @@ module ContextDev
           required :url, String
 
           # @!attribute item_id
-          #   Caller-supplied identifier echoed from submission.
+          #   Your `itemId` from submission.
           #
           #   @return [String, nil]
           optional :item_id, String, api_name: :itemId
@@ -530,7 +525,7 @@ module ContextDev
           #
           #   @param url [String] URL as submitted, or as discovered by the crawl.
           #
-          #   @param item_id [String] Caller-supplied identifier echoed from submission.
+          #   @param item_id [String] Your `itemId` from submission.
           #
           #   @param meta [Hash{Symbol=>Object}] Caller-supplied metadata echoed from submission.
           #
@@ -544,7 +539,7 @@ module ContextDev
       # @see ContextDev::Models::BatchGetResultsResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute credits_consumed
-        #   Credits used by this request.
+        #   Credits charged for this request.
         #
         #   @return [Integer]
         required :credits_consumed, Integer
@@ -556,9 +551,9 @@ module ContextDev
         required :credits_remaining, Integer
 
         # @!method initialize(credits_consumed:, credits_remaining:)
-        #   Credit usage, included whenever a valid API key is provided.
+        #   Credits this request used and your remaining balance.
         #
-        #   @param credits_consumed [Integer] Credits used by this request.
+        #   @param credits_consumed [Integer] Credits charged for this request.
         #
         #   @param credits_remaining [Integer] Credits remaining for your organization.
       end

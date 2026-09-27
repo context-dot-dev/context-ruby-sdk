@@ -1,15 +1,58 @@
 module ContextDev
   module Models
-    type monitor_delete_response = { id: String, deleted: bool }
+    type monitor_delete_response =
+      {
+        id: String,
+        deleted: bool,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorDeleteResponse::KeyMetadata
+      }
 
     class MonitorDeleteResponse < ContextDev::Internal::Type::BaseModel
       attr_accessor id: String
 
       attr_accessor deleted: bool
 
-      def initialize: (id: String, deleted: bool) -> void
+      attr_accessor request_id: String
 
-      def to_hash: -> { id: String, deleted: bool }
+      attr_reader key_metadata: ContextDev::Models::MonitorDeleteResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::MonitorDeleteResponse::KeyMetadata
+      ) -> ContextDev::Models::MonitorDeleteResponse::KeyMetadata
+
+      def initialize: (
+        id: String,
+        deleted: bool,
+        request_id: String,
+        ?key_metadata: ContextDev::Models::MonitorDeleteResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        id: String,
+        deleted: bool,
+        request_id: String,
+        key_metadata: ContextDev::Models::MonitorDeleteResponse::KeyMetadata
+      }
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
     end
   end
 end

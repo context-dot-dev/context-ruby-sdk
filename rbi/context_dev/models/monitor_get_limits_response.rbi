@@ -11,8 +11,7 @@ module ContextDev
           )
         end
 
-      # Maximum number of monitors allowed for the account. Defaults to the plan
-      # allowance unless a custom limit is set for the organization.
+      # Most monitors you can have: your plan's allowance or a custom limit.
       sig { returns(Integer) }
       attr_accessor :monitors_limit
 
@@ -20,7 +19,8 @@ module ContextDev
       sig { returns(Integer) }
       attr_accessor :monitors_used
 
-      # The plan tier the limit was resolved from.
+      # `starter` means Developer; `pro` means Pro or Growth; `scale` means Scale or
+      # Enterprise.
       sig do
         returns(
           ContextDev::Models::MonitorGetLimitsResponse::Plan::TaggedSymbol
@@ -28,21 +28,50 @@ module ContextDev
       end
       attr_accessor :plan
 
+      # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+      # support.
+      sig { returns(String) }
+      attr_accessor :request_id
+
+      # Credits this request used and your remaining balance.
+      sig do
+        returns(
+          T.nilable(ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata)
+        )
+      end
+      attr_reader :key_metadata
+
+      sig do
+        params(
+          key_metadata:
+            ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata::OrHash
+        ).void
+      end
+      attr_writer :key_metadata
+
       sig do
         params(
           monitors_limit: Integer,
           monitors_used: Integer,
-          plan: ContextDev::Models::MonitorGetLimitsResponse::Plan::OrSymbol
+          plan: ContextDev::Models::MonitorGetLimitsResponse::Plan::OrSymbol,
+          request_id: String,
+          key_metadata:
+            ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata::OrHash
         ).returns(T.attached_class)
       end
       def self.new(
-        # Maximum number of monitors allowed for the account. Defaults to the plan
-        # allowance unless a custom limit is set for the organization.
+        # Most monitors you can have: your plan's allowance or a custom limit.
         monitors_limit:,
         # Number of monitors the account currently has.
         monitors_used:,
-        # The plan tier the limit was resolved from.
-        plan:
+        # `starter` means Developer; `pro` means Pro or Growth; `scale` means Scale or
+        # Enterprise.
+        plan:,
+        # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
+        # support.
+        request_id:,
+        # Credits this request used and your remaining balance.
+        key_metadata: nil
       )
       end
 
@@ -52,14 +81,18 @@ module ContextDev
             monitors_limit: Integer,
             monitors_used: Integer,
             plan:
-              ContextDev::Models::MonitorGetLimitsResponse::Plan::TaggedSymbol
+              ContextDev::Models::MonitorGetLimitsResponse::Plan::TaggedSymbol,
+            request_id: String,
+            key_metadata:
+              ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata
           }
         )
       end
       def to_hash
       end
 
-      # The plan tier the limit was resolved from.
+      # `starter` means Developer; `pro` means Pro or Growth; `scale` means Scale or
+      # Enterprise.
       module Plan
         extend ContextDev::Internal::Type::Enum
 
@@ -98,6 +131,46 @@ module ContextDev
           )
         end
         def self.values
+        end
+      end
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Credits charged for this request.
+        sig { returns(Integer) }
+        attr_accessor :credits_consumed
+
+        # Credits remaining for your organization.
+        sig { returns(Integer) }
+        attr_accessor :credits_remaining
+
+        # Credits this request used and your remaining balance.
+        sig do
+          params(credits_consumed: Integer, credits_remaining: Integer).returns(
+            T.attached_class
+          )
+        end
+        def self.new(
+          # Credits charged for this request.
+          credits_consumed:,
+          # Credits remaining for your organization.
+          credits_remaining:
+        )
+        end
+
+        sig do
+          override.returns(
+            { credits_consumed: Integer, credits_remaining: Integer }
+          )
+        end
+        def to_hash
         end
       end
     end

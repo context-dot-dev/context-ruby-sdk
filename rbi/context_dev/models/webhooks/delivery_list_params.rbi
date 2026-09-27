@@ -123,7 +123,7 @@ module ContextDev
             end
             attr_writer :status
 
-            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            # Labels for filtering usage in the dashboard.
             sig { returns(T.nilable(T::Array[String])) }
             attr_reader :tags
 
@@ -153,7 +153,7 @@ module ContextDev
               limit: nil,
               # Filter by delivery status.
               status: nil,
-              # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+              # Labels for filtering usage in the dashboard.
               tags: nil,
               # Delivery source.
               type: :batch
@@ -299,7 +299,7 @@ module ContextDev
             end
             attr_writer :status
 
-            # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            # Labels for filtering usage in the dashboard.
             sig { returns(T.nilable(T::Array[String])) }
             attr_reader :tags
 
@@ -332,7 +332,7 @@ module ContextDev
               run_id: nil,
               # Filter by delivery status.
               status: nil,
-              # Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+              # Labels for filtering usage in the dashboard.
               tags: nil,
               # Delivery source.
               type: :monitor

@@ -64,7 +64,7 @@ module ContextDev
             optional :status, enum: -> { ContextDev::Webhooks::DeliveryListParams::Body::Batch::Status }
 
             # @!attribute tags
-            #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            #   Labels for filtering usage in the dashboard.
             #
             #   @return [Array<String>, nil]
             optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -80,7 +80,7 @@ module ContextDev
             #
             #   @param status [Symbol, ContextDev::Models::Webhooks::DeliveryListParams::Body::Batch::Status] Filter by delivery status.
             #
-            #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
             #
             #   @param type [Symbol, :batch] Delivery source.
 
@@ -146,7 +146,7 @@ module ContextDev
             optional :status, enum: -> { ContextDev::Webhooks::DeliveryListParams::Body::Monitor::Status }
 
             # @!attribute tags
-            #   Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            #   Labels for filtering usage in the dashboard.
             #
             #   @return [Array<String>, nil]
             optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -164,7 +164,7 @@ module ContextDev
             #
             #   @param status [Symbol, ContextDev::Models::Webhooks::DeliveryListParams::Body::Monitor::Status] Filter by delivery status.
             #
-            #   @param tags [Array<String>] Optional tags for tracking usage. Up to 20 tags, each 1 to 50 characters.
+            #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
             #
             #   @param type [Symbol, :monitor] Delivery source.
 
