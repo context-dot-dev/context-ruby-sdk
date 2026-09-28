@@ -98,7 +98,9 @@ module ContextDev
         {
           data: ContextDev::Models::WebScrapeResponse::Bytes::Data?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          error_code: String,
+          message: String
         }
 
       class Bytes < ContextDev::Internal::Type::BaseModel
@@ -108,16 +110,28 @@ module ContextDev
 
         attr_accessor success: bool?
 
+        attr_reader error_code: String?
+
+        def error_code=: (String) -> String
+
+        attr_reader message: String?
+
+        def message=: (String) -> String
+
         def initialize: (
           data: ContextDev::Models::WebScrapeResponse::Bytes::Data?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          ?error_code: String,
+          ?message: String
         ) -> void
 
         def to_hash: -> {
           data: ContextDev::Models::WebScrapeResponse::Bytes::Data?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          error_code: String,
+          message: String
         }
 
         type data = { :base64 => String, content_type: String }
@@ -168,7 +182,13 @@ module ContextDev
       end
 
       type highlights =
-        { data: ::Array[String]?, requested: bool, success: bool? }
+        {
+          data: ::Array[String]?,
+          requested: bool,
+          success: bool?,
+          error_code: String,
+          message: String
+        }
 
       class Highlights < ContextDev::Internal::Type::BaseModel
         attr_accessor data: ::Array[String]?
@@ -177,20 +197,39 @@ module ContextDev
 
         attr_accessor success: bool?
 
+        attr_reader error_code: String?
+
+        def error_code=: (String) -> String
+
+        attr_reader message: String?
+
+        def message=: (String) -> String
+
         def initialize: (
           data: ::Array[String]?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          ?error_code: String,
+          ?message: String
         ) -> void
 
         def to_hash: -> {
           data: ::Array[String]?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          error_code: String,
+          message: String
         }
       end
 
-      type html = { data: String?, requested: bool, success: bool? }
+      type html =
+        {
+          data: String?,
+          requested: bool,
+          success: bool?,
+          error_code: String,
+          message: String
+        }
 
       class HTML < ContextDev::Internal::Type::BaseModel
         attr_accessor data: String?
@@ -199,16 +238,38 @@ module ContextDev
 
         attr_accessor success: bool?
 
-        def initialize: (data: String?, requested: bool, success: bool?) -> void
+        attr_reader error_code: String?
 
-        def to_hash: -> { data: String?, requested: bool, success: bool? }
+        def error_code=: (String) -> String
+
+        attr_reader message: String?
+
+        def message=: (String) -> String
+
+        def initialize: (
+          data: String?,
+          requested: bool,
+          success: bool?,
+          ?error_code: String,
+          ?message: String
+        ) -> void
+
+        def to_hash: -> {
+          data: String?,
+          requested: bool,
+          success: bool?,
+          error_code: String,
+          message: String
+        }
       end
 
       type images =
         {
           data: ::Array[ContextDev::Models::WebScrapeResponse::Images::Data]?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          error_code: String,
+          message: String
         }
 
       class Images < ContextDev::Internal::Type::BaseModel
@@ -218,16 +279,28 @@ module ContextDev
 
         attr_accessor success: bool?
 
+        attr_reader error_code: String?
+
+        def error_code=: (String) -> String
+
+        attr_reader message: String?
+
+        def message=: (String) -> String
+
         def initialize: (
           data: ::Array[ContextDev::Models::WebScrapeResponse::Images::Data]?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          ?error_code: String,
+          ?message: String
         ) -> void
 
         def to_hash: -> {
           data: ::Array[ContextDev::Models::WebScrapeResponse::Images::Data]?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          error_code: String,
+          message: String
         }
 
         type data =
@@ -349,7 +422,14 @@ module ContextDev
         }
       end
 
-      type markdown = { data: String?, requested: bool, success: bool? }
+      type markdown =
+        {
+          data: String?,
+          requested: bool,
+          success: bool?,
+          error_code: String,
+          message: String
+        }
 
       class Markdown < ContextDev::Internal::Type::BaseModel
         attr_accessor data: String?
@@ -358,9 +438,29 @@ module ContextDev
 
         attr_accessor success: bool?
 
-        def initialize: (data: String?, requested: bool, success: bool?) -> void
+        attr_reader error_code: String?
 
-        def to_hash: -> { data: String?, requested: bool, success: bool? }
+        def error_code=: (String) -> String
+
+        attr_reader message: String?
+
+        def message=: (String) -> String
+
+        def initialize: (
+          data: String?,
+          requested: bool,
+          success: bool?,
+          ?error_code: String,
+          ?message: String
+        ) -> void
+
+        def to_hash: -> {
+          data: String?,
+          requested: bool,
+          success: bool?,
+          error_code: String,
+          message: String
+        }
       end
 
       type metadata =
@@ -589,7 +689,13 @@ module ContextDev
       end
 
       type parsed =
-        { data: ::Hash[Symbol, top]?, requested: bool, success: bool? }
+        {
+          data: ::Hash[Symbol, top]?,
+          requested: bool,
+          success: bool?,
+          error_code: String,
+          message: String
+        }
 
       class Parsed < ContextDev::Internal::Type::BaseModel
         attr_accessor data: ::Hash[Symbol, top]?
@@ -598,16 +704,28 @@ module ContextDev
 
         attr_accessor success: bool?
 
+        attr_reader error_code: String?
+
+        def error_code=: (String) -> String
+
+        attr_reader message: String?
+
+        def message=: (String) -> String
+
         def initialize: (
           data: ::Hash[Symbol, top]?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          ?error_code: String,
+          ?message: String
         ) -> void
 
         def to_hash: -> {
           data: ::Hash[Symbol, top]?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          error_code: String,
+          message: String
         }
       end
 
@@ -615,7 +733,9 @@ module ContextDev
         {
           data: ContextDev::Models::WebScrapeResponse::Product::Data?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          error_code: String,
+          message: String
         }
 
       class Product < ContextDev::Internal::Type::BaseModel
@@ -625,16 +745,28 @@ module ContextDev
 
         attr_accessor success: bool?
 
+        attr_reader error_code: String?
+
+        def error_code=: (String) -> String
+
+        attr_reader message: String?
+
+        def message=: (String) -> String
+
         def initialize: (
           data: ContextDev::Models::WebScrapeResponse::Product::Data?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          ?error_code: String,
+          ?message: String
         ) -> void
 
         def to_hash: -> {
           data: ContextDev::Models::WebScrapeResponse::Product::Data?,
           requested: bool,
-          success: bool?
+          success: bool?,
+          error_code: String,
+          message: String
         }
 
         type data =
@@ -807,7 +939,14 @@ module ContextDev
         end
       end
 
-      type screenshot = { data: String?, requested: bool, success: bool? }
+      type screenshot =
+        {
+          data: String?,
+          requested: bool,
+          success: bool?,
+          error_code: String,
+          message: String
+        }
 
       class Screenshot < ContextDev::Internal::Type::BaseModel
         attr_accessor data: String?
@@ -816,9 +955,29 @@ module ContextDev
 
         attr_accessor success: bool?
 
-        def initialize: (data: String?, requested: bool, success: bool?) -> void
+        attr_reader error_code: String?
 
-        def to_hash: -> { data: String?, requested: bool, success: bool? }
+        def error_code=: (String) -> String
+
+        attr_reader message: String?
+
+        def message=: (String) -> String
+
+        def initialize: (
+          data: String?,
+          requested: bool,
+          success: bool?,
+          ?error_code: String,
+          ?message: String
+        ) -> void
+
+        def to_hash: -> {
+          data: String?,
+          requested: bool,
+          success: bool?,
+          error_code: String,
+          message: String
+        }
       end
 
       type is_partial = true

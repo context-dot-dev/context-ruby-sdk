@@ -150,7 +150,19 @@ module ContextDev
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
-        # @!method initialize(data:, requested:, success:)
+        # @!attribute error_code
+        #   Why the output failed. Present only when `success` is `false`.
+        #
+        #   @return [String, nil]
+        optional :error_code, String
+
+        # @!attribute message
+        #   Explanation of the failure and possible next steps.
+        #
+        #   @return [String, nil]
+        optional :message, String
+
+        # @!method initialize(data:, requested:, success:, error_code: nil, message: nil)
         #   The original HTTP response body, unchanged by waits, actions, and filters.
         #
         #   @param data [ContextDev::Models::WebScrapeResponse::Bytes::Data, nil]
@@ -158,6 +170,10 @@ module ContextDev
         #   @param requested [Boolean]
         #
         #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
+        #
+        #   @param error_code [String] Why the output failed. Present only when `success` is `false`.
+        #
+        #   @param message [String] Explanation of the failure and possible next steps.
 
         # @see ContextDev::Models::WebScrapeResponse::Bytes#data
         class Data < ContextDev::Internal::Type::BaseModel
@@ -238,7 +254,19 @@ module ContextDev
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
-        # @!method initialize(data:, requested:, success:)
+        # @!attribute error_code
+        #   Why the output failed. Present only when `success` is `false`.
+        #
+        #   @return [String, nil]
+        optional :error_code, String
+
+        # @!attribute message
+        #   Explanation of the failure and possible next steps.
+        #
+        #   @return [String, nil]
+        optional :message, String
+
+        # @!method initialize(data:, requested:, success:, error_code: nil, message: nil)
         #   Relevant Markdown excerpts in page order. `[Heading]` adds context; `…` marks
         #   omitted text.
         #
@@ -247,6 +275,10 @@ module ContextDev
         #   @param requested [Boolean]
         #
         #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
+        #
+        #   @param error_code [String] Why the output failed. Present only when `success` is `false`.
+        #
+        #   @param message [String] Explanation of the failure and possible next steps.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#html
@@ -267,7 +299,19 @@ module ContextDev
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
-        # @!method initialize(data:, requested:, success:)
+        # @!attribute error_code
+        #   Why the output failed. Present only when `success` is `false`.
+        #
+        #   @return [String, nil]
+        optional :error_code, String
+
+        # @!attribute message
+        #   Explanation of the failure and possible next steps.
+        #
+        #   @return [String, nil]
+        optional :message, String
+
+        # @!method initialize(data:, requested:, success:, error_code: nil, message: nil)
         #   Rendered HTML after content filters.
         #
         #   @param data [String, nil]
@@ -275,6 +319,10 @@ module ContextDev
         #   @param requested [Boolean]
         #
         #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
+        #
+        #   @param error_code [String] Why the output failed. Present only when `success` is `false`.
+        #
+        #   @param message [String] Explanation of the failure and possible next steps.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#images
@@ -297,7 +345,19 @@ module ContextDev
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
-        # @!method initialize(data:, requested:, success:)
+        # @!attribute error_code
+        #   Why the output failed. Present only when `success` is `false`.
+        #
+        #   @return [String, nil]
+        optional :error_code, String
+
+        # @!attribute message
+        #   Explanation of the failure and possible next steps.
+        #
+        #   @return [String, nil]
+        optional :message, String
+
+        # @!method initialize(data:, requested:, success:, error_code: nil, message: nil)
         #   Images after content filters. `[]` when none are found.
         #
         #   @param data [Array<ContextDev::Models::WebScrapeResponse::Images::Data>, nil]
@@ -305,6 +365,10 @@ module ContextDev
         #   @param requested [Boolean]
         #
         #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
+        #
+        #   @param error_code [String] Why the output failed. Present only when `success` is `false`.
+        #
+        #   @param message [String] Explanation of the failure and possible next steps.
 
         class Data < ContextDev::Internal::Type::BaseModel
           # @!attribute alt
@@ -395,13 +459,13 @@ module ContextDev
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
         # @!attribute error_code
-        #   Cause of a failed JSON extraction, when available.
+        #   Why the output failed. Present only when `success` is `false`.
         #
         #   @return [String, nil]
         optional :error_code, String
 
         # @!attribute message
-        #   Explanation of the JSON extraction failure and possible next steps.
+        #   Explanation of the failure and possible next steps.
         #
         #   @return [String, nil]
         optional :message, String
@@ -415,9 +479,9 @@ module ContextDev
         #
         #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
         #
-        #   @param error_code [String] Cause of a failed JSON extraction, when available.
+        #   @param error_code [String] Why the output failed. Present only when `success` is `false`.
         #
-        #   @param message [String] Explanation of the JSON extraction failure and possible next steps.
+        #   @param message [String] Explanation of the failure and possible next steps.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#markdown
@@ -438,7 +502,19 @@ module ContextDev
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
-        # @!method initialize(data:, requested:, success:)
+        # @!attribute error_code
+        #   Why the output failed. Present only when `success` is `false`.
+        #
+        #   @return [String, nil]
+        optional :error_code, String
+
+        # @!attribute message
+        #   Explanation of the failure and possible next steps.
+        #
+        #   @return [String, nil]
+        optional :message, String
+
+        # @!method initialize(data:, requested:, success:, error_code: nil, message: nil)
         #   Markdown after content filters.
         #
         #   @param data [String, nil]
@@ -446,6 +522,10 @@ module ContextDev
         #   @param requested [Boolean]
         #
         #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
+        #
+        #   @param error_code [String] Why the output failed. Present only when `success` is `false`.
+        #
+        #   @param message [String] Explanation of the failure and possible next steps.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#metadata
@@ -721,7 +801,19 @@ module ContextDev
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
-        # @!method initialize(data:, requested:, success:)
+        # @!attribute error_code
+        #   Why the output failed. Present only when `success` is `false`.
+        #
+        #   @return [String, nil]
+        optional :error_code, String
+
+        # @!attribute message
+        #   Explanation of the failure and possible next steps.
+        #
+        #   @return [String, nil]
+        optional :message, String
+
+        # @!method initialize(data:, requested:, success:, error_code: nil, message: nil)
         #   Fields from `parseParams.rules`, after content filters. Unmatched fields are
         #   `null` (`[]` for lists).
         #
@@ -730,6 +822,10 @@ module ContextDev
         #   @param requested [Boolean]
         #
         #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
+        #
+        #   @param error_code [String] Why the output failed. Present only when `success` is `false`.
+        #
+        #   @param message [String] Explanation of the failure and possible next steps.
       end
 
       # @see ContextDev::Models::WebScrapeResponse#product
@@ -750,7 +846,19 @@ module ContextDev
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
-        # @!method initialize(data:, requested:, success:)
+        # @!attribute error_code
+        #   Why the output failed. Present only when `success` is `false`.
+        #
+        #   @return [String, nil]
+        optional :error_code, String
+
+        # @!attribute message
+        #   Explanation of the failure and possible next steps.
+        #
+        #   @return [String, nil]
+        optional :message, String
+
+        # @!method initialize(data:, requested:, success:, error_code: nil, message: nil)
         #   Product details found on the page.
         #
         #   @param data [ContextDev::Models::WebScrapeResponse::Product::Data, nil]
@@ -758,6 +866,10 @@ module ContextDev
         #   @param requested [Boolean]
         #
         #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
+        #
+        #   @param error_code [String] Why the output failed. Present only when `success` is `false`.
+        #
+        #   @param message [String] Explanation of the failure and possible next steps.
 
         # @see ContextDev::Models::WebScrapeResponse::Product#data
         class Data < ContextDev::Internal::Type::BaseModel
@@ -998,7 +1110,19 @@ module ContextDev
         #   @return [Boolean, nil]
         required :success, ContextDev::Internal::Type::Boolean, nil?: true
 
-        # @!method initialize(data:, requested:, success:)
+        # @!attribute error_code
+        #   Why the output failed. Present only when `success` is `false`.
+        #
+        #   @return [String, nil]
+        optional :error_code, String
+
+        # @!attribute message
+        #   Explanation of the failure and possible next steps.
+        #
+        #   @return [String, nil]
+        optional :message, String
+
+        # @!method initialize(data:, requested:, success:, error_code: nil, message: nil)
         #   Screenshot as a base64 image data URL.
         #
         #   @param data [String, nil]
@@ -1006,6 +1130,10 @@ module ContextDev
         #   @param requested [Boolean]
         #
         #   @param success [Boolean, nil] `true` if returned, `false` if it failed, `null` if not requested.
+        #
+        #   @param error_code [String] Why the output failed. Present only when `success` is `false`.
+        #
+        #   @param message [String] Explanation of the failure and possible next steps.
       end
 
       # True when at least one requested output succeeds but the response has failed or
