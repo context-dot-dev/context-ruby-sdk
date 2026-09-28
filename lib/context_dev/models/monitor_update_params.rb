@@ -234,6 +234,18 @@ module ContextDev
           #   @return [String]
           required :url, String
 
+          # @!attribute actions
+          #   Optional browser actions executed in array order after the page loads, before
+          #   content is captured, on every run. Requires a paid plan. Maximum: 5 actions.
+          #   Changes create a new baseline.
+          #
+          #   @return [Array<ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Wait, ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Perform, ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll>, nil]
+          optional :actions,
+                   -> {
+                     ContextDev::Internal::Type::ArrayOf[union: ContextDev::MonitorUpdateParams::Target::Page::Action]
+                   },
+                   nil?: true
+
           # @!attribute exclude_selectors
           #   Remove matching regions after inclusions. Changes create a new baseline.
           #
@@ -260,7 +272,7 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :normalize_whitespace, ContextDev::Internal::Type::Boolean
 
-          # @!method initialize(url:, exclude_selectors: nil, include_selectors: nil, instructions: nil, normalize_whitespace: nil, type: :page)
+          # @!method initialize(url:, actions: nil, exclude_selectors: nil, include_selectors: nil, instructions: nil, normalize_whitespace: nil, type: :page)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorUpdateParams::Target::Page} for more details.
           #
@@ -268,6 +280,8 @@ module ContextDev
           #   detection judges confirmed stable diffs against `instructions`.
           #
           #   @param url [String] Public HTTP(S) page URL to monitor.
+          #
+          #   @param actions [Array<ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Wait, ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Perform, ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll>, nil] Optional browser actions executed in array order after the page loads, before co
           #
           #   @param exclude_selectors [Array<String>] Remove matching regions after inclusions. Changes create a new baseline.
           #
@@ -278,6 +292,163 @@ module ContextDev
           #   @param normalize_whitespace [Boolean] Normalize whitespace before comparing or analyzing text.
           #
           #   @param type [Symbol, :page] Use `page` to watch one web page.
+
+          # Browser action discriminated by `do`. Each variant exposes only its applicable
+          # fields.
+          module Action
+            extend ContextDev::Internal::Type::Union
+
+            discriminator :do
+
+            # Pause for a fixed number of milliseconds before continuing to the next action.
+            variant :wait, -> { ContextDev::MonitorUpdateParams::Target::Page::Action::Wait }
+
+            # Resolve and perform one natural-language browser action.
+            variant :perform, -> { ContextDev::MonitorUpdateParams::Target::Page::Action::Perform }
+
+            # Scroll the page or a selected scrollable container, waiting adaptively for content and dimensions to settle after each iteration.
+            variant :scroll, -> { ContextDev::MonitorUpdateParams::Target::Page::Action::Scroll }
+
+            class Wait < ContextDev::Internal::Type::BaseModel
+              # @!attribute do_
+              #   Use `wait` to pause for a fixed duration.
+              #
+              #   @return [Symbol, :wait]
+              required :do_, const: :wait, api_name: :do
+
+              # @!attribute time_ms
+              #   Time to pause in milliseconds before the next action.
+              #
+              #   @return [Integer]
+              required :time_ms, Integer, api_name: :timeMs
+
+              # @!method initialize(time_ms:, do_: :wait)
+              #   Pause for a fixed number of milliseconds before continuing to the next action.
+              #
+              #   @param time_ms [Integer] Time to pause in milliseconds before the next action.
+              #
+              #   @param do_ [Symbol, :wait] Use `wait` to pause for a fixed duration.
+            end
+
+            class Perform < ContextDev::Internal::Type::BaseModel
+              # @!attribute action
+              #   One browser instruction, such as clicking a button or entering text.
+              #
+              #   @return [String]
+              required :action, String
+
+              # @!attribute do_
+              #   Use `perform` for a plain-language browser instruction.
+              #
+              #   @return [Symbol, :perform]
+              required :do_, const: :perform, api_name: :do
+
+              # @!method initialize(action:, do_: :perform)
+              #   Resolve and perform one natural-language browser action.
+              #
+              #   @param action [String] One browser instruction, such as clicking a button or entering text.
+              #
+              #   @param do_ [Symbol, :perform] Use `perform` for a plain-language browser instruction.
+            end
+
+            class Scroll < ContextDev::Internal::Type::BaseModel
+              # @!attribute do_
+              #   Use `scroll` to move through the page or a container.
+              #
+              #   @return [Symbol, :scroll]
+              required :do_, const: :scroll, api_name: :do
+
+              # @!attribute amount
+              #   Pixels per scroll, one visible viewport, or the current scroll boundary.
+              #   Defaults to viewport.
+              #
+              #   @return [Integer, Symbol, ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll::Amount, nil]
+              optional :amount, union: -> { ContextDev::MonitorUpdateParams::Target::Page::Action::Scroll::Amount }
+
+              # @!attribute container
+              #   CSS selector for the first matching scroll container. Defaults to the page.
+              #
+              #   @return [String, nil]
+              optional :container, String
+
+              # @!attribute direction
+              #   Direction to scroll. Defaults to down.
+              #
+              #   @return [Symbol, ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll::Direction, nil]
+              optional :direction, enum: -> { ContextDev::MonitorUpdateParams::Target::Page::Action::Scroll::Direction }
+
+              # @!attribute max_scrolls
+              #   Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+              #   changing. Defaults to 1.
+              #
+              #   @return [Integer, nil]
+              optional :max_scrolls, Integer, api_name: :maxScrolls
+
+              # @!method initialize(amount: nil, container: nil, direction: nil, max_scrolls: nil, do_: :scroll)
+              #   Some parameter documentations has been truncated, see
+              #   {ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll} for more
+              #   details.
+              #
+              #   Scroll the page or a selected scrollable container, waiting adaptively for
+              #   content and dimensions to settle after each iteration.
+              #
+              #   @param amount [Integer, Symbol, ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll::Amount] Pixels per scroll, one visible viewport, or the current scroll boundary. Default
+              #
+              #   @param container [String] CSS selector for the first matching scroll container. Defaults to the page.
+              #
+              #   @param direction [Symbol, ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll::Direction] Direction to scroll. Defaults to down.
+              #
+              #   @param max_scrolls [Integer] Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+              #
+              #   @param do_ [Symbol, :scroll] Use `scroll` to move through the page or a container.
+
+              # Pixels per scroll, one visible viewport, or the current scroll boundary.
+              # Defaults to viewport.
+              #
+              # @see ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll#amount
+              module Amount
+                extend ContextDev::Internal::Type::Union
+
+                variant Integer
+
+                variant const: -> { ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll::Amount::VIEWPORT }
+
+                variant const: -> { ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll::Amount::MAX }
+
+                # @!method self.variants
+                #   @return [Array(Integer, Symbol)]
+
+                define_sorbet_constant!(:Variants) do
+                  T.type_alias { T.any(Integer, ContextDev::MonitorUpdateParams::Target::Page::Action::Scroll::Amount::TaggedSymbol) }
+                end
+
+                # @!group
+
+                VIEWPORT = :viewport
+                MAX = :max
+
+                # @!endgroup
+              end
+
+              # Direction to scroll. Defaults to down.
+              #
+              # @see ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll#direction
+              module Direction
+                extend ContextDev::Internal::Type::Enum
+
+                UP = :up
+                DOWN = :down
+                LEFT = :left
+                RIGHT = :right
+
+                # @!method self.values
+                #   @return [Array<Symbol>]
+              end
+            end
+
+            # @!method self.variants
+            #   @return [Array(ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Wait, ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Perform, ContextDev::Models::MonitorUpdateParams::Target::Page::Action::Scroll)]
+          end
         end
 
         class Sitemap < ContextDev::Internal::Type::BaseModel
