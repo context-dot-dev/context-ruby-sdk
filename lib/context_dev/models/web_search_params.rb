@@ -34,6 +34,15 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebSearchParams::Freshness, nil]
       optional :freshness, enum: -> { ContextDev::WebSearchParams::Freshness }
 
+      # @!attribute highlights_options
+      #   Passages from each result page that are relevant to the query. Pages are read
+      #   with the `markdownOptions` settings.
+      #
+      #   @return [ContextDev::Models::WebSearchParams::HighlightsOptions, nil]
+      optional :highlights_options,
+               -> { ContextDev::WebSearchParams::HighlightsOptions },
+               api_name: :highlightsOptions
+
       # @!attribute include_domains
       #   Allowlist — only return results from these domains. Example: ["arxiv.org",
       #   "github.com"].
@@ -80,7 +89,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebSearchParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebSearchParams::Zdr }
 
-      # @!method initialize(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(query:, country: nil, exclude_domains: nil, freshness: nil, highlights_options: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebSearchParams} for more details.
       #
@@ -91,6 +100,8 @@ module ContextDev
       #   @param exclude_domains [Array<String>] Blocklist — drop results from these domains. Example: ["pinterest.com", "reddit.
       #
       #   @param freshness [Symbol, ContextDev::Models::WebSearchParams::Freshness] Restrict results to content published within this window.
+      #
+      #   @param highlights_options [ContextDev::Models::WebSearchParams::HighlightsOptions] Passages from each result page that are relevant to the query. Pages are read wi
       #
       #   @param include_domains [Array<String>] Allowlist — only return results from these domains. Example: ["arxiv.org", "gith
       #
@@ -370,9 +381,31 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
+      class HighlightsOptions < ContextDev::Internal::Type::BaseModel
+        # @!attribute enabled
+        #   Return relevant passages for each result. Adds 1 credit per 10 results.
+        #
+        #   @return [Boolean, nil]
+        optional :enabled, ContextDev::Internal::Type::Boolean
+
+        # @!attribute max_characters
+        #   Maximum combined length of passages per result.
+        #
+        #   @return [Integer, nil]
+        optional :max_characters, Integer, api_name: :maxCharacters
+
+        # @!method initialize(enabled: nil, max_characters: nil)
+        #   Passages from each result page that are relevant to the query. Pages are read
+        #   with the `markdownOptions` settings.
+        #
+        #   @param enabled [Boolean] Return relevant passages for each result. Adds 1 credit per 10 results.
+        #
+        #   @param max_characters [Integer] Maximum combined length of passages per result.
+      end
+
       class MarkdownOptions < ContextDev::Internal::Type::BaseModel
         # @!attribute enabled
-        #   Scrape each result to Markdown. Off by default to keep search cheap and fast.
+        #   Scrape each result to Markdown. Adds 1 credit per 10 results.
         #
         #   @return [Boolean, nil]
         optional :enabled, ContextDev::Internal::Type::Boolean
@@ -396,8 +429,8 @@ module ContextDev
         optional :include_links, ContextDev::Internal::Type::Boolean, api_name: :includeLinks
 
         # @!attribute max_age_ms
-        #   Cache TTL in ms for scraped Markdown keyed by URL + options. Default 1 day, max
-        #   30 days. Set to 0 to force a fresh scrape.
+        #   Cache TTL in ms for scraped Markdown keyed by URL + options. Default 15 days,
+        #   max 30 days. Set to 0 to force a fresh scrape.
         #
         #   @return [Integer, nil]
         optional :max_age_ms, Integer, api_name: :maxAgeMs
@@ -441,7 +474,7 @@ module ContextDev
         #
         #   Inline Markdown scraping for each result. Set `enabled: true` to activate.
         #
-        #   @param enabled [Boolean] Scrape each result to Markdown. Off by default to keep search cheap and fast.
+        #   @param enabled [Boolean] Scrape each result to Markdown. Adds 1 credit per 10 results.
         #
         #   @param include_frames [Boolean] Render iframe contents into the Markdown.
         #
@@ -449,7 +482,7 @@ module ContextDev
         #
         #   @param include_links [Boolean] Keep hyperlinks in the Markdown.
         #
-        #   @param max_age_ms [Integer] Cache TTL in ms for scraped Markdown keyed by URL + options. Default 1 day, max
+        #   @param max_age_ms [Integer] Cache TTL in ms for scraped Markdown keyed by URL + options. Default 15 days, ma
         #
         #   @param pdf [ContextDev::Models::WebSearchParams::MarkdownOptions::Pdf] PDF handling. Use start/end to bound text extraction and OCR to a page range.
         #

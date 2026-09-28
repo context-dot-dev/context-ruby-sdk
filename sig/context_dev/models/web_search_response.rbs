@@ -84,6 +84,7 @@ module ContextDev
       type result =
         {
           description: String,
+          highlights: ContextDev::Models::WebSearchResponse::Result::Highlights,
           markdown: ContextDev::Models::WebSearchResponse::Result::Markdown,
           relevance: ContextDev::Models::WebSearchResponse::Result::relevance,
           title: String,
@@ -92,6 +93,8 @@ module ContextDev
 
       class Result < ContextDev::Internal::Type::BaseModel
         attr_accessor description: String
+
+        attr_accessor highlights: ContextDev::Models::WebSearchResponse::Result::Highlights
 
         attr_accessor markdown: ContextDev::Models::WebSearchResponse::Result::Markdown
 
@@ -103,6 +106,7 @@ module ContextDev
 
         def initialize: (
           description: String,
+          highlights: ContextDev::Models::WebSearchResponse::Result::Highlights,
           markdown: ContextDev::Models::WebSearchResponse::Result::Markdown,
           relevance: ContextDev::Models::WebSearchResponse::Result::relevance,
           title: String,
@@ -111,11 +115,55 @@ module ContextDev
 
         def to_hash: -> {
           description: String,
+          highlights: ContextDev::Models::WebSearchResponse::Result::Highlights,
           markdown: ContextDev::Models::WebSearchResponse::Result::Markdown,
           relevance: ContextDev::Models::WebSearchResponse::Result::relevance,
           title: String,
           url: String
         }
+
+        type highlights =
+          {
+            code: ContextDev::Models::WebSearchResponse::Result::Highlights::code,
+            highlights: ::Array[String]?
+          }
+
+        class Highlights < ContextDev::Internal::Type::BaseModel
+          attr_accessor code: ContextDev::Models::WebSearchResponse::Result::Highlights::code
+
+          attr_accessor highlights: ::Array[String]?
+
+          def initialize: (
+            code: ContextDev::Models::WebSearchResponse::Result::Highlights::code,
+            highlights: ::Array[String]?
+          ) -> void
+
+          def to_hash: -> {
+            code: ContextDev::Models::WebSearchResponse::Result::Highlights::code,
+            highlights: ::Array[String]?
+          }
+
+          type code =
+            :SUCCESS
+            | :NOT_REQUESTED
+            | :TIMEOUT
+            | :CONTENT_TOO_LARGE
+            | :WEBSITE_ACCESS_ERROR
+            | :ERROR
+
+          module Code
+            extend ContextDev::Internal::Type::Enum
+
+            SUCCESS: :SUCCESS
+            NOT_REQUESTED: :NOT_REQUESTED
+            TIMEOUT: :TIMEOUT
+            CONTENT_TOO_LARGE: :CONTENT_TOO_LARGE
+            WEBSITE_ACCESS_ERROR: :WEBSITE_ACCESS_ERROR
+            ERROR: :ERROR
+
+            def self?.values: -> ::Array[ContextDev::Models::WebSearchResponse::Result::Highlights::code]
+          end
+        end
 
         type markdown =
           {

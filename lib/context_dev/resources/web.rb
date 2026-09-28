@@ -289,9 +289,10 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::WebSearchParams} for more details.
       #
-      # Search the web and optionally return page content with each result.
+      # Search the web and optionally return page content or relevant passages with each
+      # result.
       #
-      # @overload search(query:, country: nil, exclude_domains: nil, freshness: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @overload search(query:, country: nil, exclude_domains: nil, freshness: nil, highlights_options: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param query [String] Search query. Accepts natural language as well as Google-style search operators
       #
@@ -300,6 +301,8 @@ module ContextDev
       # @param exclude_domains [Array<String>] Blocklist — drop results from these domains. Example: ["pinterest.com", "reddit.
       #
       # @param freshness [Symbol, ContextDev::Models::WebSearchParams::Freshness] Restrict results to content published within this window.
+      #
+      # @param highlights_options [ContextDev::Models::WebSearchParams::HighlightsOptions] Passages from each result page that are relevant to the query. Pages are read wi
       #
       # @param include_domains [Array<String>] Allowlist — only return results from these domains. Example: ["arxiv.org", "gith
       #

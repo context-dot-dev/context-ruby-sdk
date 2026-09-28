@@ -212,6 +212,20 @@ module ContextDev
         sig { returns(String) }
         attr_accessor :description
 
+        # Highlights status and passages for this result.
+        sig do
+          returns(ContextDev::Models::WebSearchResponse::Result::Highlights)
+        end
+        attr_reader :highlights
+
+        sig do
+          params(
+            highlights:
+              ContextDev::Models::WebSearchResponse::Result::Highlights::OrHash
+          ).void
+        end
+        attr_writer :highlights
+
         # Markdown scrape status and content for this result.
         sig { returns(ContextDev::Models::WebSearchResponse::Result::Markdown) }
         attr_reader :markdown
@@ -243,6 +257,8 @@ module ContextDev
         sig do
           params(
             description: String,
+            highlights:
+              ContextDev::Models::WebSearchResponse::Result::Highlights::OrHash,
             markdown:
               ContextDev::Models::WebSearchResponse::Result::Markdown::OrHash,
             relevance:
@@ -255,6 +271,8 @@ module ContextDev
           # Snippet excerpt from the page. Empty string when the search provider does not
           # supply a snippet.
           description:,
+          # Highlights status and passages for this result.
+          highlights:,
           # Markdown scrape status and content for this result.
           markdown:,
           # Relevance to the original query.
@@ -270,6 +288,8 @@ module ContextDev
           override.returns(
             {
               description: String,
+              highlights:
+                ContextDev::Models::WebSearchResponse::Result::Highlights,
               markdown: ContextDev::Models::WebSearchResponse::Result::Markdown,
               relevance:
                 ContextDev::Models::WebSearchResponse::Result::Relevance::TaggedSymbol,
@@ -279,6 +299,113 @@ module ContextDev
           )
         end
         def to_hash
+        end
+
+        class Highlights < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::WebSearchResponse::Result::Highlights,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Per-result highlights outcome. Inspect this before reading `highlights`.
+          sig do
+            returns(
+              ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
+            )
+          end
+          attr_accessor :code
+
+          # Passages relevant to the query, in page order. Null unless
+          # highlightsOptions.enabled is true and the page was read.
+          sig { returns(T.nilable(T::Array[String])) }
+          attr_accessor :highlights
+
+          # Highlights status and passages for this result.
+          sig do
+            params(
+              code:
+                ContextDev::Models::WebSearchResponse::Result::Highlights::Code::OrSymbol,
+              highlights: T.nilable(T::Array[String])
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            # Per-result highlights outcome. Inspect this before reading `highlights`.
+            code:,
+            # Passages relevant to the query, in page order. Null unless
+            # highlightsOptions.enabled is true and the page was read.
+            highlights:
+          )
+          end
+
+          sig do
+            override.returns(
+              {
+                code:
+                  ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol,
+                highlights: T.nilable(T::Array[String])
+              }
+            )
+          end
+          def to_hash
+          end
+
+          # Per-result highlights outcome. Inspect this before reading `highlights`.
+          module Code
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::Models::WebSearchResponse::Result::Highlights::Code
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            SUCCESS =
+              T.let(
+                :SUCCESS,
+                ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
+              )
+            NOT_REQUESTED =
+              T.let(
+                :NOT_REQUESTED,
+                ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
+              )
+            TIMEOUT =
+              T.let(
+                :TIMEOUT,
+                ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
+              )
+            CONTENT_TOO_LARGE =
+              T.let(
+                :CONTENT_TOO_LARGE,
+                ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
+              )
+            WEBSITE_ACCESS_ERROR =
+              T.let(
+                :WEBSITE_ACCESS_ERROR,
+                ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
+              )
+            ERROR =
+              T.let(
+                :ERROR,
+                ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
+          end
         end
 
         class Markdown < ContextDev::Internal::Type::BaseModel

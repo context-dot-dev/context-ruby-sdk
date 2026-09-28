@@ -45,6 +45,19 @@ module ContextDev
       end
       attr_writer :freshness
 
+      # Passages from each result page that are relevant to the query. Pages are read
+      # with the `markdownOptions` settings.
+      sig { returns(T.nilable(ContextDev::WebSearchParams::HighlightsOptions)) }
+      attr_reader :highlights_options
+
+      sig do
+        params(
+          highlights_options:
+            ContextDev::WebSearchParams::HighlightsOptions::OrHash
+        ).void
+      end
+      attr_writer :highlights_options
+
       # Allowlist — only return results from these domains. Example: ["arxiv.org",
       # "github.com"].
       sig { returns(T.nilable(T::Array[String])) }
@@ -110,6 +123,8 @@ module ContextDev
           country: ContextDev::WebSearchParams::Country::OrSymbol,
           exclude_domains: T::Array[String],
           freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
+          highlights_options:
+            ContextDev::WebSearchParams::HighlightsOptions::OrHash,
           include_domains: T::Array[String],
           markdown_options:
             ContextDev::WebSearchParams::MarkdownOptions::OrHash,
@@ -133,6 +148,9 @@ module ContextDev
         exclude_domains: nil,
         # Restrict results to content published within this window.
         freshness: nil,
+        # Passages from each result page that are relevant to the query. Pages are read
+        # with the `markdownOptions` settings.
+        highlights_options: nil,
         # Allowlist — only return results from these domains. Example: ["arxiv.org",
         # "github.com"].
         include_domains: nil,
@@ -160,6 +178,7 @@ module ContextDev
             country: ContextDev::WebSearchParams::Country::OrSymbol,
             exclude_domains: T::Array[String],
             freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
+            highlights_options: ContextDev::WebSearchParams::HighlightsOptions,
             include_domains: T::Array[String],
             markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
             num_results: Integer,
@@ -470,6 +489,51 @@ module ContextDev
         end
       end
 
+      class HighlightsOptions < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::WebSearchParams::HighlightsOptions,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Return relevant passages for each result. Adds 1 credit per 10 results.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_reader :enabled
+
+        sig { params(enabled: T::Boolean).void }
+        attr_writer :enabled
+
+        # Maximum combined length of passages per result.
+        sig { returns(T.nilable(Integer)) }
+        attr_reader :max_characters
+
+        sig { params(max_characters: Integer).void }
+        attr_writer :max_characters
+
+        # Passages from each result page that are relevant to the query. Pages are read
+        # with the `markdownOptions` settings.
+        sig do
+          params(enabled: T::Boolean, max_characters: Integer).returns(
+            T.attached_class
+          )
+        end
+        def self.new(
+          # Return relevant passages for each result. Adds 1 credit per 10 results.
+          enabled: nil,
+          # Maximum combined length of passages per result.
+          max_characters: nil
+        )
+        end
+
+        sig do
+          override.returns({ enabled: T::Boolean, max_characters: Integer })
+        end
+        def to_hash
+        end
+      end
+
       class MarkdownOptions < ContextDev::Internal::Type::BaseModel
         OrHash =
           T.type_alias do
@@ -479,7 +543,7 @@ module ContextDev
             )
           end
 
-        # Scrape each result to Markdown. Off by default to keep search cheap and fast.
+        # Scrape each result to Markdown. Adds 1 credit per 10 results.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :enabled
 
@@ -507,8 +571,8 @@ module ContextDev
         sig { params(include_links: T::Boolean).void }
         attr_writer :include_links
 
-        # Cache TTL in ms for scraped Markdown keyed by URL + options. Default 1 day, max
-        # 30 days. Set to 0 to force a fresh scrape.
+        # Cache TTL in ms for scraped Markdown keyed by URL + options. Default 15 days,
+        # max 30 days. Set to 0 to force a fresh scrape.
         sig { returns(T.nilable(Integer)) }
         attr_reader :max_age_ms
 
@@ -583,7 +647,7 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Scrape each result to Markdown. Off by default to keep search cheap and fast.
+          # Scrape each result to Markdown. Adds 1 credit per 10 results.
           enabled: nil,
           # Render iframe contents into the Markdown.
           include_frames: nil,
@@ -591,8 +655,8 @@ module ContextDev
           include_images: nil,
           # Keep hyperlinks in the Markdown.
           include_links: nil,
-          # Cache TTL in ms for scraped Markdown keyed by URL + options. Default 1 day, max
-          # 30 days. Set to 0 to force a fresh scrape.
+          # Cache TTL in ms for scraped Markdown keyed by URL + options. Default 15 days,
+          # max 30 days. Set to 0 to force a fresh scrape.
           max_age_ms: nil,
           # PDF handling. Use start/end to bound text extraction and OCR to a page range.
           pdf: nil,

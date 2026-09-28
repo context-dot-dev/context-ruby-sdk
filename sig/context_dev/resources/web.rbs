@@ -88,6 +88,7 @@ module ContextDev
         ?country: ContextDev::Models::WebSearchParams::country,
         ?exclude_domains: ::Array[String],
         ?freshness: ContextDev::Models::WebSearchParams::freshness,
+        ?highlights_options: ContextDev::WebSearchParams::HighlightsOptions,
         ?include_domains: ::Array[String],
         ?markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
         ?num_results: Integer,
