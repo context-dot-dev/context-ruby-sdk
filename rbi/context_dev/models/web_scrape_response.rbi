@@ -288,6 +288,20 @@ module ContextDev
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
+        # Why the output failed. Present only when `success` is `false`.
+        sig { returns(T.nilable(String)) }
+        attr_reader :error_code
+
+        sig { params(error_code: String).void }
+        attr_writer :error_code
+
+        # Explanation of the failure and possible next steps.
+        sig { returns(T.nilable(String)) }
+        attr_reader :message
+
+        sig { params(message: String).void }
+        attr_writer :message
+
         # The original HTTP response body, unchanged by waits, actions, and filters.
         sig do
           params(
@@ -296,14 +310,20 @@ module ContextDev
                 ContextDev::Models::WebScrapeResponse::Bytes::Data::OrHash
               ),
             requested: T::Boolean,
-            success: T.nilable(T::Boolean)
+            success: T.nilable(T::Boolean),
+            error_code: String,
+            message: String
           ).returns(T.attached_class)
         end
         def self.new(
           data:,
           requested:,
           # `true` if returned, `false` if it failed, `null` if not requested.
-          success:
+          success:,
+          # Why the output failed. Present only when `success` is `false`.
+          error_code: nil,
+          # Explanation of the failure and possible next steps.
+          message: nil
         )
         end
 
@@ -313,7 +333,9 @@ module ContextDev
               data:
                 T.nilable(ContextDev::Models::WebScrapeResponse::Bytes::Data),
               requested: T::Boolean,
-              success: T.nilable(T::Boolean)
+              success: T.nilable(T::Boolean),
+              error_code: String,
+              message: String
             }
           )
         end
@@ -466,20 +488,40 @@ module ContextDev
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
+        # Why the output failed. Present only when `success` is `false`.
+        sig { returns(T.nilable(String)) }
+        attr_reader :error_code
+
+        sig { params(error_code: String).void }
+        attr_writer :error_code
+
+        # Explanation of the failure and possible next steps.
+        sig { returns(T.nilable(String)) }
+        attr_reader :message
+
+        sig { params(message: String).void }
+        attr_writer :message
+
         # Relevant Markdown excerpts in page order. `[Heading]` adds context; `…` marks
         # omitted text.
         sig do
           params(
             data: T.nilable(T::Array[String]),
             requested: T::Boolean,
-            success: T.nilable(T::Boolean)
+            success: T.nilable(T::Boolean),
+            error_code: String,
+            message: String
           ).returns(T.attached_class)
         end
         def self.new(
           data:,
           requested:,
           # `true` if returned, `false` if it failed, `null` if not requested.
-          success:
+          success:,
+          # Why the output failed. Present only when `success` is `false`.
+          error_code: nil,
+          # Explanation of the failure and possible next steps.
+          message: nil
         )
         end
 
@@ -488,7 +530,9 @@ module ContextDev
             {
               data: T.nilable(T::Array[String]),
               requested: T::Boolean,
-              success: T.nilable(T::Boolean)
+              success: T.nilable(T::Boolean),
+              error_code: String,
+              message: String
             }
           )
         end
@@ -515,19 +559,39 @@ module ContextDev
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
+        # Why the output failed. Present only when `success` is `false`.
+        sig { returns(T.nilable(String)) }
+        attr_reader :error_code
+
+        sig { params(error_code: String).void }
+        attr_writer :error_code
+
+        # Explanation of the failure and possible next steps.
+        sig { returns(T.nilable(String)) }
+        attr_reader :message
+
+        sig { params(message: String).void }
+        attr_writer :message
+
         # Rendered HTML after content filters.
         sig do
           params(
             data: T.nilable(String),
             requested: T::Boolean,
-            success: T.nilable(T::Boolean)
+            success: T.nilable(T::Boolean),
+            error_code: String,
+            message: String
           ).returns(T.attached_class)
         end
         def self.new(
           data:,
           requested:,
           # `true` if returned, `false` if it failed, `null` if not requested.
-          success:
+          success:,
+          # Why the output failed. Present only when `success` is `false`.
+          error_code: nil,
+          # Explanation of the failure and possible next steps.
+          message: nil
         )
         end
 
@@ -536,7 +600,9 @@ module ContextDev
             {
               data: T.nilable(String),
               requested: T::Boolean,
-              success: T.nilable(T::Boolean)
+              success: T.nilable(T::Boolean),
+              error_code: String,
+              message: String
             }
           )
         end
@@ -569,6 +635,20 @@ module ContextDev
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
+        # Why the output failed. Present only when `success` is `false`.
+        sig { returns(T.nilable(String)) }
+        attr_reader :error_code
+
+        sig { params(error_code: String).void }
+        attr_writer :error_code
+
+        # Explanation of the failure and possible next steps.
+        sig { returns(T.nilable(String)) }
+        attr_reader :message
+
+        sig { params(message: String).void }
+        attr_writer :message
+
         # Images after content filters. `[]` when none are found.
         sig do
           params(
@@ -579,14 +659,20 @@ module ContextDev
                 ]
               ),
             requested: T::Boolean,
-            success: T.nilable(T::Boolean)
+            success: T.nilable(T::Boolean),
+            error_code: String,
+            message: String
           ).returns(T.attached_class)
         end
         def self.new(
           data:,
           requested:,
           # `true` if returned, `false` if it failed, `null` if not requested.
-          success:
+          success:,
+          # Why the output failed. Present only when `success` is `false`.
+          error_code: nil,
+          # Explanation of the failure and possible next steps.
+          message: nil
         )
         end
 
@@ -598,7 +684,9 @@ module ContextDev
                   T::Array[ContextDev::Models::WebScrapeResponse::Images::Data]
                 ),
               requested: T::Boolean,
-              success: T.nilable(T::Boolean)
+              success: T.nilable(T::Boolean),
+              error_code: String,
+              message: String
             }
           )
         end
@@ -785,14 +873,14 @@ module ContextDev
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
-        # Cause of a failed JSON extraction, when available.
+        # Why the output failed. Present only when `success` is `false`.
         sig { returns(T.nilable(String)) }
         attr_reader :error_code
 
         sig { params(error_code: String).void }
         attr_writer :error_code
 
-        # Explanation of the JSON extraction failure and possible next steps.
+        # Explanation of the failure and possible next steps.
         sig { returns(T.nilable(String)) }
         attr_reader :message
 
@@ -814,9 +902,9 @@ module ContextDev
           requested:,
           # `true` if returned, `false` if it failed, `null` if not requested.
           success:,
-          # Cause of a failed JSON extraction, when available.
+          # Why the output failed. Present only when `success` is `false`.
           error_code: nil,
-          # Explanation of the JSON extraction failure and possible next steps.
+          # Explanation of the failure and possible next steps.
           message: nil
         )
         end
@@ -855,19 +943,39 @@ module ContextDev
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
+        # Why the output failed. Present only when `success` is `false`.
+        sig { returns(T.nilable(String)) }
+        attr_reader :error_code
+
+        sig { params(error_code: String).void }
+        attr_writer :error_code
+
+        # Explanation of the failure and possible next steps.
+        sig { returns(T.nilable(String)) }
+        attr_reader :message
+
+        sig { params(message: String).void }
+        attr_writer :message
+
         # Markdown after content filters.
         sig do
           params(
             data: T.nilable(String),
             requested: T::Boolean,
-            success: T.nilable(T::Boolean)
+            success: T.nilable(T::Boolean),
+            error_code: String,
+            message: String
           ).returns(T.attached_class)
         end
         def self.new(
           data:,
           requested:,
           # `true` if returned, `false` if it failed, `null` if not requested.
-          success:
+          success:,
+          # Why the output failed. Present only when `success` is `false`.
+          error_code: nil,
+          # Explanation of the failure and possible next steps.
+          message: nil
         )
         end
 
@@ -876,7 +984,9 @@ module ContextDev
             {
               data: T.nilable(String),
               requested: T::Boolean,
-              success: T.nilable(T::Boolean)
+              success: T.nilable(T::Boolean),
+              error_code: String,
+              message: String
             }
           )
         end
@@ -1404,20 +1514,40 @@ module ContextDev
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
+        # Why the output failed. Present only when `success` is `false`.
+        sig { returns(T.nilable(String)) }
+        attr_reader :error_code
+
+        sig { params(error_code: String).void }
+        attr_writer :error_code
+
+        # Explanation of the failure and possible next steps.
+        sig { returns(T.nilable(String)) }
+        attr_reader :message
+
+        sig { params(message: String).void }
+        attr_writer :message
+
         # Fields from `parseParams.rules`, after content filters. Unmatched fields are
         # `null` (`[]` for lists).
         sig do
           params(
             data: T.nilable(T::Hash[Symbol, T.anything]),
             requested: T::Boolean,
-            success: T.nilable(T::Boolean)
+            success: T.nilable(T::Boolean),
+            error_code: String,
+            message: String
           ).returns(T.attached_class)
         end
         def self.new(
           data:,
           requested:,
           # `true` if returned, `false` if it failed, `null` if not requested.
-          success:
+          success:,
+          # Why the output failed. Present only when `success` is `false`.
+          error_code: nil,
+          # Explanation of the failure and possible next steps.
+          message: nil
         )
         end
 
@@ -1426,7 +1556,9 @@ module ContextDev
             {
               data: T.nilable(T::Hash[Symbol, T.anything]),
               requested: T::Boolean,
-              success: T.nilable(T::Boolean)
+              success: T.nilable(T::Boolean),
+              error_code: String,
+              message: String
             }
           )
         end
@@ -1467,6 +1599,20 @@ module ContextDev
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
+        # Why the output failed. Present only when `success` is `false`.
+        sig { returns(T.nilable(String)) }
+        attr_reader :error_code
+
+        sig { params(error_code: String).void }
+        attr_writer :error_code
+
+        # Explanation of the failure and possible next steps.
+        sig { returns(T.nilable(String)) }
+        attr_reader :message
+
+        sig { params(message: String).void }
+        attr_writer :message
+
         # Product details found on the page.
         sig do
           params(
@@ -1475,14 +1621,20 @@ module ContextDev
                 ContextDev::Models::WebScrapeResponse::Product::Data::OrHash
               ),
             requested: T::Boolean,
-            success: T.nilable(T::Boolean)
+            success: T.nilable(T::Boolean),
+            error_code: String,
+            message: String
           ).returns(T.attached_class)
         end
         def self.new(
           data:,
           requested:,
           # `true` if returned, `false` if it failed, `null` if not requested.
-          success:
+          success:,
+          # Why the output failed. Present only when `success` is `false`.
+          error_code: nil,
+          # Explanation of the failure and possible next steps.
+          message: nil
         )
         end
 
@@ -1492,7 +1644,9 @@ module ContextDev
               data:
                 T.nilable(ContextDev::Models::WebScrapeResponse::Product::Data),
               requested: T::Boolean,
-              success: T.nilable(T::Boolean)
+              success: T.nilable(T::Boolean),
+              error_code: String,
+              message: String
             }
           )
         end
@@ -1887,19 +2041,39 @@ module ContextDev
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :success
 
+        # Why the output failed. Present only when `success` is `false`.
+        sig { returns(T.nilable(String)) }
+        attr_reader :error_code
+
+        sig { params(error_code: String).void }
+        attr_writer :error_code
+
+        # Explanation of the failure and possible next steps.
+        sig { returns(T.nilable(String)) }
+        attr_reader :message
+
+        sig { params(message: String).void }
+        attr_writer :message
+
         # Screenshot as a base64 image data URL.
         sig do
           params(
             data: T.nilable(String),
             requested: T::Boolean,
-            success: T.nilable(T::Boolean)
+            success: T.nilable(T::Boolean),
+            error_code: String,
+            message: String
           ).returns(T.attached_class)
         end
         def self.new(
           data:,
           requested:,
           # `true` if returned, `false` if it failed, `null` if not requested.
-          success:
+          success:,
+          # Why the output failed. Present only when `success` is `false`.
+          error_code: nil,
+          # Explanation of the failure and possible next steps.
+          message: nil
         )
         end
 
@@ -1908,7 +2082,9 @@ module ContextDev
             {
               data: T.nilable(String),
               requested: T::Boolean,
-              success: T.nilable(T::Boolean)
+              success: T.nilable(T::Boolean),
+              error_code: String,
+              message: String
             }
           )
         end
