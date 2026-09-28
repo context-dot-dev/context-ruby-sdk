@@ -304,13 +304,16 @@ module ContextDev
       )
       end
 
-      # Search the web and optionally return page content with each result.
+      # Search the web and optionally return page content or relevant passages with each
+      # result.
       sig do
         params(
           query: String,
           country: ContextDev::WebSearchParams::Country::OrSymbol,
           exclude_domains: T::Array[String],
           freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
+          highlights_options:
+            ContextDev::WebSearchParams::HighlightsOptions::OrHash,
           include_domains: T::Array[String],
           markdown_options:
             ContextDev::WebSearchParams::MarkdownOptions::OrHash,
@@ -334,6 +337,9 @@ module ContextDev
         exclude_domains: nil,
         # Restrict results to content published within this window.
         freshness: nil,
+        # Passages from each result page that are relevant to the query. Pages are read
+        # with the `markdownOptions` settings.
+        highlights_options: nil,
         # Allowlist — only return results from these domains. Example: ["arxiv.org",
         # "github.com"].
         include_domains: nil,

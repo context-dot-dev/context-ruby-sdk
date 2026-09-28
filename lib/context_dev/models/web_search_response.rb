@@ -108,6 +108,12 @@ module ContextDev
         #   @return [String]
         required :description, String
 
+        # @!attribute highlights
+        #   Highlights status and passages for this result.
+        #
+        #   @return [ContextDev::Models::WebSearchResponse::Result::Highlights]
+        required :highlights, -> { ContextDev::Models::WebSearchResponse::Result::Highlights }
+
         # @!attribute markdown
         #   Markdown scrape status and content for this result.
         #
@@ -132,11 +138,13 @@ module ContextDev
         #   @return [String]
         required :url, String
 
-        # @!method initialize(description:, markdown:, relevance:, title:, url:)
+        # @!method initialize(description:, highlights:, markdown:, relevance:, title:, url:)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebSearchResponse::Result} for more details.
         #
         #   @param description [String] Snippet excerpt from the page. Empty string when the search provider does not su
+        #
+        #   @param highlights [ContextDev::Models::WebSearchResponse::Result::Highlights] Highlights status and passages for this result.
         #
         #   @param markdown [ContextDev::Models::WebSearchResponse::Result::Markdown] Markdown scrape status and content for this result.
         #
@@ -145,6 +153,49 @@ module ContextDev
         #   @param title [String] Page title.
         #
         #   @param url [String] Canonical result URL.
+
+        # @see ContextDev::Models::WebSearchResponse::Result#highlights
+        class Highlights < ContextDev::Internal::Type::BaseModel
+          # @!attribute code
+          #   Per-result highlights outcome. Inspect this before reading `highlights`.
+          #
+          #   @return [Symbol, ContextDev::Models::WebSearchResponse::Result::Highlights::Code]
+          required :code, enum: -> { ContextDev::Models::WebSearchResponse::Result::Highlights::Code }
+
+          # @!attribute highlights
+          #   Passages relevant to the query, in page order. Null unless
+          #   highlightsOptions.enabled is true and the page was read.
+          #
+          #   @return [Array<String>, nil]
+          required :highlights, ContextDev::Internal::Type::ArrayOf[String], nil?: true
+
+          # @!method initialize(code:, highlights:)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::WebSearchResponse::Result::Highlights} for more details.
+          #
+          #   Highlights status and passages for this result.
+          #
+          #   @param code [Symbol, ContextDev::Models::WebSearchResponse::Result::Highlights::Code] Per-result highlights outcome. Inspect this before reading `highlights`.
+          #
+          #   @param highlights [Array<String>, nil] Passages relevant to the query, in page order. Null unless highlightsOptions.ena
+
+          # Per-result highlights outcome. Inspect this before reading `highlights`.
+          #
+          # @see ContextDev::Models::WebSearchResponse::Result::Highlights#code
+          module Code
+            extend ContextDev::Internal::Type::Enum
+
+            SUCCESS = :SUCCESS
+            NOT_REQUESTED = :NOT_REQUESTED
+            TIMEOUT = :TIMEOUT
+            CONTENT_TOO_LARGE = :CONTENT_TOO_LARGE
+            WEBSITE_ACCESS_ERROR = :WEBSITE_ACCESS_ERROR
+            ERROR = :ERROR
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
+        end
 
         # @see ContextDev::Models::WebSearchResponse::Result#markdown
         class Markdown < ContextDev::Internal::Type::BaseModel
