@@ -419,16 +419,16 @@ module ContextDev
         end
       end
 
-      type product_params = { use_ai_fallback: bool }
+      type product_params = { dedupe_images: bool }
 
       class ProductParams < ContextDev::Internal::Type::BaseModel
-        attr_reader use_ai_fallback: bool?
+        attr_reader dedupe_images: bool?
 
-        def use_ai_fallback=: (bool) -> bool
+        def dedupe_images=: (bool) -> bool
 
-        def initialize: (?use_ai_fallback: bool) -> void
+        def initialize: (?dedupe_images: bool) -> void
 
-        def to_hash: -> { use_ai_fallback: bool }
+        def to_hash: -> { dedupe_images: bool }
       end
 
       type screenshot_params =
