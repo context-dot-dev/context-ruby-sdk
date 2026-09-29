@@ -85,7 +85,7 @@ module ContextDev
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timeout_opts
-      #   Deadline for the whole request. Defaults to 60000 ms with `fail`. Fixed waits
+      #   Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits
       #   must end before it.
       #
       #   @return [ContextDev::Models::WebScrapeParams::TimeoutOpts, nil]
@@ -125,7 +125,7 @@ module ContextDev
       #
       #   @param tags [Array<String>] Labels for tracking request usage. Not retained when zdr is enabled.
       #
-      #   @param timeout_opts [ContextDev::Models::WebScrapeParams::TimeoutOpts] Deadline for the whole request. Defaults to 60000 ms with `fail`. Fixed waits mu
+      #   @param timeout_opts [ContextDev::Models::WebScrapeParams::TimeoutOpts] Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits mu
       #
       #   @param zdr [Symbol, ContextDev::Models::WebScrapeParams::Zdr] `enabled` turns on zero data retention. Your organization must have ZDR enabled.
       #
@@ -1006,7 +1006,7 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeParams::TimeoutOpts} for more details.
         #
-        #   Deadline for the whole request. Defaults to 60000 ms with `fail`. Fixed waits
+        #   Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits
         #   must end before it.
         #
         #   @param milliseconds [Integer] Deadline in milliseconds.

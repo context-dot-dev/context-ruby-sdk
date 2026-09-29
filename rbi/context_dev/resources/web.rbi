@@ -200,7 +200,7 @@ module ContextDev
         shared_params: nil,
         # Labels for tracking request usage. Not retained when zdr is enabled.
         tags: nil,
-        # Deadline for the whole request. Defaults to 60000 ms with `fail`. Fixed waits
+        # Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits
         # must end before it.
         timeout_opts: nil,
         # `enabled` turns on zero data retention. Your organization must have ZDR enabled.
