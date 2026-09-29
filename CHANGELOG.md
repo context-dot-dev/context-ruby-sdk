@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.22.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.21.0...v2.22.0) (2026-09-29)
+
+
+### Features
+
+* **answers:** route people and company research with faster answers ([#1336](https://github.com/context-dot-dev/context-ruby-sdk/issues/1336)) ([a391639](https://github.com/context-dot-dev/context-ruby-sdk/commit/a391639719b983da237217d25c10a841168bfc3d))
+* **api:** explain failed scrape outputs and fix agent-reported bugs ([#1360](https://github.com/context-dot-dev/context-ruby-sdk/issues/1360)) ([ca8bb9c](https://github.com/context-dot-dev/context-ruby-sdk/commit/ca8bb9c07d4844beb966ac3516581f2b320f2229))
+* **monitors:** support browser actions on page monitors ([#1365](https://github.com/context-dot-dev/context-ruby-sdk/issues/1365)) ([f795df1](https://github.com/context-dot-dev/context-ruby-sdk/commit/f795df1b70558bf6f3918aeaf2828774d367b62f))
+* **scrape:** default cache age to three days and allow one year ([#1339](https://github.com/context-dot-dev/context-ruby-sdk/issues/1339)) ([57d1e7d](https://github.com/context-dot-dev/context-ruby-sdk/commit/57d1e7d65f1adba78550c90722ef8776004d74b4))
+* **search:** add highlights to web search and bill page reads per 10 results ([#1387](https://github.com/context-dot-dev/context-ruby-sdk/issues/1387)) ([d3e33c2](https://github.com/context-dot-dev/context-ruby-sdk/commit/d3e33c2ff01fb25075f0e09f0ae309bfd69bfcb9))
+* **web-search:** extend page cache defaults ([#1408](https://github.com/context-dot-dev/context-ruby-sdk/issues/1408)) ([62bd789](https://github.com/context-dot-dev/context-ruby-sdk/commit/62bd7898d985adc40ae772158bd50284914ff72c))
+
+
+### Bug Fixes
+
+* **api:** document search domain limits and clarify scrape parameter errors ([#1388](https://github.com/context-dot-dev/context-ruby-sdk/issues/1388)) ([5bfd7fb](https://github.com/context-dot-dev/context-ruby-sdk/commit/5bfd7fb18f0f44fafd56881d7e12e704bde51d54))
+* **scrape:** resolve extracted URLs from source references ([#1333](https://github.com/context-dot-dev/context-ruby-sdk/issues/1333)) ([b7799a5](https://github.com/context-dot-dev/context-ruby-sdk/commit/b7799a5c6a21376c84b01c695af4d2eaa9756392))
+
+
+### Documentation
+
+* **openapi:** complete concise API reference metadata ([#1329](https://github.com/context-dot-dev/context-ruby-sdk/issues/1329)) ([ea59edb](https://github.com/context-dot-dev/context-ruby-sdk/commit/ea59edbdea84a1169b050fb42336585166446249))
+* **scrape:** rename endpoint to Scrape Anything ([#1341](https://github.com/context-dot-dev/context-ruby-sdk/issues/1341)) ([ace5048](https://github.com/context-dot-dev/context-ruby-sdk/commit/ace5048aed8b62d3c2b4f3af2a3ae082adc2a682))
+
 ## [2.21.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.20.0...v2.21.0) (2026-09-27)
 
 
