@@ -571,8 +571,10 @@ module ContextDev
         sig { params(include_links: T::Boolean).void }
         attr_writer :include_links
 
-        # Cache TTL in ms for scraped Markdown keyed by URL + options. Default 15 days,
-        # max 30 days. Set to 0 to force a fresh scrape.
+        # Maximum cache age in milliseconds for result page content. Defaults to 180 days
+        # (15552000000 ms) when Markdown is requested, or 365 days (31536000000 ms) when
+        # only highlights are requested. Explicit values override either default. Maximum:
+        # 365 days. Set to 0 to force a fresh scrape.
         sig { returns(T.nilable(Integer)) }
         attr_reader :max_age_ms
 
@@ -655,8 +657,10 @@ module ContextDev
           include_images: nil,
           # Keep hyperlinks in the Markdown.
           include_links: nil,
-          # Cache TTL in ms for scraped Markdown keyed by URL + options. Default 15 days,
-          # max 30 days. Set to 0 to force a fresh scrape.
+          # Maximum cache age in milliseconds for result page content. Defaults to 180 days
+          # (15552000000 ms) when Markdown is requested, or 365 days (31536000000 ms) when
+          # only highlights are requested. Explicit values override either default. Maximum:
+          # 365 days. Set to 0 to force a fresh scrape.
           max_age_ms: nil,
           # PDF handling. Use start/end to bound text extraction and OCR to a page range.
           pdf: nil,

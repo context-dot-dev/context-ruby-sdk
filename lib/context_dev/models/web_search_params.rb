@@ -429,8 +429,10 @@ module ContextDev
         optional :include_links, ContextDev::Internal::Type::Boolean, api_name: :includeLinks
 
         # @!attribute max_age_ms
-        #   Cache TTL in ms for scraped Markdown keyed by URL + options. Default 15 days,
-        #   max 30 days. Set to 0 to force a fresh scrape.
+        #   Maximum cache age in milliseconds for result page content. Defaults to 180 days
+        #   (15552000000 ms) when Markdown is requested, or 365 days (31536000000 ms) when
+        #   only highlights are requested. Explicit values override either default. Maximum:
+        #   365 days. Set to 0 to force a fresh scrape.
         #
         #   @return [Integer, nil]
         optional :max_age_ms, Integer, api_name: :maxAgeMs
@@ -482,7 +484,7 @@ module ContextDev
         #
         #   @param include_links [Boolean] Keep hyperlinks in the Markdown.
         #
-        #   @param max_age_ms [Integer] Cache TTL in ms for scraped Markdown keyed by URL + options. Default 15 days, ma
+        #   @param max_age_ms [Integer] Maximum cache age in milliseconds for result page content. Defaults to 180 days
         #
         #   @param pdf [ContextDev::Models::WebSearchParams::MarkdownOptions::Pdf] PDF handling. Use start/end to bound text extraction and OCR to a page range.
         #
