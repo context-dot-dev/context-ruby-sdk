@@ -972,22 +972,22 @@ module ContextDev
             )
           end
 
-        # Use an AI model when the page has no structured product data.
+        # Drop visually duplicate product images, keeping the largest copy.
         sig { returns(T.nilable(T::Boolean)) }
-        attr_reader :use_ai_fallback
+        attr_reader :dedupe_images
 
-        sig { params(use_ai_fallback: T::Boolean).void }
-        attr_writer :use_ai_fallback
+        sig { params(dedupe_images: T::Boolean).void }
+        attr_writer :dedupe_images
 
         # Product options. Requires formats.product: true.
-        sig { params(use_ai_fallback: T::Boolean).returns(T.attached_class) }
+        sig { params(dedupe_images: T::Boolean).returns(T.attached_class) }
         def self.new(
-          # Use an AI model when the page has no structured product data.
-          use_ai_fallback: nil
+          # Drop visually duplicate product images, keeping the largest copy.
+          dedupe_images: nil
         )
         end
 
-        sig { override.returns({ use_ai_fallback: T::Boolean }) }
+        sig { override.returns({ dedupe_images: T::Boolean }) }
         def to_hash
         end
       end

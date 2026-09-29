@@ -460,16 +460,16 @@ module ContextDev
       end
 
       class ProductParams < ContextDev::Internal::Type::BaseModel
-        # @!attribute use_ai_fallback
-        #   Use an AI model when the page has no structured product data.
+        # @!attribute dedupe_images
+        #   Drop visually duplicate product images, keeping the largest copy.
         #
         #   @return [Boolean, nil]
-        optional :use_ai_fallback, ContextDev::Internal::Type::Boolean, api_name: :useAIFallback
+        optional :dedupe_images, ContextDev::Internal::Type::Boolean, api_name: :dedupeImages
 
-        # @!method initialize(use_ai_fallback: nil)
+        # @!method initialize(dedupe_images: nil)
         #   Product options. Requires formats.product: true.
         #
-        #   @param use_ai_fallback [Boolean] Use an AI model when the page has no structured product data.
+        #   @param dedupe_images [Boolean] Drop visually duplicate product images, keeping the largest copy.
       end
 
       class ScreenshotParams < ContextDev::Internal::Type::BaseModel
