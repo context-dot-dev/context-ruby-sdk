@@ -20,7 +20,7 @@ module ContextDev
       required :url, String
 
       # @!attribute highlights_params
-      #   Required when `formats.highlights` is `true`.
+      #   Requires `formats.highlights: true`; required when it is set.
       #
       #   @return [ContextDev::Models::WebScrapeParams::HighlightsParams, nil]
       optional :highlights_params,
@@ -34,7 +34,7 @@ module ContextDev
       optional :image_params, -> { ContextDev::WebScrapeParams::ImageParams }, api_name: :imageParams
 
       # @!attribute json_params
-      #   Required when formats.json is true.
+      #   Requires `formats.json: true`; required when it is set.
       #
       #   @return [ContextDev::Models::WebScrapeParams::JsonParams, nil]
       optional :json_params, -> { ContextDev::WebScrapeParams::JsonParams }, api_name: :jsonParams
@@ -53,7 +53,7 @@ module ContextDev
       optional :max_age_ms, Integer, api_name: :maxAgeMs
 
       # @!attribute parse_params
-      #   Required when formats.parse is true.
+      #   Requires `formats.parse: true`; required when it is set.
       #
       #   @return [ContextDev::Models::WebScrapeParams::ParseParams, nil]
       optional :parse_params, -> { ContextDev::WebScrapeParams::ParseParams }, api_name: :parseParams
@@ -105,17 +105,17 @@ module ContextDev
       #
       #   @param url [String] Public HTTP or HTTPS URL to scrape.
       #
-      #   @param highlights_params [ContextDev::Models::WebScrapeParams::HighlightsParams] Required when `formats.highlights` is `true`.
+      #   @param highlights_params [ContextDev::Models::WebScrapeParams::HighlightsParams] Requires `formats.highlights: true`; required when it is set.
       #
       #   @param image_params [ContextDev::Models::WebScrapeParams::ImageParams] Image options. Requires formats.images: true.
       #
-      #   @param json_params [ContextDev::Models::WebScrapeParams::JsonParams] Required when formats.json is true.
+      #   @param json_params [ContextDev::Models::WebScrapeParams::JsonParams] Requires `formats.json: true`; required when it is set.
       #
       #   @param markdown_params [ContextDev::Models::WebScrapeParams::MarkdownParams] Markdown options. Requires `formats.markdown`.
       #
       #   @param max_age_ms [Integer] Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
       #
-      #   @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams] Required when formats.parse is true.
+      #   @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams] Requires `formats.parse: true`; required when it is set.
       #
       #   @param product_params [ContextDev::Models::WebScrapeParams::ProductParams] Product options. Requires formats.product: true.
       #
@@ -222,7 +222,7 @@ module ContextDev
         optional :max_characters, Integer, api_name: :maxCharacters
 
         # @!method initialize(query:, max_characters: nil)
-        #   Required when `formats.highlights` is `true`.
+        #   Requires `formats.highlights: true`; required when it is set.
         #
         #   @param query [String] The question or topic to find passages for.
         #
@@ -277,8 +277,8 @@ module ContextDev
 
       class JsonParams < ContextDev::Internal::Type::BaseModel
         # @!attribute schema
-        #   JSON Schema for a top-level object, up to 50 KB. Use optional or nullable fields
-        #   for missing facts.
+        #   JSON Schema (not an example object) for a top-level object, up to 50 KB. Use
+        #   optional or nullable fields for missing facts.
         #
         #   @return [Hash{Symbol=>Object}]
         required :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
@@ -293,9 +293,9 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeParams::JsonParams} for more details.
         #
-        #   Required when formats.json is true.
+        #   Requires `formats.json: true`; required when it is set.
         #
-        #   @param schema [Hash{Symbol=>Object}] JSON Schema for a top-level object, up to 50 KB. Use optional or nullable fields
+        #   @param schema [Hash{Symbol=>Object}] JSON Schema (not an example object) for a top-level object, up to 50 KB. Use opt
         #
         #   @param instructions [String] Extra guidance, such as which facts to prefer or how to read a field.
       end
@@ -362,7 +362,7 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeParams::ParseParams} for more details.
         #
-        #   Required when formats.parse is true.
+        #   Requires `formats.parse: true`; required when it is set.
         #
         #   @param rules [Hash{Symbol=>String, ContextDev::Models::WebScrapeParams::ParseParams::Rule::UnionMember1}] Field names mapped to CSS selectors (`h1`, `a@href`) or rule objects. Max 100 fi
 

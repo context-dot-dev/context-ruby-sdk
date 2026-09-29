@@ -180,17 +180,17 @@ module ContextDev
       #
       # @param url [String] Public HTTP or HTTPS URL to scrape.
       #
-      # @param highlights_params [ContextDev::Models::WebScrapeParams::HighlightsParams] Required when `formats.highlights` is `true`.
+      # @param highlights_params [ContextDev::Models::WebScrapeParams::HighlightsParams] Requires `formats.highlights: true`; required when it is set.
       #
       # @param image_params [ContextDev::Models::WebScrapeParams::ImageParams] Image options. Requires formats.images: true.
       #
-      # @param json_params [ContextDev::Models::WebScrapeParams::JsonParams] Required when formats.json is true.
+      # @param json_params [ContextDev::Models::WebScrapeParams::JsonParams] Requires `formats.json: true`; required when it is set.
       #
       # @param markdown_params [ContextDev::Models::WebScrapeParams::MarkdownParams] Markdown options. Requires `formats.markdown`.
       #
       # @param max_age_ms [Integer] Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
       #
-      # @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams] Required when formats.parse is true.
+      # @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams] Requires `formats.parse: true`; required when it is set.
       #
       # @param product_params [ContextDev::Models::WebScrapeParams::ProductParams] Product options. Requires formats.product: true.
       #
@@ -298,13 +298,13 @@ module ContextDev
       #
       # @param country [Symbol, ContextDev::Models::WebSearchParams::Country] Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific cou
       #
-      # @param exclude_domains [Array<String>] Blocklist — drop results from these domains. Example: ["pinterest.com", "reddit.
+      # @param exclude_domains [Array<String>] Blocklist — drop results from these domains. Up to 100 domains. Example: ["pinte
       #
       # @param freshness [Symbol, ContextDev::Models::WebSearchParams::Freshness] Restrict results to content published within this window.
       #
       # @param highlights_options [ContextDev::Models::WebSearchParams::HighlightsOptions] Passages from each result page that are relevant to the query. Pages are read wi
       #
-      # @param include_domains [Array<String>] Allowlist — only return results from these domains. Example: ["arxiv.org", "gith
+      # @param include_domains [Array<String>] Allowlist — only return results from these domains. Up to 100 domains. Example:
       #
       # @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions] Inline Markdown scraping for each result. Set `enabled: true` to activate.
       #

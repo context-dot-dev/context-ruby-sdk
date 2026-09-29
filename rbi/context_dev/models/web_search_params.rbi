@@ -26,8 +26,8 @@ module ContextDev
       end
       attr_writer :country
 
-      # Blocklist — drop results from these domains. Example: ["pinterest.com",
-      # "reddit.com"].
+      # Blocklist — drop results from these domains. Up to 100 domains. Example:
+      # ["pinterest.com", "reddit.com"].
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :exclude_domains
 
@@ -58,8 +58,8 @@ module ContextDev
       end
       attr_writer :highlights_options
 
-      # Allowlist — only return results from these domains. Example: ["arxiv.org",
-      # "github.com"].
+      # Allowlist — only return results from these domains. Up to 100 domains. Example:
+      # ["arxiv.org", "github.com"].
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :include_domains
 
@@ -143,16 +143,16 @@ module ContextDev
         # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
         # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
         country: nil,
-        # Blocklist — drop results from these domains. Example: ["pinterest.com",
-        # "reddit.com"].
+        # Blocklist — drop results from these domains. Up to 100 domains. Example:
+        # ["pinterest.com", "reddit.com"].
         exclude_domains: nil,
         # Restrict results to content published within this window.
         freshness: nil,
         # Passages from each result page that are relevant to the query. Pages are read
         # with the `markdownOptions` settings.
         highlights_options: nil,
-        # Allowlist — only return results from these domains. Example: ["arxiv.org",
-        # "github.com"].
+        # Allowlist — only return results from these domains. Up to 100 domains. Example:
+        # ["arxiv.org", "github.com"].
         include_domains: nil,
         # Inline Markdown scraping for each result. Set `enabled: true` to activate.
         markdown_options: nil,

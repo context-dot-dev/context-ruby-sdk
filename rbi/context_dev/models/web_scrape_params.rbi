@@ -22,7 +22,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
-      # Required when `formats.highlights` is `true`.
+      # Requires `formats.highlights: true`; required when it is set.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::HighlightsParams)) }
       attr_reader :highlights_params
 
@@ -45,7 +45,7 @@ module ContextDev
       end
       attr_writer :image_params
 
-      # Required when formats.json is true.
+      # Requires `formats.json: true`; required when it is set.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::JsonParams)) }
       attr_reader :json_params
 
@@ -75,7 +75,7 @@ module ContextDev
       sig { params(max_age_ms: Integer).void }
       attr_writer :max_age_ms
 
-      # Required when formats.parse is true.
+      # Requires `formats.parse: true`; required when it is set.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::ParseParams)) }
       attr_reader :parse_params
 
@@ -172,18 +172,18 @@ module ContextDev
         formats:,
         # Public HTTP or HTTPS URL to scrape.
         url:,
-        # Required when `formats.highlights` is `true`.
+        # Requires `formats.highlights: true`; required when it is set.
         highlights_params: nil,
         # Image options. Requires formats.images: true.
         image_params: nil,
-        # Required when formats.json is true.
+        # Requires `formats.json: true`; required when it is set.
         json_params: nil,
         # Markdown options. Requires `formats.markdown`.
         markdown_params: nil,
         # Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
         # 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
         max_age_ms: nil,
-        # Required when formats.parse is true.
+        # Requires `formats.parse: true`; required when it is set.
         parse_params: nil,
         # Product options. Requires formats.product: true.
         product_params: nil,
@@ -373,7 +373,7 @@ module ContextDev
         sig { params(max_characters: Integer).void }
         attr_writer :max_characters
 
-        # Required when `formats.highlights` is `true`.
+        # Requires `formats.highlights: true`; required when it is set.
         sig do
           params(query: String, max_characters: Integer).returns(
             T.attached_class
@@ -551,8 +551,8 @@ module ContextDev
             )
           end
 
-        # JSON Schema for a top-level object, up to 50 KB. Use optional or nullable fields
-        # for missing facts.
+        # JSON Schema (not an example object) for a top-level object, up to 50 KB. Use
+        # optional or nullable fields for missing facts.
         sig { returns(T::Hash[Symbol, T.anything]) }
         attr_accessor :schema
 
@@ -563,7 +563,7 @@ module ContextDev
         sig { params(instructions: String).void }
         attr_writer :instructions
 
-        # Required when formats.json is true.
+        # Requires `formats.json: true`; required when it is set.
         sig do
           params(
             schema: T::Hash[Symbol, T.anything],
@@ -571,8 +571,8 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # JSON Schema for a top-level object, up to 50 KB. Use optional or nullable fields
-          # for missing facts.
+          # JSON Schema (not an example object) for a top-level object, up to 50 KB. Use
+          # optional or nullable fields for missing facts.
           schema:,
           # Extra guidance, such as which facts to prefer or how to read a field.
           instructions: nil
@@ -724,7 +724,7 @@ module ContextDev
         end
         attr_accessor :rules
 
-        # Required when formats.parse is true.
+        # Requires `formats.parse: true`; required when it is set.
         sig do
           params(
             rules:

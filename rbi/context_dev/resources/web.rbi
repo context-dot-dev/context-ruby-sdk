@@ -179,18 +179,18 @@ module ContextDev
         formats:,
         # Public HTTP or HTTPS URL to scrape.
         url:,
-        # Required when `formats.highlights` is `true`.
+        # Requires `formats.highlights: true`; required when it is set.
         highlights_params: nil,
         # Image options. Requires formats.images: true.
         image_params: nil,
-        # Required when formats.json is true.
+        # Requires `formats.json: true`; required when it is set.
         json_params: nil,
         # Markdown options. Requires `formats.markdown`.
         markdown_params: nil,
         # Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
         # 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
         max_age_ms: nil,
-        # Required when formats.parse is true.
+        # Requires `formats.parse: true`; required when it is set.
         parse_params: nil,
         # Product options. Requires formats.product: true.
         product_params: nil,
@@ -332,16 +332,16 @@ module ContextDev
         # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
         # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
         country: nil,
-        # Blocklist — drop results from these domains. Example: ["pinterest.com",
-        # "reddit.com"].
+        # Blocklist — drop results from these domains. Up to 100 domains. Example:
+        # ["pinterest.com", "reddit.com"].
         exclude_domains: nil,
         # Restrict results to content published within this window.
         freshness: nil,
         # Passages from each result page that are relevant to the query. Pages are read
         # with the `markdownOptions` settings.
         highlights_options: nil,
-        # Allowlist — only return results from these domains. Example: ["arxiv.org",
-        # "github.com"].
+        # Allowlist — only return results from these domains. Up to 100 domains. Example:
+        # ["arxiv.org", "github.com"].
         include_domains: nil,
         # Inline Markdown scraping for each result. Set `enabled: true` to activate.
         markdown_options: nil,
