@@ -22,8 +22,8 @@ module ContextDev
       optional :country, enum: -> { ContextDev::WebSearchParams::Country }
 
       # @!attribute exclude_domains
-      #   Blocklist — drop results from these domains. Example: ["pinterest.com",
-      #   "reddit.com"].
+      #   Blocklist — drop results from these domains. Up to 100 domains. Example:
+      #   ["pinterest.com", "reddit.com"].
       #
       #   @return [Array<String>, nil]
       optional :exclude_domains, ContextDev::Internal::Type::ArrayOf[String], api_name: :excludeDomains
@@ -44,8 +44,8 @@ module ContextDev
                api_name: :highlightsOptions
 
       # @!attribute include_domains
-      #   Allowlist — only return results from these domains. Example: ["arxiv.org",
-      #   "github.com"].
+      #   Allowlist — only return results from these domains. Up to 100 domains. Example:
+      #   ["arxiv.org", "github.com"].
       #
       #   @return [Array<String>, nil]
       optional :include_domains, ContextDev::Internal::Type::ArrayOf[String], api_name: :includeDomains
@@ -97,13 +97,13 @@ module ContextDev
       #
       #   @param country [Symbol, ContextDev::Models::WebSearchParams::Country] Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific cou
       #
-      #   @param exclude_domains [Array<String>] Blocklist — drop results from these domains. Example: ["pinterest.com", "reddit.
+      #   @param exclude_domains [Array<String>] Blocklist — drop results from these domains. Up to 100 domains. Example: ["pinte
       #
       #   @param freshness [Symbol, ContextDev::Models::WebSearchParams::Freshness] Restrict results to content published within this window.
       #
       #   @param highlights_options [ContextDev::Models::WebSearchParams::HighlightsOptions] Passages from each result page that are relevant to the query. Pages are read wi
       #
-      #   @param include_domains [Array<String>] Allowlist — only return results from these domains. Example: ["arxiv.org", "gith
+      #   @param include_domains [Array<String>] Allowlist — only return results from these domains. Up to 100 domains. Example:
       #
       #   @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions] Inline Markdown scraping for each result. Set `enabled: true` to activate.
       #
