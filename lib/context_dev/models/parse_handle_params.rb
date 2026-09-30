@@ -184,14 +184,14 @@ module ContextDev
 
       class Pdf < ContextDev::Internal::Type::BaseModel
         # @!attribute end_
-        #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-        #   Must be greater than or equal to start when both are provided.
+        #   Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+        #   be >= start.
         #
         #   @return [Integer, nil]
         optional :end_, Integer, api_name: :end
 
         # @!attribute start
-        #   First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+        #   First 1-based PDF page to parse.
         #
         #   @return [Integer, nil]
         optional :start, Integer
@@ -202,9 +202,9 @@ module ContextDev
         #
         #   PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
         #
-        #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
+        #   @param end_ [Integer] Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must be
         #
-        #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+        #   @param start [Integer] First 1-based PDF page to parse.
       end
 
       # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless

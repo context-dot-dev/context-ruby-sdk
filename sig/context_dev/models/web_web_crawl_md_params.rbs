@@ -4,13 +4,13 @@ module ContextDev
       {
         url: String,
         country: ContextDev::Models::WebWebCrawlMdParams::country,
-        exclude_selectors: ::Array[String],
+        exclude_selectors: ::Array[String]?,
         follow_subdomains: bool,
         include_frames: bool,
         include_images: bool,
         include_links: bool,
-        include_selectors: ::Array[String],
-        max_age_ms: Integer,
+        include_selectors: ::Array[String]?,
+        max_age_ms: Integer?,
         max_depth: Integer,
         max_pages: Integer,
         pdf: ContextDev::WebWebCrawlMdParams::Pdf,
@@ -21,7 +21,7 @@ module ContextDev
         timeout_opts: ContextDev::WebWebCrawlMdParams::TimeoutOpts,
         url_regex: String,
         use_main_content_only: bool,
-        wait_for_ms: Integer,
+        wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebWebCrawlMdParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
@@ -38,9 +38,7 @@ module ContextDev
         ContextDev::Models::WebWebCrawlMdParams::country
       ) -> ContextDev::Models::WebWebCrawlMdParams::country
 
-      attr_reader exclude_selectors: ::Array[String]?
-
-      def exclude_selectors=: (::Array[String]) -> ::Array[String]
+      attr_accessor exclude_selectors: ::Array[String]?
 
       attr_reader follow_subdomains: bool?
 
@@ -58,13 +56,9 @@ module ContextDev
 
       def include_links=: (bool) -> bool
 
-      attr_reader include_selectors: ::Array[String]?
+      attr_accessor include_selectors: ::Array[String]?
 
-      def include_selectors=: (::Array[String]) -> ::Array[String]
-
-      attr_reader max_age_ms: Integer?
-
-      def max_age_ms=: (Integer) -> Integer
+      attr_accessor max_age_ms: Integer?
 
       attr_reader max_depth: Integer?
 
@@ -110,9 +104,7 @@ module ContextDev
 
       def use_main_content_only=: (bool) -> bool
 
-      attr_reader wait_for_ms: Integer?
-
-      def wait_for_ms=: (Integer) -> Integer
+      attr_accessor wait_for_ms: Integer?
 
       attr_reader zdr: ContextDev::Models::WebWebCrawlMdParams::zdr?
 
@@ -123,13 +115,13 @@ module ContextDev
       def initialize: (
         url: String,
         ?country: ContextDev::Models::WebWebCrawlMdParams::country,
-        ?exclude_selectors: ::Array[String],
+        ?exclude_selectors: ::Array[String]?,
         ?follow_subdomains: bool,
         ?include_frames: bool,
         ?include_images: bool,
         ?include_links: bool,
-        ?include_selectors: ::Array[String],
-        ?max_age_ms: Integer,
+        ?include_selectors: ::Array[String]?,
+        ?max_age_ms: Integer?,
         ?max_depth: Integer,
         ?max_pages: Integer,
         ?pdf: ContextDev::WebWebCrawlMdParams::Pdf,
@@ -140,7 +132,7 @@ module ContextDev
         ?timeout_opts: ContextDev::WebWebCrawlMdParams::TimeoutOpts,
         ?url_regex: String,
         ?use_main_content_only: bool,
-        ?wait_for_ms: Integer,
+        ?wait_for_ms: Integer?,
         ?zdr: ContextDev::Models::WebWebCrawlMdParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
@@ -148,13 +140,13 @@ module ContextDev
       def to_hash: -> {
         url: String,
         country: ContextDev::Models::WebWebCrawlMdParams::country,
-        exclude_selectors: ::Array[String],
+        exclude_selectors: ::Array[String]?,
         follow_subdomains: bool,
         include_frames: bool,
         include_images: bool,
         include_links: bool,
-        include_selectors: ::Array[String],
-        max_age_ms: Integer,
+        include_selectors: ::Array[String]?,
+        max_age_ms: Integer?,
         max_depth: Integer,
         max_pages: Integer,
         pdf: ContextDev::WebWebCrawlMdParams::Pdf,
@@ -165,7 +157,7 @@ module ContextDev
         timeout_opts: ContextDev::WebWebCrawlMdParams::TimeoutOpts,
         url_regex: String,
         use_main_content_only: bool,
-        wait_for_ms: Integer,
+        wait_for_ms: Integer?,
         zdr: ContextDev::Models::WebWebCrawlMdParams::zdr,
         request_options: ContextDev::RequestOptions
       }

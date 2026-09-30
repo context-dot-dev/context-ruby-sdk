@@ -220,8 +220,7 @@ module ContextDev
                 optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
 
                 # @!attribute pdf
-                #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                #   detection/OCR to an inclusive 1-based page range.
+                #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 #
                 #   @return [ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf, nil]
                 optional :pdf, -> { ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf }
@@ -275,7 +274,7 @@ module ContextDev
                 #
                 #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                 #
-                #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
+                #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 #
                 #   @param settle_animations [Boolean] Wait for CSS animations to finish before extracting, on browser-rendered pages.
                 #
@@ -503,8 +502,8 @@ module ContextDev
                 # @see ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options#pdf
                 class Pdf < ContextDev::Internal::Type::BaseModel
                   # @!attribute end_
-                  #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                  #   Must be greater than or equal to start when both are provided.
+                  #   Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                  #   be >= start.
                   #
                   #   @return [Integer, nil]
                   optional :end_, Integer, api_name: :end
@@ -522,7 +521,7 @@ module ContextDev
                   optional :should_parse, ContextDev::Internal::Type::Boolean, api_name: :shouldParse
 
                   # @!attribute start
-                  #   First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  #   First 1-based PDF page to parse.
                   #
                   #   @return [Integer, nil]
                   optional :start, Integer
@@ -532,16 +531,15 @@ module ContextDev
                   #   {ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::Markdown::Options::Pdf}
                   #   for more details.
                   #
-                  #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  #   detection/OCR to an inclusive 1-based page range.
+                  #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   #
-                  #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
+                  #   @param end_ [Integer] Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must be
                   #
                   #   @param ocr [Boolean] Read scanned PDF pages with OCR; preserve pages that already have text.
                   #
                   #   @param should_parse [Boolean] Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                   #
-                  #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  #   @param start [Integer] First 1-based PDF page to parse.
                 end
               end
             end
@@ -645,8 +643,7 @@ module ContextDev
                 optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
 
                 # @!attribute pdf
-                #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                #   detection/OCR to an inclusive 1-based page range.
+                #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 #
                 #   @return [ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf, nil]
                 optional :pdf, -> { ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf }
@@ -686,7 +683,7 @@ module ContextDev
                 #
                 #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                 #
-                #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
+                #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 #
                 #   @param settle_animations [Boolean] Wait for CSS animations to finish before extracting, on browser-rendered pages.
                 #
@@ -912,8 +909,8 @@ module ContextDev
                 # @see ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options#pdf
                 class Pdf < ContextDev::Internal::Type::BaseModel
                   # @!attribute end_
-                  #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                  #   Must be greater than or equal to start when both are provided.
+                  #   Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                  #   be >= start.
                   #
                   #   @return [Integer, nil]
                   optional :end_, Integer, api_name: :end
@@ -931,7 +928,7 @@ module ContextDev
                   optional :should_parse, ContextDev::Internal::Type::Boolean, api_name: :shouldParse
 
                   # @!attribute start
-                  #   First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  #   First 1-based PDF page to parse.
                   #
                   #   @return [Integer, nil]
                   optional :start, Integer
@@ -941,16 +938,15 @@ module ContextDev
                   #   {ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::HTML::Options::Pdf}
                   #   for more details.
                   #
-                  #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  #   detection/OCR to an inclusive 1-based page range.
+                  #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   #
-                  #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
+                  #   @param end_ [Integer] Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must be
                   #
                   #   @param ocr [Boolean] Read scanned PDF pages with OCR; preserve pages that already have text.
                   #
                   #   @param should_parse [Boolean] Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                   #
-                  #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  #   @param start [Integer] First 1-based PDF page to parse.
                 end
               end
             end
@@ -1225,8 +1221,7 @@ module ContextDev
                 optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
 
                 # @!attribute pdf
-                #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                #   detection/OCR to an inclusive 1-based page range.
+                #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 #
                 #   @return [ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf, nil]
                 optional :pdf, -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf }
@@ -1280,7 +1275,7 @@ module ContextDev
                 #
                 #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                 #
-                #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
+                #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 #
                 #   @param settle_animations [Boolean] Wait for CSS animations to finish before extracting, on browser-rendered pages.
                 #
@@ -1508,8 +1503,8 @@ module ContextDev
                 # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options#pdf
                 class Pdf < ContextDev::Internal::Type::BaseModel
                   # @!attribute end_
-                  #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                  #   Must be greater than or equal to start when both are provided.
+                  #   Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                  #   be >= start.
                   #
                   #   @return [Integer, nil]
                   optional :end_, Integer, api_name: :end
@@ -1527,7 +1522,7 @@ module ContextDev
                   optional :should_parse, ContextDev::Internal::Type::Boolean, api_name: :shouldParse
 
                   # @!attribute start
-                  #   First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  #   First 1-based PDF page to parse.
                   #
                   #   @return [Integer, nil]
                   optional :start, Integer
@@ -1537,16 +1532,15 @@ module ContextDev
                   #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Options::Pdf}
                   #   for more details.
                   #
-                  #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  #   detection/OCR to an inclusive 1-based page range.
+                  #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   #
-                  #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
+                  #   @param end_ [Integer] Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must be
                   #
                   #   @param ocr [Boolean] Read scanned PDF pages with OCR; preserve pages that already have text.
                   #
                   #   @param should_parse [Boolean] Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                   #
-                  #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  #   @param start [Integer] First 1-based PDF page to parse.
                 end
               end
             end
@@ -1763,8 +1757,7 @@ module ContextDev
                 optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
 
                 # @!attribute pdf
-                #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                #   detection/OCR to an inclusive 1-based page range.
+                #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 #
                 #   @return [ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf, nil]
                 optional :pdf, -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf }
@@ -1804,7 +1797,7 @@ module ContextDev
                 #
                 #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                 #
-                #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf] PDF parsing controls. Use start/end to limit text extraction and embedded-image
+                #   @param pdf [ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 #
                 #   @param settle_animations [Boolean] Wait for CSS animations to finish before extracting, on browser-rendered pages.
                 #
@@ -2030,8 +2023,8 @@ module ContextDev
                 # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options#pdf
                 class Pdf < ContextDev::Internal::Type::BaseModel
                   # @!attribute end_
-                  #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                  #   Must be greater than or equal to start when both are provided.
+                  #   Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                  #   be >= start.
                   #
                   #   @return [Integer, nil]
                   optional :end_, Integer, api_name: :end
@@ -2049,7 +2042,7 @@ module ContextDev
                   optional :should_parse, ContextDev::Internal::Type::Boolean, api_name: :shouldParse
 
                   # @!attribute start
-                  #   First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  #   First 1-based PDF page to parse.
                   #
                   #   @return [Integer, nil]
                   optional :start, Integer
@@ -2059,16 +2052,15 @@ module ContextDev
                   #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Options::Pdf}
                   #   for more details.
                   #
-                  #   PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  #   detection/OCR to an inclusive 1-based page range.
+                  #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   #
-                  #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
+                  #   @param end_ [Integer] Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must be
                   #
                   #   @param ocr [Boolean] Read scanned PDF pages with OCR; preserve pages that already have text.
                   #
                   #   @param should_parse [Boolean] Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                   #
-                  #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  #   @param start [Integer] First 1-based PDF page to parse.
                 end
               end
             end

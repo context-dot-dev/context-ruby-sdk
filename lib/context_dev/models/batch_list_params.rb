@@ -40,10 +40,11 @@ module ContextDev
       optional :status, enum: -> { ContextDev::BatchListParams::Status }
 
       # @!attribute tags
-      #   Comma-separated list of tags to filter by (matches batches having any of them).
+      #   Tags to filter by (matches batches having any of them). Pass repeated `tags`
+      #   params or one comma-separated list, e.g. `tags=docs,competitor`.
       #
-      #   @return [String, nil]
-      optional :tags, String
+      #   @return [String, Array<String>, nil]
+      optional :tags, union: -> { ContextDev::BatchListParams::Tags }
 
       # @!method initialize(cursor: nil, limit: nil, q: nil, search_type: nil, status: nil, tags: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
@@ -59,7 +60,7 @@ module ContextDev
       #
       #   @param status [Symbol, ContextDev::Models::BatchListParams::Status] Filter by status.
       #
-      #   @param tags [String] Comma-separated list of tags to filter by (matches batches having any of them).
+      #   @param tags [String, Array<String>] Tags to filter by (matches batches having any of them). Pass repeated `tags` par
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -88,6 +89,22 @@ module ContextDev
 
         # @!method self.values
         #   @return [Array<Symbol>]
+      end
+
+      # Tags to filter by (matches batches having any of them). Pass repeated `tags`
+      # params or one comma-separated list, e.g. `tags=docs,competitor`.
+      module Tags
+        extend ContextDev::Internal::Type::Union
+
+        variant String
+
+        variant -> { ContextDev::Models::BatchListParams::Tags::StringArray }
+
+        # @!method self.variants
+        #   @return [Array(String, Array<String>)]
+
+        # @type [ContextDev::Internal::Type::Converter]
+        StringArray = ContextDev::Internal::Type::ArrayOf[String]
       end
     end
   end

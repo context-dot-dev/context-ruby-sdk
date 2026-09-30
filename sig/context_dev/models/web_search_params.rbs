@@ -6,9 +6,9 @@ module ContextDev
         country: ContextDev::Models::WebSearchParams::country,
         exclude_domains: ::Array[String],
         freshness: ContextDev::Models::WebSearchParams::freshness,
-        highlights_options: ContextDev::WebSearchParams::HighlightsOptions,
+        highlights_options: ContextDev::WebSearchParams::HighlightsOptions?,
         include_domains: ::Array[String],
-        markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
+        markdown_options: ContextDev::WebSearchParams::MarkdownOptions?,
         num_results: Integer,
         query_fanout: bool,
         tags: ::Array[String],
@@ -39,21 +39,13 @@ module ContextDev
         ContextDev::Models::WebSearchParams::freshness
       ) -> ContextDev::Models::WebSearchParams::freshness
 
-      attr_reader highlights_options: ContextDev::WebSearchParams::HighlightsOptions?
-
-      def highlights_options=: (
-        ContextDev::WebSearchParams::HighlightsOptions
-      ) -> ContextDev::WebSearchParams::HighlightsOptions
+      attr_accessor highlights_options: ContextDev::WebSearchParams::HighlightsOptions?
 
       attr_reader include_domains: ::Array[String]?
 
       def include_domains=: (::Array[String]) -> ::Array[String]
 
-      attr_reader markdown_options: ContextDev::WebSearchParams::MarkdownOptions?
-
-      def markdown_options=: (
-        ContextDev::WebSearchParams::MarkdownOptions
-      ) -> ContextDev::WebSearchParams::MarkdownOptions
+      attr_accessor markdown_options: ContextDev::WebSearchParams::MarkdownOptions?
 
       attr_reader num_results: Integer?
 
@@ -84,9 +76,9 @@ module ContextDev
         ?country: ContextDev::Models::WebSearchParams::country,
         ?exclude_domains: ::Array[String],
         ?freshness: ContextDev::Models::WebSearchParams::freshness,
-        ?highlights_options: ContextDev::WebSearchParams::HighlightsOptions,
+        ?highlights_options: ContextDev::WebSearchParams::HighlightsOptions?,
         ?include_domains: ::Array[String],
-        ?markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
+        ?markdown_options: ContextDev::WebSearchParams::MarkdownOptions?,
         ?num_results: Integer,
         ?query_fanout: bool,
         ?tags: ::Array[String],
@@ -100,9 +92,9 @@ module ContextDev
         country: ContextDev::Models::WebSearchParams::country,
         exclude_domains: ::Array[String],
         freshness: ContextDev::Models::WebSearchParams::freshness,
-        highlights_options: ContextDev::WebSearchParams::HighlightsOptions,
+        highlights_options: ContextDev::WebSearchParams::HighlightsOptions?,
         include_domains: ::Array[String],
-        markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
+        markdown_options: ContextDev::WebSearchParams::MarkdownOptions?,
         num_results: Integer,
         query_fanout: bool,
         tags: ::Array[String],
@@ -633,12 +625,12 @@ module ContextDev
           include_frames: bool,
           include_images: bool,
           include_links: bool,
-          max_age_ms: Integer,
+          max_age_ms: Integer?,
           pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf,
           :shorten_base64_images => bool,
           timeout_opts: ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts,
           use_main_content_only: bool,
-          wait_for_ms: Integer
+          wait_for_ms: Integer?
         }
 
       class MarkdownOptions < ContextDev::Internal::Type::BaseModel
@@ -658,9 +650,7 @@ module ContextDev
 
         def include_links=: (bool) -> bool
 
-        attr_reader max_age_ms: Integer?
-
-        def max_age_ms=: (Integer) -> Integer
+        attr_accessor max_age_ms: Integer?
 
         attr_reader pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf?
 
@@ -682,21 +672,19 @@ module ContextDev
 
         def use_main_content_only=: (bool) -> bool
 
-        attr_reader wait_for_ms: Integer?
-
-        def wait_for_ms=: (Integer) -> Integer
+        attr_accessor wait_for_ms: Integer?
 
         def initialize: (
           ?enabled: bool,
           ?include_frames: bool,
           ?include_images: bool,
           ?include_links: bool,
-          ?max_age_ms: Integer,
+          ?max_age_ms: Integer?,
           ?pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf,
           ?shorten_base64_images: bool,
           ?timeout_opts: ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts,
           ?use_main_content_only: bool,
-          ?wait_for_ms: Integer
+          ?wait_for_ms: Integer?
         ) -> void
 
         def to_hash: -> {
@@ -704,12 +692,12 @@ module ContextDev
           include_frames: bool,
           include_images: bool,
           include_links: bool,
-          max_age_ms: Integer,
+          max_age_ms: Integer?,
           pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf,
           :shorten_base64_images => bool,
           timeout_opts: ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts,
           use_main_content_only: bool,
-          wait_for_ms: Integer
+          wait_for_ms: Integer?
         }
 
         type pdf = { end_: Integer, should_parse: bool, start: Integer }
