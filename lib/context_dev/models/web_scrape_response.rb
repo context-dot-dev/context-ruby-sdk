@@ -178,7 +178,7 @@ module ContextDev
         # @see ContextDev::Models::WebScrapeResponse::Bytes#data
         class Data < ContextDev::Internal::Type::BaseModel
           # @!attribute base64
-          #   Body as base64, after HTTP decompression. Up to 20 MiB decoded.
+          #   Body as base64, after HTTP decompression. Up to 50 MiB decoded.
           #
           #   @return [String]
           required :base64, String
@@ -189,7 +189,7 @@ module ContextDev
           required :content_type, String, api_name: :contentType
 
           # @!method initialize(base64:, content_type:)
-          #   @param base64 [String] Body as base64, after HTTP decompression. Up to 20 MiB decoded.
+          #   @param base64 [String] Body as base64, after HTTP decompression. Up to 50 MiB decoded.
           #
           #   @param content_type [String]
         end

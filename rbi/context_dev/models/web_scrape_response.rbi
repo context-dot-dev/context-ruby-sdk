@@ -351,7 +351,7 @@ module ContextDev
               )
             end
 
-          # Body as base64, after HTTP decompression. Up to 20 MiB decoded.
+          # Body as base64, after HTTP decompression. Up to 50 MiB decoded.
           sig { returns(String) }
           attr_accessor :base64
 
@@ -364,7 +364,7 @@ module ContextDev
             )
           end
           def self.new(
-            # Body as base64, after HTTP decompression. Up to 20 MiB decoded.
+            # Body as base64, after HTTP decompression. Up to 50 MiB decoded.
             base64:,
             content_type:
           )
