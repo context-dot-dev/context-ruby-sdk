@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.23.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.22.0...v2.23.0) (2026-09-30)
+
+
+### Features
+
+* **logs:** serve request logs at /org/logs ([#1442](https://github.com/context-dot-dev/context-ruby-sdk/issues/1442)) ([c5093d3](https://github.com/context-dot-dev/context-ruby-sdk/commit/c5093d3ab3a75b169d477ed38d0130c6f4bf0b3d))
+* **scrape:** accept documents up to 50 MB ([#1436](https://github.com/context-dot-dev/context-ruby-sdk/issues/1436)) ([7382a7a](https://github.com/context-dot-dev/context-ruby-sdk/commit/7382a7a256e353c9ab7e0d2a6cf12fb225bf4cbd))
+* **scrape:** add productParams.dedupeImages, always run product AI fallback ([#1423](https://github.com/context-dot-dev/context-ruby-sdk/issues/1423)) ([83b2be2](https://github.com/context-dot-dev/context-ruby-sdk/commit/83b2be23f9a00eafc933c8791ed373ada3460455))
+* **scrape:** default POST /web/scrape deadline to 90s ([#1428](https://github.com/context-dot-dev/context-ruby-sdk/issues/1428)) ([adacc1a](https://github.com/context-dot-dev/context-ruby-sdk/commit/adacc1a247f8146d1cba9c234c60ff7f8830513b))
+
+
+### Bug Fixes
+
+* **api:** derive OpenAPI request docs from runtime Zod schemas ([#1421](https://github.com/context-dot-dev/context-ruby-sdk/issues/1421)) ([4f3308e](https://github.com/context-dot-dev/context-ruby-sdk/commit/4f3308e35c4a1bec06fc28ad759ef25a6617f163))
+
 ## [2.22.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.21.0...v2.22.0) (2026-09-29)
 
 
