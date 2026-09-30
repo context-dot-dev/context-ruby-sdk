@@ -946,12 +946,23 @@ module ContextDev
           sig { returns(Symbol) }
           attr_accessor :type
 
-          # Optional country code hint (GL parameter) to specify the country when looking up
-          # by company name.
-          sig { returns(T.nilable(String)) }
+          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
+          # search.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::OrSymbol
+              )
+            )
+          end
           attr_reader :country_gl
 
-          sig { params(country_gl: String).void }
+          sig do
+            params(
+              country_gl:
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::OrSymbol
+            ).void
+          end
           attr_writer :country_gl
 
           sig do
@@ -1010,7 +1021,8 @@ module ContextDev
           sig do
             params(
               name: String,
-              country_gl: String,
+              country_gl:
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::OrSymbol,
               force_language:
                 T.nilable(
                   ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage::OrSymbol
@@ -1026,8 +1038,8 @@ module ContextDev
           def self.new(
             # Company name to retrieve brand data for (e.g., 'Apple Inc').
             name:,
-            # Optional country code hint (GL parameter) to specify the country when looking up
-            # by company name.
+            # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
+            # search.
             country_gl: nil,
             force_language: nil,
             # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
@@ -1051,7 +1063,8 @@ module ContextDev
               {
                 name: String,
                 type: Symbol,
-                country_gl: String,
+                country_gl:
+                  ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::OrSymbol,
                 force_language:
                   T.nilable(
                     ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage::OrSymbol
@@ -1065,6 +1078,1227 @@ module ContextDev
             )
           end
           def to_hash
+          end
+
+          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
+          # search.
+          module CountryGl
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::BrandRetrieveParams::Body::ByName::CountryGl
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            AF =
+              T.let(
+                :af,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AL =
+              T.let(
+                :al,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            DZ =
+              T.let(
+                :dz,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AS =
+              T.let(
+                :as,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AD =
+              T.let(
+                :ad,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AO =
+              T.let(
+                :ao,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AI =
+              T.let(
+                :ai,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AQ =
+              T.let(
+                :aq,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AG =
+              T.let(
+                :ag,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AR =
+              T.let(
+                :ar,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AM =
+              T.let(
+                :am,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AW =
+              T.let(
+                :aw,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AU =
+              T.let(
+                :au,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AT =
+              T.let(
+                :at,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AZ =
+              T.let(
+                :az,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BS =
+              T.let(
+                :bs,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BH =
+              T.let(
+                :bh,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BD =
+              T.let(
+                :bd,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BB =
+              T.let(
+                :bb,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BY =
+              T.let(
+                :by,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BE =
+              T.let(
+                :be,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BZ =
+              T.let(
+                :bz,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BJ =
+              T.let(
+                :bj,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BM =
+              T.let(
+                :bm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BT =
+              T.let(
+                :bt,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BO =
+              T.let(
+                :bo,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BA =
+              T.let(
+                :ba,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BW =
+              T.let(
+                :bw,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BV =
+              T.let(
+                :bv,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BR =
+              T.let(
+                :br,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            IO =
+              T.let(
+                :io,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BN =
+              T.let(
+                :bn,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BG =
+              T.let(
+                :bg,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BF =
+              T.let(
+                :bf,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            BI =
+              T.let(
+                :bi,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            KH =
+              T.let(
+                :kh,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CM =
+              T.let(
+                :cm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CA =
+              T.let(
+                :ca,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CV =
+              T.let(
+                :cv,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            KY =
+              T.let(
+                :ky,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CF =
+              T.let(
+                :cf,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TD =
+              T.let(
+                :td,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CL =
+              T.let(
+                :cl,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CN =
+              T.let(
+                :cn,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CX =
+              T.let(
+                :cx,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CC =
+              T.let(
+                :cc,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CO =
+              T.let(
+                :co,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            KM =
+              T.let(
+                :km,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CG =
+              T.let(
+                :cg,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CD =
+              T.let(
+                :cd,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CK =
+              T.let(
+                :ck,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CR =
+              T.let(
+                :cr,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CI =
+              T.let(
+                :ci,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            HR =
+              T.let(
+                :hr,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CU =
+              T.let(
+                :cu,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CY =
+              T.let(
+                :cy,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CZ =
+              T.let(
+                :cz,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            DK =
+              T.let(
+                :dk,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            DJ =
+              T.let(
+                :dj,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            DM =
+              T.let(
+                :dm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            DO =
+              T.let(
+                :do,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            EC =
+              T.let(
+                :ec,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            EG =
+              T.let(
+                :eg,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SV =
+              T.let(
+                :sv,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GQ =
+              T.let(
+                :gq,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            ER =
+              T.let(
+                :er,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            EE =
+              T.let(
+                :ee,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            ET =
+              T.let(
+                :et,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            FK =
+              T.let(
+                :fk,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            FO =
+              T.let(
+                :fo,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            FJ =
+              T.let(
+                :fj,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            FI =
+              T.let(
+                :fi,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            FR =
+              T.let(
+                :fr,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GF =
+              T.let(
+                :gf,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PF =
+              T.let(
+                :pf,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TF =
+              T.let(
+                :tf,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GA =
+              T.let(
+                :ga,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GM =
+              T.let(
+                :gm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GE =
+              T.let(
+                :ge,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            DE =
+              T.let(
+                :de,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GH =
+              T.let(
+                :gh,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GI =
+              T.let(
+                :gi,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GR =
+              T.let(
+                :gr,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GL =
+              T.let(
+                :gl,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GD =
+              T.let(
+                :gd,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GP =
+              T.let(
+                :gp,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GU =
+              T.let(
+                :gu,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GT =
+              T.let(
+                :gt,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GN =
+              T.let(
+                :gn,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GW =
+              T.let(
+                :gw,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GY =
+              T.let(
+                :gy,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            HT =
+              T.let(
+                :ht,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            HM =
+              T.let(
+                :hm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            VA =
+              T.let(
+                :va,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            HN =
+              T.let(
+                :hn,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            HK =
+              T.let(
+                :hk,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            HU =
+              T.let(
+                :hu,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            IS =
+              T.let(
+                :is,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            IN =
+              T.let(
+                :in,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            ID =
+              T.let(
+                :id,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            IR =
+              T.let(
+                :ir,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            IQ =
+              T.let(
+                :iq,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            IE =
+              T.let(
+                :ie,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            IL =
+              T.let(
+                :il,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            IT =
+              T.let(
+                :it,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            JM =
+              T.let(
+                :jm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            JP =
+              T.let(
+                :jp,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            JO =
+              T.let(
+                :jo,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            KZ =
+              T.let(
+                :kz,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            KE =
+              T.let(
+                :ke,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            KI =
+              T.let(
+                :ki,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            KP =
+              T.let(
+                :kp,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            KR =
+              T.let(
+                :kr,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            KW =
+              T.let(
+                :kw,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            KG =
+              T.let(
+                :kg,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            LA =
+              T.let(
+                :la,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            LV =
+              T.let(
+                :lv,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            LB =
+              T.let(
+                :lb,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            LS =
+              T.let(
+                :ls,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            LR =
+              T.let(
+                :lr,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            LY =
+              T.let(
+                :ly,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            LI =
+              T.let(
+                :li,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            LT =
+              T.let(
+                :lt,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            LU =
+              T.let(
+                :lu,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MO =
+              T.let(
+                :mo,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MK =
+              T.let(
+                :mk,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MG =
+              T.let(
+                :mg,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MW =
+              T.let(
+                :mw,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MY =
+              T.let(
+                :my,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MV =
+              T.let(
+                :mv,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            ML =
+              T.let(
+                :ml,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MT =
+              T.let(
+                :mt,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MH =
+              T.let(
+                :mh,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MQ =
+              T.let(
+                :mq,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MR =
+              T.let(
+                :mr,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MU =
+              T.let(
+                :mu,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            YT =
+              T.let(
+                :yt,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MX =
+              T.let(
+                :mx,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            FM =
+              T.let(
+                :fm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MD =
+              T.let(
+                :md,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MC =
+              T.let(
+                :mc,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MN =
+              T.let(
+                :mn,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MS =
+              T.let(
+                :ms,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MA =
+              T.let(
+                :ma,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MZ =
+              T.let(
+                :mz,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MM =
+              T.let(
+                :mm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NA =
+              T.let(
+                :na,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NR =
+              T.let(
+                :nr,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NP =
+              T.let(
+                :np,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NL =
+              T.let(
+                :nl,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AN =
+              T.let(
+                :an,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NC =
+              T.let(
+                :nc,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NZ =
+              T.let(
+                :nz,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NI =
+              T.let(
+                :ni,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NE =
+              T.let(
+                :ne,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NG =
+              T.let(
+                :ng,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NU =
+              T.let(
+                :nu,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NF =
+              T.let(
+                :nf,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            MP =
+              T.let(
+                :mp,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            NO =
+              T.let(
+                :no,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            OM =
+              T.let(
+                :om,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PK =
+              T.let(
+                :pk,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PW =
+              T.let(
+                :pw,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PS =
+              T.let(
+                :ps,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PA =
+              T.let(
+                :pa,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PG =
+              T.let(
+                :pg,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PY =
+              T.let(
+                :py,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PE =
+              T.let(
+                :pe,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PH =
+              T.let(
+                :ph,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PN =
+              T.let(
+                :pn,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PL =
+              T.let(
+                :pl,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PT =
+              T.let(
+                :pt,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PR =
+              T.let(
+                :pr,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            QA =
+              T.let(
+                :qa,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            RE =
+              T.let(
+                :re,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            RO =
+              T.let(
+                :ro,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            RU =
+              T.let(
+                :ru,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            RW =
+              T.let(
+                :rw,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SH =
+              T.let(
+                :sh,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            KN =
+              T.let(
+                :kn,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            LC =
+              T.let(
+                :lc,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            PM =
+              T.let(
+                :pm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            VC =
+              T.let(
+                :vc,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            WS =
+              T.let(
+                :ws,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SM =
+              T.let(
+                :sm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            ST =
+              T.let(
+                :st,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SA =
+              T.let(
+                :sa,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SN =
+              T.let(
+                :sn,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            RS =
+              T.let(
+                :rs,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SC =
+              T.let(
+                :sc,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SL =
+              T.let(
+                :sl,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SG =
+              T.let(
+                :sg,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SK =
+              T.let(
+                :sk,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SI =
+              T.let(
+                :si,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SB =
+              T.let(
+                :sb,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SO =
+              T.let(
+                :so,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            ZA =
+              T.let(
+                :za,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GS =
+              T.let(
+                :gs,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            ES =
+              T.let(
+                :es,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            LK =
+              T.let(
+                :lk,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SD =
+              T.let(
+                :sd,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SR =
+              T.let(
+                :sr,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SJ =
+              T.let(
+                :sj,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SZ =
+              T.let(
+                :sz,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SE =
+              T.let(
+                :se,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            CH =
+              T.let(
+                :ch,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            SY =
+              T.let(
+                :sy,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TW =
+              T.let(
+                :tw,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TJ =
+              T.let(
+                :tj,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TZ =
+              T.let(
+                :tz,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TH =
+              T.let(
+                :th,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TL =
+              T.let(
+                :tl,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TG =
+              T.let(
+                :tg,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TK =
+              T.let(
+                :tk,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TO =
+              T.let(
+                :to,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TT =
+              T.let(
+                :tt,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TN =
+              T.let(
+                :tn,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TR =
+              T.let(
+                :tr,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TM =
+              T.let(
+                :tm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TC =
+              T.let(
+                :tc,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            TV =
+              T.let(
+                :tv,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            UG =
+              T.let(
+                :ug,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            UA =
+              T.let(
+                :ua,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            AE =
+              T.let(
+                :ae,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            GB =
+              T.let(
+                :gb,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            US =
+              T.let(
+                :us,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            UM =
+              T.let(
+                :um,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            UY =
+              T.let(
+                :uy,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            UZ =
+              T.let(
+                :uz,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            VU =
+              T.let(
+                :vu,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            VE =
+              T.let(
+                :ve,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            VN =
+              T.let(
+                :vn,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            VG =
+              T.let(
+                :vg,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            VI =
+              T.let(
+                :vi,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            WF =
+              T.let(
+                :wf,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            EH =
+              T.let(
+                :eh,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            YE =
+              T.let(
+                :ye,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            ZM =
+              T.let(
+                :zm,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+            ZW =
+              T.let(
+                :zw,
+                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
           end
 
           module ForceLanguage
@@ -2689,11 +3923,22 @@ module ContextDev
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
-          sig { returns(T.nilable(String)) }
+          # Stock exchange code.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::OrSymbol
+              )
+            )
+          end
           attr_reader :ticker_exchange
 
-          sig { params(ticker_exchange: String).void }
+          sig do
+            params(
+              ticker_exchange:
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::OrSymbol
+            ).void
+          end
           attr_writer :ticker_exchange
 
           # Request deadline and what to return when it passes.
@@ -2726,7 +3971,8 @@ module ContextDev
               max_age_ms: Integer,
               max_speed: T::Boolean,
               tags: T::Array[String],
-              ticker_exchange: String,
+              ticker_exchange:
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::OrSymbol,
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::OrHash,
               type: Symbol
@@ -2745,7 +3991,7 @@ module ContextDev
             max_speed: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
-            # Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
+            # Stock exchange code.
             ticker_exchange: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
@@ -2766,7 +4012,8 @@ module ContextDev
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
                 tags: T::Array[String],
-                ticker_exchange: String,
+                ticker_exchange:
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::OrSymbol,
                 timeout_opts:
                   ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts
               }
@@ -3399,6 +4646,391 @@ module ContextDev
             end
           end
 
+          # Stock exchange code.
+          module TickerExchange
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            AMEX =
+              T.let(
+                :AMEX,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            AMS =
+              T.let(
+                :AMS,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            AQS =
+              T.let(
+                :AQS,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            ASX =
+              T.let(
+                :ASX,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            ATH =
+              T.let(
+                :ATH,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            BER =
+              T.let(
+                :BER,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            BME =
+              T.let(
+                :BME,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            BRU =
+              T.let(
+                :BRU,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            BSE =
+              T.let(
+                :BSE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            BUD =
+              T.let(
+                :BUD,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            BUE =
+              T.let(
+                :BUE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            BVC =
+              T.let(
+                :BVC,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            CBOE =
+              T.let(
+                :CBOE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            CNQ =
+              T.let(
+                :CNQ,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            CPH =
+              T.let(
+                :CPH,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            DFM =
+              T.let(
+                :DFM,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            DOH =
+              T.let(
+                :DOH,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            DUB =
+              T.let(
+                :DUB,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            DUS =
+              T.let(
+                :DUS,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            DXE =
+              T.let(
+                :DXE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            EGX =
+              T.let(
+                :EGX,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            FSX =
+              T.let(
+                :FSX,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            HAM =
+              T.let(
+                :HAM,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            HEL =
+              T.let(
+                :HEL,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            HKSE =
+              T.let(
+                :HKSE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            HOSE =
+              T.let(
+                :HOSE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            ICE =
+              T.let(
+                :ICE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            IOB =
+              T.let(
+                :IOB,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            IST =
+              T.let(
+                :IST,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            JKT =
+              T.let(
+                :JKT,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            JNB =
+              T.let(
+                :JNB,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            JPX =
+              T.let(
+                :JPX,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            KLS =
+              T.let(
+                :KLS,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            KOE =
+              T.let(
+                :KOE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            KSC =
+              T.let(
+                :KSC,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            KUW =
+              T.let(
+                :KUW,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            LIS =
+              T.let(
+                :LIS,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            LSE =
+              T.let(
+                :LSE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            MCX =
+              T.let(
+                :MCX,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            MEX =
+              T.let(
+                :MEX,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            MIL =
+              T.let(
+                :MIL,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            MUN =
+              T.let(
+                :MUN,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            NASDAQ =
+              T.let(
+                :NASDAQ,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            NEO =
+              T.let(
+                :NEO,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            NSE =
+              T.let(
+                :NSE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            NYSE =
+              T.let(
+                :NYSE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            NZE =
+              T.let(
+                :NZE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            OSL =
+              T.let(
+                :OSL,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            OTC =
+              T.let(
+                :OTC,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            PAR =
+              T.let(
+                :PAR,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            PNK =
+              T.let(
+                :PNK,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            PRA =
+              T.let(
+                :PRA,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            RIS =
+              T.let(
+                :RIS,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            SAO =
+              T.let(
+                :SAO,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            SAU =
+              T.let(
+                :SAU,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            SES =
+              T.let(
+                :SES,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            SET =
+              T.let(
+                :SET,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            SGO =
+              T.let(
+                :SGO,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            SHH =
+              T.let(
+                :SHH,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            SHZ =
+              T.let(
+                :SHZ,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            SIX =
+              T.let(
+                :SIX,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            STO =
+              T.let(
+                :STO,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            STU =
+              T.let(
+                :STU,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            TAI =
+              T.let(
+                :TAI,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            TAL =
+              T.let(
+                :TAL,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            TLV =
+              T.let(
+                :TLV,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            TSX =
+              T.let(
+                :TSX,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            TSXV =
+              T.let(
+                :TSXV,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            TWO =
+              T.let(
+                :TWO,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            VIE =
+              T.let(
+                :VIE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            WSE =
+              T.let(
+                :WSE,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+            XETRA =
+              T.let(
+                :XETRA,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
+          end
+
           class TimeoutOpts < ContextDev::Internal::Type::BaseModel
             OrHash =
               T.type_alias do
@@ -3704,12 +5336,23 @@ module ContextDev
           sig { params(city: String).void }
           attr_writer :city
 
-          # Optional country code hint (GL parameter) to specify the country when
-          # identifying a transaction.
-          sig { returns(T.nilable(String)) }
+          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
+          # search.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::OrSymbol
+              )
+            )
+          end
           attr_reader :country_gl
 
-          sig { params(country_gl: String).void }
+          sig do
+            params(
+              country_gl:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::OrSymbol
+            ).void
+          end
           attr_writer :country_gl
 
           sig do
@@ -3806,7 +5449,8 @@ module ContextDev
             params(
               transaction_info: String,
               city: String,
-              country_gl: String,
+              country_gl:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::OrSymbol,
               force_language:
                 T.nilable(
                   ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage::OrSymbol
@@ -3828,8 +5472,8 @@ module ContextDev
             transaction_info:,
             # Optional city name to prioritize when searching for the brand.
             city: nil,
-            # Optional country code hint (GL parameter) to specify the country when
-            # identifying a transaction.
+            # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
+            # search.
             country_gl: nil,
             force_language: nil,
             # When set to true, the API performs additional verification to ensure the
@@ -3859,7 +5503,8 @@ module ContextDev
                 transaction_info: String,
                 type: Symbol,
                 city: String,
-                country_gl: String,
+                country_gl:
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::OrSymbol,
                 force_language:
                   T.nilable(
                     ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage::OrSymbol
@@ -3877,6 +5522,1227 @@ module ContextDev
             )
           end
           def to_hash
+          end
+
+          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
+          # search.
+          module CountryGl
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            AF =
+              T.let(
+                :af,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AL =
+              T.let(
+                :al,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            DZ =
+              T.let(
+                :dz,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AS =
+              T.let(
+                :as,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AD =
+              T.let(
+                :ad,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AO =
+              T.let(
+                :ao,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AI =
+              T.let(
+                :ai,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AQ =
+              T.let(
+                :aq,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AG =
+              T.let(
+                :ag,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AR =
+              T.let(
+                :ar,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AM =
+              T.let(
+                :am,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AW =
+              T.let(
+                :aw,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AU =
+              T.let(
+                :au,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AT =
+              T.let(
+                :at,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AZ =
+              T.let(
+                :az,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BS =
+              T.let(
+                :bs,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BH =
+              T.let(
+                :bh,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BD =
+              T.let(
+                :bd,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BB =
+              T.let(
+                :bb,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BY =
+              T.let(
+                :by,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BE =
+              T.let(
+                :be,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BZ =
+              T.let(
+                :bz,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BJ =
+              T.let(
+                :bj,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BM =
+              T.let(
+                :bm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BT =
+              T.let(
+                :bt,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BO =
+              T.let(
+                :bo,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BA =
+              T.let(
+                :ba,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BW =
+              T.let(
+                :bw,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BV =
+              T.let(
+                :bv,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BR =
+              T.let(
+                :br,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            IO =
+              T.let(
+                :io,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BN =
+              T.let(
+                :bn,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BG =
+              T.let(
+                :bg,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BF =
+              T.let(
+                :bf,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            BI =
+              T.let(
+                :bi,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            KH =
+              T.let(
+                :kh,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CM =
+              T.let(
+                :cm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CA =
+              T.let(
+                :ca,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CV =
+              T.let(
+                :cv,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            KY =
+              T.let(
+                :ky,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CF =
+              T.let(
+                :cf,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TD =
+              T.let(
+                :td,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CL =
+              T.let(
+                :cl,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CN =
+              T.let(
+                :cn,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CX =
+              T.let(
+                :cx,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CC =
+              T.let(
+                :cc,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CO =
+              T.let(
+                :co,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            KM =
+              T.let(
+                :km,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CG =
+              T.let(
+                :cg,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CD =
+              T.let(
+                :cd,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CK =
+              T.let(
+                :ck,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CR =
+              T.let(
+                :cr,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CI =
+              T.let(
+                :ci,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            HR =
+              T.let(
+                :hr,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CU =
+              T.let(
+                :cu,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CY =
+              T.let(
+                :cy,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CZ =
+              T.let(
+                :cz,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            DK =
+              T.let(
+                :dk,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            DJ =
+              T.let(
+                :dj,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            DM =
+              T.let(
+                :dm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            DO =
+              T.let(
+                :do,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            EC =
+              T.let(
+                :ec,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            EG =
+              T.let(
+                :eg,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SV =
+              T.let(
+                :sv,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GQ =
+              T.let(
+                :gq,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            ER =
+              T.let(
+                :er,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            EE =
+              T.let(
+                :ee,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            ET =
+              T.let(
+                :et,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            FK =
+              T.let(
+                :fk,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            FO =
+              T.let(
+                :fo,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            FJ =
+              T.let(
+                :fj,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            FI =
+              T.let(
+                :fi,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            FR =
+              T.let(
+                :fr,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GF =
+              T.let(
+                :gf,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PF =
+              T.let(
+                :pf,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TF =
+              T.let(
+                :tf,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GA =
+              T.let(
+                :ga,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GM =
+              T.let(
+                :gm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GE =
+              T.let(
+                :ge,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            DE =
+              T.let(
+                :de,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GH =
+              T.let(
+                :gh,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GI =
+              T.let(
+                :gi,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GR =
+              T.let(
+                :gr,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GL =
+              T.let(
+                :gl,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GD =
+              T.let(
+                :gd,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GP =
+              T.let(
+                :gp,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GU =
+              T.let(
+                :gu,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GT =
+              T.let(
+                :gt,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GN =
+              T.let(
+                :gn,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GW =
+              T.let(
+                :gw,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GY =
+              T.let(
+                :gy,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            HT =
+              T.let(
+                :ht,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            HM =
+              T.let(
+                :hm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            VA =
+              T.let(
+                :va,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            HN =
+              T.let(
+                :hn,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            HK =
+              T.let(
+                :hk,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            HU =
+              T.let(
+                :hu,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            IS =
+              T.let(
+                :is,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            IN =
+              T.let(
+                :in,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            ID =
+              T.let(
+                :id,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            IR =
+              T.let(
+                :ir,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            IQ =
+              T.let(
+                :iq,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            IE =
+              T.let(
+                :ie,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            IL =
+              T.let(
+                :il,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            IT =
+              T.let(
+                :it,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            JM =
+              T.let(
+                :jm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            JP =
+              T.let(
+                :jp,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            JO =
+              T.let(
+                :jo,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            KZ =
+              T.let(
+                :kz,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            KE =
+              T.let(
+                :ke,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            KI =
+              T.let(
+                :ki,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            KP =
+              T.let(
+                :kp,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            KR =
+              T.let(
+                :kr,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            KW =
+              T.let(
+                :kw,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            KG =
+              T.let(
+                :kg,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            LA =
+              T.let(
+                :la,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            LV =
+              T.let(
+                :lv,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            LB =
+              T.let(
+                :lb,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            LS =
+              T.let(
+                :ls,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            LR =
+              T.let(
+                :lr,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            LY =
+              T.let(
+                :ly,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            LI =
+              T.let(
+                :li,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            LT =
+              T.let(
+                :lt,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            LU =
+              T.let(
+                :lu,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MO =
+              T.let(
+                :mo,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MK =
+              T.let(
+                :mk,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MG =
+              T.let(
+                :mg,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MW =
+              T.let(
+                :mw,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MY =
+              T.let(
+                :my,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MV =
+              T.let(
+                :mv,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            ML =
+              T.let(
+                :ml,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MT =
+              T.let(
+                :mt,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MH =
+              T.let(
+                :mh,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MQ =
+              T.let(
+                :mq,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MR =
+              T.let(
+                :mr,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MU =
+              T.let(
+                :mu,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            YT =
+              T.let(
+                :yt,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MX =
+              T.let(
+                :mx,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            FM =
+              T.let(
+                :fm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MD =
+              T.let(
+                :md,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MC =
+              T.let(
+                :mc,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MN =
+              T.let(
+                :mn,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MS =
+              T.let(
+                :ms,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MA =
+              T.let(
+                :ma,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MZ =
+              T.let(
+                :mz,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MM =
+              T.let(
+                :mm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NA =
+              T.let(
+                :na,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NR =
+              T.let(
+                :nr,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NP =
+              T.let(
+                :np,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NL =
+              T.let(
+                :nl,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AN =
+              T.let(
+                :an,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NC =
+              T.let(
+                :nc,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NZ =
+              T.let(
+                :nz,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NI =
+              T.let(
+                :ni,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NE =
+              T.let(
+                :ne,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NG =
+              T.let(
+                :ng,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NU =
+              T.let(
+                :nu,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NF =
+              T.let(
+                :nf,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            MP =
+              T.let(
+                :mp,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            NO =
+              T.let(
+                :no,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            OM =
+              T.let(
+                :om,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PK =
+              T.let(
+                :pk,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PW =
+              T.let(
+                :pw,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PS =
+              T.let(
+                :ps,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PA =
+              T.let(
+                :pa,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PG =
+              T.let(
+                :pg,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PY =
+              T.let(
+                :py,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PE =
+              T.let(
+                :pe,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PH =
+              T.let(
+                :ph,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PN =
+              T.let(
+                :pn,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PL =
+              T.let(
+                :pl,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PT =
+              T.let(
+                :pt,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PR =
+              T.let(
+                :pr,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            QA =
+              T.let(
+                :qa,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            RE =
+              T.let(
+                :re,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            RO =
+              T.let(
+                :ro,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            RU =
+              T.let(
+                :ru,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            RW =
+              T.let(
+                :rw,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SH =
+              T.let(
+                :sh,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            KN =
+              T.let(
+                :kn,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            LC =
+              T.let(
+                :lc,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            PM =
+              T.let(
+                :pm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            VC =
+              T.let(
+                :vc,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            WS =
+              T.let(
+                :ws,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SM =
+              T.let(
+                :sm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            ST =
+              T.let(
+                :st,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SA =
+              T.let(
+                :sa,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SN =
+              T.let(
+                :sn,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            RS =
+              T.let(
+                :rs,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SC =
+              T.let(
+                :sc,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SL =
+              T.let(
+                :sl,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SG =
+              T.let(
+                :sg,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SK =
+              T.let(
+                :sk,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SI =
+              T.let(
+                :si,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SB =
+              T.let(
+                :sb,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SO =
+              T.let(
+                :so,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            ZA =
+              T.let(
+                :za,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GS =
+              T.let(
+                :gs,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            ES =
+              T.let(
+                :es,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            LK =
+              T.let(
+                :lk,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SD =
+              T.let(
+                :sd,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SR =
+              T.let(
+                :sr,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SJ =
+              T.let(
+                :sj,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SZ =
+              T.let(
+                :sz,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SE =
+              T.let(
+                :se,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            CH =
+              T.let(
+                :ch,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            SY =
+              T.let(
+                :sy,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TW =
+              T.let(
+                :tw,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TJ =
+              T.let(
+                :tj,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TZ =
+              T.let(
+                :tz,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TH =
+              T.let(
+                :th,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TL =
+              T.let(
+                :tl,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TG =
+              T.let(
+                :tg,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TK =
+              T.let(
+                :tk,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TO =
+              T.let(
+                :to,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TT =
+              T.let(
+                :tt,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TN =
+              T.let(
+                :tn,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TR =
+              T.let(
+                :tr,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TM =
+              T.let(
+                :tm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TC =
+              T.let(
+                :tc,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            TV =
+              T.let(
+                :tv,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            UG =
+              T.let(
+                :ug,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            UA =
+              T.let(
+                :ua,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            AE =
+              T.let(
+                :ae,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            GB =
+              T.let(
+                :gb,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            US =
+              T.let(
+                :us,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            UM =
+              T.let(
+                :um,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            UY =
+              T.let(
+                :uy,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            UZ =
+              T.let(
+                :uz,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            VU =
+              T.let(
+                :vu,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            VE =
+              T.let(
+                :ve,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            VN =
+              T.let(
+                :vn,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            VG =
+              T.let(
+                :vg,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            VI =
+              T.let(
+                :vi,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            WF =
+              T.let(
+                :wf,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            EH =
+              T.let(
+                :eh,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            YE =
+              T.let(
+                :ye,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            ZM =
+              T.let(
+                :zm,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+            ZW =
+              T.let(
+                :zw,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
           end
 
           module ForceLanguage

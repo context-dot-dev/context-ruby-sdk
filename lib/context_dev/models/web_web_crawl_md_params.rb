@@ -23,7 +23,10 @@ module ContextDev
       #   Remove matching elements after inclusions. Exclusions take precedence.
       #
       #   @return [Array<String>, nil]
-      optional :exclude_selectors, ContextDev::Internal::Type::ArrayOf[String], api_name: :excludeSelectors
+      optional :exclude_selectors,
+               ContextDev::Internal::Type::ArrayOf[String],
+               api_name: :excludeSelectors,
+               nil?: true
 
       # @!attribute follow_subdomains
       #   When true, follow links on subdomains of the starting URL's domain (e.g.
@@ -56,13 +59,16 @@ module ContextDev
       #   Keep matching HTML subtrees before converting each page to Markdown.
       #
       #   @return [Array<String>, nil]
-      optional :include_selectors, ContextDev::Internal::Type::ArrayOf[String], api_name: :includeSelectors
+      optional :include_selectors,
+               ContextDev::Internal::Type::ArrayOf[String],
+               api_name: :includeSelectors,
+               nil?: true
 
       # @!attribute max_age_ms
       #   Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
       #
       #   @return [Integer, nil]
-      optional :max_age_ms, Integer, api_name: :maxAgeMs
+      optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
 
       # @!attribute max_depth
       #   Maximum link depth from the starting URL (0 = only the starting page)
@@ -134,7 +140,7 @@ module ContextDev
       #   Defaults to 3500 (3.5 seconds). Min: 0. Max: 30000 (30 seconds).
       #
       #   @return [Integer, nil]
-      optional :wait_for_ms, Integer, api_name: :waitForMs
+      optional :wait_for_ms, Integer, api_name: :waitForMs, nil?: true
 
       # @!attribute zdr
       #   `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
@@ -151,7 +157,7 @@ module ContextDev
       #
       #   @param country [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country] Fetch from this country (ISO 3166-1 alpha-2).
       #
-      #   @param exclude_selectors [Array<String>] Remove matching elements after inclusions. Exclusions take precedence.
+      #   @param exclude_selectors [Array<String>, nil] Remove matching elements after inclusions. Exclusions take precedence.
       #
       #   @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
       #
@@ -161,9 +167,9 @@ module ContextDev
       #
       #   @param include_links [Boolean] Preserve hyperlinks in the Markdown output
       #
-      #   @param include_selectors [Array<String>] Keep matching HTML subtrees before converting each page to Markdown.
+      #   @param include_selectors [Array<String>, nil] Keep matching HTML subtrees before converting each page to Markdown.
       #
-      #   @param max_age_ms [Integer] Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
+      #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
       #
       #   @param max_depth [Integer] Maximum link depth from the starting URL (0 = only the starting page)
       #
@@ -185,7 +191,7 @@ module ContextDev
       #
       #   @param use_main_content_only [Boolean] Extract only the main content, stripping headers, footers, sidebars, and navigat
       #
-      #   @param wait_for_ms [Integer] Browser wait time in milliseconds after initial page load for each crawled page.
+      #   @param wait_for_ms [Integer, nil] Browser wait time in milliseconds after initial page load for each crawled page.
       #
       #   @param zdr [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
@@ -406,14 +412,14 @@ module ContextDev
 
       class Pdf < ContextDev::Internal::Type::BaseModel
         # @!attribute end_
-        #   Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-        #   Must be greater than or equal to start when both are provided.
+        #   Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+        #   be >= start.
         #
         #   @return [Integer, nil]
         optional :end_, Integer, api_name: :end
 
         # @!attribute ocr
-        #   Read scanned PDF pages with OCR; preserve pages that already contain text.
+        #   Read scanned PDF pages with OCR; preserve pages that already have text.
         #
         #   @return [Boolean, nil]
         optional :ocr, ContextDev::Internal::Type::Boolean
@@ -426,7 +432,7 @@ module ContextDev
         optional :should_parse, ContextDev::Internal::Type::Boolean, api_name: :shouldParse
 
         # @!attribute start
-        #   First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+        #   First 1-based PDF page to parse.
         #
         #   @return [Integer, nil]
         optional :start, Integer
@@ -437,13 +443,13 @@ module ContextDev
         #
         #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         #
-        #   @param end_ [Integer] Last 1-based PDF page to parse. When omitted, parsing ends at the last page. Mus
+        #   @param end_ [Integer] Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must be
         #
-        #   @param ocr [Boolean] Read scanned PDF pages with OCR; preserve pages that already contain text.
+        #   @param ocr [Boolean] Read scanned PDF pages with OCR; preserve pages that already have text.
         #
         #   @param should_parse [Boolean] When true, PDF pages are fetched and parsed. When false, PDF pages are skipped e
         #
-        #   @param start [Integer] First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+        #   @param start [Integer] First 1-based PDF page to parse.
       end
 
       class TimeoutOpts < ContextDev::Internal::Type::BaseModel

@@ -28,10 +28,7 @@ module ContextDev
 
       # Remove matching elements after inclusions. Exclusions take precedence.
       sig { returns(T.nilable(T::Array[String])) }
-      attr_reader :exclude_selectors
-
-      sig { params(exclude_selectors: T::Array[String]).void }
-      attr_writer :exclude_selectors
+      attr_accessor :exclude_selectors
 
       # When true, follow links on subdomains of the starting URL's domain (e.g.
       # docs.example.com when starting from example.com). www and apex are always
@@ -66,17 +63,11 @@ module ContextDev
 
       # Keep matching HTML subtrees before converting each page to Markdown.
       sig { returns(T.nilable(T::Array[String])) }
-      attr_reader :include_selectors
-
-      sig { params(include_selectors: T::Array[String]).void }
-      attr_writer :include_selectors
+      attr_accessor :include_selectors
 
       # Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
       sig { returns(T.nilable(Integer)) }
-      attr_reader :max_age_ms
-
-      sig { params(max_age_ms: Integer).void }
-      attr_writer :max_age_ms
+      attr_accessor :max_age_ms
 
       # Maximum link depth from the starting URL (0 = only the starting page)
       sig { returns(T.nilable(Integer)) }
@@ -160,10 +151,7 @@ module ContextDev
       # Browser wait time in milliseconds after initial page load for each crawled page.
       # Defaults to 3500 (3.5 seconds). Min: 0. Max: 30000 (30 seconds).
       sig { returns(T.nilable(Integer)) }
-      attr_reader :wait_for_ms
-
-      sig { params(wait_for_ms: Integer).void }
-      attr_writer :wait_for_ms
+      attr_accessor :wait_for_ms
 
       # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
       # your organization has ZDR.
@@ -177,13 +165,13 @@ module ContextDev
         params(
           url: String,
           country: ContextDev::WebWebCrawlMdParams::Country::OrSymbol,
-          exclude_selectors: T::Array[String],
+          exclude_selectors: T.nilable(T::Array[String]),
           follow_subdomains: T::Boolean,
           include_frames: T::Boolean,
           include_images: T::Boolean,
           include_links: T::Boolean,
-          include_selectors: T::Array[String],
-          max_age_ms: Integer,
+          include_selectors: T.nilable(T::Array[String]),
+          max_age_ms: T.nilable(Integer),
           max_depth: Integer,
           max_pages: Integer,
           pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash,
@@ -194,7 +182,7 @@ module ContextDev
           timeout_opts: ContextDev::WebWebCrawlMdParams::TimeoutOpts::OrHash,
           url_regex: String,
           use_main_content_only: T::Boolean,
-          wait_for_ms: Integer,
+          wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebCrawlMdParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
@@ -261,13 +249,13 @@ module ContextDev
           {
             url: String,
             country: ContextDev::WebWebCrawlMdParams::Country::OrSymbol,
-            exclude_selectors: T::Array[String],
+            exclude_selectors: T.nilable(T::Array[String]),
             follow_subdomains: T::Boolean,
             include_frames: T::Boolean,
             include_images: T::Boolean,
             include_links: T::Boolean,
-            include_selectors: T::Array[String],
-            max_age_ms: Integer,
+            include_selectors: T.nilable(T::Array[String]),
+            max_age_ms: T.nilable(Integer),
             max_depth: Integer,
             max_pages: Integer,
             pdf: ContextDev::WebWebCrawlMdParams::Pdf,
@@ -278,7 +266,7 @@ module ContextDev
             timeout_opts: ContextDev::WebWebCrawlMdParams::TimeoutOpts,
             url_regex: String,
             use_main_content_only: T::Boolean,
-            wait_for_ms: Integer,
+            wait_for_ms: T.nilable(Integer),
             zdr: ContextDev::WebWebCrawlMdParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
           }
@@ -520,15 +508,15 @@ module ContextDev
             )
           end
 
-        # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-        # Must be greater than or equal to start when both are provided.
+        # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+        # be >= start.
         sig { returns(T.nilable(Integer)) }
         attr_reader :end_
 
         sig { params(end_: Integer).void }
         attr_writer :end_
 
-        # Read scanned PDF pages with OCR; preserve pages that already contain text.
+        # Read scanned PDF pages with OCR; preserve pages that already have text.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :ocr
 
@@ -543,7 +531,7 @@ module ContextDev
         sig { params(should_parse: T::Boolean).void }
         attr_writer :should_parse
 
-        # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+        # First 1-based PDF page to parse.
         sig { returns(T.nilable(Integer)) }
         attr_reader :start
 
@@ -560,15 +548,15 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-          # Must be greater than or equal to start when both are provided.
+          # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+          # be >= start.
           end_: nil,
-          # Read scanned PDF pages with OCR; preserve pages that already contain text.
+          # Read scanned PDF pages with OCR; preserve pages that already have text.
           ocr: nil,
           # When true, PDF pages are fetched and parsed. When false, PDF pages are skipped
           # entirely (not included in results and not counted as failures).
           should_parse: nil,
-          # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+          # First 1-based PDF page to parse.
           start: nil
         )
         end

@@ -296,11 +296,11 @@ module ContextDev
           required :type, const: :by_name
 
           # @!attribute country_gl
-          #   Optional country code hint (GL parameter) to specify the country when looking up
-          #   by company name.
+          #   Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
+          #   search.
           #
-          #   @return [String, nil]
-          optional :country_gl, String
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::CountryGl, nil]
+          optional :country_gl, enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::CountryGl }
 
           # @!attribute force_language
           #
@@ -347,7 +347,7 @@ module ContextDev
           #
           #   @param name [String] Company name to retrieve brand data for (e.g., 'Apple Inc').
           #
-          #   @param country_gl [String] Optional country code hint (GL parameter) to specify the country when looking up
+          #   @param country_gl [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::CountryGl] Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize searc
           #
           #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage, nil]
           #
@@ -360,6 +360,257 @@ module ContextDev
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts] Request deadline and what to return when it passes.
           #
           #   @param type [Symbol, :by_name] Discriminator for name-based brand retrieval.
+
+          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
+          # search.
+          #
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByName#country_gl
+          module CountryGl
+            extend ContextDev::Internal::Type::Enum
+
+            AF = :af
+            AL = :al
+            DZ = :dz
+            AS = :as
+            AD = :ad
+            AO = :ao
+            AI = :ai
+            AQ = :aq
+            AG = :ag
+            AR = :ar
+            AM = :am
+            AW = :aw
+            AU = :au
+            AT = :at
+            AZ = :az
+            BS = :bs
+            BH = :bh
+            BD = :bd
+            BB = :bb
+            BY = :by
+            BE = :be
+            BZ = :bz
+            BJ = :bj
+            BM = :bm
+            BT = :bt
+            BO = :bo
+            BA = :ba
+            BW = :bw
+            BV = :bv
+            BR = :br
+            IO = :io
+            BN = :bn
+            BG = :bg
+            BF = :bf
+            BI = :bi
+            KH = :kh
+            CM = :cm
+            CA = :ca
+            CV = :cv
+            KY = :ky
+            CF = :cf
+            TD = :td
+            CL = :cl
+            CN = :cn
+            CX = :cx
+            CC = :cc
+            CO = :co
+            KM = :km
+            CG = :cg
+            CD = :cd
+            CK = :ck
+            CR = :cr
+            CI = :ci
+            HR = :hr
+            CU = :cu
+            CY = :cy
+            CZ = :cz
+            DK = :dk
+            DJ = :dj
+            DM = :dm
+            DO = :do
+            EC = :ec
+            EG = :eg
+            SV = :sv
+            GQ = :gq
+            ER = :er
+            EE = :ee
+            ET = :et
+            FK = :fk
+            FO = :fo
+            FJ = :fj
+            FI = :fi
+            FR = :fr
+            GF = :gf
+            PF = :pf
+            TF = :tf
+            GA = :ga
+            GM = :gm
+            GE = :ge
+            DE = :de
+            GH = :gh
+            GI = :gi
+            GR = :gr
+            GL = :gl
+            GD = :gd
+            GP = :gp
+            GU = :gu
+            GT = :gt
+            GN = :gn
+            GW = :gw
+            GY = :gy
+            HT = :ht
+            HM = :hm
+            VA = :va
+            HN = :hn
+            HK = :hk
+            HU = :hu
+            IS = :is
+            IN = :in
+            ID = :id
+            IR = :ir
+            IQ = :iq
+            IE = :ie
+            IL = :il
+            IT = :it
+            JM = :jm
+            JP = :jp
+            JO = :jo
+            KZ = :kz
+            KE = :ke
+            KI = :ki
+            KP = :kp
+            KR = :kr
+            KW = :kw
+            KG = :kg
+            LA = :la
+            LV = :lv
+            LB = :lb
+            LS = :ls
+            LR = :lr
+            LY = :ly
+            LI = :li
+            LT = :lt
+            LU = :lu
+            MO = :mo
+            MK = :mk
+            MG = :mg
+            MW = :mw
+            MY = :my
+            MV = :mv
+            ML = :ml
+            MT = :mt
+            MH = :mh
+            MQ = :mq
+            MR = :mr
+            MU = :mu
+            YT = :yt
+            MX = :mx
+            FM = :fm
+            MD = :md
+            MC = :mc
+            MN = :mn
+            MS = :ms
+            MA = :ma
+            MZ = :mz
+            MM = :mm
+            NA = :na
+            NR = :nr
+            NP = :np
+            NL = :nl
+            AN = :an
+            NC = :nc
+            NZ = :nz
+            NI = :ni
+            NE = :ne
+            NG = :ng
+            NU = :nu
+            NF = :nf
+            MP = :mp
+            NO = :no
+            OM = :om
+            PK = :pk
+            PW = :pw
+            PS = :ps
+            PA = :pa
+            PG = :pg
+            PY = :py
+            PE = :pe
+            PH = :ph
+            PN = :pn
+            PL = :pl
+            PT = :pt
+            PR = :pr
+            QA = :qa
+            RE = :re
+            RO = :ro
+            RU = :ru
+            RW = :rw
+            SH = :sh
+            KN = :kn
+            LC = :lc
+            PM = :pm
+            VC = :vc
+            WS = :ws
+            SM = :sm
+            ST = :st
+            SA = :sa
+            SN = :sn
+            RS = :rs
+            SC = :sc
+            SL = :sl
+            SG = :sg
+            SK = :sk
+            SI = :si
+            SB = :sb
+            SO = :so
+            ZA = :za
+            GS = :gs
+            ES = :es
+            LK = :lk
+            SD = :sd
+            SR = :sr
+            SJ = :sj
+            SZ = :sz
+            SE = :se
+            CH = :ch
+            SY = :sy
+            TW = :tw
+            TJ = :tj
+            TZ = :tz
+            TH = :th
+            TL = :tl
+            TG = :tg
+            TK = :tk
+            TO = :to
+            TT = :tt
+            TN = :tn
+            TR = :tr
+            TM = :tm
+            TC = :tc
+            TV = :tv
+            UG = :ug
+            UA = :ua
+            AE = :ae
+            GB = :gb
+            US = :us
+            UM = :um
+            UY = :uy
+            UZ = :uz
+            VU = :vu
+            VE = :ve
+            VN = :vn
+            VG = :vg
+            VI = :vi
+            WF = :wf
+            EH = :eh
+            YE = :ye
+            ZM = :zm
+            ZW = :zw
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
 
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByName#force_language
           module ForceLanguage
@@ -816,10 +1067,10 @@ module ContextDev
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute ticker_exchange
-          #   Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
+          #   Stock exchange code.
           #
-          #   @return [String, nil]
-          optional :ticker_exchange, String
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TickerExchange, nil]
+          optional :ticker_exchange, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange }
 
           # @!attribute timeout_opts
           #   Request deadline and what to return when it passes.
@@ -846,7 +1097,7 @@ module ContextDev
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
-          #   @param ticker_exchange [String] Optional stock exchange for the ticker. Defaults to NASDAQ if not specified.
+          #   @param ticker_exchange [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TickerExchange] Stock exchange code.
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts] Request deadline and what to return when it passes.
           #
@@ -976,6 +1227,89 @@ module ContextDev
             YIDDISH = :yiddish
             YORUBA = :yoruba
             ZULU = :zulu
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
+
+          # Stock exchange code.
+          #
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByTicker#ticker_exchange
+          module TickerExchange
+            extend ContextDev::Internal::Type::Enum
+
+            AMEX = :AMEX
+            AMS = :AMS
+            AQS = :AQS
+            ASX = :ASX
+            ATH = :ATH
+            BER = :BER
+            BME = :BME
+            BRU = :BRU
+            BSE = :BSE
+            BUD = :BUD
+            BUE = :BUE
+            BVC = :BVC
+            CBOE = :CBOE
+            CNQ = :CNQ
+            CPH = :CPH
+            DFM = :DFM
+            DOH = :DOH
+            DUB = :DUB
+            DUS = :DUS
+            DXE = :DXE
+            EGX = :EGX
+            FSX = :FSX
+            HAM = :HAM
+            HEL = :HEL
+            HKSE = :HKSE
+            HOSE = :HOSE
+            ICE = :ICE
+            IOB = :IOB
+            IST = :IST
+            JKT = :JKT
+            JNB = :JNB
+            JPX = :JPX
+            KLS = :KLS
+            KOE = :KOE
+            KSC = :KSC
+            KUW = :KUW
+            LIS = :LIS
+            LSE = :LSE
+            MCX = :MCX
+            MEX = :MEX
+            MIL = :MIL
+            MUN = :MUN
+            NASDAQ = :NASDAQ
+            NEO = :NEO
+            NSE = :NSE
+            NYSE = :NYSE
+            NZE = :NZE
+            OSL = :OSL
+            OTC = :OTC
+            PAR = :PAR
+            PNK = :PNK
+            PRA = :PRA
+            RIS = :RIS
+            SAO = :SAO
+            SAU = :SAU
+            SES = :SES
+            SET = :SET
+            SGO = :SGO
+            SHH = :SHH
+            SHZ = :SHZ
+            SIX = :SIX
+            STO = :STO
+            STU = :STU
+            TAI = :TAI
+            TAL = :TAL
+            TLV = :TLV
+            TSX = :TSX
+            TSXV = :TSXV
+            TWO = :TWO
+            VIE = :VIE
+            WSE = :WSE
+            XETRA = :XETRA
 
             # @!method self.values
             #   @return [Array<Symbol>]
@@ -1129,11 +1463,11 @@ module ContextDev
           optional :city, String
 
           # @!attribute country_gl
-          #   Optional country code hint (GL parameter) to specify the country when
-          #   identifying a transaction.
+          #   Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
+          #   search.
           #
-          #   @return [String, nil]
-          optional :country_gl, String
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::CountryGl, nil]
+          optional :country_gl, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl }
 
           # @!attribute force_language
           #
@@ -1195,7 +1529,7 @@ module ContextDev
           #
           #   @param city [String] Optional city name to prioritize when searching for the brand.
           #
-          #   @param country_gl [String] Optional country code hint (GL parameter) to specify the country when identifyin
+          #   @param country_gl [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::CountryGl] Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize searc
           #
           #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage, nil]
           #
@@ -1212,6 +1546,257 @@ module ContextDev
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts] Request deadline and what to return when it passes.
           #
           #   @param type [Symbol, :by_transaction] Discriminator for transaction-based brand retrieval.
+
+          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
+          # search.
+          #
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#country_gl
+          module CountryGl
+            extend ContextDev::Internal::Type::Enum
+
+            AF = :af
+            AL = :al
+            DZ = :dz
+            AS = :as
+            AD = :ad
+            AO = :ao
+            AI = :ai
+            AQ = :aq
+            AG = :ag
+            AR = :ar
+            AM = :am
+            AW = :aw
+            AU = :au
+            AT = :at
+            AZ = :az
+            BS = :bs
+            BH = :bh
+            BD = :bd
+            BB = :bb
+            BY = :by
+            BE = :be
+            BZ = :bz
+            BJ = :bj
+            BM = :bm
+            BT = :bt
+            BO = :bo
+            BA = :ba
+            BW = :bw
+            BV = :bv
+            BR = :br
+            IO = :io
+            BN = :bn
+            BG = :bg
+            BF = :bf
+            BI = :bi
+            KH = :kh
+            CM = :cm
+            CA = :ca
+            CV = :cv
+            KY = :ky
+            CF = :cf
+            TD = :td
+            CL = :cl
+            CN = :cn
+            CX = :cx
+            CC = :cc
+            CO = :co
+            KM = :km
+            CG = :cg
+            CD = :cd
+            CK = :ck
+            CR = :cr
+            CI = :ci
+            HR = :hr
+            CU = :cu
+            CY = :cy
+            CZ = :cz
+            DK = :dk
+            DJ = :dj
+            DM = :dm
+            DO = :do
+            EC = :ec
+            EG = :eg
+            SV = :sv
+            GQ = :gq
+            ER = :er
+            EE = :ee
+            ET = :et
+            FK = :fk
+            FO = :fo
+            FJ = :fj
+            FI = :fi
+            FR = :fr
+            GF = :gf
+            PF = :pf
+            TF = :tf
+            GA = :ga
+            GM = :gm
+            GE = :ge
+            DE = :de
+            GH = :gh
+            GI = :gi
+            GR = :gr
+            GL = :gl
+            GD = :gd
+            GP = :gp
+            GU = :gu
+            GT = :gt
+            GN = :gn
+            GW = :gw
+            GY = :gy
+            HT = :ht
+            HM = :hm
+            VA = :va
+            HN = :hn
+            HK = :hk
+            HU = :hu
+            IS = :is
+            IN = :in
+            ID = :id
+            IR = :ir
+            IQ = :iq
+            IE = :ie
+            IL = :il
+            IT = :it
+            JM = :jm
+            JP = :jp
+            JO = :jo
+            KZ = :kz
+            KE = :ke
+            KI = :ki
+            KP = :kp
+            KR = :kr
+            KW = :kw
+            KG = :kg
+            LA = :la
+            LV = :lv
+            LB = :lb
+            LS = :ls
+            LR = :lr
+            LY = :ly
+            LI = :li
+            LT = :lt
+            LU = :lu
+            MO = :mo
+            MK = :mk
+            MG = :mg
+            MW = :mw
+            MY = :my
+            MV = :mv
+            ML = :ml
+            MT = :mt
+            MH = :mh
+            MQ = :mq
+            MR = :mr
+            MU = :mu
+            YT = :yt
+            MX = :mx
+            FM = :fm
+            MD = :md
+            MC = :mc
+            MN = :mn
+            MS = :ms
+            MA = :ma
+            MZ = :mz
+            MM = :mm
+            NA = :na
+            NR = :nr
+            NP = :np
+            NL = :nl
+            AN = :an
+            NC = :nc
+            NZ = :nz
+            NI = :ni
+            NE = :ne
+            NG = :ng
+            NU = :nu
+            NF = :nf
+            MP = :mp
+            NO = :no
+            OM = :om
+            PK = :pk
+            PW = :pw
+            PS = :ps
+            PA = :pa
+            PG = :pg
+            PY = :py
+            PE = :pe
+            PH = :ph
+            PN = :pn
+            PL = :pl
+            PT = :pt
+            PR = :pr
+            QA = :qa
+            RE = :re
+            RO = :ro
+            RU = :ru
+            RW = :rw
+            SH = :sh
+            KN = :kn
+            LC = :lc
+            PM = :pm
+            VC = :vc
+            WS = :ws
+            SM = :sm
+            ST = :st
+            SA = :sa
+            SN = :sn
+            RS = :rs
+            SC = :sc
+            SL = :sl
+            SG = :sg
+            SK = :sk
+            SI = :si
+            SB = :sb
+            SO = :so
+            ZA = :za
+            GS = :gs
+            ES = :es
+            LK = :lk
+            SD = :sd
+            SR = :sr
+            SJ = :sj
+            SZ = :sz
+            SE = :se
+            CH = :ch
+            SY = :sy
+            TW = :tw
+            TJ = :tj
+            TZ = :tz
+            TH = :th
+            TL = :tl
+            TG = :tg
+            TK = :tk
+            TO = :to
+            TT = :tt
+            TN = :tn
+            TR = :tr
+            TM = :tm
+            TC = :tc
+            TV = :tv
+            UG = :ug
+            UA = :ua
+            AE = :ae
+            GB = :gb
+            US = :us
+            UM = :um
+            UY = :uy
+            UZ = :uz
+            VU = :vu
+            VE = :ve
+            VN = :vn
+            VG = :vg
+            VI = :vi
+            WF = :wf
+            EH = :eh
+            YE = :ye
+            ZM = :zm
+            ZW = :zw
+
+            # @!method self.values
+            #   @return [Array<Symbol>]
+          end
 
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#force_language
           module ForceLanguage

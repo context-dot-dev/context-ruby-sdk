@@ -390,8 +390,7 @@ module ContextDev
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
-                # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                # detection/OCR to an inclusive 1-based page range.
+                # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 sig do
                   returns(
                     T.nilable(
@@ -474,8 +473,7 @@ module ContextDev
                   # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                   # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
-                  # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  # detection/OCR to an inclusive 1-based page range.
+                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   pdf: nil,
                   # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
@@ -1565,8 +1563,8 @@ module ContextDev
                       )
                     end
 
-                  # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                  # Must be greater than or equal to start when both are provided.
+                  # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                  # be >= start.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :end_
 
@@ -1587,15 +1585,14 @@ module ContextDev
                   sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
-                  # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  # First 1-based PDF page to parse.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :start
 
                   sig { params(start: Integer).void }
                   attr_writer :start
 
-                  # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  # detection/OCR to an inclusive 1-based page range.
+                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   sig do
                     params(
                       end_: Integer,
@@ -1605,14 +1602,14 @@ module ContextDev
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                    # Must be greater than or equal to start when both are provided.
+                    # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                    # be >= start.
                     end_: nil,
                     # Read scanned PDF pages with OCR; preserve pages that already have text.
                     ocr: nil,
                     # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
-                    # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                    # First 1-based PDF page to parse.
                     start: nil
                   )
                   end
@@ -1814,8 +1811,7 @@ module ContextDev
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
-                # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                # detection/OCR to an inclusive 1-based page range.
+                # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 sig do
                   returns(
                     T.nilable(
@@ -1881,8 +1877,7 @@ module ContextDev
                   # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                   # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
-                  # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  # detection/OCR to an inclusive 1-based page range.
+                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   pdf: nil,
                   # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
@@ -2966,8 +2961,8 @@ module ContextDev
                       )
                     end
 
-                  # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                  # Must be greater than or equal to start when both are provided.
+                  # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                  # be >= start.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :end_
 
@@ -2988,15 +2983,14 @@ module ContextDev
                   sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
-                  # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  # First 1-based PDF page to parse.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :start
 
                   sig { params(start: Integer).void }
                   attr_writer :start
 
-                  # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  # detection/OCR to an inclusive 1-based page range.
+                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   sig do
                     params(
                       end_: Integer,
@@ -3006,14 +3000,14 @@ module ContextDev
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                    # Must be greater than or equal to start when both are provided.
+                    # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                    # be >= start.
                     end_: nil,
                     # Read scanned PDF pages with OCR; preserve pages that already have text.
                     ocr: nil,
                     # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
-                    # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                    # First 1-based PDF page to parse.
                     start: nil
                   )
                   end
@@ -3542,8 +3536,7 @@ module ContextDev
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
-                # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                # detection/OCR to an inclusive 1-based page range.
+                # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 sig do
                   returns(
                     T.nilable(
@@ -3626,8 +3619,7 @@ module ContextDev
                   # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                   # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
-                  # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  # detection/OCR to an inclusive 1-based page range.
+                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   pdf: nil,
                   # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
@@ -4717,8 +4709,8 @@ module ContextDev
                       )
                     end
 
-                  # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                  # Must be greater than or equal to start when both are provided.
+                  # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                  # be >= start.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :end_
 
@@ -4739,15 +4731,14 @@ module ContextDev
                   sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
-                  # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  # First 1-based PDF page to parse.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :start
 
                   sig { params(start: Integer).void }
                   attr_writer :start
 
-                  # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  # detection/OCR to an inclusive 1-based page range.
+                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   sig do
                     params(
                       end_: Integer,
@@ -4757,14 +4748,14 @@ module ContextDev
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                    # Must be greater than or equal to start when both are provided.
+                    # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                    # be >= start.
                     end_: nil,
                     # Read scanned PDF pages with OCR; preserve pages that already have text.
                     ocr: nil,
                     # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
-                    # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                    # First 1-based PDF page to parse.
                     start: nil
                   )
                   end
@@ -5190,8 +5181,7 @@ module ContextDev
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
-                # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                # detection/OCR to an inclusive 1-based page range.
+                # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                 sig do
                   returns(
                     T.nilable(
@@ -5257,8 +5247,7 @@ module ContextDev
                   # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                   # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
-                  # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  # detection/OCR to an inclusive 1-based page range.
+                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   pdf: nil,
                   # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
@@ -6342,8 +6331,8 @@ module ContextDev
                       )
                     end
 
-                  # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                  # Must be greater than or equal to start when both are provided.
+                  # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                  # be >= start.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :end_
 
@@ -6364,15 +6353,14 @@ module ContextDev
                   sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
-                  # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                  # First 1-based PDF page to parse.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :start
 
                   sig { params(start: Integer).void }
                   attr_writer :start
 
-                  # PDF parsing controls. Use start/end to limit text extraction and embedded-image
-                  # detection/OCR to an inclusive 1-based page range.
+                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
                   sig do
                     params(
                       end_: Integer,
@@ -6382,14 +6370,14 @@ module ContextDev
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-                    # Must be greater than or equal to start when both are provided.
+                    # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+                    # be >= start.
                     end_: nil,
                     # Read scanned PDF pages with OCR; preserve pages that already have text.
                     ocr: nil,
                     # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
-                    # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+                    # First 1-based PDF page to parse.
                     start: nil
                   )
                   end

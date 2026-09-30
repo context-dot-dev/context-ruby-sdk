@@ -12,7 +12,7 @@ module ContextDev
         ?q: String,
         ?search_type: ContextDev::Models::BatchListParams::search_type,
         ?status: ContextDev::Models::BatchListParams::status,
-        ?tags: String,
+        ?tags: ContextDev::Models::BatchListParams::tags,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::BatchListResponse
 

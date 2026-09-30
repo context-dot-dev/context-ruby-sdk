@@ -53,7 +53,7 @@ module ContextDev
       sig do
         params(
           highlights_options:
-            ContextDev::WebSearchParams::HighlightsOptions::OrHash
+            T.nilable(ContextDev::WebSearchParams::HighlightsOptions::OrHash)
         ).void
       end
       attr_writer :highlights_options
@@ -72,7 +72,8 @@ module ContextDev
 
       sig do
         params(
-          markdown_options: ContextDev::WebSearchParams::MarkdownOptions::OrHash
+          markdown_options:
+            T.nilable(ContextDev::WebSearchParams::MarkdownOptions::OrHash)
         ).void
       end
       attr_writer :markdown_options
@@ -124,10 +125,10 @@ module ContextDev
           exclude_domains: T::Array[String],
           freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
           highlights_options:
-            ContextDev::WebSearchParams::HighlightsOptions::OrHash,
+            T.nilable(ContextDev::WebSearchParams::HighlightsOptions::OrHash),
           include_domains: T::Array[String],
           markdown_options:
-            ContextDev::WebSearchParams::MarkdownOptions::OrHash,
+            T.nilable(ContextDev::WebSearchParams::MarkdownOptions::OrHash),
           num_results: Integer,
           query_fanout: T::Boolean,
           tags: T::Array[String],
@@ -178,9 +179,11 @@ module ContextDev
             country: ContextDev::WebSearchParams::Country::OrSymbol,
             exclude_domains: T::Array[String],
             freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
-            highlights_options: ContextDev::WebSearchParams::HighlightsOptions,
+            highlights_options:
+              T.nilable(ContextDev::WebSearchParams::HighlightsOptions),
             include_domains: T::Array[String],
-            markdown_options: ContextDev::WebSearchParams::MarkdownOptions,
+            markdown_options:
+              T.nilable(ContextDev::WebSearchParams::MarkdownOptions),
             num_results: Integer,
             query_fanout: T::Boolean,
             tags: T::Array[String],
@@ -576,12 +579,9 @@ module ContextDev
         # only highlights are requested. Explicit values override either default. Maximum:
         # 365 days. Set to 0 to force a fresh scrape.
         sig { returns(T.nilable(Integer)) }
-        attr_reader :max_age_ms
+        attr_accessor :max_age_ms
 
-        sig { params(max_age_ms: Integer).void }
-        attr_writer :max_age_ms
-
-        # PDF handling. Use start/end to bound text extraction and OCR to a page range.
+        # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         sig do
           returns(T.nilable(ContextDev::WebSearchParams::MarkdownOptions::Pdf))
         end
@@ -627,10 +627,7 @@ module ContextDev
         # Extra wait after page load before rendering, in ms (0–30000). Useful for
         # JS-heavy pages.
         sig { returns(T.nilable(Integer)) }
-        attr_reader :wait_for_ms
-
-        sig { params(wait_for_ms: Integer).void }
-        attr_writer :wait_for_ms
+        attr_accessor :wait_for_ms
 
         # Inline Markdown scraping for each result. Set `enabled: true` to activate.
         sig do
@@ -639,13 +636,13 @@ module ContextDev
             include_frames: T::Boolean,
             include_images: T::Boolean,
             include_links: T::Boolean,
-            max_age_ms: Integer,
+            max_age_ms: T.nilable(Integer),
             pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf::OrHash,
             shorten_base64_images: T::Boolean,
             timeout_opts:
               ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts::OrHash,
             use_main_content_only: T::Boolean,
-            wait_for_ms: Integer
+            wait_for_ms: T.nilable(Integer)
           ).returns(T.attached_class)
         end
         def self.new(
@@ -662,7 +659,7 @@ module ContextDev
           # only highlights are requested. Explicit values override either default. Maximum:
           # 365 days. Set to 0 to force a fresh scrape.
           max_age_ms: nil,
-          # PDF handling. Use start/end to bound text extraction and OCR to a page range.
+          # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
           pdf: nil,
           # Truncate inline base64 image payloads to keep responses small.
           shorten_base64_images: nil,
@@ -683,13 +680,13 @@ module ContextDev
               include_frames: T::Boolean,
               include_images: T::Boolean,
               include_links: T::Boolean,
-              max_age_ms: Integer,
+              max_age_ms: T.nilable(Integer),
               pdf: ContextDev::WebSearchParams::MarkdownOptions::Pdf,
               shorten_base64_images: T::Boolean,
               timeout_opts:
                 ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts,
               use_main_content_only: T::Boolean,
-              wait_for_ms: Integer
+              wait_for_ms: T.nilable(Integer)
             }
           )
         end
@@ -720,14 +717,14 @@ module ContextDev
           sig { params(should_parse: T::Boolean).void }
           attr_writer :should_parse
 
-          # First PDF page to parse (1-based, inclusive). Defaults to page 1.
+          # First 1-based PDF page to parse.
           sig { returns(T.nilable(Integer)) }
           attr_reader :start
 
           sig { params(start: Integer).void }
           attr_writer :start
 
-          # PDF handling. Use start/end to bound text extraction and OCR to a page range.
+          # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
           sig do
             params(
               end_: Integer,
@@ -741,7 +738,7 @@ module ContextDev
             end_: nil,
             # Parse PDF URLs. When false, PDF results are skipped with WEBSITE_ACCESS_ERROR.
             should_parse: nil,
-            # First PDF page to parse (1-based, inclusive). Defaults to page 1.
+            # First 1-based PDF page to parse.
             start: nil
           )
           end

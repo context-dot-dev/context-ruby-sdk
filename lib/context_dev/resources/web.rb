@@ -302,11 +302,11 @@ module ContextDev
       #
       # @param freshness [Symbol, ContextDev::Models::WebSearchParams::Freshness] Restrict results to content published within this window.
       #
-      # @param highlights_options [ContextDev::Models::WebSearchParams::HighlightsOptions] Passages from each result page that are relevant to the query. Pages are read wi
+      # @param highlights_options [ContextDev::Models::WebSearchParams::HighlightsOptions, nil] Passages from each result page that are relevant to the query. Pages are read wi
       #
       # @param include_domains [Array<String>] Allowlist — only return results from these domains. Up to 100 domains. Example:
       #
-      # @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions] Inline Markdown scraping for each result. Set `enabled: true` to activate.
+      # @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions, nil] Inline Markdown scraping for each result. Set `enabled: true` to activate.
       #
       # @param num_results [Integer] Number of results to request and return (10–100). Defaults to 10.
       #
@@ -346,7 +346,7 @@ module ContextDev
       #
       # @param country [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country] Fetch from this country (ISO 3166-1 alpha-2).
       #
-      # @param exclude_selectors [Array<String>] Remove matching elements after inclusions. Exclusions take precedence.
+      # @param exclude_selectors [Array<String>, nil] Remove matching elements after inclusions. Exclusions take precedence.
       #
       # @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
       #
@@ -356,9 +356,9 @@ module ContextDev
       #
       # @param include_links [Boolean] Preserve hyperlinks in the Markdown output
       #
-      # @param include_selectors [Array<String>] Keep matching HTML subtrees before converting each page to Markdown.
+      # @param include_selectors [Array<String>, nil] Keep matching HTML subtrees before converting each page to Markdown.
       #
-      # @param max_age_ms [Integer] Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
+      # @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
       #
       # @param max_depth [Integer] Maximum link depth from the starting URL (0 = only the starting page)
       #
@@ -380,7 +380,7 @@ module ContextDev
       #
       # @param use_main_content_only [Boolean] Extract only the main content, stripping headers, footers, sidebars, and navigat
       #
-      # @param wait_for_ms [Integer] Browser wait time in milliseconds after initial page load for each crawled page.
+      # @param wait_for_ms [Integer, nil] Browser wait time in milliseconds after initial page load for each crawled page.
       #
       # @param zdr [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #

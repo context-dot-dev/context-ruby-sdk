@@ -7,7 +7,7 @@ module ContextDev
         q: String,
         search_type: ContextDev::Models::BatchListParams::search_type,
         status: ContextDev::Models::BatchListParams::status,
-        tags: String
+        tags: ContextDev::Models::BatchListParams::tags
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -39,9 +39,11 @@ module ContextDev
         ContextDev::Models::BatchListParams::status
       ) -> ContextDev::Models::BatchListParams::status
 
-      attr_reader tags: String?
+      attr_reader tags: ContextDev::Models::BatchListParams::tags?
 
-      def tags=: (String) -> String
+      def tags=: (
+        ContextDev::Models::BatchListParams::tags
+      ) -> ContextDev::Models::BatchListParams::tags
 
       def initialize: (
         ?cursor: String,
@@ -49,7 +51,7 @@ module ContextDev
         ?q: String,
         ?search_type: ContextDev::Models::BatchListParams::search_type,
         ?status: ContextDev::Models::BatchListParams::status,
-        ?tags: String,
+        ?tags: ContextDev::Models::BatchListParams::tags,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -59,7 +61,7 @@ module ContextDev
         q: String,
         search_type: ContextDev::Models::BatchListParams::search_type,
         status: ContextDev::Models::BatchListParams::status,
-        tags: String,
+        tags: ContextDev::Models::BatchListParams::tags,
         request_options: ContextDev::RequestOptions
       }
 
@@ -88,6 +90,16 @@ module ContextDev
         FAILED: :failed
 
         def self?.values: -> ::Array[ContextDev::Models::BatchListParams::status]
+      end
+
+      type tags = String | ::Array[String]
+
+      module Tags
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::BatchListParams::tags]
+
+        StringArray: ContextDev::Internal::Type::Converter
       end
     end
   end

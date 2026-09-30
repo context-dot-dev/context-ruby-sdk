@@ -41,7 +41,8 @@ module ContextDev
       #   @return [ContextDev::Models::WebSearchParams::HighlightsOptions, nil]
       optional :highlights_options,
                -> { ContextDev::WebSearchParams::HighlightsOptions },
-               api_name: :highlightsOptions
+               api_name: :highlightsOptions,
+               nil?: true
 
       # @!attribute include_domains
       #   Allowlist — only return results from these domains. Up to 100 domains. Example:
@@ -56,7 +57,8 @@ module ContextDev
       #   @return [ContextDev::Models::WebSearchParams::MarkdownOptions, nil]
       optional :markdown_options,
                -> { ContextDev::WebSearchParams::MarkdownOptions },
-               api_name: :markdownOptions
+               api_name: :markdownOptions,
+               nil?: true
 
       # @!attribute num_results
       #   Number of results to request and return (10–100). Defaults to 10.
@@ -101,11 +103,11 @@ module ContextDev
       #
       #   @param freshness [Symbol, ContextDev::Models::WebSearchParams::Freshness] Restrict results to content published within this window.
       #
-      #   @param highlights_options [ContextDev::Models::WebSearchParams::HighlightsOptions] Passages from each result page that are relevant to the query. Pages are read wi
+      #   @param highlights_options [ContextDev::Models::WebSearchParams::HighlightsOptions, nil] Passages from each result page that are relevant to the query. Pages are read wi
       #
       #   @param include_domains [Array<String>] Allowlist — only return results from these domains. Up to 100 domains. Example:
       #
-      #   @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions] Inline Markdown scraping for each result. Set `enabled: true` to activate.
+      #   @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions, nil] Inline Markdown scraping for each result. Set `enabled: true` to activate.
       #
       #   @param num_results [Integer] Number of results to request and return (10–100). Defaults to 10.
       #
@@ -435,10 +437,10 @@ module ContextDev
         #   365 days. Set to 0 to force a fresh scrape.
         #
         #   @return [Integer, nil]
-        optional :max_age_ms, Integer, api_name: :maxAgeMs
+        optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
 
         # @!attribute pdf
-        #   PDF handling. Use start/end to bound text extraction and OCR to a page range.
+        #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         #
         #   @return [ContextDev::Models::WebSearchParams::MarkdownOptions::Pdf, nil]
         optional :pdf, -> { ContextDev::WebSearchParams::MarkdownOptions::Pdf }
@@ -468,7 +470,7 @@ module ContextDev
         #   JS-heavy pages.
         #
         #   @return [Integer, nil]
-        optional :wait_for_ms, Integer, api_name: :waitForMs
+        optional :wait_for_ms, Integer, api_name: :waitForMs, nil?: true
 
         # @!method initialize(enabled: nil, include_frames: nil, include_images: nil, include_links: nil, max_age_ms: nil, pdf: nil, shorten_base64_images: nil, timeout_opts: nil, use_main_content_only: nil, wait_for_ms: nil)
         #   Some parameter documentations has been truncated, see
@@ -484,9 +486,9 @@ module ContextDev
         #
         #   @param include_links [Boolean] Keep hyperlinks in the Markdown.
         #
-        #   @param max_age_ms [Integer] Maximum cache age in milliseconds for result page content. Defaults to 180 days
+        #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds for result page content. Defaults to 180 days
         #
-        #   @param pdf [ContextDev::Models::WebSearchParams::MarkdownOptions::Pdf] PDF handling. Use start/end to bound text extraction and OCR to a page range.
+        #   @param pdf [ContextDev::Models::WebSearchParams::MarkdownOptions::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         #
         #   @param shorten_base64_images [Boolean] Truncate inline base64 image payloads to keep responses small.
         #
@@ -494,7 +496,7 @@ module ContextDev
         #
         #   @param use_main_content_only [Boolean] Strip nav, header, footer, and sidebar — keep only the primary article content.
         #
-        #   @param wait_for_ms [Integer] Extra wait after page load before rendering, in ms (0–30000). Useful for JS-heav
+        #   @param wait_for_ms [Integer, nil] Extra wait after page load before rendering, in ms (0–30000). Useful for JS-heav
 
         # @see ContextDev::Models::WebSearchParams::MarkdownOptions#pdf
         class Pdf < ContextDev::Internal::Type::BaseModel
@@ -512,7 +514,7 @@ module ContextDev
           optional :should_parse, ContextDev::Internal::Type::Boolean, api_name: :shouldParse
 
           # @!attribute start
-          #   First PDF page to parse (1-based, inclusive). Defaults to page 1.
+          #   First 1-based PDF page to parse.
           #
           #   @return [Integer, nil]
           optional :start, Integer
@@ -521,13 +523,13 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::WebSearchParams::MarkdownOptions::Pdf} for more details.
           #
-          #   PDF handling. Use start/end to bound text extraction and OCR to a page range.
+          #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
           #
           #   @param end_ [Integer] Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must be
           #
           #   @param should_parse [Boolean] Parse PDF URLs. When false, PDF results are skipped with WEBSITE_ACCESS_ERROR.
           #
-          #   @param start [Integer] First PDF page to parse (1-based, inclusive). Defaults to page 1.
+          #   @param start [Integer] First 1-based PDF page to parse.
         end
 
         # @see ContextDev::Models::WebSearchParams::MarkdownOptions#timeout_opts

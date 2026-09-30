@@ -324,15 +324,15 @@ module ContextDev
             )
           end
 
-        # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-        # Must be greater than or equal to start when both are provided.
+        # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+        # be >= start.
         sig { returns(T.nilable(Integer)) }
         attr_reader :end_
 
         sig { params(end_: Integer).void }
         attr_writer :end_
 
-        # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+        # First 1-based PDF page to parse.
         sig { returns(T.nilable(Integer)) }
         attr_reader :start
 
@@ -342,10 +342,10 @@ module ContextDev
         # PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
         sig { params(end_: Integer, start: Integer).returns(T.attached_class) }
         def self.new(
-          # Last 1-based PDF page to parse. When omitted, parsing ends at the last page.
-          # Must be greater than or equal to start when both are provided.
+          # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
+          # be >= start.
           end_: nil,
-          # First 1-based PDF page to parse. When omitted, parsing starts at the first page.
+          # First 1-based PDF page to parse.
           start: nil
         )
         end

@@ -27,7 +27,7 @@ module ContextDev
           q: String,
           search_type: ContextDev::BatchListParams::SearchType::OrSymbol,
           status: ContextDev::BatchListParams::Status::OrSymbol,
-          tags: String,
+          tags: ContextDev::BatchListParams::Tags::Variants,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::BatchListResponse)
       end
@@ -44,7 +44,8 @@ module ContextDev
         search_type: nil,
         # Filter by status.
         status: nil,
-        # Comma-separated list of tags to filter by (matches batches having any of them).
+        # Tags to filter by (matches batches having any of them). Pass repeated `tags`
+        # params or one comma-separated list, e.g. `tags=docs,competitor`.
         tags: nil,
         request_options: {}
       )

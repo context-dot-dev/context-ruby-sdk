@@ -54,11 +54,12 @@ module ContextDev
       sig { params(status: ContextDev::BatchListParams::Status::OrSymbol).void }
       attr_writer :status
 
-      # Comma-separated list of tags to filter by (matches batches having any of them).
-      sig { returns(T.nilable(String)) }
+      # Tags to filter by (matches batches having any of them). Pass repeated `tags`
+      # params or one comma-separated list, e.g. `tags=docs,competitor`.
+      sig { returns(T.nilable(ContextDev::BatchListParams::Tags::Variants)) }
       attr_reader :tags
 
-      sig { params(tags: String).void }
+      sig { params(tags: ContextDev::BatchListParams::Tags::Variants).void }
       attr_writer :tags
 
       sig do
@@ -68,7 +69,7 @@ module ContextDev
           q: String,
           search_type: ContextDev::BatchListParams::SearchType::OrSymbol,
           status: ContextDev::BatchListParams::Status::OrSymbol,
-          tags: String,
+          tags: ContextDev::BatchListParams::Tags::Variants,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -85,7 +86,8 @@ module ContextDev
         search_type: nil,
         # Filter by status.
         status: nil,
-        # Comma-separated list of tags to filter by (matches batches having any of them).
+        # Tags to filter by (matches batches having any of them). Pass repeated `tags`
+        # params or one comma-separated list, e.g. `tags=docs,competitor`.
         tags: nil,
         request_options: {}
       )
@@ -99,7 +101,7 @@ module ContextDev
             q: String,
             search_type: ContextDev::BatchListParams::SearchType::OrSymbol,
             status: ContextDev::BatchListParams::Status::OrSymbol,
-            tags: String,
+            tags: ContextDev::BatchListParams::Tags::Variants,
             request_options: ContextDev::RequestOptions
           }
         )
@@ -160,6 +162,28 @@ module ContextDev
         end
         def self.values
         end
+      end
+
+      # Tags to filter by (matches batches having any of them). Pass repeated `tags`
+      # params or one comma-separated list, e.g. `tags=docs,competitor`.
+      module Tags
+        extend ContextDev::Internal::Type::Union
+
+        Variants = T.type_alias { T.any(String, T::Array[String]) }
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::BatchListParams::Tags::Variants]
+          )
+        end
+        def self.variants
+        end
+
+        StringArray =
+          T.let(
+            ContextDev::Internal::Type::ArrayOf[String],
+            ContextDev::Internal::Type::Converter
+          )
       end
     end
   end

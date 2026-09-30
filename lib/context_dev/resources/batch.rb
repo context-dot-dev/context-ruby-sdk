@@ -42,7 +42,7 @@ module ContextDev
       #
       # @param status [Symbol, ContextDev::Models::BatchListParams::Status] Filter by status.
       #
-      # @param tags [String] Comma-separated list of tags to filter by (matches batches having any of them).
+      # @param tags [String, Array<String>] Tags to filter by (matches batches having any of them). Pass repeated `tags` par
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

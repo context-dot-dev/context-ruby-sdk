@@ -313,10 +313,10 @@ module ContextDev
           exclude_domains: T::Array[String],
           freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
           highlights_options:
-            ContextDev::WebSearchParams::HighlightsOptions::OrHash,
+            T.nilable(ContextDev::WebSearchParams::HighlightsOptions::OrHash),
           include_domains: T::Array[String],
           markdown_options:
-            ContextDev::WebSearchParams::MarkdownOptions::OrHash,
+            T.nilable(ContextDev::WebSearchParams::MarkdownOptions::OrHash),
           num_results: Integer,
           query_fanout: T::Boolean,
           tags: T::Array[String],
@@ -366,13 +366,13 @@ module ContextDev
         params(
           url: String,
           country: ContextDev::WebWebCrawlMdParams::Country::OrSymbol,
-          exclude_selectors: T::Array[String],
+          exclude_selectors: T.nilable(T::Array[String]),
           follow_subdomains: T::Boolean,
           include_frames: T::Boolean,
           include_images: T::Boolean,
           include_links: T::Boolean,
-          include_selectors: T::Array[String],
-          max_age_ms: Integer,
+          include_selectors: T.nilable(T::Array[String]),
+          max_age_ms: T.nilable(Integer),
           max_depth: Integer,
           max_pages: Integer,
           pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash,
@@ -383,7 +383,7 @@ module ContextDev
           timeout_opts: ContextDev::WebWebCrawlMdParams::TimeoutOpts::OrHash,
           url_regex: String,
           use_main_content_only: T::Boolean,
-          wait_for_ms: Integer,
+          wait_for_ms: T.nilable(Integer),
           zdr: ContextDev::WebWebCrawlMdParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::WebWebCrawlMdResponse)
