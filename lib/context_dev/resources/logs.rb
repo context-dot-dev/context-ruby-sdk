@@ -18,7 +18,7 @@ module ContextDev
       def retrieve(request_id, params = {})
         @client.request(
           method: :get,
-          path: ["logs/%1$s", request_id],
+          path: ["org/logs/%1$s", request_id],
           model: ContextDev::Models::LogRetrieveResponse,
           options: params[:request_options]
         )
@@ -64,7 +64,7 @@ module ContextDev
         query = ContextDev::Internal::Util.encode_query_params(parsed)
         @client.request(
           method: :get,
-          path: "logs",
+          path: "org/logs",
           query: query,
           model: ContextDev::Models::LogListResponse,
           options: options
