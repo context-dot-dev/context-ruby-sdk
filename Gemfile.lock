@@ -11,7 +11,7 @@ GIT
 PATH
   remote: .
   specs:
-    context.dev (2.22.0)
+    context.dev (2.23.0)
       cgi
       connection_pool
 
