@@ -11,9 +11,8 @@ module ContextDev
       required :json_content, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
 
       # @!attribute sources
-      #   Public evidence URLs from searches, pages, or company/profile records, in
-      #   first-seen order. A listed URL may identify a record without its page being
-      #   read.
+      #   URLs of the pages and company/profile records read for the answer, followed by
+      #   URLs cited in json_content.
       #
       #   @return [Array<String>]
       required :sources, ContextDev::Internal::Type::ArrayOf[String]
@@ -37,7 +36,7 @@ module ContextDev
       #
       #   @param json_content [Hash{Symbol=>Object}] The answer, in the shape requested by json_format.
       #
-      #   @param sources [Array<String>] Public evidence URLs from searches, pages, or company/profile records, in first-
+      #   @param sources [Array<String>] URLs of the pages and company/profile records read for the answer, followed by U
       #
       #   @param key_metadata [ContextDev::Models::WebAnswersResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
