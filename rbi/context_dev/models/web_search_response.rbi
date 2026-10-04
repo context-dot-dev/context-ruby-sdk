@@ -390,6 +390,11 @@ module ContextDev
                 :WEBSITE_ACCESS_ERROR,
                 ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
               )
+            WEBSITE_BLOCKED =
+              T.let(
+                :WEBSITE_BLOCKED,
+                ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
+              )
             ERROR =
               T.let(
                 :ERROR,
@@ -521,6 +526,11 @@ module ContextDev
             WEBSITE_ACCESS_ERROR =
               T.let(
                 :WEBSITE_ACCESS_ERROR,
+                ContextDev::Models::WebSearchResponse::Result::Markdown::Code::TaggedSymbol
+              )
+            WEBSITE_BLOCKED =
+              T.let(
+                :WEBSITE_BLOCKED,
                 ContextDev::Models::WebSearchResponse::Result::Markdown::Code::TaggedSymbol
               )
             ERROR =

@@ -149,6 +149,7 @@ module ContextDev
             | :TIMEOUT
             | :CONTENT_TOO_LARGE
             | :WEBSITE_ACCESS_ERROR
+            | :WEBSITE_BLOCKED
             | :ERROR
 
           module Code
@@ -159,6 +160,7 @@ module ContextDev
             TIMEOUT: :TIMEOUT
             CONTENT_TOO_LARGE: :CONTENT_TOO_LARGE
             WEBSITE_ACCESS_ERROR: :WEBSITE_ACCESS_ERROR
+            WEBSITE_BLOCKED: :WEBSITE_BLOCKED
             ERROR: :ERROR
 
             def self?.values: -> ::Array[ContextDev::Models::WebSearchResponse::Result::Highlights::code]
@@ -201,6 +203,7 @@ module ContextDev
             | :TIMEOUT
             | :CONTENT_TOO_LARGE
             | :WEBSITE_ACCESS_ERROR
+            | :WEBSITE_BLOCKED
             | :ERROR
 
           module Code
@@ -211,6 +214,7 @@ module ContextDev
             TIMEOUT: :TIMEOUT
             CONTENT_TOO_LARGE: :CONTENT_TOO_LARGE
             WEBSITE_ACCESS_ERROR: :WEBSITE_ACCESS_ERROR
+            WEBSITE_BLOCKED: :WEBSITE_BLOCKED
             ERROR: :ERROR
 
             def self?.values: -> ::Array[ContextDev::Models::WebSearchResponse::Result::Markdown::code]
