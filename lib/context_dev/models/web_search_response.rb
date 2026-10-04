@@ -190,6 +190,7 @@ module ContextDev
             TIMEOUT = :TIMEOUT
             CONTENT_TOO_LARGE = :CONTENT_TOO_LARGE
             WEBSITE_ACCESS_ERROR = :WEBSITE_ACCESS_ERROR
+            WEBSITE_BLOCKED = :WEBSITE_BLOCKED
             ERROR = :ERROR
 
             # @!method self.values
@@ -244,6 +245,7 @@ module ContextDev
             TIMEOUT = :TIMEOUT
             CONTENT_TOO_LARGE = :CONTENT_TOO_LARGE
             WEBSITE_ACCESS_ERROR = :WEBSITE_ACCESS_ERROR
+            WEBSITE_BLOCKED = :WEBSITE_BLOCKED
             ERROR = :ERROR
 
             # @!method self.values
