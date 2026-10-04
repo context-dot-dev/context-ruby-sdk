@@ -880,6 +880,25 @@ module ContextDev
         sig { params(error_code: String).void }
         attr_writer :error_code
 
+        # True when the page was too long to read in full, so values found only in the
+        # unread parts may be missing.
+        sig do
+          returns(
+            T.nilable(
+              ContextDev::Models::WebScrapeResponse::Json::IsTruncated::TaggedBoolean
+            )
+          )
+        end
+        attr_reader :is_truncated
+
+        sig do
+          params(
+            is_truncated:
+              ContextDev::Models::WebScrapeResponse::Json::IsTruncated::OrBoolean
+          ).void
+        end
+        attr_writer :is_truncated
+
         # Explanation of the failure and possible next steps.
         sig { returns(T.nilable(String)) }
         attr_reader :message
@@ -894,6 +913,8 @@ module ContextDev
             requested: T::Boolean,
             success: T.nilable(T::Boolean),
             error_code: String,
+            is_truncated:
+              ContextDev::Models::WebScrapeResponse::Json::IsTruncated::OrBoolean,
             message: String
           ).returns(T.attached_class)
         end
@@ -904,6 +925,9 @@ module ContextDev
           success:,
           # Why the output failed. Present only when `success` is `false`.
           error_code: nil,
+          # True when the page was too long to read in full, so values found only in the
+          # unread parts may be missing.
+          is_truncated: nil,
           # Explanation of the failure and possible next steps.
           message: nil
         )
@@ -916,11 +940,44 @@ module ContextDev
               requested: T::Boolean,
               success: T.nilable(T::Boolean),
               error_code: String,
+              is_truncated:
+                ContextDev::Models::WebScrapeResponse::Json::IsTruncated::TaggedBoolean,
               message: String
             }
           )
         end
         def to_hash
+        end
+
+        # True when the page was too long to read in full, so values found only in the
+        # unread parts may be missing.
+        module IsTruncated
+          extend ContextDev::Internal::Type::Enum
+
+          TaggedBoolean =
+            T.type_alias do
+              T.all(
+                T::Boolean,
+                ContextDev::Models::WebScrapeResponse::Json::IsTruncated
+              )
+            end
+          OrBoolean = T.type_alias { T::Boolean }
+
+          TRUE =
+            T.let(
+              true,
+              ContextDev::Models::WebScrapeResponse::Json::IsTruncated::TaggedBoolean
+            )
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::Models::WebScrapeResponse::Json::IsTruncated::TaggedBoolean
+              ]
+            )
+          end
+          def self.values
+          end
         end
       end
 

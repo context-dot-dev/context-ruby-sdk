@@ -387,6 +387,7 @@ module ContextDev
           requested: bool,
           success: bool?,
           error_code: String,
+          is_truncated: ContextDev::Models::WebScrapeResponse::Json::is_truncated,
           message: String
         }
 
@@ -401,6 +402,12 @@ module ContextDev
 
         def error_code=: (String) -> String
 
+        attr_reader is_truncated: ContextDev::Models::WebScrapeResponse::Json::is_truncated?
+
+        def is_truncated=: (
+          ContextDev::Models::WebScrapeResponse::Json::is_truncated
+        ) -> ContextDev::Models::WebScrapeResponse::Json::is_truncated
+
         attr_reader message: String?
 
         def message=: (String) -> String
@@ -410,6 +417,7 @@ module ContextDev
           requested: bool,
           success: bool?,
           ?error_code: String,
+          ?is_truncated: ContextDev::Models::WebScrapeResponse::Json::is_truncated,
           ?message: String
         ) -> void
 
@@ -418,8 +426,19 @@ module ContextDev
           requested: bool,
           success: bool?,
           error_code: String,
+          is_truncated: ContextDev::Models::WebScrapeResponse::Json::is_truncated,
           message: String
         }
+
+        type is_truncated = true
+
+        module IsTruncated
+          extend ContextDev::Internal::Type::Enum
+
+          TRUE: true
+
+          def self?.values: -> ::Array[ContextDev::Models::WebScrapeResponse::Json::is_truncated]
+        end
       end
 
       type markdown =

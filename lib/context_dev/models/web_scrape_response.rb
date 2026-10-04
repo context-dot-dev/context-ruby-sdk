@@ -464,13 +464,25 @@ module ContextDev
         #   @return [String, nil]
         optional :error_code, String
 
+        # @!attribute is_truncated
+        #   True when the page was too long to read in full, so values found only in the
+        #   unread parts may be missing.
+        #
+        #   @return [Boolean, ContextDev::Models::WebScrapeResponse::Json::IsTruncated, nil]
+        optional :is_truncated,
+                 enum: -> { ContextDev::Models::WebScrapeResponse::Json::IsTruncated },
+                 api_name: :isTruncated
+
         # @!attribute message
         #   Explanation of the failure and possible next steps.
         #
         #   @return [String, nil]
         optional :message, String
 
-        # @!method initialize(data:, requested:, success:, error_code: nil, message: nil)
+        # @!method initialize(data:, requested:, success:, error_code: nil, is_truncated: nil, message: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScrapeResponse::Json} for more details.
+        #
         #   Object matching `jsonParams.schema`.
         #
         #   @param data [Hash{Symbol=>Object}, nil]
@@ -481,7 +493,22 @@ module ContextDev
         #
         #   @param error_code [String] Why the output failed. Present only when `success` is `false`.
         #
+        #   @param is_truncated [Boolean, ContextDev::Models::WebScrapeResponse::Json::IsTruncated] True when the page was too long to read in full, so values found only in the unr
+        #
         #   @param message [String] Explanation of the failure and possible next steps.
+
+        # True when the page was too long to read in full, so values found only in the
+        # unread parts may be missing.
+        #
+        # @see ContextDev::Models::WebScrapeResponse::Json#is_truncated
+        module IsTruncated
+          extend ContextDev::Internal::Type::Enum
+
+          TRUE = true
+
+          # @!method self.values
+          #   @return [Array<Boolean>]
+        end
       end
 
       # @see ContextDev::Models::WebScrapeResponse#markdown
