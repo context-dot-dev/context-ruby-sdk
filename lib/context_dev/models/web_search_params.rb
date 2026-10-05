@@ -21,6 +21,12 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebSearchParams::Country, nil]
       optional :country, enum: -> { ContextDev::WebSearchParams::Country }
 
+      # @!attribute description_max_characters
+      #   Maximum length of each result's `description`, in characters.
+      #
+      #   @return [Integer, nil]
+      optional :description_max_characters, Integer, api_name: :descriptionMaxCharacters, nil?: true
+
       # @!attribute exclude_domains
       #   Blocklist — drop results from these domains. Up to 100 domains. Example:
       #   ["pinterest.com", "reddit.com"].
@@ -91,13 +97,15 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebSearchParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebSearchParams::Zdr }
 
-      # @!method initialize(query:, country: nil, exclude_domains: nil, freshness: nil, highlights_options: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(query:, country: nil, description_max_characters: nil, exclude_domains: nil, freshness: nil, highlights_options: nil, include_domains: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebSearchParams} for more details.
       #
       #   @param query [String] Search query. Accepts natural language as well as Google-style search operators
       #
       #   @param country [Symbol, ContextDev::Models::WebSearchParams::Country] Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific cou
+      #
+      #   @param description_max_characters [Integer, nil] Maximum length of each result's `description`, in characters.
       #
       #   @param exclude_domains [Array<String>] Blocklist — drop results from these domains. Up to 100 domains. Example: ["pinte
       #

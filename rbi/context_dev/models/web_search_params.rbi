@@ -26,6 +26,10 @@ module ContextDev
       end
       attr_writer :country
 
+      # Maximum length of each result's `description`, in characters.
+      sig { returns(T.nilable(Integer)) }
+      attr_accessor :description_max_characters
+
       # Blocklist — drop results from these domains. Up to 100 domains. Example:
       # ["pinterest.com", "reddit.com"].
       sig { returns(T.nilable(T::Array[String])) }
@@ -122,6 +126,7 @@ module ContextDev
         params(
           query: String,
           country: ContextDev::WebSearchParams::Country::OrSymbol,
+          description_max_characters: T.nilable(Integer),
           exclude_domains: T::Array[String],
           freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
           highlights_options:
@@ -144,6 +149,8 @@ module ContextDev
         # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
         # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
         country: nil,
+        # Maximum length of each result's `description`, in characters.
+        description_max_characters: nil,
         # Blocklist — drop results from these domains. Up to 100 domains. Example:
         # ["pinterest.com", "reddit.com"].
         exclude_domains: nil,
@@ -177,6 +184,7 @@ module ContextDev
           {
             query: String,
             country: ContextDev::WebSearchParams::Country::OrSymbol,
+            description_max_characters: T.nilable(Integer),
             exclude_domains: T::Array[String],
             freshness: ContextDev::WebSearchParams::Freshness::OrSymbol,
             highlights_options:
