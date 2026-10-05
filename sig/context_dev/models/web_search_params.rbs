@@ -4,6 +4,7 @@ module ContextDev
       {
         query: String,
         country: ContextDev::Models::WebSearchParams::country,
+        description_max_characters: Integer?,
         exclude_domains: ::Array[String],
         freshness: ContextDev::Models::WebSearchParams::freshness,
         highlights_options: ContextDev::WebSearchParams::HighlightsOptions?,
@@ -28,6 +29,8 @@ module ContextDev
       def country=: (
         ContextDev::Models::WebSearchParams::country
       ) -> ContextDev::Models::WebSearchParams::country
+
+      attr_accessor description_max_characters: Integer?
 
       attr_reader exclude_domains: ::Array[String]?
 
@@ -74,6 +77,7 @@ module ContextDev
       def initialize: (
         query: String,
         ?country: ContextDev::Models::WebSearchParams::country,
+        ?description_max_characters: Integer?,
         ?exclude_domains: ::Array[String],
         ?freshness: ContextDev::Models::WebSearchParams::freshness,
         ?highlights_options: ContextDev::WebSearchParams::HighlightsOptions?,
@@ -90,6 +94,7 @@ module ContextDev
       def to_hash: -> {
         query: String,
         country: ContextDev::Models::WebSearchParams::country,
+        description_max_characters: Integer?,
         exclude_domains: ::Array[String],
         freshness: ContextDev::Models::WebSearchParams::freshness,
         highlights_options: ContextDev::WebSearchParams::HighlightsOptions?,

@@ -86,6 +86,7 @@ module ContextDev
       def search: (
         query: String,
         ?country: ContextDev::Models::WebSearchParams::country,
+        ?description_max_characters: Integer?,
         ?exclude_domains: ::Array[String],
         ?freshness: ContextDev::Models::WebSearchParams::freshness,
         ?highlights_options: ContextDev::WebSearchParams::HighlightsOptions?,
