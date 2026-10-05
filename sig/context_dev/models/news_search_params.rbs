@@ -463,6 +463,7 @@ module ContextDev
           | :mx
           | :ng
           | :nl
+          | :pk
           | :qa
           | :sa
           | :se
@@ -493,6 +494,7 @@ module ContextDev
           MX: :mx
           NG: :ng
           NL: :nl
+          PK: :pk
           QA: :qa
           SA: :sa
           SE: :se

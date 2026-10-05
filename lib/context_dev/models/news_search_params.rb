@@ -437,6 +437,7 @@ module ContextDev
           MX = :mx
           NG = :ng
           NL = :nl
+          PK = :pk
           QA = :qa
           SA = :sa
           SE = :se

@@ -1202,6 +1202,11 @@ module ContextDev
               :nl,
               ContextDev::NewsSearchParams::FilterBy::SourceCountry::TaggedSymbol
             )
+          PK =
+            T.let(
+              :pk,
+              ContextDev::NewsSearchParams::FilterBy::SourceCountry::TaggedSymbol
+            )
           QA =
             T.let(
               :qa,
