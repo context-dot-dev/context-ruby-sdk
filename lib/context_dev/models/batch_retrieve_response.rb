@@ -76,7 +76,7 @@ module ContextDev
       required :request_id, String
 
       # @!attribute results
-      #   Result download links; null until the batch finishes. Files are deleted 7 days
+      #   Result download links; null until the batch finishes. Files are deleted 180 days
       #   after the batch finishes.
       #
       #   @return [ContextDev::Models::BatchRetrieveResponse::Results, nil]
@@ -138,7 +138,7 @@ module ContextDev
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param results [ContextDev::Models::BatchRetrieveResponse::Results, nil] Result download links; null until the batch finishes. Files are deleted 7 days a
+      #   @param results [ContextDev::Models::BatchRetrieveResponse::Results, nil] Result download links; null until the batch finishes. Files are deleted 180 days
       #
       #   @param status [Symbol, ContextDev::Models::BatchRetrieveResponse::Status] Current state. `completed`, `cancelled`, and `failed` are final.
       #
@@ -284,7 +284,7 @@ module ContextDev
                  -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchRetrieveResponse::Results::File] }
 
         # @!method initialize(expires_at:, files:)
-        #   Result download links; null until the batch finishes. Files are deleted 7 days
+        #   Result download links; null until the batch finishes. Files are deleted 180 days
         #   after the batch finishes.
         #
         #   @param expires_at [String] When these links expire (24 hours after this response).

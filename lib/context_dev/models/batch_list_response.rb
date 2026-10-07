@@ -108,7 +108,7 @@ module ContextDev
         required :progress, -> { ContextDev::Models::BatchListResponse::Data::Progress }
 
         # @!attribute results
-        #   Result download links; null until the batch finishes. Files are deleted 7 days
+        #   Result download links; null until the batch finishes. Files are deleted 180 days
         #   after the batch finishes.
         #
         #   @return [ContextDev::Models::BatchListResponse::Data::Results, nil]
@@ -156,7 +156,7 @@ module ContextDev
         #
         #   @param progress [ContextDev::Models::BatchListResponse::Data::Progress] Pages attempted so far. Use `status` to check completion.
         #
-        #   @param results [ContextDev::Models::BatchListResponse::Data::Results, nil] Result download links; null until the batch finishes. Files are deleted 7 days a
+        #   @param results [ContextDev::Models::BatchListResponse::Data::Results, nil] Result download links; null until the batch finishes. Files are deleted 180 days
         #
         #   @param status [Symbol, ContextDev::Models::BatchListResponse::Data::Status] Current state. `completed`, `cancelled`, and `failed` are final.
         #
@@ -279,7 +279,7 @@ module ContextDev
                    -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchListResponse::Data::Results::File] }
 
           # @!method initialize(expires_at:, files:)
-          #   Result download links; null until the batch finishes. Files are deleted 7 days
+          #   Result download links; null until the batch finishes. Files are deleted 180 days
           #   after the batch finishes.
           #
           #   @param expires_at [String] When these links expire (24 hours after this response).

@@ -88,7 +88,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Result download links; null until the batch finishes. Files are deleted 7 days
+      # Result download links; null until the batch finishes. Files are deleted 180 days
       # after the batch finishes.
       sig do
         returns(T.nilable(ContextDev::Models::BatchRetrieveResponse::Results))
@@ -203,7 +203,7 @@ module ContextDev
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # Result download links; null until the batch finishes. Files are deleted 7 days
+        # Result download links; null until the batch finishes. Files are deleted 180 days
         # after the batch finishes.
         results:,
         # Current state. `completed`, `cancelled`, and `failed` are final.
@@ -474,7 +474,7 @@ module ContextDev
         end
         attr_accessor :files
 
-        # Result download links; null until the batch finishes. Files are deleted 7 days
+        # Result download links; null until the batch finishes. Files are deleted 180 days
         # after the batch finishes.
         sig do
           params(
