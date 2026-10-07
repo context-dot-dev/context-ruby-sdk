@@ -4,7 +4,7 @@ module ContextDev
   module Resources
     # Scrape many pages or crawl a site asynchronously.
     class Batch
-      # Get batch progress and result download links. Result files are deleted 7 days
+      # Get batch progress and result download links. Result files are deleted 180 days
       # after the batch finishes.
       sig do
         params(
@@ -81,8 +81,8 @@ module ContextDev
       )
       end
 
-      # Page through a finished batch’s results as JSON. Results remain available for 7
-      # days.
+      # Page through a finished batch’s results as JSON. Results remain available for
+      # 180 days.
       sig do
         params(
           batch_id: String,
