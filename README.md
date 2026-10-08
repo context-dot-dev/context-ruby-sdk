@@ -1,6 +1,6 @@
-# Context Dev Ruby API library
+# Context.dev Ruby SDK API library
 
-The Context Dev Ruby library provides convenient access to the Context Dev REST API from any Ruby 3.2.0+ application. It ships with comprehensive types & docstrings in Yard, RBS, and RBI – [see below](https://github.com/context-dot-dev/context-ruby-sdk#Sorbet) for usage with Sorbet. The standard library's `net/http` is used as the HTTP transport, with connection pooling via the `connection_pool` gem.
+The Context.dev Ruby SDK library provides convenient access to the Context Dev REST API from any Ruby 3.2.0+ application. It ships with comprehensive types & docstrings in Yard, RBS, and RBI – [see below](https://github.com/context-dot-dev/context-ruby-sdk#Sorbet) for usage with Sorbet. The standard library's `net/http` is used as the HTTP transport, with connection pooling via the `connection_pool` gem.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -32,9 +32,9 @@ context_dev = ContextDev::Client.new(
   api_key: ENV["CONTEXT_DEV_API_KEY"] # This is the default and can be omitted
 )
 
-brand = context_dev.brand.retrieve(body: {domain: "stripe.com", type: "by_domain"})
+response = context_dev.web.scrape(formats: {markdown: true, html: true}, url: "https://example.com")
 
-puts(brand.request_id)
+puts(response.request_id)
 ```
 
 ### Handling errors
@@ -43,7 +43,7 @@ When the library is unable to connect to the API, or if the API returns a non-su
 
 ```ruby
 begin
-  brand = context_dev.brand.retrieve(body: {domain: "stripe.com", type: "by_domain"})
+  web = context_dev.web.scrape(formats: {markdown: true}, url: "https://example.com")
 rescue ContextDev::Errors::APIConnectionError => e
   puts("The server could not be reached")
   puts(e.cause)  # an underlying Exception, likely raised within `net/http`
@@ -86,8 +86,9 @@ context_dev = ContextDev::Client.new(
 )
 
 # Or, configure per-request:
-context_dev.brand.retrieve(
-  body: {domain: "stripe.com", type: "by_domain"},
+context_dev.web.scrape(
+  formats: {markdown: true},
+  url: "https://example.com",
   request_options: {max_retries: 5}
 )
 ```
@@ -103,7 +104,11 @@ context_dev = ContextDev::Client.new(
 )
 
 # Or, configure per-request:
-context_dev.brand.retrieve(body: {domain: "stripe.com", type: "by_domain"}, request_options: {timeout: 5})
+context_dev.web.scrape(
+  formats: {markdown: true},
+  url: "https://example.com",
+  request_options: {timeout: 5}
+)
 ```
 
 On timeout, `ContextDev::Errors::APITimeoutError` is raised.
@@ -133,9 +138,10 @@ You can send undocumented parameters to any endpoint, and read undocumented resp
 Note: the `extra_` parameters of the same name overrides the documented parameters.
 
 ```ruby
-brand =
-  context_dev.brand.retrieve(
-    body: {domain: "stripe.com", type: "by_domain"},
+response =
+  context_dev.web.scrape(
+    formats: {markdown: true},
+    url: "https://example.com",
     request_options: {
       extra_query: {my_query_parameter: value},
       extra_body: {my_body_parameter: value},
@@ -143,7 +149,7 @@ brand =
     }
   )
 
-puts(brand[:my_undocumented_property])
+puts(response[:my_undocumented_property])
 ```
 
 #### Undocumented request params
@@ -181,8 +187,9 @@ This library provides comprehensive [RBI](https://sorbet.org/docs/rbi) definitio
 You can provide typesafe request parameters like so:
 
 ```ruby
-context_dev.brand.retrieve(
-  body: ContextDev::BrandRetrieveParams::Body::ByDomain.new(domain: "stripe.com")
+context_dev.web.scrape(
+  formats: ContextDev::WebScrapeParams::Formats.new(markdown: true, html: true),
+  url: "https://example.com"
 )
 ```
 
@@ -190,13 +197,14 @@ Or, equivalently:
 
 ```ruby
 # Hashes work, but are not typesafe:
-context_dev.brand.retrieve(body: {domain: "stripe.com", type: "by_domain"})
+context_dev.web.scrape(formats: {markdown: true, html: true}, url: "https://example.com")
 
 # You can also splat a full Params class:
-params = ContextDev::BrandRetrieveParams.new(
-  body: ContextDev::BrandRetrieveParams::Body::ByDomain.new(domain: "stripe.com")
+params = ContextDev::WebScrapeParams.new(
+  formats: ContextDev::WebScrapeParams::Formats.new(markdown: true, html: true),
+  url: "https://example.com"
 )
-context_dev.brand.retrieve(**params)
+context_dev.web.scrape(**params)
 ```
 
 ### Enums
