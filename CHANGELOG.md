@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.24.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.23.0...v2.24.0) (2026-10-07)
+
+
+### Features
+
+* **batches:** keep batch result files for 180 days ([#1638](https://github.com/context-dot-dev/context-ruby-sdk/issues/1638)) ([ea7e08c](https://github.com/context-dot-dev/context-ruby-sdk/commit/ea7e08cfe3395bc2d67c6a075e9608aa1415385d))
+* **news:** add Google News sitemap feeds for 52 sites from the NEEDLE 4-star gaps ([#1612](https://github.com/context-dot-dev/context-ruby-sdk/issues/1612)) ([f5f5efd](https://github.com/context-dot-dev/context-ruby-sdk/commit/f5f5efdc0171f5a9660fefe3b76b293330f89888))
+* **search:** /web/search - for news results extend description with matching passages from article. ([f47a992](https://github.com/context-dot-dev/context-ruby-sdk/commit/f47a9929203307f12654368f2ae94ddf3869f05c))
+
+
+### Bug Fixes
+
+* **answers:** keep page links for the agent and only cite URLs it actually saw ([#1571](https://github.com/context-dot-dev/context-ruby-sdk/issues/1571)) ([831788c](https://github.com/context-dot-dev/context-ruby-sdk/commit/831788c4a124e4cd98f764754b5ba8e2003b75c3))
+* **scrape:** keep the relevant sections of long pages for JSON extraction ([#1582](https://github.com/context-dot-dev/context-ruby-sdk/issues/1582)) ([8e874a8](https://github.com/context-dot-dev/context-ruby-sdk/commit/8e874a8c9ae5e7770578f6e0d2155c04930a7962))
+* **search:** shorter default page-read budget and blocked-page codes for search results ([#1573](https://github.com/context-dot-dev/context-ruby-sdk/issues/1573)) ([674cd69](https://github.com/context-dot-dev/context-ruby-sdk/commit/674cd6983b6df2feccd040287f525ba0e364611b))
+
 ## [2.23.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.22.0...v2.23.0) (2026-09-30)
 
 
