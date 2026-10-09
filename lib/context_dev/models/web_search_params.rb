@@ -415,7 +415,7 @@ module ContextDev
 
       class MarkdownOptions < ContextDev::Internal::Type::BaseModel
         # @!attribute enabled
-        #   Scrape each result to Markdown. Adds 1 credit per 10 results.
+        #   Scrape each result to Markdown. Adds 1 credit per result with Markdown.
         #
         #   @return [Boolean, nil]
         optional :enabled, ContextDev::Internal::Type::Boolean
@@ -486,7 +486,7 @@ module ContextDev
         #
         #   Inline Markdown scraping for each result. Set `enabled: true` to activate.
         #
-        #   @param enabled [Boolean] Scrape each result to Markdown. Adds 1 credit per 10 results.
+        #   @param enabled [Boolean] Scrape each result to Markdown. Adds 1 credit per result with Markdown.
         #
         #   @param include_frames [Boolean] Render iframe contents into the Markdown.
         #

@@ -554,7 +554,7 @@ module ContextDev
             )
           end
 
-        # Scrape each result to Markdown. Adds 1 credit per 10 results.
+        # Scrape each result to Markdown. Adds 1 credit per result with Markdown.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :enabled
 
@@ -654,7 +654,7 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Scrape each result to Markdown. Adds 1 credit per 10 results.
+          # Scrape each result to Markdown. Adds 1 credit per result with Markdown.
           enabled: nil,
           # Render iframe contents into the Markdown.
           include_frames: nil,
