@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.27.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.26.0...v2.27.0) (2026-10-17)
+
+
+### Features
+
+* **brand:** add search metadata and country and language filters ([#1945](https://github.com/context-dot-dev/context-ruby-sdk/issues/1945)) ([1cfb968](https://github.com/context-dot-dev/context-ruby-sdk/commit/1cfb9680c832918a4a64a9743b1aa1d3ab188d62))
+* **scrape:** add g2-reviews prebuilt parser ([#1933](https://github.com/context-dot-dev/context-ruby-sdk/issues/1933)) ([b301f20](https://github.com/context-dot-dev/context-ruby-sdk/commit/b301f20675cc74c287c04264e21991bd87f3b3b9))
+* **scrape:** add google-maps-reviews prebuilt parser with oldest-first sort ([#1928](https://github.com/context-dot-dev/context-ruby-sdk/issues/1928)) ([82cb5b1](https://github.com/context-dot-dev/context-ruby-sdk/commit/82cb5b1f08a00b889893212d02c665cbdd1834d8))
+* **scrape:** add Instagram profile, post, and feed prebuilt parsers ([#1905](https://github.com/context-dot-dev/context-ruby-sdk/issues/1905)) ([eea9361](https://github.com/context-dot-dev/context-ruby-sdk/commit/eea9361a221564be1060c7ff7ddc6ba8dd39d5d2))
+* **search:** add languages filter to web search ([#1833](https://github.com/context-dot-dev/context-ruby-sdk/issues/1833)) ([71c2585](https://github.com/context-dot-dev/context-ruby-sdk/commit/71c25854af46fa5b7fcef6b26d677d2b9e63da1d))
+
 ## [2.26.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.25.0...v2.26.0) (2026-10-16)
 
 
