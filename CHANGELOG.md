@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.29.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.28.0...v2.29.0) (2026-10-18)
+
+
+### Features
+
+* **scrape:** add TikTok profile and video prebuilt parsers ([#1956](https://github.com/context-dot-dev/context-ruby-sdk/issues/1956)) ([59b4899](https://github.com/context-dot-dev/context-ruby-sdk/commit/59b489983fb79b312ef90763152e8a341acc70f3))
+
 ## [2.28.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.27.0...v2.28.0) (2026-10-18)
 
 
