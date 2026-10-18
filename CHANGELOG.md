@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.28.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.27.0...v2.28.0) (2026-10-18)
+
+
+### Features
+
+* **people:** allow enrichment on free plans ([#1961](https://github.com/context-dot-dev/context-ruby-sdk/issues/1961)) ([ac9db04](https://github.com/context-dot-dev/context-ruby-sdk/commit/ac9db042769f3d61adc1a7525f8a0ad138b23243))
+
 ## [2.27.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.26.0...v2.27.0) (2026-10-17)
 
 
