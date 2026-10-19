@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.31.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.30.0...v2.31.0) (2026-10-19)
+
+
+### Features
+
+* **crawl:** add exclude URL regex to crawl and sitemap endpoints ([#1982](https://github.com/context-dot-dev/context-ruby-sdk/issues/1982)) ([d9086e9](https://github.com/context-dot-dev/context-ruby-sdk/commit/d9086e9ab4894fc725551770d944f55a1c568512))
+
 ## [2.30.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.29.0...v2.30.0) (2026-10-19)
 
 
