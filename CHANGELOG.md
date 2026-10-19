@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.30.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.29.0...v2.30.0) (2026-10-19)
+
+
+### Features
+
+* **news:** add natural-language search to POST /news/search ([#1975](https://github.com/context-dot-dev/context-ruby-sdk/issues/1975)) ([a8b59cf](https://github.com/context-dot-dev/context-ruby-sdk/commit/a8b59cf6806a83a63fffe4345f5e50edcb286970))
+
 ## [2.29.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.28.0...v2.29.0) (2026-10-18)
 
 
