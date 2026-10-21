@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.35.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.34.2...v2.35.0) (2026-10-21)
+
+
+### Features
+
+* **batch:** follow only chosen languages in start_url crawls ([#2003](https://github.com/context-dot-dev/context-ruby-sdk/issues/2003)) ([7ae20fc](https://github.com/context-dot-dev/context-ruby-sdk/commit/7ae20fc89e84dbcf2e492bbe2de3eac1ebe98256))
+
 ## [2.34.2](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.34.1...v2.34.2) (2026-10-21)
 
 
