@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.34.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.33.0...v2.34.0) (2026-10-21)
+
+
+### Features
+
+* **web-search:** include Scholar papers for research queries ([#2009](https://github.com/context-dot-dev/context-ruby-sdk/issues/2009)) ([bab77da](https://github.com/context-dot-dev/context-ruby-sdk/commit/bab77daa7e3abf571099ec02bd10c793586aa4f0))
+
 ## [2.33.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.32.0...v2.33.0) (2026-10-21)
 
 
