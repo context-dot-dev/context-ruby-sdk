@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.35.0...v2.36.0) (2026-10-21)
+
+
+### Features
+
+* **scrape:** add sourcePreference to choose between HTML conversion and published Markdown ([#2010](https://github.com/context-dot-dev/context-ruby-sdk/issues/2010)) ([21d9ba7](https://github.com/context-dot-dev/context-ruby-sdk/commit/21d9ba760ba0234c6c74c40bf04a73b240c0fbbd))
+
 ## [2.35.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.34.2...v2.35.0) (2026-10-21)
 
 
