@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.34.1](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.34.0...v2.34.1) (2026-10-21)
+
+
+### Bug Fixes
+
+* **answers:** document request_id in the /web/answers response ([#2040](https://github.com/context-dot-dev/context-ruby-sdk/issues/2040)) ([dd2586c](https://github.com/context-dot-dev/context-ruby-sdk/commit/dd2586c7a111f86568a9704ed949ad8e8411c763))
+
 ## [2.34.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.33.0...v2.34.0) (2026-10-21)
 
 
