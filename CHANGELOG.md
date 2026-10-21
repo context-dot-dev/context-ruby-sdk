@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.32.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.31.1...v2.32.0) (2026-10-21)
+
+
+### Features
+
+* **company-search:** prepare public response contract ([#2021](https://github.com/context-dot-dev/context-ruby-sdk/issues/2021)) ([366aa37](https://github.com/context-dot-dev/context-ruby-sdk/commit/366aa371a7c7165760e3ab2d6a0d381eb061f2ee))
+
 ## [2.31.1](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.31.0...v2.31.1) (2026-10-21)
 
 
