@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.34.2](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.34.1...v2.34.2) (2026-10-21)
+
+
+### Bug Fixes
+
+* **openapi:** document request_id and key_metadata on every response in one place ([#2042](https://github.com/context-dot-dev/context-ruby-sdk/issues/2042)) ([29d0885](https://github.com/context-dot-dev/context-ruby-sdk/commit/29d08859e4459fe93933fa7b8a690ae475974671))
+
 ## [2.34.1](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.34.0...v2.34.1) (2026-10-21)
 
 
