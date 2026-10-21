@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.31.1](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.31.0...v2.31.1) (2026-10-21)
+
+
+### Bug Fixes
+
+* **news:** return extended descriptions for index search ([#2019](https://github.com/context-dot-dev/context-ruby-sdk/issues/2019)) ([06afad3](https://github.com/context-dot-dev/context-ruby-sdk/commit/06afad3128a56b52b04483fe2e740501fe36805f))
+
 ## [2.31.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.30.0...v2.31.0) (2026-10-19)
 
 
