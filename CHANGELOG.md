@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.36.1](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.36.0...v2.36.1) (2026-10-21)
+
+
+### Documentation
+
+* **openapi:** unify regex wording and shorten sourcePreference descriptions ([#2051](https://github.com/context-dot-dev/context-ruby-sdk/issues/2051)) ([d48939f](https://github.com/context-dot-dev/context-ruby-sdk/commit/d48939f23e78c58a31a619dd319ef1c44b3e6aa4))
+
 ## [2.36.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.35.0...v2.36.0) (2026-10-21)
 
 
