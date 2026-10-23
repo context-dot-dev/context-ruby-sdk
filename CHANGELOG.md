@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.37.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.36.1...v2.37.0) (2026-10-23)
+
+
+### Features
+
+* **people:** publish people search in the API specification ([#2094](https://github.com/context-dot-dev/context-ruby-sdk/issues/2094)) ([43787a2](https://github.com/context-dot-dev/context-ruby-sdk/commit/43787a2f9652280f10c4f74b07f3d14005143842))
+
 ## [2.36.1](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.36.0...v2.36.1) (2026-10-21)
 
 
