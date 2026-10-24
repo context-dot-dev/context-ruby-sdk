@@ -335,17 +335,17 @@ module ContextDev
         private def retry_delay(headers, retry_count:)
           # Non-standard extension
           span = Float(headers["retry-after-ms"], exception: false)&.then { _1 / 1000 }
-          return span if span
+          return [span, 0.0].max if span
 
           retry_header = headers["retry-after"]
-          return span if (span = Float(retry_header, exception: false))
+          return [span, 0.0].max if (span = Float(retry_header, exception: false))
 
           span = retry_header&.then do
             Time.httpdate(_1) - Time.now
           rescue ArgumentError
             nil
           end
-          return span if span
+          return [span, 0.0].max if span
 
           scale = retry_count**2
           jitter = 1 - (0.25 * rand)
