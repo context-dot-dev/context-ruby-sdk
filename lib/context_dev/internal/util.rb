@@ -428,7 +428,7 @@ module ContextDev
             @stream.to_a.join
           in Integer
             @buf << @stream.next while @buf.length < max_len
-            @buf.slice!(..max_len)
+            @buf.slice!(0, max_len)
           end
         rescue StopIteration
           @stream = nil
@@ -456,7 +456,7 @@ module ContextDev
               read
             end
           end
-            .tap(&@blk)
+            .tap { @blk&.call(_1) }
         end
 
         # @api private

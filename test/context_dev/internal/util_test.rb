@@ -673,3 +673,29 @@ class ContextDev::Test::UtilSseTest < Minitest::Test
     end
   end
 end
+
+class ContextDev::Test::UtilReadIOAdapterTest < Minitest::Test
+  def test_read_with_max_len
+    enum = ["hello ", "world"].to_enum
+    adapter = ContextDev::Internal::Util::ReadIOAdapter.new(enum)
+
+    chunk1 = adapter.read(3)
+    assert_equal("hel", chunk1)
+    assert_equal(3, chunk1.bytesize)
+
+    chunk2 = adapter.read(4)
+    assert_equal("lo w", chunk2)
+    assert_equal(4, chunk2.bytesize)
+
+    chunk3 = adapter.read(10)
+    assert_equal("orld", chunk3)
+
+    assert_nil(adapter.read(5))
+  end
+
+  def test_read_without_block
+    adapter = ContextDev::Internal::Util::ReadIOAdapter.new("sample content")
+    assert_equal("sample", adapter.read(6))
+    assert_equal(" content", adapter.read)
+  end
+end
