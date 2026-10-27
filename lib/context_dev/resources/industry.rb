@@ -3,6 +3,8 @@
 module ContextDev
   module Resources
     class Industry
+      # @deprecated
+      #
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::IndustryRetrieveNaicsParams} for more details.
       #
@@ -43,6 +45,8 @@ module ContextDev
         )
       end
 
+      # @deprecated
+      #
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::IndustryRetrieveSicParams} for more details.
       #
