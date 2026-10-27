@@ -8,13 +8,14 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute query
-      #   Describe the people to find.
+      #   Describe the people to find. Up to 500 characters in `fast` mode and 5000 in
+      #   `ultra` mode.
       #
       #   @return [String]
       required :query, String
 
       # @!attribute cursor
-      #   Use next_cursor with the same query and filters to fetch the next page.
+      #   Use next_cursor with the same query, mode and filters to fetch the next page.
       #
       #   @return [String, nil]
       optional :cursor, String
@@ -25,18 +26,31 @@ module ContextDev
       #   @return [ContextDev::Models::PersonSearchParams::Filters, nil]
       optional :filters, -> { ContextDev::PersonSearchParams::Filters }
 
+      # @!attribute mode
+      #   `fast` matches people on basic criteria (e.g. their role, location or
+      #   background); `ultra` plans a deeper search, judges each candidate against every
+      #   criterion in the query and explains each match.
+      #
+      #   @return [Symbol, ContextDev::Models::PersonSearchParams::Mode, nil]
+      optional :mode, enum: -> { ContextDev::PersonSearchParams::Mode }
+
       # @!attribute tags
       #   Labels for filtering usage in the dashboard.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!method initialize(query:, cursor: nil, filters: nil, tags: nil, request_options: {})
-      #   @param query [String] Describe the people to find.
+      # @!method initialize(query:, cursor: nil, filters: nil, mode: nil, tags: nil, request_options: {})
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::PersonSearchParams} for more details.
       #
-      #   @param cursor [String] Use next_cursor with the same query and filters to fetch the next page.
+      #   @param query [String] Describe the people to find. Up to 500 characters in `fast` mode and 5000 in `ul
+      #
+      #   @param cursor [String] Use next_cursor with the same query, mode and filters to fetch the next page.
       #
       #   @param filters [ContextDev::Models::PersonSearchParams::Filters] Additional constraints every result must match.
+      #
+      #   @param mode [Symbol, ContextDev::Models::PersonSearchParams::Mode] `fast` matches people on basic criteria (e.g. their role, location or background
       #
       #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
@@ -69,6 +83,19 @@ module ContextDev
         #   @param years_of_experience_max [Integer] Maximum years of professional experience.
         #
         #   @param years_of_experience_min [Integer] Minimum years of professional experience.
+      end
+
+      # `fast` matches people on basic criteria (e.g. their role, location or
+      # background); `ultra` plans a deeper search, judges each candidate against every
+      # criterion in the query and explains each match.
+      module Mode
+        extend ContextDev::Internal::Type::Enum
+
+        FAST = :fast
+        ULTRA = :ultra
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
       end
     end
   end

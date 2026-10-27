@@ -97,7 +97,13 @@ module ContextDev
         #   @return [Integer, nil]
         required :years_of_experience, Integer, nil?: true
 
-        # @!method initialize(description:, is_founder:, location:, name:, profiles:, role:, schools:, skills:, years_of_experience:)
+        # @!attribute match
+        #   How well the person matches the query. Only returned in `ultra` mode.
+        #
+        #   @return [ContextDev::Models::PersonSearchResponse::Result::Match, nil]
+        optional :match, -> { ContextDev::Models::PersonSearchResponse::Result::Match }
+
+        # @!method initialize(description:, is_founder:, location:, name:, profiles:, role:, schools:, skills:, years_of_experience:, match: nil)
         #   A person matching your search; unavailable details are null or empty lists.
         #
         #   @param description [String, nil] What the person does.
@@ -117,6 +123,8 @@ module ContextDev
         #   @param skills [Array<String>] Professional skills.
         #
         #   @param years_of_experience [Integer, nil] Years of professional experience.
+        #
+        #   @param match [ContextDev::Models::PersonSearchResponse::Result::Match] How well the person matches the query. Only returned in `ultra` mode.
 
         # @see ContextDev::Models::PersonSearchResponse::Result#location
         class Location < ContextDev::Internal::Type::BaseModel
@@ -214,6 +222,20 @@ module ContextDev
             #
             #   @param name [String, nil] Company name.
           end
+        end
+
+        # @see ContextDev::Models::PersonSearchResponse::Result#match
+        class Match < ContextDev::Internal::Type::BaseModel
+          # @!attribute confidence
+          #   How well the person matches the query, from 0 to 1.
+          #
+          #   @return [Float]
+          required :confidence, Float
+
+          # @!method initialize(confidence:)
+          #   How well the person matches the query. Only returned in `ultra` mode.
+          #
+          #   @param confidence [Float] How well the person matches the query, from 0 to 1.
         end
       end
 

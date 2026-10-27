@@ -45,15 +45,20 @@ module ContextDev
         )
       end
 
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::PersonSearchParams} for more details.
+      #
       # Find people with a natural-language query.
       #
-      # @overload search(query:, cursor: nil, filters: nil, tags: nil, request_options: {})
+      # @overload search(query:, cursor: nil, filters: nil, mode: nil, tags: nil, request_options: {})
       #
-      # @param query [String] Describe the people to find.
+      # @param query [String] Describe the people to find. Up to 500 characters in `fast` mode and 5000 in `ul
       #
-      # @param cursor [String] Use next_cursor with the same query and filters to fetch the next page.
+      # @param cursor [String] Use next_cursor with the same query, mode and filters to fetch the next page.
       #
       # @param filters [ContextDev::Models::PersonSearchParams::Filters] Additional constraints every result must match.
+      #
+      # @param mode [Symbol, ContextDev::Models::PersonSearchParams::Mode] `fast` matches people on basic criteria (e.g. their role, location or background
       #
       # @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #

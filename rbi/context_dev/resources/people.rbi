@@ -53,17 +53,23 @@ module ContextDev
           query: String,
           cursor: String,
           filters: ContextDev::PersonSearchParams::Filters::OrHash,
+          mode: ContextDev::PersonSearchParams::Mode::OrSymbol,
           tags: T::Array[String],
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::PersonSearchResponse)
       end
       def search(
-        # Describe the people to find.
+        # Describe the people to find. Up to 500 characters in `fast` mode and 5000 in
+        # `ultra` mode.
         query:,
-        # Use next_cursor with the same query and filters to fetch the next page.
+        # Use next_cursor with the same query, mode and filters to fetch the next page.
         cursor: nil,
         # Additional constraints every result must match.
         filters: nil,
+        # `fast` matches people on basic criteria (e.g. their role, location or
+        # background); `ultra` plans a deeper search, judges each candidate against every
+        # criterion in the query and explains each match.
+        mode: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
         request_options: {}

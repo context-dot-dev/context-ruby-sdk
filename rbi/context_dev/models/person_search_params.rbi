@@ -11,11 +11,12 @@ module ContextDev
           T.any(ContextDev::PersonSearchParams, ContextDev::Internal::AnyHash)
         end
 
-      # Describe the people to find.
+      # Describe the people to find. Up to 500 characters in `fast` mode and 5000 in
+      # `ultra` mode.
       sig { returns(String) }
       attr_accessor :query
 
-      # Use next_cursor with the same query and filters to fetch the next page.
+      # Use next_cursor with the same query, mode and filters to fetch the next page.
       sig { returns(T.nilable(String)) }
       attr_reader :cursor
 
@@ -31,6 +32,15 @@ module ContextDev
       end
       attr_writer :filters
 
+      # `fast` matches people on basic criteria (e.g. their role, location or
+      # background); `ultra` plans a deeper search, judges each candidate against every
+      # criterion in the query and explains each match.
+      sig { returns(T.nilable(ContextDev::PersonSearchParams::Mode::OrSymbol)) }
+      attr_reader :mode
+
+      sig { params(mode: ContextDev::PersonSearchParams::Mode::OrSymbol).void }
+      attr_writer :mode
+
       # Labels for filtering usage in the dashboard.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
@@ -43,17 +53,23 @@ module ContextDev
           query: String,
           cursor: String,
           filters: ContextDev::PersonSearchParams::Filters::OrHash,
+          mode: ContextDev::PersonSearchParams::Mode::OrSymbol,
           tags: T::Array[String],
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
       def self.new(
-        # Describe the people to find.
+        # Describe the people to find. Up to 500 characters in `fast` mode and 5000 in
+        # `ultra` mode.
         query:,
-        # Use next_cursor with the same query and filters to fetch the next page.
+        # Use next_cursor with the same query, mode and filters to fetch the next page.
         cursor: nil,
         # Additional constraints every result must match.
         filters: nil,
+        # `fast` matches people on basic criteria (e.g. their role, location or
+        # background); `ultra` plans a deeper search, judges each candidate against every
+        # criterion in the query and explains each match.
+        mode: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
         request_options: {}
@@ -66,6 +82,7 @@ module ContextDev
             query: String,
             cursor: String,
             filters: ContextDev::PersonSearchParams::Filters,
+            mode: ContextDev::PersonSearchParams::Mode::OrSymbol,
             tags: T::Array[String],
             request_options: ContextDev::RequestOptions
           }
@@ -132,6 +149,29 @@ module ContextDev
           )
         end
         def to_hash
+        end
+      end
+
+      # `fast` matches people on basic criteria (e.g. their role, location or
+      # background); `ultra` plans a deeper search, judges each candidate against every
+      # criterion in the query and explains each match.
+      module Mode
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias { T.all(Symbol, ContextDev::PersonSearchParams::Mode) }
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        FAST = T.let(:fast, ContextDev::PersonSearchParams::Mode::TaggedSymbol)
+        ULTRA =
+          T.let(:ultra, ContextDev::PersonSearchParams::Mode::TaggedSymbol)
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::PersonSearchParams::Mode::TaggedSymbol]
+          )
+        end
+        def self.values
         end
       end
     end

@@ -18,6 +18,7 @@ module ContextDev
         query: String,
         ?cursor: String,
         ?filters: ContextDev::PersonSearchParams::Filters,
+        ?mode: ContextDev::Models::PersonSearchParams::mode,
         ?tags: ::Array[String],
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::PersonSearchResponse

@@ -140,6 +140,22 @@ module ContextDev
         sig { returns(T.nilable(Integer)) }
         attr_accessor :years_of_experience
 
+        # How well the person matches the query. Only returned in `ultra` mode.
+        sig do
+          returns(
+            T.nilable(ContextDev::Models::PersonSearchResponse::Result::Match)
+          )
+        end
+        attr_reader :match
+
+        sig do
+          params(
+            match:
+              ContextDev::Models::PersonSearchResponse::Result::Match::OrHash
+          ).void
+        end
+        attr_writer :match
+
         # A person matching your search; unavailable details are null or empty lists.
         sig do
           params(
@@ -153,7 +169,9 @@ module ContextDev
               ContextDev::Models::PersonSearchResponse::Result::Role::OrHash,
             schools: T::Array[String],
             skills: T::Array[String],
-            years_of_experience: T.nilable(Integer)
+            years_of_experience: T.nilable(Integer),
+            match:
+              ContextDev::Models::PersonSearchResponse::Result::Match::OrHash
           ).returns(T.attached_class)
         end
         def self.new(
@@ -174,7 +192,9 @@ module ContextDev
           # Professional skills.
           skills:,
           # Years of professional experience.
-          years_of_experience:
+          years_of_experience:,
+          # How well the person matches the query. Only returned in `ultra` mode.
+          match: nil
         )
         end
 
@@ -190,7 +210,8 @@ module ContextDev
               role: ContextDev::Models::PersonSearchResponse::Result::Role,
               schools: T::Array[String],
               skills: T::Array[String],
-              years_of_experience: T.nilable(Integer)
+              years_of_experience: T.nilable(Integer),
+              match: ContextDev::Models::PersonSearchResponse::Result::Match
             }
           )
         end
@@ -377,6 +398,32 @@ module ContextDev
             end
             def to_hash
             end
+          end
+        end
+
+        class Match < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::Models::PersonSearchResponse::Result::Match,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # How well the person matches the query, from 0 to 1.
+          sig { returns(Float) }
+          attr_accessor :confidence
+
+          # How well the person matches the query. Only returned in `ultra` mode.
+          sig { params(confidence: Float).returns(T.attached_class) }
+          def self.new(
+            # How well the person matches the query, from 0 to 1.
+            confidence:
+          )
+          end
+
+          sig { override.returns({ confidence: Float }) }
+          def to_hash
           end
         end
       end

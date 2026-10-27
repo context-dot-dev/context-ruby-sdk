@@ -45,7 +45,8 @@ module ContextDev
           role: ContextDev::Models::PersonSearchResponse::Result::Role,
           schools: ::Array[String],
           skills: ::Array[String],
-          years_of_experience: Integer?
+          years_of_experience: Integer?,
+          match: ContextDev::Models::PersonSearchResponse::Result::Match
         }
 
       class Result < ContextDev::Internal::Type::BaseModel
@@ -67,6 +68,12 @@ module ContextDev
 
         attr_accessor years_of_experience: Integer?
 
+        attr_reader match: ContextDev::Models::PersonSearchResponse::Result::Match?
+
+        def match=: (
+          ContextDev::Models::PersonSearchResponse::Result::Match
+        ) -> ContextDev::Models::PersonSearchResponse::Result::Match
+
         def initialize: (
           description: String?,
           is_founder: bool?,
@@ -76,7 +83,8 @@ module ContextDev
           role: ContextDev::Models::PersonSearchResponse::Result::Role,
           schools: ::Array[String],
           skills: ::Array[String],
-          years_of_experience: Integer?
+          years_of_experience: Integer?,
+          ?match: ContextDev::Models::PersonSearchResponse::Result::Match
         ) -> void
 
         def to_hash: -> {
@@ -88,7 +96,8 @@ module ContextDev
           role: ContextDev::Models::PersonSearchResponse::Result::Role,
           schools: ::Array[String],
           skills: ::Array[String],
-          years_of_experience: Integer?
+          years_of_experience: Integer?,
+          match: ContextDev::Models::PersonSearchResponse::Result::Match
         }
 
         type location =
@@ -161,6 +170,16 @@ module ContextDev
 
             def to_hash: -> { domain: String?, name: String? }
           end
+        end
+
+        type match = { confidence: Float }
+
+        class Match < ContextDev::Internal::Type::BaseModel
+          attr_accessor confidence: Float
+
+          def initialize: (confidence: Float) -> void
+
+          def to_hash: -> { confidence: Float }
         end
       end
 
