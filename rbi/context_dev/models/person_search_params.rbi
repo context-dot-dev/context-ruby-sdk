@@ -34,7 +34,8 @@ module ContextDev
 
       # `fast` matches people on basic criteria (e.g. their role, location or
       # background); `ultra` plans a deeper search, judges each candidate against every
-      # criterion in the query and explains each match.
+      # criterion in the query. Complex `ultra` searches can take up to 60 seconds to
+      # complete, so allow for that in your client timeout.
       sig { returns(T.nilable(ContextDev::PersonSearchParams::Mode::OrSymbol)) }
       attr_reader :mode
 
@@ -68,7 +69,8 @@ module ContextDev
         filters: nil,
         # `fast` matches people on basic criteria (e.g. their role, location or
         # background); `ultra` plans a deeper search, judges each candidate against every
-        # criterion in the query and explains each match.
+        # criterion in the query. Complex `ultra` searches can take up to 60 seconds to
+        # complete, so allow for that in your client timeout.
         mode: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
@@ -154,7 +156,8 @@ module ContextDev
 
       # `fast` matches people on basic criteria (e.g. their role, location or
       # background); `ultra` plans a deeper search, judges each candidate against every
-      # criterion in the query and explains each match.
+      # criterion in the query. Complex `ultra` searches can take up to 60 seconds to
+      # complete, so allow for that in your client timeout.
       module Mode
         extend ContextDev::Internal::Type::Enum
 
