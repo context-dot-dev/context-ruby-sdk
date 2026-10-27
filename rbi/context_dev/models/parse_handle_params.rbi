@@ -49,6 +49,14 @@ module ContextDev
       sig { params(include_links: T::Boolean).void }
       attr_writer :include_links
 
+      # Start each PDF page in the Markdown with a `<!-- page N -->` line, where N is
+      # the original 1-based page number.
+      sig { returns(T.nilable(T::Boolean)) }
+      attr_reader :include_numbered_pages
+
+      sig { params(include_numbered_pages: T::Boolean).void }
+      attr_writer :include_numbered_pages
+
       # Read text from images and scanned PDF pages. PDF page ranges still apply.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :ocr
@@ -99,6 +107,7 @@ module ContextDev
           extension: ContextDev::ParseHandleParams::Extension::OrSymbol,
           include_images: T::Boolean,
           include_links: T::Boolean,
+          include_numbered_pages: T::Boolean,
           ocr: T::Boolean,
           pdf: ContextDev::ParseHandleParams::Pdf::OrHash,
           shorten_base64_images: T::Boolean,
@@ -119,6 +128,9 @@ module ContextDev
         include_images: nil,
         # Preserve hyperlinks in Markdown output
         include_links: nil,
+        # Start each PDF page in the Markdown with a `<!-- page N -->` line, where N is
+        # the original 1-based page number.
+        include_numbered_pages: nil,
         # Read text from images and scanned PDF pages. PDF page ranges still apply.
         ocr: nil,
         # PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
@@ -144,6 +156,7 @@ module ContextDev
             extension: ContextDev::ParseHandleParams::Extension::OrSymbol,
             include_images: T::Boolean,
             include_links: T::Boolean,
+            include_numbered_pages: T::Boolean,
             ocr: T::Boolean,
             pdf: ContextDev::ParseHandleParams::Pdf,
             shorten_base64_images: T::Boolean,

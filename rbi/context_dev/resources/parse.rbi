@@ -11,6 +11,7 @@ module ContextDev
           extension: ContextDev::ParseHandleParams::Extension::OrSymbol,
           include_images: T::Boolean,
           include_links: T::Boolean,
+          include_numbered_pages: T::Boolean,
           ocr: T::Boolean,
           pdf: ContextDev::ParseHandleParams::Pdf::OrHash,
           shorten_base64_images: T::Boolean,
@@ -32,6 +33,9 @@ module ContextDev
         include_images: nil,
         # Query param: Preserve hyperlinks in Markdown output
         include_links: nil,
+        # Query param: Start each PDF page in the Markdown with a `<!-- page N -->` line,
+        # where N is the original 1-based page number.
+        include_numbered_pages: nil,
         # Query param: Read text from images and scanned PDF pages. PDF page ranges still
         # apply.
         ocr: nil,

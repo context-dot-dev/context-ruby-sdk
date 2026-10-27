@@ -2589,6 +2589,14 @@ module ContextDev
             sig { params(end_page: Integer).void }
             attr_writer :end_page
 
+            # Start each page in the Markdown with a `<!-- page N -->` line using its original
+            # 1-based page number; these responses are never served from cache.
+            sig { returns(T.nilable(T::Boolean)) }
+            attr_reader :include_numbered_pages
+
+            sig { params(include_numbered_pages: T::Boolean).void }
+            attr_writer :include_numbered_pages
+
             # Set `auto` to read scanned pages with OCR.
             sig do
               returns(
@@ -2618,6 +2626,7 @@ module ContextDev
             sig do
               params(
                 end_page: Integer,
+                include_numbered_pages: T::Boolean,
                 ocr:
                   ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf::Ocr::OrSymbol,
                 start_page: Integer
@@ -2626,6 +2635,9 @@ module ContextDev
             def self.new(
               # Last page to parse. Must be at least `startPage`.
               end_page: nil,
+              # Start each page in the Markdown with a `<!-- page N -->` line using its original
+              # 1-based page number; these responses are never served from cache.
+              include_numbered_pages: nil,
               # Set `auto` to read scanned pages with OCR.
               ocr: nil,
               # First page to parse, starting at 1.
@@ -2637,6 +2649,7 @@ module ContextDev
               override.returns(
                 {
                   end_page: Integer,
+                  include_numbered_pages: T::Boolean,
                   ocr:
                     ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf::Ocr::OrSymbol,
                   start_page: Integer

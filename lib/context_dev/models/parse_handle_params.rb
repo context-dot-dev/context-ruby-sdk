@@ -37,6 +37,13 @@ module ContextDev
       #   @return [Boolean, nil]
       optional :include_links, ContextDev::Internal::Type::Boolean
 
+      # @!attribute include_numbered_pages
+      #   Start each PDF page in the Markdown with a `<!-- page N -->` line, where N is
+      #   the original 1-based page number.
+      #
+      #   @return [Boolean, nil]
+      optional :include_numbered_pages, ContextDev::Internal::Type::Boolean
+
       # @!attribute ocr
       #   Read text from images and scanned PDF pages. PDF page ranges still apply.
       #
@@ -74,7 +81,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::ParseHandleParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::ParseHandleParams::Zdr }
 
-      # @!method initialize(body:, client: nil, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, zdr: nil, request_options: {})
+      # @!method initialize(body:, client: nil, extension: nil, include_images: nil, include_links: nil, include_numbered_pages: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::ParseHandleParams} for more details.
       #
@@ -87,6 +94,8 @@ module ContextDev
       #   @param include_images [Boolean] Include image references in Markdown output
       #
       #   @param include_links [Boolean] Preserve hyperlinks in Markdown output
+      #
+      #   @param include_numbered_pages [Boolean] Start each PDF page in the Markdown with a `<!-- page N -->` line, where N is th
       #
       #   @param ocr [Boolean] Read text from images and scanned PDF pages. PDF page ranges still apply.
       #

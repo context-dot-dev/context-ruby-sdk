@@ -1351,6 +1351,15 @@ module ContextDev
                   #   @return [Integer, nil]
                   optional :end_page, Integer, api_name: :endPage
 
+                  # @!attribute include_numbered_pages
+                  #   Start each page in the Markdown with a `<!-- page N -->` line using its original
+                  #   1-based page number; these responses are never served from cache.
+                  #
+                  #   @return [Boolean, nil]
+                  optional :include_numbered_pages,
+                           ContextDev::Internal::Type::Boolean,
+                           api_name: :includeNumberedPages
+
                   # @!attribute ocr
                   #   Set `auto` to read scanned pages with OCR.
                   #
@@ -1364,10 +1373,16 @@ module ContextDev
                   #   @return [Integer, nil]
                   optional :start_page, Integer, api_name: :startPage
 
-                  # @!method initialize(end_page: nil, ocr: nil, start_page: nil)
+                  # @!method initialize(end_page: nil, include_numbered_pages: nil, ocr: nil, start_page: nil)
+                  #   Some parameter documentations has been truncated, see
+                  #   {ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::SharedParams::Parsers::Pdf}
+                  #   for more details.
+                  #
                   #   PDF page range and OCR.
                   #
                   #   @param end_page [Integer] Last page to parse. Must be at least `startPage`.
+                  #
+                  #   @param include_numbered_pages [Boolean] Start each page in the Markdown with a `<!-- page N -->` line using its original
                   #
                   #   @param ocr [Symbol, ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::SharedParams::Parsers::Pdf::Ocr] Set `auto` to read scanned pages with OCR.
                   #
@@ -3120,6 +3135,15 @@ module ContextDev
                   #   @return [Integer, nil]
                   optional :end_page, Integer, api_name: :endPage
 
+                  # @!attribute include_numbered_pages
+                  #   Start each page in the Markdown with a `<!-- page N -->` line using its original
+                  #   1-based page number; these responses are never served from cache.
+                  #
+                  #   @return [Boolean, nil]
+                  optional :include_numbered_pages,
+                           ContextDev::Internal::Type::Boolean,
+                           api_name: :includeNumberedPages
+
                   # @!attribute ocr
                   #   Set `auto` to read scanned pages with OCR.
                   #
@@ -3133,10 +3157,16 @@ module ContextDev
                   #   @return [Integer, nil]
                   optional :start_page, Integer, api_name: :startPage
 
-                  # @!method initialize(end_page: nil, ocr: nil, start_page: nil)
+                  # @!method initialize(end_page: nil, include_numbered_pages: nil, ocr: nil, start_page: nil)
+                  #   Some parameter documentations has been truncated, see
+                  #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::SharedParams::Parsers::Pdf}
+                  #   for more details.
+                  #
                   #   PDF page range and OCR.
                   #
                   #   @param end_page [Integer] Last page to parse. Must be at least `startPage`.
+                  #
+                  #   @param include_numbered_pages [Boolean] Start each page in the Markdown with a `<!-- page N -->` line using its original
                   #
                   #   @param ocr [Symbol, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::SharedParams::Parsers::Pdf::Ocr] Set `auto` to read scanned pages with OCR.
                   #

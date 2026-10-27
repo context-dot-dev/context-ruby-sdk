@@ -7,6 +7,7 @@ module ContextDev
         extension: ContextDev::Models::ParseHandleParams::extension,
         include_images: bool,
         include_links: bool,
+        include_numbered_pages: bool,
         ocr: bool,
         pdf: ContextDev::ParseHandleParams::Pdf,
         :shorten_base64_images => bool,
@@ -39,6 +40,10 @@ module ContextDev
       attr_reader include_links: bool?
 
       def include_links=: (bool) -> bool
+
+      attr_reader include_numbered_pages: bool?
+
+      def include_numbered_pages=: (bool) -> bool
 
       attr_reader ocr: bool?
 
@@ -74,6 +79,7 @@ module ContextDev
         ?extension: ContextDev::Models::ParseHandleParams::extension,
         ?include_images: bool,
         ?include_links: bool,
+        ?include_numbered_pages: bool,
         ?ocr: bool,
         ?pdf: ContextDev::ParseHandleParams::Pdf,
         ?shorten_base64_images: bool,
@@ -89,6 +95,7 @@ module ContextDev
         extension: ContextDev::Models::ParseHandleParams::extension,
         include_images: bool,
         include_links: bool,
+        include_numbered_pages: bool,
         ocr: bool,
         pdf: ContextDev::ParseHandleParams::Pdf,
         :shorten_base64_images => bool,

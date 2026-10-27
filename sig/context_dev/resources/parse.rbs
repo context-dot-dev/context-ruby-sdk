@@ -7,6 +7,7 @@ module ContextDev
         ?extension: ContextDev::Models::ParseHandleParams::extension,
         ?include_images: bool,
         ?include_links: bool,
+        ?include_numbered_pages: bool,
         ?ocr: bool,
         ?pdf: ContextDev::ParseHandleParams::Pdf,
         ?shorten_base64_images: bool,

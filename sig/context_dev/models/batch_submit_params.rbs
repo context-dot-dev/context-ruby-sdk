@@ -1060,6 +1060,7 @@ module ContextDev
                 type pdf =
                   {
                     end_page: Integer,
+                    include_numbered_pages: bool,
                     ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::SharedParams::Parsers::Pdf::ocr,
                     start_page: Integer
                   }
@@ -1068,6 +1069,10 @@ module ContextDev
                   attr_reader end_page: Integer?
 
                   def end_page=: (Integer) -> Integer
+
+                  attr_reader include_numbered_pages: bool?
+
+                  def include_numbered_pages=: (bool) -> bool
 
                   attr_reader ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::SharedParams::Parsers::Pdf::ocr?
 
@@ -1081,12 +1086,14 @@ module ContextDev
 
                   def initialize: (
                     ?end_page: Integer,
+                    ?include_numbered_pages: bool,
                     ?ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::SharedParams::Parsers::Pdf::ocr,
                     ?start_page: Integer
                   ) -> void
 
                   def to_hash: -> {
                     end_page: Integer,
+                    include_numbered_pages: bool,
                     ocr: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::SharedParams::Parsers::Pdf::ocr,
                     start_page: Integer
                   }
@@ -2547,6 +2554,7 @@ module ContextDev
                 type pdf =
                   {
                     end_page: Integer,
+                    include_numbered_pages: bool,
                     ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::SharedParams::Parsers::Pdf::ocr,
                     start_page: Integer
                   }
@@ -2555,6 +2563,10 @@ module ContextDev
                   attr_reader end_page: Integer?
 
                   def end_page=: (Integer) -> Integer
+
+                  attr_reader include_numbered_pages: bool?
+
+                  def include_numbered_pages=: (bool) -> bool
 
                   attr_reader ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::SharedParams::Parsers::Pdf::ocr?
 
@@ -2568,12 +2580,14 @@ module ContextDev
 
                   def initialize: (
                     ?end_page: Integer,
+                    ?include_numbered_pages: bool,
                     ?ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::SharedParams::Parsers::Pdf::ocr,
                     ?start_page: Integer
                   ) -> void
 
                   def to_hash: -> {
                     end_page: Integer,
+                    include_numbered_pages: bool,
                     ocr: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::SharedParams::Parsers::Pdf::ocr,
                     start_page: Integer
                   }

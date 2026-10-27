@@ -8,7 +8,7 @@ module ContextDev
       #
       # Convert uploaded file bytes into Markdown and optional HTML.
       #
-      # @overload handle(body:, client: nil, extension: nil, include_images: nil, include_links: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, zdr: nil, request_options: {})
+      # @overload handle(body:, client: nil, extension: nil, include_images: nil, include_links: nil, include_numbered_pages: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, zdr: nil, request_options: {})
       #
       # @param body [Pathname, StringIO, IO, String, ContextDev::FilePart] Body param
       #
@@ -19,6 +19,8 @@ module ContextDev
       # @param include_images [Boolean] Query param: Include image references in Markdown output
       #
       # @param include_links [Boolean] Query param: Preserve hyperlinks in Markdown output
+      #
+      # @param include_numbered_pages [Boolean] Query param: Start each PDF page in the Markdown with a `<!-- page N -->` line,
       #
       # @param ocr [Boolean] Query param: Read text from images and scanned PDF pages. PDF page ranges still
       #
