@@ -68,7 +68,7 @@ module ContextDev
         filters: nil,
         # `fast` matches people on basic criteria (e.g. their role, location or
         # background); `ultra` plans a deeper search, judges each candidate against every
-        # criterion in the query. Complex `ultra` searches can take up to 60 seconds to
+        # criterion in the query. Complex `ultra` searches can take up to 30 seconds to
         # complete, so allow for that in your client timeout.
         mode: nil,
         # Labels for filtering usage in the dashboard.
