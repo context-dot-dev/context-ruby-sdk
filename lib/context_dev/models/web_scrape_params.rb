@@ -58,6 +58,12 @@ module ContextDev
       #   @return [ContextDev::Models::WebScrapeParams::ParseParams::CustomParser, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser, nil]
       optional :parse_params, union: -> { ContextDev::WebScrapeParams::ParseParams }, api_name: :parseParams
 
+      # @!attribute policies
+      #   Access policy IDs to apply. A URL must pass every policy.
+      #
+      #   @return [Array<String>, nil]
+      optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute product_params
       #   Product options. Requires formats.product: true.
       #
@@ -97,7 +103,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebScrapeParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebScrapeParams::Zdr }
 
-      # @!method initialize(formats:, url:, highlights_params: nil, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, product_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(formats:, url:, highlights_params: nil, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, policies: nil, product_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScrapeParams} for more details.
       #
@@ -116,6 +122,8 @@ module ContextDev
       #   @param max_age_ms [Integer] Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
       #
       #   @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams::CustomParser, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser] Requires `formats.parse: true`; required when it is set.
+      #
+      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
       #
       #   @param product_params [ContextDev::Models::WebScrapeParams::ProductParams] Product options. Requires formats.product: true.
       #

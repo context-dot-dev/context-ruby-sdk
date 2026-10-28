@@ -6,6 +6,7 @@ module ContextDev
         target: ContextDev::Models::MonitorCreateParams::target,
         change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
         mode: ContextDev::Models::MonitorCreateParams::mode,
+        policies: ::Array[String],
         schedule: ContextDev::MonitorCreateParams::Schedule,
         tags: ::Array[String],
         webhook: ContextDev::MonitorCreateParams::Webhook?
@@ -32,6 +33,10 @@ module ContextDev
         ContextDev::Models::MonitorCreateParams::mode
       ) -> ContextDev::Models::MonitorCreateParams::mode
 
+      attr_reader policies: ::Array[String]?
+
+      def policies=: (::Array[String]) -> ::Array[String]
+
       attr_reader schedule: ContextDev::MonitorCreateParams::Schedule?
 
       def schedule=: (
@@ -49,6 +54,7 @@ module ContextDev
         target: ContextDev::Models::MonitorCreateParams::target,
         ?change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
         ?mode: ContextDev::Models::MonitorCreateParams::mode,
+        ?policies: ::Array[String],
         ?schedule: ContextDev::MonitorCreateParams::Schedule,
         ?tags: ::Array[String],
         ?webhook: ContextDev::MonitorCreateParams::Webhook?,
@@ -60,6 +66,7 @@ module ContextDev
         target: ContextDev::Models::MonitorCreateParams::target,
         change_detection: ContextDev::Models::MonitorCreateParams::change_detection,
         mode: ContextDev::Models::MonitorCreateParams::mode,
+        policies: ::Array[String],
         schedule: ContextDev::MonitorCreateParams::Schedule,
         tags: ::Array[String],
         webhook: ContextDev::MonitorCreateParams::Webhook?,

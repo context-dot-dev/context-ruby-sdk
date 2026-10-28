@@ -35,6 +35,12 @@ module ContextDev
       #   @return [Integer, nil]
       optional :max_age_ms, Integer, nil?: true
 
+      # @!attribute policies
+      #   Comma-separated access policy IDs to apply. A URL must pass every policy.
+      #
+      #   @return [Array<String>, nil]
+      optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute tags
       #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
@@ -54,7 +60,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebExtractStyleguideParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebExtractStyleguideParams::Zdr }
 
-      # @!method initialize(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractStyleguideParams} for more details.
       #
@@ -65,6 +71,8 @@ module ContextDev
       #   @param domain [String] Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
       #
       #   @param max_age_ms [Integer, nil] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
+      #
+      #   @param policies [Array<String>] Comma-separated access policy IDs to apply. A URL must pass every policy.
       #
       #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #

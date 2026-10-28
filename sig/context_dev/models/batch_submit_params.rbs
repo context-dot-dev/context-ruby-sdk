@@ -3,6 +3,7 @@ module ContextDev
     type batch_submit_params =
       {
         input: ContextDev::Models::BatchSubmitParams::input,
+        policies: ::Array[String],
         tags: ::Array[String],
         webhook: ContextDev::BatchSubmitParams::Webhook,
         webhook_url: String,
@@ -15,6 +16,10 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       attr_accessor input: ContextDev::Models::BatchSubmitParams::input
+
+      attr_reader policies: ::Array[String]?
+
+      def policies=: (::Array[String]) -> ::Array[String]
 
       attr_reader tags: ::Array[String]?
 
@@ -36,6 +41,7 @@ module ContextDev
 
       def initialize: (
         input: ContextDev::Models::BatchSubmitParams::input,
+        ?policies: ::Array[String],
         ?tags: ::Array[String],
         ?webhook: ContextDev::BatchSubmitParams::Webhook,
         ?webhook_url: String,
@@ -45,6 +51,7 @@ module ContextDev
 
       def to_hash: -> {
         input: ContextDev::Models::BatchSubmitParams::input,
+        policies: ::Array[String],
         tags: ::Array[String],
         webhook: ContextDev::BatchSubmitParams::Webhook,
         webhook_url: String,

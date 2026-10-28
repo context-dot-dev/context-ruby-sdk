@@ -5,11 +5,13 @@ module ContextDev
     class Utility
       # Queue brand or styleguide data so a later lookup can return sooner.
       #
-      # @overload prefetch(identifier:, type:, tags: nil, timeout_opts: nil, request_options: {})
+      # @overload prefetch(identifier:, type:, policies: nil, tags: nil, timeout_opts: nil, request_options: {})
       #
       # @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier] Identifier of the target to prefetch. Provide exactly one of domain or email.
       #
       # @param type [Symbol, ContextDev::Models::UtilityPrefetchParams::Type] Data to prefetch.
+      #
+      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
       #
       # @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #

@@ -5,6 +5,7 @@ module ContextDev
         monitor_id: String,
         change_detection: ContextDev::Models::MonitorUpdateParams::change_detection,
         name: String,
+        policies: ::Array[String],
         schedule: ContextDev::MonitorUpdateParams::Schedule,
         status: ContextDev::Models::MonitorUpdateParams::status,
         tags: ::Array[String],
@@ -28,6 +29,10 @@ module ContextDev
       attr_reader name: String?
 
       def name=: (String) -> String
+
+      attr_reader policies: ::Array[String]?
+
+      def policies=: (::Array[String]) -> ::Array[String]
 
       attr_reader schedule: ContextDev::MonitorUpdateParams::Schedule?
 
@@ -57,6 +62,7 @@ module ContextDev
         monitor_id: String,
         ?change_detection: ContextDev::Models::MonitorUpdateParams::change_detection,
         ?name: String,
+        ?policies: ::Array[String],
         ?schedule: ContextDev::MonitorUpdateParams::Schedule,
         ?status: ContextDev::Models::MonitorUpdateParams::status,
         ?tags: ::Array[String],
@@ -69,6 +75,7 @@ module ContextDev
         monitor_id: String,
         change_detection: ContextDev::Models::MonitorUpdateParams::change_detection,
         name: String,
+        policies: ::Array[String],
         schedule: ContextDev::MonitorUpdateParams::Schedule,
         status: ContextDev::Models::MonitorUpdateParams::status,
         tags: ::Array[String],

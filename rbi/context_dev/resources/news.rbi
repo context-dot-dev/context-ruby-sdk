@@ -17,6 +17,7 @@ module ContextDev
           cursor: T.nilable(String),
           filter_by: ContextDev::NewsSearchParams::FilterBy::OrHash,
           limit: Integer,
+          policies: T::Array[String],
           sort_by: ContextDev::NewsSearchParams::SortBy::OrHash,
           tags: T::Array[String],
           request_options: ContextDev::RequestOptions::OrHash
@@ -34,6 +35,8 @@ module ContextDev
         filter_by: nil,
         # Maximum results to return. Defaults to 10.
         limit: nil,
+        # Access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Result ordering. Defaults to newest for entity searches. Natural-language
         # searches are always ordered by relevance.
         sort_by: nil,

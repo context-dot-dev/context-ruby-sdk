@@ -54,6 +54,13 @@ module ContextDev
       sig { returns(T.nilable(Integer)) }
       attr_accessor :max_age_ms
 
+      # Comma-separated access policy IDs to apply. A URL must pass every policy.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :policies
+
+      sig { params(policies: T::Array[String]).void }
+      attr_writer :policies
+
       # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
@@ -96,6 +103,7 @@ module ContextDev
           direct_url: String,
           domain: String,
           max_age_ms: T.nilable(Integer),
+          policies: T::Array[String],
           tags: T::Array[String],
           timeout_opts:
             ContextDev::WebExtractStyleguideParams::TimeoutOpts::OrHash,
@@ -116,6 +124,8 @@ module ContextDev
         # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
         # year. `0` refreshes.
         max_age_ms: nil,
+        # Comma-separated access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
         # Request deadline and what to return when it passes.
@@ -135,6 +145,7 @@ module ContextDev
             direct_url: String,
             domain: String,
             max_age_ms: T.nilable(Integer),
+            policies: T::Array[String],
             tags: T::Array[String],
             timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts,
             zdr: ContextDev::WebExtractStyleguideParams::Zdr::OrSymbol,

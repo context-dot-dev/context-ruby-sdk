@@ -56,6 +56,7 @@ module ContextDev
           last_error: ContextDev::Models::MonitorListResponse::Data::LastError?,
           last_run_at: Time?,
           next_run_at: Time?,
+          policies: ::Array[String],
           tags: ::Array[String],
           webhook: ContextDev::Models::MonitorListResponse::Data::Webhook?,
           webhook_failure: ContextDev::Models::MonitorListResponse::Data::WebhookFailure?
@@ -90,6 +91,10 @@ module ContextDev
 
         attr_accessor next_run_at: Time?
 
+        attr_reader policies: ::Array[String]?
+
+        def policies=: (::Array[String]) -> ::Array[String]
+
         attr_reader tags: ::Array[String]?
 
         def tags=: (::Array[String]) -> ::Array[String]
@@ -113,6 +118,7 @@ module ContextDev
           ?last_error: ContextDev::Models::MonitorListResponse::Data::LastError?,
           ?last_run_at: Time?,
           ?next_run_at: Time?,
+          ?policies: ::Array[String],
           ?tags: ::Array[String],
           ?webhook: ContextDev::Models::MonitorListResponse::Data::Webhook?,
           ?webhook_failure: ContextDev::Models::MonitorListResponse::Data::WebhookFailure?
@@ -133,6 +139,7 @@ module ContextDev
           last_error: ContextDev::Models::MonitorListResponse::Data::LastError?,
           last_run_at: Time?,
           next_run_at: Time?,
+          policies: ::Array[String],
           tags: ::Array[String],
           webhook: ContextDev::Models::MonitorListResponse::Data::Webhook?,
           webhook_failure: ContextDev::Models::MonitorListResponse::Data::WebhookFailure?

@@ -13,6 +13,12 @@ module ContextDev
       #   @return [ContextDev::Models::BatchSubmitParams::Input::Scrape, ContextDev::Models::BatchSubmitParams::Input::Crawl]
       required :input, union: -> { ContextDev::BatchSubmitParams::Input }
 
+      # @!attribute policies
+      #   Access policy IDs to apply to every page. A URL must pass every policy.
+      #
+      #   @return [Array<String>, nil]
+      optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute tags
       #   Tags stored on the batch. Filter the batch list by them later.
       #
@@ -40,11 +46,13 @@ module ContextDev
       #   @return [String, nil]
       optional :idempotency_key, String
 
-      # @!method initialize(input:, tags: nil, webhook: nil, webhook_url: nil, idempotency_key: nil, request_options: {})
+      # @!method initialize(input:, policies: nil, tags: nil, webhook: nil, webhook_url: nil, idempotency_key: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchSubmitParams} for more details.
       #
       #   @param input [ContextDev::Models::BatchSubmitParams::Input::Scrape, ContextDev::Models::BatchSubmitParams::Input::Crawl] Choose a URL list or a site crawl.
+      #
+      #   @param policies [Array<String>] Access policy IDs to apply to every page. A URL must pass every policy.
       #
       #   @param tags [Array<String>] Tags stored on the batch. Filter the batch list by them later.
       #

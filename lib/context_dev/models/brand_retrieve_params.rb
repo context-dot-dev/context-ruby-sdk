@@ -77,6 +77,12 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute policies
+          #   Access policy IDs to apply. A URL must pass every policy.
+          #
+          #   @return [Array<String>, nil]
+          optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute tags
           #   Labels for filtering usage in the dashboard.
           #
@@ -91,7 +97,7 @@ module ContextDev
                    -> { ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts },
                    api_name: :timeoutOpts
 
-          # @!method initialize(domain:, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, timeout_opts: nil, type: :by_domain)
+          # @!method initialize(domain:, force_language: nil, max_age_ms: nil, max_speed: nil, policies: nil, tags: nil, timeout_opts: nil, type: :by_domain)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByDomain} for more details.
           #
@@ -104,6 +110,8 @@ module ContextDev
           #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
@@ -324,6 +332,12 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute policies
+          #   Access policy IDs to apply. A URL must pass every policy.
+          #
+          #   @return [Array<String>, nil]
+          optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute tags
           #   Labels for filtering usage in the dashboard.
           #
@@ -338,7 +352,7 @@ module ContextDev
                    -> { ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts },
                    api_name: :timeoutOpts
 
-          # @!method initialize(name:, country_gl: nil, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, timeout_opts: nil, type: :by_name)
+          # @!method initialize(name:, country_gl: nil, force_language: nil, max_age_ms: nil, max_speed: nil, policies: nil, tags: nil, timeout_opts: nil, type: :by_name)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByName} for more details.
           #
@@ -354,6 +368,8 @@ module ContextDev
           #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
@@ -818,6 +834,12 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute policies
+          #   Access policy IDs to apply. A URL must pass every policy.
+          #
+          #   @return [Array<String>, nil]
+          optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute tags
           #   Labels for filtering usage in the dashboard.
           #
@@ -832,7 +854,7 @@ module ContextDev
                    -> { ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts },
                    api_name: :timeoutOpts
 
-          # @!method initialize(email:, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, timeout_opts: nil, type: :by_email)
+          # @!method initialize(email:, force_language: nil, max_age_ms: nil, max_speed: nil, policies: nil, tags: nil, timeout_opts: nil, type: :by_email)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByEmail} for more details.
           #
@@ -847,6 +869,8 @@ module ContextDev
           #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
@@ -1060,6 +1084,12 @@ module ContextDev
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
+          # @!attribute policies
+          #   Access policy IDs to apply. A URL must pass every policy.
+          #
+          #   @return [Array<String>, nil]
+          optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute tags
           #   Labels for filtering usage in the dashboard.
           #
@@ -1080,7 +1110,7 @@ module ContextDev
                    -> { ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts },
                    api_name: :timeoutOpts
 
-          # @!method initialize(ticker:, force_language: nil, max_age_ms: nil, max_speed: nil, tags: nil, ticker_exchange: nil, timeout_opts: nil, type: :by_ticker)
+          # @!method initialize(ticker:, force_language: nil, max_age_ms: nil, max_speed: nil, policies: nil, tags: nil, ticker_exchange: nil, timeout_opts: nil, type: :by_ticker)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByTicker} for more details.
           #
@@ -1094,6 +1124,8 @@ module ContextDev
           #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
@@ -1372,6 +1404,12 @@ module ContextDev
           #   @return [Symbol, :by_direct_url]
           required :type, const: :by_direct_url
 
+          # @!attribute policies
+          #   Access policy IDs to apply. A URL must pass every policy.
+          #
+          #   @return [Array<String>, nil]
+          optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute tags
           #   Labels for filtering usage in the dashboard.
           #
@@ -1386,7 +1424,7 @@ module ContextDev
                    -> { ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts },
                    api_name: :timeoutOpts
 
-          # @!method initialize(direct_url:, tags: nil, timeout_opts: nil, type: :by_direct_url)
+          # @!method initialize(direct_url:, policies: nil, tags: nil, timeout_opts: nil, type: :by_direct_url)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL} for more details.
           #
@@ -1394,6 +1432,8 @@ module ContextDev
           #   identifiers are excluded.
           #
           #   @param direct_url [String] Full http(s) URL to fetch brand data from (e.g., 'https://stripe.com/enterprise'
+          #
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
@@ -1504,6 +1544,12 @@ module ContextDev
           #   @return [String, Float, nil]
           optional :phone, union: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone }
 
+          # @!attribute policies
+          #   Access policy IDs to apply. A URL must pass every policy.
+          #
+          #   @return [Array<String>, nil]
+          optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
           # @!attribute tags
           #   Labels for filtering usage in the dashboard.
           #
@@ -1518,7 +1564,7 @@ module ContextDev
                    -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts },
                    api_name: :timeoutOpts
 
-          # @!method initialize(transaction_info:, city: nil, country_gl: nil, force_language: nil, high_confidence_only: nil, max_speed: nil, mcc: nil, phone: nil, tags: nil, timeout_opts: nil, type: :by_transaction)
+          # @!method initialize(transaction_info:, city: nil, country_gl: nil, force_language: nil, high_confidence_only: nil, max_speed: nil, mcc: nil, phone: nil, policies: nil, tags: nil, timeout_opts: nil, type: :by_transaction)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByTransaction} for more details.
           #
@@ -1540,6 +1586,8 @@ module ContextDev
           #   @param mcc [String, Float] Optional Merchant Category Code (MCC) to help identify the business category or
           #
           #   @param phone [String, Float] Optional phone number from the transaction to help verify brand match.
+          #
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #

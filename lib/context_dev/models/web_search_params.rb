@@ -79,6 +79,12 @@ module ContextDev
       #   @return [Integer, nil]
       optional :num_results, Integer, api_name: :numResults
 
+      # @!attribute policies
+      #   Access policy IDs to apply. A URL must pass every policy.
+      #
+      #   @return [Array<String>, nil]
+      optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute query_fanout
       #   Currently has no effect.
       #
@@ -104,7 +110,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebSearchParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebSearchParams::Zdr }
 
-      # @!method initialize(query:, country: nil, description_max_characters: nil, exclude_domains: nil, freshness: nil, highlights_options: nil, include_domains: nil, languages: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(query:, country: nil, description_max_characters: nil, exclude_domains: nil, freshness: nil, highlights_options: nil, include_domains: nil, languages: nil, markdown_options: nil, num_results: nil, policies: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebSearchParams} for more details.
       #
@@ -127,6 +133,8 @@ module ContextDev
       #   @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions, nil] Inline Markdown scraping for each result. Set `enabled: true` to activate.
       #
       #   @param num_results [Integer] Number of results to request and return (1–100). Defaults to 10.
+      #
+      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
       #
       #   @param query_fanout [Boolean] Currently has no effect.
       #

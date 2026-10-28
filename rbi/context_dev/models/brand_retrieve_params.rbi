@@ -125,6 +125,13 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
+          # Access policy IDs to apply. A URL must pass every policy.
+          sig { returns(T.nilable(T::Array[String])) }
+          attr_reader :policies
+
+          sig { params(policies: T::Array[String]).void }
+          attr_writer :policies
+
           # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
@@ -160,6 +167,7 @@ module ContextDev
                 ),
               max_age_ms: Integer,
               max_speed: T::Boolean,
+              policies: T::Array[String],
               tags: T::Array[String],
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::OrHash,
@@ -177,6 +185,8 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
+            # Access policy IDs to apply. A URL must pass every policy.
+            policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
             # Request deadline and what to return when it passes.
@@ -197,6 +207,7 @@ module ContextDev
                   ),
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
+                policies: T::Array[String],
                 tags: T::Array[String],
                 timeout_opts:
                   ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts
@@ -991,6 +1002,13 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
+          # Access policy IDs to apply. A URL must pass every policy.
+          sig { returns(T.nilable(T::Array[String])) }
+          attr_reader :policies
+
+          sig { params(policies: T::Array[String]).void }
+          attr_writer :policies
+
           # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
@@ -1029,6 +1047,7 @@ module ContextDev
                 ),
               max_age_ms: Integer,
               max_speed: T::Boolean,
+              policies: T::Array[String],
               tags: T::Array[String],
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::OrHash,
@@ -1049,6 +1068,8 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
+            # Access policy IDs to apply. A URL must pass every policy.
+            policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
             # Request deadline and what to return when it passes.
@@ -1071,6 +1092,7 @@ module ContextDev
                   ),
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
+                policies: T::Array[String],
                 tags: T::Array[String],
                 timeout_opts:
                   ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts
@@ -3067,6 +3089,13 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
+          # Access policy IDs to apply. A URL must pass every policy.
+          sig { returns(T.nilable(T::Array[String])) }
+          attr_reader :policies
+
+          sig { params(policies: T::Array[String]).void }
+          attr_writer :policies
+
           # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
@@ -3104,6 +3133,7 @@ module ContextDev
                 ),
               max_age_ms: Integer,
               max_speed: T::Boolean,
+              policies: T::Array[String],
               tags: T::Array[String],
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::OrHash,
@@ -3121,6 +3151,8 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
+            # Access policy IDs to apply. A URL must pass every policy.
+            policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
             # Request deadline and what to return when it passes.
@@ -3141,6 +3173,7 @@ module ContextDev
                   ),
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
+                policies: T::Array[String],
                 tags: T::Array[String],
                 timeout_opts:
                   ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts
@@ -3916,6 +3949,13 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
+          # Access policy IDs to apply. A URL must pass every policy.
+          sig { returns(T.nilable(T::Array[String])) }
+          attr_reader :policies
+
+          sig { params(policies: T::Array[String]).void }
+          attr_writer :policies
+
           # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
@@ -3970,6 +4010,7 @@ module ContextDev
                 ),
               max_age_ms: Integer,
               max_speed: T::Boolean,
+              policies: T::Array[String],
               tags: T::Array[String],
               ticker_exchange:
                 ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::OrSymbol,
@@ -3989,6 +4030,8 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
+            # Access policy IDs to apply. A URL must pass every policy.
+            policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
             # Stock exchange code.
@@ -4011,6 +4054,7 @@ module ContextDev
                   ),
                 max_age_ms: Integer,
                 max_speed: T::Boolean,
+                policies: T::Array[String],
                 tags: T::Array[String],
                 ticker_exchange:
                   ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::OrSymbol,
@@ -5149,6 +5193,13 @@ module ContextDev
           sig { returns(Symbol) }
           attr_accessor :type
 
+          # Access policy IDs to apply. A URL must pass every policy.
+          sig { returns(T.nilable(T::Array[String])) }
+          attr_reader :policies
+
+          sig { params(policies: T::Array[String]).void }
+          attr_writer :policies
+
           # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
@@ -5179,6 +5230,7 @@ module ContextDev
           sig do
             params(
               direct_url: String,
+              policies: T::Array[String],
               tags: T::Array[String],
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::OrHash,
@@ -5190,6 +5242,8 @@ module ContextDev
             # 'https://stripe.com/enterprise'). Only this URL is fetched — not the entire
             # internet.
             direct_url:,
+            # Access policy IDs to apply. A URL must pass every policy.
+            policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
             # Request deadline and what to return when it passes.
@@ -5204,6 +5258,7 @@ module ContextDev
               {
                 direct_url: String,
                 type: Symbol,
+                policies: T::Array[String],
                 tags: T::Array[String],
                 timeout_opts:
                   ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts
@@ -5418,6 +5473,13 @@ module ContextDev
           end
           attr_writer :phone
 
+          # Access policy IDs to apply. A URL must pass every policy.
+          sig { returns(T.nilable(T::Array[String])) }
+          attr_reader :policies
+
+          sig { params(policies: T::Array[String]).void }
+          attr_writer :policies
+
           # Labels for filtering usage in the dashboard.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
@@ -5461,6 +5523,7 @@ module ContextDev
                 ContextDev::BrandRetrieveParams::Body::ByTransaction::Mcc::Variants,
               phone:
                 ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone::Variants,
+              policies: T::Array[String],
               tags: T::Array[String],
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::OrHash,
@@ -5488,6 +5551,8 @@ module ContextDev
             mcc: nil,
             # Optional phone number from the transaction to help verify brand match.
             phone: nil,
+            # Access policy IDs to apply. A URL must pass every policy.
+            policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
             # Request deadline and what to return when it passes.
@@ -5515,6 +5580,7 @@ module ContextDev
                   ContextDev::BrandRetrieveParams::Body::ByTransaction::Mcc::Variants,
                 phone:
                   ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone::Variants,
+                policies: T::Array[String],
                 tags: T::Array[String],
                 timeout_opts:
                   ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts

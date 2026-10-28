@@ -47,6 +47,13 @@ module ContextDev
       sig { params(name: String).void }
       attr_writer :name
 
+      # Access policy IDs to apply to every run. Send an empty list to remove them.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :policies
+
+      sig { params(policies: T::Array[String]).void }
+      attr_writer :policies
+
       # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
       # every 6 hours or every 2 days. The total interval (frequency × unit) must be
       # between 10 minutes and 1 year.
@@ -122,6 +129,7 @@ module ContextDev
               ContextDev::MonitorUpdateParams::ChangeDetection::Semantic::OrHash
             ),
           name: String,
+          policies: T::Array[String],
           schedule: ContextDev::MonitorUpdateParams::Schedule::OrHash,
           status: ContextDev::MonitorUpdateParams::Status::OrSymbol,
           tags: T::Array[String],
@@ -143,6 +151,8 @@ module ContextDev
         change_detection: nil,
         # Display name for the monitor.
         name: nil,
+        # Access policy IDs to apply to every run. Send an empty list to remove them.
+        policies: nil,
         # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
         # every 6 hours or every 2 days. The total interval (frequency × unit) must be
         # between 10 minutes and 1 year.
@@ -169,6 +179,7 @@ module ContextDev
                 ContextDev::MonitorUpdateParams::ChangeDetection::Semantic
               ),
             name: String,
+            policies: T::Array[String],
             schedule: ContextDev::MonitorUpdateParams::Schedule,
             status: ContextDev::MonitorUpdateParams::Status::OrSymbol,
             tags: T::Array[String],

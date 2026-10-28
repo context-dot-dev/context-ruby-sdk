@@ -98,6 +98,13 @@ module ContextDev
       sig { params(pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash).void }
       attr_writer :pdf
 
+      # Access policy IDs to apply. A URL must pass every policy.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :policies
+
+      sig { params(policies: T::Array[String]).void }
+      attr_writer :policies
+
       # Wait briefly for CSS animations and transitions to settle before reading each
       # page.
       sig { returns(T.nilable(T::Boolean)) }
@@ -208,6 +215,7 @@ module ContextDev
           max_depth: Integer,
           max_pages: Integer,
           pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash,
+          policies: T::Array[String],
           settle_animations: T::Boolean,
           shorten_base64_images: T::Boolean,
           source_preference:
@@ -255,6 +263,8 @@ module ContextDev
         max_pages: nil,
         # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         pdf: nil,
+        # Access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Wait briefly for CSS animations and transitions to settle before reading each
         # page.
         settle_animations: nil,
@@ -304,6 +314,7 @@ module ContextDev
             max_depth: Integer,
             max_pages: Integer,
             pdf: ContextDev::WebWebCrawlMdParams::Pdf,
+            policies: T::Array[String],
             settle_animations: T::Boolean,
             shorten_base64_images: T::Boolean,
             source_preference:

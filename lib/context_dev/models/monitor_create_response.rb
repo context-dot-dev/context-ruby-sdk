@@ -99,6 +99,12 @@ module ContextDev
       #   @return [Time, nil]
       optional :next_run_at, Time, nil?: true
 
+      # @!attribute policies
+      #   Access policy IDs applied to every run.
+      #
+      #   @return [Array<String>, nil]
+      optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute schedule
       #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
       #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
@@ -127,7 +133,7 @@ module ContextDev
       #   @return [ContextDev::Models::MonitorCreateResponse::WebhookFailure, nil]
       optional :webhook_failure, -> { ContextDev::Models::MonitorCreateResponse::WebhookFailure }, nil?: true
 
-      # @!method initialize(id:, change_detection:, created_at:, initial_run_id:, mode:, name:, request_id:, status:, target:, updated_at:, baseline: nil, key_metadata: nil, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, schedule: nil, tags: nil, webhook: nil, webhook_failure: nil)
+      # @!method initialize(id:, change_detection:, created_at:, initial_run_id:, mode:, name:, request_id:, status:, target:, updated_at:, baseline: nil, key_metadata: nil, last_change_at: nil, last_error: nil, last_run_at: nil, next_run_at: nil, policies: nil, schedule: nil, tags: nil, webhook: nil, webhook_failure: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorCreateResponse} for more details.
       #
@@ -162,6 +168,8 @@ module ContextDev
       #   @param last_run_at [Time, nil]
       #
       #   @param next_run_at [Time, nil] When the next scheduled run is due; null while paused.
+      #
+      #   @param policies [Array<String>] Access policy IDs applied to every run.
       #
       #   @param schedule [ContextDev::Models::MonitorCreateResponse::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #

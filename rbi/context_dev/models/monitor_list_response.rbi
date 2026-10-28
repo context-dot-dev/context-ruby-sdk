@@ -183,6 +183,13 @@ module ContextDev
         sig { returns(T.nilable(Time)) }
         attr_accessor :next_run_at
 
+        # Access policy IDs applied to every run.
+        sig { returns(T.nilable(T::Array[String])) }
+        attr_reader :policies
+
+        sig { params(policies: T::Array[String]).void }
+        attr_writer :policies
+
         # Labels for filtering monitors, their changes, and their usage.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :tags
@@ -269,6 +276,7 @@ module ContextDev
               ),
             last_run_at: T.nilable(Time),
             next_run_at: T.nilable(Time),
+            policies: T::Array[String],
             tags: T::Array[String],
             webhook:
               T.nilable(
@@ -308,6 +316,8 @@ module ContextDev
           last_run_at: nil,
           # When the next scheduled run is due; null while paused.
           next_run_at: nil,
+          # Access policy IDs applied to every run.
+          policies: nil,
           # Labels for filtering monitors, their changes, and their usage.
           tags: nil,
           # Webhook destination and delivery settings. Null means no webhook is configured.
@@ -346,6 +356,7 @@ module ContextDev
                 ),
               last_run_at: T.nilable(Time),
               next_run_at: T.nilable(Time),
+              policies: T::Array[String],
               tags: T::Array[String],
               webhook:
                 T.nilable(

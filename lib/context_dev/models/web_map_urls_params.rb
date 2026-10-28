@@ -38,6 +38,12 @@ module ContextDev
       #   @return [Integer, nil]
       optional :max_links, Integer
 
+      # @!attribute policies
+      #   Comma-separated access policy IDs to apply. A URL must pass every policy.
+      #
+      #   @return [Array<String>, nil]
+      optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute search
       #   Filter URLs by a topic or phrase, most relevant first.
       #
@@ -77,7 +83,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebMapURLsParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebMapURLsParams::Zdr }
 
-      # @!method initialize(domain:, exclude_url_regex: nil, headers: nil, include_subdomains: nil, max_links: nil, search: nil, sitemap_url: nil, tags: nil, timeout_opts: nil, url_regex: nil, zdr: nil, request_options: {})
+      # @!method initialize(domain:, exclude_url_regex: nil, headers: nil, include_subdomains: nil, max_links: nil, policies: nil, search: nil, sitemap_url: nil, tags: nil, timeout_opts: nil, url_regex: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebMapURLsParams} for more details.
       #
@@ -90,6 +96,8 @@ module ContextDev
       #   @param include_subdomains [Boolean] Include URLs on subdomains.
       #
       #   @param max_links [Integer] Maximum number of URLs to return.
+      #
+      #   @param policies [Array<String>] Comma-separated access policy IDs to apply. A URL must pass every policy.
       #
       #   @param search [String] Filter URLs by a topic or phrase, most relevant first.
       #

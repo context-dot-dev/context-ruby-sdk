@@ -10,7 +10,7 @@ module ContextDev
       # Watch a page, URL inventory, or extracted website data on a schedule. A run
       # starts immediately to capture the baseline.
       #
-      # @overload create(name:, target:, change_detection: nil, mode: nil, schedule: nil, tags: nil, webhook: nil, request_options: {})
+      # @overload create(name:, target:, change_detection: nil, mode: nil, policies: nil, schedule: nil, tags: nil, webhook: nil, request_options: {})
       #
       # @param name [String] Display name for the monitor.
       #
@@ -19,6 +19,8 @@ module ContextDev
       # @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract targets and page targ
       #
       # @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Always `web`. Optional.
+      #
+      # @param policies [Array<String>] Access policy IDs to apply to every run.
       #
       # @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #
@@ -68,13 +70,15 @@ module ContextDev
       # Update a monitor. Changing its target or change detection replaces the baseline
       # and queues a new baseline run.
       #
-      # @overload update(monitor_id, change_detection: nil, name: nil, schedule: nil, status: nil, tags: nil, target: nil, webhook: nil, request_options: {})
+      # @overload update(monitor_id, change_detection: nil, name: nil, policies: nil, schedule: nil, status: nil, tags: nil, target: nil, webhook: nil, request_options: {})
       #
       # @param monitor_id [String] ID of the monitor.
       #
       # @param change_detection [ContextDev::Models::MonitorUpdateParams::ChangeDetection::Exact, ContextDev::Models::MonitorUpdateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract targets and page targ
       #
       # @param name [String] Display name for the monitor.
+      #
+      # @param policies [Array<String>] Access policy IDs to apply to every run. Send an empty list to remove them.
       #
       # @param schedule [ContextDev::Models::MonitorUpdateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #

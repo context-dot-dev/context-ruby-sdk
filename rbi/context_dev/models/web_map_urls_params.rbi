@@ -44,6 +44,13 @@ module ContextDev
       sig { params(max_links: Integer).void }
       attr_writer :max_links
 
+      # Comma-separated access policy IDs to apply. A URL must pass every policy.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :policies
+
+      sig { params(policies: T::Array[String]).void }
+      attr_writer :policies
+
       # Filter URLs by a topic or phrase, most relevant first.
       sig { returns(T.nilable(String)) }
       attr_reader :search
@@ -100,6 +107,7 @@ module ContextDev
           headers: T::Hash[Symbol, String],
           include_subdomains: T::Boolean,
           max_links: Integer,
+          policies: T::Array[String],
           search: String,
           sitemap_url: String,
           tags: T::Array[String],
@@ -121,6 +129,8 @@ module ContextDev
         include_subdomains: nil,
         # Maximum number of URLs to return.
         max_links: nil,
+        # Comma-separated access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Filter URLs by a topic or phrase, most relevant first.
         search: nil,
         # Fetch this sitemap instead of discovering sitemaps. Must belong to the domain or
@@ -148,6 +158,7 @@ module ContextDev
             headers: T::Hash[Symbol, String],
             include_subdomains: T::Boolean,
             max_links: Integer,
+            policies: T::Array[String],
             search: String,
             sitemap_url: String,
             tags: T::Array[String],

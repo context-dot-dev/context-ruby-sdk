@@ -22,6 +22,13 @@ module ContextDev
       end
       attr_accessor :input
 
+      # Access policy IDs to apply to every page. A URL must pass every policy.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :policies
+
+      sig { params(policies: T::Array[String]).void }
+      attr_writer :policies
+
       # Tags stored on the batch. Filter the batch list by them later.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
@@ -62,6 +69,7 @@ module ContextDev
               ContextDev::BatchSubmitParams::Input::Scrape::OrHash,
               ContextDev::BatchSubmitParams::Input::Crawl::OrHash
             ),
+          policies: T::Array[String],
           tags: T::Array[String],
           webhook: ContextDev::BatchSubmitParams::Webhook::OrHash,
           webhook_url: String,
@@ -72,6 +80,8 @@ module ContextDev
       def self.new(
         # Choose a URL list or a site crawl.
         input:,
+        # Access policy IDs to apply to every page. A URL must pass every policy.
+        policies: nil,
         # Tags stored on the batch. Filter the batch list by them later.
         tags: nil,
         # Where to send the batch's final-status event. Omit `retry` for one attempt; `{}`
@@ -95,6 +105,7 @@ module ContextDev
                 ContextDev::BatchSubmitParams::Input::Scrape,
                 ContextDev::BatchSubmitParams::Input::Crawl
               ),
+            policies: T::Array[String],
             tags: T::Array[String],
             webhook: ContextDev::BatchSubmitParams::Webhook,
             webhook_url: String,

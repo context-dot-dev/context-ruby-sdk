@@ -18,6 +18,7 @@ module ContextDev
         tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
         key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
+        policies: ::Array[String],
         webhook_delivery_id: String
       }
 
@@ -58,6 +59,10 @@ module ContextDev
         ContextDev::Models::BatchRetrieveResponse::KeyMetadata
       ) -> ContextDev::Models::BatchRetrieveResponse::KeyMetadata
 
+      attr_reader policies: ::Array[String]?
+
+      def policies=: (::Array[String]) -> ::Array[String]
+
       attr_reader webhook_delivery_id: String?
 
       def webhook_delivery_id=: (String) -> String
@@ -79,6 +84,7 @@ module ContextDev
         tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
         ?key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
+        ?policies: ::Array[String],
         ?webhook_delivery_id: String
       ) -> void
 
@@ -99,6 +105,7 @@ module ContextDev
         tags: ::Array[String],
         timing: ContextDev::Models::BatchRetrieveResponse::Timing,
         key_metadata: ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
+        policies: ::Array[String],
         webhook_delivery_id: String
       }
 

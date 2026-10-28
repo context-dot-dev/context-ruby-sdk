@@ -6,6 +6,7 @@ module ContextDev
         cursor: String?,
         filter_by: ContextDev::NewsSearchParams::FilterBy,
         limit: Integer,
+        policies: ::Array[String],
         sort_by: ContextDev::NewsSearchParams::SortBy,
         tags: ::Array[String]
       }
@@ -29,6 +30,10 @@ module ContextDev
 
       def limit=: (Integer) -> Integer
 
+      attr_reader policies: ::Array[String]?
+
+      def policies=: (::Array[String]) -> ::Array[String]
+
       attr_reader sort_by: ContextDev::NewsSearchParams::SortBy?
 
       def sort_by=: (
@@ -44,6 +49,7 @@ module ContextDev
         ?cursor: String?,
         ?filter_by: ContextDev::NewsSearchParams::FilterBy,
         ?limit: Integer,
+        ?policies: ::Array[String],
         ?sort_by: ContextDev::NewsSearchParams::SortBy,
         ?tags: ::Array[String],
         ?request_options: ContextDev::request_opts
@@ -54,6 +60,7 @@ module ContextDev
         cursor: String?,
         filter_by: ContextDev::NewsSearchParams::FilterBy,
         limit: Integer,
+        policies: ::Array[String],
         sort_by: ContextDev::NewsSearchParams::SortBy,
         tags: ::Array[String],
         request_options: ContextDev::RequestOptions

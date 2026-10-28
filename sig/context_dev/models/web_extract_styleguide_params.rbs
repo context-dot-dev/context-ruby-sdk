@@ -6,6 +6,7 @@ module ContextDev
         direct_url: String,
         domain: String,
         max_age_ms: Integer?,
+        policies: ::Array[String],
         tags: ::Array[String],
         timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts,
         zdr: ContextDev::Models::WebExtractStyleguideParams::zdr
@@ -32,6 +33,10 @@ module ContextDev
 
       attr_accessor max_age_ms: Integer?
 
+      attr_reader policies: ::Array[String]?
+
+      def policies=: (::Array[String]) -> ::Array[String]
+
       attr_reader tags: ::Array[String]?
 
       def tags=: (::Array[String]) -> ::Array[String]
@@ -53,6 +58,7 @@ module ContextDev
         ?direct_url: String,
         ?domain: String,
         ?max_age_ms: Integer?,
+        ?policies: ::Array[String],
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts,
         ?zdr: ContextDev::Models::WebExtractStyleguideParams::zdr,
@@ -64,6 +70,7 @@ module ContextDev
         direct_url: String,
         domain: String,
         max_age_ms: Integer?,
+        policies: ::Array[String],
         tags: ::Array[String],
         timeout_opts: ContextDev::WebExtractStyleguideParams::TimeoutOpts,
         zdr: ContextDev::Models::WebExtractStyleguideParams::zdr,

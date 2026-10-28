@@ -95,6 +95,12 @@ module ContextDev
       #   @return [ContextDev::Models::WebWebCrawlMdParams::Pdf, nil]
       optional :pdf, -> { ContextDev::WebWebCrawlMdParams::Pdf }
 
+      # @!attribute policies
+      #   Access policy IDs to apply. A URL must pass every policy.
+      #
+      #   @return [Array<String>, nil]
+      optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute settle_animations
       #   Wait briefly for CSS animations and transitions to settle before reading each
       #   page.
@@ -168,7 +174,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebWebCrawlMdParams::Zdr }
 
-      # @!method initialize(url:, country: nil, exclude_selectors: nil, exclude_url_regex: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, source_preference: nil, stop_after_ms: nil, tags: nil, timeout_opts: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @!method initialize(url:, country: nil, exclude_selectors: nil, exclude_url_regex: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, policies: nil, settle_animations: nil, shorten_base64_images: nil, source_preference: nil, stop_after_ms: nil, tags: nil, timeout_opts: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdParams} for more details.
       #
@@ -197,6 +203,8 @@ module ContextDev
       #   @param max_pages [Integer] Maximum pages to crawl.
       #
       #   @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+      #
+      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
       #
       #   @param settle_animations [Boolean] Wait briefly for CSS animations and transitions to settle before reading each pa
       #

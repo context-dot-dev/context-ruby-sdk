@@ -7,6 +7,7 @@ module ContextDev
         headers: ::Hash[Symbol, String],
         include_subdomains: bool,
         max_links: Integer,
+        policies: ::Array[String],
         search: String,
         sitemap_url: String,
         tags: ::Array[String],
@@ -37,6 +38,10 @@ module ContextDev
       attr_reader max_links: Integer?
 
       def max_links=: (Integer) -> Integer
+
+      attr_reader policies: ::Array[String]?
+
+      def policies=: (::Array[String]) -> ::Array[String]
 
       attr_reader search: String?
 
@@ -72,6 +77,7 @@ module ContextDev
         ?headers: ::Hash[Symbol, String],
         ?include_subdomains: bool,
         ?max_links: Integer,
+        ?policies: ::Array[String],
         ?search: String,
         ?sitemap_url: String,
         ?tags: ::Array[String],
@@ -87,6 +93,7 @@ module ContextDev
         headers: ::Hash[Symbol, String],
         include_subdomains: bool,
         max_links: Integer,
+        policies: ::Array[String],
         search: String,
         sitemap_url: String,
         tags: ::Array[String],

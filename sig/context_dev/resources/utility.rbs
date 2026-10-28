@@ -4,6 +4,7 @@ module ContextDev
       def prefetch: (
         identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
         type: ContextDev::Models::UtilityPrefetchParams::type_,
+        ?policies: ::Array[String],
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::UtilityPrefetchParams::TimeoutOpts,
         ?request_options: ContextDev::request_opts

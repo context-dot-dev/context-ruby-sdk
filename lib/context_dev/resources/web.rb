@@ -9,13 +9,15 @@ module ContextDev
       # Research the web and return a sourced answer in your JSON shape. Choose `fast`
       # for a short task or `ultra` for deeper research.
       #
-      # @overload answers(task:, json_format: nil, mode: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @overload answers(task:, json_format: nil, mode: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param task [String] Research task. The agent selects company/profile lookups, web searches, or page
       #
       # @param json_format [Hash{Symbol=>Object}] Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000 ch
       #
       # @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] `fast` prioritizes speed, with extra verification for people and companies; `ult
+      #
+      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
       #
       # @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
@@ -79,7 +81,7 @@ module ContextDev
       #
       # Extract colors, typography, spacing, and component styles from a website.
       #
-      # @overload extract_styleguide(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @overload extract_styleguide(color_scheme: nil, direct_url: nil, domain: nil, max_age_ms: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param color_scheme [Symbol, ContextDev::Models::WebExtractStyleguideParams::ColorScheme] Optional browser color scheme to emulate for websites that respond to prefers-co
       #
@@ -88,6 +90,8 @@ module ContextDev
       # @param domain [String] Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
       #
       # @param max_age_ms [Integer, nil] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
+      #
+      # @param policies [Array<String>] Comma-separated access policy IDs to apply. A URL must pass every policy.
       #
       # @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
@@ -123,7 +127,7 @@ module ContextDev
       # Discover a site's URLs, with page titles, descriptions, keywords, and language
       # when available. Metadata can be missing on newly discovered URLs.
       #
-      # @overload map_urls(domain:, exclude_url_regex: nil, headers: nil, include_subdomains: nil, max_links: nil, search: nil, sitemap_url: nil, tags: nil, timeout_opts: nil, url_regex: nil, zdr: nil, request_options: {})
+      # @overload map_urls(domain:, exclude_url_regex: nil, headers: nil, include_subdomains: nil, max_links: nil, policies: nil, search: nil, sitemap_url: nil, tags: nil, timeout_opts: nil, url_regex: nil, zdr: nil, request_options: {})
       #
       # @param domain [String] Domain to map, e.g. `stripe.com`.
       #
@@ -134,6 +138,8 @@ module ContextDev
       # @param include_subdomains [Boolean] Include URLs on subdomains.
       #
       # @param max_links [Integer] Maximum number of URLs to return.
+      #
+      # @param policies [Array<String>] Comma-separated access policy IDs to apply. A URL must pass every policy.
       #
       # @param search [String] Filter URLs by a topic or phrase, most relevant first.
       #
@@ -177,7 +183,7 @@ module ContextDev
       # Scrape anything from a URL on the internet. Returns the outputs you enable in
       # formats. Handles PDFs, DOCX, PPT, XLSX, and 40 other file formats.
       #
-      # @overload scrape(formats:, url:, highlights_params: nil, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, product_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @overload scrape(formats:, url:, highlights_params: nil, image_params: nil, json_params: nil, markdown_params: nil, max_age_ms: nil, parse_params: nil, policies: nil, product_params: nil, screenshot_params: nil, shared_params: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param formats [ContextDev::Models::WebScrapeParams::Formats] Outputs to return. Set at least one to `true`.
       #
@@ -194,6 +200,8 @@ module ContextDev
       # @param max_age_ms [Integer] Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
       #
       # @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams::CustomParser, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser] Requires `formats.parse: true`; required when it is set.
+      #
+      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
       #
       # @param product_params [ContextDev::Models::WebScrapeParams::ProductParams] Product options. Requires formats.product: true.
       #
@@ -295,7 +303,7 @@ module ContextDev
       # Search the web and optionally return page content or relevant passages with each
       # result.
       #
-      # @overload search(query:, country: nil, description_max_characters: nil, exclude_domains: nil, freshness: nil, highlights_options: nil, include_domains: nil, languages: nil, markdown_options: nil, num_results: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @overload search(query:, country: nil, description_max_characters: nil, exclude_domains: nil, freshness: nil, highlights_options: nil, include_domains: nil, languages: nil, markdown_options: nil, num_results: nil, policies: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param query [String] Search query. Accepts natural language as well as Google-style search operators
       #
@@ -316,6 +324,8 @@ module ContextDev
       # @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions, nil] Inline Markdown scraping for each result. Set `enabled: true` to activate.
       #
       # @param num_results [Integer] Number of results to request and return (1–100). Defaults to 10.
+      #
+      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
       #
       # @param query_fanout [Boolean] Currently has no effect.
       #
@@ -347,7 +357,7 @@ module ContextDev
       # Crawl a website and return page content as Markdown. Use a batch for crawls
       # beyond 500 pages.
       #
-      # @overload web_crawl_md(url:, country: nil, exclude_selectors: nil, exclude_url_regex: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, settle_animations: nil, shorten_base64_images: nil, source_preference: nil, stop_after_ms: nil, tags: nil, timeout_opts: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
+      # @overload web_crawl_md(url:, country: nil, exclude_selectors: nil, exclude_url_regex: nil, follow_subdomains: nil, include_frames: nil, include_images: nil, include_links: nil, include_selectors: nil, max_age_ms: nil, max_depth: nil, max_pages: nil, pdf: nil, policies: nil, settle_animations: nil, shorten_base64_images: nil, source_preference: nil, stop_after_ms: nil, tags: nil, timeout_opts: nil, url_regex: nil, use_main_content_only: nil, wait_for_ms: nil, zdr: nil, request_options: {})
       #
       # @param url [String] Start URL, including `http://` or `https://`.
       #
@@ -374,6 +384,8 @@ module ContextDev
       # @param max_pages [Integer] Maximum pages to crawl.
       #
       # @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+      #
+      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
       #
       # @param settle_animations [Boolean] Wait briefly for CSS animations and transitions to settle before reading each pa
       #

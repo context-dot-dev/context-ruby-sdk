@@ -32,6 +32,13 @@ module ContextDev
       sig { params(mode: ContextDev::WebAnswersParams::Mode::OrSymbol).void }
       attr_writer :mode
 
+      # Access policy IDs to apply. A URL must pass every policy.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :policies
+
+      sig { params(policies: T::Array[String]).void }
+      attr_writer :policies
+
       # Labels for filtering usage in the dashboard.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
@@ -63,6 +70,7 @@ module ContextDev
           task: String,
           json_format: T::Hash[Symbol, T.anything],
           mode: ContextDev::WebAnswersParams::Mode::OrSymbol,
+          policies: T::Array[String],
           tags: T::Array[String],
           timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts::OrHash,
           zdr: ContextDev::WebAnswersParams::Zdr::OrSymbol,
@@ -79,6 +87,8 @@ module ContextDev
         # `fast` prioritizes speed, with extra verification for people and companies;
         # `ultra` supports deeper research (default).
         mode: nil,
+        # Access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
         # Request deadline and what to return when it passes.
@@ -96,6 +106,7 @@ module ContextDev
             task: String,
             json_format: T::Hash[Symbol, T.anything],
             mode: ContextDev::WebAnswersParams::Mode::OrSymbol,
+            policies: T::Array[String],
             tags: T::Array[String],
             timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts,
             zdr: ContextDev::WebAnswersParams::Zdr::OrSymbol,

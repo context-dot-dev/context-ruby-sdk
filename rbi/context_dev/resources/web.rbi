@@ -10,6 +10,7 @@ module ContextDev
           task: String,
           json_format: T::Hash[Symbol, T.anything],
           mode: ContextDev::WebAnswersParams::Mode::OrSymbol,
+          policies: T::Array[String],
           tags: T::Array[String],
           timeout_opts: ContextDev::WebAnswersParams::TimeoutOpts::OrHash,
           zdr: ContextDev::WebAnswersParams::Zdr::OrSymbol,
@@ -26,6 +27,8 @@ module ContextDev
         # `fast` prioritizes speed, with extra verification for people and companies;
         # `ultra` supports deeper research (default).
         mode: nil,
+        # Access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
         # Request deadline and what to return when it passes.
@@ -75,6 +78,7 @@ module ContextDev
           direct_url: String,
           domain: String,
           max_age_ms: T.nilable(Integer),
+          policies: T::Array[String],
           tags: T::Array[String],
           timeout_opts:
             ContextDev::WebExtractStyleguideParams::TimeoutOpts::OrHash,
@@ -95,6 +99,8 @@ module ContextDev
         # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
         # year. `0` refreshes.
         max_age_ms: nil,
+        # Comma-separated access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
         # Request deadline and what to return when it passes.
@@ -115,6 +121,7 @@ module ContextDev
           headers: T::Hash[Symbol, String],
           include_subdomains: T::Boolean,
           max_links: Integer,
+          policies: T::Array[String],
           search: String,
           sitemap_url: String,
           tags: T::Array[String],
@@ -136,6 +143,8 @@ module ContextDev
         include_subdomains: nil,
         # Maximum number of URLs to return.
         max_links: nil,
+        # Comma-separated access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Filter URLs by a topic or phrase, most relevant first.
         search: nil,
         # Fetch this sitemap instead of discovering sitemaps. Must belong to the domain or
@@ -172,6 +181,7 @@ module ContextDev
               ContextDev::WebScrapeParams::ParseParams::CustomParser::OrHash,
               ContextDev::WebScrapeParams::ParseParams::PrebuiltParser::OrHash
             ),
+          policies: T::Array[String],
           product_params: ContextDev::WebScrapeParams::ProductParams::OrHash,
           screenshot_params:
             ContextDev::WebScrapeParams::ScreenshotParams::OrHash,
@@ -200,6 +210,8 @@ module ContextDev
         max_age_ms: nil,
         # Requires `formats.parse: true`; required when it is set.
         parse_params: nil,
+        # Access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Product options. Requires formats.product: true.
         product_params: nil,
         # Screenshot options. Requires formats.screenshot: true.
@@ -334,6 +346,7 @@ module ContextDev
           markdown_options:
             T.nilable(ContextDev::WebSearchParams::MarkdownOptions::OrHash),
           num_results: Integer,
+          policies: T::Array[String],
           query_fanout: T::Boolean,
           tags: T::Array[String],
           timeout_opts: ContextDev::WebSearchParams::TimeoutOpts::OrHash,
@@ -368,6 +381,8 @@ module ContextDev
         markdown_options: nil,
         # Number of results to request and return (1–100). Defaults to 10.
         num_results: nil,
+        # Access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Currently has no effect.
         query_fanout: nil,
         # Labels for filtering usage in the dashboard.
@@ -398,6 +413,7 @@ module ContextDev
           max_depth: Integer,
           max_pages: Integer,
           pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash,
+          policies: T::Array[String],
           settle_animations: T::Boolean,
           shorten_base64_images: T::Boolean,
           source_preference:
@@ -445,6 +461,8 @@ module ContextDev
         max_pages: nil,
         # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         pdf: nil,
+        # Access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Wait briefly for CSS animations and transitions to settle before reading each
         # page.
         settle_animations: nil,

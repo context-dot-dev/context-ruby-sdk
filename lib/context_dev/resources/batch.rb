@@ -145,9 +145,11 @@ module ContextDev
       # screenshots, images, bytes, parsed fields, products, highlights, and JSON. Poll
       # the batch ID or receive a webhook when it finishes.
       #
-      # @overload submit(input:, tags: nil, webhook: nil, webhook_url: nil, idempotency_key: nil, request_options: {})
+      # @overload submit(input:, policies: nil, tags: nil, webhook: nil, webhook_url: nil, idempotency_key: nil, request_options: {})
       #
       # @param input [ContextDev::Models::BatchSubmitParams::Input::Scrape, ContextDev::Models::BatchSubmitParams::Input::Crawl] Body param: Choose a URL list or a site crawl.
+      #
+      # @param policies [Array<String>] Body param: Access policy IDs to apply to every page. A URL must pass every poli
       #
       # @param tags [Array<String>] Body param: Tags stored on the batch. Filter the batch list by them later.
       #

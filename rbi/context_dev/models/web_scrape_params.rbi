@@ -99,6 +99,13 @@ module ContextDev
       end
       attr_writer :parse_params
 
+      # Access policy IDs to apply. A URL must pass every policy.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :policies
+
+      sig { params(policies: T::Array[String]).void }
+      attr_writer :policies
+
       # Product options. Requires formats.product: true.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::ProductParams)) }
       attr_reader :product_params
@@ -174,6 +181,7 @@ module ContextDev
               ContextDev::WebScrapeParams::ParseParams::CustomParser::OrHash,
               ContextDev::WebScrapeParams::ParseParams::PrebuiltParser::OrHash
             ),
+          policies: T::Array[String],
           product_params: ContextDev::WebScrapeParams::ProductParams::OrHash,
           screenshot_params:
             ContextDev::WebScrapeParams::ScreenshotParams::OrHash,
@@ -202,6 +210,8 @@ module ContextDev
         max_age_ms: nil,
         # Requires `formats.parse: true`; required when it is set.
         parse_params: nil,
+        # Access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Product options. Requires formats.product: true.
         product_params: nil,
         # Screenshot options. Requires formats.screenshot: true.
@@ -234,6 +244,7 @@ module ContextDev
                 ContextDev::WebScrapeParams::ParseParams::CustomParser,
                 ContextDev::WebScrapeParams::ParseParams::PrebuiltParser
               ),
+            policies: T::Array[String],
             product_params: ContextDev::WebScrapeParams::ProductParams,
             screenshot_params: ContextDev::WebScrapeParams::ScreenshotParams,
             shared_params: ContextDev::WebScrapeParams::SharedParams,

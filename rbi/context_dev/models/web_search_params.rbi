@@ -118,6 +118,13 @@ module ContextDev
       sig { params(num_results: Integer).void }
       attr_writer :num_results
 
+      # Access policy IDs to apply. A URL must pass every policy.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :policies
+
+      sig { params(policies: T::Array[String]).void }
+      attr_writer :policies
+
       # Currently has no effect.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :query_fanout
@@ -171,6 +178,7 @@ module ContextDev
           markdown_options:
             T.nilable(ContextDev::WebSearchParams::MarkdownOptions::OrHash),
           num_results: Integer,
+          policies: T::Array[String],
           query_fanout: T::Boolean,
           tags: T::Array[String],
           timeout_opts: ContextDev::WebSearchParams::TimeoutOpts::OrHash,
@@ -205,6 +213,8 @@ module ContextDev
         markdown_options: nil,
         # Number of results to request and return (1–100). Defaults to 10.
         num_results: nil,
+        # Access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Currently has no effect.
         query_fanout: nil,
         # Labels for filtering usage in the dashboard.
@@ -239,6 +249,7 @@ module ContextDev
             markdown_options:
               T.nilable(ContextDev::WebSearchParams::MarkdownOptions),
             num_results: Integer,
+            policies: T::Array[String],
             query_fanout: T::Boolean,
             tags: T::Array[String],
             timeout_opts: ContextDev::WebSearchParams::TimeoutOpts,

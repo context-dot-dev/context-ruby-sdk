@@ -60,7 +60,8 @@ module ContextDev
           results: ContextDev::Models::BatchListResponse::Data::Results?,
           status: ContextDev::Models::BatchListResponse::Data::status,
           tags: ::Array[String],
-          timing: ContextDev::Models::BatchListResponse::Data::Timing
+          timing: ContextDev::Models::BatchListResponse::Data::Timing,
+          policies: ::Array[String]
         }
 
       class Data < ContextDev::Internal::Type::BaseModel
@@ -90,6 +91,10 @@ module ContextDev
 
         attr_accessor timing: ContextDev::Models::BatchListResponse::Data::Timing
 
+        attr_reader policies: ::Array[String]?
+
+        def policies=: (::Array[String]) -> ::Array[String]
+
         def initialize: (
           id: String,
           crawl: ContextDev::CrawlControls?,
@@ -103,7 +108,8 @@ module ContextDev
           results: ContextDev::Models::BatchListResponse::Data::Results?,
           status: ContextDev::Models::BatchListResponse::Data::status,
           tags: ::Array[String],
-          timing: ContextDev::Models::BatchListResponse::Data::Timing
+          timing: ContextDev::Models::BatchListResponse::Data::Timing,
+          ?policies: ::Array[String]
         ) -> void
 
         def to_hash: -> {
@@ -119,7 +125,8 @@ module ContextDev
           results: ContextDev::Models::BatchListResponse::Data::Results?,
           status: ContextDev::Models::BatchListResponse::Data::status,
           tags: ::Array[String],
-          timing: ContextDev::Models::BatchListResponse::Data::Timing
+          timing: ContextDev::Models::BatchListResponse::Data::Timing,
+          policies: ::Array[String]
         }
 
         type credits =

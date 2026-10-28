@@ -28,6 +28,12 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebAnswersParams::Mode, nil]
       optional :mode, enum: -> { ContextDev::WebAnswersParams::Mode }
 
+      # @!attribute policies
+      #   Access policy IDs to apply. A URL must pass every policy.
+      #
+      #   @return [Array<String>, nil]
+      optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute tags
       #   Labels for filtering usage in the dashboard.
       #
@@ -47,7 +53,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebAnswersParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebAnswersParams::Zdr }
 
-      # @!method initialize(task:, json_format: nil, mode: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(task:, json_format: nil, mode: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebAnswersParams} for more details.
       #
@@ -56,6 +62,8 @@ module ContextDev
       #   @param json_format [Hash{Symbol=>Object}] Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000 ch
       #
       #   @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] `fast` prioritizes speed, with extra verification for people and companies; `ult
+      #
+      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
       #
       #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #

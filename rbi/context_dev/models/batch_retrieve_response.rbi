@@ -145,6 +145,13 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # Access policy IDs applied to every page.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :policies
+
+      sig { params(policies: T::Array[String]).void }
+      attr_writer :policies
+
       # Batch completion delivery ID, when available.
       sig { returns(T.nilable(String)) }
       attr_reader :webhook_delivery_id
@@ -177,6 +184,7 @@ module ContextDev
           timing: ContextDev::Models::BatchRetrieveResponse::Timing::OrHash,
           key_metadata:
             ContextDev::Models::BatchRetrieveResponse::KeyMetadata::OrHash,
+          policies: T::Array[String],
           webhook_delivery_id: String
         ).returns(T.attached_class)
       end
@@ -216,6 +224,8 @@ module ContextDev
         timing:,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
+        # Access policy IDs applied to every page.
+        policies: nil,
         # Batch completion delivery ID, when available.
         webhook_delivery_id: nil
       )
@@ -244,6 +254,7 @@ module ContextDev
             timing: ContextDev::Models::BatchRetrieveResponse::Timing,
             key_metadata:
               ContextDev::Models::BatchRetrieveResponse::KeyMetadata,
+            policies: T::Array[String],
             webhook_delivery_id: String
           }
         )

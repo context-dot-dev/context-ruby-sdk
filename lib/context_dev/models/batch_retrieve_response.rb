@@ -104,13 +104,19 @@ module ContextDev
       #   @return [ContextDev::Models::BatchRetrieveResponse::KeyMetadata, nil]
       optional :key_metadata, -> { ContextDev::Models::BatchRetrieveResponse::KeyMetadata }
 
+      # @!attribute policies
+      #   Access policy IDs applied to every page.
+      #
+      #   @return [Array<String>, nil]
+      optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute webhook_delivery_id
       #   Batch completion delivery ID, when available.
       #
       #   @return [String, nil]
       optional :webhook_delivery_id, String
 
-      # @!method initialize(id:, crawl:, credits:, failure:, formats:, input:, invalid_urls:, mode:, page_errors:, progress:, request_id:, results:, status:, tags:, timing:, key_metadata: nil, webhook_delivery_id: nil)
+      # @!method initialize(id:, crawl:, credits:, failure:, formats:, input:, invalid_urls:, mode:, page_errors:, progress:, request_id:, results:, status:, tags:, timing:, key_metadata: nil, policies: nil, webhook_delivery_id: nil)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchRetrieveResponse} for more details.
       #
@@ -146,6 +152,8 @@ module ContextDev
       #   @param timing [ContextDev::Models::BatchRetrieveResponse::Timing]
       #
       #   @param key_metadata [ContextDev::Models::BatchRetrieveResponse::KeyMetadata] Credits this request used and your remaining balance.
+      #
+      #   @param policies [Array<String>] Access policy IDs applied to every page.
       #
       #   @param webhook_delivery_id [String] Batch completion delivery ID, when available.
 

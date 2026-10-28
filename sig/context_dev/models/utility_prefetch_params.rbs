@@ -4,6 +4,7 @@ module ContextDev
       {
         identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
         type: ContextDev::Models::UtilityPrefetchParams::type_,
+        policies: ::Array[String],
         tags: ::Array[String],
         timeout_opts: ContextDev::UtilityPrefetchParams::TimeoutOpts
       }
@@ -16,6 +17,10 @@ module ContextDev
       attr_accessor identifier: ContextDev::Models::UtilityPrefetchParams::identifier
 
       attr_accessor type: ContextDev::Models::UtilityPrefetchParams::type_
+
+      attr_reader policies: ::Array[String]?
+
+      def policies=: (::Array[String]) -> ::Array[String]
 
       attr_reader tags: ::Array[String]?
 
@@ -30,6 +35,7 @@ module ContextDev
       def initialize: (
         identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
         type: ContextDev::Models::UtilityPrefetchParams::type_,
+        ?policies: ::Array[String],
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::UtilityPrefetchParams::TimeoutOpts,
         ?request_options: ContextDev::request_opts
@@ -38,6 +44,7 @@ module ContextDev
       def to_hash: -> {
         identifier: ContextDev::Models::UtilityPrefetchParams::identifier,
         type: ContextDev::Models::UtilityPrefetchParams::type_,
+        policies: ::Array[String],
         tags: ::Array[String],
         timeout_opts: ContextDev::UtilityPrefetchParams::TimeoutOpts,
         request_options: ContextDev::RequestOptions

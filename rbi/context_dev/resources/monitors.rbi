@@ -21,6 +21,7 @@ module ContextDev
               ContextDev::MonitorCreateParams::ChangeDetection::Semantic::OrHash
             ),
           mode: ContextDev::MonitorCreateParams::Mode::OrSymbol,
+          policies: T::Array[String],
           schedule: ContextDev::MonitorCreateParams::Schedule::OrHash,
           tags: T::Array[String],
           webhook: T.nilable(ContextDev::MonitorCreateParams::Webhook::OrHash),
@@ -37,6 +38,8 @@ module ContextDev
         change_detection: nil,
         # Always `web`. Optional.
         mode: nil,
+        # Access policy IDs to apply to every run.
+        policies: nil,
         # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
         # every 6 hours or every 2 days. The total interval (frequency × unit) must be
         # between 10 minutes and 1 year.
@@ -74,6 +77,7 @@ module ContextDev
               ContextDev::MonitorUpdateParams::ChangeDetection::Semantic::OrHash
             ),
           name: String,
+          policies: T::Array[String],
           schedule: ContextDev::MonitorUpdateParams::Schedule::OrHash,
           status: ContextDev::MonitorUpdateParams::Status::OrSymbol,
           tags: T::Array[String],
@@ -95,6 +99,8 @@ module ContextDev
         change_detection: nil,
         # Display name for the monitor.
         name: nil,
+        # Access policy IDs to apply to every run. Send an empty list to remove them.
+        policies: nil,
         # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
         # every 6 hours or every 2 days. The total interval (frequency × unit) must be
         # between 10 minutes and 1 year.

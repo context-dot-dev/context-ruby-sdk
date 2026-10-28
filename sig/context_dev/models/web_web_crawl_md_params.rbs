@@ -15,6 +15,7 @@ module ContextDev
         max_depth: Integer,
         max_pages: Integer,
         pdf: ContextDev::WebWebCrawlMdParams::Pdf,
+        policies: ::Array[String],
         settle_animations: bool,
         :shorten_base64_images => bool,
         source_preference: ::Array[ContextDev::Models::WebWebCrawlMdParams::source_preference],
@@ -80,6 +81,10 @@ module ContextDev
         ContextDev::WebWebCrawlMdParams::Pdf
       ) -> ContextDev::WebWebCrawlMdParams::Pdf
 
+      attr_reader policies: ::Array[String]?
+
+      def policies=: (::Array[String]) -> ::Array[String]
+
       attr_reader settle_animations: bool?
 
       def settle_animations=: (bool) -> bool
@@ -138,6 +143,7 @@ module ContextDev
         ?max_depth: Integer,
         ?max_pages: Integer,
         ?pdf: ContextDev::WebWebCrawlMdParams::Pdf,
+        ?policies: ::Array[String],
         ?settle_animations: bool,
         ?shorten_base64_images: bool,
         ?source_preference: ::Array[ContextDev::Models::WebWebCrawlMdParams::source_preference],
@@ -165,6 +171,7 @@ module ContextDev
         max_depth: Integer,
         max_pages: Integer,
         pdf: ContextDev::WebWebCrawlMdParams::Pdf,
+        policies: ::Array[String],
         settle_animations: bool,
         :shorten_base64_images => bool,
         source_preference: ::Array[ContextDev::Models::WebWebCrawlMdParams::source_preference],

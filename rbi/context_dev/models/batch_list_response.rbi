@@ -220,6 +220,13 @@ module ContextDev
         end
         attr_writer :timing
 
+        # Access policy IDs applied to every page.
+        sig { returns(T.nilable(T::Array[String])) }
+        attr_reader :policies
+
+        sig { params(policies: T::Array[String]).void }
+        attr_writer :policies
+
         # An asynchronous web scraping job.
         sig do
           params(
@@ -242,7 +249,8 @@ module ContextDev
             status:
               ContextDev::Models::BatchListResponse::Data::Status::OrSymbol,
             tags: T::Array[String],
-            timing: ContextDev::Models::BatchListResponse::Data::Timing::OrHash
+            timing: ContextDev::Models::BatchListResponse::Data::Timing::OrHash,
+            policies: T::Array[String]
           ).returns(T.attached_class)
         end
         def self.new(
@@ -273,7 +281,9 @@ module ContextDev
           status:,
           # Tags stored on the batch at submission.
           tags:,
-          timing:
+          timing:,
+          # Access policy IDs applied to every page.
+          policies: nil
         )
         end
 
@@ -295,7 +305,8 @@ module ContextDev
               status:
                 ContextDev::Models::BatchListResponse::Data::Status::TaggedSymbol,
               tags: T::Array[String],
-              timing: ContextDev::Models::BatchListResponse::Data::Timing
+              timing: ContextDev::Models::BatchListResponse::Data::Timing,
+              policies: T::Array[String]
             }
           )
         end

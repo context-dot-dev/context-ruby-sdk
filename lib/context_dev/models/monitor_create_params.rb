@@ -32,6 +32,12 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::MonitorCreateParams::Mode, nil]
       optional :mode, enum: -> { ContextDev::MonitorCreateParams::Mode }
 
+      # @!attribute policies
+      #   Access policy IDs to apply to every run.
+      #
+      #   @return [Array<String>, nil]
+      optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute schedule
       #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
       #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
@@ -52,7 +58,7 @@ module ContextDev
       #   @return [ContextDev::Models::MonitorCreateParams::Webhook, nil]
       optional :webhook, -> { ContextDev::MonitorCreateParams::Webhook }, nil?: true
 
-      # @!method initialize(name:, target:, change_detection: nil, mode: nil, schedule: nil, tags: nil, webhook: nil, request_options: {})
+      # @!method initialize(name:, target:, change_detection: nil, mode: nil, policies: nil, schedule: nil, tags: nil, webhook: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorCreateParams} for more details.
       #
@@ -63,6 +69,8 @@ module ContextDev
       #   @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract targets and page targ
       #
       #   @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Always `web`. Optional.
+      #
+      #   @param policies [Array<String>] Access policy IDs to apply to every run.
       #
       #   @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #

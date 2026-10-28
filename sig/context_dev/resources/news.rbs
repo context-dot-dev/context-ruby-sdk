@@ -6,6 +6,7 @@ module ContextDev
         ?cursor: String?,
         ?filter_by: ContextDev::NewsSearchParams::FilterBy,
         ?limit: Integer,
+        ?policies: ::Array[String],
         ?sort_by: ContextDev::NewsSearchParams::SortBy,
         ?tags: ::Array[String],
         ?request_options: ContextDev::request_opts

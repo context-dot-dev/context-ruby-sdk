@@ -26,6 +26,12 @@ module ContextDev
       #   @return [String, nil]
       optional :name, String
 
+      # @!attribute policies
+      #   Access policy IDs to apply to every run. Send an empty list to remove them.
+      #
+      #   @return [Array<String>, nil]
+      optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
       # @!attribute schedule
       #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
       #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
@@ -58,7 +64,7 @@ module ContextDev
       #   @return [ContextDev::Models::MonitorUpdateParams::Webhook, nil]
       optional :webhook, -> { ContextDev::MonitorUpdateParams::Webhook }, nil?: true
 
-      # @!method initialize(monitor_id:, change_detection: nil, name: nil, schedule: nil, status: nil, tags: nil, target: nil, webhook: nil, request_options: {})
+      # @!method initialize(monitor_id:, change_detection: nil, name: nil, policies: nil, schedule: nil, status: nil, tags: nil, target: nil, webhook: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorUpdateParams} for more details.
       #
@@ -67,6 +73,8 @@ module ContextDev
       #   @param change_detection [ContextDev::Models::MonitorUpdateParams::ChangeDetection::Exact, ContextDev::Models::MonitorUpdateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract targets and page targ
       #
       #   @param name [String] Display name for the monitor.
+      #
+      #   @param policies [Array<String>] Access policy IDs to apply to every run. Send an empty list to remove them.
       #
       #   @param schedule [ContextDev::Models::MonitorUpdateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #

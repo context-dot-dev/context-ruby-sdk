@@ -118,6 +118,7 @@ module ContextDev
               ContextDev::BatchSubmitParams::Input::Scrape::OrHash,
               ContextDev::BatchSubmitParams::Input::Crawl::OrHash
             ),
+          policies: T::Array[String],
           tags: T::Array[String],
           webhook: ContextDev::BatchSubmitParams::Webhook::OrHash,
           webhook_url: String,
@@ -128,6 +129,9 @@ module ContextDev
       def submit(
         # Body param: Choose a URL list or a site crawl.
         input:,
+        # Body param: Access policy IDs to apply to every page. A URL must pass every
+        # policy.
+        policies: nil,
         # Body param: Tags stored on the batch. Filter the batch list by them later.
         tags: nil,
         # Body param: Where to send the batch's final-status event. Omit `retry` for one

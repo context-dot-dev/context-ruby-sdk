@@ -29,6 +29,13 @@ module ContextDev
       sig { returns(ContextDev::UtilityPrefetchParams::Type::OrSymbol) }
       attr_accessor :type
 
+      # Access policy IDs to apply. A URL must pass every policy.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :policies
+
+      sig { params(policies: T::Array[String]).void }
+      attr_writer :policies
+
       # Labels for filtering usage in the dashboard.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
@@ -55,6 +62,7 @@ module ContextDev
               ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier::OrHash
             ),
           type: ContextDev::UtilityPrefetchParams::Type::OrSymbol,
+          policies: T::Array[String],
           tags: T::Array[String],
           timeout_opts: ContextDev::UtilityPrefetchParams::TimeoutOpts::OrHash,
           request_options: ContextDev::RequestOptions::OrHash
@@ -65,6 +73,8 @@ module ContextDev
         identifier:,
         # Data to prefetch.
         type:,
+        # Access policy IDs to apply. A URL must pass every policy.
+        policies: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
         # Request deadline and what to return when it passes.
@@ -82,6 +92,7 @@ module ContextDev
                 ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier
               ),
             type: ContextDev::UtilityPrefetchParams::Type::OrSymbol,
+            policies: T::Array[String],
             tags: T::Array[String],
             timeout_opts: ContextDev::UtilityPrefetchParams::TimeoutOpts,
             request_options: ContextDev::RequestOptions

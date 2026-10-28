@@ -130,7 +130,13 @@ module ContextDev
         #   @return [ContextDev::Models::BatchListResponse::Data::Timing]
         required :timing, -> { ContextDev::Models::BatchListResponse::Data::Timing }
 
-        # @!method initialize(id:, crawl:, credits:, failure:, formats:, input:, mode:, page_errors:, progress:, results:, status:, tags:, timing:)
+        # @!attribute policies
+        #   Access policy IDs applied to every page.
+        #
+        #   @return [Array<String>, nil]
+        optional :policies, ContextDev::Internal::Type::ArrayOf[String]
+
+        # @!method initialize(id:, crawl:, credits:, failure:, formats:, input:, mode:, page_errors:, progress:, results:, status:, tags:, timing:, policies: nil)
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::BatchListResponse::Data} for more details.
         #
@@ -162,6 +168,8 @@ module ContextDev
         #   @param tags [Array<String>] Tags stored on the batch at submission.
         #
         #   @param timing [ContextDev::Models::BatchListResponse::Data::Timing]
+        #
+        #   @param policies [Array<String>] Access policy IDs applied to every page.
 
         # @see ContextDev::Models::BatchListResponse::Data#credits
         class Credits < ContextDev::Internal::Type::BaseModel

@@ -61,6 +61,13 @@ module ContextDev
       sig { params(mode: ContextDev::MonitorCreateParams::Mode::OrSymbol).void }
       attr_writer :mode
 
+      # Access policy IDs to apply to every run.
+      sig { returns(T.nilable(T::Array[String])) }
+      attr_reader :policies
+
+      sig { params(policies: T::Array[String]).void }
+      attr_writer :policies
+
       # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
       # every 6 hours or every 2 days. The total interval (frequency × unit) must be
       # between 10 minutes and 1 year.
@@ -105,6 +112,7 @@ module ContextDev
               ContextDev::MonitorCreateParams::ChangeDetection::Semantic::OrHash
             ),
           mode: ContextDev::MonitorCreateParams::Mode::OrSymbol,
+          policies: T::Array[String],
           schedule: ContextDev::MonitorCreateParams::Schedule::OrHash,
           tags: T::Array[String],
           webhook: T.nilable(ContextDev::MonitorCreateParams::Webhook::OrHash),
@@ -121,6 +129,8 @@ module ContextDev
         change_detection: nil,
         # Always `web`. Optional.
         mode: nil,
+        # Access policy IDs to apply to every run.
+        policies: nil,
         # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
         # every 6 hours or every 2 days. The total interval (frequency × unit) must be
         # between 10 minutes and 1 year.
@@ -149,6 +159,7 @@ module ContextDev
                 ContextDev::MonitorCreateParams::ChangeDetection::Semantic
               ),
             mode: ContextDev::MonitorCreateParams::Mode::OrSymbol,
+            policies: T::Array[String],
             schedule: ContextDev::MonitorCreateParams::Schedule,
             tags: T::Array[String],
             webhook: T.nilable(ContextDev::MonitorCreateParams::Webhook),

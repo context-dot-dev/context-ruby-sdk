@@ -12,6 +12,7 @@ module ContextDev
         languages: ContextDev::Models::WebSearchParams::languages,
         markdown_options: ContextDev::WebSearchParams::MarkdownOptions?,
         num_results: Integer,
+        policies: ::Array[String],
         query_fanout: bool,
         tags: ::Array[String],
         timeout_opts: ContextDev::WebSearchParams::TimeoutOpts,
@@ -61,6 +62,10 @@ module ContextDev
 
       def num_results=: (Integer) -> Integer
 
+      attr_reader policies: ::Array[String]?
+
+      def policies=: (::Array[String]) -> ::Array[String]
+
       attr_reader query_fanout: bool?
 
       def query_fanout=: (bool) -> bool
@@ -92,6 +97,7 @@ module ContextDev
         ?languages: ContextDev::Models::WebSearchParams::languages,
         ?markdown_options: ContextDev::WebSearchParams::MarkdownOptions?,
         ?num_results: Integer,
+        ?policies: ::Array[String],
         ?query_fanout: bool,
         ?tags: ::Array[String],
         ?timeout_opts: ContextDev::WebSearchParams::TimeoutOpts,
@@ -110,6 +116,7 @@ module ContextDev
         languages: ContextDev::Models::WebSearchParams::languages,
         markdown_options: ContextDev::WebSearchParams::MarkdownOptions?,
         num_results: Integer,
+        policies: ::Array[String],
         query_fanout: bool,
         tags: ::Array[String],
         timeout_opts: ContextDev::WebSearchParams::TimeoutOpts,
