@@ -157,6 +157,26 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByDomain::Zdr::OrSymbol
+              )
+            )
+          end
+          attr_reader :zdr
+
+          sig do
+            params(
+              zdr:
+                ContextDev::BrandRetrieveParams::Body::ByDomain::Zdr::OrSymbol
+            ).void
+          end
+          attr_writer :zdr
+
           # Retrieve brand data by domain. Cannot be combined with name, email, or ticker.
           sig do
             params(
@@ -171,6 +191,8 @@ module ContextDev
               tags: T::Array[String],
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::OrHash,
+              zdr:
+                ContextDev::BrandRetrieveParams::Body::ByDomain::Zdr::OrSymbol,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -191,6 +213,10 @@ module ContextDev
             tags: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
+            # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+            # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+            # organization has ZDR.
+            zdr: nil,
             # Discriminator for domain-based brand retrieval.
             type: :by_domain
           )
@@ -210,7 +236,9 @@ module ContextDev
                 policies: T::Array[String],
                 tags: T::Array[String],
                 timeout_opts:
-                  ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts,
+                zdr:
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::Zdr::OrSymbol
               }
             )
           end
@@ -938,6 +966,43 @@ module ContextDev
               end
             end
           end
+
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::Zdr
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            ENABLED =
+              T.let(
+                :enabled,
+                ContextDev::BrandRetrieveParams::Body::ByDomain::Zdr::TaggedSymbol
+              )
+            DISABLED =
+              T.let(
+                :disabled,
+                ContextDev::BrandRetrieveParams::Body::ByDomain::Zdr::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BrandRetrieveParams::Body::ByDomain::Zdr::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
+          end
         end
 
         class ByName < ContextDev::Internal::Type::BaseModel
@@ -1034,6 +1099,25 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByName::Zdr::OrSymbol
+              )
+            )
+          end
+          attr_reader :zdr
+
+          sig do
+            params(
+              zdr: ContextDev::BrandRetrieveParams::Body::ByName::Zdr::OrSymbol
+            ).void
+          end
+          attr_writer :zdr
+
           # Retrieve brand data by company name. Cannot be combined with domain, email, or
           # ticker.
           sig do
@@ -1051,6 +1135,7 @@ module ContextDev
               tags: T::Array[String],
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::OrHash,
+              zdr: ContextDev::BrandRetrieveParams::Body::ByName::Zdr::OrSymbol,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -1074,6 +1159,10 @@ module ContextDev
             tags: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
+            # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+            # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+            # organization has ZDR.
+            zdr: nil,
             # Discriminator for name-based brand retrieval.
             type: :by_name
           )
@@ -1095,7 +1184,9 @@ module ContextDev
                 policies: T::Array[String],
                 tags: T::Array[String],
                 timeout_opts:
-                  ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts
+                  ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts,
+                zdr:
+                  ContextDev::BrandRetrieveParams::Body::ByName::Zdr::OrSymbol
               }
             )
           end
@@ -3044,6 +3135,43 @@ module ContextDev
               end
             end
           end
+
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::BrandRetrieveParams::Body::ByName::Zdr
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            ENABLED =
+              T.let(
+                :enabled,
+                ContextDev::BrandRetrieveParams::Body::ByName::Zdr::TaggedSymbol
+              )
+            DISABLED =
+              T.let(
+                :disabled,
+                ContextDev::BrandRetrieveParams::Body::ByName::Zdr::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BrandRetrieveParams::Body::ByName::Zdr::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
+          end
         end
 
         class ByEmail < ContextDev::Internal::Type::BaseModel
@@ -3121,6 +3249,25 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByEmail::Zdr::OrSymbol
+              )
+            )
+          end
+          attr_reader :zdr
+
+          sig do
+            params(
+              zdr: ContextDev::BrandRetrieveParams::Body::ByEmail::Zdr::OrSymbol
+            ).void
+          end
+          attr_writer :zdr
+
           # Retrieve brand data by email address. The domain is extracted from the email.
           # Free and disposable email providers are rejected with 422. Cannot be combined
           # with domain, name, or ticker.
@@ -3137,6 +3284,8 @@ module ContextDev
               tags: T::Array[String],
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::OrHash,
+              zdr:
+                ContextDev::BrandRetrieveParams::Body::ByEmail::Zdr::OrSymbol,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -3157,6 +3306,10 @@ module ContextDev
             tags: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
+            # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+            # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+            # organization has ZDR.
+            zdr: nil,
             # Discriminator for email-based brand retrieval.
             type: :by_email
           )
@@ -3176,7 +3329,9 @@ module ContextDev
                 policies: T::Array[String],
                 tags: T::Array[String],
                 timeout_opts:
-                  ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts,
+                zdr:
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::Zdr::OrSymbol
               }
             )
           end
@@ -3904,6 +4059,43 @@ module ContextDev
               end
             end
           end
+
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::Zdr
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            ENABLED =
+              T.let(
+                :enabled,
+                ContextDev::BrandRetrieveParams::Body::ByEmail::Zdr::TaggedSymbol
+              )
+            DISABLED =
+              T.let(
+                :disabled,
+                ContextDev::BrandRetrieveParams::Body::ByEmail::Zdr::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BrandRetrieveParams::Body::ByEmail::Zdr::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
+          end
         end
 
         class ByTicker < ContextDev::Internal::Type::BaseModel
@@ -3999,6 +4191,26 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByTicker::Zdr::OrSymbol
+              )
+            )
+          end
+          attr_reader :zdr
+
+          sig do
+            params(
+              zdr:
+                ContextDev::BrandRetrieveParams::Body::ByTicker::Zdr::OrSymbol
+            ).void
+          end
+          attr_writer :zdr
+
           # Retrieve brand data by stock ticker. Cannot be combined with domain, name, or
           # email.
           sig do
@@ -4016,6 +4228,8 @@ module ContextDev
                 ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::OrSymbol,
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::OrHash,
+              zdr:
+                ContextDev::BrandRetrieveParams::Body::ByTicker::Zdr::OrSymbol,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -4038,6 +4252,10 @@ module ContextDev
             ticker_exchange: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
+            # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+            # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+            # organization has ZDR.
+            zdr: nil,
             # Discriminator for ticker-based brand retrieval.
             type: :by_ticker
           )
@@ -4059,7 +4277,9 @@ module ContextDev
                 ticker_exchange:
                   ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange::OrSymbol,
                 timeout_opts:
-                  ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts,
+                zdr:
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::Zdr::OrSymbol
               }
             )
           end
@@ -5172,6 +5392,43 @@ module ContextDev
               end
             end
           end
+
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::Zdr
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            ENABLED =
+              T.let(
+                :enabled,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::Zdr::TaggedSymbol
+              )
+            DISABLED =
+              T.let(
+                :disabled,
+                ContextDev::BrandRetrieveParams::Body::ByTicker::Zdr::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BrandRetrieveParams::Body::ByTicker::Zdr::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
+            end
+          end
         end
 
         class ByDirectURL < ContextDev::Internal::Type::BaseModel
@@ -5225,6 +5482,26 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByDirectURL::Zdr::OrSymbol
+              )
+            )
+          end
+          attr_reader :zdr
+
+          sig do
+            params(
+              zdr:
+                ContextDev::BrandRetrieveParams::Body::ByDirectURL::Zdr::OrSymbol
+            ).void
+          end
+          attr_writer :zdr
+
           # Retrieve brand data from this exact URL. Cross-site enrichment and other lookup
           # identifiers are excluded.
           sig do
@@ -5234,6 +5511,8 @@ module ContextDev
               tags: T::Array[String],
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::OrHash,
+              zdr:
+                ContextDev::BrandRetrieveParams::Body::ByDirectURL::Zdr::OrSymbol,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -5248,6 +5527,10 @@ module ContextDev
             tags: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
+            # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+            # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+            # organization has ZDR.
+            zdr: nil,
             # Discriminator for direct-URL-based brand retrieval.
             type: :by_direct_url
           )
@@ -5261,7 +5544,9 @@ module ContextDev
                 policies: T::Array[String],
                 tags: T::Array[String],
                 timeout_opts:
-                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts
+                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts,
+                zdr:
+                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::Zdr::OrSymbol
               }
             )
           end
@@ -5363,6 +5648,43 @@ module ContextDev
               end
               def self.values
               end
+            end
+          end
+
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::Zdr
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            ENABLED =
+              T.let(
+                :enabled,
+                ContextDev::BrandRetrieveParams::Body::ByDirectURL::Zdr::TaggedSymbol
+              )
+            DISABLED =
+              T.let(
+                :disabled,
+                ContextDev::BrandRetrieveParams::Body::ByDirectURL::Zdr::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BrandRetrieveParams::Body::ByDirectURL::Zdr::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
             end
           end
         end
@@ -5505,6 +5827,26 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          sig do
+            returns(
+              T.nilable(
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Zdr::OrSymbol
+              )
+            )
+          end
+          attr_reader :zdr
+
+          sig do
+            params(
+              zdr:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Zdr::OrSymbol
+            ).void
+          end
+          attr_writer :zdr
+
           # Identify brand data from a transaction descriptor. Cannot be combined with
           # domain, name, email, or ticker.
           sig do
@@ -5527,6 +5869,8 @@ module ContextDev
               tags: T::Array[String],
               timeout_opts:
                 ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::OrHash,
+              zdr:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Zdr::OrSymbol,
               type: Symbol
             ).returns(T.attached_class)
           end
@@ -5557,6 +5901,10 @@ module ContextDev
             tags: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
+            # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+            # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+            # organization has ZDR.
+            zdr: nil,
             # Discriminator for transaction-based brand retrieval.
             type: :by_transaction
           )
@@ -5583,7 +5931,9 @@ module ContextDev
                 policies: T::Array[String],
                 tags: T::Array[String],
                 timeout_opts:
-                  ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts,
+                zdr:
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::Zdr::OrSymbol
               }
             )
           end
@@ -7565,6 +7915,43 @@ module ContextDev
               end
               def self.values
               end
+            end
+          end
+
+          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
+          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
+          # organization has ZDR.
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            TaggedSymbol =
+              T.type_alias do
+                T.all(
+                  Symbol,
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::Zdr
+                )
+              end
+            OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+            ENABLED =
+              T.let(
+                :enabled,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Zdr::TaggedSymbol
+              )
+            DISABLED =
+              T.let(
+                :disabled,
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Zdr::TaggedSymbol
+              )
+
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::Zdr::TaggedSymbol
+                ]
+              )
+            end
+            def self.values
             end
           end
         end

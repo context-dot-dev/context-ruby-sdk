@@ -40,7 +40,8 @@ module ContextDev
             max_speed: bool,
             policies: ::Array[String],
             tags: ::Array[String],
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::zdr
           }
 
         class ByDomain < ContextDev::Internal::Type::BaseModel
@@ -72,6 +73,12 @@ module ContextDev
             ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts
           ) -> ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts
 
+          attr_reader zdr: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::zdr?
+
+          def zdr=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByDomain::zdr
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByDomain::zdr
+
           def initialize: (
             domain: String,
             ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::force_language?,
@@ -80,6 +87,7 @@ module ContextDev
             ?policies: ::Array[String],
             ?tags: ::Array[String],
             ?timeout_opts: ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts,
+            ?zdr: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::zdr,
             ?type: :by_domain
           ) -> void
 
@@ -91,7 +99,8 @@ module ContextDev
             max_speed: bool,
             policies: ::Array[String],
             tags: ::Array[String],
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByDomain::zdr
           }
 
           type force_language =
@@ -379,6 +388,17 @@ module ContextDev
               def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::behavior]
             end
           end
+
+          type zdr = :enabled | :disabled
+
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            ENABLED: :enabled
+            DISABLED: :disabled
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByDomain::zdr]
+          end
         end
 
         type by_name =
@@ -391,7 +411,8 @@ module ContextDev
             max_speed: bool,
             policies: ::Array[String],
             tags: ::Array[String],
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByName::zdr
           }
 
         class ByName < ContextDev::Internal::Type::BaseModel
@@ -429,6 +450,12 @@ module ContextDev
             ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts
           ) -> ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts
 
+          attr_reader zdr: ContextDev::Models::BrandRetrieveParams::Body::ByName::zdr?
+
+          def zdr=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByName::zdr
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByName::zdr
+
           def initialize: (
             name: String,
             ?country_gl: ContextDev::Models::BrandRetrieveParams::Body::ByName::country_gl,
@@ -438,6 +465,7 @@ module ContextDev
             ?policies: ::Array[String],
             ?tags: ::Array[String],
             ?timeout_opts: ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts,
+            ?zdr: ContextDev::Models::BrandRetrieveParams::Body::ByName::zdr,
             ?type: :by_name
           ) -> void
 
@@ -450,7 +478,8 @@ module ContextDev
             max_speed: bool,
             policies: ::Array[String],
             tags: ::Array[String],
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByName::zdr
           }
 
           type country_gl =
@@ -1225,6 +1254,17 @@ module ContextDev
               def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts::behavior]
             end
           end
+
+          type zdr = :enabled | :disabled
+
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            ENABLED: :enabled
+            DISABLED: :disabled
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByName::zdr]
+          end
         end
 
         type by_email =
@@ -1236,7 +1276,8 @@ module ContextDev
             max_speed: bool,
             policies: ::Array[String],
             tags: ::Array[String],
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::zdr
           }
 
         class ByEmail < ContextDev::Internal::Type::BaseModel
@@ -1268,6 +1309,12 @@ module ContextDev
             ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts
           ) -> ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts
 
+          attr_reader zdr: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::zdr?
+
+          def zdr=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByEmail::zdr
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByEmail::zdr
+
           def initialize: (
             email: String,
             ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::force_language?,
@@ -1276,6 +1323,7 @@ module ContextDev
             ?policies: ::Array[String],
             ?tags: ::Array[String],
             ?timeout_opts: ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts,
+            ?zdr: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::zdr,
             ?type: :by_email
           ) -> void
 
@@ -1287,7 +1335,8 @@ module ContextDev
             max_speed: bool,
             policies: ::Array[String],
             tags: ::Array[String],
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByEmail::zdr
           }
 
           type force_language =
@@ -1575,6 +1624,17 @@ module ContextDev
               def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::behavior]
             end
           end
+
+          type zdr = :enabled | :disabled
+
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            ENABLED: :enabled
+            DISABLED: :disabled
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByEmail::zdr]
+          end
         end
 
         type by_ticker =
@@ -1587,7 +1647,8 @@ module ContextDev
             policies: ::Array[String],
             tags: ::Array[String],
             ticker_exchange: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ticker_exchange,
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::zdr
           }
 
         class ByTicker < ContextDev::Internal::Type::BaseModel
@@ -1625,6 +1686,12 @@ module ContextDev
             ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts
           ) -> ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts
 
+          attr_reader zdr: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::zdr?
+
+          def zdr=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByTicker::zdr
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByTicker::zdr
+
           def initialize: (
             ticker: String,
             ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::force_language?,
@@ -1634,6 +1701,7 @@ module ContextDev
             ?tags: ::Array[String],
             ?ticker_exchange: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ticker_exchange,
             ?timeout_opts: ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts,
+            ?zdr: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::zdr,
             ?type: :by_ticker
           ) -> void
 
@@ -1646,7 +1714,8 @@ module ContextDev
             policies: ::Array[String],
             tags: ::Array[String],
             ticker_exchange: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ticker_exchange,
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByTicker::zdr
           }
 
           type force_language =
@@ -2087,6 +2156,17 @@ module ContextDev
               def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::behavior]
             end
           end
+
+          type zdr = :enabled | :disabled
+
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            ENABLED: :enabled
+            DISABLED: :disabled
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTicker::zdr]
+          end
         end
 
         type by_direct_url =
@@ -2095,7 +2175,8 @@ module ContextDev
             type: :by_direct_url,
             policies: ::Array[String],
             tags: ::Array[String],
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::zdr
           }
 
         class ByDirectURL < ContextDev::Internal::Type::BaseModel
@@ -2117,11 +2198,18 @@ module ContextDev
             ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts
           ) -> ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts
 
+          attr_reader zdr: ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::zdr?
+
+          def zdr=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::zdr
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::zdr
+
           def initialize: (
             direct_url: String,
             ?policies: ::Array[String],
             ?tags: ::Array[String],
             ?timeout_opts: ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts,
+            ?zdr: ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::zdr,
             ?type: :by_direct_url
           ) -> void
 
@@ -2130,7 +2218,8 @@ module ContextDev
             type: :by_direct_url,
             policies: ::Array[String],
             tags: ::Array[String],
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::zdr
           }
 
           type timeout_opts =
@@ -2169,6 +2258,17 @@ module ContextDev
               def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::behavior]
             end
           end
+
+          type zdr = :enabled | :disabled
+
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            ENABLED: :enabled
+            DISABLED: :disabled
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::zdr]
+          end
         end
 
         type by_transaction =
@@ -2184,7 +2284,8 @@ module ContextDev
             phone: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::phone,
             policies: ::Array[String],
             tags: ::Array[String],
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::zdr
           }
 
         class ByTransaction < ContextDev::Internal::Type::BaseModel
@@ -2238,6 +2339,12 @@ module ContextDev
             ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts
           ) -> ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts
 
+          attr_reader zdr: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::zdr?
+
+          def zdr=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::zdr
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::zdr
+
           def initialize: (
             transaction_info: String,
             ?city: String,
@@ -2250,6 +2357,7 @@ module ContextDev
             ?policies: ::Array[String],
             ?tags: ::Array[String],
             ?timeout_opts: ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts,
+            ?zdr: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::zdr,
             ?type: :by_transaction
           ) -> void
 
@@ -2265,7 +2373,8 @@ module ContextDev
             phone: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::phone,
             policies: ::Array[String],
             tags: ::Array[String],
-            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts
+            timeout_opts: ContextDev::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts,
+            zdr: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::zdr
           }
 
           type country_gl =
@@ -3055,6 +3164,17 @@ module ContextDev
 
               def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::behavior]
             end
+          end
+
+          type zdr = :enabled | :disabled
+
+          module Zdr
+            extend ContextDev::Internal::Type::Enum
+
+            ENABLED: :enabled
+            DISABLED: :disabled
+
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::zdr]
           end
         end
 
