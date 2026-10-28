@@ -98,9 +98,9 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          #   assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          #   organization has ZDR.
+          #   `enabled` disables request logs and traces and omits request and response
+          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::Zdr, nil]
           optional :zdr, enum: -> { ContextDev::BrandRetrieveParams::Body::ByDomain::Zdr }
@@ -125,7 +125,7 @@ module ContextDev
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::Zdr] `enabled` disables request logs, usage logs, and traces. Brand data and hosted a
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::Zdr] `enabled` disables request logs and traces and omits request and response conten
           #
           #   @param type [Symbol, :by_domain] Discriminator for domain-based brand retrieval.
 
@@ -299,9 +299,9 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          # organization has ZDR.
+          # `enabled` disables request logs and traces and omits request and response
+          # content from usage logs. Brand data and hosted assets may still be stored.
+          # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByDomain#zdr
           module Zdr
@@ -378,9 +378,9 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          #   assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          #   organization has ZDR.
+          #   `enabled` disables request logs and traces and omits request and response
+          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::Zdr, nil]
           optional :zdr, enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::Zdr }
@@ -408,7 +408,7 @@ module ContextDev
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::Zdr] `enabled` disables request logs, usage logs, and traces. Brand data and hosted a
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::Zdr] `enabled` disables request logs and traces and omits request and response conten
           #
           #   @param type [Symbol, :by_name] Discriminator for name-based brand retrieval.
 
@@ -833,9 +833,9 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          # organization has ZDR.
+          # `enabled` disables request logs and traces and omits request and response
+          # content from usage logs. Brand data and hosted assets may still be stored.
+          # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByName#zdr
           module Zdr
@@ -905,9 +905,9 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          #   assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          #   organization has ZDR.
+          #   `enabled` disables request logs and traces and omits request and response
+          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::Zdr, nil]
           optional :zdr, enum: -> { ContextDev::BrandRetrieveParams::Body::ByEmail::Zdr }
@@ -934,7 +934,7 @@ module ContextDev
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::Zdr] `enabled` disables request logs, usage logs, and traces. Brand data and hosted a
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::Zdr] `enabled` disables request logs and traces and omits request and response conten
           #
           #   @param type [Symbol, :by_email] Discriminator for email-based brand retrieval.
 
@@ -1108,9 +1108,9 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          # organization has ZDR.
+          # `enabled` disables request logs and traces and omits request and response
+          # content from usage logs. Brand data and hosted assets may still be stored.
+          # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByEmail#zdr
           module Zdr
@@ -1186,9 +1186,9 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          #   assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          #   organization has ZDR.
+          #   `enabled` disables request logs and traces and omits request and response
+          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::Zdr, nil]
           optional :zdr, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTicker::Zdr }
@@ -1216,7 +1216,7 @@ module ContextDev
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::Zdr] `enabled` disables request logs, usage logs, and traces. Brand data and hosted a
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::Zdr] `enabled` disables request logs and traces and omits request and response conten
           #
           #   @param type [Symbol, :by_ticker] Discriminator for ticker-based brand retrieval.
 
@@ -1473,9 +1473,9 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          # organization has ZDR.
+          # `enabled` disables request logs and traces and omits request and response
+          # content from usage logs. Brand data and hosted assets may still be stored.
+          # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTicker#zdr
           module Zdr
@@ -1525,9 +1525,9 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          #   assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          #   organization has ZDR.
+          #   `enabled` disables request logs and traces and omits request and response
+          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::Zdr, nil]
           optional :zdr, enum: -> { ContextDev::BrandRetrieveParams::Body::ByDirectURL::Zdr }
@@ -1547,7 +1547,7 @@ module ContextDev
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::Zdr] `enabled` disables request logs, usage logs, and traces. Brand data and hosted a
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::Zdr] `enabled` disables request logs and traces and omits request and response conten
           #
           #   @param type [Symbol, :by_direct_url] Discriminator for direct-URL-based brand retrieval.
 
@@ -1592,9 +1592,9 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          # organization has ZDR.
+          # `enabled` disables request logs and traces and omits request and response
+          # content from usage logs. Brand data and hosted assets may still be stored.
+          # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL#zdr
           module Zdr
@@ -1690,9 +1690,9 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          #   assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          #   organization has ZDR.
+          #   `enabled` disables request logs and traces and omits request and response
+          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::Zdr, nil]
           optional :zdr, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Zdr }
@@ -1726,7 +1726,7 @@ module ContextDev
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::Zdr] `enabled` disables request logs, usage logs, and traces. Brand data and hosted a
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::Zdr] `enabled` disables request logs and traces and omits request and response conten
           #
           #   @param type [Symbol, :by_transaction] Discriminator for transaction-based brand retrieval.
 
@@ -2181,9 +2181,9 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-          # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-          # organization has ZDR.
+          # `enabled` disables request logs and traces and omits request and response
+          # content from usage logs. Brand data and hosted assets may still be stored.
+          # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#zdr
           module Zdr

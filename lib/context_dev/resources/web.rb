@@ -97,7 +97,7 @@ module ContextDev
       #
       # @param timeout_opts [ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
-      # @param zdr [Symbol, ContextDev::Models::WebExtractStyleguideParams::Zdr] `enabled` disables request logs, usage logs, and traces. Brand data and hosted a
+      # @param zdr [Symbol, ContextDev::Models::WebExtractStyleguideParams::Zdr] `enabled` disables request logs and traces and omits request and response conten
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

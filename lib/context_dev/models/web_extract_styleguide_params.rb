@@ -54,9 +54,9 @@ module ContextDev
       optional :timeout_opts, -> { ContextDev::WebExtractStyleguideParams::TimeoutOpts }
 
       # @!attribute zdr
-      #   `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-      #   assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-      #   organization has ZDR.
+      #   `enabled` disables request logs and traces and omits request and response
+      #   content from usage logs. Brand data and hosted assets may still be stored.
+      #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
       #
       #   @return [Symbol, ContextDev::Models::WebExtractStyleguideParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebExtractStyleguideParams::Zdr }
@@ -79,7 +79,7 @@ module ContextDev
       #
       #   @param timeout_opts [ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
-      #   @param zdr [Symbol, ContextDev::Models::WebExtractStyleguideParams::Zdr] `enabled` disables request logs, usage logs, and traces. Brand data and hosted a
+      #   @param zdr [Symbol, ContextDev::Models::WebExtractStyleguideParams::Zdr] `enabled` disables request logs and traces and omits request and response conten
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -134,9 +134,9 @@ module ContextDev
         end
       end
 
-      # `enabled` disables request logs, usage logs, and traces. Brand data and hosted
-      # assets may still be stored. Returns 403 `ZDR_NOT_ENABLED` unless your
-      # organization has ZDR.
+      # `enabled` disables request logs and traces and omits request and response
+      # content from usage logs. Brand data and hosted assets may still be stored.
+      # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 
