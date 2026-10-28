@@ -87,8 +87,8 @@ module ContextDev
         sig { returns(String) }
         attr_accessor :id
 
-        # How changes are judged. Defaults to `semantic` for extract targets and page
-        # targets with `instructions`, otherwise `exact`.
+        # How changes are judged. Defaults to `semantic` for extract and search targets
+        # and page targets with `instructions`, otherwise `exact`.
         sig do
           returns(
             ContextDev::Models::MonitorListResponse::Data::ChangeDetection::Variants
@@ -133,7 +133,8 @@ module ContextDev
         end
         attr_accessor :status
 
-        # What to watch: a page, a sitemap, or data extracted from a site.
+        # What to watch: a page, a sitemap, data extracted from a site, or web search
+        # results.
         sig do
           returns(
             ContextDev::Models::MonitorListResponse::Data::Target::Variants
@@ -238,7 +239,7 @@ module ContextDev
         attr_writer :webhook_failure
 
         # A web monitor. `mode` is the constant `web`; behavior is described by `target`
-        # (page/sitemap/extract) and `change_detection` (exact/semantic).
+        # (page/sitemap/extract/search) and `change_detection` (exact/semantic).
         sig do
           params(
             id: String,
@@ -258,7 +259,8 @@ module ContextDev
               T.any(
                 ContextDev::Models::MonitorListResponse::Data::Target::Page::OrHash,
                 ContextDev::Models::MonitorListResponse::Data::Target::Sitemap::OrHash,
-                ContextDev::Models::MonitorListResponse::Data::Target::Extract::OrHash
+                ContextDev::Models::MonitorListResponse::Data::Target::Extract::OrHash,
+                ContextDev::Models::MonitorListResponse::Data::Target::Search::OrHash
               ),
             updated_at: Time,
             baseline:
@@ -266,7 +268,8 @@ module ContextDev
                 T.any(
                   ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsPageBaseline::OrHash,
                   ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSitemapBaseline::OrHash,
-                  ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsExtractBaseline::OrHash
+                  ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsExtractBaseline::OrHash,
+                  ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSearchBaseline::OrHash
                 )
               ),
             last_change_at: T.nilable(Time),
@@ -290,8 +293,8 @@ module ContextDev
         end
         def self.new(
           id:,
-          # How changes are judged. Defaults to `semantic` for extract targets and page
-          # targets with `instructions`, otherwise `exact`.
+          # How changes are judged. Defaults to `semantic` for extract and search targets
+          # and page targets with `instructions`, otherwise `exact`.
           change_detection:,
           created_at:,
           # Always `web`. Optional.
@@ -304,7 +307,8 @@ module ContextDev
           # Current state. Failed monitors keep running; paused monitors must be resumed
           # with `status: "active"`.
           status:,
-          # What to watch: a page, a sitemap, or data extracted from a site.
+          # What to watch: a page, a sitemap, data extracted from a site, or web search
+          # results.
           target:,
           updated_at:,
           # Comparison baseline, included on Retrieve. Null until capture completes or after
@@ -372,8 +376,8 @@ module ContextDev
         def to_hash
         end
 
-        # How changes are judged. Defaults to `semantic` for extract targets and page
-        # targets with `instructions`, otherwise `exact`.
+        # How changes are judged. Defaults to `semantic` for extract and search targets
+        # and page targets with `instructions`, otherwise `exact`.
         module ChangeDetection
           extend ContextDev::Internal::Type::Union
 
@@ -394,15 +398,16 @@ module ContextDev
                 )
               end
 
-            # Use `exact` to compare visible text or sitemap URLs.
+            # Use `exact` to compare visible text, sitemap URLs, or search results.
             sig { returns(Symbol) }
             attr_accessor :type
 
             # Detect exact changes. For page targets, this means visible text diffs. For
-            # sitemap targets, this means URL additions and removals.
+            # sitemap targets, this means URL additions and removals. For search targets, this
+            # means every new result.
             sig { params(type: Symbol).returns(T.attached_class) }
             def self.new(
-              # Use `exact` to compare visible text or sitemap URLs.
+              # Use `exact` to compare visible text, sitemap URLs, or search results.
               type: :exact
             )
             end
@@ -673,7 +678,8 @@ module ContextDev
           end
         end
 
-        # What to watch: a page, a sitemap, or data extracted from a site.
+        # What to watch: a page, a sitemap, data extracted from a site, or web search
+        # results.
         module Target
           extend ContextDev::Internal::Type::Union
 
@@ -682,7 +688,8 @@ module ContextDev
               T.any(
                 ContextDev::Models::MonitorListResponse::Data::Target::Page,
                 ContextDev::Models::MonitorListResponse::Data::Target::Sitemap,
-                ContextDev::Models::MonitorListResponse::Data::Target::Extract
+                ContextDev::Models::MonitorListResponse::Data::Target::Extract,
+                ContextDev::Models::MonitorListResponse::Data::Target::Search
               )
             end
 
@@ -1292,6 +1299,60 @@ module ContextDev
             end
           end
 
+          class Search < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::Models::MonitorListResponse::Data::Target::Search,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # Web search query to run on every check. Supports operators such as `site:`,
+            # `-site:`, and quoted phrases.
+            sig { returns(String) }
+            attr_accessor :query
+
+            # Use `search` to watch the whole web for new results about a topic.
+            sig { returns(Symbol) }
+            attr_accessor :type
+
+            # Plain-language description of which new results matter. Defaults to the query.
+            sig { returns(T.nilable(String)) }
+            attr_reader :instructions
+
+            sig { params(instructions: String).void }
+            attr_writer :instructions
+
+            # Search the web on every run and report results not seen before, listed in the
+            # change’s `matched_urls` and `evidence`. Semantic detection reports only results
+            # describing a new development that matches `instructions`; exact detection
+            # reports every new result.
+            sig do
+              params(query: String, instructions: String, type: Symbol).returns(
+                T.attached_class
+              )
+            end
+            def self.new(
+              # Web search query to run on every check. Supports operators such as `site:`,
+              # `-site:`, and quoted phrases.
+              query:,
+              # Plain-language description of which new results matter. Defaults to the query.
+              instructions: nil,
+              # Use `search` to watch the whole web for new results about a topic.
+              type: :search
+            )
+            end
+
+            sig do
+              override.returns(
+                { query: String, type: Symbol, instructions: String }
+              )
+            end
+            def to_hash
+            end
+          end
+
           sig do
             override.returns(
               T::Array[
@@ -1313,7 +1374,8 @@ module ContextDev
               T.any(
                 ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsPageBaseline,
                 ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSitemapBaseline,
-                ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsExtractBaseline
+                ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsExtractBaseline,
+                ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSearchBaseline
               )
             end
 
@@ -1456,6 +1518,117 @@ module ContextDev
               )
             end
             def to_hash
+            end
+          end
+
+          class MonitorsSearchBaseline < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSearchBaseline,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # When this baseline was last captured or replaced.
+            sig { returns(Time) }
+            attr_accessor :captured_at
+
+            # Search results as last observed.
+            sig do
+              returns(
+                T::Array[
+                  ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSearchBaseline::Result
+                ]
+              )
+            end
+            attr_accessor :results
+
+            # Current baseline of a `search` monitor: the search results as last observed.
+            sig do
+              params(
+                captured_at: Time,
+                results:
+                  T::Array[
+                    ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSearchBaseline::Result::OrHash
+                  ]
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # When this baseline was last captured or replaced.
+              captured_at:,
+              # Search results as last observed.
+              results:
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  captured_at: Time,
+                  results:
+                    T::Array[
+                      ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSearchBaseline::Result
+                    ]
+                }
+              )
+            end
+            def to_hash
+            end
+
+            class Result < ContextDev::Internal::Type::BaseModel
+              OrHash =
+                T.type_alias do
+                  T.any(
+                    ContextDev::Models::MonitorListResponse::Data::Baseline::MonitorsSearchBaseline::Result,
+                    ContextDev::Internal::AnyHash
+                  )
+                end
+
+              # Result snippet.
+              sig { returns(String) }
+              attr_accessor :description
+
+              # When the result was published, when known.
+              sig { returns(T.nilable(Time)) }
+              attr_accessor :published_at
+
+              sig { returns(String) }
+              attr_accessor :title
+
+              sig { returns(String) }
+              attr_accessor :url
+
+              sig do
+                params(
+                  description: String,
+                  published_at: T.nilable(Time),
+                  title: String,
+                  url: String
+                ).returns(T.attached_class)
+              end
+              def self.new(
+                # Result snippet.
+                description:,
+                # When the result was published, when known.
+                published_at:,
+                title:,
+                url:
+              )
+              end
+
+              sig do
+                override.returns(
+                  {
+                    description: String,
+                    published_at: T.nilable(Time),
+                    title: String,
+                    url: String
+                  }
+                )
+              end
+              def to_hash
+              end
             end
           end
 

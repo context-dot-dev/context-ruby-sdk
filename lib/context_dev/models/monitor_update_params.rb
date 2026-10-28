@@ -14,8 +14,8 @@ module ContextDev
       required :monitor_id, String
 
       # @!attribute change_detection
-      #   How changes are judged. Defaults to `semantic` for extract targets and page
-      #   targets with `instructions`, otherwise `exact`.
+      #   How changes are judged. Defaults to `semantic` for extract and search targets
+      #   and page targets with `instructions`, otherwise `exact`.
       #
       #   @return [ContextDev::Models::MonitorUpdateParams::ChangeDetection::Exact, ContextDev::Models::MonitorUpdateParams::ChangeDetection::Semantic, nil]
       optional :change_detection, union: -> { ContextDev::MonitorUpdateParams::ChangeDetection }
@@ -53,9 +53,10 @@ module ContextDev
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute target
-      #   What to watch: a page, a sitemap, or data extracted from a site.
+      #   What to watch: a page, a sitemap, data extracted from a site, or web search
+      #   results.
       #
-      #   @return [ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract, nil]
+      #   @return [ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract, ContextDev::Models::MonitorUpdateParams::Target::Search, nil]
       optional :target, union: -> { ContextDev::MonitorUpdateParams::Target }
 
       # @!attribute webhook
@@ -70,7 +71,7 @@ module ContextDev
       #
       #   @param monitor_id [String] ID of the monitor.
       #
-      #   @param change_detection [ContextDev::Models::MonitorUpdateParams::ChangeDetection::Exact, ContextDev::Models::MonitorUpdateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract targets and page targ
+      #   @param change_detection [ContextDev::Models::MonitorUpdateParams::ChangeDetection::Exact, ContextDev::Models::MonitorUpdateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract and search targets an
       #
       #   @param name [String] Display name for the monitor.
       #
@@ -82,20 +83,20 @@ module ContextDev
       #
       #   @param tags [Array<String>] Labels for filtering monitors, their changes, and their usage.
       #
-      #   @param target [ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract] What to watch: a page, a sitemap, or data extracted from a site.
+      #   @param target [ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract, ContextDev::Models::MonitorUpdateParams::Target::Search] What to watch: a page, a sitemap, data extracted from a site, or web search resu
       #
       #   @param webhook [ContextDev::Models::MonitorUpdateParams::Webhook, nil] Set to null to remove the webhook. Changing `url` issues a new secret.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # How changes are judged. Defaults to `semantic` for extract targets and page
-      # targets with `instructions`, otherwise `exact`.
+      # How changes are judged. Defaults to `semantic` for extract and search targets
+      # and page targets with `instructions`, otherwise `exact`.
       module ChangeDetection
         extend ContextDev::Internal::Type::Union
 
         discriminator :type
 
-        # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals.
+        # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals. For search targets, this means every new result.
         variant :exact, -> { ContextDev::MonitorUpdateParams::ChangeDetection::Exact }
 
         # Detect meaningful content changes using the target’s instructions and optional schema.
@@ -103,16 +104,17 @@ module ContextDev
 
         class Exact < ContextDev::Internal::Type::BaseModel
           # @!attribute type
-          #   Use `exact` to compare visible text or sitemap URLs.
+          #   Use `exact` to compare visible text, sitemap URLs, or search results.
           #
           #   @return [Symbol, :exact]
           required :type, const: :exact
 
           # @!method initialize(type: :exact)
           #   Detect exact changes. For page targets, this means visible text diffs. For
-          #   sitemap targets, this means URL additions and removals.
+          #   sitemap targets, this means URL additions and removals. For search targets, this
+          #   means every new result.
           #
-          #   @param type [Symbol, :exact] Use `exact` to compare visible text or sitemap URLs.
+          #   @param type [Symbol, :exact] Use `exact` to compare visible text, sitemap URLs, or search results.
         end
 
         class Semantic < ContextDev::Internal::Type::BaseModel
@@ -214,7 +216,8 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # What to watch: a page, a sitemap, or data extracted from a site.
+      # What to watch: a page, a sitemap, data extracted from a site, or web search
+      # results.
       module Target
         extend ContextDev::Internal::Type::Union
 
@@ -228,6 +231,9 @@ module ContextDev
 
         # Track relevant pages selected by `schema` and `instructions`; refresh the page set periodically.
         variant :extract, -> { ContextDev::MonitorUpdateParams::Target::Extract }
+
+        # Search the web on every run and report results not seen before, listed in the change’s `matched_urls` and `evidence`. Semantic detection reports only results describing a new development that matches `instructions`; exact detection reports every new result.
+        variant :search, -> { ContextDev::MonitorUpdateParams::Target::Search }
 
         class Page < ContextDev::Internal::Type::BaseModel
           # @!attribute type
@@ -571,8 +577,44 @@ module ContextDev
           #   @param type [Symbol, :extract] Use `extract` to watch structured data across selected pages.
         end
 
+        class Search < ContextDev::Internal::Type::BaseModel
+          # @!attribute query
+          #   Web search query to run on every check. Supports operators such as `site:`,
+          #   `-site:`, and quoted phrases.
+          #
+          #   @return [String]
+          required :query, String
+
+          # @!attribute type
+          #   Use `search` to watch the whole web for new results about a topic.
+          #
+          #   @return [Symbol, :search]
+          required :type, const: :search
+
+          # @!attribute instructions
+          #   Plain-language description of which new results matter. Defaults to the query.
+          #
+          #   @return [String, nil]
+          optional :instructions, String
+
+          # @!method initialize(query:, instructions: nil, type: :search)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::MonitorUpdateParams::Target::Search} for more details.
+          #
+          #   Search the web on every run and report results not seen before, listed in the
+          #   change’s `matched_urls` and `evidence`. Semantic detection reports only results
+          #   describing a new development that matches `instructions`; exact detection
+          #   reports every new result.
+          #
+          #   @param query [String] Web search query to run on every check. Supports operators such as `site:`, `-si
+          #
+          #   @param instructions [String] Plain-language description of which new results matter. Defaults to the query.
+          #
+          #   @param type [Symbol, :search] Use `search` to watch the whole web for new results about a topic.
+        end
+
         # @!method self.variants
-        #   @return [Array(ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract)]
+        #   @return [Array(ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract, ContextDev::Models::MonitorUpdateParams::Target::Search)]
       end
 
       class Webhook < ContextDev::Internal::Type::BaseModel

@@ -211,6 +211,11 @@ module ContextDev
             :extract,
             ContextDev::MonitorListAccountChangesParams::TargetType::TaggedSymbol
           )
+        SEARCH =
+          T.let(
+            :search,
+            ContextDev::MonitorListAccountChangesParams::TargetType::TaggedSymbol
+          )
 
         sig do
           override.returns(

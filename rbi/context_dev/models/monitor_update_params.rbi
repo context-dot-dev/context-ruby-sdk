@@ -15,8 +15,8 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :monitor_id
 
-      # How changes are judged. Defaults to `semantic` for extract targets and page
-      # targets with `instructions`, otherwise `exact`.
+      # How changes are judged. Defaults to `semantic` for extract and search targets
+      # and page targets with `instructions`, otherwise `exact`.
       sig do
         returns(
           T.nilable(
@@ -83,14 +83,16 @@ module ContextDev
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # What to watch: a page, a sitemap, or data extracted from a site.
+      # What to watch: a page, a sitemap, data extracted from a site, or web search
+      # results.
       sig do
         returns(
           T.nilable(
             T.any(
               ContextDev::MonitorUpdateParams::Target::Page,
               ContextDev::MonitorUpdateParams::Target::Sitemap,
-              ContextDev::MonitorUpdateParams::Target::Extract
+              ContextDev::MonitorUpdateParams::Target::Extract,
+              ContextDev::MonitorUpdateParams::Target::Search
             )
           )
         )
@@ -103,7 +105,8 @@ module ContextDev
             T.any(
               ContextDev::MonitorUpdateParams::Target::Page::OrHash,
               ContextDev::MonitorUpdateParams::Target::Sitemap::OrHash,
-              ContextDev::MonitorUpdateParams::Target::Extract::OrHash
+              ContextDev::MonitorUpdateParams::Target::Extract::OrHash,
+              ContextDev::MonitorUpdateParams::Target::Search::OrHash
             )
         ).void
       end
@@ -137,7 +140,8 @@ module ContextDev
             T.any(
               ContextDev::MonitorUpdateParams::Target::Page::OrHash,
               ContextDev::MonitorUpdateParams::Target::Sitemap::OrHash,
-              ContextDev::MonitorUpdateParams::Target::Extract::OrHash
+              ContextDev::MonitorUpdateParams::Target::Extract::OrHash,
+              ContextDev::MonitorUpdateParams::Target::Search::OrHash
             ),
           webhook: T.nilable(ContextDev::MonitorUpdateParams::Webhook::OrHash),
           request_options: ContextDev::RequestOptions::OrHash
@@ -146,8 +150,8 @@ module ContextDev
       def self.new(
         # ID of the monitor.
         monitor_id:,
-        # How changes are judged. Defaults to `semantic` for extract targets and page
-        # targets with `instructions`, otherwise `exact`.
+        # How changes are judged. Defaults to `semantic` for extract and search targets
+        # and page targets with `instructions`, otherwise `exact`.
         change_detection: nil,
         # Display name for the monitor.
         name: nil,
@@ -161,7 +165,8 @@ module ContextDev
         status: nil,
         # Labels for filtering monitors, their changes, and their usage.
         tags: nil,
-        # What to watch: a page, a sitemap, or data extracted from a site.
+        # What to watch: a page, a sitemap, data extracted from a site, or web search
+        # results.
         target: nil,
         # Set to null to remove the webhook. Changing `url` issues a new secret.
         webhook: nil,
@@ -187,7 +192,8 @@ module ContextDev
               T.any(
                 ContextDev::MonitorUpdateParams::Target::Page,
                 ContextDev::MonitorUpdateParams::Target::Sitemap,
-                ContextDev::MonitorUpdateParams::Target::Extract
+                ContextDev::MonitorUpdateParams::Target::Extract,
+                ContextDev::MonitorUpdateParams::Target::Search
               ),
             webhook: T.nilable(ContextDev::MonitorUpdateParams::Webhook),
             request_options: ContextDev::RequestOptions
@@ -197,8 +203,8 @@ module ContextDev
       def to_hash
       end
 
-      # How changes are judged. Defaults to `semantic` for extract targets and page
-      # targets with `instructions`, otherwise `exact`.
+      # How changes are judged. Defaults to `semantic` for extract and search targets
+      # and page targets with `instructions`, otherwise `exact`.
       module ChangeDetection
         extend ContextDev::Internal::Type::Union
 
@@ -219,15 +225,16 @@ module ContextDev
               )
             end
 
-          # Use `exact` to compare visible text or sitemap URLs.
+          # Use `exact` to compare visible text, sitemap URLs, or search results.
           sig { returns(Symbol) }
           attr_accessor :type
 
           # Detect exact changes. For page targets, this means visible text diffs. For
-          # sitemap targets, this means URL additions and removals.
+          # sitemap targets, this means URL additions and removals. For search targets, this
+          # means every new result.
           sig { params(type: Symbol).returns(T.attached_class) }
           def self.new(
-            # Use `exact` to compare visible text or sitemap URLs.
+            # Use `exact` to compare visible text, sitemap URLs, or search results.
             type: :exact
           )
           end
@@ -438,7 +445,8 @@ module ContextDev
         end
       end
 
-      # What to watch: a page, a sitemap, or data extracted from a site.
+      # What to watch: a page, a sitemap, data extracted from a site, or web search
+      # results.
       module Target
         extend ContextDev::Internal::Type::Union
 
@@ -447,7 +455,8 @@ module ContextDev
             T.any(
               ContextDev::MonitorUpdateParams::Target::Page,
               ContextDev::MonitorUpdateParams::Target::Sitemap,
-              ContextDev::MonitorUpdateParams::Target::Extract
+              ContextDev::MonitorUpdateParams::Target::Extract,
+              ContextDev::MonitorUpdateParams::Target::Search
             )
           end
 
@@ -1063,6 +1072,60 @@ module ContextDev
                 max_pages: Integer,
                 schema: T::Hash[Symbol, T.anything]
               }
+            )
+          end
+          def to_hash
+          end
+        end
+
+        class Search < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::MonitorUpdateParams::Target::Search,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Web search query to run on every check. Supports operators such as `site:`,
+          # `-site:`, and quoted phrases.
+          sig { returns(String) }
+          attr_accessor :query
+
+          # Use `search` to watch the whole web for new results about a topic.
+          sig { returns(Symbol) }
+          attr_accessor :type
+
+          # Plain-language description of which new results matter. Defaults to the query.
+          sig { returns(T.nilable(String)) }
+          attr_reader :instructions
+
+          sig { params(instructions: String).void }
+          attr_writer :instructions
+
+          # Search the web on every run and report results not seen before, listed in the
+          # change’s `matched_urls` and `evidence`. Semantic detection reports only results
+          # describing a new development that matches `instructions`; exact detection
+          # reports every new result.
+          sig do
+            params(query: String, instructions: String, type: Symbol).returns(
+              T.attached_class
+            )
+          end
+          def self.new(
+            # Web search query to run on every check. Supports operators such as `site:`,
+            # `-site:`, and quoted phrases.
+            query:,
+            # Plain-language description of which new results matter. Defaults to the query.
+            instructions: nil,
+            # Use `search` to watch the whole web for new results about a topic.
+            type: :search
+          )
+          end
+
+          sig do
+            override.returns(
+              { query: String, type: Symbol, instructions: String }
             )
           end
           def to_hash

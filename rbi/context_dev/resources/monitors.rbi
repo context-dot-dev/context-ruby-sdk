@@ -13,7 +13,8 @@ module ContextDev
             T.any(
               ContextDev::MonitorCreateParams::Target::Page::OrHash,
               ContextDev::MonitorCreateParams::Target::Sitemap::OrHash,
-              ContextDev::MonitorCreateParams::Target::Extract::OrHash
+              ContextDev::MonitorCreateParams::Target::Extract::OrHash,
+              ContextDev::MonitorCreateParams::Target::Search::OrHash
             ),
           change_detection:
             T.any(
@@ -31,10 +32,11 @@ module ContextDev
       def create(
         # Display name for the monitor.
         name:,
-        # What to watch: a page, a sitemap, or data extracted from a site.
+        # What to watch: a page, a sitemap, data extracted from a site, or web search
+        # results.
         target:,
-        # How changes are judged. Defaults to `semantic` for extract targets and page
-        # targets with `instructions`, otherwise `exact`.
+        # How changes are judged. Defaults to `semantic` for extract and search targets
+        # and page targets with `instructions`, otherwise `exact`.
         change_detection: nil,
         # Always `web`. Optional.
         mode: nil,
@@ -85,7 +87,8 @@ module ContextDev
             T.any(
               ContextDev::MonitorUpdateParams::Target::Page::OrHash,
               ContextDev::MonitorUpdateParams::Target::Sitemap::OrHash,
-              ContextDev::MonitorUpdateParams::Target::Extract::OrHash
+              ContextDev::MonitorUpdateParams::Target::Extract::OrHash,
+              ContextDev::MonitorUpdateParams::Target::Search::OrHash
             ),
           webhook: T.nilable(ContextDev::MonitorUpdateParams::Webhook::OrHash),
           request_options: ContextDev::RequestOptions::OrHash
@@ -94,8 +97,8 @@ module ContextDev
       def update(
         # ID of the monitor.
         monitor_id,
-        # How changes are judged. Defaults to `semantic` for extract targets and page
-        # targets with `instructions`, otherwise `exact`.
+        # How changes are judged. Defaults to `semantic` for extract and search targets
+        # and page targets with `instructions`, otherwise `exact`.
         change_detection: nil,
         # Display name for the monitor.
         name: nil,
@@ -109,7 +112,8 @@ module ContextDev
         status: nil,
         # Labels for filtering monitors, their changes, and their usage.
         tags: nil,
-        # What to watch: a page, a sitemap, or data extracted from a site.
+        # What to watch: a page, a sitemap, data extracted from a site, or web search
+        # results.
         target: nil,
         # Set to null to remove the webhook. Changing `url` issues a new secret.
         webhook: nil,
@@ -146,8 +150,8 @@ module ContextDev
         limit: nil,
         # Free-text search term, matched against the fields named in `search_by`.
         q: nil,
-        # Fields to search with `q`. Defaults to all fields; page and extract targets can
-        # have instructions.
+        # Fields to search with `q`. Defaults to all fields; page, extract, and search
+        # targets can have instructions, and `url` matches a search target’s query.
         search_by: nil,
         # `prefix` for as-you-type prefix matching (default), `exact` for full-token
         # matching.

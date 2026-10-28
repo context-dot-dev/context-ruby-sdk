@@ -138,7 +138,7 @@ module ContextDev
         def self?.values: -> ::Array[ContextDev::Models::MonitorListParams::status]
       end
 
-      type target_type = :page | :sitemap | :extract
+      type target_type = :page | :sitemap | :extract | :search
 
       module TargetType
         extend ContextDev::Internal::Type::Enum
@@ -146,6 +146,7 @@ module ContextDev
         PAGE: :page
         SITEMAP: :sitemap
         EXTRACT: :extract
+        SEARCH: :search
 
         def self?.values: -> ::Array[ContextDev::Models::MonitorListParams::target_type]
       end

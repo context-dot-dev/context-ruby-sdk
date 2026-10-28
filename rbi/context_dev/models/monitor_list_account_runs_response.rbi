@@ -462,6 +462,11 @@ module ContextDev
               :extract,
               ContextDev::Models::MonitorListAccountRunsResponse::Data::TargetType::TaggedSymbol
             )
+          SEARCH =
+            T.let(
+              :search,
+              ContextDev::Models::MonitorListAccountRunsResponse::Data::TargetType::TaggedSymbol
+            )
 
           sig do
             override.returns(

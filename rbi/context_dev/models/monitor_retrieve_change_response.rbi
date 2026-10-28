@@ -61,6 +61,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :title
 
+      # The monitored URL. For search targets, the first newly reported result.
       sig { returns(String) }
       attr_accessor :url
 
@@ -238,6 +239,7 @@ module ContextDev
         tags:,
         target_type:,
         title:,
+        # The monitored URL. For search targets, the first newly reported result.
         url:,
         added_url_count: nil,
         # At most 500 URLs are included; the corresponding count field is always exact.
@@ -391,6 +393,11 @@ module ContextDev
         EXTRACT =
           T.let(
             :extract,
+            ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::TaggedSymbol
+          )
+        SEARCH =
+          T.let(
+            :search,
             ContextDev::Models::MonitorRetrieveChangeResponse::TargetType::TaggedSymbol
           )
 

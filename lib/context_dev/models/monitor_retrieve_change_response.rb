@@ -66,6 +66,7 @@ module ContextDev
       required :title, String
 
       # @!attribute url
+      #   The monitored URL. For search targets, the first newly reported result.
       #
       #   @return [String]
       required :url, String
@@ -167,7 +168,7 @@ module ContextDev
       #
       #   @param title [String]
       #
-      #   @param url [String]
+      #   @param url [String] The monitored URL. For search targets, the first newly reported result.
       #
       #   @param added_url_count [Integer]
       #
@@ -225,6 +226,7 @@ module ContextDev
         PAGE = :page
         SITEMAP = :sitemap
         EXTRACT = :extract
+        SEARCH = :search
 
         # @!method self.values
         #   @return [Array<Symbol>]

@@ -185,6 +185,7 @@ module ContextDev
         ContextDev::MonitorUpdateParams::Target::Page
         | ContextDev::MonitorUpdateParams::Target::Sitemap
         | ContextDev::MonitorUpdateParams::Target::Extract
+        | ContextDev::MonitorUpdateParams::Target::Search
 
       module Target
         extend ContextDev::Internal::Type::Union
@@ -448,6 +449,26 @@ module ContextDev
             max_pages: Integer,
             schema: ::Hash[Symbol, top]
           }
+        end
+
+        type search = { query: String, type: :search, instructions: String }
+
+        class Search < ContextDev::Internal::Type::BaseModel
+          attr_accessor query: String
+
+          attr_accessor type: :search
+
+          attr_reader instructions: String?
+
+          def instructions=: (String) -> String
+
+          def initialize: (
+            query: String,
+            ?instructions: String,
+            ?type: :search
+          ) -> void
+
+          def to_hash: -> { query: String, type: :search, instructions: String }
         end
 
         def self?.variants: -> ::Array[ContextDev::Models::MonitorUpdateParams::target]

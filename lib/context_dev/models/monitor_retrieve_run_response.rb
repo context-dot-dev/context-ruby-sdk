@@ -207,6 +207,7 @@ module ContextDev
         PAGE = :page
         SITEMAP = :sitemap
         EXTRACT = :extract
+        SEARCH = :search
 
         # @!method self.values
         #   @return [Array<Symbol>]

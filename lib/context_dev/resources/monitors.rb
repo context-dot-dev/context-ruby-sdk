@@ -14,9 +14,9 @@ module ContextDev
       #
       # @param name [String] Display name for the monitor.
       #
-      # @param target [ContextDev::Models::MonitorCreateParams::Target::Page, ContextDev::Models::MonitorCreateParams::Target::Sitemap, ContextDev::Models::MonitorCreateParams::Target::Extract] What to watch: a page, a sitemap, or data extracted from a site.
+      # @param target [ContextDev::Models::MonitorCreateParams::Target::Page, ContextDev::Models::MonitorCreateParams::Target::Sitemap, ContextDev::Models::MonitorCreateParams::Target::Extract, ContextDev::Models::MonitorCreateParams::Target::Search] What to watch: a page, a sitemap, data extracted from a site, or web search resu
       #
-      # @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract targets and page targ
+      # @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract and search targets an
       #
       # @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Always `web`. Optional.
       #
@@ -74,7 +74,7 @@ module ContextDev
       #
       # @param monitor_id [String] ID of the monitor.
       #
-      # @param change_detection [ContextDev::Models::MonitorUpdateParams::ChangeDetection::Exact, ContextDev::Models::MonitorUpdateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract targets and page targ
+      # @param change_detection [ContextDev::Models::MonitorUpdateParams::ChangeDetection::Exact, ContextDev::Models::MonitorUpdateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract and search targets an
       #
       # @param name [String] Display name for the monitor.
       #
@@ -86,7 +86,7 @@ module ContextDev
       #
       # @param tags [Array<String>] Labels for filtering monitors, their changes, and their usage.
       #
-      # @param target [ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract] What to watch: a page, a sitemap, or data extracted from a site.
+      # @param target [ContextDev::Models::MonitorUpdateParams::Target::Page, ContextDev::Models::MonitorUpdateParams::Target::Sitemap, ContextDev::Models::MonitorUpdateParams::Target::Extract, ContextDev::Models::MonitorUpdateParams::Target::Search] What to watch: a page, a sitemap, data extracted from a site, or web search resu
       #
       # @param webhook [ContextDev::Models::MonitorUpdateParams::Webhook, nil] Set to null to remove the webhook. Changing `url` issues a new secret.
       #
@@ -121,7 +121,7 @@ module ContextDev
       #
       # @param q [String] Free-text search term, matched against the fields named in `search_by`.
       #
-      # @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil] Fields to search with `q`. Defaults to all fields; page and extract targets can
+      # @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil] Fields to search with `q`. Defaults to all fields; page, extract, and search tar
       #
       # @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
       #

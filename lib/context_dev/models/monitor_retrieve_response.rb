@@ -10,8 +10,8 @@ module ContextDev
       required :id, String
 
       # @!attribute change_detection
-      #   How changes are judged. Defaults to `semantic` for extract targets and page
-      #   targets with `instructions`, otherwise `exact`.
+      #   How changes are judged. Defaults to `semantic` for extract and search targets
+      #   and page targets with `instructions`, otherwise `exact`.
       #
       #   @return [ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Exact, ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Semantic]
       required :change_detection, union: -> { ContextDev::Models::MonitorRetrieveResponse::ChangeDetection }
@@ -47,9 +47,10 @@ module ContextDev
       required :status, enum: -> { ContextDev::Models::MonitorRetrieveResponse::Status }
 
       # @!attribute target
-      #   What to watch: a page, a sitemap, or data extracted from a site.
+      #   What to watch: a page, a sitemap, data extracted from a site, or web search
+      #   results.
       #
-      #   @return [ContextDev::Models::MonitorRetrieveResponse::Target::Page, ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap, ContextDev::Models::MonitorRetrieveResponse::Target::Extract]
+      #   @return [ContextDev::Models::MonitorRetrieveResponse::Target::Page, ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap, ContextDev::Models::MonitorRetrieveResponse::Target::Extract, ContextDev::Models::MonitorRetrieveResponse::Target::Search]
       required :target, union: -> { ContextDev::Models::MonitorRetrieveResponse::Target }
 
       # @!attribute updated_at
@@ -61,7 +62,7 @@ module ContextDev
       #   Comparison baseline, included on Retrieve. Null until capture completes or after
       #   target changes.
       #
-      #   @return [ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline, nil]
+      #   @return [ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSearchBaseline, nil]
       optional :baseline, union: -> { ContextDev::Models::MonitorRetrieveResponse::Baseline }, nil?: true
 
       # @!attribute key_metadata
@@ -132,7 +133,7 @@ module ContextDev
       #
       #   @param id [String]
       #
-      #   @param change_detection [ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Exact, ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract targets and page targ
+      #   @param change_detection [ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Exact, ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract and search targets an
       #
       #   @param created_at [Time]
       #
@@ -144,11 +145,11 @@ module ContextDev
       #
       #   @param status [Symbol, ContextDev::Models::MonitorRetrieveResponse::Status] Current state. Failed monitors keep running; paused monitors must be resumed wit
       #
-      #   @param target [ContextDev::Models::MonitorRetrieveResponse::Target::Page, ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap, ContextDev::Models::MonitorRetrieveResponse::Target::Extract] What to watch: a page, a sitemap, or data extracted from a site.
+      #   @param target [ContextDev::Models::MonitorRetrieveResponse::Target::Page, ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap, ContextDev::Models::MonitorRetrieveResponse::Target::Extract, ContextDev::Models::MonitorRetrieveResponse::Target::Search] What to watch: a page, a sitemap, data extracted from a site, or web search resu
       #
       #   @param updated_at [Time]
       #
-      #   @param baseline [ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline, nil] Comparison baseline, included on Retrieve. Null until capture completes or after
+      #   @param baseline [ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSearchBaseline, nil] Comparison baseline, included on Retrieve. Null until capture completes or after
       #
       #   @param key_metadata [ContextDev::Models::MonitorRetrieveResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
@@ -170,8 +171,8 @@ module ContextDev
       #
       #   @param webhook_failure [ContextDev::Models::MonitorRetrieveResponse::WebhookFailure, nil] Present while webhook deliveries are failing consecutively; null when deliveries
 
-      # How changes are judged. Defaults to `semantic` for extract targets and page
-      # targets with `instructions`, otherwise `exact`.
+      # How changes are judged. Defaults to `semantic` for extract and search targets
+      # and page targets with `instructions`, otherwise `exact`.
       #
       # @see ContextDev::Models::MonitorRetrieveResponse#change_detection
       module ChangeDetection
@@ -179,7 +180,7 @@ module ContextDev
 
         discriminator :type
 
-        # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals.
+        # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals. For search targets, this means every new result.
         variant :exact, -> { ContextDev::Models::MonitorRetrieveResponse::ChangeDetection::Exact }
 
         # Detect meaningful content changes using the target’s instructions and optional schema.
@@ -187,16 +188,17 @@ module ContextDev
 
         class Exact < ContextDev::Internal::Type::BaseModel
           # @!attribute type
-          #   Use `exact` to compare visible text or sitemap URLs.
+          #   Use `exact` to compare visible text, sitemap URLs, or search results.
           #
           #   @return [Symbol, :exact]
           required :type, const: :exact
 
           # @!method initialize(type: :exact)
           #   Detect exact changes. For page targets, this means visible text diffs. For
-          #   sitemap targets, this means URL additions and removals.
+          #   sitemap targets, this means URL additions and removals. For search targets, this
+          #   means every new result.
           #
-          #   @param type [Symbol, :exact] Use `exact` to compare visible text or sitemap URLs.
+          #   @param type [Symbol, :exact] Use `exact` to compare visible text, sitemap URLs, or search results.
         end
 
         class Semantic < ContextDev::Internal::Type::BaseModel
@@ -252,7 +254,8 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # What to watch: a page, a sitemap, or data extracted from a site.
+      # What to watch: a page, a sitemap, data extracted from a site, or web search
+      # results.
       #
       # @see ContextDev::Models::MonitorRetrieveResponse#target
       module Target
@@ -268,6 +271,9 @@ module ContextDev
 
         # Track relevant pages selected by `schema` and `instructions`; refresh the page set periodically.
         variant :extract, -> { ContextDev::Models::MonitorRetrieveResponse::Target::Extract }
+
+        # Search the web on every run and report results not seen before, listed in the change’s `matched_urls` and `evidence`. Semantic detection reports only results describing a new development that matches `instructions`; exact detection reports every new result.
+        variant :search, -> { ContextDev::Models::MonitorRetrieveResponse::Target::Search }
 
         class Page < ContextDev::Internal::Type::BaseModel
           # @!attribute type
@@ -616,8 +622,44 @@ module ContextDev
           #   @param type [Symbol, :extract] Use `extract` to watch structured data across selected pages.
         end
 
+        class Search < ContextDev::Internal::Type::BaseModel
+          # @!attribute query
+          #   Web search query to run on every check. Supports operators such as `site:`,
+          #   `-site:`, and quoted phrases.
+          #
+          #   @return [String]
+          required :query, String
+
+          # @!attribute type
+          #   Use `search` to watch the whole web for new results about a topic.
+          #
+          #   @return [Symbol, :search]
+          required :type, const: :search
+
+          # @!attribute instructions
+          #   Plain-language description of which new results matter. Defaults to the query.
+          #
+          #   @return [String, nil]
+          optional :instructions, String
+
+          # @!method initialize(query:, instructions: nil, type: :search)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::MonitorRetrieveResponse::Target::Search} for more details.
+          #
+          #   Search the web on every run and report results not seen before, listed in the
+          #   change’s `matched_urls` and `evidence`. Semantic detection reports only results
+          #   describing a new development that matches `instructions`; exact detection
+          #   reports every new result.
+          #
+          #   @param query [String] Web search query to run on every check. Supports operators such as `site:`, `-si
+          #
+          #   @param instructions [String] Plain-language description of which new results matter. Defaults to the query.
+          #
+          #   @param type [Symbol, :search] Use `search` to watch the whole web for new results about a topic.
+        end
+
         # @!method self.variants
-        #   @return [Array(ContextDev::Models::MonitorRetrieveResponse::Target::Page, ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap, ContextDev::Models::MonitorRetrieveResponse::Target::Extract)]
+        #   @return [Array(ContextDev::Models::MonitorRetrieveResponse::Target::Page, ContextDev::Models::MonitorRetrieveResponse::Target::Sitemap, ContextDev::Models::MonitorRetrieveResponse::Target::Extract, ContextDev::Models::MonitorRetrieveResponse::Target::Search)]
       end
 
       # Comparison baseline, included on Retrieve. Null until capture completes or after
@@ -635,6 +677,9 @@ module ContextDev
 
         # Current baseline of an `extract` monitor: the pages it tracks and the structured data as last extracted.
         variant -> { ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline }
+
+        # Current baseline of a `search` monitor: the search results as last observed.
+        variant -> { ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSearchBaseline }
 
         class MonitorsPageBaseline < ContextDev::Internal::Type::BaseModel
           # @!attribute captured_at
@@ -722,8 +767,63 @@ module ContextDev
           #   @param urls_analyzed [Array<String>] The page URLs the monitor tracks and analyzes for changes.
         end
 
+        class MonitorsSearchBaseline < ContextDev::Internal::Type::BaseModel
+          # @!attribute captured_at
+          #   When this baseline was last captured or replaced.
+          #
+          #   @return [Time]
+          required :captured_at, Time
+
+          # @!attribute results
+          #   Search results as last observed.
+          #
+          #   @return [Array<ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSearchBaseline::Result>]
+          required :results,
+                   -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSearchBaseline::Result] }
+
+          # @!method initialize(captured_at:, results:)
+          #   Current baseline of a `search` monitor: the search results as last observed.
+          #
+          #   @param captured_at [Time] When this baseline was last captured or replaced.
+          #
+          #   @param results [Array<ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSearchBaseline::Result>] Search results as last observed.
+
+          class Result < ContextDev::Internal::Type::BaseModel
+            # @!attribute description
+            #   Result snippet.
+            #
+            #   @return [String]
+            required :description, String
+
+            # @!attribute published_at
+            #   When the result was published, when known.
+            #
+            #   @return [Time, nil]
+            required :published_at, Time, nil?: true
+
+            # @!attribute title
+            #
+            #   @return [String]
+            required :title, String
+
+            # @!attribute url
+            #
+            #   @return [String]
+            required :url, String
+
+            # @!method initialize(description:, published_at:, title:, url:)
+            #   @param description [String] Result snippet.
+            #
+            #   @param published_at [Time, nil] When the result was published, when known.
+            #
+            #   @param title [String]
+            #
+            #   @param url [String]
+          end
+        end
+
         # @!method self.variants
-        #   @return [Array(ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline)]
+        #   @return [Array(ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsExtractBaseline, ContextDev::Models::MonitorRetrieveResponse::Baseline::MonitorsSearchBaseline)]
       end
 
       # @see ContextDev::Models::MonitorRetrieveResponse#key_metadata

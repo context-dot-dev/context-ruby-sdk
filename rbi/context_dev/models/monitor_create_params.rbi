@@ -15,20 +15,22 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :name
 
-      # What to watch: a page, a sitemap, or data extracted from a site.
+      # What to watch: a page, a sitemap, data extracted from a site, or web search
+      # results.
       sig do
         returns(
           T.any(
             ContextDev::MonitorCreateParams::Target::Page,
             ContextDev::MonitorCreateParams::Target::Sitemap,
-            ContextDev::MonitorCreateParams::Target::Extract
+            ContextDev::MonitorCreateParams::Target::Extract,
+            ContextDev::MonitorCreateParams::Target::Search
           )
         )
       end
       attr_accessor :target
 
-      # How changes are judged. Defaults to `semantic` for extract targets and page
-      # targets with `instructions`, otherwise `exact`.
+      # How changes are judged. Defaults to `semantic` for extract and search targets
+      # and page targets with `instructions`, otherwise `exact`.
       sig do
         returns(
           T.nilable(
@@ -104,7 +106,8 @@ module ContextDev
             T.any(
               ContextDev::MonitorCreateParams::Target::Page::OrHash,
               ContextDev::MonitorCreateParams::Target::Sitemap::OrHash,
-              ContextDev::MonitorCreateParams::Target::Extract::OrHash
+              ContextDev::MonitorCreateParams::Target::Extract::OrHash,
+              ContextDev::MonitorCreateParams::Target::Search::OrHash
             ),
           change_detection:
             T.any(
@@ -122,10 +125,11 @@ module ContextDev
       def self.new(
         # Display name for the monitor.
         name:,
-        # What to watch: a page, a sitemap, or data extracted from a site.
+        # What to watch: a page, a sitemap, data extracted from a site, or web search
+        # results.
         target:,
-        # How changes are judged. Defaults to `semantic` for extract targets and page
-        # targets with `instructions`, otherwise `exact`.
+        # How changes are judged. Defaults to `semantic` for extract and search targets
+        # and page targets with `instructions`, otherwise `exact`.
         change_detection: nil,
         # Always `web`. Optional.
         mode: nil,
@@ -151,7 +155,8 @@ module ContextDev
               T.any(
                 ContextDev::MonitorCreateParams::Target::Page,
                 ContextDev::MonitorCreateParams::Target::Sitemap,
-                ContextDev::MonitorCreateParams::Target::Extract
+                ContextDev::MonitorCreateParams::Target::Extract,
+                ContextDev::MonitorCreateParams::Target::Search
               ),
             change_detection:
               T.any(
@@ -170,7 +175,8 @@ module ContextDev
       def to_hash
       end
 
-      # What to watch: a page, a sitemap, or data extracted from a site.
+      # What to watch: a page, a sitemap, data extracted from a site, or web search
+      # results.
       module Target
         extend ContextDev::Internal::Type::Union
 
@@ -179,7 +185,8 @@ module ContextDev
             T.any(
               ContextDev::MonitorCreateParams::Target::Page,
               ContextDev::MonitorCreateParams::Target::Sitemap,
-              ContextDev::MonitorCreateParams::Target::Extract
+              ContextDev::MonitorCreateParams::Target::Extract,
+              ContextDev::MonitorCreateParams::Target::Search
             )
           end
 
@@ -801,6 +808,60 @@ module ContextDev
           end
         end
 
+        class Search < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::MonitorCreateParams::Target::Search,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Web search query to run on every check. Supports operators such as `site:`,
+          # `-site:`, and quoted phrases.
+          sig { returns(String) }
+          attr_accessor :query
+
+          # Use `search` to watch the whole web for new results about a topic.
+          sig { returns(Symbol) }
+          attr_accessor :type
+
+          # Plain-language description of which new results matter. Defaults to the query.
+          sig { returns(T.nilable(String)) }
+          attr_reader :instructions
+
+          sig { params(instructions: String).void }
+          attr_writer :instructions
+
+          # Search the web on every run and report results not seen before, listed in the
+          # change’s `matched_urls` and `evidence`. Semantic detection reports only results
+          # describing a new development that matches `instructions`; exact detection
+          # reports every new result.
+          sig do
+            params(query: String, instructions: String, type: Symbol).returns(
+              T.attached_class
+            )
+          end
+          def self.new(
+            # Web search query to run on every check. Supports operators such as `site:`,
+            # `-site:`, and quoted phrases.
+            query:,
+            # Plain-language description of which new results matter. Defaults to the query.
+            instructions: nil,
+            # Use `search` to watch the whole web for new results about a topic.
+            type: :search
+          )
+          end
+
+          sig do
+            override.returns(
+              { query: String, type: Symbol, instructions: String }
+            )
+          end
+          def to_hash
+          end
+        end
+
         sig do
           override.returns(
             T::Array[ContextDev::MonitorCreateParams::Target::Variants]
@@ -810,8 +871,8 @@ module ContextDev
         end
       end
 
-      # How changes are judged. Defaults to `semantic` for extract targets and page
-      # targets with `instructions`, otherwise `exact`.
+      # How changes are judged. Defaults to `semantic` for extract and search targets
+      # and page targets with `instructions`, otherwise `exact`.
       module ChangeDetection
         extend ContextDev::Internal::Type::Union
 
@@ -832,15 +893,16 @@ module ContextDev
               )
             end
 
-          # Use `exact` to compare visible text or sitemap URLs.
+          # Use `exact` to compare visible text, sitemap URLs, or search results.
           sig { returns(Symbol) }
           attr_accessor :type
 
           # Detect exact changes. For page targets, this means visible text diffs. For
-          # sitemap targets, this means URL additions and removals.
+          # sitemap targets, this means URL additions and removals. For search targets, this
+          # means every new result.
           sig { params(type: Symbol).returns(T.attached_class) }
           def self.new(
-            # Use `exact` to compare visible text or sitemap URLs.
+            # Use `exact` to compare visible text, sitemap URLs, or search results.
             type: :exact
           )
           end

@@ -32,8 +32,8 @@ module ContextDev
       optional :q, String
 
       # @!attribute search_by
-      #   Fields to search with `q`. Defaults to all fields; page and extract targets can
-      #   have instructions.
+      #   Fields to search with `q`. Defaults to all fields; page, extract, and search
+      #   targets can have instructions, and `url` matches a search target’s query.
       #
       #   @return [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil]
       optional :search_by,
@@ -83,7 +83,7 @@ module ContextDev
       #
       #   @param q [String] Free-text search term, matched against the fields named in `search_by`.
       #
-      #   @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil] Fields to search with `q`. Defaults to all fields; page and extract targets can
+      #   @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil] Fields to search with `q`. Defaults to all fields; page, extract, and search tar
       #
       #   @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
       #
@@ -151,6 +151,7 @@ module ContextDev
         PAGE = :page
         SITEMAP = :sitemap
         EXTRACT = :extract
+        SEARCH = :search
 
         # @!method self.values
         #   @return [Array<Symbol>]

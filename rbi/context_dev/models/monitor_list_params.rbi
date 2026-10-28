@@ -50,8 +50,8 @@ module ContextDev
       sig { params(q: String).void }
       attr_writer :q
 
-      # Fields to search with `q`. Defaults to all fields; page and extract targets can
-      # have instructions.
+      # Fields to search with `q`. Defaults to all fields; page, extract, and search
+      # targets can have instructions, and `url` matches a search target’s query.
       sig do
         returns(
           T.nilable(T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol])
@@ -136,8 +136,8 @@ module ContextDev
         limit: nil,
         # Free-text search term, matched against the fields named in `search_by`.
         q: nil,
-        # Fields to search with `q`. Defaults to all fields; page and extract targets can
-        # have instructions.
+        # Fields to search with `q`. Defaults to all fields; page, extract, and search
+        # targets can have instructions, and `url` matches a search target’s query.
         search_by: nil,
         # `prefix` for as-you-type prefix matching (default), `exact` for full-token
         # matching.
@@ -311,6 +311,11 @@ module ContextDev
         EXTRACT =
           T.let(
             :extract,
+            ContextDev::MonitorListParams::TargetType::TaggedSymbol
+          )
+        SEARCH =
+          T.let(
+            :search,
             ContextDev::MonitorListParams::TargetType::TaggedSymbol
           )
 
