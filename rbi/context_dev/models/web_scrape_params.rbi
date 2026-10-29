@@ -140,15 +140,14 @@ module ContextDev
       end
       attr_writer :shared_params
 
-      # Labels for tracking request usage. Not retained when zdr is enabled.
+      # Labels for filtering usage in the dashboard.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits
-      # must end before it.
+      # Request deadline and what to return when it passes.
       sig { returns(T.nilable(ContextDev::WebScrapeParams::TimeoutOpts)) }
       attr_reader :timeout_opts
 
@@ -218,10 +217,9 @@ module ContextDev
         screenshot_params: nil,
         # Browser and content settings shared by all outputs.
         shared_params: nil,
-        # Labels for tracking request usage. Not retained when zdr is enabled.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
-        # Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits
-        # must end before it.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
         # `enabled` turns on zero data retention. Your organization must have ZDR enabled.
         zdr: nil,
@@ -1623,15 +1621,33 @@ module ContextDev
         sig { params(dedupe_images: T::Boolean).void }
         attr_writer :dedupe_images
 
+        # Ignored. The AI fallback runs automatically.
+        sig { returns(T.nilable(T::Boolean)) }
+        attr_reader :use_ai_fallback
+
+        sig { params(use_ai_fallback: T::Boolean).void }
+        attr_writer :use_ai_fallback
+
         # Product options. Requires formats.product: true.
-        sig { params(dedupe_images: T::Boolean).returns(T.attached_class) }
+        sig do
+          params(
+            dedupe_images: T::Boolean,
+            use_ai_fallback: T::Boolean
+          ).returns(T.attached_class)
+        end
         def self.new(
           # Drop visually duplicate product images, keeping the largest copy.
-          dedupe_images: nil
+          dedupe_images: nil,
+          # Ignored. The AI fallback runs automatically.
+          use_ai_fallback: nil
         )
         end
 
-        sig { override.returns({ dedupe_images: T::Boolean }) }
+        sig do
+          override.returns(
+            { dedupe_images: T::Boolean, use_ai_fallback: T::Boolean }
+          )
+        end
         def to_hash
         end
       end
@@ -2963,8 +2979,7 @@ module ContextDev
         end
         attr_writer :behavior
 
-        # Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits
-        # must end before it.
+        # Request deadline and what to return when it passes.
         sig do
           params(
             milliseconds: Integer,

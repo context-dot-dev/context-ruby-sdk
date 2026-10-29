@@ -219,10 +219,9 @@ module ContextDev
         screenshot_params: nil,
         # Browser and content settings shared by all outputs.
         shared_params: nil,
-        # Labels for tracking request usage. Not retained when zdr is enabled.
+        # Labels for filtering usage in the dashboard.
         tags: nil,
-        # Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits
-        # must end before it.
+        # Request deadline and what to return when it passes.
         timeout_opts: nil,
         # `enabled` turns on zero data retention. Your organization must have ZDR enabled.
         zdr: nil,

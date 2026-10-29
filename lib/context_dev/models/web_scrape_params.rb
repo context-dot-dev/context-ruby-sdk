@@ -85,14 +85,13 @@ module ContextDev
       optional :shared_params, -> { ContextDev::WebScrapeParams::SharedParams }, api_name: :sharedParams
 
       # @!attribute tags
-      #   Labels for tracking request usage. Not retained when zdr is enabled.
+      #   Labels for filtering usage in the dashboard.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timeout_opts
-      #   Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits
-      #   must end before it.
+      #   Request deadline and what to return when it passes.
       #
       #   @return [ContextDev::Models::WebScrapeParams::TimeoutOpts, nil]
       optional :timeout_opts, -> { ContextDev::WebScrapeParams::TimeoutOpts }, api_name: :timeoutOpts
@@ -131,9 +130,9 @@ module ContextDev
       #
       #   @param shared_params [ContextDev::Models::WebScrapeParams::SharedParams] Browser and content settings shared by all outputs.
       #
-      #   @param tags [Array<String>] Labels for tracking request usage. Not retained when zdr is enabled.
+      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
-      #   @param timeout_opts [ContextDev::Models::WebScrapeParams::TimeoutOpts] Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits mu
+      #   @param timeout_opts [ContextDev::Models::WebScrapeParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
       #   @param zdr [Symbol, ContextDev::Models::WebScrapeParams::Zdr] `enabled` turns on zero data retention. Your organization must have ZDR enabled.
       #
@@ -755,10 +754,20 @@ module ContextDev
         #   @return [Boolean, nil]
         optional :dedupe_images, ContextDev::Internal::Type::Boolean, api_name: :dedupeImages
 
-        # @!method initialize(dedupe_images: nil)
+        # @!attribute use_ai_fallback
+        #   @deprecated
+        #
+        #   Ignored. The AI fallback runs automatically.
+        #
+        #   @return [Boolean, nil]
+        optional :use_ai_fallback, ContextDev::Internal::Type::Boolean, api_name: :useAIFallback
+
+        # @!method initialize(dedupe_images: nil, use_ai_fallback: nil)
         #   Product options. Requires formats.product: true.
         #
         #   @param dedupe_images [Boolean] Drop visually duplicate product images, keeping the largest copy.
+        #
+        #   @param use_ai_fallback [Boolean] Ignored. The AI fallback runs automatically.
       end
 
       class ScreenshotParams < ContextDev::Internal::Type::BaseModel
@@ -1394,8 +1403,7 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeParams::TimeoutOpts} for more details.
         #
-        #   Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits
-        #   must end before it.
+        #   Request deadline and what to return when it passes.
         #
         #   @param milliseconds [Integer] Deadline in milliseconds.
         #

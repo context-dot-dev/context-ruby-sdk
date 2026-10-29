@@ -577,16 +577,20 @@ module ContextDev
         def self?.variants: -> ::Array[ContextDev::Models::WebScrapeParams::parse_params]
       end
 
-      type product_params = { dedupe_images: bool }
+      type product_params = { dedupe_images: bool, use_ai_fallback: bool }
 
       class ProductParams < ContextDev::Internal::Type::BaseModel
         attr_reader dedupe_images: bool?
 
         def dedupe_images=: (bool) -> bool
 
-        def initialize: (?dedupe_images: bool) -> void
+        attr_reader use_ai_fallback: bool?
 
-        def to_hash: -> { dedupe_images: bool }
+        def use_ai_fallback=: (bool) -> bool
+
+        def initialize: (?dedupe_images: bool, ?use_ai_fallback: bool) -> void
+
+        def to_hash: -> { dedupe_images: bool, use_ai_fallback: bool }
       end
 
       type screenshot_params =

@@ -1116,7 +1116,7 @@ module ContextDev
                        api_name: :sharedParams
 
               # @!attribute tags
-              #   Labels for tracking request usage. Not retained when zdr is enabled.
+              #   Labels for filtering usage in the dashboard.
               #
               #   @return [Array<String>, nil]
               optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -1170,7 +1170,7 @@ module ContextDev
               #
               #   @param shared_params [ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams] Browser and content settings shared by all outputs.
               #
-              #   @param tags [Array<String>] Labels for tracking request usage. Not retained when zdr is enabled.
+              #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
               #
               #   @param timeout_opts [ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts] Deadline for each page, using the same behavior and defaults as POST /web/scrape
               #
@@ -1848,10 +1848,20 @@ module ContextDev
                 #   @return [Boolean, nil]
                 optional :dedupe_images, ContextDev::Internal::Type::Boolean, api_name: :dedupeImages
 
-                # @!method initialize(dedupe_images: nil)
+                # @!attribute use_ai_fallback
+                #   @deprecated
+                #
+                #   Ignored. The AI fallback runs automatically.
+                #
+                #   @return [Boolean, nil]
+                optional :use_ai_fallback, ContextDev::Internal::Type::Boolean, api_name: :useAIFallback
+
+                # @!method initialize(dedupe_images: nil, use_ai_fallback: nil)
                 #   Product options. Requires formats.product: true.
                 #
                 #   @param dedupe_images [Boolean] Drop visually duplicate product images, keeping the largest copy.
+                #
+                #   @param use_ai_fallback [Boolean] Ignored. The AI fallback runs automatically.
               end
 
               # @see ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData#screenshot_params
@@ -4137,7 +4147,7 @@ module ContextDev
                        api_name: :sharedParams
 
               # @!attribute tags
-              #   Labels for tracking request usage. Not retained when zdr is enabled.
+              #   Labels for filtering usage in the dashboard.
               #
               #   @return [Array<String>, nil]
               optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -4190,7 +4200,7 @@ module ContextDev
               #
               #   @param shared_params [ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams] Browser and content settings shared by all outputs.
               #
-              #   @param tags [Array<String>] Labels for tracking request usage. Not retained when zdr is enabled.
+              #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
               #
               #   @param timeout_opts [ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts] Deadline for each page, using the same behavior and defaults as POST /web/scrape
               #
@@ -5140,10 +5150,20 @@ module ContextDev
                 #   @return [Boolean, nil]
                 optional :dedupe_images, ContextDev::Internal::Type::Boolean, api_name: :dedupeImages
 
-                # @!method initialize(dedupe_images: nil)
+                # @!attribute use_ai_fallback
+                #   @deprecated
+                #
+                #   Ignored. The AI fallback runs automatically.
+                #
+                #   @return [Boolean, nil]
+                optional :use_ai_fallback, ContextDev::Internal::Type::Boolean, api_name: :useAIFallback
+
+                # @!method initialize(dedupe_images: nil, use_ai_fallback: nil)
                 #   Product options. Requires formats.product: true.
                 #
                 #   @param dedupe_images [Boolean] Drop visually duplicate product images, keeping the largest copy.
+                #
+                #   @param use_ai_fallback [Boolean] Ignored. The AI fallback runs automatically.
               end
 
               # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData#screenshot_params

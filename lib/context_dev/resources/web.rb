@@ -209,9 +209,9 @@ module ContextDev
       #
       # @param shared_params [ContextDev::Models::WebScrapeParams::SharedParams] Browser and content settings shared by all outputs.
       #
-      # @param tags [Array<String>] Labels for tracking request usage. Not retained when zdr is enabled.
+      # @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
-      # @param timeout_opts [ContextDev::Models::WebScrapeParams::TimeoutOpts] Deadline for the whole request. Defaults to 90000 ms with `fail`. Fixed waits mu
+      # @param timeout_opts [ContextDev::Models::WebScrapeParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
       # @param zdr [Symbol, ContextDev::Models::WebScrapeParams::Zdr] `enabled` turns on zero data retention. Your organization must have ZDR enabled.
       #
