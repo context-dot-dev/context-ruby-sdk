@@ -501,7 +501,7 @@ module ContextDev
       # @type [Regexp]
       JSON_CONTENT = %r{^application/(?:[a-zA-Z0-9.-]+\+)?json(?!l)}
       # @type [Regexp]
-      JSONL_CONTENT = %r{^application/(:?x-(?:n|l)djson)|(:?(?:x-)?jsonl)}
+      JSONL_CONTENT = %r{^application/(?:x-(?:n|l)djson|(?:x-)?jsonl)}
 
       class << self
         # @api private
