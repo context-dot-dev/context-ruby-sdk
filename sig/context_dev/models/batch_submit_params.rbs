@@ -1876,6 +1876,7 @@ module ContextDev
                     | :"tiktok-following"
                     | :"tiktok-user-search"
                     | :"yelp-search"
+                    | :"yelp-reviews"
                     | :emails
                     | :"phone-numbers"
                     | :links
@@ -1901,6 +1902,7 @@ module ContextDev
                     TIKTOK_FOLLOWING: :"tiktok-following"
                     TIKTOK_USER_SEARCH: :"tiktok-user-search"
                     YELP_SEARCH: :"yelp-search"
+                    YELP_REVIEWS: :"yelp-reviews"
                     EMAILS: :emails
                     PHONE_NUMBERS: :"phone-numbers"
                     LINKS: :links
@@ -5233,6 +5235,7 @@ module ContextDev
                     | :"tiktok-following"
                     | :"tiktok-user-search"
                     | :"yelp-search"
+                    | :"yelp-reviews"
                     | :emails
                     | :"phone-numbers"
                     | :links
@@ -5258,6 +5261,7 @@ module ContextDev
                     TIKTOK_FOLLOWING: :"tiktok-following"
                     TIKTOK_USER_SEARCH: :"tiktok-user-search"
                     YELP_SEARCH: :"yelp-search"
+                    YELP_REVIEWS: :"yelp-reviews"
                     EMAILS: :emails
                     PHONE_NUMBERS: :"phone-numbers"
                     LINKS: :links
