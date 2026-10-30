@@ -776,6 +776,7 @@ module ContextDev
           | :"tiktok-followers"
           | :"tiktok-following"
           | :"tiktok-user-search"
+          | :"yelp-search"
           | :emails
           | :"phone-numbers"
           | :links
@@ -801,6 +802,7 @@ module ContextDev
           TIKTOK_FOLLOWERS: :"tiktok-followers"
           TIKTOK_FOLLOWING: :"tiktok-following"
           TIKTOK_USER_SEARCH: :"tiktok-user-search"
+          YELP_SEARCH: :"yelp-search"
           EMAILS: :emails
           PHONE_NUMBERS: :"phone-numbers"
           LINKS: :links

@@ -386,10 +386,11 @@ module ContextDev
             # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
             # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
             # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-            # data.users, emails, phone-numbers, and links return data.emails,
-            # data.phone_numbers, and data.links from the rendered page; the store, Maps, G2,
-            # Instagram, and TikTok parsers read their data directly, independently of DOM
-            # filters and other outputs.
+            # data.users, yelp-search returns up to 20 ranked organic businesses in
+            # data.businesses, plus total and pagination, from a Yelp search URL; emails,
+            # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+            # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+            # their data directly, independently of DOM filters and other outputs.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed
@@ -569,10 +570,11 @@ module ContextDev
               # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
               # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
               # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-              # data.users, emails, phone-numbers, and links return data.emails,
-              # data.phone_numbers, and data.links from the rendered page; the store, Maps, G2,
-              # Instagram, and TikTok parsers read their data directly, independently of DOM
-              # filters and other outputs.
+              # data.users, yelp-search returns up to 20 ranked organic businesses in
+              # data.businesses, plus total and pagination, from a Yelp search URL; emails,
+              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+              # their data directly, independently of DOM filters and other outputs.
               parsed:,
               # Product details found on the page.
               product:,
@@ -2004,10 +2006,11 @@ module ContextDev
               # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
               # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
               # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-              # data.users, emails, phone-numbers, and links return data.emails,
-              # data.phone_numbers, and data.links from the rendered page; the store, Maps, G2,
-              # Instagram, and TikTok parsers read their data directly, independently of DOM
-              # filters and other outputs.
+              # data.users, yelp-search returns up to 20 ranked organic businesses in
+              # data.businesses, plus total and pagination, from a Yelp search URL; emails,
+              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+              # their data directly, independently of DOM filters and other outputs.
               sig do
                 params(
                   data: T.nilable(T::Hash[Symbol, T.anything]),
@@ -2152,6 +2155,11 @@ module ContextDev
                 TIKTOK_USER_SEARCH =
                   T.let(
                     :"tiktok-user-search",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed::Type::TaggedSymbol
+                  )
+                YELP_SEARCH =
+                  T.let(
+                    :"yelp-search",
                     ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed::Type::TaggedSymbol
                   )
                 EMAILS =
@@ -3093,10 +3101,11 @@ module ContextDev
             # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
             # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
             # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-            # data.users, emails, phone-numbers, and links return data.emails,
-            # data.phone_numbers, and data.links from the rendered page; the store, Maps, G2,
-            # Instagram, and TikTok parsers read their data directly, independently of DOM
-            # filters and other outputs.
+            # data.users, yelp-search returns up to 20 ranked organic businesses in
+            # data.businesses, plus total and pagination, from a Yelp search URL; emails,
+            # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+            # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+            # their data directly, independently of DOM filters and other outputs.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed
@@ -3276,10 +3285,11 @@ module ContextDev
               # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
               # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
               # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-              # data.users, emails, phone-numbers, and links return data.emails,
-              # data.phone_numbers, and data.links from the rendered page; the store, Maps, G2,
-              # Instagram, and TikTok parsers read their data directly, independently of DOM
-              # filters and other outputs.
+              # data.users, yelp-search returns up to 20 ranked organic businesses in
+              # data.businesses, plus total and pagination, from a Yelp search URL; emails,
+              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+              # their data directly, independently of DOM filters and other outputs.
               parsed:,
               # Product details found on the page.
               product:,
@@ -4711,10 +4721,11 @@ module ContextDev
               # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
               # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
               # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-              # data.users, emails, phone-numbers, and links return data.emails,
-              # data.phone_numbers, and data.links from the rendered page; the store, Maps, G2,
-              # Instagram, and TikTok parsers read their data directly, independently of DOM
-              # filters and other outputs.
+              # data.users, yelp-search returns up to 20 ranked organic businesses in
+              # data.businesses, plus total and pagination, from a Yelp search URL; emails,
+              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+              # their data directly, independently of DOM filters and other outputs.
               sig do
                 params(
                   data: T.nilable(T::Hash[Symbol, T.anything]),
@@ -4859,6 +4870,11 @@ module ContextDev
                 TIKTOK_USER_SEARCH =
                   T.let(
                     :"tiktok-user-search",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed::Type::TaggedSymbol
+                  )
+                YELP_SEARCH =
+                  T.let(
+                    :"yelp-search",
                     ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed::Type::TaggedSymbol
                   )
                 EMAILS =

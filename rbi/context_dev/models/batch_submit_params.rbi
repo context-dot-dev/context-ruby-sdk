@@ -4542,17 +4542,19 @@ module ContextDev
                   # (/search/user?q={query}) as data.users: id, username, nickname, biography,
                   # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
                   # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). emails accepts any page
-                  # and returns its email addresses as data.emails ([{ email }]), read from mailto
-                  # links, Cloudflare-protected addresses, and visible text. phone-numbers accepts
-                  # any page and returns its valid phone numbers in E.164 as data.phone_numbers ([{
-                  # phone }]), read from tel links and visible text; numbers without a country code
-                  # are read for the country of the site TLD, defaulting to US. links accepts any
-                  # page and returns its unique http(s) links as data.links ([{ url, text }]), with
-                  # absolute URLs; text falls back to aria-label or image alt and is null when a
-                  # link has none. The emails parser reads the rendered page and respects content
-                  # filters; the other prebuilt parsers read their data independently of DOM
-                  # filters.
+                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). yelp-search accepts Yelp
+                  # search URLs with find_desc and find_loc, reads start as the result offset, and
+                  # returns up to 20 ranked organic businesses in data.businesses with total and
+                  # pagination. emails accepts any page and returns its email addresses as
+                  # data.emails ([{ email }]), read from mailto links, Cloudflare-protected
+                  # addresses, and visible text. phone-numbers accepts any page and returns its
+                  # valid phone numbers in E.164 as data.phone_numbers ([{ phone }]), read from tel
+                  # links and visible text; numbers without a country code are read for the country
+                  # of the site TLD, defaulting to US. links accepts any page and returns its unique
+                  # http(s) links as data.links ([{ url, text }]), with absolute URLs; text falls
+                  # back to aria-label or image alt and is null when a link has none. The emails
+                  # parser reads the rendered page and respects content filters; the other prebuilt
+                  # parsers read their data independently of DOM filters.
                   sig do
                     returns(
                       ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::OrSymbol
@@ -4661,17 +4663,19 @@ module ContextDev
                     # (/search/user?q={query}) as data.users: id, username, nickname, biography,
                     # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
                     # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                    # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). emails accepts any page
-                    # and returns its email addresses as data.emails ([{ email }]), read from mailto
-                    # links, Cloudflare-protected addresses, and visible text. phone-numbers accepts
-                    # any page and returns its valid phone numbers in E.164 as data.phone_numbers ([{
-                    # phone }]), read from tel links and visible text; numbers without a country code
-                    # are read for the country of the site TLD, defaulting to US. links accepts any
-                    # page and returns its unique http(s) links as data.links ([{ url, text }]), with
-                    # absolute URLs; text falls back to aria-label or image alt and is null when a
-                    # link has none. The emails parser reads the rendered page and respects content
-                    # filters; the other prebuilt parsers read their data independently of DOM
-                    # filters.
+                    # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). yelp-search accepts Yelp
+                    # search URLs with find_desc and find_loc, reads start as the result offset, and
+                    # returns up to 20 ranked organic businesses in data.businesses with total and
+                    # pagination. emails accepts any page and returns its email addresses as
+                    # data.emails ([{ email }]), read from mailto links, Cloudflare-protected
+                    # addresses, and visible text. phone-numbers accepts any page and returns its
+                    # valid phone numbers in E.164 as data.phone_numbers ([{ phone }]), read from tel
+                    # links and visible text; numbers without a country code are read for the country
+                    # of the site TLD, defaulting to US. links accepts any page and returns its unique
+                    # http(s) links as data.links ([{ url, text }]), with absolute URLs; text falls
+                    # back to aria-label or image alt and is null when a link has none. The emails
+                    # parser reads the rendered page and respects content filters; the other prebuilt
+                    # parsers read their data independently of DOM filters.
                     parser:,
                     # google-maps-reviews only. Maximum number of reviews to return. Defaults to 100;
                     # maximum 1000.
@@ -4758,17 +4762,19 @@ module ContextDev
                   # (/search/user?q={query}) as data.users: id, username, nickname, biography,
                   # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
                   # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). emails accepts any page
-                  # and returns its email addresses as data.emails ([{ email }]), read from mailto
-                  # links, Cloudflare-protected addresses, and visible text. phone-numbers accepts
-                  # any page and returns its valid phone numbers in E.164 as data.phone_numbers ([{
-                  # phone }]), read from tel links and visible text; numbers without a country code
-                  # are read for the country of the site TLD, defaulting to US. links accepts any
-                  # page and returns its unique http(s) links as data.links ([{ url, text }]), with
-                  # absolute URLs; text falls back to aria-label or image alt and is null when a
-                  # link has none. The emails parser reads the rendered page and respects content
-                  # filters; the other prebuilt parsers read their data independently of DOM
-                  # filters.
+                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). yelp-search accepts Yelp
+                  # search URLs with find_desc and find_loc, reads start as the result offset, and
+                  # returns up to 20 ranked organic businesses in data.businesses with total and
+                  # pagination. emails accepts any page and returns its email addresses as
+                  # data.emails ([{ email }]), read from mailto links, Cloudflare-protected
+                  # addresses, and visible text. phone-numbers accepts any page and returns its
+                  # valid phone numbers in E.164 as data.phone_numbers ([{ phone }]), read from tel
+                  # links and visible text; numbers without a country code are read for the country
+                  # of the site TLD, defaulting to US. links accepts any page and returns its unique
+                  # http(s) links as data.links ([{ url, text }]), with absolute URLs; text falls
+                  # back to aria-label or image alt and is null when a link has none. The emails
+                  # parser reads the rendered page and respects content filters; the other prebuilt
+                  # parsers read their data independently of DOM filters.
                   module Parser
                     extend ContextDev::Internal::Type::Enum
 
@@ -4864,6 +4870,11 @@ module ContextDev
                     TIKTOK_USER_SEARCH =
                       T.let(
                         :"tiktok-user-search",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    YELP_SEARCH =
+                      T.let(
+                        :"yelp-search",
                         ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     EMAILS =
@@ -13131,17 +13142,19 @@ module ContextDev
                   # (/search/user?q={query}) as data.users: id, username, nickname, biography,
                   # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
                   # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). emails accepts any page
-                  # and returns its email addresses as data.emails ([{ email }]), read from mailto
-                  # links, Cloudflare-protected addresses, and visible text. phone-numbers accepts
-                  # any page and returns its valid phone numbers in E.164 as data.phone_numbers ([{
-                  # phone }]), read from tel links and visible text; numbers without a country code
-                  # are read for the country of the site TLD, defaulting to US. links accepts any
-                  # page and returns its unique http(s) links as data.links ([{ url, text }]), with
-                  # absolute URLs; text falls back to aria-label or image alt and is null when a
-                  # link has none. The emails parser reads the rendered page and respects content
-                  # filters; the other prebuilt parsers read their data independently of DOM
-                  # filters.
+                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). yelp-search accepts Yelp
+                  # search URLs with find_desc and find_loc, reads start as the result offset, and
+                  # returns up to 20 ranked organic businesses in data.businesses with total and
+                  # pagination. emails accepts any page and returns its email addresses as
+                  # data.emails ([{ email }]), read from mailto links, Cloudflare-protected
+                  # addresses, and visible text. phone-numbers accepts any page and returns its
+                  # valid phone numbers in E.164 as data.phone_numbers ([{ phone }]), read from tel
+                  # links and visible text; numbers without a country code are read for the country
+                  # of the site TLD, defaulting to US. links accepts any page and returns its unique
+                  # http(s) links as data.links ([{ url, text }]), with absolute URLs; text falls
+                  # back to aria-label or image alt and is null when a link has none. The emails
+                  # parser reads the rendered page and respects content filters; the other prebuilt
+                  # parsers read their data independently of DOM filters.
                   sig do
                     returns(
                       ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::OrSymbol
@@ -13250,17 +13263,19 @@ module ContextDev
                     # (/search/user?q={query}) as data.users: id, username, nickname, biography,
                     # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
                     # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                    # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). emails accepts any page
-                    # and returns its email addresses as data.emails ([{ email }]), read from mailto
-                    # links, Cloudflare-protected addresses, and visible text. phone-numbers accepts
-                    # any page and returns its valid phone numbers in E.164 as data.phone_numbers ([{
-                    # phone }]), read from tel links and visible text; numbers without a country code
-                    # are read for the country of the site TLD, defaulting to US. links accepts any
-                    # page and returns its unique http(s) links as data.links ([{ url, text }]), with
-                    # absolute URLs; text falls back to aria-label or image alt and is null when a
-                    # link has none. The emails parser reads the rendered page and respects content
-                    # filters; the other prebuilt parsers read their data independently of DOM
-                    # filters.
+                    # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). yelp-search accepts Yelp
+                    # search URLs with find_desc and find_loc, reads start as the result offset, and
+                    # returns up to 20 ranked organic businesses in data.businesses with total and
+                    # pagination. emails accepts any page and returns its email addresses as
+                    # data.emails ([{ email }]), read from mailto links, Cloudflare-protected
+                    # addresses, and visible text. phone-numbers accepts any page and returns its
+                    # valid phone numbers in E.164 as data.phone_numbers ([{ phone }]), read from tel
+                    # links and visible text; numbers without a country code are read for the country
+                    # of the site TLD, defaulting to US. links accepts any page and returns its unique
+                    # http(s) links as data.links ([{ url, text }]), with absolute URLs; text falls
+                    # back to aria-label or image alt and is null when a link has none. The emails
+                    # parser reads the rendered page and respects content filters; the other prebuilt
+                    # parsers read their data independently of DOM filters.
                     parser:,
                     # google-maps-reviews only. Maximum number of reviews to return. Defaults to 100;
                     # maximum 1000.
@@ -13347,17 +13362,19 @@ module ContextDev
                   # (/search/user?q={query}) as data.users: id, username, nickname, biography,
                   # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
                   # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). emails accepts any page
-                  # and returns its email addresses as data.emails ([{ email }]), read from mailto
-                  # links, Cloudflare-protected addresses, and visible text. phone-numbers accepts
-                  # any page and returns its valid phone numbers in E.164 as data.phone_numbers ([{
-                  # phone }]), read from tel links and visible text; numbers without a country code
-                  # are read for the country of the site TLD, defaulting to US. links accepts any
-                  # page and returns its unique http(s) links as data.links ([{ url, text }]), with
-                  # absolute URLs; text falls back to aria-label or image alt and is null when a
-                  # link has none. The emails parser reads the rendered page and respects content
-                  # filters; the other prebuilt parsers read their data independently of DOM
-                  # filters.
+                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). yelp-search accepts Yelp
+                  # search URLs with find_desc and find_loc, reads start as the result offset, and
+                  # returns up to 20 ranked organic businesses in data.businesses with total and
+                  # pagination. emails accepts any page and returns its email addresses as
+                  # data.emails ([{ email }]), read from mailto links, Cloudflare-protected
+                  # addresses, and visible text. phone-numbers accepts any page and returns its
+                  # valid phone numbers in E.164 as data.phone_numbers ([{ phone }]), read from tel
+                  # links and visible text; numbers without a country code are read for the country
+                  # of the site TLD, defaulting to US. links accepts any page and returns its unique
+                  # http(s) links as data.links ([{ url, text }]), with absolute URLs; text falls
+                  # back to aria-label or image alt and is null when a link has none. The emails
+                  # parser reads the rendered page and respects content filters; the other prebuilt
+                  # parsers read their data independently of DOM filters.
                   module Parser
                     extend ContextDev::Internal::Type::Enum
 
@@ -13453,6 +13470,11 @@ module ContextDev
                     TIKTOK_USER_SEARCH =
                       T.let(
                         :"tiktok-user-search",
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    YELP_SEARCH =
+                      T.let(
+                        :"yelp-search",
                         ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     EMAILS =

@@ -63,10 +63,11 @@ module ContextDev
       #   data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
       #   one record as data, tiktok-feed returns data.videos, tiktok-comments returns
       #   data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-      #   data.users, emails, phone-numbers, and links return data.emails,
-      #   data.phone_numbers, and data.links from the rendered page; the store, Maps, G2,
-      #   Instagram, and TikTok parsers read their data directly, independently of DOM
-      #   filters and other outputs.
+      #   data.users, yelp-search returns up to 20 ranked organic businesses in
+      #   data.businesses, plus total and pagination, from a Yelp search URL; emails,
+      #   phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+      #   from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+      #   their data directly, independently of DOM filters and other outputs.
       #
       #   @return [ContextDev::Models::WebScrapeResponse::Parsed]
       required :parsed, -> { ContextDev::Models::WebScrapeResponse::Parsed }
@@ -880,10 +881,11 @@ module ContextDev
         #   data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
         #   one record as data, tiktok-feed returns data.videos, tiktok-comments returns
         #   data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-        #   data.users, emails, phone-numbers, and links return data.emails,
-        #   data.phone_numbers, and data.links from the rendered page; the store, Maps, G2,
-        #   Instagram, and TikTok parsers read their data directly, independently of DOM
-        #   filters and other outputs.
+        #   data.users, yelp-search returns up to 20 ranked organic businesses in
+        #   data.businesses, plus total and pagination, from a Yelp search URL; emails,
+        #   phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+        #   from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+        #   their data directly, independently of DOM filters and other outputs.
         #
         #   @param data [Hash{Symbol=>Object}, nil]
         #
@@ -922,6 +924,7 @@ module ContextDev
           TIKTOK_FOLLOWERS = :"tiktok-followers"
           TIKTOK_FOLLOWING = :"tiktok-following"
           TIKTOK_USER_SEARCH = :"tiktok-user-search"
+          YELP_SEARCH = :"yelp-search"
           EMAILS = :emails
           PHONE_NUMBERS = :"phone-numbers"
           LINKS = :links
