@@ -928,6 +928,10 @@ module ContextDev
           TIKTOK_FOLLOWERS = :"tiktok-followers"
           TIKTOK_FOLLOWING = :"tiktok-following"
           TIKTOK_USER_SEARCH = :"tiktok-user-search"
+          REDDIT_POST = :"reddit-post"
+          REDDIT_SEARCH = :"reddit-search"
+          REDDIT_SUBREDDIT = :"reddit-subreddit"
+          REDDIT_USER = :"reddit-user"
           YELP_SEARCH = :"yelp-search"
           YELP_REVIEWS = :"yelp-reviews"
           EMAILS = :emails

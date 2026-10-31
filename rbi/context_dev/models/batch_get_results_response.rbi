@@ -2163,6 +2163,26 @@ module ContextDev
                     :"tiktok-user-search",
                     ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed::Type::TaggedSymbol
                   )
+                REDDIT_POST =
+                  T.let(
+                    :"reddit-post",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed::Type::TaggedSymbol
+                  )
+                REDDIT_SEARCH =
+                  T.let(
+                    :"reddit-search",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed::Type::TaggedSymbol
+                  )
+                REDDIT_SUBREDDIT =
+                  T.let(
+                    :"reddit-subreddit",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed::Type::TaggedSymbol
+                  )
+                REDDIT_USER =
+                  T.let(
+                    :"reddit-user",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed::Type::TaggedSymbol
+                  )
                 YELP_SEARCH =
                   T.let(
                     :"yelp-search",
@@ -4887,6 +4907,26 @@ module ContextDev
                 TIKTOK_USER_SEARCH =
                   T.let(
                     :"tiktok-user-search",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed::Type::TaggedSymbol
+                  )
+                REDDIT_POST =
+                  T.let(
+                    :"reddit-post",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed::Type::TaggedSymbol
+                  )
+                REDDIT_SEARCH =
+                  T.let(
+                    :"reddit-search",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed::Type::TaggedSymbol
+                  )
+                REDDIT_SUBREDDIT =
+                  T.let(
+                    :"reddit-subreddit",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed::Type::TaggedSymbol
+                  )
+                REDDIT_USER =
+                  T.let(
+                    :"reddit-user",
                     ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed::Type::TaggedSymbol
                   )
                 YELP_SEARCH =

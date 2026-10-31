@@ -1799,6 +1799,26 @@ module ContextDev
               :"tiktok-user-search",
               ContextDev::Models::WebScrapeResponse::Parsed::Type::TaggedSymbol
             )
+          REDDIT_POST =
+            T.let(
+              :"reddit-post",
+              ContextDev::Models::WebScrapeResponse::Parsed::Type::TaggedSymbol
+            )
+          REDDIT_SEARCH =
+            T.let(
+              :"reddit-search",
+              ContextDev::Models::WebScrapeResponse::Parsed::Type::TaggedSymbol
+            )
+          REDDIT_SUBREDDIT =
+            T.let(
+              :"reddit-subreddit",
+              ContextDev::Models::WebScrapeResponse::Parsed::Type::TaggedSymbol
+            )
+          REDDIT_USER =
+            T.let(
+              :"reddit-user",
+              ContextDev::Models::WebScrapeResponse::Parsed::Type::TaggedSymbol
+            )
           YELP_SEARCH =
             T.let(
               :"yelp-search",
