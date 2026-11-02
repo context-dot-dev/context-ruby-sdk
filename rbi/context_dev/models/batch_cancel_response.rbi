@@ -249,7 +249,8 @@ module ContextDev
         sig { params(images: T::Boolean).void }
         attr_writer :images
 
-        # An object matching `jsonParams.schema`, extracted from the page.
+        # An object matching `jsonParams.schema`, extracted from the page text and its
+        # embedded data (JSON-LD, meta tags, framework state).
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :json
 
@@ -307,7 +308,8 @@ module ContextDev
           html: nil,
           # Images found on the page.
           images: nil,
-          # An object matching `jsonParams.schema`, extracted from the page.
+          # An object matching `jsonParams.schema`, extracted from the page text and its
+          # embedded data (JSON-LD, meta tags, framework state).
           json: nil,
           # Page content as Markdown.
           markdown: nil,

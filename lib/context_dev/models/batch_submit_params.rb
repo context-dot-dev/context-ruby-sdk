@@ -1203,7 +1203,8 @@ module ContextDev
                 optional :images, ContextDev::Internal::Type::Boolean
 
                 # @!attribute json
-                #   An object matching `jsonParams.schema`, extracted from the page.
+                #   An object matching `jsonParams.schema`, extracted from the page text and its
+                #   embedded data (JSON-LD, meta tags, framework state).
                 #
                 #   @return [Boolean, nil]
                 optional :json, ContextDev::Internal::Type::Boolean
@@ -1233,6 +1234,10 @@ module ContextDev
                 optional :screenshot, ContextDev::Internal::Type::Boolean
 
                 # @!method initialize(bytes: nil, highlights: nil, html: nil, images: nil, json: nil, markdown: nil, parse: nil, product: nil, screenshot: nil)
+                #   Some parameter documentations has been truncated, see
+                #   {ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Formats}
+                #   for more details.
+                #
                 #   Outputs to return. Set at least one to `true`.
                 #
                 #   @param bytes [Boolean] The original HTTP response body.
@@ -1243,7 +1248,7 @@ module ContextDev
                 #
                 #   @param images [Boolean] Images found on the page.
                 #
-                #   @param json [Boolean] An object matching `jsonParams.schema`, extracted from the page.
+                #   @param json [Boolean] An object matching `jsonParams.schema`, extracted from the page text and its emb
                 #
                 #   @param markdown [Boolean] Page content as Markdown.
                 #
@@ -4357,7 +4362,8 @@ module ContextDev
                 optional :images, ContextDev::Internal::Type::Boolean
 
                 # @!attribute json
-                #   An object matching `jsonParams.schema`, extracted from the page.
+                #   An object matching `jsonParams.schema`, extracted from the page text and its
+                #   embedded data (JSON-LD, meta tags, framework state).
                 #
                 #   @return [Boolean, nil]
                 optional :json, ContextDev::Internal::Type::Boolean
@@ -4387,6 +4393,10 @@ module ContextDev
                 optional :screenshot, ContextDev::Internal::Type::Boolean
 
                 # @!method initialize(bytes: nil, highlights: nil, html: nil, images: nil, json: nil, markdown: nil, parse: nil, product: nil, screenshot: nil)
+                #   Some parameter documentations has been truncated, see
+                #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Formats}
+                #   for more details.
+                #
                 #   Outputs to return. Set at least one to `true`.
                 #
                 #   @param bytes [Boolean] The original HTTP response body.
@@ -4397,7 +4407,7 @@ module ContextDev
                 #
                 #   @param images [Boolean] Images found on the page.
                 #
-                #   @param json [Boolean] An object matching `jsonParams.schema`, extracted from the page.
+                #   @param json [Boolean] An object matching `jsonParams.schema`, extracted from the page text and its emb
                 #
                 #   @param markdown [Boolean] Page content as Markdown.
                 #
