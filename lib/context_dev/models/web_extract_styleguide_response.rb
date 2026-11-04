@@ -178,8 +178,8 @@ module ContextDev
 
         # @!attribute font_links
         #   Font assets keyed by family name as it appears in fontFamily/fontFallbacks
-        #   (non-generic names only). Clients match typography.fontFamily / fontWeight or
-        #   button styles to pick a file URL from files.
+        #   (non-generic names only). Match font style and weight against faces to select a
+        #   file URL.
         #
         #   @return [Hash{Symbol=>ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink}]
         required :font_links,
@@ -826,13 +826,6 @@ module ContextDev
         end
 
         class FontLink < ContextDev::Internal::Type::BaseModel
-          # @!attribute files
-          #   Upright font files keyed by weight string (e.g. "400" for regular, "500",
-          #   "700"). Values are absolute URLs.
-          #
-          #   @return [Hash{Symbol=>String}]
-          required :files, ContextDev::Internal::Type::HashOf[String]
-
           # @!attribute type
           #
           #   @return [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type]
@@ -846,25 +839,43 @@ module ContextDev
           optional :category, String
 
           # @!attribute display_name
-          #   Present when type is custom: human-readable name derived from the fontLinks key
-          #   (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
-          #   Google entries omit this.
+          #   Human-readable family name. For custom fonts, derived from the fontLinks key;
+          #   for Google fonts, the canonical Google Fonts family name.
           #
           #   @return [String, nil]
           optional :display_name, String, api_name: :displayName
 
-          # @!method initialize(files:, type:, category: nil, display_name: nil)
+          # @!attribute faces
+          #   Discovered font faces, including style, weight, and distinct Unicode subsets.
+          #
+          #   @return [Array<ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face>, nil]
+          optional :faces,
+                   -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face] }
+
+          # @!attribute files
+          #   @deprecated
+          #
+          #   Deprecated upright font lookup keyed by weight string. A variable font can map
+          #   several standard weight keys to the same URL; faces retains its actual weight
+          #   range.
+          #
+          #   @return [Hash{Symbol=>String}, nil]
+          optional :files, ContextDev::Internal::Type::HashOf[String]
+
+          # @!method initialize(type:, category: nil, display_name: nil, faces: nil, files: nil)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink} for
           #   more details.
-          #
-          #   @param files [Hash{Symbol=>String}] Upright font files keyed by weight string (e.g. "400" for regular, "500", "700")
           #
           #   @param type [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type]
           #
           #   @param category [String] Google Fonts category when type is google (e.g. sans-serif, serif, monospace, di
           #
-          #   @param display_name [String] Present when type is custom: human-readable name derived from the fontLinks key
+          #   @param display_name [String] Human-readable family name. For custom fonts, derived from the fontLinks key; fo
+          #
+          #   @param faces [Array<ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face>] Discovered font faces, including style, weight, and distinct Unicode subsets.
+          #
+          #   @param files [Hash{Symbol=>String}] Deprecated upright font lookup keyed by weight string. A variable font can map s
 
           # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink#type
           module Type
@@ -875,6 +886,55 @@ module ContextDev
 
             # @!method self.values
             #   @return [Array<Symbol>]
+          end
+
+          class Face < ContextDev::Internal::Type::BaseModel
+            # @!attribute style
+            #   CSS font-style descriptor: normal, italic, or oblique, including an optional
+            #   oblique angle or angle range (e.g. oblique 10deg 20deg).
+            #
+            #   @return [String]
+            required :style, String
+
+            # @!attribute url
+            #   Preferred font file URL or inline font data URL.
+            #
+            #   @return [String]
+            required :url, String
+
+            # @!attribute weight
+            #   CSS font-weight descriptor. A variable font file can have a range such as "300
+            #   500", covering intermediate weights without separate files.
+            #
+            #   @return [String]
+            required :weight, String
+
+            # @!attribute unicode_range
+            #   CSS unicode-range descriptor.
+            #
+            #   @return [String, nil]
+            optional :unicode_range, String, api_name: :unicodeRange
+
+            # @!attribute width
+            #   CSS font-width or font-stretch descriptor.
+            #
+            #   @return [String, nil]
+            optional :width, String
+
+            # @!method initialize(style:, url:, weight:, unicode_range: nil, width: nil)
+            #   Some parameter documentations has been truncated, see
+            #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face}
+            #   for more details.
+            #
+            #   @param style [String] CSS font-style descriptor: normal, italic, or oblique, including an optional obl
+            #
+            #   @param url [String] Preferred font file URL or inline font data URL.
+            #
+            #   @param weight [String] CSS font-weight descriptor. A variable font file can have a range such as "300 5
+            #
+            #   @param unicode_range [String] CSS unicode-range descriptor.
+            #
+            #   @param width [String] CSS font-width or font-stretch descriptor.
           end
         end
 

@@ -392,8 +392,8 @@ module ContextDev
         attr_writer :element_spacing
 
         # Font assets keyed by family name as it appears in fontFamily/fontFallbacks
-        # (non-generic names only). Clients match typography.fontFamily / fontWeight or
-        # button styles to pick a file URL from files.
+        # (non-generic names only). Match font style and weight against faces to select a
+        # file URL.
         sig do
           returns(
             T::Hash[
@@ -474,8 +474,8 @@ module ContextDev
           # Spacing system used on the website
           element_spacing:,
           # Font assets keyed by family name as it appears in fontFamily/fontFallbacks
-          # (non-generic names only). Clients match typography.fontFamily / fontWeight or
-          # button styles to pick a file URL from files.
+          # (non-generic names only). Match font style and weight against faces to select a
+          # file URL.
           font_links:,
           # The primary color mode of the website design
           mode:,
@@ -1333,11 +1333,6 @@ module ContextDev
               )
             end
 
-          # Upright font files keyed by weight string (e.g. "400" for regular, "500",
-          # "700"). Values are absolute URLs.
-          sig { returns(T::Hash[Symbol, String]) }
-          attr_accessor :files
-
           sig do
             returns(
               ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol
@@ -1353,47 +1348,87 @@ module ContextDev
           sig { params(category: String).void }
           attr_writer :category
 
-          # Present when type is custom: human-readable name derived from the fontLinks key
-          # (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
-          # Google entries omit this.
+          # Human-readable family name. For custom fonts, derived from the fontLinks key;
+          # for Google fonts, the canonical Google Fonts family name.
           sig { returns(T.nilable(String)) }
           attr_reader :display_name
 
           sig { params(display_name: String).void }
           attr_writer :display_name
 
+          # Discovered font faces, including style, weight, and distinct Unicode subsets.
+          sig do
+            returns(
+              T.nilable(
+                T::Array[
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face
+                ]
+              )
+            )
+          end
+          attr_reader :faces
+
           sig do
             params(
-              files: T::Hash[Symbol, String],
+              faces:
+                T::Array[
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face::OrHash
+                ]
+            ).void
+          end
+          attr_writer :faces
+
+          # Deprecated upright font lookup keyed by weight string. A variable font can map
+          # several standard weight keys to the same URL; faces retains its actual weight
+          # range.
+          sig { returns(T.nilable(T::Hash[Symbol, String])) }
+          attr_reader :files
+
+          sig { params(files: T::Hash[Symbol, String]).void }
+          attr_writer :files
+
+          sig do
+            params(
               type:
                 ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type::OrSymbol,
               category: String,
-              display_name: String
+              display_name: String,
+              faces:
+                T::Array[
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face::OrHash
+                ],
+              files: T::Hash[Symbol, String]
             ).returns(T.attached_class)
           end
           def self.new(
-            # Upright font files keyed by weight string (e.g. "400" for regular, "500",
-            # "700"). Values are absolute URLs.
-            files:,
             type:,
             # Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
             # display, handwriting). Omitted for custom fonts when unknown.
             category: nil,
-            # Present when type is custom: human-readable name derived from the fontLinks key
-            # (strip build/hash suffixes, split camelCase / PascalCase, normalize separators).
-            # Google entries omit this.
-            display_name: nil
+            # Human-readable family name. For custom fonts, derived from the fontLinks key;
+            # for Google fonts, the canonical Google Fonts family name.
+            display_name: nil,
+            # Discovered font faces, including style, weight, and distinct Unicode subsets.
+            faces: nil,
+            # Deprecated upright font lookup keyed by weight string. A variable font can map
+            # several standard weight keys to the same URL; faces retains its actual weight
+            # range.
+            files: nil
           )
           end
 
           sig do
             override.returns(
               {
-                files: T::Hash[Symbol, String],
                 type:
                   ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol,
                 category: String,
-                display_name: String
+                display_name: String,
+                faces:
+                  T::Array[
+                    ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face
+                  ],
+                files: T::Hash[Symbol, String]
               }
             )
           end
@@ -1431,6 +1466,83 @@ module ContextDev
               )
             end
             def self.values
+            end
+          end
+
+          class Face < ContextDev::Internal::Type::BaseModel
+            OrHash =
+              T.type_alias do
+                T.any(
+                  ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face,
+                  ContextDev::Internal::AnyHash
+                )
+              end
+
+            # CSS font-style descriptor: normal, italic, or oblique, including an optional
+            # oblique angle or angle range (e.g. oblique 10deg 20deg).
+            sig { returns(String) }
+            attr_accessor :style
+
+            # Preferred font file URL or inline font data URL.
+            sig { returns(String) }
+            attr_accessor :url
+
+            # CSS font-weight descriptor. A variable font file can have a range such as "300
+            # 500", covering intermediate weights without separate files.
+            sig { returns(String) }
+            attr_accessor :weight
+
+            # CSS unicode-range descriptor.
+            sig { returns(T.nilable(String)) }
+            attr_reader :unicode_range
+
+            sig { params(unicode_range: String).void }
+            attr_writer :unicode_range
+
+            # CSS font-width or font-stretch descriptor.
+            sig { returns(T.nilable(String)) }
+            attr_reader :width
+
+            sig { params(width: String).void }
+            attr_writer :width
+
+            sig do
+              params(
+                style: String,
+                url: String,
+                weight: String,
+                unicode_range: String,
+                width: String
+              ).returns(T.attached_class)
+            end
+            def self.new(
+              # CSS font-style descriptor: normal, italic, or oblique, including an optional
+              # oblique angle or angle range (e.g. oblique 10deg 20deg).
+              style:,
+              # Preferred font file URL or inline font data URL.
+              url:,
+              # CSS font-weight descriptor. A variable font file can have a range such as "300
+              # 500", covering intermediate weights without separate files.
+              weight:,
+              # CSS unicode-range descriptor.
+              unicode_range: nil,
+              # CSS font-width or font-stretch descriptor.
+              width: nil
+            )
+            end
+
+            sig do
+              override.returns(
+                {
+                  style: String,
+                  url: String,
+                  weight: String,
+                  unicode_range: String,
+                  width: String
+                }
+              )
+            end
+            def to_hash
             end
           end
         end

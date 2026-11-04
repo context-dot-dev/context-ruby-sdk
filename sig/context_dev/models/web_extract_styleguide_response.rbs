@@ -661,15 +661,14 @@ module ContextDev
 
         type font_link =
           {
-            files: ::Hash[Symbol, String],
             type: ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::type_,
             category: String,
-            display_name: String
+            display_name: String,
+            faces: ::Array[ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face],
+            files: ::Hash[Symbol, String]
           }
 
         class FontLink < ContextDev::Internal::Type::BaseModel
-          attr_accessor files: ::Hash[Symbol, String]
-
           attr_accessor type: ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::type_
 
           attr_reader category: String?
@@ -680,18 +679,30 @@ module ContextDev
 
           def display_name=: (String) -> String
 
+          attr_reader faces: ::Array[ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face]?
+
+          def faces=: (
+            ::Array[ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face]
+          ) -> ::Array[ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face]
+
+          attr_reader files: ::Hash[Symbol, String]?
+
+          def files=: (::Hash[Symbol, String]) -> ::Hash[Symbol, String]
+
           def initialize: (
-            files: ::Hash[Symbol, String],
             type: ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::type_,
             ?category: String,
-            ?display_name: String
+            ?display_name: String,
+            ?faces: ::Array[ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face],
+            ?files: ::Hash[Symbol, String]
           ) -> void
 
           def to_hash: -> {
-            files: ::Hash[Symbol, String],
             type: ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::type_,
             category: String,
-            display_name: String
+            display_name: String,
+            faces: ::Array[ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face],
+            files: ::Hash[Symbol, String]
           }
 
           type type_ = :google | :custom
@@ -703,6 +714,47 @@ module ContextDev
             CUSTOM: :custom
 
             def self?.values: -> ::Array[ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::type_]
+          end
+
+          type face =
+            {
+              style: String,
+              url: String,
+              weight: String,
+              unicode_range: String,
+              width: String
+            }
+
+          class Face < ContextDev::Internal::Type::BaseModel
+            attr_accessor style: String
+
+            attr_accessor url: String
+
+            attr_accessor weight: String
+
+            attr_reader unicode_range: String?
+
+            def unicode_range=: (String) -> String
+
+            attr_reader width: String?
+
+            def width=: (String) -> String
+
+            def initialize: (
+              style: String,
+              url: String,
+              weight: String,
+              ?unicode_range: String,
+              ?width: String
+            ) -> void
+
+            def to_hash: -> {
+              style: String,
+              url: String,
+              weight: String,
+              unicode_range: String,
+              width: String
+            }
           end
         end
 
