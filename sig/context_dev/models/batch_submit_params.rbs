@@ -1881,6 +1881,7 @@ module ContextDev
                     | :"reddit-user"
                     | :"yelp-search"
                     | :"yelp-reviews"
+                    | :"tripadvisor-reviews"
                     | :emails
                     | :"phone-numbers"
                     | :links
@@ -1911,6 +1912,7 @@ module ContextDev
                     REDDIT_USER: :"reddit-user"
                     YELP_SEARCH: :"yelp-search"
                     YELP_REVIEWS: :"yelp-reviews"
+                    TRIPADVISOR_REVIEWS: :"tripadvisor-reviews"
                     EMAILS: :emails
                     PHONE_NUMBERS: :"phone-numbers"
                     LINKS: :links
@@ -5248,6 +5250,7 @@ module ContextDev
                     | :"reddit-user"
                     | :"yelp-search"
                     | :"yelp-reviews"
+                    | :"tripadvisor-reviews"
                     | :emails
                     | :"phone-numbers"
                     | :links
@@ -5278,6 +5281,7 @@ module ContextDev
                     REDDIT_USER: :"reddit-user"
                     YELP_SEARCH: :"yelp-search"
                     YELP_REVIEWS: :"yelp-reviews"
+                    TRIPADVISOR_REVIEWS: :"tripadvisor-reviews"
                     EMAILS: :emails
                     PHONE_NUMBERS: :"phone-numbers"
                     LINKS: :links

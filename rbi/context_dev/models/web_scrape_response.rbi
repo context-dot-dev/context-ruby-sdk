@@ -107,7 +107,9 @@ module ContextDev
       # data.users, yelp-search returns up to 20 ranked organic businesses in
       # data.businesses, plus total and pagination, from a Yelp search URL; yelp-reviews
       # returns up to 20 latest public reviews in data.reviews, with business details
-      # and next_offset, from a Yelp business URL; emails, phone-numbers, and links
+      # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
+      # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
+      # hotel, restaurant, or attraction review URL; emails, phone-numbers, and links
       # return data.emails, data.phone_numbers, and data.links from the rendered page;
       # the store, Maps, G2, Instagram, and TikTok parsers read their data directly,
       # independently of DOM filters and other outputs.
@@ -252,7 +254,9 @@ module ContextDev
         # data.users, yelp-search returns up to 20 ranked organic businesses in
         # data.businesses, plus total and pagination, from a Yelp search URL; yelp-reviews
         # returns up to 20 latest public reviews in data.reviews, with business details
-        # and next_offset, from a Yelp business URL; emails, phone-numbers, and links
+        # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
+        # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
+        # hotel, restaurant, or attraction review URL; emails, phone-numbers, and links
         # return data.emails, data.phone_numbers, and data.links from the rendered page;
         # the store, Maps, G2, Instagram, and TikTok parsers read their data directly,
         # independently of DOM filters and other outputs.
@@ -1653,7 +1657,9 @@ module ContextDev
         # data.users, yelp-search returns up to 20 ranked organic businesses in
         # data.businesses, plus total and pagination, from a Yelp search URL; yelp-reviews
         # returns up to 20 latest public reviews in data.reviews, with business details
-        # and next_offset, from a Yelp business URL; emails, phone-numbers, and links
+        # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
+        # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
+        # hotel, restaurant, or attraction review URL; emails, phone-numbers, and links
         # return data.emails, data.phone_numbers, and data.links from the rendered page;
         # the store, Maps, G2, Instagram, and TikTok parsers read their data directly,
         # independently of DOM filters and other outputs.
@@ -1827,6 +1833,11 @@ module ContextDev
           YELP_REVIEWS =
             T.let(
               :"yelp-reviews",
+              ContextDev::Models::WebScrapeResponse::Parsed::Type::TaggedSymbol
+            )
+          TRIPADVISOR_REVIEWS =
+            T.let(
+              :"tripadvisor-reviews",
               ContextDev::Models::WebScrapeResponse::Parsed::Type::TaggedSymbol
             )
           EMAILS =

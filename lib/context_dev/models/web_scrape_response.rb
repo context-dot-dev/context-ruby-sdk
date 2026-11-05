@@ -66,7 +66,9 @@ module ContextDev
       #   data.users, yelp-search returns up to 20 ranked organic businesses in
       #   data.businesses, plus total and pagination, from a Yelp search URL; yelp-reviews
       #   returns up to 20 latest public reviews in data.reviews, with business details
-      #   and next_offset, from a Yelp business URL; emails, phone-numbers, and links
+      #   and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
+      #   reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
+      #   hotel, restaurant, or attraction review URL; emails, phone-numbers, and links
       #   return data.emails, data.phone_numbers, and data.links from the rendered page;
       #   the store, Maps, G2, Instagram, and TikTok parsers read their data directly,
       #   independently of DOM filters and other outputs.
@@ -886,7 +888,9 @@ module ContextDev
         #   data.users, yelp-search returns up to 20 ranked organic businesses in
         #   data.businesses, plus total and pagination, from a Yelp search URL; yelp-reviews
         #   returns up to 20 latest public reviews in data.reviews, with business details
-        #   and next_offset, from a Yelp business URL; emails, phone-numbers, and links
+        #   and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
+        #   reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
+        #   hotel, restaurant, or attraction review URL; emails, phone-numbers, and links
         #   return data.emails, data.phone_numbers, and data.links from the rendered page;
         #   the store, Maps, G2, Instagram, and TikTok parsers read their data directly,
         #   independently of DOM filters and other outputs.
@@ -934,6 +938,7 @@ module ContextDev
           REDDIT_USER = :"reddit-user"
           YELP_SEARCH = :"yelp-search"
           YELP_REVIEWS = :"yelp-reviews"
+          TRIPADVISOR_REVIEWS = :"tripadvisor-reviews"
           EMAILS = :emails
           PHONE_NUMBERS = :"phone-numbers"
           LINKS = :links
