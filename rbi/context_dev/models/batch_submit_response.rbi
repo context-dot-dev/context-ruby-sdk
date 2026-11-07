@@ -38,7 +38,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :created_at
 
-      # What accepting this batch cost.
+      # Credits are reserved after background validation, before scraping starts.
       sig { returns(ContextDev::Models::BatchSubmitResponse::Credits) }
       attr_reader :credits
 
@@ -84,7 +84,9 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Always `queued`. An accepted batch has not started yet.
+      # Current state. `pending` means waiting for execution capacity or background
+      # validation. Capacity-limited batches remain pending until a slot opens.
+      # `completed`, `cancelled`, and `failed` are final.
       sig do
         returns(ContextDev::Models::BatchSubmitResponse::Status::TaggedSymbol)
       end
@@ -147,7 +149,7 @@ module ContextDev
         crawl:,
         # When the batch was created.
         created_at:,
-        # What accepting this batch cost.
+        # Credits are reserved after background validation, before scraping starts.
         credits:,
         # Outputs requested for each page. Matches input.data.formats on submission.
         formats:,
@@ -160,7 +162,9 @@ module ContextDev
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # Always `queued`. An accepted batch has not started yet.
+        # Current state. `pending` means waiting for execution capacity or background
+        # validation. Capacity-limited batches remain pending until a slot opens.
+        # `completed`, `cancelled`, and `failed` are final.
         status:,
         # Tags stored on the batch.
         tags:,
@@ -299,14 +303,14 @@ module ContextDev
             )
           end
 
-        # Credits held at submission.
+        # Credits reserved by background preparation. Zero while pending.
         sig { returns(Integer) }
         attr_accessor :reserved
 
-        # What accepting this batch cost.
+        # Credits are reserved after background validation, before scraping starts.
         sig { params(reserved: Integer).returns(T.attached_class) }
         def self.new(
-          # Credits held at submission.
+          # Credits reserved by background preparation. Zero while pending.
           reserved:
         )
         end
@@ -508,7 +512,9 @@ module ContextDev
         end
       end
 
-      # Always `queued`. An accepted batch has not started yet.
+      # Current state. `pending` means waiting for execution capacity or background
+      # validation. Capacity-limited batches remain pending until a slot opens.
+      # `completed`, `cancelled`, and `failed` are final.
       module Status
         extend ContextDev::Internal::Type::Enum
 
@@ -518,9 +524,39 @@ module ContextDev
           end
         OrSymbol = T.type_alias { T.any(Symbol, String) }
 
+        PENDING =
+          T.let(
+            :pending,
+            ContextDev::Models::BatchSubmitResponse::Status::TaggedSymbol
+          )
         QUEUED =
           T.let(
             :queued,
+            ContextDev::Models::BatchSubmitResponse::Status::TaggedSymbol
+          )
+        RUNNING =
+          T.let(
+            :running,
+            ContextDev::Models::BatchSubmitResponse::Status::TaggedSymbol
+          )
+        CANCELLING =
+          T.let(
+            :cancelling,
+            ContextDev::Models::BatchSubmitResponse::Status::TaggedSymbol
+          )
+        COMPLETED =
+          T.let(
+            :completed,
+            ContextDev::Models::BatchSubmitResponse::Status::TaggedSymbol
+          )
+        CANCELLED =
+          T.let(
+            :cancelled,
+            ContextDev::Models::BatchSubmitResponse::Status::TaggedSymbol
+          )
+        FAILED =
+          T.let(
+            :failed,
             ContextDev::Models::BatchSubmitResponse::Status::TaggedSymbol
           )
 

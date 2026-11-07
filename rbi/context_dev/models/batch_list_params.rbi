@@ -153,6 +153,8 @@ module ContextDev
           T.type_alias { T.all(Symbol, ContextDev::BatchListParams::Status) }
         OrSymbol = T.type_alias { T.any(Symbol, String) }
 
+        PENDING =
+          T.let(:pending, ContextDev::BatchListParams::Status::TaggedSymbol)
         QUEUED =
           T.let(:queued, ContextDev::BatchListParams::Status::TaggedSymbol)
         RUNNING =

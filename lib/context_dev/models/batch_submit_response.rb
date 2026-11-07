@@ -29,7 +29,7 @@ module ContextDev
       required :created_at, String
 
       # @!attribute credits
-      #   What accepting this batch cost.
+      #   Credits are reserved after background validation, before scraping starts.
       #
       #   @return [ContextDev::Models::BatchSubmitResponse::Credits]
       required :credits, -> { ContextDev::Models::BatchSubmitResponse::Credits }
@@ -67,7 +67,9 @@ module ContextDev
       required :request_id, String
 
       # @!attribute status
-      #   Always `queued`. An accepted batch has not started yet.
+      #   Current state. `pending` means waiting for execution capacity or background
+      #   validation. Capacity-limited batches remain pending until a slot opens.
+      #   `completed`, `cancelled`, and `failed` are final.
       #
       #   @return [Symbol, ContextDev::Models::BatchSubmitResponse::Status]
       required :status, enum: -> { ContextDev::Models::BatchSubmitResponse::Status }
@@ -102,7 +104,7 @@ module ContextDev
       #
       #   @param created_at [String] When the batch was created.
       #
-      #   @param credits [ContextDev::Models::BatchSubmitResponse::Credits] What accepting this batch cost.
+      #   @param credits [ContextDev::Models::BatchSubmitResponse::Credits] Credits are reserved after background validation, before scraping starts.
       #
       #   @param formats [ContextDev::Models::BatchSubmitResponse::Formats] Outputs requested for each page. Matches input.data.formats on submission.
       #
@@ -114,7 +116,7 @@ module ContextDev
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param status [Symbol, ContextDev::Models::BatchSubmitResponse::Status] Always `queued`. An accepted batch has not started yet.
+      #   @param status [Symbol, ContextDev::Models::BatchSubmitResponse::Status] Current state. `pending` means waiting for execution capacity or background vali
       #
       #   @param tags [Array<String>] Tags stored on the batch.
       #
@@ -166,15 +168,15 @@ module ContextDev
       # @see ContextDev::Models::BatchSubmitResponse#credits
       class Credits < ContextDev::Internal::Type::BaseModel
         # @!attribute reserved
-        #   Credits held at submission.
+        #   Credits reserved by background preparation. Zero while pending.
         #
         #   @return [Integer]
         required :reserved, Integer
 
         # @!method initialize(reserved:)
-        #   What accepting this batch cost.
+        #   Credits are reserved after background validation, before scraping starts.
         #
-        #   @param reserved [Integer] Credits held at submission.
+        #   @param reserved [Integer] Credits reserved by background preparation. Zero while pending.
       end
 
       # @see ContextDev::Models::BatchSubmitResponse#formats
@@ -291,13 +293,21 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Always `queued`. An accepted batch has not started yet.
+      # Current state. `pending` means waiting for execution capacity or background
+      # validation. Capacity-limited batches remain pending until a slot opens.
+      # `completed`, `cancelled`, and `failed` are final.
       #
       # @see ContextDev::Models::BatchSubmitResponse#status
       module Status
         extend ContextDev::Internal::Type::Enum
 
+        PENDING = :pending
         QUEUED = :queued
+        RUNNING = :running
+        CANCELLING = :cancelling
+        COMPLETED = :completed
+        CANCELLED = :cancelled
+        FAILED = :failed
 
         # @!method self.values
         #   @return [Array<Symbol>]

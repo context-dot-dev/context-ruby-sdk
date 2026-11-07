@@ -88,6 +88,7 @@ module ContextDev
       module Status
         extend ContextDev::Internal::Type::Enum
 
+        PENDING = :pending
         QUEUED = :queued
         RUNNING = :running
         CANCELLING = :cancelling

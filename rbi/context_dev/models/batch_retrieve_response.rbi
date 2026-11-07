@@ -109,7 +109,9 @@ module ContextDev
       end
       attr_writer :results
 
-      # Current state. `completed`, `cancelled`, and `failed` are final.
+      # Current state. `pending` means waiting for execution capacity or background
+      # validation. Capacity-limited batches remain pending until a slot opens.
+      # `completed`, `cancelled`, and `failed` are final.
       sig do
         returns(ContextDev::Models::BatchRetrieveResponse::Status::TaggedSymbol)
       end
@@ -217,7 +219,9 @@ module ContextDev
         # Result download links; null until the batch finishes. Files are deleted 180 days
         # after the batch finishes.
         results:,
-        # Current state. `completed`, `cancelled`, and `failed` are final.
+        # Current state. `pending` means waiting for execution capacity or background
+        # validation. Capacity-limited batches remain pending until a slot opens.
+        # `completed`, `cancelled`, and `failed` are final.
         status:,
         # Tags stored on the batch at submission.
         tags:,
@@ -283,7 +287,8 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :refunded
 
-        # Credits held when the batch was accepted.
+        # Credits held by background preparation before scraping starts. Zero while
+        # pending.
         sig { returns(Integer) }
         attr_accessor :reserved
 
@@ -303,7 +308,8 @@ module ContextDev
           ocr_charged:,
           # Credits returned for unsuccessful pages when the batch settles.
           refunded:,
-          # Credits held when the batch was accepted.
+          # Credits held by background preparation before scraping starts. Zero while
+          # pending.
           reserved:
         )
         end
@@ -660,7 +666,9 @@ module ContextDev
         end
       end
 
-      # Current state. `completed`, `cancelled`, and `failed` are final.
+      # Current state. `pending` means waiting for execution capacity or background
+      # validation. Capacity-limited batches remain pending until a slot opens.
+      # `completed`, `cancelled`, and `failed` are final.
       module Status
         extend ContextDev::Internal::Type::Enum
 
@@ -670,6 +678,11 @@ module ContextDev
           end
         OrSymbol = T.type_alias { T.any(Symbol, String) }
 
+        PENDING =
+          T.let(
+            :pending,
+            ContextDev::Models::BatchRetrieveResponse::Status::TaggedSymbol
+          )
         QUEUED =
           T.let(
             :queued,

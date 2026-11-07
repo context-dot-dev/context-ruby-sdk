@@ -84,11 +84,18 @@ module ContextDev
       end
 
       type status =
-        :queued | :running | :cancelling | :completed | :cancelled | :failed
+        :pending
+        | :queued
+        | :running
+        | :cancelling
+        | :completed
+        | :cancelled
+        | :failed
 
       module Status
         extend ContextDev::Internal::Type::Enum
 
+        PENDING: :pending
         QUEUED: :queued
         RUNNING: :running
         CANCELLING: :cancelling

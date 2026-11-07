@@ -114,7 +114,9 @@ module ContextDev
         required :results, -> { ContextDev::Models::BatchListResponse::Data::Results }, nil?: true
 
         # @!attribute status
-        #   Current state. `completed`, `cancelled`, and `failed` are final.
+        #   Current state. `pending` means waiting for execution capacity or background
+        #   validation. Capacity-limited batches remain pending until a slot opens.
+        #   `completed`, `cancelled`, and `failed` are final.
         #
         #   @return [Symbol, ContextDev::Models::BatchListResponse::Data::Status]
         required :status, enum: -> { ContextDev::Models::BatchListResponse::Data::Status }
@@ -163,7 +165,7 @@ module ContextDev
         #
         #   @param results [ContextDev::Models::BatchListResponse::Data::Results, nil] Result download links; null until the batch finishes. Files are deleted 180 days
         #
-        #   @param status [Symbol, ContextDev::Models::BatchListResponse::Data::Status] Current state. `completed`, `cancelled`, and `failed` are final.
+        #   @param status [Symbol, ContextDev::Models::BatchListResponse::Data::Status] Current state. `pending` means waiting for execution capacity or background vali
         #
         #   @param tags [Array<String>] Tags stored on the batch at submission.
         #
@@ -192,12 +194,16 @@ module ContextDev
           required :refunded, Integer
 
           # @!attribute reserved
-          #   Credits held when the batch was accepted.
+          #   Credits held by background preparation before scraping starts. Zero while
+          #   pending.
           #
           #   @return [Integer]
           required :reserved, Integer
 
           # @!method initialize(net:, ocr_charged:, refunded:, reserved:)
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::BatchListResponse::Data::Credits} for more details.
+          #
           #   Batch credit usage and settlement.
           #
           #   @param net [Integer] `reserved` minus `refunded` plus `ocr_charged`.
@@ -206,7 +212,7 @@ module ContextDev
           #
           #   @param refunded [Integer] Credits returned for unsuccessful pages when the batch settles.
           #
-          #   @param reserved [Integer] Credits held when the batch was accepted.
+          #   @param reserved [Integer] Credits held by background preparation before scraping starts. Zero while pendin
         end
 
         # @see ContextDev::Models::BatchListResponse::Data#formats
@@ -389,12 +395,15 @@ module ContextDev
           end
         end
 
-        # Current state. `completed`, `cancelled`, and `failed` are final.
+        # Current state. `pending` means waiting for execution capacity or background
+        # validation. Capacity-limited batches remain pending until a slot opens.
+        # `completed`, `cancelled`, and `failed` are final.
         #
         # @see ContextDev::Models::BatchListResponse::Data#status
         module Status
           extend ContextDev::Internal::Type::Enum
 
+          PENDING = :pending
           QUEUED = :queued
           RUNNING = :running
           CANCELLING = :cancelling
