@@ -3060,6 +3060,17 @@ module ContextDev
 
                   # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap#controls
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    # @!attribute exclude_paths
+                    #   Path fragments that skip a sitemap URL in a crawl. Works separately from any
+                    #   regex inclusion or exclusion you define. Defaults to
+                    #   ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
+                    #   every listed URL.
+                    #
+                    #   @return [Array<String>, nil]
+                    optional :exclude_paths,
+                             ContextDev::Internal::Type::ArrayOf[String],
+                             api_name: :excludePaths
+
                     # @!attribute exclude_regex
                     #   Regex pattern; sitemap URLs matching it are not scraped, even when they match
                     #   `regex`.
@@ -3079,13 +3090,15 @@ module ContextDev
                     #   @return [String, nil]
                     optional :regex, String
 
-                    # @!method initialize(exclude_regex: nil, max_urls: nil, regex: nil)
+                    # @!method initialize(exclude_paths: nil, exclude_regex: nil, max_urls: nil, regex: nil)
                     #   Some parameter documentations has been truncated, see
                     #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls}
                     #   for more details.
                     #
                     #   Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
                     #   URLs and never follows links off them, so there is no crawl depth here.
+                    #
+                    #   @param exclude_paths [Array<String>] Path fragments that skip a sitemap URL in a crawl. Works separately from any reg
                     #
                     #   @param exclude_regex [String] Regex pattern; sitemap URLs matching it are not scraped, even when they match `r
                     #
@@ -3809,6 +3822,17 @@ module ContextDev
 
                   # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap#controls
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    # @!attribute exclude_paths
+                    #   Path fragments that skip a sitemap URL in a crawl. Works separately from any
+                    #   regex inclusion or exclusion you define. Defaults to
+                    #   ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
+                    #   every listed URL.
+                    #
+                    #   @return [Array<String>, nil]
+                    optional :exclude_paths,
+                             ContextDev::Internal::Type::ArrayOf[String],
+                             api_name: :excludePaths
+
                     # @!attribute exclude_regex
                     #   Regex pattern; sitemap URLs matching it are not scraped, even when they match
                     #   `regex`.
@@ -3828,13 +3852,15 @@ module ContextDev
                     #   @return [String, nil]
                     optional :regex, String
 
-                    # @!method initialize(exclude_regex: nil, max_urls: nil, regex: nil)
+                    # @!method initialize(exclude_paths: nil, exclude_regex: nil, max_urls: nil, regex: nil)
                     #   Some parameter documentations has been truncated, see
                     #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls}
                     #   for more details.
                     #
                     #   Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
                     #   URLs and never follows links off them, so there is no crawl depth here.
+                    #
+                    #   @param exclude_paths [Array<String>] Path fragments that skip a sitemap URL in a crawl. Works separately from any reg
                     #
                     #   @param exclude_regex [String] Regex pattern; sitemap URLs matching it are not scraped, even when they match `r
                     #
@@ -4704,6 +4730,17 @@ module ContextDev
 
                   # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap#controls
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    # @!attribute exclude_paths
+                    #   Path fragments that skip a sitemap URL in a crawl. Works separately from any
+                    #   regex inclusion or exclusion you define. Defaults to
+                    #   ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
+                    #   every listed URL.
+                    #
+                    #   @return [Array<String>, nil]
+                    optional :exclude_paths,
+                             ContextDev::Internal::Type::ArrayOf[String],
+                             api_name: :excludePaths
+
                     # @!attribute exclude_regex
                     #   Regex pattern; sitemap URLs matching it are not scraped, even when they match
                     #   `regex`.
@@ -4723,13 +4760,15 @@ module ContextDev
                     #   @return [String, nil]
                     optional :regex, String
 
-                    # @!method initialize(exclude_regex: nil, max_urls: nil, regex: nil)
+                    # @!method initialize(exclude_paths: nil, exclude_regex: nil, max_urls: nil, regex: nil)
                     #   Some parameter documentations has been truncated, see
                     #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls}
                     #   for more details.
                     #
                     #   Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
                     #   URLs and never follows links off them, so there is no crawl depth here.
+                    #
+                    #   @param exclude_paths [Array<String>] Path fragments that skip a sitemap URL in a crawl. Works separately from any reg
                     #
                     #   @param exclude_regex [String] Regex pattern; sitemap URLs matching it are not scraped, even when they match `r
                     #

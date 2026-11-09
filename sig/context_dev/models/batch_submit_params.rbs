@@ -2897,9 +2897,18 @@ module ContextDev
                   }
 
                   type controls =
-                    { exclude_regex: String, max_urls: Integer, regex: String }
+                    {
+                      exclude_paths: ::Array[String],
+                      exclude_regex: String,
+                      max_urls: Integer,
+                      regex: String
+                    }
 
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    attr_reader exclude_paths: ::Array[String]?
+
+                    def exclude_paths=: (::Array[String]) -> ::Array[String]
+
                     attr_reader exclude_regex: String?
 
                     def exclude_regex=: (String) -> String
@@ -2913,12 +2922,14 @@ module ContextDev
                     def regex=: (String) -> String
 
                     def initialize: (
+                      ?exclude_paths: ::Array[String],
                       ?exclude_regex: String,
                       ?max_urls: Integer,
                       ?regex: String
                     ) -> void
 
                     def to_hash: -> {
+                      exclude_paths: ::Array[String],
                       exclude_regex: String,
                       max_urls: Integer,
                       regex: String
@@ -3837,9 +3848,18 @@ module ContextDev
                   }
 
                   type controls =
-                    { exclude_regex: String, max_urls: Integer, regex: String }
+                    {
+                      exclude_paths: ::Array[String],
+                      exclude_regex: String,
+                      max_urls: Integer,
+                      regex: String
+                    }
 
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    attr_reader exclude_paths: ::Array[String]?
+
+                    def exclude_paths=: (::Array[String]) -> ::Array[String]
+
                     attr_reader exclude_regex: String?
 
                     def exclude_regex=: (String) -> String
@@ -3853,12 +3873,14 @@ module ContextDev
                     def regex=: (String) -> String
 
                     def initialize: (
+                      ?exclude_paths: ::Array[String],
                       ?exclude_regex: String,
                       ?max_urls: Integer,
                       ?regex: String
                     ) -> void
 
                     def to_hash: -> {
+                      exclude_paths: ::Array[String],
                       exclude_regex: String,
                       max_urls: Integer,
                       regex: String
@@ -4889,9 +4911,18 @@ module ContextDev
                   }
 
                   type controls =
-                    { exclude_regex: String, max_urls: Integer, regex: String }
+                    {
+                      exclude_paths: ::Array[String],
+                      exclude_regex: String,
+                      max_urls: Integer,
+                      regex: String
+                    }
 
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    attr_reader exclude_paths: ::Array[String]?
+
+                    def exclude_paths=: (::Array[String]) -> ::Array[String]
+
                     attr_reader exclude_regex: String?
 
                     def exclude_regex=: (String) -> String
@@ -4905,12 +4936,14 @@ module ContextDev
                     def regex=: (String) -> String
 
                     def initialize: (
+                      ?exclude_paths: ::Array[String],
                       ?exclude_regex: String,
                       ?max_urls: Integer,
                       ?regex: String
                     ) -> void
 
                     def to_hash: -> {
+                      exclude_paths: ::Array[String],
                       exclude_regex: String,
                       max_urls: Integer,
                       regex: String

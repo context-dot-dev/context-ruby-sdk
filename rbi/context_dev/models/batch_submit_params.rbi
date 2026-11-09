@@ -7650,6 +7650,16 @@ module ContextDev
                         )
                       end
 
+                    # Path fragments that skip a sitemap URL in a crawl. Works separately from any
+                    # regex inclusion or exclusion you define. Defaults to
+                    # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
+                    # every listed URL.
+                    sig { returns(T.nilable(T::Array[String])) }
+                    attr_reader :exclude_paths
+
+                    sig { params(exclude_paths: T::Array[String]).void }
+                    attr_writer :exclude_paths
+
                     # Regex pattern; sitemap URLs matching it are not scraped, even when they match
                     # `regex`.
                     sig { returns(T.nilable(String)) }
@@ -7676,12 +7686,18 @@ module ContextDev
                     # URLs and never follows links off them, so there is no crawl depth here.
                     sig do
                       params(
+                        exclude_paths: T::Array[String],
                         exclude_regex: String,
                         max_urls: Integer,
                         regex: String
                       ).returns(T.attached_class)
                     end
                     def self.new(
+                      # Path fragments that skip a sitemap URL in a crawl. Works separately from any
+                      # regex inclusion or exclusion you define. Defaults to
+                      # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
+                      # every listed URL.
+                      exclude_paths: nil,
                       # Regex pattern; sitemap URLs matching it are not scraped, even when they match
                       # `regex`.
                       exclude_regex: nil,
@@ -7695,6 +7711,7 @@ module ContextDev
                     sig do
                       override.returns(
                         {
+                          exclude_paths: T::Array[String],
                           exclude_regex: String,
                           max_urls: Integer,
                           regex: String
@@ -9942,6 +9959,16 @@ module ContextDev
                         )
                       end
 
+                    # Path fragments that skip a sitemap URL in a crawl. Works separately from any
+                    # regex inclusion or exclusion you define. Defaults to
+                    # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
+                    # every listed URL.
+                    sig { returns(T.nilable(T::Array[String])) }
+                    attr_reader :exclude_paths
+
+                    sig { params(exclude_paths: T::Array[String]).void }
+                    attr_writer :exclude_paths
+
                     # Regex pattern; sitemap URLs matching it are not scraped, even when they match
                     # `regex`.
                     sig { returns(T.nilable(String)) }
@@ -9968,12 +9995,18 @@ module ContextDev
                     # URLs and never follows links off them, so there is no crawl depth here.
                     sig do
                       params(
+                        exclude_paths: T::Array[String],
                         exclude_regex: String,
                         max_urls: Integer,
                         regex: String
                       ).returns(T.attached_class)
                     end
                     def self.new(
+                      # Path fragments that skip a sitemap URL in a crawl. Works separately from any
+                      # regex inclusion or exclusion you define. Defaults to
+                      # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
+                      # every listed URL.
+                      exclude_paths: nil,
                       # Regex pattern; sitemap URLs matching it are not scraped, even when they match
                       # `regex`.
                       exclude_regex: nil,
@@ -9987,6 +10020,7 @@ module ContextDev
                     sig do
                       override.returns(
                         {
+                          exclude_paths: T::Array[String],
                           exclude_regex: String,
                           max_urls: Integer,
                           regex: String
@@ -12486,6 +12520,16 @@ module ContextDev
                         )
                       end
 
+                    # Path fragments that skip a sitemap URL in a crawl. Works separately from any
+                    # regex inclusion or exclusion you define. Defaults to
+                    # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
+                    # every listed URL.
+                    sig { returns(T.nilable(T::Array[String])) }
+                    attr_reader :exclude_paths
+
+                    sig { params(exclude_paths: T::Array[String]).void }
+                    attr_writer :exclude_paths
+
                     # Regex pattern; sitemap URLs matching it are not scraped, even when they match
                     # `regex`.
                     sig { returns(T.nilable(String)) }
@@ -12512,12 +12556,18 @@ module ContextDev
                     # URLs and never follows links off them, so there is no crawl depth here.
                     sig do
                       params(
+                        exclude_paths: T::Array[String],
                         exclude_regex: String,
                         max_urls: Integer,
                         regex: String
                       ).returns(T.attached_class)
                     end
                     def self.new(
+                      # Path fragments that skip a sitemap URL in a crawl. Works separately from any
+                      # regex inclusion or exclusion you define. Defaults to
+                      # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
+                      # every listed URL.
+                      exclude_paths: nil,
                       # Regex pattern; sitemap URLs matching it are not scraped, even when they match
                       # `regex`.
                       exclude_regex: nil,
@@ -12531,6 +12581,7 @@ module ContextDev
                     sig do
                       override.returns(
                         {
+                          exclude_paths: T::Array[String],
                           exclude_regex: String,
                           max_urls: Integer,
                           regex: String
