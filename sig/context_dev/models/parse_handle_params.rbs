@@ -106,7 +106,9 @@ module ContextDev
       }
 
       type extension =
-        :txt
+        :warc
+        | :"warc.gz"
+        | :txt
         | :text
         | :md
         | :markdown
@@ -180,6 +182,8 @@ module ContextDev
       module Extension
         extend ContextDev::Internal::Type::Enum
 
+        WARC: :warc
+        WARC_GZ: :"warc.gz"
         TXT: :txt
         TEXT: :text
         MD: :md

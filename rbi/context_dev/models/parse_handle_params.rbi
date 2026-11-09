@@ -22,7 +22,7 @@ module ContextDev
       attr_writer :client
 
       # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
-      # md, py, rtf, jpg, png, or txt.
+      # md, py, rtf, jpg, png, txt, warc, or warc.gz.
       sig do
         returns(T.nilable(ContextDev::ParseHandleParams::Extension::OrSymbol))
       end
@@ -122,7 +122,7 @@ module ContextDev
         # Optional client identifier used for usage attribution.
         client: nil,
         # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
-        # md, py, rtf, jpg, png, or txt.
+        # md, py, rtf, jpg, png, txt, warc, or warc.gz.
         extension: nil,
         # Include image references in Markdown output
         include_images: nil,
@@ -171,7 +171,7 @@ module ContextDev
       end
 
       # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
-      # md, py, rtf, jpg, png, or txt.
+      # md, py, rtf, jpg, png, txt, warc, or warc.gz.
       module Extension
         extend ContextDev::Internal::Type::Enum
 
@@ -181,6 +181,13 @@ module ContextDev
           end
         OrSymbol = T.type_alias { T.any(Symbol, String) }
 
+        WARC =
+          T.let(:warc, ContextDev::ParseHandleParams::Extension::TaggedSymbol)
+        WARC_GZ =
+          T.let(
+            :"warc.gz",
+            ContextDev::ParseHandleParams::Extension::TaggedSymbol
+          )
         TXT =
           T.let(:txt, ContextDev::ParseHandleParams::Extension::TaggedSymbol)
         TEXT =

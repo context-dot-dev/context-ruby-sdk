@@ -6,7 +6,10 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::ParseHandleParams} for more details.
       #
-      # Convert uploaded file bytes into Markdown and optional HTML.
+      # Convert uploaded file bytes into Markdown and optional HTML. WARC and WARC.GZ
+      # archives combine HTTP response, resource, and conversion records in archive
+      # order. Revisit and segmented records are skipped. Decoded WARC content is
+      # limited to 50 MiB.
       #
       # @overload handle(body:, client: nil, extension: nil, include_images: nil, include_links: nil, include_numbered_pages: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, zdr: nil, request_options: {})
       #

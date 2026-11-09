@@ -292,11 +292,11 @@ context_dev.web.scrape(**params)
 Since this library does not depend on `sorbet-runtime`, it cannot provide [`T::Enum`](https://sorbet.org/docs/tenum) instances. Instead, we provide "tagged symbols" instead, which is always a primitive at runtime:
 
 ```ruby
-# :txt
-puts(ContextDev::ParseHandleParams::Extension::TXT)
+# :warc
+puts(ContextDev::ParseHandleParams::Extension::WARC)
 
 # Revealed type: `T.all(ContextDev::ParseHandleParams::Extension, Symbol)`
-T.reveal_type(ContextDev::ParseHandleParams::Extension::TXT)
+T.reveal_type(ContextDev::ParseHandleParams::Extension::WARC)
 ```
 
 Enum parameters have a "relaxed" type, so you can either pass in enum constants or their literal value:
@@ -304,13 +304,13 @@ Enum parameters have a "relaxed" type, so you can either pass in enum constants 
 ```ruby
 # Using the enum constants preserves the tagged type information:
 context_dev.parse.handle(
-  extension: ContextDev::ParseHandleParams::Extension::TXT,
+  extension: ContextDev::ParseHandleParams::Extension::WARC,
   # …
 )
 
 # Literal values are also permissible:
 context_dev.parse.handle(
-  extension: :txt,
+  extension: :warc,
   # …
 )
 ```

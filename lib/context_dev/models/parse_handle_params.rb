@@ -20,7 +20,7 @@ module ContextDev
 
       # @!attribute extension
       #   Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
-      #   md, py, rtf, jpg, png, or txt.
+      #   md, py, rtf, jpg, png, txt, warc, or warc.gz.
       #
       #   @return [Symbol, ContextDev::Models::ParseHandleParams::Extension, nil]
       optional :extension, enum: -> { ContextDev::ParseHandleParams::Extension }
@@ -112,10 +112,12 @@ module ContextDev
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
       # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
-      # md, py, rtf, jpg, png, or txt.
+      # md, py, rtf, jpg, png, txt, warc, or warc.gz.
       module Extension
         extend ContextDev::Internal::Type::Enum
 
+        WARC = :warc
+        WARC_GZ = :"warc.gz"
         TXT = :txt
         TEXT = :text
         MD = :md

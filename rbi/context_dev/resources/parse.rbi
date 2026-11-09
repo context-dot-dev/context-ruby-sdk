@@ -3,7 +3,10 @@
 module ContextDev
   module Resources
     class Parse
-      # Convert uploaded file bytes into Markdown and optional HTML.
+      # Convert uploaded file bytes into Markdown and optional HTML. WARC and WARC.GZ
+      # archives combine HTTP response, resource, and conversion records in archive
+      # order. Revisit and segmented records are skipped. Decoded WARC content is
+      # limited to 50 MiB.
       sig do
         params(
           body: ContextDev::Internal::FileInput,
@@ -27,7 +30,7 @@ module ContextDev
         # Query param: Optional client identifier used for usage attribution.
         client: nil,
         # Query param: Optional file extension hint, such as pdf, docx, xlsx, pptx, html,
-        # json, csv, md, py, rtf, jpg, png, or txt.
+        # json, csv, md, py, rtf, jpg, png, txt, warc, or warc.gz.
         extension: nil,
         # Query param: Include image references in Markdown output
         include_images: nil,

@@ -67,6 +67,7 @@ module ContextDev
       module Type
         extend ContextDev::Internal::Type::Enum
 
+        WARC = :warc
         HTML = :html
         XML = :xml
         JSON = :json

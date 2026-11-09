@@ -123,6 +123,11 @@ module ContextDev
           end
         OrSymbol = T.type_alias { T.any(Symbol, String) }
 
+        WARC =
+          T.let(
+            :warc,
+            ContextDev::Models::ParseHandleResponse::Type::TaggedSymbol
+          )
         HTML =
           T.let(
             :html,
