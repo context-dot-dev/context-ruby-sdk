@@ -673,3 +673,28 @@ class ContextDev::Test::UtilSseTest < Minitest::Test
     end
   end
 end
+
+class ContextDev::Test::UtilJsonlContentTest < Minitest::Test
+  def test_jsonl_content_type
+    matched = [
+      "application/jsonl",
+      "application/x-jsonl",
+      "application/x-ndjson",
+      "application/x-ldjson"
+    ]
+    rejected = [
+      "text/jsonl",
+      "application/octet-stream; filename=data.jsonl",
+      "random_jsonl",
+      "text/plain"
+    ]
+
+    matched.each do |content_type|
+      assert_match(ContextDev::Internal::Util::JSONL_CONTENT, content_type)
+    end
+
+    rejected.each do |content_type|
+      refute_match(ContextDev::Internal::Util::JSONL_CONTENT, content_type)
+    end
+  end
+end
