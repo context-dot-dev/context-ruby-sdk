@@ -55,6 +55,7 @@ module ContextDev
           filters: ContextDev::PersonSearchParams::Filters::OrHash,
           mode: ContextDev::PersonSearchParams::Mode::OrSymbol,
           tags: T::Array[String],
+          zdr: ContextDev::PersonSearchParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::PersonSearchResponse)
       end
@@ -73,6 +74,9 @@ module ContextDev
         mode: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
+        zdr: nil,
         request_options: {}
       )
       end

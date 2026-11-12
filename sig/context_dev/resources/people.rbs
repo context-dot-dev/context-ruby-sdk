@@ -20,6 +20,7 @@ module ContextDev
         ?filters: ContextDev::PersonSearchParams::Filters,
         ?mode: ContextDev::Models::PersonSearchParams::mode,
         ?tags: ::Array[String],
+        ?zdr: ContextDev::Models::PersonSearchParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::PersonSearchResponse
 

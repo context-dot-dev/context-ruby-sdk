@@ -6,7 +6,8 @@ module ContextDev
         cursor: String,
         filters: ContextDev::PersonSearchParams::Filters,
         mode: ContextDev::Models::PersonSearchParams::mode,
-        tags: ::Array[String]
+        tags: ::Array[String],
+        zdr: ContextDev::Models::PersonSearchParams::zdr
       }
       & ContextDev::Internal::Type::request_parameters
 
@@ -36,12 +37,19 @@ module ContextDev
 
       def tags=: (::Array[String]) -> ::Array[String]
 
+      attr_reader zdr: ContextDev::Models::PersonSearchParams::zdr?
+
+      def zdr=: (
+        ContextDev::Models::PersonSearchParams::zdr
+      ) -> ContextDev::Models::PersonSearchParams::zdr
+
       def initialize: (
         query: String,
         ?cursor: String,
         ?filters: ContextDev::PersonSearchParams::Filters,
         ?mode: ContextDev::Models::PersonSearchParams::mode,
         ?tags: ::Array[String],
+        ?zdr: ContextDev::Models::PersonSearchParams::zdr,
         ?request_options: ContextDev::request_opts
       ) -> void
 
@@ -51,6 +59,7 @@ module ContextDev
         filters: ContextDev::PersonSearchParams::Filters,
         mode: ContextDev::Models::PersonSearchParams::mode,
         tags: ::Array[String],
+        zdr: ContextDev::Models::PersonSearchParams::zdr,
         request_options: ContextDev::RequestOptions
       }
 
@@ -96,6 +105,17 @@ module ContextDev
         ULTRA: :ultra
 
         def self?.values: -> ::Array[ContextDev::Models::PersonSearchParams::mode]
+      end
+
+      type zdr = :enabled | :disabled
+
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED: :enabled
+        DISABLED: :disabled
+
+        def self?.values: -> ::Array[ContextDev::Models::PersonSearchParams::zdr]
       end
     end
   end

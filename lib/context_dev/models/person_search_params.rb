@@ -41,7 +41,14 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!method initialize(query:, cursor: nil, filters: nil, mode: nil, tags: nil, request_options: {})
+      # @!attribute zdr
+      #   `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      #   your organization has ZDR.
+      #
+      #   @return [Symbol, ContextDev::Models::PersonSearchParams::Zdr, nil]
+      optional :zdr, enum: -> { ContextDev::PersonSearchParams::Zdr }
+
+      # @!method initialize(query:, cursor: nil, filters: nil, mode: nil, tags: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::PersonSearchParams} for more details.
       #
@@ -54,6 +61,8 @@ module ContextDev
       #   @param mode [Symbol, ContextDev::Models::PersonSearchParams::Mode] `fast` matches people on basic criteria (e.g. their role, location or background
       #
       #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      #
+      #   @param zdr [Symbol, ContextDev::Models::PersonSearchParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -95,6 +104,18 @@ module ContextDev
 
         FAST = :fast
         ULTRA = :ultra
+
+        # @!method self.values
+        #   @return [Array<Symbol>]
+      end
+
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        ENABLED = :enabled
+        DISABLED = :disabled
 
         # @!method self.values
         #   @return [Array<Symbol>]

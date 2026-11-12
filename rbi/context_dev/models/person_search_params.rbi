@@ -49,6 +49,14 @@ module ContextDev
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
+      sig { returns(T.nilable(ContextDev::PersonSearchParams::Zdr::OrSymbol)) }
+      attr_reader :zdr
+
+      sig { params(zdr: ContextDev::PersonSearchParams::Zdr::OrSymbol).void }
+      attr_writer :zdr
+
       sig do
         params(
           query: String,
@@ -56,6 +64,7 @@ module ContextDev
           filters: ContextDev::PersonSearchParams::Filters::OrHash,
           mode: ContextDev::PersonSearchParams::Mode::OrSymbol,
           tags: T::Array[String],
+          zdr: ContextDev::PersonSearchParams::Zdr::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
       end
@@ -74,6 +83,9 @@ module ContextDev
         mode: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
+        # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+        # your organization has ZDR.
+        zdr: nil,
         request_options: {}
       )
       end
@@ -86,6 +98,7 @@ module ContextDev
             filters: ContextDev::PersonSearchParams::Filters,
             mode: ContextDev::PersonSearchParams::Mode::OrSymbol,
             tags: T::Array[String],
+            zdr: ContextDev::PersonSearchParams::Zdr::OrSymbol,
             request_options: ContextDev::RequestOptions
           }
         )
@@ -172,6 +185,29 @@ module ContextDev
         sig do
           override.returns(
             T::Array[ContextDev::PersonSearchParams::Mode::TaggedSymbol]
+          )
+        end
+        def self.values
+        end
+      end
+
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
+      module Zdr
+        extend ContextDev::Internal::Type::Enum
+
+        TaggedSymbol =
+          T.type_alias { T.all(Symbol, ContextDev::PersonSearchParams::Zdr) }
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        ENABLED =
+          T.let(:enabled, ContextDev::PersonSearchParams::Zdr::TaggedSymbol)
+        DISABLED =
+          T.let(:disabled, ContextDev::PersonSearchParams::Zdr::TaggedSymbol)
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::PersonSearchParams::Zdr::TaggedSymbol]
           )
         end
         def self.values

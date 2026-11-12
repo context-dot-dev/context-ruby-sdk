@@ -50,7 +50,7 @@ module ContextDev
       #
       # Find people with a natural-language query.
       #
-      # @overload search(query:, cursor: nil, filters: nil, mode: nil, tags: nil, request_options: {})
+      # @overload search(query:, cursor: nil, filters: nil, mode: nil, tags: nil, zdr: nil, request_options: {})
       #
       # @param query [String] Describe the people to find. Up to 500 characters in `fast` mode and 5000 in `ul
       #
@@ -61,6 +61,8 @@ module ContextDev
       # @param mode [Symbol, ContextDev::Models::PersonSearchParams::Mode] `fast` matches people on basic criteria (e.g. their role, location or background
       #
       # @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      #
+      # @param zdr [Symbol, ContextDev::Models::PersonSearchParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
