@@ -1,5 +1,63 @@
 # Changelog
 
+## [2.38.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.37.0...v2.38.0) (2026-11-12)
+
+
+### Features
+
+* **access-policies:** limit which websites API requests can reach ([#2213](https://github.com/context-dot-dev/context-ruby-sdk/issues/2213)) ([9c97d2d](https://github.com/context-dot-dev/context-ruby-sdk/commit/9c97d2db46357b6a0a4027a413479127dfe8ba03))
+* **access-policies:** limit which websites API requests can reach ([#2213](https://github.com/context-dot-dev/context-ruby-sdk/issues/2213)) ([e2290f4](https://github.com/context-dot-dev/context-ruby-sdk/commit/e2290f4d234652053030ed0facd95c8d675eccad))
+* **access-policies:** limit which websites API requests can reach ([#2213](https://github.com/context-dot-dev/context-ruby-sdk/issues/2213)) ([c31170c](https://github.com/context-dot-dev/context-ruby-sdk/commit/c31170ccd5de5d0f7b8b932fbc7445200ac44344))
+* **access-policies:** limit which websites API requests can reach ([#2213](https://github.com/context-dot-dev/context-ruby-sdk/issues/2213)) ([2374d4c](https://github.com/context-dot-dev/context-ruby-sdk/commit/2374d4c53a90e92282d6ac62431d0847b002be23))
+* **access-policies:** limit which websites API requests can reach ([#2213](https://github.com/context-dot-dev/context-ruby-sdk/issues/2213)) ([7b7d307](https://github.com/context-dot-dev/context-ruby-sdk/commit/7b7d30795a8cba0233afd0e30e1ada599b869d14))
+* **api:** serve a public OpenAPI spec and generate the SDKs from it ([#2075](https://github.com/context-dot-dev/context-ruby-sdk/issues/2075)) ([622d0c3](https://github.com/context-dot-dev/context-ruby-sdk/commit/622d0c33d987e1eba0c00bb195de90ce2eeb90fb))
+* **batch:** accept lightweight submissions and queue pending work ([#2683](https://github.com/context-dot-dev/context-ruby-sdk/issues/2683)) ([94f185d](https://github.com/context-dot-dev/context-ruby-sdk/commit/94f185d6f5954f40ae0769ca28f53b0e1c696c73))
+* **batches:** let sitemap crawls choose which paths count as non-pages ([#2796](https://github.com/context-dot-dev/context-ruby-sdk/issues/2796)) ([e153dce](https://github.com/context-dot-dev/context-ruby-sdk/commit/e153dce2b038497138108517db8832f3618223ce))
+* **batch:** raise batch submissions to 2,500 per minute per organization ([#2734](https://github.com/context-dot-dev/context-ruby-sdk/issues/2734)) ([82264dc](https://github.com/context-dot-dev/context-ruby-sdk/commit/82264dce25a12228be41d6b0d1f0473fd327a829))
+* **brand:** support log-free brand and styleguide requests ([#2231](https://github.com/context-dot-dev/context-ruby-sdk/issues/2231)) ([9c97d2d](https://github.com/context-dot-dev/context-ruby-sdk/commit/9c97d2db46357b6a0a4027a413479127dfe8ba03))
+* **brand:** support log-free brand and styleguide requests ([#2231](https://github.com/context-dot-dev/context-ruby-sdk/issues/2231)) ([e2290f4](https://github.com/context-dot-dev/context-ruby-sdk/commit/e2290f4d234652053030ed0facd95c8d675eccad))
+* **brand:** support log-free brand and styleguide requests ([#2231](https://github.com/context-dot-dev/context-ruby-sdk/issues/2231)) ([c31170c](https://github.com/context-dot-dev/context-ruby-sdk/commit/c31170ccd5de5d0f7b8b932fbc7445200ac44344))
+* **brand:** support log-free brand and styleguide requests ([#2231](https://github.com/context-dot-dev/context-ruby-sdk/issues/2231)) ([2374d4c](https://github.com/context-dot-dev/context-ruby-sdk/commit/2374d4c53a90e92282d6ac62431d0847b002be23))
+* **monitors:** add search target to watch the web for new developments ([#2215](https://github.com/context-dot-dev/context-ruby-sdk/issues/2215)) ([9c97d2d](https://github.com/context-dot-dev/context-ruby-sdk/commit/9c97d2db46357b6a0a4027a413479127dfe8ba03))
+* **monitors:** add search target to watch the web for new developments ([#2215](https://github.com/context-dot-dev/context-ruby-sdk/issues/2215)) ([e2290f4](https://github.com/context-dot-dev/context-ruby-sdk/commit/e2290f4d234652053030ed0facd95c8d675eccad))
+* **parse:** mark PDF page numbers inline in Markdown with includeNumberedPages ([#2110](https://github.com/context-dot-dev/context-ruby-sdk/issues/2110)) ([c60456e](https://github.com/context-dot-dev/context-ruby-sdk/commit/c60456ee9c093af534db0432658a4b30d69f4f41))
+* **parse:** support WARC archives in parsing and scraping ([#2761](https://github.com/context-dot-dev/context-ruby-sdk/issues/2761)) ([d09556d](https://github.com/context-dot-dev/context-ruby-sdk/commit/d09556de6844d86f9da8f93474ff032d80af8ba5))
+* **people:** add ultra mode to people search ([#2149](https://github.com/context-dot-dev/context-ruby-sdk/issues/2149)) ([f9d3393](https://github.com/context-dot-dev/context-ruby-sdk/commit/f9d3393d6798317dce0dc5246bd89b89441c64c1))
+* **scrape:** add reddit-post prebuilt parser with full comment trees ([#2217](https://github.com/context-dot-dev/context-ruby-sdk/issues/2217)) ([95a3632](https://github.com/context-dot-dev/context-ruby-sdk/commit/95a3632b7ff8ab1f715980a1b40d2edfa18a7e36))
+* **scrape:** add Tripadvisor reviews parser ([#2508](https://github.com/context-dot-dev/context-ruby-sdk/issues/2508)) ([8f10abd](https://github.com/context-dot-dev/context-ruby-sdk/commit/8f10abd6a1403c1c3d1ae930f55927adaf97e0f4))
+* **scrape:** add Yelp reviews parser ([ea66000](https://github.com/context-dot-dev/context-ruby-sdk/commit/ea6600005bf509ea901f9875e736413dd6ce6075))
+* **scrape:** add Yelp search parser ([bdd2db7](https://github.com/context-dot-dev/context-ruby-sdk/commit/bdd2db7fb0e4bfe3e296ab8236178f6c31205774))
+* **scrape:** read framework-embedded page data in the json format ([#2405](https://github.com/context-dot-dev/context-ruby-sdk/issues/2405)) ([12707d0](https://github.com/context-dot-dev/context-ruby-sdk/commit/12707d0dce674830541edfcdea8556bfda052df2))
+* **scrape:** return Yelp reviewer id and profile url in yelp-reviews ([#2402](https://github.com/context-dot-dev/context-ruby-sdk/issues/2402)) ([4596198](https://github.com/context-dot-dev/context-ruby-sdk/commit/45961983a9bdffd7fa972aa46c6761d34b7c45fb))
+* **zdr:** accept zero data retention on people search and company search ([#2852](https://github.com/context-dot-dev/context-ruby-sdk/issues/2852)) ([84988b5](https://github.com/context-dot-dev/context-ruby-sdk/commit/84988b50231e4d8119512d173d5f8dfd56824bc9))
+
+
+### Bug Fixes
+
+* **brand:** keep metadata-only usage logs for ZDR brand requests ([#2234](https://github.com/context-dot-dev/context-ruby-sdk/issues/2234)) ([9c97d2d](https://github.com/context-dot-dev/context-ruby-sdk/commit/9c97d2db46357b6a0a4027a413479127dfe8ba03))
+* **brand:** keep metadata-only usage logs for ZDR brand requests ([#2234](https://github.com/context-dot-dev/context-ruby-sdk/issues/2234)) ([e2290f4](https://github.com/context-dot-dev/context-ruby-sdk/commit/e2290f4d234652053030ed0facd95c8d675eccad))
+* **brand:** keep metadata-only usage logs for ZDR brand requests ([#2234](https://github.com/context-dot-dev/context-ruby-sdk/issues/2234)) ([c31170c](https://github.com/context-dot-dev/context-ruby-sdk/commit/c31170ccd5de5d0f7b8b932fbc7445200ac44344))
+* **openapi:** keep legacy batch inputs in the spec as deprecated ([#2225](https://github.com/context-dot-dev/context-ruby-sdk/issues/2225)) ([9c97d2d](https://github.com/context-dot-dev/context-ruby-sdk/commit/9c97d2db46357b6a0a4027a413479127dfe8ba03))
+* **openapi:** keep legacy batch inputs in the spec as deprecated ([#2225](https://github.com/context-dot-dev/context-ruby-sdk/issues/2225)) ([e2290f4](https://github.com/context-dot-dev/context-ruby-sdk/commit/e2290f4d234652053030ed0facd95c8d675eccad))
+* **openapi:** keep legacy batch inputs in the spec as deprecated ([#2225](https://github.com/context-dot-dev/context-ruby-sdk/issues/2225)) ([c31170c](https://github.com/context-dot-dev/context-ruby-sdk/commit/c31170ccd5de5d0f7b8b932fbc7445200ac44344))
+* **openapi:** keep legacy batch inputs in the spec as deprecated ([#2225](https://github.com/context-dot-dev/context-ruby-sdk/issues/2225)) ([2374d4c](https://github.com/context-dot-dev/context-ruby-sdk/commit/2374d4c53a90e92282d6ac62431d0847b002be23))
+* **openapi:** keep legacy batch inputs in the spec as deprecated ([#2225](https://github.com/context-dot-dev/context-ruby-sdk/issues/2225)) ([7b7d307](https://github.com/context-dot-dev/context-ruby-sdk/commit/7b7d30795a8cba0233afd0e30e1ada599b869d14))
+* **openapi:** keep legacy batch inputs in the spec as deprecated ([#2225](https://github.com/context-dot-dev/context-ruby-sdk/issues/2225)) ([f45c764](https://github.com/context-dot-dev/context-ruby-sdk/commit/f45c764f36109212cf70ef5bf3fe59e45f27e4a3))
+* **people:** split ultra people ranking on its strongest phrase signals ([#2209](https://github.com/context-dot-dev/context-ruby-sdk/issues/2209)) ([de365f8](https://github.com/context-dot-dev/context-ruby-sdk/commit/de365f86d8c6772d7c9fa1e1dc1285701b61490e))
+* **scrape:** derive the /web/scrape request spec from its zod schema ([#2044](https://github.com/context-dot-dev/context-ruby-sdk/issues/2044)) ([5193bc1](https://github.com/context-dot-dev/context-ruby-sdk/commit/5193bc1b4883977b46a966f05a043ceec7e435f3))
+* **scrape:** restore Instagram profile posts from public pages ([#2233](https://github.com/context-dot-dev/context-ruby-sdk/issues/2233)) ([9c97d2d](https://github.com/context-dot-dev/context-ruby-sdk/commit/9c97d2db46357b6a0a4027a413479127dfe8ba03))
+
+
+### Documentation
+
+* **logs:** say that a request log appears a few seconds after the request ([#2564](https://github.com/context-dot-dev/context-ruby-sdk/issues/2564)) ([c60a6f0](https://github.com/context-dot-dev/context-ruby-sdk/commit/c60a6f062e11d4bce0b77835c6b419d84be2c9a1))
+* **people:** note that complex ultra people searches can take up to 60 seconds ([#2206](https://github.com/context-dot-dev/context-ruby-sdk/issues/2206)) ([9c483ca](https://github.com/context-dot-dev/context-ruby-sdk/commit/9c483caff2fb8b6cb51674e1c837f2fca31f6f54))
+
+
+### Refactors
+
+* **fonts:** share font link schemas and inferred types ([6495548](https://github.com/context-dot-dev/context-ruby-sdk/commit/649554849fd64b8b23f6adf1a918159b925cc265))
+
 ## [2.37.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.36.1...v2.37.0) (2026-10-23)
 
 
