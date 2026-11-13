@@ -46,6 +46,8 @@ module ContextDev
               case [key, val]
               in [Symbol | String, ^type]
                 true
+              in [Symbol | String, nil] if nilable?
+                true
               else
                 false
               end

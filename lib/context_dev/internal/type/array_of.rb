@@ -38,7 +38,7 @@ module ContextDev
         # @param other [Object]
         #
         # @return [Boolean]
-        def ===(other) = other.is_a?(Array) && other.all?(item_type)
+        def ===(other) = other.is_a?(Array) && other.all? { (nilable? && _1.nil?) || item_type === _1 }
 
         # @api public
         #

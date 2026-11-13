@@ -725,3 +725,30 @@ class ContextDev::Test::MetaInfoTest < Minitest::Test
     assert_equal({doc: "dawg"}, ub)
   end
 end
+
+class ContextDev::Test::NilableCollectionCaseEqualityTest < Minitest::Test
+  def test_array_of_nilable_case_equality
+    arr_type = ContextDev::Internal::Type::ArrayOf[String, nil?: true]
+    assert_operator(arr_type, :===, ["hello", nil])
+    assert_operator(arr_type, :===, [nil])
+    assert_operator(arr_type, :===, ["hello", "world"])
+    refute_operator(arr_type, :===, ["hello", 123])
+
+    non_nilable = ContextDev::Internal::Type::ArrayOf[String]
+    assert_operator(non_nilable, :===, ["hello", "world"])
+    refute_operator(non_nilable, :===, ["hello", nil])
+  end
+
+  def test_hash_of_nilable_case_equality
+    hash_type = ContextDev::Internal::Type::HashOf[String, nil?: true]
+    assert_operator(hash_type, :===, {a: "hello", b: nil})
+    assert_operator(hash_type, :===, {"a" => "hello", "b" => nil})
+    assert_operator(hash_type, :===, {a: nil})
+    assert_operator(hash_type, :===, {a: "hello"})
+    refute_operator(hash_type, :===, {a: 123})
+
+    non_nilable = ContextDev::Internal::Type::HashOf[String]
+    assert_operator(non_nilable, :===, {a: "hello", b: "world"})
+    refute_operator(non_nilable, :===, {a: "hello", b: nil})
+  end
+end
