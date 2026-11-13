@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "pathname"
+
 module ContextDev
   class FilePart
     # @return [Pathname, StringIO, IO, String]
@@ -49,7 +51,7 @@ module ContextDev
         in [nil, Pathname]
           content.basename.to_path
         in [nil, IO]
-          content.to_path
+          content.to_path&.then { ::File.basename(_1) }
         else
           filename
         end

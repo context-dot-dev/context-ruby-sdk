@@ -592,7 +592,10 @@ module ContextDev
           in ContextDev::FilePart unless val.filename.nil?
             filename = encode_path(val.filename)
             y << "; filename=\"#{filename}\""
-          in Pathname | IO
+          in Pathname
+            filename = encode_path(::File.basename(val.to_path))
+            y << "; filename=\"#{filename}\""
+          in IO unless val.to_path.nil?
             filename = encode_path(::File.basename(val.to_path))
             y << "; filename=\"#{filename}\""
           else

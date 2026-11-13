@@ -259,6 +259,21 @@ class ContextDev::Test::UtilFormDataEncodingTest < Minitest::Test
     end
   end
 
+  def test_pathless_io_encode
+    r, w = IO.pipe
+    w.write("streamed data")
+    w.close
+    headers = {"content-type" => "multipart/form-data"}
+    encoded = ContextDev::Internal::Util.encode_content(headers, r)
+    cgi = FakeCGI.new(*encoded)
+    io = cgi[""]
+    assert_pattern do
+      io.original_filename => ""
+      io.read => "streamed data"
+    end
+    r.close
+  end
+
   def test_hash_encode
     headers = {"content-type" => "multipart/form-data"}
     cases = {
