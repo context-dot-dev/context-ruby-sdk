@@ -120,6 +120,27 @@ class ContextDevTest < Minitest::Test
     assert_in_delta(10, Thread.current.thread_variable_get(:mock_sleep).last, 1.0)
   end
 
+  def test_client_retry_after_past_date
+    time_now = Time.now
+
+    stub_request(:post, "http://localhost/web/scrape").to_return_json(
+      status: 500,
+      headers: {"retry-after" => (time_now - 60).httpdate},
+      body: {}
+    )
+
+    context_dev = ContextDev::Client.new(base_url: "http://localhost", api_key: "My API Key", max_retries: 1)
+
+    Thread.current.thread_variable_set(:time_now, time_now)
+    assert_raises(ContextDev::Errors::InternalServerError) do
+      context_dev.web.scrape(formats: {}, url: "https://example.com")
+    end
+    Thread.current.thread_variable_set(:time_now, nil)
+
+    assert_requested(:any, /./, times: 2)
+    assert_equal([0.0], Thread.current.thread_variable_get(:mock_sleep))
+  end
+
   def test_client_retry_after_ms
     stub_request(:post, "http://localhost/web/scrape").to_return_json(
       status: 500,
