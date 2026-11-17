@@ -213,7 +213,7 @@ module ContextDev
         optional :json, ContextDev::Internal::Type::Boolean
 
         # @!attribute markdown
-        #   Page content as Markdown.
+        #   Page content or video transcript as Markdown.
         #
         #   @return [Boolean, nil]
         optional :markdown, ContextDev::Internal::Type::Boolean
@@ -252,7 +252,7 @@ module ContextDev
         #
         #   @param json [Boolean] An object matching `jsonParams.schema`, extracted from the page text and its emb
         #
-        #   @param markdown [Boolean] Page content as Markdown.
+        #   @param markdown [Boolean] Page content or video transcript as Markdown.
         #
         #   @param parse [Boolean] Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
         #

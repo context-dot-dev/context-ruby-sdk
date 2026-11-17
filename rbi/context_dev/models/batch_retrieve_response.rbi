@@ -373,7 +373,7 @@ module ContextDev
         sig { params(json: T::Boolean).void }
         attr_writer :json
 
-        # Page content as Markdown.
+        # Page content or video transcript as Markdown.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :markdown
 
@@ -427,7 +427,7 @@ module ContextDev
           # An object matching `jsonParams.schema`, extracted from the page text and its
           # embedded data (JSON-LD, meta tags, framework state).
           json: nil,
-          # Page content as Markdown.
+          # Page content or video transcript as Markdown.
           markdown: nil,
           # Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
           parse: nil,
