@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.38.1](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.38.0...v2.38.1) (2026-11-18)
+
+
+### Chores
+
+* run release-please centrally from brand-dev-server ([0104cfc](https://github.com/context-dot-dev/context-ruby-sdk/commit/0104cfc61e8e8f8276026cd05a70bfa2af04b8ea))
+
 ## [2.38.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.37.0...v2.38.0) (2026-11-17)
 
 
