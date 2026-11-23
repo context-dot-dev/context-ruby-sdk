@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.38.2](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.38.1...v2.38.2) (2026-11-23)
+
+
+### Chores
+
+* require MFA for gem owners on RubyGems ([#11](https://github.com/context-dot-dev/context-ruby-sdk/issues/11)) ([6079300](https://github.com/context-dot-dev/context-ruby-sdk/commit/6079300b1a06449221b45c91fb50c646d02d53a6))
+
 ## [2.38.1](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.38.0...v2.38.1) (2026-11-18)
 
 
