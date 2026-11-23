@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.homepage = "https://gemdocs.org/gems/context.dev"
   s.metadata["homepage_uri"] = s.homepage
   s.metadata["source_code_uri"] = "https://github.com/context-dot-dev/context-ruby-sdk"
-  s.metadata["rubygems_mfa_required"] = false.to_s
+  s.metadata["rubygems_mfa_required"] = true.to_s
   s.required_ruby_version = ">= 3.2.0"
 
   s.files = Dir[
