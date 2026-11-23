@@ -13,6 +13,9 @@ jobs:
     name: publish
     runs-on: ubuntu-latest
     environment: production
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -25,10 +28,9 @@ jobs:
       - run: |-
           bundle install
 
+      - name: Configure RubyGems credentials
+        uses: rubygems/configure-rubygems-credentials@dc5a8d8553e6ee01fc26761a49e99e733d17954a # v2.1.0
+
       - name: Publish to RubyGems.org
         run: |
           bash ./bin/publish-gem
-        env:
-          # `RUBYGEMS_HOST` is only required for private gem repositories, not https://rubygems.org
-          RUBYGEMS_HOST: ${{ secrets.CONTEXT_DEV_RUBYGEMS_HOST || secrets.RUBYGEMS_HOST }}
-          GEM_HOST_API_KEY: ${{ secrets.CONTEXT_DEV_GEM_HOST_API_KEY || secrets.GEM_HOST_API_KEY }}
