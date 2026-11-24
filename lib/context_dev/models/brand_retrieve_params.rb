@@ -78,7 +78,9 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy.
+          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          #   access policies are enabled for your organization; otherwise the request fails
+          #   with `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -119,7 +121,7 @@ module ContextDev
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
@@ -358,7 +360,9 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy.
+          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          #   access policies are enabled for your organization; otherwise the request fails
+          #   with `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -402,7 +406,7 @@ module ContextDev
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
@@ -885,7 +889,9 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy.
+          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          #   access policies are enabled for your organization; otherwise the request fails
+          #   with `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -928,7 +934,7 @@ module ContextDev
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
@@ -1160,7 +1166,9 @@ module ContextDev
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy.
+          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          #   access policies are enabled for your organization; otherwise the request fails
+          #   with `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -1208,7 +1216,7 @@ module ContextDev
           #
           #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
@@ -1505,7 +1513,9 @@ module ContextDev
           required :type, const: :by_direct_url
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy.
+          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          #   access policies are enabled for your organization; otherwise the request fails
+          #   with `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -1541,7 +1551,7 @@ module ContextDev
           #
           #   @param direct_url [String] Full http(s) URL to fetch brand data from (e.g., 'https://stripe.com/enterprise'
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #
@@ -1670,7 +1680,9 @@ module ContextDev
           optional :phone, union: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone }
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy.
+          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          #   access policies are enabled for your organization; otherwise the request fails
+          #   with `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -1720,7 +1732,7 @@ module ContextDev
           #
           #   @param phone [String, Float] Optional phone number from the transaction to help verify brand match.
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
           #
           #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
           #

@@ -125,7 +125,9 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Access policy IDs to apply. A URL must pass every policy.
+          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          # access policies are enabled for your organization; otherwise the request fails
+          # with `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
@@ -207,7 +209,9 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Access policy IDs to apply. A URL must pass every policy.
+            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+            # access policies are enabled for your organization; otherwise the request fails
+            # with `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
@@ -1067,7 +1071,9 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Access policy IDs to apply. A URL must pass every policy.
+          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          # access policies are enabled for your organization; otherwise the request fails
+          # with `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
@@ -1153,7 +1159,9 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Access policy IDs to apply. A URL must pass every policy.
+            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+            # access policies are enabled for your organization; otherwise the request fails
+            # with `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
@@ -3217,7 +3225,9 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Access policy IDs to apply. A URL must pass every policy.
+          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          # access policies are enabled for your organization; otherwise the request fails
+          # with `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
@@ -3300,7 +3310,9 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Access policy IDs to apply. A URL must pass every policy.
+            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+            # access policies are enabled for your organization; otherwise the request fails
+            # with `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
@@ -4141,7 +4153,9 @@ module ContextDev
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Access policy IDs to apply. A URL must pass every policy.
+          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          # access policies are enabled for your organization; otherwise the request fails
+          # with `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
@@ -4244,7 +4258,9 @@ module ContextDev
             # the API will skip time-consuming operations for faster response at the cost of
             # less comprehensive data.
             max_speed: nil,
-            # Access policy IDs to apply. A URL must pass every policy.
+            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+            # access policies are enabled for your organization; otherwise the request fails
+            # with `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
@@ -5450,7 +5466,9 @@ module ContextDev
           sig { returns(Symbol) }
           attr_accessor :type
 
-          # Access policy IDs to apply. A URL must pass every policy.
+          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          # access policies are enabled for your organization; otherwise the request fails
+          # with `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
@@ -5521,7 +5539,9 @@ module ContextDev
             # 'https://stripe.com/enterprise'). Only this URL is fetched — not the entire
             # internet.
             direct_url:,
-            # Access policy IDs to apply. A URL must pass every policy.
+            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+            # access policies are enabled for your organization; otherwise the request fails
+            # with `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,
@@ -5795,7 +5815,9 @@ module ContextDev
           end
           attr_writer :phone
 
-          # Access policy IDs to apply. A URL must pass every policy.
+          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+          # access policies are enabled for your organization; otherwise the request fails
+          # with `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
@@ -5895,7 +5917,9 @@ module ContextDev
             mcc: nil,
             # Optional phone number from the transaction to help verify brand match.
             phone: nil,
-            # Access policy IDs to apply. A URL must pass every policy.
+            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+            # access policies are enabled for your organization; otherwise the request fails
+            # with `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
             # Labels for filtering usage in the dashboard.
             tags: nil,

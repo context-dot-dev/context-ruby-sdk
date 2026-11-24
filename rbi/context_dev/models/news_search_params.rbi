@@ -45,7 +45,9 @@ module ContextDev
       sig { params(limit: Integer).void }
       attr_writer :limit
 
-      # Access policy IDs to apply. A URL must pass every policy.
+      # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+      # access policies are enabled for your organization; otherwise the request fails
+      # with `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
@@ -95,7 +97,9 @@ module ContextDev
         filter_by: nil,
         # Maximum results to return. Defaults to 10.
         limit: nil,
-        # Access policy IDs to apply. A URL must pass every policy.
+        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+        # access policies are enabled for your organization; otherwise the request fails
+        # with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Result ordering. Defaults to newest for entity searches. Natural-language
         # searches are always ordered by relevance.

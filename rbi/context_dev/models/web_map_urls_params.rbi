@@ -44,7 +44,9 @@ module ContextDev
       sig { params(max_links: Integer).void }
       attr_writer :max_links
 
-      # Comma-separated access policy IDs to apply. A URL must pass every policy.
+      # Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
+      # it out unless access policies are enabled for your organization; otherwise the
+      # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
@@ -129,7 +131,9 @@ module ContextDev
         include_subdomains: nil,
         # Maximum number of URLs to return.
         max_links: nil,
-        # Comma-separated access policy IDs to apply. A URL must pass every policy.
+        # Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
+        # it out unless access policies are enabled for your organization; otherwise the
+        # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Filter URLs by a topic or phrase, most relevant first.
         search: nil,

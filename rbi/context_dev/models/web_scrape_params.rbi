@@ -99,7 +99,9 @@ module ContextDev
       end
       attr_writer :parse_params
 
-      # Access policy IDs to apply. A URL must pass every policy.
+      # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+      # access policies are enabled for your organization; otherwise the request fails
+      # with `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
@@ -209,7 +211,9 @@ module ContextDev
         max_age_ms: nil,
         # Requires `formats.parse: true`; required when it is set.
         parse_params: nil,
-        # Access policy IDs to apply. A URL must pass every policy.
+        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+        # access policies are enabled for your organization; otherwise the request fails
+        # with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Product options. Requires formats.product: true.
         product_params: nil,

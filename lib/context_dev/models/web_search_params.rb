@@ -80,7 +80,9 @@ module ContextDev
       optional :num_results, Integer, api_name: :numResults
 
       # @!attribute policies
-      #   Access policy IDs to apply. A URL must pass every policy.
+      #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+      #   access policies are enabled for your organization; otherwise the request fails
+      #   with `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -134,7 +136,7 @@ module ContextDev
       #
       #   @param num_results [Integer] Number of results to request and return (1–100). Defaults to 10.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
       #
       #   @param query_fanout [Boolean] Currently has no effect.
       #

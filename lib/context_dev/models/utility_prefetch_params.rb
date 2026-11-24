@@ -20,7 +20,9 @@ module ContextDev
       required :type, enum: -> { ContextDev::UtilityPrefetchParams::Type }
 
       # @!attribute policies
-      #   Access policy IDs to apply. A URL must pass every policy.
+      #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+      #   access policies are enabled for your organization; otherwise the request fails
+      #   with `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -38,11 +40,14 @@ module ContextDev
       optional :timeout_opts, -> { ContextDev::UtilityPrefetchParams::TimeoutOpts }, api_name: :timeoutOpts
 
       # @!method initialize(identifier:, type:, policies: nil, tags: nil, timeout_opts: nil, request_options: {})
+      #   Some parameter documentations has been truncated, see
+      #   {ContextDev::Models::UtilityPrefetchParams} for more details.
+      #
       #   @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier] Identifier of the target to prefetch. Provide exactly one of domain or email.
       #
       #   @param type [Symbol, ContextDev::Models::UtilityPrefetchParams::Type] Data to prefetch.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
       #
       #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #

@@ -118,7 +118,9 @@ module ContextDev
       sig { params(num_results: Integer).void }
       attr_writer :num_results
 
-      # Access policy IDs to apply. A URL must pass every policy.
+      # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+      # access policies are enabled for your organization; otherwise the request fails
+      # with `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
@@ -213,7 +215,9 @@ module ContextDev
         markdown_options: nil,
         # Number of results to request and return (1–100). Defaults to 10.
         num_results: nil,
-        # Access policy IDs to apply. A URL must pass every policy.
+        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+        # access policies are enabled for your organization; otherwise the request fails
+        # with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Currently has no effect.
         query_fanout: nil,

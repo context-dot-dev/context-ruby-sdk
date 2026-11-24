@@ -63,7 +63,9 @@ module ContextDev
       sig { params(mode: ContextDev::MonitorCreateParams::Mode::OrSymbol).void }
       attr_writer :mode
 
-      # Access policy IDs to apply to every run.
+      # Access policy IDs to apply to every run. Leave it out unless access policies are
+      # enabled for your organization; otherwise the request fails with
+      # `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
@@ -133,7 +135,9 @@ module ContextDev
         change_detection: nil,
         # Always `web`. Optional.
         mode: nil,
-        # Access policy IDs to apply to every run.
+        # Access policy IDs to apply to every run. Leave it out unless access policies are
+        # enabled for your organization; otherwise the request fails with
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
         # every 6 hours or every 2 days. The total interval (frequency × unit) must be

@@ -14,7 +14,9 @@ module ContextDev
       required :input, union: -> { ContextDev::BatchSubmitParams::Input }
 
       # @!attribute policies
-      #   Access policy IDs to apply to every page. A URL must pass every policy.
+      #   Access policy IDs to apply to every page. A URL must pass every policy. Leave it
+      #   out unless access policies are enabled for your organization; otherwise the
+      #   request fails with `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -52,7 +54,7 @@ module ContextDev
       #
       #   @param input [ContextDev::Models::BatchSubmitParams::Input::Scrape, ContextDev::Models::BatchSubmitParams::Input::Crawl] Choose a URL list or a site crawl.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply to every page. A URL must pass every policy.
+      #   @param policies [Array<String>] Access policy IDs to apply to every page. A URL must pass every policy. Leave it
       #
       #   @param tags [Array<String>] Tags stored on the batch. Filter the batch list by them later.
       #

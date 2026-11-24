@@ -28,6 +28,8 @@ module ContextDev
 
       # @!attribute policies
       #   Access policy IDs to apply to every run. Send an empty list to remove them.
+      #   Leave it out unless access policies are enabled for your organization; otherwise
+      #   the request fails with `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -75,7 +77,7 @@ module ContextDev
       #
       #   @param name [String] Display name for the monitor.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply to every run. Send an empty list to remove them.
+      #   @param policies [Array<String>] Access policy IDs to apply to every run. Send an empty list to remove them. Leav
       #
       #   @param schedule [ContextDev::Models::MonitorUpdateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #

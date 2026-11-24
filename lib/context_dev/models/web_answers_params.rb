@@ -29,7 +29,9 @@ module ContextDev
       optional :mode, enum: -> { ContextDev::WebAnswersParams::Mode }
 
       # @!attribute policies
-      #   Access policy IDs to apply. A URL must pass every policy.
+      #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+      #   access policies are enabled for your organization; otherwise the request fails
+      #   with `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -63,7 +65,7 @@ module ContextDev
       #
       #   @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] `fast` prioritizes speed, with extra verification for people and companies; `ult
       #
-      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
       #
       #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #

@@ -98,7 +98,9 @@ module ContextDev
       sig { params(pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash).void }
       attr_writer :pdf
 
-      # Access policy IDs to apply. A URL must pass every policy.
+      # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+      # access policies are enabled for your organization; otherwise the request fails
+      # with `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
@@ -263,7 +265,9 @@ module ContextDev
         max_pages: nil,
         # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         pdf: nil,
-        # Access policy IDs to apply. A URL must pass every policy.
+        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+        # access policies are enabled for your organization; otherwise the request fails
+        # with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Wait briefly for CSS animations and transitions to settle before reading each
         # page.

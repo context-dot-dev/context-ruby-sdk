@@ -34,7 +34,9 @@ module ContextDev
       optional :mode, enum: -> { ContextDev::MonitorCreateParams::Mode }
 
       # @!attribute policies
-      #   Access policy IDs to apply to every run.
+      #   Access policy IDs to apply to every run. Leave it out unless access policies are
+      #   enabled for your organization; otherwise the request fails with
+      #   `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -71,7 +73,7 @@ module ContextDev
       #
       #   @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Always `web`. Optional.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply to every run.
+      #   @param policies [Array<String>] Access policy IDs to apply to every run. Leave it out unless access policies are
       #
       #   @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #

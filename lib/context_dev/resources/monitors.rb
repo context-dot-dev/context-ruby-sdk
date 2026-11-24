@@ -20,7 +20,7 @@ module ContextDev
       #
       # @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Always `web`. Optional.
       #
-      # @param policies [Array<String>] Access policy IDs to apply to every run.
+      # @param policies [Array<String>] Access policy IDs to apply to every run. Leave it out unless access policies are
       #
       # @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #
@@ -78,7 +78,7 @@ module ContextDev
       #
       # @param name [String] Display name for the monitor.
       #
-      # @param policies [Array<String>] Access policy IDs to apply to every run. Send an empty list to remove them.
+      # @param policies [Array<String>] Access policy IDs to apply to every run. Send an empty list to remove them. Leav
       #
       # @param schedule [ContextDev::Models::MonitorUpdateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
       #

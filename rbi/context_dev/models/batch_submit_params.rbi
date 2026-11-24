@@ -22,7 +22,9 @@ module ContextDev
       end
       attr_accessor :input
 
-      # Access policy IDs to apply to every page. A URL must pass every policy.
+      # Access policy IDs to apply to every page. A URL must pass every policy. Leave it
+      # out unless access policies are enabled for your organization; otherwise the
+      # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
@@ -80,7 +82,9 @@ module ContextDev
       def self.new(
         # Choose a URL list or a site crawl.
         input:,
-        # Access policy IDs to apply to every page. A URL must pass every policy.
+        # Access policy IDs to apply to every page. A URL must pass every policy. Leave it
+        # out unless access policies are enabled for your organization; otherwise the
+        # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Tags stored on the batch. Filter the batch list by them later.
         tags: nil,

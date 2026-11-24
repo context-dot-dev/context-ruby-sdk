@@ -17,7 +17,7 @@ module ContextDev
       #
       # @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] `fast` prioritizes speed, with extra verification for people and companies; `ult
       #
-      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
       #
       # @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #
@@ -91,7 +91,7 @@ module ContextDev
       #
       # @param max_age_ms [Integer, nil] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
       #
-      # @param policies [Array<String>] Comma-separated access policy IDs to apply. A URL must pass every policy.
+      # @param policies [Array<String>] Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
       #
       # @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
@@ -139,7 +139,7 @@ module ContextDev
       #
       # @param max_links [Integer] Maximum number of URLs to return.
       #
-      # @param policies [Array<String>] Comma-separated access policy IDs to apply. A URL must pass every policy.
+      # @param policies [Array<String>] Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
       #
       # @param search [String] Filter URLs by a topic or phrase, most relevant first.
       #
@@ -201,7 +201,7 @@ module ContextDev
       #
       # @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams::CustomParser, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser] Requires `formats.parse: true`; required when it is set.
       #
-      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
       #
       # @param product_params [ContextDev::Models::WebScrapeParams::ProductParams] Product options. Requires formats.product: true.
       #
@@ -325,7 +325,7 @@ module ContextDev
       #
       # @param num_results [Integer] Number of results to request and return (1–100). Defaults to 10.
       #
-      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
       #
       # @param query_fanout [Boolean] Currently has no effect.
       #
@@ -385,7 +385,7 @@ module ContextDev
       #
       # @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
       #
-      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
       #
       # @param settle_animations [Boolean] Wait briefly for CSS animations and transitions to settle before reading each pa
       #

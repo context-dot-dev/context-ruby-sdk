@@ -3,6 +3,9 @@
 module ContextDev
   module Resources
     class Utility
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::UtilityPrefetchParams} for more details.
+      #
       # Queue brand or styleguide data so a later lookup can return sooner.
       #
       # @overload prefetch(identifier:, type:, policies: nil, tags: nil, timeout_opts: nil, request_options: {})
@@ -11,7 +14,7 @@ module ContextDev
       #
       # @param type [Symbol, ContextDev::Models::UtilityPrefetchParams::Type] Data to prefetch.
       #
-      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
       #
       # @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #

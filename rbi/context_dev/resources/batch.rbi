@@ -137,7 +137,8 @@ module ContextDev
         # Body param: Choose a URL list or a site crawl.
         input:,
         # Body param: Access policy IDs to apply to every page. A URL must pass every
-        # policy.
+        # policy. Leave it out unless access policies are enabled for your organization;
+        # otherwise the request fails with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Body param: Tags stored on the batch. Filter the batch list by them later.
         tags: nil,

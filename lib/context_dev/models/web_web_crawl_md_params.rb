@@ -96,7 +96,9 @@ module ContextDev
       optional :pdf, -> { ContextDev::WebWebCrawlMdParams::Pdf }
 
       # @!attribute policies
-      #   Access policy IDs to apply. A URL must pass every policy.
+      #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+      #   access policies are enabled for your organization; otherwise the request fails
+      #   with `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -204,7 +206,7 @@ module ContextDev
       #
       #   @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
       #
       #   @param settle_animations [Boolean] Wait briefly for CSS animations and transitions to settle before reading each pa
       #

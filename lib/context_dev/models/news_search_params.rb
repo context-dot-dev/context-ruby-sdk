@@ -35,7 +35,9 @@ module ContextDev
       optional :limit, Integer
 
       # @!attribute policies
-      #   Access policy IDs to apply. A URL must pass every policy.
+      #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+      #   access policies are enabled for your organization; otherwise the request fails
+      #   with `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -65,7 +67,7 @@ module ContextDev
       #
       #   @param limit [Integer] Maximum results to return. Defaults to 10.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
       #
       #   @param sort_by [ContextDev::Models::NewsSearchParams::SortBy] Result ordering. Defaults to newest for entity searches. Natural-language search
       #

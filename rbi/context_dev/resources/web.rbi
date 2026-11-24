@@ -27,7 +27,9 @@ module ContextDev
         # `fast` prioritizes speed, with extra verification for people and companies;
         # `ultra` supports deeper research (default).
         mode: nil,
-        # Access policy IDs to apply. A URL must pass every policy.
+        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+        # access policies are enabled for your organization; otherwise the request fails
+        # with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
@@ -99,7 +101,9 @@ module ContextDev
         # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
         # year. `0` refreshes.
         max_age_ms: nil,
-        # Comma-separated access policy IDs to apply. A URL must pass every policy.
+        # Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
+        # it out unless access policies are enabled for your organization; otherwise the
+        # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
         tags: nil,
@@ -144,7 +148,9 @@ module ContextDev
         include_subdomains: nil,
         # Maximum number of URLs to return.
         max_links: nil,
-        # Comma-separated access policy IDs to apply. A URL must pass every policy.
+        # Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
+        # it out unless access policies are enabled for your organization; otherwise the
+        # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Filter URLs by a topic or phrase, most relevant first.
         search: nil,
@@ -211,7 +217,9 @@ module ContextDev
         max_age_ms: nil,
         # Requires `formats.parse: true`; required when it is set.
         parse_params: nil,
-        # Access policy IDs to apply. A URL must pass every policy.
+        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+        # access policies are enabled for your organization; otherwise the request fails
+        # with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Product options. Requires formats.product: true.
         product_params: nil,
@@ -381,7 +389,9 @@ module ContextDev
         markdown_options: nil,
         # Number of results to request and return (1–100). Defaults to 10.
         num_results: nil,
-        # Access policy IDs to apply. A URL must pass every policy.
+        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+        # access policies are enabled for your organization; otherwise the request fails
+        # with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Currently has no effect.
         query_fanout: nil,
@@ -461,7 +471,9 @@ module ContextDev
         max_pages: nil,
         # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
         pdf: nil,
-        # Access policy IDs to apply. A URL must pass every policy.
+        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+        # access policies are enabled for your organization; otherwise the request fails
+        # with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Wait briefly for CSS animations and transitions to settle before reading each
         # page.

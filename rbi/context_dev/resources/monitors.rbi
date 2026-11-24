@@ -40,7 +40,9 @@ module ContextDev
         change_detection: nil,
         # Always `web`. Optional.
         mode: nil,
-        # Access policy IDs to apply to every run.
+        # Access policy IDs to apply to every run. Leave it out unless access policies are
+        # enabled for your organization; otherwise the request fails with
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
         # every 6 hours or every 2 days. The total interval (frequency × unit) must be
@@ -103,6 +105,8 @@ module ContextDev
         # Display name for the monitor.
         name: nil,
         # Access policy IDs to apply to every run. Send an empty list to remove them.
+        # Leave it out unless access policies are enabled for your organization; otherwise
+        # the request fails with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
         # every 6 hours or every 2 days. The total interval (frequency × unit) must be

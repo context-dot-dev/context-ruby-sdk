@@ -21,7 +21,7 @@ module ContextDev
       #
       # @param limit [Integer] Maximum results to return. Defaults to 10.
       #
-      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy.
+      # @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
       #
       # @param sort_by [ContextDev::Models::NewsSearchParams::SortBy] Result ordering. Defaults to newest for entity searches. Natural-language search
       #

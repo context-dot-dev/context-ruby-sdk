@@ -32,7 +32,9 @@ module ContextDev
       sig { params(mode: ContextDev::WebAnswersParams::Mode::OrSymbol).void }
       attr_writer :mode
 
-      # Access policy IDs to apply. A URL must pass every policy.
+      # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+      # access policies are enabled for your organization; otherwise the request fails
+      # with `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
@@ -87,7 +89,9 @@ module ContextDev
         # `fast` prioritizes speed, with extra verification for people and companies;
         # `ultra` supports deeper research (default).
         mode: nil,
-        # Access policy IDs to apply. A URL must pass every policy.
+        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
+        # access policies are enabled for your organization; otherwise the request fails
+        # with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,

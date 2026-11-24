@@ -36,7 +36,9 @@ module ContextDev
       optional :max_age_ms, Integer, nil?: true
 
       # @!attribute policies
-      #   Comma-separated access policy IDs to apply. A URL must pass every policy.
+      #   Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
+      #   it out unless access policies are enabled for your organization; otherwise the
+      #   request fails with `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -73,7 +75,7 @@ module ContextDev
       #
       #   @param max_age_ms [Integer, nil] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
       #
-      #   @param policies [Array<String>] Comma-separated access policy IDs to apply. A URL must pass every policy.
+      #   @param policies [Array<String>] Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
       #
       #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
       #
