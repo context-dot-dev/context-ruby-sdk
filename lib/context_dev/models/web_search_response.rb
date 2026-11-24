@@ -169,7 +169,13 @@ module ContextDev
           #   @return [Array<String>, nil]
           required :highlights, ContextDev::Internal::Type::ArrayOf[String], nil?: true
 
-          # @!method initialize(code:, highlights:)
+          # @!attribute message
+          #   Why this output is missing. Present only when `code` is a failure.
+          #
+          #   @return [String, nil]
+          optional :message, String
+
+          # @!method initialize(code:, highlights:, message: nil)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::WebSearchResponse::Result::Highlights} for more details.
           #
@@ -178,6 +184,8 @@ module ContextDev
           #   @param code [Symbol, ContextDev::Models::WebSearchResponse::Result::Highlights::Code] Per-result highlights outcome. Inspect this before reading `highlights`.
           #
           #   @param highlights [Array<String>, nil] Passages relevant to the query, in page order. Null unless highlightsOptions.ena
+          #
+          #   @param message [String] Why this output is missing. Present only when `code` is a failure.
 
           # Per-result highlights outcome. Inspect this before reading `highlights`.
           #
@@ -191,6 +199,7 @@ module ContextDev
             CONTENT_TOO_LARGE = :CONTENT_TOO_LARGE
             WEBSITE_ACCESS_ERROR = :WEBSITE_ACCESS_ERROR
             WEBSITE_BLOCKED = :WEBSITE_BLOCKED
+            WEBSITE_NOT_FOUND = :WEBSITE_NOT_FOUND
             ERROR = :ERROR
 
             # @!method self.values
@@ -222,7 +231,13 @@ module ContextDev
                    enum: -> { ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState },
                    api_name: :finalDOMState
 
-          # @!method initialize(code:, markdown:, final_dom_state: nil)
+          # @!attribute message
+          #   Why this output is missing. Present only when `code` is a failure.
+          #
+          #   @return [String, nil]
+          optional :message, String
+
+          # @!method initialize(code:, markdown:, final_dom_state: nil, message: nil)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::WebSearchResponse::Result::Markdown} for more details.
           #
@@ -233,6 +248,8 @@ module ContextDev
           #   @param markdown [String, nil] GFM Markdown of the page. Null unless markdownOptions.enabled is true and scrapi
           #
           #   @param final_dom_state [Symbol, ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState] `loaded`, or `still-loading` when capture ended before the page finished loading
+          #
+          #   @param message [String] Why this output is missing. Present only when `code` is a failure.
 
           # Per-result scrape outcome. Inspect this before reading `markdown`.
           #
@@ -246,6 +263,7 @@ module ContextDev
             CONTENT_TOO_LARGE = :CONTENT_TOO_LARGE
             WEBSITE_ACCESS_ERROR = :WEBSITE_ACCESS_ERROR
             WEBSITE_BLOCKED = :WEBSITE_BLOCKED
+            WEBSITE_NOT_FOUND = :WEBSITE_NOT_FOUND
             ERROR = :ERROR
 
             # @!method self.values

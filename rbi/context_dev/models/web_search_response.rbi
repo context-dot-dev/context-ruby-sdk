@@ -323,12 +323,20 @@ module ContextDev
           sig { returns(T.nilable(T::Array[String])) }
           attr_accessor :highlights
 
+          # Why this output is missing. Present only when `code` is a failure.
+          sig { returns(T.nilable(String)) }
+          attr_reader :message
+
+          sig { params(message: String).void }
+          attr_writer :message
+
           # Highlights status and passages for this result.
           sig do
             params(
               code:
                 ContextDev::Models::WebSearchResponse::Result::Highlights::Code::OrSymbol,
-              highlights: T.nilable(T::Array[String])
+              highlights: T.nilable(T::Array[String]),
+              message: String
             ).returns(T.attached_class)
           end
           def self.new(
@@ -336,7 +344,9 @@ module ContextDev
             code:,
             # Passages relevant to the query, in page order. Null unless
             # highlightsOptions.enabled is true and the page was read.
-            highlights:
+            highlights:,
+            # Why this output is missing. Present only when `code` is a failure.
+            message: nil
           )
           end
 
@@ -345,7 +355,8 @@ module ContextDev
               {
                 code:
                   ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol,
-                highlights: T.nilable(T::Array[String])
+                highlights: T.nilable(T::Array[String]),
+                message: String
               }
             )
           end
@@ -393,6 +404,11 @@ module ContextDev
             WEBSITE_BLOCKED =
               T.let(
                 :WEBSITE_BLOCKED,
+                ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
+              )
+            WEBSITE_NOT_FOUND =
+              T.let(
+                :WEBSITE_NOT_FOUND,
                 ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
               )
             ERROR =
@@ -454,6 +470,13 @@ module ContextDev
           end
           attr_writer :final_dom_state
 
+          # Why this output is missing. Present only when `code` is a failure.
+          sig { returns(T.nilable(String)) }
+          attr_reader :message
+
+          sig { params(message: String).void }
+          attr_writer :message
+
           # Markdown scrape status and content for this result.
           sig do
             params(
@@ -461,7 +484,8 @@ module ContextDev
                 ContextDev::Models::WebSearchResponse::Result::Markdown::Code::OrSymbol,
               markdown: T.nilable(String),
               final_dom_state:
-                ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState::OrSymbol
+                ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState::OrSymbol,
+              message: String
             ).returns(T.attached_class)
           end
           def self.new(
@@ -472,7 +496,9 @@ module ContextDev
             markdown:,
             # `loaded`, or `still-loading` when capture ended before the page finished
             # loading.
-            final_dom_state: nil
+            final_dom_state: nil,
+            # Why this output is missing. Present only when `code` is a failure.
+            message: nil
           )
           end
 
@@ -483,7 +509,8 @@ module ContextDev
                   ContextDev::Models::WebSearchResponse::Result::Markdown::Code::TaggedSymbol,
                 markdown: T.nilable(String),
                 final_dom_state:
-                  ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState::TaggedSymbol
+                  ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState::TaggedSymbol,
+                message: String
               }
             )
           end
@@ -531,6 +558,11 @@ module ContextDev
             WEBSITE_BLOCKED =
               T.let(
                 :WEBSITE_BLOCKED,
+                ContextDev::Models::WebSearchResponse::Result::Markdown::Code::TaggedSymbol
+              )
+            WEBSITE_NOT_FOUND =
+              T.let(
+                :WEBSITE_NOT_FOUND,
                 ContextDev::Models::WebSearchResponse::Result::Markdown::Code::TaggedSymbol
               )
             ERROR =

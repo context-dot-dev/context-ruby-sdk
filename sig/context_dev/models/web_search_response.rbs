@@ -125,7 +125,8 @@ module ContextDev
         type highlights =
           {
             code: ContextDev::Models::WebSearchResponse::Result::Highlights::code,
-            highlights: ::Array[String]?
+            highlights: ::Array[String]?,
+            message: String
           }
 
         class Highlights < ContextDev::Internal::Type::BaseModel
@@ -133,14 +134,20 @@ module ContextDev
 
           attr_accessor highlights: ::Array[String]?
 
+          attr_reader message: String?
+
+          def message=: (String) -> String
+
           def initialize: (
             code: ContextDev::Models::WebSearchResponse::Result::Highlights::code,
-            highlights: ::Array[String]?
+            highlights: ::Array[String]?,
+            ?message: String
           ) -> void
 
           def to_hash: -> {
             code: ContextDev::Models::WebSearchResponse::Result::Highlights::code,
-            highlights: ::Array[String]?
+            highlights: ::Array[String]?,
+            message: String
           }
 
           type code =
@@ -150,6 +157,7 @@ module ContextDev
             | :CONTENT_TOO_LARGE
             | :WEBSITE_ACCESS_ERROR
             | :WEBSITE_BLOCKED
+            | :WEBSITE_NOT_FOUND
             | :ERROR
 
           module Code
@@ -161,6 +169,7 @@ module ContextDev
             CONTENT_TOO_LARGE: :CONTENT_TOO_LARGE
             WEBSITE_ACCESS_ERROR: :WEBSITE_ACCESS_ERROR
             WEBSITE_BLOCKED: :WEBSITE_BLOCKED
+            WEBSITE_NOT_FOUND: :WEBSITE_NOT_FOUND
             ERROR: :ERROR
 
             def self?.values: -> ::Array[ContextDev::Models::WebSearchResponse::Result::Highlights::code]
@@ -171,7 +180,8 @@ module ContextDev
           {
             code: ContextDev::Models::WebSearchResponse::Result::Markdown::code,
             markdown: String?,
-            final_dom_state: ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state
+            final_dom_state: ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state,
+            message: String
           }
 
         class Markdown < ContextDev::Internal::Type::BaseModel
@@ -185,16 +195,22 @@ module ContextDev
             ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state
           ) -> ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state
 
+          attr_reader message: String?
+
+          def message=: (String) -> String
+
           def initialize: (
             code: ContextDev::Models::WebSearchResponse::Result::Markdown::code,
             markdown: String?,
-            ?final_dom_state: ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state
+            ?final_dom_state: ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state,
+            ?message: String
           ) -> void
 
           def to_hash: -> {
             code: ContextDev::Models::WebSearchResponse::Result::Markdown::code,
             markdown: String?,
-            final_dom_state: ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state
+            final_dom_state: ContextDev::Models::WebSearchResponse::Result::Markdown::final_dom_state,
+            message: String
           }
 
           type code =
@@ -204,6 +220,7 @@ module ContextDev
             | :CONTENT_TOO_LARGE
             | :WEBSITE_ACCESS_ERROR
             | :WEBSITE_BLOCKED
+            | :WEBSITE_NOT_FOUND
             | :ERROR
 
           module Code
@@ -215,6 +232,7 @@ module ContextDev
             CONTENT_TOO_LARGE: :CONTENT_TOO_LARGE
             WEBSITE_ACCESS_ERROR: :WEBSITE_ACCESS_ERROR
             WEBSITE_BLOCKED: :WEBSITE_BLOCKED
+            WEBSITE_NOT_FOUND: :WEBSITE_NOT_FOUND
             ERROR: :ERROR
 
             def self?.values: -> ::Array[ContextDev::Models::WebSearchResponse::Result::Markdown::code]
