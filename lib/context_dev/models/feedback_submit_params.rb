@@ -63,6 +63,7 @@ module ContextDev
         FRICTION = :friction
         FEATURE_GAP = :feature_gap
         QUALITY_DEGRADATION = :quality_degradation
+        BAD_BRAND = :bad_brand
         OTHER = :other
 
         # @!method self.values

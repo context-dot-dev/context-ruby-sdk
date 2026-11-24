@@ -8,8 +8,8 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute task
-      #   Research task. The agent selects company/profile lookups, web searches, or page
-      #   reads. Include domains or URLs to focus the research.
+      #   Research task, up to 2000 characters. The agent selects company/profile lookups,
+      #   web searches, or page reads. Include domains or URLs to focus the research.
       #
       #   @return [String]
       required :task, String
@@ -59,7 +59,7 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebAnswersParams} for more details.
       #
-      #   @param task [String] Research task. The agent selects company/profile lookups, web searches, or page
+      #   @param task [String] Research task, up to 2000 characters. The agent selects company/profile lookups,
       #
       #   @param json_format [Hash{Symbol=>Object}] Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000 ch
       #

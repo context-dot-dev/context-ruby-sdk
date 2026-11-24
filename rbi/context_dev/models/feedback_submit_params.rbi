@@ -114,6 +114,11 @@ module ContextDev
             :quality_degradation,
             ContextDev::FeedbackSubmitParams::Category::TaggedSymbol
           )
+        BAD_BRAND =
+          T.let(
+            :bad_brand,
+            ContextDev::FeedbackSubmitParams::Category::TaggedSymbol
+          )
         OTHER =
           T.let(
             :other,

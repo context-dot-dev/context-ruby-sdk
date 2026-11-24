@@ -54,6 +54,7 @@ module ContextDev
         | :friction
         | :feature_gap
         | :quality_degradation
+        | :bad_brand
         | :other
 
       module Category
@@ -64,6 +65,7 @@ module ContextDev
         FRICTION: :friction
         FEATURE_GAP: :feature_gap
         QUALITY_DEGRADATION: :quality_degradation
+        BAD_BRAND: :bad_brand
         OTHER: :other
 
         def self?.values: -> ::Array[ContextDev::Models::FeedbackSubmitParams::category]

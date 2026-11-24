@@ -11,7 +11,7 @@ module ContextDev
       #
       # @overload answers(task:, json_format: nil, mode: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
-      # @param task [String] Research task. The agent selects company/profile lookups, web searches, or page
+      # @param task [String] Research task, up to 2000 characters. The agent selects company/profile lookups,
       #
       # @param json_format [Hash{Symbol=>Object}] Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000 ch
       #

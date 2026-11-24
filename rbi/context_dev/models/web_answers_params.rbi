@@ -11,8 +11,8 @@ module ContextDev
           T.any(ContextDev::WebAnswersParams, ContextDev::Internal::AnyHash)
         end
 
-      # Research task. The agent selects company/profile lookups, web searches, or page
-      # reads. Include domains or URLs to focus the research.
+      # Research task, up to 2000 characters. The agent selects company/profile lookups,
+      # web searches, or page reads. Include domains or URLs to focus the research.
       sig { returns(String) }
       attr_accessor :task
 
@@ -80,8 +80,8 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Research task. The agent selects company/profile lookups, web searches, or page
-        # reads. Include domains or URLs to focus the research.
+        # Research task, up to 2000 characters. The agent selects company/profile lookups,
+        # web searches, or page reads. Include domains or URLs to focus the research.
         task:,
         # Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
         # characters; unknowns may be null.
