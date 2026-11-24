@@ -31,8 +31,8 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::WebAnswersResponse::KeyMetadata }
 
       # @!attribute partial
-      #   True when the request deadline ended research and the answer uses the evidence
-      #   collected so far.
+      #   True when the answer is incomplete: the request deadline ended research, or a
+      #   requested list item has no researched values.
       #
       #   @return [Boolean, nil]
       optional :partial, ContextDev::Internal::Type::Boolean
@@ -49,7 +49,7 @@ module ContextDev
       #
       #   @param key_metadata [ContextDev::Models::WebAnswersResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param partial [Boolean] True when the request deadline ended research and the answer uses the evidence c
+      #   @param partial [Boolean] True when the answer is incomplete: the request deadline ended research, or a re
 
       # @see ContextDev::Models::WebAnswersResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel

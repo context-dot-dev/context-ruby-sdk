@@ -39,8 +39,8 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # True when the request deadline ended research and the answer uses the evidence
-      # collected so far.
+      # True when the answer is incomplete: the request deadline ended research, or a
+      # requested list item has no researched values.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :partial
 
@@ -68,8 +68,8 @@ module ContextDev
         sources:,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
-        # True when the request deadline ended research and the answer uses the evidence
-        # collected so far.
+        # True when the answer is incomplete: the request deadline ended research, or a
+        # requested list item has no researched values.
         partial: nil
       )
       end
