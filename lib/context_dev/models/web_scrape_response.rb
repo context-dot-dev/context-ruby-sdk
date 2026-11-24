@@ -1195,7 +1195,27 @@ module ContextDev
               #   @return [String, nil]
               required :url, String, nil?: true
 
-              # @!method initialize(attributes:, images:, sku:, url:)
+              # @!attribute availability
+              #   Normalized stock or ordering availability of this variant.
+              #
+              #   @return [Symbol, ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability, nil]
+              optional :availability,
+                       enum: -> { ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability },
+                       nil?: true
+
+              # @!attribute currency
+              #   Currency code for the variant price (e.g., USD, EUR) when stated with it.
+              #
+              #   @return [String, nil]
+              optional :currency, String, nil?: true
+
+              # @!attribute price
+              #   Price of this variant when the source states one per variant.
+              #
+              #   @return [Float, nil]
+              optional :price, Float, nil?: true
+
+              # @!method initialize(attributes:, images:, sku:, url:, availability: nil, currency: nil, price: nil)
               #   Some parameter documentations has been truncated, see
               #   {ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant} for
               #   more details.
@@ -1207,6 +1227,30 @@ module ContextDev
               #   @param sku [String, nil]
               #
               #   @param url [String, nil] Variant or offer URL when provided by the source. May be shared by variants.
+              #
+              #   @param availability [Symbol, ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability, nil] Normalized stock or ordering availability of this variant.
+              #
+              #   @param currency [String, nil] Currency code for the variant price (e.g., USD, EUR) when stated with it.
+              #
+              #   @param price [Float, nil] Price of this variant when the source states one per variant.
+
+              # Normalized stock or ordering availability of this variant.
+              #
+              # @see ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant#availability
+              module Availability
+                extend ContextDev::Internal::Type::Enum
+
+                IN_STOCK = :in_stock
+                OUT_OF_STOCK = :out_of_stock
+                LIMITED_AVAILABILITY = :limited_availability
+                PREORDER = :preorder
+                BACKORDER = :backorder
+                MADE_TO_ORDER = :made_to_order
+                DISCONTINUED = :discontinued
+
+                # @!method self.values
+                #   @return [Array<Symbol>]
+              end
             end
           end
         end

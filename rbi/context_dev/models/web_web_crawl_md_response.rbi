@@ -352,7 +352,7 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :source_url
 
-          # HTTP status code of the response
+          # HTTP status code of the response (0 when the page could not be retrieved)
           sig { returns(Integer) }
           attr_accessor :status_code
 
@@ -434,6 +434,16 @@ module ContextDev
 
           sig { params(description: String).void }
           attr_writer :description
+
+          # Why the page failed. Present only when `success` is `false`: `WEBSITE_BLOCKED`
+          # (the site served an anti-bot challenge or access wall), `WEBSITE_ACCESS_ERROR`
+          # (the page could not be retrieved or had no usable content), `NOT_FOUND`,
+          # `UNSUPPORTED_CONTENT`, `NO_PUBLISHED_MARKDOWN`, or `INTERNAL_ERROR`.
+          sig { returns(T.nilable(String)) }
+          attr_reader :error_code
+
+          sig { params(error_code: String).void }
+          attr_writer :error_code
 
           # Resolved favicon URL, when present.
           sig { returns(T.nilable(String)) }
@@ -590,6 +600,7 @@ module ContextDev
               author: String,
               canonical_url: String,
               description: String,
+              error_code: String,
               favicon: String,
               headings:
                 T::Array[
@@ -623,7 +634,7 @@ module ContextDev
             final_url:,
             # Original URL requested by the caller.
             source_url:,
-            # HTTP status code of the response
+            # HTTP status code of the response (0 when the page could not be retrieved)
             status_code:,
             # true if the page was fetched and parsed successfully
             success:,
@@ -641,6 +652,11 @@ module ContextDev
             canonical_url: nil,
             # Best description extracted from standard, Open Graph, or Twitter metadata.
             description: nil,
+            # Why the page failed. Present only when `success` is `false`: `WEBSITE_BLOCKED`
+            # (the site served an anti-bot challenge or access wall), `WEBSITE_ACCESS_ERROR`
+            # (the page could not be retrieved or had no usable content), `NOT_FOUND`,
+            # `UNSUPPORTED_CONTENT`, `NO_PUBLISHED_MARKDOWN`, or `INTERNAL_ERROR`.
+            error_code: nil,
             # Resolved favicon URL, when present.
             favicon: nil,
             # Page headings (h1–h6) in document order, extracted from the unfiltered document.
@@ -691,6 +707,7 @@ module ContextDev
                 author: String,
                 canonical_url: String,
                 description: String,
+                error_code: String,
                 favicon: String,
                 headings:
                   T::Array[

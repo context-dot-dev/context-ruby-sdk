@@ -153,6 +153,7 @@ module ContextDev
             author: String,
             canonical_url: String,
             description: String,
+            error_code: String,
             favicon: String,
             headings: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading],
             image: String,
@@ -205,6 +206,10 @@ module ContextDev
           attr_reader description: String?
 
           def description=: (String) -> String
+
+          attr_reader error_code: String?
+
+          def error_code=: (String) -> String
 
           attr_reader favicon: String?
 
@@ -275,6 +280,7 @@ module ContextDev
             ?author: String,
             ?canonical_url: String,
             ?description: String,
+            ?error_code: String,
             ?favicon: String,
             ?headings: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading],
             ?image: String,
@@ -302,6 +308,7 @@ module ContextDev
             author: String,
             canonical_url: String,
             description: String,
+            error_code: String,
             favicon: String,
             headings: ::Array[ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading],
             image: String,

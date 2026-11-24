@@ -186,7 +186,7 @@ module ContextDev
           required :source_url, String, api_name: :sourceUrl
 
           # @!attribute status_code
-          #   HTTP status code of the response
+          #   HTTP status code of the response (0 when the page could not be retrieved)
           #
           #   @return [Integer]
           required :status_code, Integer, api_name: :statusCode
@@ -241,6 +241,15 @@ module ContextDev
           #
           #   @return [String, nil]
           optional :description, String
+
+          # @!attribute error_code
+          #   Why the page failed. Present only when `success` is `false`: `WEBSITE_BLOCKED`
+          #   (the site served an anti-bot challenge or access wall), `WEBSITE_ACCESS_ERROR`
+          #   (the page could not be retrieved or had no usable content), `NOT_FOUND`,
+          #   `UNSUPPORTED_CONTENT`, `NO_PUBLISHED_MARKDOWN`, or `INTERNAL_ERROR`.
+          #
+          #   @return [String, nil]
+          optional :error_code, String
 
           # @!attribute favicon
           #   Resolved favicon URL, when present.
@@ -321,7 +330,7 @@ module ContextDev
           optional :twitter,
                    -> { ContextDev::Internal::Type::HashOf[union: ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Twitter] }
 
-          # @!method initialize(crawl_depth:, final_url:, source_url:, status_code:, success:, title:, url:, additional_meta: nil, alternates: nil, author: nil, canonical_url: nil, description: nil, favicon: nil, headings: nil, image: nil, json_ld: nil, keywords: nil, language: nil, modified_time: nil, open_graph: nil, published_time: nil, robots: nil, site_name: nil, twitter: nil)
+          # @!method initialize(crawl_depth:, final_url:, source_url:, status_code:, success:, title:, url:, additional_meta: nil, alternates: nil, author: nil, canonical_url: nil, description: nil, error_code: nil, favicon: nil, headings: nil, image: nil, json_ld: nil, keywords: nil, language: nil, modified_time: nil, open_graph: nil, published_time: nil, robots: nil, site_name: nil, twitter: nil)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata} for more details.
           #
@@ -331,7 +340,7 @@ module ContextDev
           #
           #   @param source_url [String] Original URL requested by the caller.
           #
-          #   @param status_code [Integer] HTTP status code of the response
+          #   @param status_code [Integer] HTTP status code of the response (0 when the page could not be retrieved)
           #
           #   @param success [Boolean] true if the page was fetched and parsed successfully
           #
@@ -348,6 +357,8 @@ module ContextDev
           #   @param canonical_url [String] Resolved canonical URL, when present.
           #
           #   @param description [String] Best description extracted from standard, Open Graph, or Twitter metadata.
+          #
+          #   @param error_code [String] Why the page failed. Present only when `success` is `false`: `WEBSITE_BLOCKED` (
           #
           #   @param favicon [String] Resolved favicon URL, when present.
           #

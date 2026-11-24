@@ -1108,7 +1108,10 @@ module ContextDev
                       attributes: ::Hash[Symbol, String],
                       images: ::Array[String],
                       sku: String?,
-                      url: String?
+                      url: String?,
+                      availability: ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Product::Data::Product::Variant::availability?,
+                      currency: String?,
+                      price: Float?
                     }
 
                   class Variant < ContextDev::Internal::Type::BaseModel
@@ -1120,19 +1123,54 @@ module ContextDev
 
                     attr_accessor url: String?
 
+                    attr_accessor availability: ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Product::Data::Product::Variant::availability?
+
+                    attr_accessor currency: String?
+
+                    attr_accessor price: Float?
+
                     def initialize: (
                       attributes: ::Hash[Symbol, String],
                       images: ::Array[String],
                       sku: String?,
-                      url: String?
+                      url: String?,
+                      ?availability: ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Product::Data::Product::Variant::availability?,
+                      ?currency: String?,
+                      ?price: Float?
                     ) -> void
 
                     def to_hash: -> {
                       attributes: ::Hash[Symbol, String],
                       images: ::Array[String],
                       sku: String?,
-                      url: String?
+                      url: String?,
+                      availability: ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Product::Data::Product::Variant::availability?,
+                      currency: String?,
+                      price: Float?
                     }
+
+                    type availability =
+                      :in_stock
+                      | :out_of_stock
+                      | :limited_availability
+                      | :preorder
+                      | :backorder
+                      | :made_to_order
+                      | :discontinued
+
+                    module Availability
+                      extend ContextDev::Internal::Type::Enum
+
+                      IN_STOCK: :in_stock
+                      OUT_OF_STOCK: :out_of_stock
+                      LIMITED_AVAILABILITY: :limited_availability
+                      PREORDER: :preorder
+                      BACKORDER: :backorder
+                      MADE_TO_ORDER: :made_to_order
+                      DISCONTINUED: :discontinued
+
+                      def self?.values: -> ::Array[ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Product::Data::Product::Variant::availability]
+                    end
                   end
                 end
               end
@@ -2291,7 +2329,10 @@ module ContextDev
                       attributes: ::Hash[Symbol, String],
                       images: ::Array[String],
                       sku: String?,
-                      url: String?
+                      url: String?,
+                      availability: ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Product::Data::Product::Variant::availability?,
+                      currency: String?,
+                      price: Float?
                     }
 
                   class Variant < ContextDev::Internal::Type::BaseModel
@@ -2303,19 +2344,54 @@ module ContextDev
 
                     attr_accessor url: String?
 
+                    attr_accessor availability: ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Product::Data::Product::Variant::availability?
+
+                    attr_accessor currency: String?
+
+                    attr_accessor price: Float?
+
                     def initialize: (
                       attributes: ::Hash[Symbol, String],
                       images: ::Array[String],
                       sku: String?,
-                      url: String?
+                      url: String?,
+                      ?availability: ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Product::Data::Product::Variant::availability?,
+                      ?currency: String?,
+                      ?price: Float?
                     ) -> void
 
                     def to_hash: -> {
                       attributes: ::Hash[Symbol, String],
                       images: ::Array[String],
                       sku: String?,
-                      url: String?
+                      url: String?,
+                      availability: ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Product::Data::Product::Variant::availability?,
+                      currency: String?,
+                      price: Float?
                     }
+
+                    type availability =
+                      :in_stock
+                      | :out_of_stock
+                      | :limited_availability
+                      | :preorder
+                      | :backorder
+                      | :made_to_order
+                      | :discontinued
+
+                    module Availability
+                      extend ContextDev::Internal::Type::Enum
+
+                      IN_STOCK: :in_stock
+                      OUT_OF_STOCK: :out_of_stock
+                      LIMITED_AVAILABILITY: :limited_availability
+                      PREORDER: :preorder
+                      BACKORDER: :backorder
+                      MADE_TO_ORDER: :made_to_order
+                      DISCONTINUED: :discontinued
+
+                      def self?.values: -> ::Array[ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Product::Data::Product::Variant::availability]
+                    end
                   end
                 end
               end

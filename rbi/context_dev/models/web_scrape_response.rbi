@@ -2287,12 +2287,36 @@ module ContextDev
               sig { returns(T.nilable(String)) }
               attr_accessor :url
 
+              # Normalized stock or ordering availability of this variant.
+              sig do
+                returns(
+                  T.nilable(
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability::TaggedSymbol
+                  )
+                )
+              end
+              attr_accessor :availability
+
+              # Currency code for the variant price (e.g., USD, EUR) when stated with it.
+              sig { returns(T.nilable(String)) }
+              attr_accessor :currency
+
+              # Price of this variant when the source states one per variant.
+              sig { returns(T.nilable(Float)) }
+              attr_accessor :price
+
               sig do
                 params(
                   attributes: T::Hash[Symbol, String],
                   images: T::Array[String],
                   sku: T.nilable(String),
-                  url: T.nilable(String)
+                  url: T.nilable(String),
+                  availability:
+                    T.nilable(
+                      ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability::OrSymbol
+                    ),
+                  currency: T.nilable(String),
+                  price: T.nilable(Float)
                 ).returns(T.attached_class)
               end
               def self.new(
@@ -2303,7 +2327,13 @@ module ContextDev
                 images:,
                 sku:,
                 # Variant or offer URL when provided by the source. May be shared by variants.
-                url:
+                url:,
+                # Normalized stock or ordering availability of this variant.
+                availability: nil,
+                # Currency code for the variant price (e.g., USD, EUR) when stated with it.
+                currency: nil,
+                # Price of this variant when the source states one per variant.
+                price: nil
               )
               end
 
@@ -2313,11 +2343,77 @@ module ContextDev
                     attributes: T::Hash[Symbol, String],
                     images: T::Array[String],
                     sku: T.nilable(String),
-                    url: T.nilable(String)
+                    url: T.nilable(String),
+                    availability:
+                      T.nilable(
+                        ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability::TaggedSymbol
+                      ),
+                    currency: T.nilable(String),
+                    price: T.nilable(Float)
                   }
                 )
               end
               def to_hash
+              end
+
+              # Normalized stock or ordering availability of this variant.
+              module Availability
+                extend ContextDev::Internal::Type::Enum
+
+                TaggedSymbol =
+                  T.type_alias do
+                    T.all(
+                      Symbol,
+                      ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability
+                    )
+                  end
+                OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                IN_STOCK =
+                  T.let(
+                    :in_stock,
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability::TaggedSymbol
+                  )
+                OUT_OF_STOCK =
+                  T.let(
+                    :out_of_stock,
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability::TaggedSymbol
+                  )
+                LIMITED_AVAILABILITY =
+                  T.let(
+                    :limited_availability,
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability::TaggedSymbol
+                  )
+                PREORDER =
+                  T.let(
+                    :preorder,
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability::TaggedSymbol
+                  )
+                BACKORDER =
+                  T.let(
+                    :backorder,
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability::TaggedSymbol
+                  )
+                MADE_TO_ORDER =
+                  T.let(
+                    :made_to_order,
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability::TaggedSymbol
+                  )
+                DISCONTINUED =
+                  T.let(
+                    :discontinued,
+                    ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability::TaggedSymbol
+                  )
+
+                sig do
+                  override.returns(
+                    T::Array[
+                      ContextDev::Models::WebScrapeResponse::Product::Data::Product::Variant::Availability::TaggedSymbol
+                    ]
+                  )
+                end
+                def self.values
+                end
               end
             end
           end
