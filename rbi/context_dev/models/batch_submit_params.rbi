@@ -6612,6 +6612,9 @@ module ContextDev
 
                 # "fail" returns 408 at the deadline. "return-partial" returns available results;
                 # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
+                # On POST /web/scrape, an output that is not ready in time fails with error_code
+                # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
+                # only when the whole request cannot respond by the deadline.
                 sig do
                   returns(
                     T.nilable(
@@ -6643,6 +6646,9 @@ module ContextDev
                   milliseconds:,
                   # "fail" returns 408 at the deadline. "return-partial" returns available results;
                   # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
+                  # On POST /web/scrape, an output that is not ready in time fails with error_code
+                  # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
+                  # only when the whole request cannot respond by the deadline.
                   behavior: nil
                 )
                 end
@@ -6661,6 +6667,9 @@ module ContextDev
 
                 # "fail" returns 408 at the deadline. "return-partial" returns available results;
                 # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
+                # On POST /web/scrape, an output that is not ready in time fails with error_code
+                # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
+                # only when the whole request cannot respond by the deadline.
                 module Behavior
                   extend ContextDev::Internal::Type::Enum
 
@@ -15512,6 +15521,9 @@ module ContextDev
 
                 # "fail" returns 408 at the deadline. "return-partial" returns available results;
                 # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
+                # On POST /web/scrape, an output that is not ready in time fails with error_code
+                # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
+                # only when the whole request cannot respond by the deadline.
                 sig do
                   returns(
                     T.nilable(
@@ -15543,6 +15555,9 @@ module ContextDev
                   milliseconds:,
                   # "fail" returns 408 at the deadline. "return-partial" returns available results;
                   # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
+                  # On POST /web/scrape, an output that is not ready in time fails with error_code
+                  # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
+                  # only when the whole request cannot respond by the deadline.
                   behavior: nil
                 )
                 end
@@ -15561,6 +15576,9 @@ module ContextDev
 
                 # "fail" returns 408 at the deadline. "return-partial" returns available results;
                 # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
+                # On POST /web/scrape, an output that is not ready in time fails with error_code
+                # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
+                # only when the whole request cannot respond by the deadline.
                 module Behavior
                   extend ContextDev::Internal::Type::Enum
 

@@ -2678,6 +2678,9 @@ module ContextDev
                 # @!attribute behavior
                 #   "fail" returns 408 at the deadline. "return-partial" returns available results;
                 #   inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
+                #   On POST /web/scrape, an output that is not ready in time fails with error_code
+                #   REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
+                #   only when the whole request cannot respond by the deadline.
                 #
                 #   @return [Symbol, ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior, nil]
                 optional :behavior,
@@ -2697,6 +2700,9 @@ module ContextDev
 
                 # "fail" returns 408 at the deadline. "return-partial" returns available results;
                 # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
+                # On POST /web/scrape, an output that is not ready in time fails with error_code
+                # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
+                # only when the whole request cannot respond by the deadline.
                 #
                 # @see ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts#behavior
                 module Behavior
@@ -6179,6 +6185,9 @@ module ContextDev
                 # @!attribute behavior
                 #   "fail" returns 408 at the deadline. "return-partial" returns available results;
                 #   inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
+                #   On POST /web/scrape, an output that is not ready in time fails with error_code
+                #   REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
+                #   only when the whole request cannot respond by the deadline.
                 #
                 #   @return [Symbol, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior, nil]
                 optional :behavior,
@@ -6198,6 +6207,9 @@ module ContextDev
 
                 # "fail" returns 408 at the deadline. "return-partial" returns available results;
                 # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
+                # On POST /web/scrape, an output that is not ready in time fails with error_code
+                # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
+                # only when the whole request cannot respond by the deadline.
                 #
                 # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts#behavior
                 module Behavior
