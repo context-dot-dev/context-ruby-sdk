@@ -1,7 +1,7 @@
 module ContextDev
   module Models
     type monitor_get_credit_usage_params =
-      { since: Time, until_: Time }
+      { since: Time, tag: String, until_: Time }
       & ContextDev::Internal::Type::request_parameters
 
     class MonitorGetCreditUsageParams < ContextDev::Internal::Type::BaseModel
@@ -12,18 +12,24 @@ module ContextDev
 
       def since=: (Time) -> Time
 
+      attr_reader tag: String?
+
+      def tag=: (String) -> String
+
       attr_reader until_: Time?
 
       def until_=: (Time) -> Time
 
       def initialize: (
         ?since: Time,
+        ?tag: String,
         ?until_: Time,
         ?request_options: ContextDev::request_opts
       ) -> void
 
       def to_hash: -> {
         since: Time,
+        tag: String,
         until_: Time,
         request_options: ContextDev::RequestOptions
       }

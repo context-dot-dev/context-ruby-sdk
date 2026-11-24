@@ -170,12 +170,18 @@ module ContextDev
         )
       end
 
-      # Return usage per monitor, highest first, for up to the 10,000 most recent runs
-      # in the requested window.
+      # Some parameter documentations has been truncated, see
+      # {ContextDev::Models::MonitorGetCreditUsageParams} for more details.
       #
-      # @overload get_credit_usage(since: nil, until_: nil, request_options: {})
+      # Return usage per monitor, highest first, for up to the 10,000 most recent runs
+      # in the requested window. Pass `tag` to report only the monitors that carry that
+      # tag, such as one customer’s monitors.
+      #
+      # @overload get_credit_usage(since: nil, tag: nil, until_: nil, request_options: {})
       #
       # @param since [Time] Only include items at or after this ISO 8601 timestamp.
+      #
+      # @param tag [String] Only include monitors that currently have this tag. Deleted monitors are left ou
       #
       # @param until_ [Time] Only include items before this ISO 8601 timestamp.
       #

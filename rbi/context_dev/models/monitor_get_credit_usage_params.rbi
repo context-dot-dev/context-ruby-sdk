@@ -21,6 +21,14 @@ module ContextDev
       sig { params(since: Time).void }
       attr_writer :since
 
+      # Only include monitors that currently have this tag. Deleted monitors are left
+      # out.
+      sig { returns(T.nilable(String)) }
+      attr_reader :tag
+
+      sig { params(tag: String).void }
+      attr_writer :tag
+
       # Only include items before this ISO 8601 timestamp.
       sig { returns(T.nilable(Time)) }
       attr_reader :until_
@@ -31,6 +39,7 @@ module ContextDev
       sig do
         params(
           since: Time,
+          tag: String,
           until_: Time,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
@@ -38,6 +47,9 @@ module ContextDev
       def self.new(
         # Only include items at or after this ISO 8601 timestamp.
         since: nil,
+        # Only include monitors that currently have this tag. Deleted monitors are left
+        # out.
+        tag: nil,
         # Only include items before this ISO 8601 timestamp.
         until_: nil,
         request_options: {}
@@ -48,6 +60,7 @@ module ContextDev
         override.returns(
           {
             since: Time,
+            tag: String,
             until_: Time,
             request_options: ContextDev::RequestOptions
           }

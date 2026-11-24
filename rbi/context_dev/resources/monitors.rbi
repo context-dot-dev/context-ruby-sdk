@@ -183,10 +183,12 @@ module ContextDev
       end
 
       # Return usage per monitor, highest first, for up to the 10,000 most recent runs
-      # in the requested window.
+      # in the requested window. Pass `tag` to report only the monitors that carry that
+      # tag, such as one customer’s monitors.
       sig do
         params(
           since: Time,
+          tag: String,
           until_: Time,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::MonitorGetCreditUsageResponse)
@@ -194,6 +196,9 @@ module ContextDev
       def get_credit_usage(
         # Only include items at or after this ISO 8601 timestamp.
         since: nil,
+        # Only include monitors that currently have this tag. Deleted monitors are left
+        # out.
+        tag: nil,
         # Only include items before this ISO 8601 timestamp.
         until_: nil,
         request_options: {}
