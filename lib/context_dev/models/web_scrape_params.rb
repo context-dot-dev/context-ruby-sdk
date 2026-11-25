@@ -881,6 +881,8 @@ module ContextDev
             YELP_SEARCH = :"yelp-search"
             YELP_REVIEWS = :"yelp-reviews"
             TRIPADVISOR_REVIEWS = :"tripadvisor-reviews"
+            CAR_RENTAL_AVAILABILITY = :"car-rental-availability"
+            CAR_RENTAL_LOCATIONS = :"car-rental-locations"
             EMAILS = :emails
             PHONE_NUMBERS = :"phone-numbers"
             LINKS = :links

@@ -391,10 +391,14 @@ module ContextDev
             # returns up to 20 latest public reviews in data.reviews, with business details
             # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
             # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-            # hotel, restaurant, or attraction review URL; emails, phone-numbers, and links
-            # return data.emails, data.phone_numbers, and data.links from the rendered page;
-            # the store, Maps, G2, Instagram, and TikTok parsers read their data directly,
-            # independently of DOM filters and other outputs.
+            # hotel, restaurant, or attraction review URL; car-rental-availability returns
+            # every vehicle with pay-now and pay-later prices in data.vehicles from an
+            # avis.com or budget.com vehicle-availability search URL; car-rental-locations
+            # returns rental branches with codes, addresses, coordinates and hours in
+            # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
+            # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+            # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+            # their data directly, independently of DOM filters and other outputs.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed
@@ -579,10 +583,14 @@ module ContextDev
               # returns up to 20 latest public reviews in data.reviews, with business details
               # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
               # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-              # hotel, restaurant, or attraction review URL; emails, phone-numbers, and links
-              # return data.emails, data.phone_numbers, and data.links from the rendered page;
-              # the store, Maps, G2, Instagram, and TikTok parsers read their data directly,
-              # independently of DOM filters and other outputs.
+              # hotel, restaurant, or attraction review URL; car-rental-availability returns
+              # every vehicle with pay-now and pay-later prices in data.vehicles from an
+              # avis.com or budget.com vehicle-availability search URL; car-rental-locations
+              # returns rental branches with codes, addresses, coordinates and hours in
+              # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
+              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+              # their data directly, independently of DOM filters and other outputs.
               parsed:,
               # Product details found on the page.
               product:,
@@ -2019,10 +2027,14 @@ module ContextDev
               # returns up to 20 latest public reviews in data.reviews, with business details
               # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
               # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-              # hotel, restaurant, or attraction review URL; emails, phone-numbers, and links
-              # return data.emails, data.phone_numbers, and data.links from the rendered page;
-              # the store, Maps, G2, Instagram, and TikTok parsers read their data directly,
-              # independently of DOM filters and other outputs.
+              # hotel, restaurant, or attraction review URL; car-rental-availability returns
+              # every vehicle with pay-now and pay-later prices in data.vehicles from an
+              # avis.com or budget.com vehicle-availability search URL; car-rental-locations
+              # returns rental branches with codes, addresses, coordinates and hours in
+              # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
+              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+              # their data directly, independently of DOM filters and other outputs.
               sig do
                 params(
                   data: T.nilable(T::Hash[Symbol, T.anything]),
@@ -2202,6 +2214,16 @@ module ContextDev
                 TRIPADVISOR_REVIEWS =
                   T.let(
                     :"tripadvisor-reviews",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed::Type::TaggedSymbol
+                  )
+                CAR_RENTAL_AVAILABILITY =
+                  T.let(
+                    :"car-rental-availability",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed::Type::TaggedSymbol
+                  )
+                CAR_RENTAL_LOCATIONS =
+                  T.let(
+                    :"car-rental-locations",
                     ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed::Type::TaggedSymbol
                   )
                 EMAILS =
@@ -3244,10 +3266,14 @@ module ContextDev
             # returns up to 20 latest public reviews in data.reviews, with business details
             # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
             # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-            # hotel, restaurant, or attraction review URL; emails, phone-numbers, and links
-            # return data.emails, data.phone_numbers, and data.links from the rendered page;
-            # the store, Maps, G2, Instagram, and TikTok parsers read their data directly,
-            # independently of DOM filters and other outputs.
+            # hotel, restaurant, or attraction review URL; car-rental-availability returns
+            # every vehicle with pay-now and pay-later prices in data.vehicles from an
+            # avis.com or budget.com vehicle-availability search URL; car-rental-locations
+            # returns rental branches with codes, addresses, coordinates and hours in
+            # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
+            # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+            # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+            # their data directly, independently of DOM filters and other outputs.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed
@@ -3432,10 +3458,14 @@ module ContextDev
               # returns up to 20 latest public reviews in data.reviews, with business details
               # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
               # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-              # hotel, restaurant, or attraction review URL; emails, phone-numbers, and links
-              # return data.emails, data.phone_numbers, and data.links from the rendered page;
-              # the store, Maps, G2, Instagram, and TikTok parsers read their data directly,
-              # independently of DOM filters and other outputs.
+              # hotel, restaurant, or attraction review URL; car-rental-availability returns
+              # every vehicle with pay-now and pay-later prices in data.vehicles from an
+              # avis.com or budget.com vehicle-availability search URL; car-rental-locations
+              # returns rental branches with codes, addresses, coordinates and hours in
+              # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
+              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+              # their data directly, independently of DOM filters and other outputs.
               parsed:,
               # Product details found on the page.
               product:,
@@ -4872,10 +4902,14 @@ module ContextDev
               # returns up to 20 latest public reviews in data.reviews, with business details
               # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
               # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-              # hotel, restaurant, or attraction review URL; emails, phone-numbers, and links
-              # return data.emails, data.phone_numbers, and data.links from the rendered page;
-              # the store, Maps, G2, Instagram, and TikTok parsers read their data directly,
-              # independently of DOM filters and other outputs.
+              # hotel, restaurant, or attraction review URL; car-rental-availability returns
+              # every vehicle with pay-now and pay-later prices in data.vehicles from an
+              # avis.com or budget.com vehicle-availability search URL; car-rental-locations
+              # returns rental branches with codes, addresses, coordinates and hours in
+              # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
+              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
+              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
+              # their data directly, independently of DOM filters and other outputs.
               sig do
                 params(
                   data: T.nilable(T::Hash[Symbol, T.anything]),
@@ -5055,6 +5089,16 @@ module ContextDev
                 TRIPADVISOR_REVIEWS =
                   T.let(
                     :"tripadvisor-reviews",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed::Type::TaggedSymbol
+                  )
+                CAR_RENTAL_AVAILABILITY =
+                  T.let(
+                    :"car-rental-availability",
+                    ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed::Type::TaggedSymbol
+                  )
+                CAR_RENTAL_LOCATIONS =
+                  T.let(
+                    :"car-rental-locations",
                     ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed::Type::TaggedSymbol
                   )
                 EMAILS =

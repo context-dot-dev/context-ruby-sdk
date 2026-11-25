@@ -1786,6 +1786,16 @@ module ContextDev
                 :"tripadvisor-reviews",
                 ContextDev::WebScrapeParams::ParseParams::PrebuiltParser::Parser::TaggedSymbol
               )
+            CAR_RENTAL_AVAILABILITY =
+              T.let(
+                :"car-rental-availability",
+                ContextDev::WebScrapeParams::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+              )
+            CAR_RENTAL_LOCATIONS =
+              T.let(
+                :"car-rental-locations",
+                ContextDev::WebScrapeParams::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+              )
             EMAILS =
               T.let(
                 :emails,

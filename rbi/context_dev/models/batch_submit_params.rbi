@@ -5136,6 +5136,16 @@ module ContextDev
                         :"tripadvisor-reviews",
                         ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
+                    CAR_RENTAL_AVAILABILITY =
+                      T.let(
+                        :"car-rental-availability",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    CAR_RENTAL_LOCATIONS =
+                      T.let(
+                        :"car-rental-locations",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
                     EMAILS =
                       T.let(
                         :emails,
@@ -14049,6 +14059,16 @@ module ContextDev
                     TRIPADVISOR_REVIEWS =
                       T.let(
                         :"tripadvisor-reviews",
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    CAR_RENTAL_AVAILABILITY =
+                      T.let(
+                        :"car-rental-availability",
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    CAR_RENTAL_LOCATIONS =
+                      T.let(
+                        :"car-rental-locations",
                         ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     EMAILS =
