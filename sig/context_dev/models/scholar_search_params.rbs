@@ -1,0 +1,108 @@
+module ContextDev
+  module Models
+    type scholar_search_params =
+      {
+        query: String,
+        cursor: String?,
+        filter_by: ContextDev::ScholarSearchParams::FilterBy,
+        limit: Integer,
+        sort: ContextDev::Models::ScholarSearchParams::sort,
+        tags: ::Array[String]
+      }
+      & ContextDev::Internal::Type::request_parameters
+
+    class ScholarSearchParams < ContextDev::Internal::Type::BaseModel
+      extend ContextDev::Internal::Type::RequestParameters::Converter
+      include ContextDev::Internal::Type::RequestParameters
+
+      attr_accessor query: String
+
+      attr_accessor cursor: String?
+
+      attr_reader filter_by: ContextDev::ScholarSearchParams::FilterBy?
+
+      def filter_by=: (
+        ContextDev::ScholarSearchParams::FilterBy
+      ) -> ContextDev::ScholarSearchParams::FilterBy
+
+      attr_reader limit: Integer?
+
+      def limit=: (Integer) -> Integer
+
+      attr_reader sort: ContextDev::Models::ScholarSearchParams::sort?
+
+      def sort=: (
+        ContextDev::Models::ScholarSearchParams::sort
+      ) -> ContextDev::Models::ScholarSearchParams::sort
+
+      attr_reader tags: ::Array[String]?
+
+      def tags=: (::Array[String]) -> ::Array[String]
+
+      def initialize: (
+        query: String,
+        ?cursor: String?,
+        ?filter_by: ContextDev::ScholarSearchParams::FilterBy,
+        ?limit: Integer,
+        ?sort: ContextDev::Models::ScholarSearchParams::sort,
+        ?tags: ::Array[String],
+        ?request_options: ContextDev::request_opts
+      ) -> void
+
+      def to_hash: -> {
+        query: String,
+        cursor: String?,
+        filter_by: ContextDev::ScholarSearchParams::FilterBy,
+        limit: Integer,
+        sort: ContextDev::Models::ScholarSearchParams::sort,
+        tags: ::Array[String],
+        request_options: ContextDev::RequestOptions
+      }
+
+      type filter_by = { date: ContextDev::ScholarSearchParams::FilterBy::Date }
+
+      class FilterBy < ContextDev::Internal::Type::BaseModel
+        attr_reader date: ContextDev::ScholarSearchParams::FilterBy::Date?
+
+        def date=: (
+          ContextDev::ScholarSearchParams::FilterBy::Date
+        ) -> ContextDev::ScholarSearchParams::FilterBy::Date
+
+        def initialize: (
+          ?date: ContextDev::ScholarSearchParams::FilterBy::Date
+        ) -> void
+
+        def to_hash: -> {
+          date: ContextDev::ScholarSearchParams::FilterBy::Date
+        }
+
+        type date = { from: Integer, to: Integer }
+
+        class Date < ContextDev::Internal::Type::BaseModel
+          attr_reader from: Integer?
+
+          def from=: (Integer) -> Integer
+
+          attr_reader to: Integer?
+
+          def to=: (Integer) -> Integer
+
+          def initialize: (?from: Integer, ?to: Integer) -> void
+
+          def to_hash: -> { from: Integer, to: Integer }
+        end
+      end
+
+      type sort = :relevance | :date_desc
+
+      module Sort
+        extend ContextDev::Internal::Type::Enum
+
+        RELEVANCE: :relevance
+        DATE_DESC: :date_desc
+
+        def self?.values: -> ::Array[ContextDev::Models::ScholarSearchParams::sort]
+      end
+    end
+  end
+end

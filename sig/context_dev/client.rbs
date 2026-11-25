@@ -30,6 +30,8 @@ module ContextDev
 
     attr_reader news: ContextDev::Resources::News
 
+    attr_reader scholar: ContextDev::Resources::Scholar
+
     attr_reader logs: ContextDev::Resources::Logs
 
     attr_reader browser: ContextDev::Resources::Browser

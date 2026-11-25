@@ -1,0 +1,17 @@
+module ContextDev
+  module Resources
+    class Scholar
+      def search: (
+        query: String,
+        ?cursor: String?,
+        ?filter_by: ContextDev::ScholarSearchParams::FilterBy,
+        ?limit: Integer,
+        ?sort: ContextDev::Models::ScholarSearchParams::sort,
+        ?tags: ::Array[String],
+        ?request_options: ContextDev::request_opts
+      ) -> ContextDev::Models::ScholarSearchResponse
+
+      def initialize: (client: ContextDev::Client) -> void
+    end
+  end
+end

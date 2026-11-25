@@ -51,6 +51,10 @@ module ContextDev
     # @return [ContextDev::Resources::News]
     attr_reader :news
 
+    # Search full-text academic papers from arXiv and Europe PMC.
+    # @return [ContextDev::Resources::Scholar]
+    attr_reader :scholar
+
     # Read your organization's API request logs.
     # @return [ContextDev::Resources::Logs]
     attr_reader :logs
@@ -133,6 +137,7 @@ module ContextDev
       @webhooks = ContextDev::Resources::Webhooks.new(client: self)
       @people = ContextDev::Resources::People.new(client: self)
       @news = ContextDev::Resources::News.new(client: self)
+      @scholar = ContextDev::Resources::Scholar.new(client: self)
       @logs = ContextDev::Resources::Logs.new(client: self)
       @browser = ContextDev::Resources::Browser.new(client: self)
       @feedback = ContextDev::Resources::Feedback.new(client: self)

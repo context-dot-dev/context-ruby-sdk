@@ -46,6 +46,10 @@ module ContextDev
     sig { returns(ContextDev::Resources::News) }
     attr_reader :news
 
+    # Search full-text academic papers from arXiv and Europe PMC.
+    sig { returns(ContextDev::Resources::Scholar) }
+    attr_reader :scholar
+
     # Read your organization's API request logs.
     sig { returns(ContextDev::Resources::Logs) }
     attr_reader :logs

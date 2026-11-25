@@ -1,0 +1,137 @@
+module ContextDev
+  module Models
+    type scholar_search_response =
+      {
+        data: ::Array[ContextDev::Models::ScholarSearchResponse::Data],
+        has_more: bool,
+        meta: ContextDev::Models::ScholarSearchResponse::Meta,
+        next_cursor: String?,
+        request_id: String,
+        key_metadata: ContextDev::Models::ScholarSearchResponse::KeyMetadata
+      }
+
+    class ScholarSearchResponse < ContextDev::Internal::Type::BaseModel
+      attr_accessor data: ::Array[ContextDev::Models::ScholarSearchResponse::Data]
+
+      attr_accessor has_more: bool
+
+      attr_accessor meta: ContextDev::Models::ScholarSearchResponse::Meta
+
+      attr_accessor next_cursor: String?
+
+      attr_accessor request_id: String
+
+      attr_reader key_metadata: ContextDev::Models::ScholarSearchResponse::KeyMetadata?
+
+      def key_metadata=: (
+        ContextDev::Models::ScholarSearchResponse::KeyMetadata
+      ) -> ContextDev::Models::ScholarSearchResponse::KeyMetadata
+
+      def initialize: (
+        data: ::Array[ContextDev::Models::ScholarSearchResponse::Data],
+        has_more: bool,
+        meta: ContextDev::Models::ScholarSearchResponse::Meta,
+        next_cursor: String?,
+        request_id: String,
+        ?key_metadata: ContextDev::Models::ScholarSearchResponse::KeyMetadata
+      ) -> void
+
+      def to_hash: -> {
+        data: ::Array[ContextDev::Models::ScholarSearchResponse::Data],
+        has_more: bool,
+        meta: ContextDev::Models::ScholarSearchResponse::Meta,
+        next_cursor: String?,
+        request_id: String,
+        key_metadata: ContextDev::Models::ScholarSearchResponse::KeyMetadata
+      }
+
+      type data =
+        {
+          id: String,
+          full_text_format: ContextDev::Models::ScholarSearchResponse::Data::full_text_format,
+          full_text_url: String,
+          published_at: Time?,
+          snippet: String,
+          title: String,
+          url: String
+        }
+
+      class Data < ContextDev::Internal::Type::BaseModel
+        attr_accessor id: String
+
+        attr_accessor full_text_format: ContextDev::Models::ScholarSearchResponse::Data::full_text_format
+
+        attr_accessor full_text_url: String
+
+        attr_accessor published_at: Time?
+
+        attr_accessor snippet: String
+
+        attr_accessor title: String
+
+        attr_accessor url: String
+
+        def initialize: (
+          id: String,
+          full_text_format: ContextDev::Models::ScholarSearchResponse::Data::full_text_format,
+          full_text_url: String,
+          published_at: Time?,
+          snippet: String,
+          title: String,
+          url: String
+        ) -> void
+
+        def to_hash: -> {
+          id: String,
+          full_text_format: ContextDev::Models::ScholarSearchResponse::Data::full_text_format,
+          full_text_url: String,
+          published_at: Time?,
+          snippet: String,
+          title: String,
+          url: String
+        }
+
+        type full_text_format = :pdf | :html | :jats
+
+        module FullTextFormat
+          extend ContextDev::Internal::Type::Enum
+
+          PDF: :pdf
+          HTML: :html
+          JATS: :jats
+
+          def self?.values: -> ::Array[ContextDev::Models::ScholarSearchResponse::Data::full_text_format]
+        end
+      end
+
+      type meta = { count: Integer }
+
+      class Meta < ContextDev::Internal::Type::BaseModel
+        attr_accessor count: Integer
+
+        def initialize: (count: Integer) -> void
+
+        def to_hash: -> { count: Integer }
+      end
+
+      type key_metadata =
+        { credits_consumed: Integer, credits_remaining: Integer }
+
+      class KeyMetadata < ContextDev::Internal::Type::BaseModel
+        attr_accessor credits_consumed: Integer
+
+        attr_accessor credits_remaining: Integer
+
+        def initialize: (
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        ) -> void
+
+        def to_hash: -> {
+          credits_consumed: Integer,
+          credits_remaining: Integer
+        }
+      end
+    end
+  end
+end

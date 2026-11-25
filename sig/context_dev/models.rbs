@@ -75,6 +75,8 @@ module ContextDev
 
   class RetryConfig = ContextDev::Models::RetryConfig
 
+  class ScholarSearchParams = ContextDev::Models::ScholarSearchParams
+
   class UtilityPrefetchParams = ContextDev::Models::UtilityPrefetchParams
 
   class WebAnswersParams = ContextDev::Models::WebAnswersParams
