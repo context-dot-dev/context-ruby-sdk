@@ -16,6 +16,15 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :task
 
+      # Limits what the research may use.
+      sig { returns(T.nilable(ContextDev::WebAnswersParams::Controls)) }
+      attr_reader :controls
+
+      sig do
+        params(controls: ContextDev::WebAnswersParams::Controls::OrHash).void
+      end
+      attr_writer :controls
+
       # Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
       # characters; unknowns may be null.
       sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
@@ -70,6 +79,7 @@ module ContextDev
       sig do
         params(
           task: String,
+          controls: ContextDev::WebAnswersParams::Controls::OrHash,
           json_format: T::Hash[Symbol, T.anything],
           mode: ContextDev::WebAnswersParams::Mode::OrSymbol,
           policies: T::Array[String],
@@ -83,6 +93,8 @@ module ContextDev
         # Research task, up to 2000 characters. The agent selects company/profile lookups,
         # web searches, or page reads. Include domains or URLs to focus the research.
         task:,
+        # Limits what the research may use.
+        controls: nil,
         # Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
         # characters; unknowns may be null.
         json_format: nil,
@@ -108,6 +120,7 @@ module ContextDev
         override.returns(
           {
             task: String,
+            controls: ContextDev::WebAnswersParams::Controls,
             json_format: T::Hash[Symbol, T.anything],
             mode: ContextDev::WebAnswersParams::Mode::OrSymbol,
             policies: T::Array[String],
@@ -119,6 +132,61 @@ module ContextDev
         )
       end
       def to_hash
+      end
+
+      class Controls < ContextDev::Internal::Type::BaseModel
+        OrHash =
+          T.type_alias do
+            T.any(
+              ContextDev::WebAnswersParams::Controls,
+              ContextDev::Internal::AnyHash
+            )
+          end
+
+        # Never search, read or cite these sites, sections or pages. Same format as
+        # `sources`. Up to 100 entries.
+        sig { returns(T.nilable(T::Array[String])) }
+        attr_reader :exclude_sources
+
+        sig { params(exclude_sources: T::Array[String]).void }
+        attr_writer :exclude_sources
+
+        # Only search, read and cite these sites, sections or pages. Each entry is a URL
+        # prefix: "example.com" covers the site and its subdomains, "example.com/docs"
+        # covers that section, and "example.com/docs/setup.html" is one page. Up to 20
+        # entries.
+        sig { returns(T.nilable(T::Array[String])) }
+        attr_reader :sources
+
+        sig { params(sources: T::Array[String]).void }
+        attr_writer :sources
+
+        # Limits what the research may use.
+        sig do
+          params(
+            exclude_sources: T::Array[String],
+            sources: T::Array[String]
+          ).returns(T.attached_class)
+        end
+        def self.new(
+          # Never search, read or cite these sites, sections or pages. Same format as
+          # `sources`. Up to 100 entries.
+          exclude_sources: nil,
+          # Only search, read and cite these sites, sections or pages. Each entry is a URL
+          # prefix: "example.com" covers the site and its subdomains, "example.com/docs"
+          # covers that section, and "example.com/docs/setup.html" is one page. Up to 20
+          # entries.
+          sources: nil
+        )
+        end
+
+        sig do
+          override.returns(
+            { exclude_sources: T::Array[String], sources: T::Array[String] }
+          )
+        end
+        def to_hash
+        end
       end
 
       # `fast` prioritizes speed, with extra verification for people and companies;

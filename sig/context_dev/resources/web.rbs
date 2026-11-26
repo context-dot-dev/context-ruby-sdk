@@ -3,6 +3,7 @@ module ContextDev
     class Web
       def answers: (
         task: String,
+        ?controls: ContextDev::WebAnswersParams::Controls,
         ?json_format: ::Hash[Symbol, top],
         ?mode: ContextDev::Models::WebAnswersParams::mode,
         ?policies: ::Array[String],

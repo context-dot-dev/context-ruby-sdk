@@ -9,9 +9,11 @@ module ContextDev
       # Research the web and return a sourced answer in your JSON shape. Choose `fast`
       # for a short task or `ultra` for deeper research.
       #
-      # @overload answers(task:, json_format: nil, mode: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @overload answers(task:, controls: nil, json_format: nil, mode: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #
       # @param task [String] Research task, up to 2000 characters. The agent selects company/profile lookups,
+      #
+      # @param controls [ContextDev::Models::WebAnswersParams::Controls] Limits what the research may use.
       #
       # @param json_format [Hash{Symbol=>Object}] Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000 ch
       #

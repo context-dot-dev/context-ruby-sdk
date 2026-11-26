@@ -8,6 +8,7 @@ module ContextDev
       sig do
         params(
           task: String,
+          controls: ContextDev::WebAnswersParams::Controls::OrHash,
           json_format: T::Hash[Symbol, T.anything],
           mode: ContextDev::WebAnswersParams::Mode::OrSymbol,
           policies: T::Array[String],
@@ -21,6 +22,8 @@ module ContextDev
         # Research task, up to 2000 characters. The agent selects company/profile lookups,
         # web searches, or page reads. Include domains or URLs to focus the research.
         task:,
+        # Limits what the research may use.
+        controls: nil,
         # Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
         # characters; unknowns may be null.
         json_format: nil,

@@ -3,6 +3,7 @@ module ContextDev
     type web_answers_params =
       {
         task: String,
+        controls: ContextDev::WebAnswersParams::Controls,
         json_format: ::Hash[Symbol, top],
         mode: ContextDev::Models::WebAnswersParams::mode,
         policies: ::Array[String],
@@ -17,6 +18,12 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       attr_accessor task: String
+
+      attr_reader controls: ContextDev::WebAnswersParams::Controls?
+
+      def controls=: (
+        ContextDev::WebAnswersParams::Controls
+      ) -> ContextDev::WebAnswersParams::Controls
 
       attr_reader json_format: ::Hash[Symbol, top]?
 
@@ -50,6 +57,7 @@ module ContextDev
 
       def initialize: (
         task: String,
+        ?controls: ContextDev::WebAnswersParams::Controls,
         ?json_format: ::Hash[Symbol, top],
         ?mode: ContextDev::Models::WebAnswersParams::mode,
         ?policies: ::Array[String],
@@ -61,6 +69,7 @@ module ContextDev
 
       def to_hash: -> {
         task: String,
+        controls: ContextDev::WebAnswersParams::Controls,
         json_format: ::Hash[Symbol, top],
         mode: ContextDev::Models::WebAnswersParams::mode,
         policies: ::Array[String],
@@ -69,6 +78,29 @@ module ContextDev
         zdr: ContextDev::Models::WebAnswersParams::zdr,
         request_options: ContextDev::RequestOptions
       }
+
+      type controls =
+        { exclude_sources: ::Array[String], sources: ::Array[String] }
+
+      class Controls < ContextDev::Internal::Type::BaseModel
+        attr_reader exclude_sources: ::Array[String]?
+
+        def exclude_sources=: (::Array[String]) -> ::Array[String]
+
+        attr_reader sources: ::Array[String]?
+
+        def sources=: (::Array[String]) -> ::Array[String]
+
+        def initialize: (
+          ?exclude_sources: ::Array[String],
+          ?sources: ::Array[String]
+        ) -> void
+
+        def to_hash: -> {
+          exclude_sources: ::Array[String],
+          sources: ::Array[String]
+        }
+      end
 
       type mode = :fast | :ultra
 

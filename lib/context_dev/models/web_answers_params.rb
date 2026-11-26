@@ -14,6 +14,12 @@ module ContextDev
       #   @return [String]
       required :task, String
 
+      # @!attribute controls
+      #   Limits what the research may use.
+      #
+      #   @return [ContextDev::Models::WebAnswersParams::Controls, nil]
+      optional :controls, -> { ContextDev::WebAnswersParams::Controls }
+
       # @!attribute json_format
       #   Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
       #   characters; unknowns may be null.
@@ -55,11 +61,13 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebAnswersParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebAnswersParams::Zdr }
 
-      # @!method initialize(task:, json_format: nil, mode: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(task:, controls: nil, json_format: nil, mode: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebAnswersParams} for more details.
       #
       #   @param task [String] Research task, up to 2000 characters. The agent selects company/profile lookups,
+      #
+      #   @param controls [ContextDev::Models::WebAnswersParams::Controls] Limits what the research may use.
       #
       #   @param json_format [Hash{Symbol=>Object}] Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000 ch
       #
@@ -74,6 +82,34 @@ module ContextDev
       #   @param zdr [Symbol, ContextDev::Models::WebAnswersParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
+
+      class Controls < ContextDev::Internal::Type::BaseModel
+        # @!attribute exclude_sources
+        #   Never search, read or cite these sites, sections or pages. Same format as
+        #   `sources`. Up to 100 entries.
+        #
+        #   @return [Array<String>, nil]
+        optional :exclude_sources, ContextDev::Internal::Type::ArrayOf[String], api_name: :excludeSources
+
+        # @!attribute sources
+        #   Only search, read and cite these sites, sections or pages. Each entry is a URL
+        #   prefix: "example.com" covers the site and its subdomains, "example.com/docs"
+        #   covers that section, and "example.com/docs/setup.html" is one page. Up to 20
+        #   entries.
+        #
+        #   @return [Array<String>, nil]
+        optional :sources, ContextDev::Internal::Type::ArrayOf[String]
+
+        # @!method initialize(exclude_sources: nil, sources: nil)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebAnswersParams::Controls} for more details.
+        #
+        #   Limits what the research may use.
+        #
+        #   @param exclude_sources [Array<String>] Never search, read or cite these sites, sections or pages. Same format as `sourc
+        #
+        #   @param sources [Array<String>] Only search, read and cite these sites, sections or pages. Each entry is a URL p
+      end
 
       # `fast` prioritizes speed, with extra verification for people and companies;
       # `ultra` supports deeper research (default).
