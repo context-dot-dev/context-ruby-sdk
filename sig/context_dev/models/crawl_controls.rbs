@@ -2,17 +2,24 @@ module ContextDev
   module Models
     type crawl_controls =
       {
+        exclude: ::Array[ContextDev::Models::CrawlControls::exclude]?,
         exclude_url_pattern: String?,
+        follow: ::Array[ContextDev::Models::CrawlControls::follow]?,
         follow_subdomains: bool,
         languages: ContextDev::Models::CrawlControls::languages?,
         max_depth: Integer?,
         max_pages: Integer,
+        scrape: ::Array[ContextDev::Models::CrawlControls::scrape]?,
         source: ContextDev::Models::CrawlControls::source,
         url_pattern: String?
       }
 
     class CrawlControls < ContextDev::Internal::Type::BaseModel
+      attr_accessor exclude: ::Array[ContextDev::Models::CrawlControls::exclude]?
+
       attr_accessor exclude_url_pattern: String?
+
+      attr_accessor follow: ::Array[ContextDev::Models::CrawlControls::follow]?
 
       attr_accessor follow_subdomains: bool
 
@@ -22,29 +29,112 @@ module ContextDev
 
       attr_accessor max_pages: Integer
 
+      attr_accessor scrape: ::Array[ContextDev::Models::CrawlControls::scrape]?
+
       attr_accessor source: ContextDev::Models::CrawlControls::source
 
       attr_accessor url_pattern: String?
 
       def initialize: (
+        exclude: ::Array[ContextDev::Models::CrawlControls::exclude]?,
         exclude_url_pattern: String?,
+        follow: ::Array[ContextDev::Models::CrawlControls::follow]?,
         follow_subdomains: bool,
         languages: ContextDev::Models::CrawlControls::languages?,
         max_depth: Integer?,
         max_pages: Integer,
+        scrape: ::Array[ContextDev::Models::CrawlControls::scrape]?,
         source: ContextDev::Models::CrawlControls::source,
         url_pattern: String?
       ) -> void
 
       def to_hash: -> {
+        exclude: ::Array[ContextDev::Models::CrawlControls::exclude]?,
         exclude_url_pattern: String?,
+        follow: ::Array[ContextDev::Models::CrawlControls::follow]?,
         follow_subdomains: bool,
         languages: ContextDev::Models::CrawlControls::languages?,
         max_depth: Integer?,
         max_pages: Integer,
+        scrape: ::Array[ContextDev::Models::CrawlControls::scrape]?,
         source: ContextDev::Models::CrawlControls::source,
         url_pattern: String?
       }
+
+      type exclude =
+        ContextDev::CrawlControls::Exclude::Regex
+        | ContextDev::CrawlControls::Exclude::Product
+
+      module Exclude
+        extend ContextDev::Internal::Type::Union
+
+        type regex = { kind: :regex, pattern: String }
+
+        class Regex < ContextDev::Internal::Type::BaseModel
+          attr_accessor kind: :regex
+
+          attr_accessor pattern: String
+
+          def initialize: (pattern: String, ?kind: :regex) -> void
+
+          def to_hash: -> { kind: :regex, pattern: String }
+        end
+
+        type product = { kind: :product }
+
+        class Product < ContextDev::Internal::Type::BaseModel
+          attr_accessor kind: :product
+
+          def initialize: (?kind: :product) -> void
+
+          def to_hash: -> { kind: :product }
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::CrawlControls::exclude]
+      end
+
+      type follow =
+        ContextDev::CrawlControls::Follow::Regex
+        | ContextDev::CrawlControls::Follow::Pagination
+        | ContextDev::CrawlControls::Follow::Product
+
+      module Follow
+        extend ContextDev::Internal::Type::Union
+
+        type regex = { kind: :regex, pattern: String }
+
+        class Regex < ContextDev::Internal::Type::BaseModel
+          attr_accessor kind: :regex
+
+          attr_accessor pattern: String
+
+          def initialize: (pattern: String, ?kind: :regex) -> void
+
+          def to_hash: -> { kind: :regex, pattern: String }
+        end
+
+        type pagination = { kind: :pagination }
+
+        class Pagination < ContextDev::Internal::Type::BaseModel
+          attr_accessor kind: :pagination
+
+          def initialize: (?kind: :pagination) -> void
+
+          def to_hash: -> { kind: :pagination }
+        end
+
+        type product = { kind: :product }
+
+        class Product < ContextDev::Internal::Type::BaseModel
+          attr_accessor kind: :product
+
+          def initialize: (?kind: :product) -> void
+
+          def to_hash: -> { kind: :product }
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::CrawlControls::follow]
+      end
 
       type languages =
         :same_as_start_url
@@ -215,6 +305,38 @@ module ContextDev
         SAME_AS_START_URL: :same_as_start_url
 
         UnionMember1Array: ContextDev::Internal::Type::Converter
+      end
+
+      type scrape =
+        ContextDev::CrawlControls::Scrape::Regex
+        | ContextDev::CrawlControls::Scrape::Product
+
+      module Scrape
+        extend ContextDev::Internal::Type::Union
+
+        type regex = { kind: :regex, pattern: String }
+
+        class Regex < ContextDev::Internal::Type::BaseModel
+          attr_accessor kind: :regex
+
+          attr_accessor pattern: String
+
+          def initialize: (pattern: String, ?kind: :regex) -> void
+
+          def to_hash: -> { kind: :regex, pattern: String }
+        end
+
+        type product = { kind: :product }
+
+        class Product < ContextDev::Internal::Type::BaseModel
+          attr_accessor kind: :product
+
+          def initialize: (?kind: :product) -> void
+
+          def to_hash: -> { kind: :product }
+        end
+
+        def self?.variants: -> ::Array[ContextDev::Models::CrawlControls::scrape]
       end
 
       type source =

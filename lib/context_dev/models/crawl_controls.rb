@@ -3,11 +3,27 @@
 module ContextDev
   module Models
     class CrawlControls < ContextDev::Internal::Type::BaseModel
+      # @!attribute exclude
+      #   Pages the crawl skipped. Null when it skipped none.
+      #
+      #   @return [Array<ContextDev::Models::CrawlControls::Exclude::Regex, ContextDev::Models::CrawlControls::Exclude::Product>, nil]
+      required :exclude,
+               -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::CrawlControls::Exclude] },
+               nil?: true
+
       # @!attribute exclude_url_pattern
       #   Regex pattern URLs must not match to be crawled. Null when the crawl set none.
       #
       #   @return [String, nil]
       required :exclude_url_pattern, String, nil?: true
+
+      # @!attribute follow
+      #   Links the crawl followed. Null when it followed every link.
+      #
+      #   @return [Array<ContextDev::Models::CrawlControls::Follow::Regex, ContextDev::Models::CrawlControls::Follow::Pagination, ContextDev::Models::CrawlControls::Follow::Product>, nil]
+      required :follow,
+               -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::CrawlControls::Follow] },
+               nil?: true
 
       # @!attribute follow_subdomains
       #   Whether links to subdomains were followed. Always false for a sitemap crawl.
@@ -35,6 +51,14 @@ module ContextDev
       #   @return [Integer]
       required :max_pages, Integer
 
+      # @!attribute scrape
+      #   Pages the crawl returned. Null when it returned every fetched page.
+      #
+      #   @return [Array<ContextDev::Models::CrawlControls::Scrape::Regex, ContextDev::Models::CrawlControls::Scrape::Product>, nil]
+      required :scrape,
+               -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::CrawlControls::Scrape] },
+               nil?: true
+
       # @!attribute source
       #   Where the crawl started.
       #
@@ -47,13 +71,17 @@ module ContextDev
       #   @return [String, nil]
       required :url_pattern, String, nil?: true
 
-      # @!method initialize(exclude_url_pattern:, follow_subdomains:, languages:, max_depth:, max_pages:, source:, url_pattern:)
+      # @!method initialize(exclude:, exclude_url_pattern:, follow:, follow_subdomains:, languages:, max_depth:, max_pages:, scrape:, source:, url_pattern:)
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::CrawlControls} for more details.
       #
       #   Crawl settings as submitted.
       #
+      #   @param exclude [Array<ContextDev::Models::CrawlControls::Exclude::Regex, ContextDev::Models::CrawlControls::Exclude::Product>, nil] Pages the crawl skipped. Null when it skipped none.
+      #
       #   @param exclude_url_pattern [String, nil] Regex pattern URLs must not match to be crawled. Null when the crawl set none.
+      #
+      #   @param follow [Array<ContextDev::Models::CrawlControls::Follow::Regex, ContextDev::Models::CrawlControls::Follow::Pagination, ContextDev::Models::CrawlControls::Follow::Product>, nil] Links the crawl followed. Null when it followed every link.
       #
       #   @param follow_subdomains [Boolean] Whether links to subdomains were followed. Always false for a sitemap crawl.
       #
@@ -63,9 +91,127 @@ module ContextDev
       #
       #   @param max_pages [Integer] The `maxUrls` submitted with the crawl. A sitemap crawl scrapes only the URLs it
       #
+      #   @param scrape [Array<ContextDev::Models::CrawlControls::Scrape::Regex, ContextDev::Models::CrawlControls::Scrape::Product>, nil] Pages the crawl returned. Null when it returned every fetched page.
+      #
       #   @param source [ContextDev::Models::CrawlControls::Source::StartURL, ContextDev::Models::CrawlControls::Source::Sitemap] Where the crawl started.
       #
       #   @param url_pattern [String, nil] Regex pattern URLs had to match to be crawled. Null when the crawl set none.
+
+      # Selects pages by URL pattern or by kind of page.
+      module Exclude
+        extend ContextDev::Internal::Type::Union
+
+        discriminator :kind
+
+        # Pages whose URL matches a regex pattern.
+        variant :regex, -> { ContextDev::CrawlControls::Exclude::Regex }
+
+        # Product detail pages.
+        variant :product, -> { ContextDev::CrawlControls::Exclude::Product }
+
+        class Regex < ContextDev::Internal::Type::BaseModel
+          # @!attribute kind
+          #   Match pages by URL pattern.
+          #
+          #   @return [Symbol, :regex]
+          required :kind, const: :regex
+
+          # @!attribute pattern
+          #   Regex pattern for the page URL.
+          #
+          #   @return [String]
+          required :pattern, String
+
+          # @!method initialize(pattern:, kind: :regex)
+          #   Pages whose URL matches a regex pattern.
+          #
+          #   @param pattern [String] Regex pattern for the page URL.
+          #
+          #   @param kind [Symbol, :regex] Match pages by URL pattern.
+        end
+
+        class Product < ContextDev::Internal::Type::BaseModel
+          # @!attribute kind
+          #   Match product detail pages.
+          #
+          #   @return [Symbol, :product]
+          required :kind, const: :product
+
+          # @!method initialize(kind: :product)
+          #   Product detail pages.
+          #
+          #   @param kind [Symbol, :product] Match product detail pages.
+        end
+
+        # @!method self.variants
+        #   @return [Array(ContextDev::Models::CrawlControls::Exclude::Regex, ContextDev::Models::CrawlControls::Exclude::Product)]
+      end
+
+      # Selects links by URL pattern, by kind of page, or as the next page of a list.
+      module Follow
+        extend ContextDev::Internal::Type::Union
+
+        discriminator :kind
+
+        # Pages whose URL matches a regex pattern.
+        variant :regex, -> { ContextDev::CrawlControls::Follow::Regex }
+
+        # Further pages of a paginated list, such as page 2 of a catalog.
+        variant :pagination, -> { ContextDev::CrawlControls::Follow::Pagination }
+
+        # Product detail pages.
+        variant :product, -> { ContextDev::CrawlControls::Follow::Product }
+
+        class Regex < ContextDev::Internal::Type::BaseModel
+          # @!attribute kind
+          #   Match pages by URL pattern.
+          #
+          #   @return [Symbol, :regex]
+          required :kind, const: :regex
+
+          # @!attribute pattern
+          #   Regex pattern for the page URL.
+          #
+          #   @return [String]
+          required :pattern, String
+
+          # @!method initialize(pattern:, kind: :regex)
+          #   Pages whose URL matches a regex pattern.
+          #
+          #   @param pattern [String] Regex pattern for the page URL.
+          #
+          #   @param kind [Symbol, :regex] Match pages by URL pattern.
+        end
+
+        class Pagination < ContextDev::Internal::Type::BaseModel
+          # @!attribute kind
+          #   Match the further pages of a paginated list.
+          #
+          #   @return [Symbol, :pagination]
+          required :kind, const: :pagination
+
+          # @!method initialize(kind: :pagination)
+          #   Further pages of a paginated list, such as page 2 of a catalog.
+          #
+          #   @param kind [Symbol, :pagination] Match the further pages of a paginated list.
+        end
+
+        class Product < ContextDev::Internal::Type::BaseModel
+          # @!attribute kind
+          #   Match product detail pages.
+          #
+          #   @return [Symbol, :product]
+          required :kind, const: :product
+
+          # @!method initialize(kind: :product)
+          #   Product detail pages.
+          #
+          #   @param kind [Symbol, :product] Match product detail pages.
+        end
+
+        # @!method self.variants
+        #   @return [Array(ContextDev::Models::CrawlControls::Follow::Regex, ContextDev::Models::CrawlControls::Follow::Pagination, ContextDev::Models::CrawlControls::Follow::Product)]
+      end
 
       # Languages whose pages were followed; null when all languages were.
       #
@@ -180,6 +326,56 @@ module ContextDev
         # @type [ContextDev::Internal::Type::Converter]
         UnionMember1Array =
           ContextDev::Internal::Type::ArrayOf[enum: -> { ContextDev::CrawlControls::Languages::UnionMember1 }]
+      end
+
+      # Selects pages by URL pattern or by kind of page.
+      module Scrape
+        extend ContextDev::Internal::Type::Union
+
+        discriminator :kind
+
+        # Pages whose URL matches a regex pattern.
+        variant :regex, -> { ContextDev::CrawlControls::Scrape::Regex }
+
+        # Product detail pages.
+        variant :product, -> { ContextDev::CrawlControls::Scrape::Product }
+
+        class Regex < ContextDev::Internal::Type::BaseModel
+          # @!attribute kind
+          #   Match pages by URL pattern.
+          #
+          #   @return [Symbol, :regex]
+          required :kind, const: :regex
+
+          # @!attribute pattern
+          #   Regex pattern for the page URL.
+          #
+          #   @return [String]
+          required :pattern, String
+
+          # @!method initialize(pattern:, kind: :regex)
+          #   Pages whose URL matches a regex pattern.
+          #
+          #   @param pattern [String] Regex pattern for the page URL.
+          #
+          #   @param kind [Symbol, :regex] Match pages by URL pattern.
+        end
+
+        class Product < ContextDev::Internal::Type::BaseModel
+          # @!attribute kind
+          #   Match product detail pages.
+          #
+          #   @return [Symbol, :product]
+          required :kind, const: :product
+
+          # @!method initialize(kind: :product)
+          #   Product detail pages.
+          #
+          #   @param kind [Symbol, :product] Match product detail pages.
+        end
+
+        # @!method self.variants
+        #   @return [Array(ContextDev::Models::CrawlControls::Scrape::Regex, ContextDev::Models::CrawlControls::Scrape::Product)]
       end
 
       # Where the crawl started.

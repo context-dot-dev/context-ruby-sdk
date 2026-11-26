@@ -7049,13 +7049,64 @@ module ContextDev
                         )
                       end
 
-                    # Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
-                    # itself is always included.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :exclude_regex
+                    # Pages to skip entirely, even when they match `follow` or `scrape`.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :exclude
 
-                    sig { params(exclude_regex: String).void }
-                    attr_writer :exclude_regex
+                    sig do
+                      params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :exclude
+
+                    # Links to follow from each page; every followed page is checked for links again.
+                    # Follows all links when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Pagination,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :follow
+
+                    sig do
+                      params(
+                        follow:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Pagination::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :follow
 
                     # Follow links to subdomains.
                     sig { returns(T.nilable(T::Boolean)) }
@@ -7107,17 +7158,52 @@ module ContextDev
                     sig { params(max_urls: Integer).void }
                     attr_writer :max_urls
 
-                    # Regex pattern for URLs to include. The `start_url` itself is always included.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :regex
+                    # Pages to return in the results. Returns every fetched page when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :scrape
 
-                    sig { params(regex: String).void }
-                    attr_writer :regex
+                    sig do
+                      params(
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :scrape
 
                     # Limits and filters for page discovery.
                     sig do
                       params(
-                        exclude_regex: String,
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Product::OrHash
+                            )
+                          ],
+                        follow:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Pagination::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Product::OrHash
+                            )
+                          ],
                         follow_subdomains: T::Boolean,
                         languages:
                           T.any(
@@ -7128,13 +7214,21 @@ module ContextDev
                           ),
                         max_depth: Integer,
                         max_urls: Integer,
-                        regex: String
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Product::OrHash
+                            )
+                          ]
                       ).returns(T.attached_class)
                     end
                     def self.new(
-                      # Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
-                      # itself is always included.
-                      exclude_regex: nil,
+                      # Pages to skip entirely, even when they match `follow` or `scrape`.
+                      exclude: nil,
+                      # Links to follow from each page; every followed page is checked for links again.
+                      # Follows all links when omitted.
+                      follow: nil,
                       # Follow links to subdomains.
                       follow_subdomains: nil,
                       # Only follow pages in these languages, or `same_as_start_url`; all languages when
@@ -7144,15 +7238,29 @@ module ContextDev
                       max_depth: nil,
                       # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                       max_urls: nil,
-                      # Regex pattern for URLs to include. The `start_url` itself is always included.
-                      regex: nil
+                      # Pages to return in the results. Returns every fetched page when omitted.
+                      scrape: nil
                     )
                     end
 
                     sig do
                       override.returns(
                         {
-                          exclude_regex: String,
+                          exclude:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Product
+                              )
+                            ],
+                          follow:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Pagination,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Product
+                              )
+                            ],
                           follow_subdomains: T::Boolean,
                           languages:
                             T.any(
@@ -7163,11 +7271,218 @@ module ContextDev
                             ),
                           max_depth: Integer,
                           max_urls: Integer,
-                          regex: String
+                          scrape:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Product
+                              )
+                            ]
                         }
                       )
                     end
                     def to_hash
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
+
+                    # Selects links by URL pattern, by kind of page, or as the next page of a list.
+                    module Follow
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Pagination,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Pagination < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Pagination,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match the further pages of a paginated list.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Further pages of a paginated list, such as page 2 of a catalog.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match the further pages of a paginated list.
+                          kind: :pagination
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
                     end
 
                     # Only follow pages in these languages, or `same_as_start_url`; all languages when
@@ -7613,6 +7928,93 @@ module ContextDev
                           ContextDev::Internal::Type::Converter
                         )
                     end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
                   end
                 end
 
@@ -7697,8 +8099,36 @@ module ContextDev
                         )
                       end
 
-                    # Path fragments that skip a sitemap URL in a crawl. Works separately from any
-                    # regex inclusion or exclusion you define. Defaults to
+                    # Sitemap pages to skip, even when they match `scrape`.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :exclude
+
+                    sig do
+                      params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :exclude
+
+                    # Path fragments that skip a sitemap URL in a crawl. Works separately from
+                    # `scrape` and `exclude`. Defaults to
                     # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
                     # every listed URL.
                     sig { returns(T.nilable(T::Array[String])) }
@@ -7707,14 +8137,6 @@ module ContextDev
                     sig { params(exclude_paths: T::Array[String]).void }
                     attr_writer :exclude_paths
 
-                    # Regex pattern; sitemap URLs matching it are not scraped, even when they match
-                    # `regex`.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :exclude_regex
-
-                    sig { params(exclude_regex: String).void }
-                    attr_writer :exclude_regex
-
                     # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     sig { returns(T.nilable(Integer)) }
                     attr_reader :max_urls
@@ -7722,50 +8144,268 @@ module ContextDev
                     sig { params(max_urls: Integer).void }
                     attr_writer :max_urls
 
-                    # Regex pattern; only sitemap URLs matching it are scraped.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :regex
+                    # Sitemap pages to return in the results. Returns every listed page when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :scrape
 
-                    sig { params(regex: String).void }
-                    attr_writer :regex
+                    sig do
+                      params(
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :scrape
 
                     # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
                     # URLs and never follows links off them, so there is no crawl depth here.
                     sig do
                       params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Product::OrHash
+                            )
+                          ],
                         exclude_paths: T::Array[String],
-                        exclude_regex: String,
                         max_urls: Integer,
-                        regex: String
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Product::OrHash
+                            )
+                          ]
                       ).returns(T.attached_class)
                     end
                     def self.new(
-                      # Path fragments that skip a sitemap URL in a crawl. Works separately from any
-                      # regex inclusion or exclusion you define. Defaults to
+                      # Sitemap pages to skip, even when they match `scrape`.
+                      exclude: nil,
+                      # Path fragments that skip a sitemap URL in a crawl. Works separately from
+                      # `scrape` and `exclude`. Defaults to
                       # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
                       # every listed URL.
                       exclude_paths: nil,
-                      # Regex pattern; sitemap URLs matching it are not scraped, even when they match
-                      # `regex`.
-                      exclude_regex: nil,
                       # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                       max_urls: nil,
-                      # Regex pattern; only sitemap URLs matching it are scraped.
-                      regex: nil
+                      # Sitemap pages to return in the results. Returns every listed page when omitted.
+                      scrape: nil
                     )
                     end
 
                     sig do
                       override.returns(
                         {
+                          exclude:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Product
+                              )
+                            ],
                           exclude_paths: T::Array[String],
-                          exclude_regex: String,
                           max_urls: Integer,
-                          regex: String
+                          scrape:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Product
+                              )
+                            ]
                         }
                       )
                     end
                     def to_hash
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
                     end
                   end
                 end
@@ -9358,13 +9998,64 @@ module ContextDev
                         )
                       end
 
-                    # Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
-                    # itself is always included.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :exclude_regex
+                    # Pages to skip entirely, even when they match `follow` or `scrape`.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :exclude
 
-                    sig { params(exclude_regex: String).void }
-                    attr_writer :exclude_regex
+                    sig do
+                      params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :exclude
+
+                    # Links to follow from each page; every followed page is checked for links again.
+                    # Follows all links when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Pagination,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :follow
+
+                    sig do
+                      params(
+                        follow:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Pagination::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :follow
 
                     # Follow links to subdomains.
                     sig { returns(T.nilable(T::Boolean)) }
@@ -9416,17 +10107,52 @@ module ContextDev
                     sig { params(max_urls: Integer).void }
                     attr_writer :max_urls
 
-                    # Regex pattern for URLs to include. The `start_url` itself is always included.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :regex
+                    # Pages to return in the results. Returns every fetched page when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :scrape
 
-                    sig { params(regex: String).void }
-                    attr_writer :regex
+                    sig do
+                      params(
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :scrape
 
                     # Limits and filters for page discovery.
                     sig do
                       params(
-                        exclude_regex: String,
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Product::OrHash
+                            )
+                          ],
+                        follow:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Pagination::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Product::OrHash
+                            )
+                          ],
                         follow_subdomains: T::Boolean,
                         languages:
                           T.any(
@@ -9437,13 +10163,21 @@ module ContextDev
                           ),
                         max_depth: Integer,
                         max_urls: Integer,
-                        regex: String
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Product::OrHash
+                            )
+                          ]
                       ).returns(T.attached_class)
                     end
                     def self.new(
-                      # Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
-                      # itself is always included.
-                      exclude_regex: nil,
+                      # Pages to skip entirely, even when they match `follow` or `scrape`.
+                      exclude: nil,
+                      # Links to follow from each page; every followed page is checked for links again.
+                      # Follows all links when omitted.
+                      follow: nil,
                       # Follow links to subdomains.
                       follow_subdomains: nil,
                       # Only follow pages in these languages, or `same_as_start_url`; all languages when
@@ -9453,15 +10187,29 @@ module ContextDev
                       max_depth: nil,
                       # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                       max_urls: nil,
-                      # Regex pattern for URLs to include. The `start_url` itself is always included.
-                      regex: nil
+                      # Pages to return in the results. Returns every fetched page when omitted.
+                      scrape: nil
                     )
                     end
 
                     sig do
                       override.returns(
                         {
-                          exclude_regex: String,
+                          exclude:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Product
+                              )
+                            ],
+                          follow:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Pagination,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Product
+                              )
+                            ],
                           follow_subdomains: T::Boolean,
                           languages:
                             T.any(
@@ -9472,11 +10220,218 @@ module ContextDev
                             ),
                           max_depth: Integer,
                           max_urls: Integer,
-                          regex: String
+                          scrape:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Product
+                              )
+                            ]
                         }
                       )
                     end
                     def to_hash
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
+
+                    # Selects links by URL pattern, by kind of page, or as the next page of a list.
+                    module Follow
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Pagination,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Pagination < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Pagination,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match the further pages of a paginated list.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Further pages of a paginated list, such as page 2 of a catalog.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match the further pages of a paginated list.
+                          kind: :pagination
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
                     end
 
                     # Only follow pages in these languages, or `same_as_start_url`; all languages when
@@ -9922,6 +10877,93 @@ module ContextDev
                           ContextDev::Internal::Type::Converter
                         )
                     end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
                   end
                 end
 
@@ -10006,8 +11048,36 @@ module ContextDev
                         )
                       end
 
-                    # Path fragments that skip a sitemap URL in a crawl. Works separately from any
-                    # regex inclusion or exclusion you define. Defaults to
+                    # Sitemap pages to skip, even when they match `scrape`.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :exclude
+
+                    sig do
+                      params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :exclude
+
+                    # Path fragments that skip a sitemap URL in a crawl. Works separately from
+                    # `scrape` and `exclude`. Defaults to
                     # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
                     # every listed URL.
                     sig { returns(T.nilable(T::Array[String])) }
@@ -10016,14 +11086,6 @@ module ContextDev
                     sig { params(exclude_paths: T::Array[String]).void }
                     attr_writer :exclude_paths
 
-                    # Regex pattern; sitemap URLs matching it are not scraped, even when they match
-                    # `regex`.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :exclude_regex
-
-                    sig { params(exclude_regex: String).void }
-                    attr_writer :exclude_regex
-
                     # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     sig { returns(T.nilable(Integer)) }
                     attr_reader :max_urls
@@ -10031,50 +11093,268 @@ module ContextDev
                     sig { params(max_urls: Integer).void }
                     attr_writer :max_urls
 
-                    # Regex pattern; only sitemap URLs matching it are scraped.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :regex
+                    # Sitemap pages to return in the results. Returns every listed page when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :scrape
 
-                    sig { params(regex: String).void }
-                    attr_writer :regex
+                    sig do
+                      params(
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :scrape
 
                     # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
                     # URLs and never follows links off them, so there is no crawl depth here.
                     sig do
                       params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Product::OrHash
+                            )
+                          ],
                         exclude_paths: T::Array[String],
-                        exclude_regex: String,
                         max_urls: Integer,
-                        regex: String
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Product::OrHash
+                            )
+                          ]
                       ).returns(T.attached_class)
                     end
                     def self.new(
-                      # Path fragments that skip a sitemap URL in a crawl. Works separately from any
-                      # regex inclusion or exclusion you define. Defaults to
+                      # Sitemap pages to skip, even when they match `scrape`.
+                      exclude: nil,
+                      # Path fragments that skip a sitemap URL in a crawl. Works separately from
+                      # `scrape` and `exclude`. Defaults to
                       # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
                       # every listed URL.
                       exclude_paths: nil,
-                      # Regex pattern; sitemap URLs matching it are not scraped, even when they match
-                      # `regex`.
-                      exclude_regex: nil,
                       # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                       max_urls: nil,
-                      # Regex pattern; only sitemap URLs matching it are scraped.
-                      regex: nil
+                      # Sitemap pages to return in the results. Returns every listed page when omitted.
+                      scrape: nil
                     )
                     end
 
                     sig do
                       override.returns(
                         {
+                          exclude:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Product
+                              )
+                            ],
                           exclude_paths: T::Array[String],
-                          exclude_regex: String,
                           max_urls: Integer,
-                          regex: String
+                          scrape:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Product
+                              )
+                            ]
                         }
                       )
                     end
                     def to_hash
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
                     end
                   end
                 end
@@ -11919,13 +13199,64 @@ module ContextDev
                         )
                       end
 
-                    # Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
-                    # itself is always included.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :exclude_regex
+                    # Pages to skip entirely, even when they match `follow` or `scrape`.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :exclude
 
-                    sig { params(exclude_regex: String).void }
-                    attr_writer :exclude_regex
+                    sig do
+                      params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :exclude
+
+                    # Links to follow from each page; every followed page is checked for links again.
+                    # Follows all links when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :follow
+
+                    sig do
+                      params(
+                        follow:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :follow
 
                     # Follow links to subdomains.
                     sig { returns(T.nilable(T::Boolean)) }
@@ -11977,17 +13308,52 @@ module ContextDev
                     sig { params(max_urls: Integer).void }
                     attr_writer :max_urls
 
-                    # Regex pattern for URLs to include. The `start_url` itself is always included.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :regex
+                    # Pages to return in the results. Returns every fetched page when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :scrape
 
-                    sig { params(regex: String).void }
-                    attr_writer :regex
+                    sig do
+                      params(
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :scrape
 
                     # Limits and filters for page discovery.
                     sig do
                       params(
-                        exclude_regex: String,
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product::OrHash
+                            )
+                          ],
+                        follow:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product::OrHash
+                            )
+                          ],
                         follow_subdomains: T::Boolean,
                         languages:
                           T.any(
@@ -11998,13 +13364,21 @@ module ContextDev
                           ),
                         max_depth: Integer,
                         max_urls: Integer,
-                        regex: String
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product::OrHash
+                            )
+                          ]
                       ).returns(T.attached_class)
                     end
                     def self.new(
-                      # Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
-                      # itself is always included.
-                      exclude_regex: nil,
+                      # Pages to skip entirely, even when they match `follow` or `scrape`.
+                      exclude: nil,
+                      # Links to follow from each page; every followed page is checked for links again.
+                      # Follows all links when omitted.
+                      follow: nil,
                       # Follow links to subdomains.
                       follow_subdomains: nil,
                       # Only follow pages in these languages, or `same_as_start_url`; all languages when
@@ -12014,15 +13388,29 @@ module ContextDev
                       max_depth: nil,
                       # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                       max_urls: nil,
-                      # Regex pattern for URLs to include. The `start_url` itself is always included.
-                      regex: nil
+                      # Pages to return in the results. Returns every fetched page when omitted.
+                      scrape: nil
                     )
                     end
 
                     sig do
                       override.returns(
                         {
-                          exclude_regex: String,
+                          exclude:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product
+                              )
+                            ],
+                          follow:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product
+                              )
+                            ],
                           follow_subdomains: T::Boolean,
                           languages:
                             T.any(
@@ -12033,11 +13421,218 @@ module ContextDev
                             ),
                           max_depth: Integer,
                           max_urls: Integer,
-                          regex: String
+                          scrape:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product
+                              )
+                            ]
                         }
                       )
                     end
                     def to_hash
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
+
+                    # Selects links by URL pattern, by kind of page, or as the next page of a list.
+                    module Follow
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Pagination < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match the further pages of a paginated list.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Further pages of a paginated list, such as page 2 of a catalog.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match the further pages of a paginated list.
+                          kind: :pagination
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
                     end
 
                     # Only follow pages in these languages, or `same_as_start_url`; all languages when
@@ -12483,6 +14078,93 @@ module ContextDev
                           ContextDev::Internal::Type::Converter
                         )
                     end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
                   end
                 end
 
@@ -12567,8 +14249,36 @@ module ContextDev
                         )
                       end
 
-                    # Path fragments that skip a sitemap URL in a crawl. Works separately from any
-                    # regex inclusion or exclusion you define. Defaults to
+                    # Sitemap pages to skip, even when they match `scrape`.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :exclude
+
+                    sig do
+                      params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :exclude
+
+                    # Path fragments that skip a sitemap URL in a crawl. Works separately from
+                    # `scrape` and `exclude`. Defaults to
                     # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
                     # every listed URL.
                     sig { returns(T.nilable(T::Array[String])) }
@@ -12577,14 +14287,6 @@ module ContextDev
                     sig { params(exclude_paths: T::Array[String]).void }
                     attr_writer :exclude_paths
 
-                    # Regex pattern; sitemap URLs matching it are not scraped, even when they match
-                    # `regex`.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :exclude_regex
-
-                    sig { params(exclude_regex: String).void }
-                    attr_writer :exclude_regex
-
                     # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     sig { returns(T.nilable(Integer)) }
                     attr_reader :max_urls
@@ -12592,50 +14294,268 @@ module ContextDev
                     sig { params(max_urls: Integer).void }
                     attr_writer :max_urls
 
-                    # Regex pattern; only sitemap URLs matching it are scraped.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :regex
+                    # Sitemap pages to return in the results. Returns every listed page when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :scrape
 
-                    sig { params(regex: String).void }
-                    attr_writer :regex
+                    sig do
+                      params(
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :scrape
 
                     # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
                     # URLs and never follows links off them, so there is no crawl depth here.
                     sig do
                       params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product::OrHash
+                            )
+                          ],
                         exclude_paths: T::Array[String],
-                        exclude_regex: String,
                         max_urls: Integer,
-                        regex: String
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product::OrHash
+                            )
+                          ]
                       ).returns(T.attached_class)
                     end
                     def self.new(
-                      # Path fragments that skip a sitemap URL in a crawl. Works separately from any
-                      # regex inclusion or exclusion you define. Defaults to
+                      # Sitemap pages to skip, even when they match `scrape`.
+                      exclude: nil,
+                      # Path fragments that skip a sitemap URL in a crawl. Works separately from
+                      # `scrape` and `exclude`. Defaults to
                       # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
                       # every listed URL.
                       exclude_paths: nil,
-                      # Regex pattern; sitemap URLs matching it are not scraped, even when they match
-                      # `regex`.
-                      exclude_regex: nil,
                       # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                       max_urls: nil,
-                      # Regex pattern; only sitemap URLs matching it are scraped.
-                      regex: nil
+                      # Sitemap pages to return in the results. Returns every listed page when omitted.
+                      scrape: nil
                     )
                     end
 
                     sig do
                       override.returns(
                         {
+                          exclude:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product
+                              )
+                            ],
                           exclude_paths: T::Array[String],
-                          exclude_regex: String,
                           max_urls: Integer,
-                          regex: String
+                          scrape:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product
+                              )
+                            ]
                         }
                       )
                     end
                     def to_hash
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regex pattern for the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regex pattern for the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
                     end
                   end
                 end

@@ -2866,12 +2866,20 @@ module ContextDev
 
                   # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL#controls
                   class Controls < ContextDev::Internal::Type::BaseModel
-                    # @!attribute exclude_regex
-                    #   Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
-                    #   itself is always included.
+                    # @!attribute exclude
+                    #   Pages to skip entirely, even when they match `follow` or `scrape`.
                     #
-                    #   @return [String, nil]
-                    optional :exclude_regex, String, api_name: :excludeRegex
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Product>, nil]
+                    optional :exclude,
+                             -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude] }
+
+                    # @!attribute follow
+                    #   Links to follow from each page; every followed page is checked for links again.
+                    #   Follows all links when omitted.
+                    #
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Pagination, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Product>, nil]
+                    optional :follow,
+                             -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow] }
 
                     # @!attribute follow_subdomains
                     #   Follow links to subdomains.
@@ -2901,20 +2909,23 @@ module ContextDev
                     #   @return [Integer, nil]
                     optional :max_urls, Integer, api_name: :maxUrls
 
-                    # @!attribute regex
-                    #   Regex pattern for URLs to include. The `start_url` itself is always included.
+                    # @!attribute scrape
+                    #   Pages to return in the results. Returns every fetched page when omitted.
                     #
-                    #   @return [String, nil]
-                    optional :regex, String
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Product>, nil]
+                    optional :scrape,
+                             -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape] }
 
-                    # @!method initialize(exclude_regex: nil, follow_subdomains: nil, languages: nil, max_depth: nil, max_urls: nil, regex: nil)
+                    # @!method initialize(exclude: nil, follow: nil, follow_subdomains: nil, languages: nil, max_depth: nil, max_urls: nil, scrape: nil)
                     #   Some parameter documentations has been truncated, see
                     #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls}
                     #   for more details.
                     #
                     #   Limits and filters for page discovery.
                     #
-                    #   @param exclude_regex [String] Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
+                    #   @param exclude [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Product>] Pages to skip entirely, even when they match `follow` or `scrape`.
+                    #
+                    #   @param follow [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Pagination, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Product>] Links to follow from each page; every followed page is checked for links again.
                     #
                     #   @param follow_subdomains [Boolean] Follow links to subdomains.
                     #
@@ -2924,7 +2935,128 @@ module ContextDev
                     #
                     #   @param max_urls [Integer] Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     #
-                    #   @param regex [String] Regex pattern for URLs to include. The `start_url` itself is always included.
+                    #   @param scrape [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Product>] Pages to return in the results. Returns every fetched page when omitted.
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Product)]
+                    end
+
+                    # Selects links by URL pattern, by kind of page, or as the next page of a list.
+                    module Follow
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Regex }
+
+                      # Further pages of a paginated list, such as page 2 of a catalog.
+                      variant :pagination,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Pagination }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Pagination < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match the further pages of a paginated list.
+                        #
+                        #   @return [Symbol, :pagination]
+                        required :kind, const: :pagination
+
+                        # @!method initialize(kind: :pagination)
+                        #   Further pages of a paginated list, such as page 2 of a catalog.
+                        #
+                        #   @param kind [Symbol, :pagination] Match the further pages of a paginated list.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Pagination, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Product)]
+                    end
 
                     # Only follow pages in these languages, or `same_as_start_url`; all languages when
                     # omitted.
@@ -3045,6 +3177,58 @@ module ContextDev
                           enum: -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Languages::UnionMember1 }
                         ]
                     end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Product)]
+                    end
                   end
                 end
 
@@ -3086,9 +3270,16 @@ module ContextDev
 
                   # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap#controls
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    # @!attribute exclude
+                    #   Sitemap pages to skip, even when they match `scrape`.
+                    #
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Product>, nil]
+                    optional :exclude,
+                             -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude] }
+
                     # @!attribute exclude_paths
-                    #   Path fragments that skip a sitemap URL in a crawl. Works separately from any
-                    #   regex inclusion or exclusion you define. Defaults to
+                    #   Path fragments that skip a sitemap URL in a crawl. Works separately from
+                    #   `scrape` and `exclude`. Defaults to
                     #   ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
                     #   every listed URL.
                     #
@@ -3097,26 +3288,20 @@ module ContextDev
                              ContextDev::Internal::Type::ArrayOf[String],
                              api_name: :excludePaths
 
-                    # @!attribute exclude_regex
-                    #   Regex pattern; sitemap URLs matching it are not scraped, even when they match
-                    #   `regex`.
-                    #
-                    #   @return [String, nil]
-                    optional :exclude_regex, String, api_name: :excludeRegex
-
                     # @!attribute max_urls
                     #   Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     #
                     #   @return [Integer, nil]
                     optional :max_urls, Integer, api_name: :maxUrls
 
-                    # @!attribute regex
-                    #   Regex pattern; only sitemap URLs matching it are scraped.
+                    # @!attribute scrape
+                    #   Sitemap pages to return in the results. Returns every listed page when omitted.
                     #
-                    #   @return [String, nil]
-                    optional :regex, String
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Product>, nil]
+                    optional :scrape,
+                             -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape] }
 
-                    # @!method initialize(exclude_paths: nil, exclude_regex: nil, max_urls: nil, regex: nil)
+                    # @!method initialize(exclude: nil, exclude_paths: nil, max_urls: nil, scrape: nil)
                     #   Some parameter documentations has been truncated, see
                     #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls}
                     #   for more details.
@@ -3124,13 +3309,117 @@ module ContextDev
                     #   Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
                     #   URLs and never follows links off them, so there is no crawl depth here.
                     #
-                    #   @param exclude_paths [Array<String>] Path fragments that skip a sitemap URL in a crawl. Works separately from any reg
+                    #   @param exclude [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Product>] Sitemap pages to skip, even when they match `scrape`.
                     #
-                    #   @param exclude_regex [String] Regex pattern; sitemap URLs matching it are not scraped, even when they match `r
+                    #   @param exclude_paths [Array<String>] Path fragments that skip a sitemap URL in a crawl. Works separately from `scrape
                     #
                     #   @param max_urls [Integer] Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     #
-                    #   @param regex [String] Regex pattern; only sitemap URLs matching it are scraped.
+                    #   @param scrape [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Product>] Sitemap pages to return in the results. Returns every listed page when omitted.
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Product)]
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Product)]
+                    end
                   end
                 end
 
@@ -3628,12 +3917,20 @@ module ContextDev
 
                   # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL#controls
                   class Controls < ContextDev::Internal::Type::BaseModel
-                    # @!attribute exclude_regex
-                    #   Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
-                    #   itself is always included.
+                    # @!attribute exclude
+                    #   Pages to skip entirely, even when they match `follow` or `scrape`.
                     #
-                    #   @return [String, nil]
-                    optional :exclude_regex, String, api_name: :excludeRegex
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Product>, nil]
+                    optional :exclude,
+                             -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude] }
+
+                    # @!attribute follow
+                    #   Links to follow from each page; every followed page is checked for links again.
+                    #   Follows all links when omitted.
+                    #
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Pagination, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Product>, nil]
+                    optional :follow,
+                             -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow] }
 
                     # @!attribute follow_subdomains
                     #   Follow links to subdomains.
@@ -3663,20 +3960,23 @@ module ContextDev
                     #   @return [Integer, nil]
                     optional :max_urls, Integer, api_name: :maxUrls
 
-                    # @!attribute regex
-                    #   Regex pattern for URLs to include. The `start_url` itself is always included.
+                    # @!attribute scrape
+                    #   Pages to return in the results. Returns every fetched page when omitted.
                     #
-                    #   @return [String, nil]
-                    optional :regex, String
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Product>, nil]
+                    optional :scrape,
+                             -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape] }
 
-                    # @!method initialize(exclude_regex: nil, follow_subdomains: nil, languages: nil, max_depth: nil, max_urls: nil, regex: nil)
+                    # @!method initialize(exclude: nil, follow: nil, follow_subdomains: nil, languages: nil, max_depth: nil, max_urls: nil, scrape: nil)
                     #   Some parameter documentations has been truncated, see
                     #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls}
                     #   for more details.
                     #
                     #   Limits and filters for page discovery.
                     #
-                    #   @param exclude_regex [String] Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
+                    #   @param exclude [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Product>] Pages to skip entirely, even when they match `follow` or `scrape`.
+                    #
+                    #   @param follow [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Pagination, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Product>] Links to follow from each page; every followed page is checked for links again.
                     #
                     #   @param follow_subdomains [Boolean] Follow links to subdomains.
                     #
@@ -3686,7 +3986,128 @@ module ContextDev
                     #
                     #   @param max_urls [Integer] Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     #
-                    #   @param regex [String] Regex pattern for URLs to include. The `start_url` itself is always included.
+                    #   @param scrape [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Product>] Pages to return in the results. Returns every fetched page when omitted.
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Product)]
+                    end
+
+                    # Selects links by URL pattern, by kind of page, or as the next page of a list.
+                    module Follow
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Regex }
+
+                      # Further pages of a paginated list, such as page 2 of a catalog.
+                      variant :pagination,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Pagination }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Pagination < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match the further pages of a paginated list.
+                        #
+                        #   @return [Symbol, :pagination]
+                        required :kind, const: :pagination
+
+                        # @!method initialize(kind: :pagination)
+                        #   Further pages of a paginated list, such as page 2 of a catalog.
+                        #
+                        #   @param kind [Symbol, :pagination] Match the further pages of a paginated list.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Pagination, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Product)]
+                    end
 
                     # Only follow pages in these languages, or `same_as_start_url`; all languages when
                     # omitted.
@@ -3807,6 +4228,58 @@ module ContextDev
                           enum: -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Languages::UnionMember1 }
                         ]
                     end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Product)]
+                    end
                   end
                 end
 
@@ -3848,9 +4321,16 @@ module ContextDev
 
                   # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap#controls
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    # @!attribute exclude
+                    #   Sitemap pages to skip, even when they match `scrape`.
+                    #
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Product>, nil]
+                    optional :exclude,
+                             -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude] }
+
                     # @!attribute exclude_paths
-                    #   Path fragments that skip a sitemap URL in a crawl. Works separately from any
-                    #   regex inclusion or exclusion you define. Defaults to
+                    #   Path fragments that skip a sitemap URL in a crawl. Works separately from
+                    #   `scrape` and `exclude`. Defaults to
                     #   ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
                     #   every listed URL.
                     #
@@ -3859,26 +4339,20 @@ module ContextDev
                              ContextDev::Internal::Type::ArrayOf[String],
                              api_name: :excludePaths
 
-                    # @!attribute exclude_regex
-                    #   Regex pattern; sitemap URLs matching it are not scraped, even when they match
-                    #   `regex`.
-                    #
-                    #   @return [String, nil]
-                    optional :exclude_regex, String, api_name: :excludeRegex
-
                     # @!attribute max_urls
                     #   Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     #
                     #   @return [Integer, nil]
                     optional :max_urls, Integer, api_name: :maxUrls
 
-                    # @!attribute regex
-                    #   Regex pattern; only sitemap URLs matching it are scraped.
+                    # @!attribute scrape
+                    #   Sitemap pages to return in the results. Returns every listed page when omitted.
                     #
-                    #   @return [String, nil]
-                    optional :regex, String
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Product>, nil]
+                    optional :scrape,
+                             -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape] }
 
-                    # @!method initialize(exclude_paths: nil, exclude_regex: nil, max_urls: nil, regex: nil)
+                    # @!method initialize(exclude: nil, exclude_paths: nil, max_urls: nil, scrape: nil)
                     #   Some parameter documentations has been truncated, see
                     #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls}
                     #   for more details.
@@ -3886,13 +4360,117 @@ module ContextDev
                     #   Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
                     #   URLs and never follows links off them, so there is no crawl depth here.
                     #
-                    #   @param exclude_paths [Array<String>] Path fragments that skip a sitemap URL in a crawl. Works separately from any reg
+                    #   @param exclude [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Product>] Sitemap pages to skip, even when they match `scrape`.
                     #
-                    #   @param exclude_regex [String] Regex pattern; sitemap URLs matching it are not scraped, even when they match `r
+                    #   @param exclude_paths [Array<String>] Path fragments that skip a sitemap URL in a crawl. Works separately from `scrape
                     #
                     #   @param max_urls [Integer] Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     #
-                    #   @param regex [String] Regex pattern; only sitemap URLs matching it are scraped.
+                    #   @param scrape [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Product>] Sitemap pages to return in the results. Returns every listed page when omitted.
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Product)]
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Product)]
+                    end
                   end
                 end
 
@@ -4536,12 +5114,28 @@ module ContextDev
 
                   # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL#controls
                   class Controls < ContextDev::Internal::Type::BaseModel
-                    # @!attribute exclude_regex
-                    #   Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
-                    #   itself is always included.
+                    # @!attribute exclude
+                    #   Pages to skip entirely, even when they match `follow` or `scrape`.
                     #
-                    #   @return [String, nil]
-                    optional :exclude_regex, String, api_name: :excludeRegex
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product>, nil]
+                    optional :exclude,
+                             -> do
+                               ContextDev::Internal::Type::ArrayOf[
+                                 union: ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude
+                               ]
+                             end
+
+                    # @!attribute follow
+                    #   Links to follow from each page; every followed page is checked for links again.
+                    #   Follows all links when omitted.
+                    #
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product>, nil]
+                    optional :follow,
+                             -> do
+                               ContextDev::Internal::Type::ArrayOf[
+                                 union: ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow
+                               ]
+                             end
 
                     # @!attribute follow_subdomains
                     #   Follow links to subdomains.
@@ -4571,20 +5165,27 @@ module ContextDev
                     #   @return [Integer, nil]
                     optional :max_urls, Integer, api_name: :maxUrls
 
-                    # @!attribute regex
-                    #   Regex pattern for URLs to include. The `start_url` itself is always included.
+                    # @!attribute scrape
+                    #   Pages to return in the results. Returns every fetched page when omitted.
                     #
-                    #   @return [String, nil]
-                    optional :regex, String
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product>, nil]
+                    optional :scrape,
+                             -> do
+                               ContextDev::Internal::Type::ArrayOf[
+                                 union: ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape
+                               ]
+                             end
 
-                    # @!method initialize(exclude_regex: nil, follow_subdomains: nil, languages: nil, max_depth: nil, max_urls: nil, regex: nil)
+                    # @!method initialize(exclude: nil, follow: nil, follow_subdomains: nil, languages: nil, max_depth: nil, max_urls: nil, scrape: nil)
                     #   Some parameter documentations has been truncated, see
                     #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls}
                     #   for more details.
                     #
                     #   Limits and filters for page discovery.
                     #
-                    #   @param exclude_regex [String] Regex pattern for URLs to exclude, even when they match `regex`. The `start_url`
+                    #   @param exclude [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product>] Pages to skip entirely, even when they match `follow` or `scrape`.
+                    #
+                    #   @param follow [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product>] Links to follow from each page; every followed page is checked for links again.
                     #
                     #   @param follow_subdomains [Boolean] Follow links to subdomains.
                     #
@@ -4594,7 +5195,128 @@ module ContextDev
                     #
                     #   @param max_urls [Integer] Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     #
-                    #   @param regex [String] Regex pattern for URLs to include. The `start_url` itself is always included.
+                    #   @param scrape [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product>] Pages to return in the results. Returns every fetched page when omitted.
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product)]
+                    end
+
+                    # Selects links by URL pattern, by kind of page, or as the next page of a list.
+                    module Follow
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex }
+
+                      # Further pages of a paginated list, such as page 2 of a catalog.
+                      variant :pagination,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Pagination < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match the further pages of a paginated list.
+                        #
+                        #   @return [Symbol, :pagination]
+                        required :kind, const: :pagination
+
+                        # @!method initialize(kind: :pagination)
+                        #   Further pages of a paginated list, such as page 2 of a catalog.
+                        #
+                        #   @param kind [Symbol, :pagination] Match the further pages of a paginated list.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product)]
+                    end
 
                     # Only follow pages in these languages, or `same_as_start_url`; all languages when
                     # omitted.
@@ -4715,6 +5437,58 @@ module ContextDev
                           enum: -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1 }
                         ]
                     end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product)]
+                    end
                   end
                 end
 
@@ -4756,9 +5530,20 @@ module ContextDev
 
                   # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap#controls
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    # @!attribute exclude
+                    #   Sitemap pages to skip, even when they match `scrape`.
+                    #
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product>, nil]
+                    optional :exclude,
+                             -> do
+                               ContextDev::Internal::Type::ArrayOf[
+                                 union: ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude
+                               ]
+                             end
+
                     # @!attribute exclude_paths
-                    #   Path fragments that skip a sitemap URL in a crawl. Works separately from any
-                    #   regex inclusion or exclusion you define. Defaults to
+                    #   Path fragments that skip a sitemap URL in a crawl. Works separately from
+                    #   `scrape` and `exclude`. Defaults to
                     #   ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
                     #   every listed URL.
                     #
@@ -4767,26 +5552,24 @@ module ContextDev
                              ContextDev::Internal::Type::ArrayOf[String],
                              api_name: :excludePaths
 
-                    # @!attribute exclude_regex
-                    #   Regex pattern; sitemap URLs matching it are not scraped, even when they match
-                    #   `regex`.
-                    #
-                    #   @return [String, nil]
-                    optional :exclude_regex, String, api_name: :excludeRegex
-
                     # @!attribute max_urls
                     #   Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     #
                     #   @return [Integer, nil]
                     optional :max_urls, Integer, api_name: :maxUrls
 
-                    # @!attribute regex
-                    #   Regex pattern; only sitemap URLs matching it are scraped.
+                    # @!attribute scrape
+                    #   Sitemap pages to return in the results. Returns every listed page when omitted.
                     #
-                    #   @return [String, nil]
-                    optional :regex, String
+                    #   @return [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product>, nil]
+                    optional :scrape,
+                             -> do
+                               ContextDev::Internal::Type::ArrayOf[
+                                 union: ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape
+                               ]
+                             end
 
-                    # @!method initialize(exclude_paths: nil, exclude_regex: nil, max_urls: nil, regex: nil)
+                    # @!method initialize(exclude: nil, exclude_paths: nil, max_urls: nil, scrape: nil)
                     #   Some parameter documentations has been truncated, see
                     #   {ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls}
                     #   for more details.
@@ -4794,13 +5577,117 @@ module ContextDev
                     #   Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
                     #   URLs and never follows links off them, so there is no crawl depth here.
                     #
-                    #   @param exclude_paths [Array<String>] Path fragments that skip a sitemap URL in a crawl. Works separately from any reg
+                    #   @param exclude [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product>] Sitemap pages to skip, even when they match `scrape`.
                     #
-                    #   @param exclude_regex [String] Regex pattern; sitemap URLs matching it are not scraped, even when they match `r
+                    #   @param exclude_paths [Array<String>] Path fragments that skip a sitemap URL in a crawl. Works separately from `scrape
                     #
                     #   @param max_urls [Integer] Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
                     #
-                    #   @param regex [String] Regex pattern; only sitemap URLs matching it are scraped.
+                    #   @param scrape [Array<ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product>] Sitemap pages to return in the results. Returns every listed page when omitted.
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product)]
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      discriminator :kind
+
+                      # Pages whose URL matches a regex pattern.
+                      variant :regex,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex }
+
+                      # Product detail pages.
+                      variant :product,
+                              -> { ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match pages by URL pattern.
+                        #
+                        #   @return [Symbol, :regex]
+                        required :kind, const: :regex
+
+                        # @!attribute pattern
+                        #   Regex pattern for the page URL.
+                        #
+                        #   @return [String]
+                        required :pattern, String
+
+                        # @!method initialize(pattern:, kind: :regex)
+                        #   Pages whose URL matches a regex pattern.
+                        #
+                        #   @param pattern [String] Regex pattern for the page URL.
+                        #
+                        #   @param kind [Symbol, :regex] Match pages by URL pattern.
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        # @!attribute kind
+                        #   Match product detail pages.
+                        #
+                        #   @return [Symbol, :product]
+                        required :kind, const: :product
+
+                        # @!method initialize(kind: :product)
+                        #   Product detail pages.
+                        #
+                        #   @param kind [Symbol, :product] Match product detail pages.
+                      end
+
+                      # @!method self.variants
+                      #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product)]
+                    end
                   end
                 end
 

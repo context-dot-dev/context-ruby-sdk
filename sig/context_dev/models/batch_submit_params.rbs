@@ -2644,18 +2644,27 @@ module ContextDev
 
                   type controls =
                     {
-                      exclude_regex: String,
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::exclude],
+                      follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::follow],
                       follow_subdomains: bool,
                       languages: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::languages,
                       max_depth: Integer,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::scrape]
                     }
 
                   class Controls < ContextDev::Internal::Type::BaseModel
-                    attr_reader exclude_regex: String?
+                    attr_reader exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::exclude]?
 
-                    def exclude_regex=: (String) -> String
+                    def exclude=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::exclude]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::exclude]
+
+                    attr_reader follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::follow]?
+
+                    def follow=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::follow]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::follow]
 
                     attr_reader follow_subdomains: bool?
 
@@ -2675,27 +2684,106 @@ module ContextDev
 
                     def max_urls=: (Integer) -> Integer
 
-                    attr_reader regex: String?
+                    attr_reader scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::scrape]?
 
-                    def regex=: (String) -> String
+                    def scrape=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::scrape]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::scrape]
 
                     def initialize: (
-                      ?exclude_regex: String,
+                      ?exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::exclude],
+                      ?follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::follow],
                       ?follow_subdomains: bool,
                       ?languages: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::languages,
                       ?max_depth: Integer,
                       ?max_urls: Integer,
-                      ?regex: String
+                      ?scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::scrape]
                     ) -> void
 
                     def to_hash: -> {
-                      exclude_regex: String,
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::exclude],
+                      follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::follow],
                       follow_subdomains: bool,
                       languages: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::languages,
                       max_depth: Integer,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::scrape]
                     }
+
+                    type exclude =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Exclude::Product
+
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::exclude]
+                    end
+
+                    type follow =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Pagination
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Follow::Product
+
+                    module Follow
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type pagination = { kind: :pagination }
+
+                      class Pagination < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :pagination
+
+                        def initialize: (?kind: :pagination) -> void
+
+                        def to_hash: -> { kind: :pagination }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::follow]
+                    end
 
                     type languages =
                       :same_as_start_url
@@ -2867,6 +2955,38 @@ module ContextDev
 
                       UnionMember1Array: ContextDev::Internal::Type::Converter
                     end
+
+                    type scrape =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::Scrape::Product
+
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::StartURL::Controls::scrape]
+                    end
                   end
                 end
 
@@ -2902,42 +3022,110 @@ module ContextDev
 
                   type controls =
                     {
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::exclude],
                       exclude_paths: ::Array[String],
-                      exclude_regex: String,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::scrape]
                     }
 
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    attr_reader exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::exclude]?
+
+                    def exclude=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::exclude]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::exclude]
+
                     attr_reader exclude_paths: ::Array[String]?
 
                     def exclude_paths=: (::Array[String]) -> ::Array[String]
-
-                    attr_reader exclude_regex: String?
-
-                    def exclude_regex=: (String) -> String
 
                     attr_reader max_urls: Integer?
 
                     def max_urls=: (Integer) -> Integer
 
-                    attr_reader regex: String?
+                    attr_reader scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::scrape]?
 
-                    def regex=: (String) -> String
+                    def scrape=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::scrape]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::scrape]
 
                     def initialize: (
+                      ?exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::exclude],
                       ?exclude_paths: ::Array[String],
-                      ?exclude_regex: String,
                       ?max_urls: Integer,
-                      ?regex: String
+                      ?scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::scrape]
                     ) -> void
 
                     def to_hash: -> {
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::exclude],
                       exclude_paths: ::Array[String],
-                      exclude_regex: String,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::scrape]
                     }
+
+                    type exclude =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Exclude::Product
+
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::exclude]
+                    end
+
+                    type scrape =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::Scrape::Product
+
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::Markdown::Source::Sitemap::Controls::scrape]
+                    end
                   end
                 end
 
@@ -3595,18 +3783,27 @@ module ContextDev
 
                   type controls =
                     {
-                      exclude_regex: String,
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::exclude],
+                      follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::follow],
                       follow_subdomains: bool,
                       languages: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::languages,
                       max_depth: Integer,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::scrape]
                     }
 
                   class Controls < ContextDev::Internal::Type::BaseModel
-                    attr_reader exclude_regex: String?
+                    attr_reader exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::exclude]?
 
-                    def exclude_regex=: (String) -> String
+                    def exclude=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::exclude]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::exclude]
+
+                    attr_reader follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::follow]?
+
+                    def follow=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::follow]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::follow]
 
                     attr_reader follow_subdomains: bool?
 
@@ -3626,27 +3823,106 @@ module ContextDev
 
                     def max_urls=: (Integer) -> Integer
 
-                    attr_reader regex: String?
+                    attr_reader scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::scrape]?
 
-                    def regex=: (String) -> String
+                    def scrape=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::scrape]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::scrape]
 
                     def initialize: (
-                      ?exclude_regex: String,
+                      ?exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::exclude],
+                      ?follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::follow],
                       ?follow_subdomains: bool,
                       ?languages: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::languages,
                       ?max_depth: Integer,
                       ?max_urls: Integer,
-                      ?regex: String
+                      ?scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::scrape]
                     ) -> void
 
                     def to_hash: -> {
-                      exclude_regex: String,
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::exclude],
+                      follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::follow],
                       follow_subdomains: bool,
                       languages: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::languages,
                       max_depth: Integer,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::scrape]
                     }
+
+                    type exclude =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Exclude::Product
+
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::exclude]
+                    end
+
+                    type follow =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Pagination
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Follow::Product
+
+                    module Follow
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type pagination = { kind: :pagination }
+
+                      class Pagination < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :pagination
+
+                        def initialize: (?kind: :pagination) -> void
+
+                        def to_hash: -> { kind: :pagination }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::follow]
+                    end
 
                     type languages =
                       :same_as_start_url
@@ -3818,6 +4094,38 @@ module ContextDev
 
                       UnionMember1Array: ContextDev::Internal::Type::Converter
                     end
+
+                    type scrape =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::Scrape::Product
+
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::StartURL::Controls::scrape]
+                    end
                   end
                 end
 
@@ -3853,42 +4161,110 @@ module ContextDev
 
                   type controls =
                     {
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::exclude],
                       exclude_paths: ::Array[String],
-                      exclude_regex: String,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::scrape]
                     }
 
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    attr_reader exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::exclude]?
+
+                    def exclude=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::exclude]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::exclude]
+
                     attr_reader exclude_paths: ::Array[String]?
 
                     def exclude_paths=: (::Array[String]) -> ::Array[String]
-
-                    attr_reader exclude_regex: String?
-
-                    def exclude_regex=: (String) -> String
 
                     attr_reader max_urls: Integer?
 
                     def max_urls=: (Integer) -> Integer
 
-                    attr_reader regex: String?
+                    attr_reader scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::scrape]?
 
-                    def regex=: (String) -> String
+                    def scrape=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::scrape]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::scrape]
 
                     def initialize: (
+                      ?exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::exclude],
                       ?exclude_paths: ::Array[String],
-                      ?exclude_regex: String,
                       ?max_urls: Integer,
-                      ?regex: String
+                      ?scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::scrape]
                     ) -> void
 
                     def to_hash: -> {
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::exclude],
                       exclude_paths: ::Array[String],
-                      exclude_regex: String,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::scrape]
                     }
+
+                    type exclude =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Exclude::Product
+
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::exclude]
+                    end
+
+                    type scrape =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::Scrape::Product
+
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::HTML::Source::Sitemap::Controls::scrape]
+                    end
                   end
                 end
 
@@ -4658,18 +5034,27 @@ module ContextDev
 
                   type controls =
                     {
-                      exclude_regex: String,
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::exclude],
+                      follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::follow],
                       follow_subdomains: bool,
                       languages: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::languages,
                       max_depth: Integer,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::scrape]
                     }
 
                   class Controls < ContextDev::Internal::Type::BaseModel
-                    attr_reader exclude_regex: String?
+                    attr_reader exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::exclude]?
 
-                    def exclude_regex=: (String) -> String
+                    def exclude=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::exclude]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::exclude]
+
+                    attr_reader follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::follow]?
+
+                    def follow=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::follow]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::follow]
 
                     attr_reader follow_subdomains: bool?
 
@@ -4689,27 +5074,106 @@ module ContextDev
 
                     def max_urls=: (Integer) -> Integer
 
-                    attr_reader regex: String?
+                    attr_reader scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::scrape]?
 
-                    def regex=: (String) -> String
+                    def scrape=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::scrape]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::scrape]
 
                     def initialize: (
-                      ?exclude_regex: String,
+                      ?exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::exclude],
+                      ?follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::follow],
                       ?follow_subdomains: bool,
                       ?languages: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::languages,
                       ?max_depth: Integer,
                       ?max_urls: Integer,
-                      ?regex: String
+                      ?scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::scrape]
                     ) -> void
 
                     def to_hash: -> {
-                      exclude_regex: String,
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::exclude],
+                      follow: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::follow],
                       follow_subdomains: bool,
                       languages: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::languages,
                       max_depth: Integer,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::scrape]
                     }
+
+                    type exclude =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product
+
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::exclude]
+                    end
+
+                    type follow =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product
+
+                    module Follow
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type pagination = { kind: :pagination }
+
+                      class Pagination < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :pagination
+
+                        def initialize: (?kind: :pagination) -> void
+
+                        def to_hash: -> { kind: :pagination }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::follow]
+                    end
 
                     type languages =
                       :same_as_start_url
@@ -4881,6 +5345,38 @@ module ContextDev
 
                       UnionMember1Array: ContextDev::Internal::Type::Converter
                     end
+
+                    type scrape =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product
+
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::scrape]
+                    end
                   end
                 end
 
@@ -4916,42 +5412,110 @@ module ContextDev
 
                   type controls =
                     {
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::exclude],
                       exclude_paths: ::Array[String],
-                      exclude_regex: String,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::scrape]
                     }
 
                   class Controls < ContextDev::Internal::Type::BaseModel
+                    attr_reader exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::exclude]?
+
+                    def exclude=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::exclude]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::exclude]
+
                     attr_reader exclude_paths: ::Array[String]?
 
                     def exclude_paths=: (::Array[String]) -> ::Array[String]
-
-                    attr_reader exclude_regex: String?
-
-                    def exclude_regex=: (String) -> String
 
                     attr_reader max_urls: Integer?
 
                     def max_urls=: (Integer) -> Integer
 
-                    attr_reader regex: String?
+                    attr_reader scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::scrape]?
 
-                    def regex=: (String) -> String
+                    def scrape=: (
+                      ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::scrape]
+                    ) -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::scrape]
 
                     def initialize: (
+                      ?exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::exclude],
                       ?exclude_paths: ::Array[String],
-                      ?exclude_regex: String,
                       ?max_urls: Integer,
-                      ?regex: String
+                      ?scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::scrape]
                     ) -> void
 
                     def to_hash: -> {
+                      exclude: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::exclude],
                       exclude_paths: ::Array[String],
-                      exclude_regex: String,
                       max_urls: Integer,
-                      regex: String
+                      scrape: ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::scrape]
                     }
+
+                    type exclude =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product
+
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::exclude]
+                    end
+
+                    type scrape =
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex
+                      | ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product
+
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      type regex = { kind: :regex, pattern: String }
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :regex
+
+                        attr_accessor pattern: String
+
+                        def initialize: (pattern: String, ?kind: :regex) -> void
+
+                        def to_hash: -> { kind: :regex, pattern: String }
+                      end
+
+                      type product = { kind: :product }
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        attr_accessor kind: :product
+
+                        def initialize: (?kind: :product) -> void
+
+                        def to_hash: -> { kind: :product }
+                      end
+
+                      def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::scrape]
+                    end
                   end
                 end
 

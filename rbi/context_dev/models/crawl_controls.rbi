@@ -8,9 +8,25 @@ module ContextDev
           T.any(ContextDev::CrawlControls, ContextDev::Internal::AnyHash)
         end
 
+      # Pages the crawl skipped. Null when it skipped none.
+      sig do
+        returns(
+          T.nilable(T::Array[ContextDev::CrawlControls::Exclude::Variants])
+        )
+      end
+      attr_accessor :exclude
+
       # Regex pattern URLs must not match to be crawled. Null when the crawl set none.
       sig { returns(T.nilable(String)) }
       attr_accessor :exclude_url_pattern
+
+      # Links the crawl followed. Null when it followed every link.
+      sig do
+        returns(
+          T.nilable(T::Array[ContextDev::CrawlControls::Follow::Variants])
+        )
+      end
+      attr_accessor :follow
 
       # Whether links to subdomains were followed. Always false for a sitemap crawl.
       sig { returns(T::Boolean) }
@@ -30,6 +46,14 @@ module ContextDev
       sig { returns(Integer) }
       attr_accessor :max_pages
 
+      # Pages the crawl returned. Null when it returned every fetched page.
+      sig do
+        returns(
+          T.nilable(T::Array[ContextDev::CrawlControls::Scrape::Variants])
+        )
+      end
+      attr_accessor :scrape
+
       # Where the crawl started.
       sig { returns(ContextDev::CrawlControls::Source::Variants) }
       attr_accessor :source
@@ -41,7 +65,26 @@ module ContextDev
       # Crawl settings as submitted.
       sig do
         params(
+          exclude:
+            T.nilable(
+              T::Array[
+                T.any(
+                  ContextDev::CrawlControls::Exclude::Regex::OrHash,
+                  ContextDev::CrawlControls::Exclude::Product::OrHash
+                )
+              ]
+            ),
           exclude_url_pattern: T.nilable(String),
+          follow:
+            T.nilable(
+              T::Array[
+                T.any(
+                  ContextDev::CrawlControls::Follow::Regex::OrHash,
+                  ContextDev::CrawlControls::Follow::Pagination::OrHash,
+                  ContextDev::CrawlControls::Follow::Product::OrHash
+                )
+              ]
+            ),
           follow_subdomains: T::Boolean,
           languages:
             T.nilable(
@@ -54,6 +97,15 @@ module ContextDev
             ),
           max_depth: T.nilable(Integer),
           max_pages: Integer,
+          scrape:
+            T.nilable(
+              T::Array[
+                T.any(
+                  ContextDev::CrawlControls::Scrape::Regex::OrHash,
+                  ContextDev::CrawlControls::Scrape::Product::OrHash
+                )
+              ]
+            ),
           source:
             T.any(
               ContextDev::CrawlControls::Source::StartURL::OrHash,
@@ -63,8 +115,12 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Pages the crawl skipped. Null when it skipped none.
+        exclude:,
         # Regex pattern URLs must not match to be crawled. Null when the crawl set none.
         exclude_url_pattern:,
+        # Links the crawl followed. Null when it followed every link.
+        follow:,
         # Whether links to subdomains were followed. Always false for a sitemap crawl.
         follow_subdomains:,
         # Languages whose pages were followed; null when all languages were.
@@ -75,6 +131,8 @@ module ContextDev
         # The `maxUrls` submitted with the crawl. A sitemap crawl scrapes only the URLs
         # its sitemap actually lists, up to this many, so `input.reserved` is often lower.
         max_pages:,
+        # Pages the crawl returned. Null when it returned every fetched page.
+        scrape:,
         # Where the crawl started.
         source:,
         # Regex pattern URLs had to match to be crawled. Null when the crawl set none.
@@ -85,18 +143,213 @@ module ContextDev
       sig do
         override.returns(
           {
+            exclude:
+              T.nilable(T::Array[ContextDev::CrawlControls::Exclude::Variants]),
             exclude_url_pattern: T.nilable(String),
+            follow:
+              T.nilable(T::Array[ContextDev::CrawlControls::Follow::Variants]),
             follow_subdomains: T::Boolean,
             languages:
               T.nilable(ContextDev::CrawlControls::Languages::Variants),
             max_depth: T.nilable(Integer),
             max_pages: Integer,
+            scrape:
+              T.nilable(T::Array[ContextDev::CrawlControls::Scrape::Variants]),
             source: ContextDev::CrawlControls::Source::Variants,
             url_pattern: T.nilable(String)
           }
         )
       end
       def to_hash
+      end
+
+      # Selects pages by URL pattern or by kind of page.
+      module Exclude
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              ContextDev::CrawlControls::Exclude::Regex,
+              ContextDev::CrawlControls::Exclude::Product
+            )
+          end
+
+        class Regex < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::CrawlControls::Exclude::Regex,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Match pages by URL pattern.
+          sig { returns(Symbol) }
+          attr_accessor :kind
+
+          # Regex pattern for the page URL.
+          sig { returns(String) }
+          attr_accessor :pattern
+
+          # Pages whose URL matches a regex pattern.
+          sig do
+            params(pattern: String, kind: Symbol).returns(T.attached_class)
+          end
+          def self.new(
+            # Regex pattern for the page URL.
+            pattern:,
+            # Match pages by URL pattern.
+            kind: :regex
+          )
+          end
+
+          sig { override.returns({ kind: Symbol, pattern: String }) }
+          def to_hash
+          end
+        end
+
+        class Product < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::CrawlControls::Exclude::Product,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Match product detail pages.
+          sig { returns(Symbol) }
+          attr_accessor :kind
+
+          # Product detail pages.
+          sig { params(kind: Symbol).returns(T.attached_class) }
+          def self.new(
+            # Match product detail pages.
+            kind: :product
+          )
+          end
+
+          sig { override.returns({ kind: Symbol }) }
+          def to_hash
+          end
+        end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::CrawlControls::Exclude::Variants]
+          )
+        end
+        def self.variants
+        end
+      end
+
+      # Selects links by URL pattern, by kind of page, or as the next page of a list.
+      module Follow
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              ContextDev::CrawlControls::Follow::Regex,
+              ContextDev::CrawlControls::Follow::Pagination,
+              ContextDev::CrawlControls::Follow::Product
+            )
+          end
+
+        class Regex < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::CrawlControls::Follow::Regex,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Match pages by URL pattern.
+          sig { returns(Symbol) }
+          attr_accessor :kind
+
+          # Regex pattern for the page URL.
+          sig { returns(String) }
+          attr_accessor :pattern
+
+          # Pages whose URL matches a regex pattern.
+          sig do
+            params(pattern: String, kind: Symbol).returns(T.attached_class)
+          end
+          def self.new(
+            # Regex pattern for the page URL.
+            pattern:,
+            # Match pages by URL pattern.
+            kind: :regex
+          )
+          end
+
+          sig { override.returns({ kind: Symbol, pattern: String }) }
+          def to_hash
+          end
+        end
+
+        class Pagination < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::CrawlControls::Follow::Pagination,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Match the further pages of a paginated list.
+          sig { returns(Symbol) }
+          attr_accessor :kind
+
+          # Further pages of a paginated list, such as page 2 of a catalog.
+          sig { params(kind: Symbol).returns(T.attached_class) }
+          def self.new(
+            # Match the further pages of a paginated list.
+            kind: :pagination
+          )
+          end
+
+          sig { override.returns({ kind: Symbol }) }
+          def to_hash
+          end
+        end
+
+        class Product < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::CrawlControls::Follow::Product,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Match product detail pages.
+          sig { returns(Symbol) }
+          attr_accessor :kind
+
+          # Product detail pages.
+          sig { params(kind: Symbol).returns(T.attached_class) }
+          def self.new(
+            # Match product detail pages.
+            kind: :product
+          )
+          end
+
+          sig { override.returns({ kind: Symbol }) }
+          def to_hash
+          end
+        end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::CrawlControls::Follow::Variants]
+          )
+        end
+        def self.variants
+        end
       end
 
       # Languages whose pages were followed; null when all languages were.
@@ -529,6 +782,87 @@ module ContextDev
             ],
             ContextDev::Internal::Type::Converter
           )
+      end
+
+      # Selects pages by URL pattern or by kind of page.
+      module Scrape
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              ContextDev::CrawlControls::Scrape::Regex,
+              ContextDev::CrawlControls::Scrape::Product
+            )
+          end
+
+        class Regex < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::CrawlControls::Scrape::Regex,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Match pages by URL pattern.
+          sig { returns(Symbol) }
+          attr_accessor :kind
+
+          # Regex pattern for the page URL.
+          sig { returns(String) }
+          attr_accessor :pattern
+
+          # Pages whose URL matches a regex pattern.
+          sig do
+            params(pattern: String, kind: Symbol).returns(T.attached_class)
+          end
+          def self.new(
+            # Regex pattern for the page URL.
+            pattern:,
+            # Match pages by URL pattern.
+            kind: :regex
+          )
+          end
+
+          sig { override.returns({ kind: Symbol, pattern: String }) }
+          def to_hash
+          end
+        end
+
+        class Product < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::CrawlControls::Scrape::Product,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Match product detail pages.
+          sig { returns(Symbol) }
+          attr_accessor :kind
+
+          # Product detail pages.
+          sig { params(kind: Symbol).returns(T.attached_class) }
+          def self.new(
+            # Match product detail pages.
+            kind: :product
+          )
+          end
+
+          sig { override.returns({ kind: Symbol }) }
+          def to_hash
+          end
+        end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::CrawlControls::Scrape::Variants]
+          )
+        end
+        def self.variants
+        end
       end
 
       # Where the crawl started.
