@@ -371,7 +371,7 @@ module ContextDev
       #
       # @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
       #
-      # @param include_frames [Boolean] When true, the contents of iframes are rendered to Markdown for each crawled pag
+      # @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebCrawlMdParams::IncludeFrames] Which iframe contents to render to Markdown for each crawled page. `auto` (defau
       #
       # @param include_images [Boolean] Include image references in the Markdown output (`html-conversion` only).
       #

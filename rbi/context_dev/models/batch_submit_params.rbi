@@ -5639,12 +5639,32 @@ module ContextDev
                 sig { params(headers: T::Hash[Symbol, String]).void }
                 attr_writer :headers
 
-                # Include iframe content in HTML and text outputs. Screenshots always show visible
-                # frames.
-                sig { returns(T.nilable(T::Boolean)) }
+                # Which iframe contents to include in HTML and text outputs. Screenshots always
+                # show visible frames. `auto` (default) inlines only iframes that hold page
+                # content, such as same-site documents, framesets, job boards, forms and embedded
+                # documents, and skips ads and widgets. `true` inlines every iframe. `false`
+                # inlines none.
+                sig do
+                  returns(
+                    T.nilable(
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                      )
+                    )
+                  )
+                end
                 attr_reader :include_frames
 
-                sig { params(include_frames: T::Boolean).void }
+                sig do
+                  params(
+                    include_frames:
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                      )
+                  ).void
+                end
                 attr_writer :include_frames
 
                 # Keep only elements matching these CSS selectors.
@@ -5786,7 +5806,11 @@ module ContextDev
                     dismiss_popups: T::Boolean,
                     exclude_selectors: T::Array[String],
                     headers: T::Hash[Symbol, String],
-                    include_frames: T::Boolean,
+                    include_frames:
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                      ),
                     include_selectors: T::Array[String],
                     main_content_only: T::Boolean,
                     parsers:
@@ -5819,8 +5843,11 @@ module ContextDev
                   exclude_selectors: nil,
                   # HTTP headers to send to the target site. Requests with headers skip the cache.
                   headers: nil,
-                  # Include iframe content in HTML and text outputs. Screenshots always show visible
-                  # frames.
+                  # Which iframe contents to include in HTML and text outputs. Screenshots always
+                  # show visible frames. `auto` (default) inlines only iframes that hold page
+                  # content, such as same-site documents, framesets, job boards, forms and embedded
+                  # documents, and skips ads and widgets. `true` inlines every iframe. `false`
+                  # inlines none.
                   include_frames: nil,
                   # Keep only elements matching these CSS selectors.
                   include_selectors: nil,
@@ -5863,7 +5890,11 @@ module ContextDev
                       dismiss_popups: T::Boolean,
                       exclude_selectors: T::Array[String],
                       headers: T::Hash[Symbol, String],
-                      include_frames: T::Boolean,
+                      include_frames:
+                        T.any(
+                          T::Boolean,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                        ),
                       include_selectors: T::Array[String],
                       main_content_only: T::Boolean,
                       parsers:
@@ -6220,6 +6251,48 @@ module ContextDev
                   end
                   def self.variants
                   end
+                end
+
+                # Which iframe contents to include in HTML and text outputs. Screenshots always
+                # show visible frames. `auto` (default) inlines only iframes that hold page
+                # content, such as same-site documents, framesets, job boards, forms and embedded
+                # documents, and skips ads and widgets. `true` inlines every iframe. `false`
+                # inlines none.
+                module IncludeFrames
+                  extend ContextDev::Internal::Type::Union
+
+                  Variants =
+                    T.type_alias do
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::TaggedSymbol
+                      )
+                    end
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::Variants
+                      ]
+                    )
+                  end
+                  def self.variants
+                  end
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  AUTO =
+                    T.let(
+                      :auto,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::TaggedSymbol
+                    )
                 end
 
                 class Parsers < ContextDev::Internal::Type::BaseModel
@@ -16484,12 +16557,32 @@ module ContextDev
                 sig { params(headers: T::Hash[Symbol, String]).void }
                 attr_writer :headers
 
-                # Include iframe content in HTML and text outputs. Screenshots always show visible
-                # frames.
-                sig { returns(T.nilable(T::Boolean)) }
+                # Which iframe contents to include in HTML and text outputs. Screenshots always
+                # show visible frames. `auto` (default) inlines only iframes that hold page
+                # content, such as same-site documents, framesets, job boards, forms and embedded
+                # documents, and skips ads and widgets. `true` inlines every iframe. `false`
+                # inlines none.
+                sig do
+                  returns(
+                    T.nilable(
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
+                      )
+                    )
+                  )
+                end
                 attr_reader :include_frames
 
-                sig { params(include_frames: T::Boolean).void }
+                sig do
+                  params(
+                    include_frames:
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
+                      )
+                  ).void
+                end
                 attr_writer :include_frames
 
                 # Keep only elements matching these CSS selectors.
@@ -16631,7 +16724,11 @@ module ContextDev
                     dismiss_popups: T::Boolean,
                     exclude_selectors: T::Array[String],
                     headers: T::Hash[Symbol, String],
-                    include_frames: T::Boolean,
+                    include_frames:
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
+                      ),
                     include_selectors: T::Array[String],
                     main_content_only: T::Boolean,
                     parsers:
@@ -16664,8 +16761,11 @@ module ContextDev
                   exclude_selectors: nil,
                   # HTTP headers to send to the target site. Requests with headers skip the cache.
                   headers: nil,
-                  # Include iframe content in HTML and text outputs. Screenshots always show visible
-                  # frames.
+                  # Which iframe contents to include in HTML and text outputs. Screenshots always
+                  # show visible frames. `auto` (default) inlines only iframes that hold page
+                  # content, such as same-site documents, framesets, job boards, forms and embedded
+                  # documents, and skips ads and widgets. `true` inlines every iframe. `false`
+                  # inlines none.
                   include_frames: nil,
                   # Keep only elements matching these CSS selectors.
                   include_selectors: nil,
@@ -16708,7 +16808,11 @@ module ContextDev
                       dismiss_popups: T::Boolean,
                       exclude_selectors: T::Array[String],
                       headers: T::Hash[Symbol, String],
-                      include_frames: T::Boolean,
+                      include_frames:
+                        T.any(
+                          T::Boolean,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
+                        ),
                       include_selectors: T::Array[String],
                       main_content_only: T::Boolean,
                       parsers:
@@ -17065,6 +17169,48 @@ module ContextDev
                   end
                   def self.variants
                   end
+                end
+
+                # Which iframe contents to include in HTML and text outputs. Screenshots always
+                # show visible frames. `auto` (default) inlines only iframes that hold page
+                # content, such as same-site documents, framesets, job boards, forms and embedded
+                # documents, and skips ads and widgets. `true` inlines every iframe. `false`
+                # inlines none.
+                module IncludeFrames
+                  extend ContextDev::Internal::Type::Union
+
+                  Variants =
+                    T.type_alias do
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::TaggedSymbol
+                      )
+                    end
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::Variants
+                      ]
+                    )
+                  end
+                  def self.variants
+                  end
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  AUTO =
+                    T.let(
+                      :auto,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::TaggedSymbol
+                    )
                 end
 
                 class Parsers < ContextDev::Internal::Type::BaseModel

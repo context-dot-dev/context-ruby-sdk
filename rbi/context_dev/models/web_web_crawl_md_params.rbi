@@ -47,12 +47,31 @@ module ContextDev
       sig { params(follow_subdomains: T::Boolean).void }
       attr_writer :follow_subdomains
 
-      # When true, the contents of iframes are rendered to Markdown for each crawled
-      # page.
-      sig { returns(T.nilable(T::Boolean)) }
+      # Which iframe contents to render to Markdown for each crawled page. `auto`
+      # (default) inlines only iframes that hold page content, such as same-site
+      # documents, framesets, job boards, forms and embedded documents, and skips ads
+      # and widgets. `true` inlines every iframe. `false` inlines none.
+      sig do
+        returns(
+          T.nilable(
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebCrawlMdParams::IncludeFrames::OrSymbol
+            )
+          )
+        )
+      end
       attr_reader :include_frames
 
-      sig { params(include_frames: T::Boolean).void }
+      sig do
+        params(
+          include_frames:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebCrawlMdParams::IncludeFrames::OrSymbol
+            )
+        ).void
+      end
       attr_writer :include_frames
 
       # Include image references in the Markdown output (`html-conversion` only).
@@ -209,7 +228,11 @@ module ContextDev
           exclude_selectors: T.nilable(T::Array[String]),
           exclude_url_regex: String,
           follow_subdomains: T::Boolean,
-          include_frames: T::Boolean,
+          include_frames:
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebCrawlMdParams::IncludeFrames::OrSymbol
+            ),
           include_images: T::Boolean,
           include_links: T::Boolean,
           include_selectors: T.nilable(T::Array[String]),
@@ -248,8 +271,10 @@ module ContextDev
         # docs.example.com when starting from example.com). www and apex are always
         # treated as equivalent.
         follow_subdomains: nil,
-        # When true, the contents of iframes are rendered to Markdown for each crawled
-        # page.
+        # Which iframe contents to render to Markdown for each crawled page. `auto`
+        # (default) inlines only iframes that hold page content, such as same-site
+        # documents, framesets, job boards, forms and embedded documents, and skips ads
+        # and widgets. `true` inlines every iframe. `false` inlines none.
         include_frames: nil,
         # Include image references in the Markdown output (`html-conversion` only).
         include_images: nil,
@@ -310,7 +335,11 @@ module ContextDev
             exclude_selectors: T.nilable(T::Array[String]),
             exclude_url_regex: String,
             follow_subdomains: T::Boolean,
-            include_frames: T::Boolean,
+            include_frames:
+              T.any(
+                T::Boolean,
+                ContextDev::WebWebCrawlMdParams::IncludeFrames::OrSymbol
+              ),
             include_images: T::Boolean,
             include_links: T::Boolean,
             include_selectors: T.nilable(T::Array[String]),
@@ -561,6 +590,42 @@ module ContextDev
         end
         def self.values
         end
+      end
+
+      # Which iframe contents to render to Markdown for each crawled page. `auto`
+      # (default) inlines only iframes that hold page content, such as same-site
+      # documents, framesets, job boards, forms and embedded documents, and skips ads
+      # and widgets. `true` inlines every iframe. `false` inlines none.
+      module IncludeFrames
+        extend ContextDev::Internal::Type::Union
+
+        Variants =
+          T.type_alias do
+            T.any(
+              T::Boolean,
+              ContextDev::WebWebCrawlMdParams::IncludeFrames::TaggedSymbol
+            )
+          end
+
+        sig do
+          override.returns(
+            T::Array[ContextDev::WebWebCrawlMdParams::IncludeFrames::Variants]
+          )
+        end
+        def self.variants
+        end
+
+        TaggedSymbol =
+          T.type_alias do
+            T.all(Symbol, ContextDev::WebWebCrawlMdParams::IncludeFrames)
+          end
+        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+        AUTO =
+          T.let(
+            :auto,
+            ContextDev::WebWebCrawlMdParams::IncludeFrames::TaggedSymbol
+          )
       end
 
       class Pdf < ContextDev::Internal::Type::BaseModel

@@ -114,7 +114,7 @@ module ContextDev
         ?exclude_selectors: ::Array[String]?,
         ?exclude_url_regex: String,
         ?follow_subdomains: bool,
-        ?include_frames: bool,
+        ?include_frames: ContextDev::Models::WebWebCrawlMdParams::include_frames,
         ?include_images: bool,
         ?include_links: bool,
         ?include_selectors: ::Array[String]?,

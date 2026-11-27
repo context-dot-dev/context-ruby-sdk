@@ -1096,11 +1096,16 @@ module ContextDev
         optional :headers, ContextDev::Internal::Type::HashOf[String]
 
         # @!attribute include_frames
-        #   Include iframe content in HTML and text outputs. Screenshots always show visible
-        #   frames.
+        #   Which iframe contents to include in HTML and text outputs. Screenshots always
+        #   show visible frames. `auto` (default) inlines only iframes that hold page
+        #   content, such as same-site documents, framesets, job boards, forms and embedded
+        #   documents, and skips ads and widgets. `true` inlines every iframe. `false`
+        #   inlines none.
         #
-        #   @return [Boolean, nil]
-        optional :include_frames, ContextDev::Internal::Type::Boolean, api_name: :includeFrames
+        #   @return [Boolean, Symbol, ContextDev::Models::WebScrapeParams::SharedParams::IncludeFrames, nil]
+        optional :include_frames,
+                 union: -> { ContextDev::WebScrapeParams::SharedParams::IncludeFrames },
+                 api_name: :includeFrames
 
         # @!attribute include_selectors
         #   Keep only elements matching these CSS selectors.
@@ -1177,7 +1182,7 @@ module ContextDev
         #
         #   @param headers [Hash{Symbol=>String}] HTTP headers to send to the target site. Requests with headers skip the cache.
         #
-        #   @param include_frames [Boolean] Include iframe content in HTML and text outputs. Screenshots always show visible
+        #   @param include_frames [Boolean, Symbol, ContextDev::Models::WebScrapeParams::SharedParams::IncludeFrames] Which iframe contents to include in HTML and text outputs. Screenshots always sh
         #
         #   @param include_selectors [Array<String>] Keep only elements matching these CSS selectors.
         #
@@ -1352,6 +1357,34 @@ module ContextDev
 
           # @!method self.variants
           #   @return [Array(ContextDev::Models::WebScrapeParams::SharedParams::Action::Perform, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll, ContextDev::Models::WebScrapeParams::SharedParams::Action::Wait, ContextDev::Models::WebScrapeParams::SharedParams::Action::WaitFor)]
+        end
+
+        # Which iframe contents to include in HTML and text outputs. Screenshots always
+        # show visible frames. `auto` (default) inlines only iframes that hold page
+        # content, such as same-site documents, framesets, job boards, forms and embedded
+        # documents, and skips ads and widgets. `true` inlines every iframe. `false`
+        # inlines none.
+        #
+        # @see ContextDev::Models::WebScrapeParams::SharedParams#include_frames
+        module IncludeFrames
+          extend ContextDev::Internal::Type::Union
+
+          variant ContextDev::Internal::Type::Boolean
+
+          variant const: -> { ContextDev::Models::WebScrapeParams::SharedParams::IncludeFrames::AUTO }
+
+          # @!method self.variants
+          #   @return [Array(Boolean, Symbol)]
+
+          define_sorbet_constant!(:Variants) do
+            T.type_alias { T.any(T::Boolean, ContextDev::WebScrapeParams::SharedParams::IncludeFrames::TaggedSymbol) }
+          end
+
+          # @!group
+
+          AUTO = :auto
+
+          # @!endgroup
         end
 
         # @see ContextDev::Models::WebScrapeParams::SharedParams#parsers

@@ -2197,11 +2197,18 @@ module ContextDev
                 optional :headers, ContextDev::Internal::Type::HashOf[String]
 
                 # @!attribute include_frames
-                #   Include iframe content in HTML and text outputs. Screenshots always show visible
-                #   frames.
+                #   Which iframe contents to include in HTML and text outputs. Screenshots always
+                #   show visible frames. `auto` (default) inlines only iframes that hold page
+                #   content, such as same-site documents, framesets, job boards, forms and embedded
+                #   documents, and skips ads and widgets. `true` inlines every iframe. `false`
+                #   inlines none.
                 #
-                #   @return [Boolean, nil]
-                optional :include_frames, ContextDev::Internal::Type::Boolean, api_name: :includeFrames
+                #   @return [Boolean, Symbol, ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames, nil]
+                optional :include_frames,
+                         union: -> {
+                           ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames
+                         },
+                         api_name: :includeFrames
 
                 # @!attribute include_selectors
                 #   Keep only elements matching these CSS selectors.
@@ -2285,7 +2292,7 @@ module ContextDev
                 #
                 #   @param headers [Hash{Symbol=>String}] HTTP headers to send to the target site. Requests with headers skip the cache.
                 #
-                #   @param include_frames [Boolean] Include iframe content in HTML and text outputs. Screenshots always show visible
+                #   @param include_frames [Boolean, Symbol, ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames] Which iframe contents to include in HTML and text outputs. Screenshots always sh
                 #
                 #   @param include_selectors [Array<String>] Keep only elements matching these CSS selectors.
                 #
@@ -2471,6 +2478,39 @@ module ContextDev
 
                   # @!method self.variants
                   #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform, ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll, ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait, ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor)]
+                end
+
+                # Which iframe contents to include in HTML and text outputs. Screenshots always
+                # show visible frames. `auto` (default) inlines only iframes that hold page
+                # content, such as same-site documents, framesets, job boards, forms and embedded
+                # documents, and skips ads and widgets. `true` inlines every iframe. `false`
+                # inlines none.
+                #
+                # @see ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams#include_frames
+                module IncludeFrames
+                  extend ContextDev::Internal::Type::Union
+
+                  variant ContextDev::Internal::Type::Boolean
+
+                  variant const: -> { ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::AUTO }
+
+                  # @!method self.variants
+                  #   @return [Array(Boolean, Symbol)]
+
+                  define_sorbet_constant!(:Variants) do
+                    T.type_alias do
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::TaggedSymbol
+                      )
+                    end
+                  end
+
+                  # @!group
+
+                  AUTO = :auto
+
+                  # @!endgroup
                 end
 
                 # @see ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams#parsers
@@ -6597,11 +6637,18 @@ module ContextDev
                 optional :headers, ContextDev::Internal::Type::HashOf[String]
 
                 # @!attribute include_frames
-                #   Include iframe content in HTML and text outputs. Screenshots always show visible
-                #   frames.
+                #   Which iframe contents to include in HTML and text outputs. Screenshots always
+                #   show visible frames. `auto` (default) inlines only iframes that hold page
+                #   content, such as same-site documents, framesets, job boards, forms and embedded
+                #   documents, and skips ads and widgets. `true` inlines every iframe. `false`
+                #   inlines none.
                 #
-                #   @return [Boolean, nil]
-                optional :include_frames, ContextDev::Internal::Type::Boolean, api_name: :includeFrames
+                #   @return [Boolean, Symbol, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames, nil]
+                optional :include_frames,
+                         union: -> {
+                           ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames
+                         },
+                         api_name: :includeFrames
 
                 # @!attribute include_selectors
                 #   Keep only elements matching these CSS selectors.
@@ -6685,7 +6732,7 @@ module ContextDev
                 #
                 #   @param headers [Hash{Symbol=>String}] HTTP headers to send to the target site. Requests with headers skip the cache.
                 #
-                #   @param include_frames [Boolean] Include iframe content in HTML and text outputs. Screenshots always show visible
+                #   @param include_frames [Boolean, Symbol, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames] Which iframe contents to include in HTML and text outputs. Screenshots always sh
                 #
                 #   @param include_selectors [Array<String>] Keep only elements matching these CSS selectors.
                 #
@@ -6871,6 +6918,39 @@ module ContextDev
 
                   # @!method self.variants
                   #   @return [Array(ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait, ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor)]
+                end
+
+                # Which iframe contents to include in HTML and text outputs. Screenshots always
+                # show visible frames. `auto` (default) inlines only iframes that hold page
+                # content, such as same-site documents, framesets, job boards, forms and embedded
+                # documents, and skips ads and widgets. `true` inlines every iframe. `false`
+                # inlines none.
+                #
+                # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams#include_frames
+                module IncludeFrames
+                  extend ContextDev::Internal::Type::Union
+
+                  variant ContextDev::Internal::Type::Boolean
+
+                  variant const: -> { ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::AUTO }
+
+                  # @!method self.variants
+                  #   @return [Array(Boolean, Symbol)]
+
+                  define_sorbet_constant!(:Variants) do
+                    T.type_alias do
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::TaggedSymbol
+                      )
+                    end
+                  end
+
+                  # @!group
+
+                  AUTO = :auto
+
+                  # @!endgroup
                 end
 
                 # @see ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams#parsers

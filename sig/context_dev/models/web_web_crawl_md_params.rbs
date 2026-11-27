@@ -7,7 +7,7 @@ module ContextDev
         exclude_selectors: ::Array[String]?,
         exclude_url_regex: String,
         follow_subdomains: bool,
-        include_frames: bool,
+        include_frames: ContextDev::Models::WebWebCrawlMdParams::include_frames,
         include_images: bool,
         include_links: bool,
         include_selectors: ::Array[String]?,
@@ -51,9 +51,11 @@ module ContextDev
 
       def follow_subdomains=: (bool) -> bool
 
-      attr_reader include_frames: bool?
+      attr_reader include_frames: ContextDev::Models::WebWebCrawlMdParams::include_frames?
 
-      def include_frames=: (bool) -> bool
+      def include_frames=: (
+        ContextDev::Models::WebWebCrawlMdParams::include_frames
+      ) -> ContextDev::Models::WebWebCrawlMdParams::include_frames
 
       attr_reader include_images: bool?
 
@@ -135,7 +137,7 @@ module ContextDev
         ?exclude_selectors: ::Array[String]?,
         ?exclude_url_regex: String,
         ?follow_subdomains: bool,
-        ?include_frames: bool,
+        ?include_frames: ContextDev::Models::WebWebCrawlMdParams::include_frames,
         ?include_images: bool,
         ?include_links: bool,
         ?include_selectors: ::Array[String]?,
@@ -163,7 +165,7 @@ module ContextDev
         exclude_selectors: ::Array[String]?,
         exclude_url_regex: String,
         follow_subdomains: bool,
-        include_frames: bool,
+        include_frames: ContextDev::Models::WebWebCrawlMdParams::include_frames,
         include_images: bool,
         include_links: bool,
         include_selectors: ::Array[String]?,
@@ -600,6 +602,16 @@ module ContextDev
         ZW: :zw
 
         def self?.values: -> ::Array[ContextDev::Models::WebWebCrawlMdParams::country]
+      end
+
+      type include_frames = bool | :auto
+
+      module IncludeFrames
+        extend ContextDev::Internal::Type::Union
+
+        def self?.variants: -> ::Array[ContextDev::Models::WebWebCrawlMdParams::include_frames]
+
+        AUTO: :auto
       end
 
       type pdf =

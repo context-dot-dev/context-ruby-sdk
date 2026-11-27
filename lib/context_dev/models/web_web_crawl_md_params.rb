@@ -44,11 +44,15 @@ module ContextDev
       optional :follow_subdomains, ContextDev::Internal::Type::Boolean, api_name: :followSubdomains
 
       # @!attribute include_frames
-      #   When true, the contents of iframes are rendered to Markdown for each crawled
-      #   page.
+      #   Which iframe contents to render to Markdown for each crawled page. `auto`
+      #   (default) inlines only iframes that hold page content, such as same-site
+      #   documents, framesets, job boards, forms and embedded documents, and skips ads
+      #   and widgets. `true` inlines every iframe. `false` inlines none.
       #
-      #   @return [Boolean, nil]
-      optional :include_frames, ContextDev::Internal::Type::Boolean, api_name: :includeFrames
+      #   @return [Boolean, Symbol, ContextDev::Models::WebWebCrawlMdParams::IncludeFrames, nil]
+      optional :include_frames,
+               union: -> { ContextDev::WebWebCrawlMdParams::IncludeFrames },
+               api_name: :includeFrames
 
       # @!attribute include_images
       #   Include image references in the Markdown output (`html-conversion` only).
@@ -190,7 +194,7 @@ module ContextDev
       #
       #   @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
       #
-      #   @param include_frames [Boolean] When true, the contents of iframes are rendered to Markdown for each crawled pag
+      #   @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebCrawlMdParams::IncludeFrames] Which iframe contents to render to Markdown for each crawled page. `auto` (defau
       #
       #   @param include_images [Boolean] Include image references in the Markdown output (`html-conversion` only).
       #
@@ -441,6 +445,31 @@ module ContextDev
 
         # @!method self.values
         #   @return [Array<Symbol>]
+      end
+
+      # Which iframe contents to render to Markdown for each crawled page. `auto`
+      # (default) inlines only iframes that hold page content, such as same-site
+      # documents, framesets, job boards, forms and embedded documents, and skips ads
+      # and widgets. `true` inlines every iframe. `false` inlines none.
+      module IncludeFrames
+        extend ContextDev::Internal::Type::Union
+
+        variant ContextDev::Internal::Type::Boolean
+
+        variant const: -> { ContextDev::Models::WebWebCrawlMdParams::IncludeFrames::AUTO }
+
+        # @!method self.variants
+        #   @return [Array(Boolean, Symbol)]
+
+        define_sorbet_constant!(:Variants) do
+          T.type_alias { T.any(T::Boolean, ContextDev::WebWebCrawlMdParams::IncludeFrames::TaggedSymbol) }
+        end
+
+        # @!group
+
+        AUTO = :auto
+
+        # @!endgroup
       end
 
       class Pdf < ContextDev::Internal::Type::BaseModel

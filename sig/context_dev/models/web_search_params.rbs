@@ -814,7 +814,7 @@ module ContextDev
       type markdown_options =
         {
           enabled: bool,
-          include_frames: bool,
+          include_frames: ContextDev::Models::WebSearchParams::MarkdownOptions::include_frames,
           include_images: bool,
           include_links: bool,
           max_age_ms: Integer?,
@@ -830,9 +830,11 @@ module ContextDev
 
         def enabled=: (bool) -> bool
 
-        attr_reader include_frames: bool?
+        attr_reader include_frames: ContextDev::Models::WebSearchParams::MarkdownOptions::include_frames?
 
-        def include_frames=: (bool) -> bool
+        def include_frames=: (
+          ContextDev::Models::WebSearchParams::MarkdownOptions::include_frames
+        ) -> ContextDev::Models::WebSearchParams::MarkdownOptions::include_frames
 
         attr_reader include_images: bool?
 
@@ -868,7 +870,7 @@ module ContextDev
 
         def initialize: (
           ?enabled: bool,
-          ?include_frames: bool,
+          ?include_frames: ContextDev::Models::WebSearchParams::MarkdownOptions::include_frames,
           ?include_images: bool,
           ?include_links: bool,
           ?max_age_ms: Integer?,
@@ -881,7 +883,7 @@ module ContextDev
 
         def to_hash: -> {
           enabled: bool,
-          include_frames: bool,
+          include_frames: ContextDev::Models::WebSearchParams::MarkdownOptions::include_frames,
           include_images: bool,
           include_links: bool,
           max_age_ms: Integer?,
@@ -891,6 +893,16 @@ module ContextDev
           use_main_content_only: bool,
           wait_for_ms: Integer?
         }
+
+        type include_frames = bool | :auto
+
+        module IncludeFrames
+          extend ContextDev::Internal::Type::Union
+
+          def self?.variants: -> ::Array[ContextDev::Models::WebSearchParams::MarkdownOptions::include_frames]
+
+          AUTO: :auto
+        end
 
         type pdf = { end_: Integer, should_parse: bool, start: Integer }
 

@@ -1054,11 +1054,31 @@ module ContextDev
         sig { params(enabled: T::Boolean).void }
         attr_writer :enabled
 
-        # Render iframe contents into the Markdown.
-        sig { returns(T.nilable(T::Boolean)) }
+        # Which iframe contents to render into the Markdown. `auto` (default) inlines only
+        # iframes that hold page content, such as same-site documents, framesets, job
+        # boards, forms and embedded documents, and skips ads and widgets. `true` inlines
+        # every iframe. `false` inlines none.
+        sig do
+          returns(
+            T.nilable(
+              T.any(
+                T::Boolean,
+                ContextDev::WebSearchParams::MarkdownOptions::IncludeFrames::OrSymbol
+              )
+            )
+          )
+        end
         attr_reader :include_frames
 
-        sig { params(include_frames: T::Boolean).void }
+        sig do
+          params(
+            include_frames:
+              T.any(
+                T::Boolean,
+                ContextDev::WebSearchParams::MarkdownOptions::IncludeFrames::OrSymbol
+              )
+          ).void
+        end
         attr_writer :include_frames
 
         # Emit image references in the Markdown.
@@ -1134,7 +1154,11 @@ module ContextDev
         sig do
           params(
             enabled: T::Boolean,
-            include_frames: T::Boolean,
+            include_frames:
+              T.any(
+                T::Boolean,
+                ContextDev::WebSearchParams::MarkdownOptions::IncludeFrames::OrSymbol
+              ),
             include_images: T::Boolean,
             include_links: T::Boolean,
             max_age_ms: T.nilable(Integer),
@@ -1149,7 +1173,10 @@ module ContextDev
         def self.new(
           # Scrape each result to Markdown. Adds 1 credit per result with Markdown.
           enabled: nil,
-          # Render iframe contents into the Markdown.
+          # Which iframe contents to render into the Markdown. `auto` (default) inlines only
+          # iframes that hold page content, such as same-site documents, framesets, job
+          # boards, forms and embedded documents, and skips ads and widgets. `true` inlines
+          # every iframe. `false` inlines none.
           include_frames: nil,
           # Emit image references in the Markdown.
           include_images: nil,
@@ -1178,7 +1205,11 @@ module ContextDev
           override.returns(
             {
               enabled: T::Boolean,
-              include_frames: T::Boolean,
+              include_frames:
+                T.any(
+                  T::Boolean,
+                  ContextDev::WebSearchParams::MarkdownOptions::IncludeFrames::OrSymbol
+                ),
               include_images: T::Boolean,
               include_links: T::Boolean,
               max_age_ms: T.nilable(Integer),
@@ -1192,6 +1223,47 @@ module ContextDev
           )
         end
         def to_hash
+        end
+
+        # Which iframe contents to render into the Markdown. `auto` (default) inlines only
+        # iframes that hold page content, such as same-site documents, framesets, job
+        # boards, forms and embedded documents, and skips ads and widgets. `true` inlines
+        # every iframe. `false` inlines none.
+        module IncludeFrames
+          extend ContextDev::Internal::Type::Union
+
+          Variants =
+            T.type_alias do
+              T.any(
+                T::Boolean,
+                ContextDev::WebSearchParams::MarkdownOptions::IncludeFrames::TaggedSymbol
+              )
+            end
+
+          sig do
+            override.returns(
+              T::Array[
+                ContextDev::WebSearchParams::MarkdownOptions::IncludeFrames::Variants
+              ]
+            )
+          end
+          def self.variants
+          end
+
+          TaggedSymbol =
+            T.type_alias do
+              T.all(
+                Symbol,
+                ContextDev::WebSearchParams::MarkdownOptions::IncludeFrames
+              )
+            end
+          OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+          AUTO =
+            T.let(
+              :auto,
+              ContextDev::WebSearchParams::MarkdownOptions::IncludeFrames::TaggedSymbol
+            )
         end
 
         class Pdf < ContextDev::Internal::Type::BaseModel

@@ -2071,7 +2071,7 @@ module ContextDev
                   dismiss_popups: bool,
                   exclude_selectors: ::Array[String],
                   headers: ::Hash[Symbol, String],
-                  include_frames: bool,
+                  include_frames: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::include_frames,
                   include_selectors: ::Array[String],
                   main_content_only: bool,
                   parsers: ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers,
@@ -2109,9 +2109,11 @@ module ContextDev
 
                 def headers=: (::Hash[Symbol, String]) -> ::Hash[Symbol, String]
 
-                attr_reader include_frames: bool?
+                attr_reader include_frames: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::include_frames?
 
-                def include_frames=: (bool) -> bool
+                def include_frames=: (
+                  ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::include_frames
+                ) -> ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::include_frames
 
                 attr_reader include_selectors: ::Array[String]?
 
@@ -2162,7 +2164,7 @@ module ContextDev
                   ?dismiss_popups: bool,
                   ?exclude_selectors: ::Array[String],
                   ?headers: ::Hash[Symbol, String],
-                  ?include_frames: bool,
+                  ?include_frames: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::include_frames,
                   ?include_selectors: ::Array[String],
                   ?main_content_only: bool,
                   ?parsers: ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers,
@@ -2180,7 +2182,7 @@ module ContextDev
                   dismiss_popups: bool,
                   exclude_selectors: ::Array[String],
                   headers: ::Hash[Symbol, String],
-                  include_frames: bool,
+                  include_frames: ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::include_frames,
                   include_selectors: ::Array[String],
                   main_content_only: bool,
                   parsers: ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers,
@@ -2313,6 +2315,16 @@ module ContextDev
                   end
 
                   def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::action]
+                end
+
+                type include_frames = bool | :auto
+
+                module IncludeFrames
+                  extend ContextDev::Internal::Type::Union
+
+                  def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::include_frames]
+
+                  AUTO: :auto
                 end
 
                 type parsers =
@@ -6041,7 +6053,7 @@ module ContextDev
                   dismiss_popups: bool,
                   exclude_selectors: ::Array[String],
                   headers: ::Hash[Symbol, String],
-                  include_frames: bool,
+                  include_frames: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::include_frames,
                   include_selectors: ::Array[String],
                   main_content_only: bool,
                   parsers: ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers,
@@ -6079,9 +6091,11 @@ module ContextDev
 
                 def headers=: (::Hash[Symbol, String]) -> ::Hash[Symbol, String]
 
-                attr_reader include_frames: bool?
+                attr_reader include_frames: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::include_frames?
 
-                def include_frames=: (bool) -> bool
+                def include_frames=: (
+                  ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::include_frames
+                ) -> ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::include_frames
 
                 attr_reader include_selectors: ::Array[String]?
 
@@ -6132,7 +6146,7 @@ module ContextDev
                   ?dismiss_popups: bool,
                   ?exclude_selectors: ::Array[String],
                   ?headers: ::Hash[Symbol, String],
-                  ?include_frames: bool,
+                  ?include_frames: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::include_frames,
                   ?include_selectors: ::Array[String],
                   ?main_content_only: bool,
                   ?parsers: ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers,
@@ -6150,7 +6164,7 @@ module ContextDev
                   dismiss_popups: bool,
                   exclude_selectors: ::Array[String],
                   headers: ::Hash[Symbol, String],
-                  include_frames: bool,
+                  include_frames: ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::include_frames,
                   include_selectors: ::Array[String],
                   main_content_only: bool,
                   parsers: ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers,
@@ -6283,6 +6297,16 @@ module ContextDev
                   end
 
                   def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::action]
+                end
+
+                type include_frames = bool | :auto
+
+                module IncludeFrames
+                  extend ContextDev::Internal::Type::Union
+
+                  def self?.variants: -> ::Array[ContextDev::Models::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::include_frames]
+
+                  AUTO: :auto
                 end
 
                 type parsers =

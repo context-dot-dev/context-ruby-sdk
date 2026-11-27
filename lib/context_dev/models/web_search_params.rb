@@ -556,10 +556,15 @@ module ContextDev
         optional :enabled, ContextDev::Internal::Type::Boolean
 
         # @!attribute include_frames
-        #   Render iframe contents into the Markdown.
+        #   Which iframe contents to render into the Markdown. `auto` (default) inlines only
+        #   iframes that hold page content, such as same-site documents, framesets, job
+        #   boards, forms and embedded documents, and skips ads and widgets. `true` inlines
+        #   every iframe. `false` inlines none.
         #
-        #   @return [Boolean, nil]
-        optional :include_frames, ContextDev::Internal::Type::Boolean, api_name: :includeFrames
+        #   @return [Boolean, Symbol, ContextDev::Models::WebSearchParams::MarkdownOptions::IncludeFrames, nil]
+        optional :include_frames,
+                 union: -> { ContextDev::WebSearchParams::MarkdownOptions::IncludeFrames },
+                 api_name: :includeFrames
 
         # @!attribute include_images
         #   Emit image references in the Markdown.
@@ -623,7 +628,7 @@ module ContextDev
         #
         #   @param enabled [Boolean] Scrape each result to Markdown. Adds 1 credit per result with Markdown.
         #
-        #   @param include_frames [Boolean] Render iframe contents into the Markdown.
+        #   @param include_frames [Boolean, Symbol, ContextDev::Models::WebSearchParams::MarkdownOptions::IncludeFrames] Which iframe contents to render into the Markdown. `auto` (default) inlines only
         #
         #   @param include_images [Boolean] Emit image references in the Markdown.
         #
@@ -640,6 +645,33 @@ module ContextDev
         #   @param use_main_content_only [Boolean] Strip nav, header, footer, and sidebar — keep only the primary article content.
         #
         #   @param wait_for_ms [Integer, nil] Extra wait after page load before rendering, in ms (0–30000). Useful for JS-heav
+
+        # Which iframe contents to render into the Markdown. `auto` (default) inlines only
+        # iframes that hold page content, such as same-site documents, framesets, job
+        # boards, forms and embedded documents, and skips ads and widgets. `true` inlines
+        # every iframe. `false` inlines none.
+        #
+        # @see ContextDev::Models::WebSearchParams::MarkdownOptions#include_frames
+        module IncludeFrames
+          extend ContextDev::Internal::Type::Union
+
+          variant ContextDev::Internal::Type::Boolean
+
+          variant const: -> { ContextDev::Models::WebSearchParams::MarkdownOptions::IncludeFrames::AUTO }
+
+          # @!method self.variants
+          #   @return [Array(Boolean, Symbol)]
+
+          define_sorbet_constant!(:Variants) do
+            T.type_alias { T.any(T::Boolean, ContextDev::WebSearchParams::MarkdownOptions::IncludeFrames::TaggedSymbol) }
+          end
+
+          # @!group
+
+          AUTO = :auto
+
+          # @!endgroup
+        end
 
         # @see ContextDev::Models::WebSearchParams::MarkdownOptions#pdf
         class Pdf < ContextDev::Internal::Type::BaseModel
