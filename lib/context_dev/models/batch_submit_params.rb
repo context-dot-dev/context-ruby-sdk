@@ -34,13 +34,6 @@ module ContextDev
       #   @return [ContextDev::Models::BatchSubmitParams::Webhook, nil]
       optional :webhook, -> { ContextDev::BatchSubmitParams::Webhook }
 
-      # @!attribute webhook_url
-      #   Legacy URL notified when the batch finishes. Preserves one best-effort attempt.
-      #   Cannot be combined with webhook.
-      #
-      #   @return [String, nil]
-      optional :webhook_url, String, api_name: :webhookUrl
-
       # @!attribute idempotency_key
       #   Unique key per submission. Retrying with the same key and body returns the
       #   original batch; a different body returns `409`.
@@ -48,7 +41,7 @@ module ContextDev
       #   @return [String, nil]
       optional :idempotency_key, String
 
-      # @!method initialize(input:, policies: nil, tags: nil, webhook: nil, webhook_url: nil, idempotency_key: nil, request_options: {})
+      # @!method initialize(input:, policies: nil, tags: nil, webhook: nil, idempotency_key: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchSubmitParams} for more details.
       #
@@ -59,8 +52,6 @@ module ContextDev
       #   @param tags [Array<String>] Tags stored on the batch. Filter the batch list by them later.
       #
       #   @param webhook [ContextDev::Models::BatchSubmitParams::Webhook] Where to send the batch's final-status event. Omit `retry` for one attempt; `{}`
-      #
-      #   @param webhook_url [String] Legacy URL notified when the batch finishes. Preserves one best-effort attempt.
       #
       #   @param idempotency_key [String] Unique key per submission. Retrying with the same key and body returns the origi
       #

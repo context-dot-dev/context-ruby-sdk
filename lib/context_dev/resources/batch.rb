@@ -150,7 +150,7 @@ module ContextDev
       # it finishes. Deferred rejections appear as status failed with a failure code and
       # message.
       #
-      # @overload submit(input:, policies: nil, tags: nil, webhook: nil, webhook_url: nil, idempotency_key: nil, request_options: {})
+      # @overload submit(input:, policies: nil, tags: nil, webhook: nil, idempotency_key: nil, request_options: {})
       #
       # @param input [ContextDev::Models::BatchSubmitParams::Input::Scrape, ContextDev::Models::BatchSubmitParams::Input::Crawl] Body param: Choose a URL list or a site crawl.
       #
@@ -159,8 +159,6 @@ module ContextDev
       # @param tags [Array<String>] Body param: Tags stored on the batch. Filter the batch list by them later.
       #
       # @param webhook [ContextDev::Models::BatchSubmitParams::Webhook] Body param: Where to send the batch's final-status event. Omit `retry` for one a
-      #
-      # @param webhook_url [String] Body param: Legacy URL notified when the batch finishes. Preserves one best-effo
       #
       # @param idempotency_key [String] Header param: Unique key per submission. Retrying with the same key and body ret
       #

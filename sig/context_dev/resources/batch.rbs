@@ -38,7 +38,6 @@ module ContextDev
         ?policies: ::Array[String],
         ?tags: ::Array[String],
         ?webhook: ContextDev::BatchSubmitParams::Webhook,
-        ?webhook_url: String,
         ?idempotency_key: String,
         ?request_options: ContextDev::request_opts
       ) -> ContextDev::Models::BatchSubmitResponse

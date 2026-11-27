@@ -111,7 +111,7 @@ module ContextDev
       #
       # List your monitors with optional search and filters.
       #
-      # @overload list(change_detection_type: nil, cursor: nil, limit: nil, q: nil, search_by: nil, search_type: nil, status: nil, tag: nil, tags: nil, target_type: nil, request_options: {})
+      # @overload list(change_detection_type: nil, cursor: nil, limit: nil, q: nil, search_by: nil, search_type: nil, status: nil, tags: nil, target_type: nil, request_options: {})
       #
       # @param change_detection_type [Symbol, ContextDev::Models::MonitorListParams::ChangeDetectionType] Filter by change detection type.
       #
@@ -126,8 +126,6 @@ module ContextDev
       # @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
       #
       # @param status [Symbol, ContextDev::Models::MonitorListParams::Status] Filter monitors by lifecycle status.
-      #
-      # @param tag [String] Filter to items that have this tag.
       #
       # @param tags [Array<String>, nil] Comma-separated list of tags to filter by (matches monitors having any of them).
       #

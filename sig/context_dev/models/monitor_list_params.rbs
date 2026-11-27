@@ -9,7 +9,6 @@ module ContextDev
         search_by: ::Array[ContextDev::Models::MonitorListParams::search_by]?,
         search_type: ContextDev::Models::MonitorListParams::search_type,
         status: ContextDev::Models::MonitorListParams::status,
-        tag: String,
         tags: ::Array[String]?,
         target_type: ContextDev::Models::MonitorListParams::target_type
       }
@@ -51,10 +50,6 @@ module ContextDev
         ContextDev::Models::MonitorListParams::status
       ) -> ContextDev::Models::MonitorListParams::status
 
-      attr_reader tag: String?
-
-      def tag=: (String) -> String
-
       attr_accessor tags: ::Array[String]?
 
       attr_reader target_type: ContextDev::Models::MonitorListParams::target_type?
@@ -71,7 +66,6 @@ module ContextDev
         ?search_by: ::Array[ContextDev::Models::MonitorListParams::search_by]?,
         ?search_type: ContextDev::Models::MonitorListParams::search_type,
         ?status: ContextDev::Models::MonitorListParams::status,
-        ?tag: String,
         ?tags: ::Array[String]?,
         ?target_type: ContextDev::Models::MonitorListParams::target_type,
         ?request_options: ContextDev::request_opts
@@ -85,7 +79,6 @@ module ContextDev
         search_by: ::Array[ContextDev::Models::MonitorListParams::search_by]?,
         search_type: ContextDev::Models::MonitorListParams::search_type,
         status: ContextDev::Models::MonitorListParams::status,
-        tag: String,
         tags: ::Array[String]?,
         target_type: ContextDev::Models::MonitorListParams::target_type,
         request_options: ContextDev::RequestOptions

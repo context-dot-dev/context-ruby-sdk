@@ -125,7 +125,6 @@ module ContextDev
           policies: T::Array[String],
           tags: T::Array[String],
           webhook: ContextDev::BatchSubmitParams::Webhook::OrHash,
-          webhook_url: String,
           idempotency_key: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(ContextDev::Models::BatchSubmitResponse)
@@ -142,9 +141,6 @@ module ContextDev
         # Body param: Where to send the batch's final-status event. Omit `retry` for one
         # attempt; `{}` uses the default retry schedule.
         webhook: nil,
-        # Body param: Legacy URL notified when the batch finishes. Preserves one
-        # best-effort attempt. Cannot be combined with webhook.
-        webhook_url: nil,
         # Header param: Unique key per submission. Retrying with the same key and body
         # returns the original batch; a different body returns `409`.
         idempotency_key: nil,

@@ -48,14 +48,6 @@ module ContextDev
       end
       attr_writer :webhook
 
-      # Legacy URL notified when the batch finishes. Preserves one best-effort attempt.
-      # Cannot be combined with webhook.
-      sig { returns(T.nilable(String)) }
-      attr_reader :webhook_url
-
-      sig { params(webhook_url: String).void }
-      attr_writer :webhook_url
-
       # Unique key per submission. Retrying with the same key and body returns the
       # original batch; a different body returns `409`.
       sig { returns(T.nilable(String)) }
@@ -74,7 +66,6 @@ module ContextDev
           policies: T::Array[String],
           tags: T::Array[String],
           webhook: ContextDev::BatchSubmitParams::Webhook::OrHash,
-          webhook_url: String,
           idempotency_key: String,
           request_options: ContextDev::RequestOptions::OrHash
         ).returns(T.attached_class)
@@ -91,9 +82,6 @@ module ContextDev
         # Where to send the batch's final-status event. Omit `retry` for one attempt; `{}`
         # uses the default retry schedule.
         webhook: nil,
-        # Legacy URL notified when the batch finishes. Preserves one best-effort attempt.
-        # Cannot be combined with webhook.
-        webhook_url: nil,
         # Unique key per submission. Retrying with the same key and body returns the
         # original batch; a different body returns `409`.
         idempotency_key: nil,
@@ -112,7 +100,6 @@ module ContextDev
             policies: T::Array[String],
             tags: T::Array[String],
             webhook: ContextDev::BatchSubmitParams::Webhook,
-            webhook_url: String,
             idempotency_key: String,
             request_options: ContextDev::RequestOptions
           }

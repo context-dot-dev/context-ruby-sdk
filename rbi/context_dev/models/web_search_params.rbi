@@ -127,13 +127,6 @@ module ContextDev
       sig { params(policies: T::Array[String]).void }
       attr_writer :policies
 
-      # Currently has no effect.
-      sig { returns(T.nilable(T::Boolean)) }
-      attr_reader :query_fanout
-
-      sig { params(query_fanout: T::Boolean).void }
-      attr_writer :query_fanout
-
       # Labels for filtering usage in the dashboard.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
@@ -181,7 +174,6 @@ module ContextDev
             T.nilable(ContextDev::WebSearchParams::MarkdownOptions::OrHash),
           num_results: Integer,
           policies: T::Array[String],
-          query_fanout: T::Boolean,
           tags: T::Array[String],
           timeout_opts: ContextDev::WebSearchParams::TimeoutOpts::OrHash,
           zdr: ContextDev::WebSearchParams::Zdr::OrSymbol,
@@ -219,8 +211,6 @@ module ContextDev
         # access policies are enabled for your organization; otherwise the request fails
         # with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
-        # Currently has no effect.
-        query_fanout: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
         # Request deadline and what to return when it passes.
@@ -254,7 +244,6 @@ module ContextDev
               T.nilable(ContextDev::WebSearchParams::MarkdownOptions),
             num_results: Integer,
             policies: T::Array[String],
-            query_fanout: T::Boolean,
             tags: T::Array[String],
             timeout_opts: ContextDev::WebSearchParams::TimeoutOpts,
             zdr: ContextDev::WebSearchParams::Zdr::OrSymbol,

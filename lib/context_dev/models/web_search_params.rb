@@ -87,12 +87,6 @@ module ContextDev
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
-      # @!attribute query_fanout
-      #   Currently has no effect.
-      #
-      #   @return [Boolean, nil]
-      optional :query_fanout, ContextDev::Internal::Type::Boolean, api_name: :queryFanout
-
       # @!attribute tags
       #   Labels for filtering usage in the dashboard.
       #
@@ -112,7 +106,7 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::WebSearchParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebSearchParams::Zdr }
 
-      # @!method initialize(query:, country: nil, description_max_characters: nil, exclude_domains: nil, freshness: nil, highlights_options: nil, include_domains: nil, languages: nil, markdown_options: nil, num_results: nil, policies: nil, query_fanout: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
+      # @!method initialize(query:, country: nil, description_max_characters: nil, exclude_domains: nil, freshness: nil, highlights_options: nil, include_domains: nil, languages: nil, markdown_options: nil, num_results: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebSearchParams} for more details.
       #
@@ -137,8 +131,6 @@ module ContextDev
       #   @param num_results [Integer] Number of results to request and return (1–100). Defaults to 10.
       #
       #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
-      #
-      #   @param query_fanout [Boolean] Currently has no effect.
       #
       #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
       #

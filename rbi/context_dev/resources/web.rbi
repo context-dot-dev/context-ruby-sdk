@@ -358,7 +358,6 @@ module ContextDev
             T.nilable(ContextDev::WebSearchParams::MarkdownOptions::OrHash),
           num_results: Integer,
           policies: T::Array[String],
-          query_fanout: T::Boolean,
           tags: T::Array[String],
           timeout_opts: ContextDev::WebSearchParams::TimeoutOpts::OrHash,
           zdr: ContextDev::WebSearchParams::Zdr::OrSymbol,
@@ -396,8 +395,6 @@ module ContextDev
         # access policies are enabled for your organization; otherwise the request fails
         # with `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
-        # Currently has no effect.
-        query_fanout: nil,
         # Labels for filtering usage in the dashboard.
         tags: nil,
         # Request deadline and what to return when it passes.

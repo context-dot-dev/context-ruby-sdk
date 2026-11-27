@@ -84,13 +84,6 @@ module ContextDev
       end
       attr_writer :status
 
-      # Filter to items that have this tag.
-      sig { returns(T.nilable(String)) }
-      attr_reader :tag
-
-      sig { params(tag: String).void }
-      attr_writer :tag
-
       # Comma-separated list of tags to filter by (matches monitors having any of them).
       sig { returns(T.nilable(T::Array[String])) }
       attr_accessor :tags
@@ -121,7 +114,6 @@ module ContextDev
             ),
           search_type: ContextDev::MonitorListParams::SearchType::OrSymbol,
           status: ContextDev::MonitorListParams::Status::OrSymbol,
-          tag: String,
           tags: T.nilable(T::Array[String]),
           target_type: ContextDev::MonitorListParams::TargetType::OrSymbol,
           request_options: ContextDev::RequestOptions::OrHash
@@ -144,8 +136,6 @@ module ContextDev
         search_type: nil,
         # Filter monitors by lifecycle status.
         status: nil,
-        # Filter to items that have this tag.
-        tag: nil,
         # Comma-separated list of tags to filter by (matches monitors having any of them).
         tags: nil,
         # Filter by target type.
@@ -168,7 +158,6 @@ module ContextDev
               ),
             search_type: ContextDev::MonitorListParams::SearchType::OrSymbol,
             status: ContextDev::MonitorListParams::Status::OrSymbol,
-            tag: String,
             tags: T.nilable(T::Array[String]),
             target_type: ContextDev::MonitorListParams::TargetType::OrSymbol,
             request_options: ContextDev::RequestOptions

@@ -6,7 +6,6 @@ module ContextDev
         policies: ::Array[String],
         tags: ::Array[String],
         webhook: ContextDev::BatchSubmitParams::Webhook,
-        webhook_url: String,
         idempotency_key: String
       }
       & ContextDev::Internal::Type::request_parameters
@@ -31,10 +30,6 @@ module ContextDev
         ContextDev::BatchSubmitParams::Webhook
       ) -> ContextDev::BatchSubmitParams::Webhook
 
-      attr_reader webhook_url: String?
-
-      def webhook_url=: (String) -> String
-
       attr_reader idempotency_key: String?
 
       def idempotency_key=: (String) -> String
@@ -44,7 +39,6 @@ module ContextDev
         ?policies: ::Array[String],
         ?tags: ::Array[String],
         ?webhook: ContextDev::BatchSubmitParams::Webhook,
-        ?webhook_url: String,
         ?idempotency_key: String,
         ?request_options: ContextDev::request_opts
       ) -> void
@@ -54,7 +48,6 @@ module ContextDev
         policies: ::Array[String],
         tags: ::Array[String],
         webhook: ContextDev::BatchSubmitParams::Webhook,
-        webhook_url: String,
         idempotency_key: String,
         request_options: ContextDev::RequestOptions
       }
