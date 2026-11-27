@@ -33,12 +33,6 @@ module ContextDev
       #   @return [Symbol, ContextDev::Models::BatchListParams::SearchType, nil]
       optional :search_type, enum: -> { ContextDev::BatchListParams::SearchType }
 
-      # @!attribute should_include_unified
-      #   Include batches submitted with Scrape Anything formats. Defaults to false.
-      #
-      #   @return [Boolean, nil]
-      optional :should_include_unified, ContextDev::Internal::Type::Boolean
-
       # @!attribute status
       #   Filter by status.
       #
@@ -52,7 +46,7 @@ module ContextDev
       #   @return [String, Array<String>, nil]
       optional :tags, union: -> { ContextDev::BatchListParams::Tags }
 
-      # @!method initialize(cursor: nil, limit: nil, q: nil, search_type: nil, should_include_unified: nil, status: nil, tags: nil, request_options: {})
+      # @!method initialize(cursor: nil, limit: nil, q: nil, search_type: nil, status: nil, tags: nil, request_options: {})
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchListParams} for more details.
       #
@@ -63,8 +57,6 @@ module ContextDev
       #   @param q [String] Free-text search term, matched against the batch id, crawl source (start URL or
       #
       #   @param search_type [Symbol, ContextDev::Models::BatchListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
-      #
-      #   @param should_include_unified [Boolean] Include batches submitted with Scrape Anything formats. Defaults to false.
       #
       #   @param status [Symbol, ContextDev::Models::BatchListParams::Status] Filter by status.
       #

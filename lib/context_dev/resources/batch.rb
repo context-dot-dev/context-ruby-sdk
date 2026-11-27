@@ -30,7 +30,7 @@ module ContextDev
       #
       # List your batches, newest first, with optional filters.
       #
-      # @overload list(cursor: nil, limit: nil, q: nil, search_type: nil, should_include_unified: nil, status: nil, tags: nil, request_options: {})
+      # @overload list(cursor: nil, limit: nil, q: nil, search_type: nil, status: nil, tags: nil, request_options: {})
       #
       # @param cursor [String] Cursor from the previous page.
       #
@@ -39,8 +39,6 @@ module ContextDev
       # @param q [String] Free-text search term, matched against the batch id, crawl source (start URL or
       #
       # @param search_type [Symbol, ContextDev::Models::BatchListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
-      #
-      # @param should_include_unified [Boolean] Include batches submitted with Scrape Anything formats. Defaults to false.
       #
       # @param status [Symbol, ContextDev::Models::BatchListParams::Status] Filter by status.
       #
@@ -57,7 +55,7 @@ module ContextDev
         @client.request(
           method: :get,
           path: "batch/list",
-          query: query.transform_keys(should_include_unified: "shouldIncludeUnified"),
+          query: query,
           model: ContextDev::Models::BatchListResponse,
           options: options
         )

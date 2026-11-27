@@ -26,7 +26,6 @@ module ContextDev
           limit: Integer,
           q: String,
           search_type: ContextDev::BatchListParams::SearchType::OrSymbol,
-          should_include_unified: T::Boolean,
           status: ContextDev::BatchListParams::Status::OrSymbol,
           tags: ContextDev::BatchListParams::Tags::Variants,
           request_options: ContextDev::RequestOptions::OrHash
@@ -43,8 +42,6 @@ module ContextDev
         # `prefix` for as-you-type prefix matching (default), `exact` for full-token
         # matching.
         search_type: nil,
-        # Include batches submitted with Scrape Anything formats. Defaults to false.
-        should_include_unified: nil,
         # Filter by status.
         status: nil,
         # Tags to filter by (matches batches having any of them). Pass repeated `tags`

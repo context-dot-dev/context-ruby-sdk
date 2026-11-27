@@ -47,13 +47,6 @@ module ContextDev
       end
       attr_writer :search_type
 
-      # Include batches submitted with Scrape Anything formats. Defaults to false.
-      sig { returns(T.nilable(T::Boolean)) }
-      attr_reader :should_include_unified
-
-      sig { params(should_include_unified: T::Boolean).void }
-      attr_writer :should_include_unified
-
       # Filter by status.
       sig { returns(T.nilable(ContextDev::BatchListParams::Status::OrSymbol)) }
       attr_reader :status
@@ -75,7 +68,6 @@ module ContextDev
           limit: Integer,
           q: String,
           search_type: ContextDev::BatchListParams::SearchType::OrSymbol,
-          should_include_unified: T::Boolean,
           status: ContextDev::BatchListParams::Status::OrSymbol,
           tags: ContextDev::BatchListParams::Tags::Variants,
           request_options: ContextDev::RequestOptions::OrHash
@@ -92,8 +84,6 @@ module ContextDev
         # `prefix` for as-you-type prefix matching (default), `exact` for full-token
         # matching.
         search_type: nil,
-        # Include batches submitted with Scrape Anything formats. Defaults to false.
-        should_include_unified: nil,
         # Filter by status.
         status: nil,
         # Tags to filter by (matches batches having any of them). Pass repeated `tags`
@@ -110,7 +100,6 @@ module ContextDev
             limit: Integer,
             q: String,
             search_type: ContextDev::BatchListParams::SearchType::OrSymbol,
-            should_include_unified: T::Boolean,
             status: ContextDev::BatchListParams::Status::OrSymbol,
             tags: ContextDev::BatchListParams::Tags::Variants,
             request_options: ContextDev::RequestOptions
