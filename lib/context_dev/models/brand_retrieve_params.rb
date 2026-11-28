@@ -330,12 +330,11 @@ module ContextDev
           #   @return [Symbol, :by_name]
           required :type, const: :by_name
 
-          # @!attribute country_gl
-          #   Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
-          #   search.
+          # @!attribute country
+          #   Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           #
-          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::CountryGl, nil]
-          optional :country_gl, enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::CountryGl }
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::Country, nil]
+          optional :country, enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::Country }
 
           # @!attribute force_language
           #
@@ -389,7 +388,7 @@ module ContextDev
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::Zdr, nil]
           optional :zdr, enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::Zdr }
 
-          # @!method initialize(name:, country_gl: nil, force_language: nil, max_age_ms: nil, max_speed: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, type: :by_name)
+          # @!method initialize(name:, country: nil, force_language: nil, max_age_ms: nil, max_speed: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, type: :by_name)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByName} for more details.
           #
@@ -398,7 +397,7 @@ module ContextDev
           #
           #   @param name [String] Company name to retrieve brand data for (e.g., 'Apple Inc').
           #
-          #   @param country_gl [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::CountryGl] Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize searc
+          #   @param country [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::Country] Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           #
           #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage, nil]
           #
@@ -416,11 +415,10 @@ module ContextDev
           #
           #   @param type [Symbol, :by_name] Discriminator for name-based brand retrieval.
 
-          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
-          # search.
+          # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           #
-          # @see ContextDev::Models::BrandRetrieveParams::Body::ByName#country_gl
-          module CountryGl
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByName#country
+          module Country
             extend ContextDev::Internal::Type::Enum
 
             AF = :af
@@ -1637,12 +1635,11 @@ module ContextDev
           #   @return [String, nil]
           optional :city, String
 
-          # @!attribute country_gl
-          #   Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
-          #   search.
+          # @!attribute country
+          #   Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           #
-          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::CountryGl, nil]
-          optional :country_gl, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl }
+          #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::Country, nil]
+          optional :country, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Country }
 
           # @!attribute force_language
           #
@@ -1709,7 +1706,7 @@ module ContextDev
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::Zdr, nil]
           optional :zdr, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Zdr }
 
-          # @!method initialize(transaction_info:, city: nil, country_gl: nil, force_language: nil, high_confidence_only: nil, max_speed: nil, mcc: nil, phone: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, type: :by_transaction)
+          # @!method initialize(transaction_info:, city: nil, country: nil, force_language: nil, high_confidence_only: nil, max_speed: nil, mcc: nil, phone: nil, policies: nil, tags: nil, timeout_opts: nil, zdr: nil, type: :by_transaction)
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByTransaction} for more details.
           #
@@ -1720,7 +1717,7 @@ module ContextDev
           #
           #   @param city [String] Optional city name to prioritize when searching for the brand.
           #
-          #   @param country_gl [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::CountryGl] Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize searc
+          #   @param country [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::Country] Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           #
           #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage, nil]
           #
@@ -1742,11 +1739,10 @@ module ContextDev
           #
           #   @param type [Symbol, :by_transaction] Discriminator for transaction-based brand retrieval.
 
-          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
-          # search.
+          # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           #
-          # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#country_gl
-          module CountryGl
+          # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#country
+          module Country
             extend ContextDev::Internal::Type::Enum
 
             AF = :af

@@ -405,7 +405,7 @@ module ContextDev
           {
             name: String,
             type: :by_name,
-            country_gl: ContextDev::Models::BrandRetrieveParams::Body::ByName::country_gl,
+            country: ContextDev::Models::BrandRetrieveParams::Body::ByName::country,
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language?,
             max_age_ms: Integer,
             max_speed: bool,
@@ -420,11 +420,11 @@ module ContextDev
 
           attr_accessor type: :by_name
 
-          attr_reader country_gl: ContextDev::Models::BrandRetrieveParams::Body::ByName::country_gl?
+          attr_reader country: ContextDev::Models::BrandRetrieveParams::Body::ByName::country?
 
-          def country_gl=: (
-            ContextDev::Models::BrandRetrieveParams::Body::ByName::country_gl
-          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByName::country_gl
+          def country=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByName::country
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByName::country
 
           attr_accessor force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language?
 
@@ -458,7 +458,7 @@ module ContextDev
 
           def initialize: (
             name: String,
-            ?country_gl: ContextDev::Models::BrandRetrieveParams::Body::ByName::country_gl,
+            ?country: ContextDev::Models::BrandRetrieveParams::Body::ByName::country,
             ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language?,
             ?max_age_ms: Integer,
             ?max_speed: bool,
@@ -472,7 +472,7 @@ module ContextDev
           def to_hash: -> {
             name: String,
             type: :by_name,
-            country_gl: ContextDev::Models::BrandRetrieveParams::Body::ByName::country_gl,
+            country: ContextDev::Models::BrandRetrieveParams::Body::ByName::country,
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByName::force_language?,
             max_age_ms: Integer,
             max_speed: bool,
@@ -482,7 +482,7 @@ module ContextDev
             zdr: ContextDev::Models::BrandRetrieveParams::Body::ByName::zdr
           }
 
-          type country_gl =
+          type country =
             :af
             | :al
             | :dz
@@ -723,7 +723,7 @@ module ContextDev
             | :zm
             | :zw
 
-          module CountryGl
+          module Country
             extend ContextDev::Internal::Type::Enum
 
             AF: :af
@@ -966,7 +966,7 @@ module ContextDev
             ZM: :zm
             ZW: :zw
 
-            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByName::country_gl]
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByName::country]
           end
 
           type force_language =
@@ -2276,7 +2276,7 @@ module ContextDev
             transaction_info: String,
             type: :by_transaction,
             city: String,
-            country_gl: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country_gl,
+            country: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country,
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language?,
             high_confidence_only: bool,
             max_speed: bool,
@@ -2297,11 +2297,11 @@ module ContextDev
 
           def city=: (String) -> String
 
-          attr_reader country_gl: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country_gl?
+          attr_reader country: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country?
 
-          def country_gl=: (
-            ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country_gl
-          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country_gl
+          def country=: (
+            ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country
+          ) -> ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country
 
           attr_accessor force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language?
 
@@ -2348,7 +2348,7 @@ module ContextDev
           def initialize: (
             transaction_info: String,
             ?city: String,
-            ?country_gl: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country_gl,
+            ?country: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country,
             ?force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language?,
             ?high_confidence_only: bool,
             ?max_speed: bool,
@@ -2365,7 +2365,7 @@ module ContextDev
             transaction_info: String,
             type: :by_transaction,
             city: String,
-            country_gl: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country_gl,
+            country: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country,
             force_language: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::force_language?,
             high_confidence_only: bool,
             max_speed: bool,
@@ -2377,7 +2377,7 @@ module ContextDev
             zdr: ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::zdr
           }
 
-          type country_gl =
+          type country =
             :af
             | :al
             | :dz
@@ -2618,7 +2618,7 @@ module ContextDev
             | :zm
             | :zw
 
-          module CountryGl
+          module Country
             extend ContextDev::Internal::Type::Enum
 
             AF: :af
@@ -2861,7 +2861,7 @@ module ContextDev
             ZM: :zm
             ZW: :zw
 
-            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country_gl]
+            def self?.values: -> ::Array[ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::country]
           end
 
           type force_language =

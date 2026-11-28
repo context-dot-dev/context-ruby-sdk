@@ -1026,24 +1026,23 @@ module ContextDev
           sig { returns(Symbol) }
           attr_accessor :type
 
-          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
-          # search.
+          # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           sig do
             returns(
               T.nilable(
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::OrSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::OrSymbol
               )
             )
           end
-          attr_reader :country_gl
+          attr_reader :country
 
           sig do
             params(
-              country_gl:
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::OrSymbol
+              country:
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::OrSymbol
             ).void
           end
-          attr_writer :country_gl
+          attr_writer :country
 
           sig do
             returns(
@@ -1129,8 +1128,8 @@ module ContextDev
           sig do
             params(
               name: String,
-              country_gl:
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::OrSymbol,
+              country:
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::OrSymbol,
               force_language:
                 T.nilable(
                   ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage::OrSymbol
@@ -1148,9 +1147,8 @@ module ContextDev
           def self.new(
             # Company name to retrieve brand data for (e.g., 'Apple Inc').
             name:,
-            # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
-            # search.
-            country_gl: nil,
+            # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
+            country: nil,
             force_language: nil,
             # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
             # year. `0` refreshes.
@@ -1181,8 +1179,8 @@ module ContextDev
               {
                 name: String,
                 type: Symbol,
-                country_gl:
-                  ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::OrSymbol,
+                country:
+                  ContextDev::BrandRetrieveParams::Body::ByName::Country::OrSymbol,
                 force_language:
                   T.nilable(
                     ContextDev::BrandRetrieveParams::Body::ByName::ForceLanguage::OrSymbol
@@ -1201,16 +1199,15 @@ module ContextDev
           def to_hash
           end
 
-          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
-          # search.
-          module CountryGl
+          # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
+          module Country
             extend ContextDev::Internal::Type::Enum
 
             TaggedSymbol =
               T.type_alias do
                 T.all(
                   Symbol,
-                  ContextDev::BrandRetrieveParams::Body::ByName::CountryGl
+                  ContextDev::BrandRetrieveParams::Body::ByName::Country
                 )
               end
             OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -1218,1203 +1215,1203 @@ module ContextDev
             AF =
               T.let(
                 :af,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AL =
               T.let(
                 :al,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             DZ =
               T.let(
                 :dz,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AS =
               T.let(
                 :as,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AD =
               T.let(
                 :ad,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AO =
               T.let(
                 :ao,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AI =
               T.let(
                 :ai,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AQ =
               T.let(
                 :aq,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AG =
               T.let(
                 :ag,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AR =
               T.let(
                 :ar,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AM =
               T.let(
                 :am,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AW =
               T.let(
                 :aw,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AU =
               T.let(
                 :au,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AT =
               T.let(
                 :at,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AZ =
               T.let(
                 :az,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BS =
               T.let(
                 :bs,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BH =
               T.let(
                 :bh,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BD =
               T.let(
                 :bd,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BB =
               T.let(
                 :bb,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BY =
               T.let(
                 :by,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BE =
               T.let(
                 :be,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BZ =
               T.let(
                 :bz,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BJ =
               T.let(
                 :bj,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BM =
               T.let(
                 :bm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BT =
               T.let(
                 :bt,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BO =
               T.let(
                 :bo,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BA =
               T.let(
                 :ba,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BW =
               T.let(
                 :bw,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BV =
               T.let(
                 :bv,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BR =
               T.let(
                 :br,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             IO =
               T.let(
                 :io,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BN =
               T.let(
                 :bn,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BG =
               T.let(
                 :bg,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BF =
               T.let(
                 :bf,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             BI =
               T.let(
                 :bi,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             KH =
               T.let(
                 :kh,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CM =
               T.let(
                 :cm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CA =
               T.let(
                 :ca,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CV =
               T.let(
                 :cv,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             KY =
               T.let(
                 :ky,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CF =
               T.let(
                 :cf,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TD =
               T.let(
                 :td,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CL =
               T.let(
                 :cl,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CN =
               T.let(
                 :cn,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CX =
               T.let(
                 :cx,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CC =
               T.let(
                 :cc,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CO =
               T.let(
                 :co,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             KM =
               T.let(
                 :km,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CG =
               T.let(
                 :cg,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CD =
               T.let(
                 :cd,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CK =
               T.let(
                 :ck,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CR =
               T.let(
                 :cr,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CI =
               T.let(
                 :ci,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             HR =
               T.let(
                 :hr,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CU =
               T.let(
                 :cu,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CY =
               T.let(
                 :cy,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CZ =
               T.let(
                 :cz,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             DK =
               T.let(
                 :dk,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             DJ =
               T.let(
                 :dj,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             DM =
               T.let(
                 :dm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             DO =
               T.let(
                 :do,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             EC =
               T.let(
                 :ec,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             EG =
               T.let(
                 :eg,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SV =
               T.let(
                 :sv,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GQ =
               T.let(
                 :gq,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             ER =
               T.let(
                 :er,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             EE =
               T.let(
                 :ee,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             ET =
               T.let(
                 :et,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             FK =
               T.let(
                 :fk,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             FO =
               T.let(
                 :fo,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             FJ =
               T.let(
                 :fj,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             FI =
               T.let(
                 :fi,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             FR =
               T.let(
                 :fr,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GF =
               T.let(
                 :gf,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PF =
               T.let(
                 :pf,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TF =
               T.let(
                 :tf,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GA =
               T.let(
                 :ga,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GM =
               T.let(
                 :gm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GE =
               T.let(
                 :ge,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             DE =
               T.let(
                 :de,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GH =
               T.let(
                 :gh,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GI =
               T.let(
                 :gi,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GR =
               T.let(
                 :gr,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GL =
               T.let(
                 :gl,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GD =
               T.let(
                 :gd,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GP =
               T.let(
                 :gp,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GU =
               T.let(
                 :gu,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GT =
               T.let(
                 :gt,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GN =
               T.let(
                 :gn,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GW =
               T.let(
                 :gw,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GY =
               T.let(
                 :gy,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             HT =
               T.let(
                 :ht,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             HM =
               T.let(
                 :hm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             VA =
               T.let(
                 :va,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             HN =
               T.let(
                 :hn,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             HK =
               T.let(
                 :hk,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             HU =
               T.let(
                 :hu,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             IS =
               T.let(
                 :is,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             IN =
               T.let(
                 :in,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             ID =
               T.let(
                 :id,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             IR =
               T.let(
                 :ir,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             IQ =
               T.let(
                 :iq,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             IE =
               T.let(
                 :ie,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             IL =
               T.let(
                 :il,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             IT =
               T.let(
                 :it,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             JM =
               T.let(
                 :jm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             JP =
               T.let(
                 :jp,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             JO =
               T.let(
                 :jo,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             KZ =
               T.let(
                 :kz,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             KE =
               T.let(
                 :ke,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             KI =
               T.let(
                 :ki,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             KP =
               T.let(
                 :kp,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             KR =
               T.let(
                 :kr,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             KW =
               T.let(
                 :kw,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             KG =
               T.let(
                 :kg,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             LA =
               T.let(
                 :la,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             LV =
               T.let(
                 :lv,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             LB =
               T.let(
                 :lb,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             LS =
               T.let(
                 :ls,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             LR =
               T.let(
                 :lr,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             LY =
               T.let(
                 :ly,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             LI =
               T.let(
                 :li,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             LT =
               T.let(
                 :lt,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             LU =
               T.let(
                 :lu,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MO =
               T.let(
                 :mo,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MK =
               T.let(
                 :mk,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MG =
               T.let(
                 :mg,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MW =
               T.let(
                 :mw,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MY =
               T.let(
                 :my,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MV =
               T.let(
                 :mv,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             ML =
               T.let(
                 :ml,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MT =
               T.let(
                 :mt,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MH =
               T.let(
                 :mh,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MQ =
               T.let(
                 :mq,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MR =
               T.let(
                 :mr,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MU =
               T.let(
                 :mu,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             YT =
               T.let(
                 :yt,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MX =
               T.let(
                 :mx,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             FM =
               T.let(
                 :fm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MD =
               T.let(
                 :md,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MC =
               T.let(
                 :mc,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MN =
               T.let(
                 :mn,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MS =
               T.let(
                 :ms,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MA =
               T.let(
                 :ma,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MZ =
               T.let(
                 :mz,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MM =
               T.let(
                 :mm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NA =
               T.let(
                 :na,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NR =
               T.let(
                 :nr,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NP =
               T.let(
                 :np,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NL =
               T.let(
                 :nl,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AN =
               T.let(
                 :an,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NC =
               T.let(
                 :nc,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NZ =
               T.let(
                 :nz,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NI =
               T.let(
                 :ni,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NE =
               T.let(
                 :ne,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NG =
               T.let(
                 :ng,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NU =
               T.let(
                 :nu,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NF =
               T.let(
                 :nf,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             MP =
               T.let(
                 :mp,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             NO =
               T.let(
                 :no,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             OM =
               T.let(
                 :om,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PK =
               T.let(
                 :pk,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PW =
               T.let(
                 :pw,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PS =
               T.let(
                 :ps,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PA =
               T.let(
                 :pa,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PG =
               T.let(
                 :pg,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PY =
               T.let(
                 :py,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PE =
               T.let(
                 :pe,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PH =
               T.let(
                 :ph,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PN =
               T.let(
                 :pn,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PL =
               T.let(
                 :pl,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PT =
               T.let(
                 :pt,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PR =
               T.let(
                 :pr,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             QA =
               T.let(
                 :qa,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             RE =
               T.let(
                 :re,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             RO =
               T.let(
                 :ro,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             RU =
               T.let(
                 :ru,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             RW =
               T.let(
                 :rw,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SH =
               T.let(
                 :sh,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             KN =
               T.let(
                 :kn,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             LC =
               T.let(
                 :lc,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             PM =
               T.let(
                 :pm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             VC =
               T.let(
                 :vc,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             WS =
               T.let(
                 :ws,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SM =
               T.let(
                 :sm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             ST =
               T.let(
                 :st,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SA =
               T.let(
                 :sa,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SN =
               T.let(
                 :sn,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             RS =
               T.let(
                 :rs,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SC =
               T.let(
                 :sc,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SL =
               T.let(
                 :sl,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SG =
               T.let(
                 :sg,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SK =
               T.let(
                 :sk,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SI =
               T.let(
                 :si,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SB =
               T.let(
                 :sb,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SO =
               T.let(
                 :so,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             ZA =
               T.let(
                 :za,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GS =
               T.let(
                 :gs,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             ES =
               T.let(
                 :es,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             LK =
               T.let(
                 :lk,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SD =
               T.let(
                 :sd,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SR =
               T.let(
                 :sr,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SJ =
               T.let(
                 :sj,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SZ =
               T.let(
                 :sz,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SE =
               T.let(
                 :se,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             CH =
               T.let(
                 :ch,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             SY =
               T.let(
                 :sy,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TW =
               T.let(
                 :tw,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TJ =
               T.let(
                 :tj,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TZ =
               T.let(
                 :tz,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TH =
               T.let(
                 :th,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TL =
               T.let(
                 :tl,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TG =
               T.let(
                 :tg,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TK =
               T.let(
                 :tk,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TO =
               T.let(
                 :to,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TT =
               T.let(
                 :tt,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TN =
               T.let(
                 :tn,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TR =
               T.let(
                 :tr,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TM =
               T.let(
                 :tm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TC =
               T.let(
                 :tc,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             TV =
               T.let(
                 :tv,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             UG =
               T.let(
                 :ug,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             UA =
               T.let(
                 :ua,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             AE =
               T.let(
                 :ae,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             GB =
               T.let(
                 :gb,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             US =
               T.let(
                 :us,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             UM =
               T.let(
                 :um,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             UY =
               T.let(
                 :uy,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             UZ =
               T.let(
                 :uz,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             VU =
               T.let(
                 :vu,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             VE =
               T.let(
                 :ve,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             VN =
               T.let(
                 :vn,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             VG =
               T.let(
                 :vg,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             VI =
               T.let(
                 :vi,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             WF =
               T.let(
                 :wf,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             EH =
               T.let(
                 :eh,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             YE =
               T.let(
                 :ye,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             ZM =
               T.let(
                 :zm,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
             ZW =
               T.let(
                 :zw,
-                ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
               )
 
             sig do
               override.returns(
                 T::Array[
-                  ContextDev::BrandRetrieveParams::Body::ByName::CountryGl::TaggedSymbol
+                  ContextDev::BrandRetrieveParams::Body::ByName::Country::TaggedSymbol
                 ]
               )
             end
@@ -5733,24 +5730,23 @@ module ContextDev
           sig { params(city: String).void }
           attr_writer :city
 
-          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
-          # search.
+          # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           sig do
             returns(
               T.nilable(
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::OrSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::OrSymbol
               )
             )
           end
-          attr_reader :country_gl
+          attr_reader :country
 
           sig do
             params(
-              country_gl:
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::OrSymbol
+              country:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::OrSymbol
             ).void
           end
-          attr_writer :country_gl
+          attr_writer :country
 
           sig do
             returns(
@@ -5875,8 +5871,8 @@ module ContextDev
             params(
               transaction_info: String,
               city: String,
-              country_gl:
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::OrSymbol,
+              country:
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::OrSymbol,
               force_language:
                 T.nilable(
                   ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage::OrSymbol
@@ -5901,9 +5897,8 @@ module ContextDev
             transaction_info:,
             # Optional city name to prioritize when searching for the brand.
             city: nil,
-            # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
-            # search.
-            country_gl: nil,
+            # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
+            country: nil,
             force_language: nil,
             # When set to true, the API performs additional verification to ensure the
             # identified brand matches the transaction with high confidence.
@@ -5940,8 +5935,8 @@ module ContextDev
                 transaction_info: String,
                 type: Symbol,
                 city: String,
-                country_gl:
-                  ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::OrSymbol,
+                country:
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::OrSymbol,
                 force_language:
                   T.nilable(
                     ContextDev::BrandRetrieveParams::Body::ByTransaction::ForceLanguage::OrSymbol
@@ -5964,16 +5959,15 @@ module ContextDev
           def to_hash
           end
 
-          # Two-letter ISO 3166-1 alpha-2 country code (GL parameter) used to localize
-          # search.
-          module CountryGl
+          # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
+          module Country
             extend ContextDev::Internal::Type::Enum
 
             TaggedSymbol =
               T.type_alias do
                 T.all(
                   Symbol,
-                  ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::Country
                 )
               end
             OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -5981,1203 +5975,1203 @@ module ContextDev
             AF =
               T.let(
                 :af,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AL =
               T.let(
                 :al,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             DZ =
               T.let(
                 :dz,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AS =
               T.let(
                 :as,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AD =
               T.let(
                 :ad,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AO =
               T.let(
                 :ao,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AI =
               T.let(
                 :ai,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AQ =
               T.let(
                 :aq,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AG =
               T.let(
                 :ag,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AR =
               T.let(
                 :ar,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AM =
               T.let(
                 :am,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AW =
               T.let(
                 :aw,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AU =
               T.let(
                 :au,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AT =
               T.let(
                 :at,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AZ =
               T.let(
                 :az,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BS =
               T.let(
                 :bs,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BH =
               T.let(
                 :bh,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BD =
               T.let(
                 :bd,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BB =
               T.let(
                 :bb,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BY =
               T.let(
                 :by,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BE =
               T.let(
                 :be,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BZ =
               T.let(
                 :bz,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BJ =
               T.let(
                 :bj,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BM =
               T.let(
                 :bm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BT =
               T.let(
                 :bt,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BO =
               T.let(
                 :bo,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BA =
               T.let(
                 :ba,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BW =
               T.let(
                 :bw,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BV =
               T.let(
                 :bv,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BR =
               T.let(
                 :br,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             IO =
               T.let(
                 :io,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BN =
               T.let(
                 :bn,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BG =
               T.let(
                 :bg,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BF =
               T.let(
                 :bf,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             BI =
               T.let(
                 :bi,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             KH =
               T.let(
                 :kh,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CM =
               T.let(
                 :cm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CA =
               T.let(
                 :ca,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CV =
               T.let(
                 :cv,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             KY =
               T.let(
                 :ky,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CF =
               T.let(
                 :cf,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TD =
               T.let(
                 :td,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CL =
               T.let(
                 :cl,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CN =
               T.let(
                 :cn,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CX =
               T.let(
                 :cx,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CC =
               T.let(
                 :cc,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CO =
               T.let(
                 :co,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             KM =
               T.let(
                 :km,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CG =
               T.let(
                 :cg,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CD =
               T.let(
                 :cd,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CK =
               T.let(
                 :ck,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CR =
               T.let(
                 :cr,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CI =
               T.let(
                 :ci,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             HR =
               T.let(
                 :hr,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CU =
               T.let(
                 :cu,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CY =
               T.let(
                 :cy,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CZ =
               T.let(
                 :cz,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             DK =
               T.let(
                 :dk,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             DJ =
               T.let(
                 :dj,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             DM =
               T.let(
                 :dm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             DO =
               T.let(
                 :do,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             EC =
               T.let(
                 :ec,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             EG =
               T.let(
                 :eg,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SV =
               T.let(
                 :sv,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GQ =
               T.let(
                 :gq,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             ER =
               T.let(
                 :er,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             EE =
               T.let(
                 :ee,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             ET =
               T.let(
                 :et,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             FK =
               T.let(
                 :fk,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             FO =
               T.let(
                 :fo,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             FJ =
               T.let(
                 :fj,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             FI =
               T.let(
                 :fi,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             FR =
               T.let(
                 :fr,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GF =
               T.let(
                 :gf,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PF =
               T.let(
                 :pf,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TF =
               T.let(
                 :tf,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GA =
               T.let(
                 :ga,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GM =
               T.let(
                 :gm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GE =
               T.let(
                 :ge,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             DE =
               T.let(
                 :de,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GH =
               T.let(
                 :gh,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GI =
               T.let(
                 :gi,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GR =
               T.let(
                 :gr,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GL =
               T.let(
                 :gl,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GD =
               T.let(
                 :gd,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GP =
               T.let(
                 :gp,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GU =
               T.let(
                 :gu,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GT =
               T.let(
                 :gt,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GN =
               T.let(
                 :gn,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GW =
               T.let(
                 :gw,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GY =
               T.let(
                 :gy,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             HT =
               T.let(
                 :ht,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             HM =
               T.let(
                 :hm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             VA =
               T.let(
                 :va,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             HN =
               T.let(
                 :hn,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             HK =
               T.let(
                 :hk,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             HU =
               T.let(
                 :hu,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             IS =
               T.let(
                 :is,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             IN =
               T.let(
                 :in,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             ID =
               T.let(
                 :id,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             IR =
               T.let(
                 :ir,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             IQ =
               T.let(
                 :iq,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             IE =
               T.let(
                 :ie,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             IL =
               T.let(
                 :il,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             IT =
               T.let(
                 :it,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             JM =
               T.let(
                 :jm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             JP =
               T.let(
                 :jp,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             JO =
               T.let(
                 :jo,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             KZ =
               T.let(
                 :kz,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             KE =
               T.let(
                 :ke,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             KI =
               T.let(
                 :ki,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             KP =
               T.let(
                 :kp,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             KR =
               T.let(
                 :kr,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             KW =
               T.let(
                 :kw,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             KG =
               T.let(
                 :kg,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             LA =
               T.let(
                 :la,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             LV =
               T.let(
                 :lv,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             LB =
               T.let(
                 :lb,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             LS =
               T.let(
                 :ls,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             LR =
               T.let(
                 :lr,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             LY =
               T.let(
                 :ly,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             LI =
               T.let(
                 :li,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             LT =
               T.let(
                 :lt,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             LU =
               T.let(
                 :lu,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MO =
               T.let(
                 :mo,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MK =
               T.let(
                 :mk,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MG =
               T.let(
                 :mg,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MW =
               T.let(
                 :mw,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MY =
               T.let(
                 :my,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MV =
               T.let(
                 :mv,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             ML =
               T.let(
                 :ml,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MT =
               T.let(
                 :mt,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MH =
               T.let(
                 :mh,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MQ =
               T.let(
                 :mq,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MR =
               T.let(
                 :mr,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MU =
               T.let(
                 :mu,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             YT =
               T.let(
                 :yt,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MX =
               T.let(
                 :mx,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             FM =
               T.let(
                 :fm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MD =
               T.let(
                 :md,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MC =
               T.let(
                 :mc,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MN =
               T.let(
                 :mn,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MS =
               T.let(
                 :ms,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MA =
               T.let(
                 :ma,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MZ =
               T.let(
                 :mz,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MM =
               T.let(
                 :mm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NA =
               T.let(
                 :na,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NR =
               T.let(
                 :nr,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NP =
               T.let(
                 :np,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NL =
               T.let(
                 :nl,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AN =
               T.let(
                 :an,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NC =
               T.let(
                 :nc,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NZ =
               T.let(
                 :nz,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NI =
               T.let(
                 :ni,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NE =
               T.let(
                 :ne,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NG =
               T.let(
                 :ng,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NU =
               T.let(
                 :nu,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NF =
               T.let(
                 :nf,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             MP =
               T.let(
                 :mp,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             NO =
               T.let(
                 :no,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             OM =
               T.let(
                 :om,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PK =
               T.let(
                 :pk,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PW =
               T.let(
                 :pw,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PS =
               T.let(
                 :ps,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PA =
               T.let(
                 :pa,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PG =
               T.let(
                 :pg,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PY =
               T.let(
                 :py,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PE =
               T.let(
                 :pe,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PH =
               T.let(
                 :ph,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PN =
               T.let(
                 :pn,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PL =
               T.let(
                 :pl,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PT =
               T.let(
                 :pt,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PR =
               T.let(
                 :pr,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             QA =
               T.let(
                 :qa,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             RE =
               T.let(
                 :re,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             RO =
               T.let(
                 :ro,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             RU =
               T.let(
                 :ru,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             RW =
               T.let(
                 :rw,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SH =
               T.let(
                 :sh,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             KN =
               T.let(
                 :kn,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             LC =
               T.let(
                 :lc,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             PM =
               T.let(
                 :pm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             VC =
               T.let(
                 :vc,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             WS =
               T.let(
                 :ws,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SM =
               T.let(
                 :sm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             ST =
               T.let(
                 :st,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SA =
               T.let(
                 :sa,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SN =
               T.let(
                 :sn,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             RS =
               T.let(
                 :rs,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SC =
               T.let(
                 :sc,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SL =
               T.let(
                 :sl,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SG =
               T.let(
                 :sg,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SK =
               T.let(
                 :sk,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SI =
               T.let(
                 :si,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SB =
               T.let(
                 :sb,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SO =
               T.let(
                 :so,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             ZA =
               T.let(
                 :za,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GS =
               T.let(
                 :gs,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             ES =
               T.let(
                 :es,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             LK =
               T.let(
                 :lk,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SD =
               T.let(
                 :sd,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SR =
               T.let(
                 :sr,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SJ =
               T.let(
                 :sj,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SZ =
               T.let(
                 :sz,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SE =
               T.let(
                 :se,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             CH =
               T.let(
                 :ch,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             SY =
               T.let(
                 :sy,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TW =
               T.let(
                 :tw,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TJ =
               T.let(
                 :tj,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TZ =
               T.let(
                 :tz,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TH =
               T.let(
                 :th,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TL =
               T.let(
                 :tl,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TG =
               T.let(
                 :tg,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TK =
               T.let(
                 :tk,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TO =
               T.let(
                 :to,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TT =
               T.let(
                 :tt,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TN =
               T.let(
                 :tn,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TR =
               T.let(
                 :tr,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TM =
               T.let(
                 :tm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TC =
               T.let(
                 :tc,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             TV =
               T.let(
                 :tv,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             UG =
               T.let(
                 :ug,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             UA =
               T.let(
                 :ua,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             AE =
               T.let(
                 :ae,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             GB =
               T.let(
                 :gb,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             US =
               T.let(
                 :us,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             UM =
               T.let(
                 :um,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             UY =
               T.let(
                 :uy,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             UZ =
               T.let(
                 :uz,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             VU =
               T.let(
                 :vu,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             VE =
               T.let(
                 :ve,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             VN =
               T.let(
                 :vn,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             VG =
               T.let(
                 :vg,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             VI =
               T.let(
                 :vi,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             WF =
               T.let(
                 :wf,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             EH =
               T.let(
                 :eh,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             YE =
               T.let(
                 :ye,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             ZM =
               T.let(
                 :zm,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
             ZW =
               T.let(
                 :zw,
-                ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
               )
 
             sig do
               override.returns(
                 T::Array[
-                  ContextDev::BrandRetrieveParams::Body::ByTransaction::CountryGl::TaggedSymbol
+                  ContextDev::BrandRetrieveParams::Body::ByTransaction::Country::TaggedSymbol
                 ]
               )
             end
