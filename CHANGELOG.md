@@ -1,5 +1,39 @@
 # Changelog
 
+## [2.39.0](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.38.2...v2.39.0) (2026-11-28)
+
+
+### Features
+
+* **answers:** limit research to listed sources with controls ([#3252](https://github.com/context-dot-dev/context-ruby-sdk/issues/3252)) ([11b1561](https://github.com/context-dot-dev/context-ruby-sdk/commit/11b1561d94cf0b29e3025798d01ec1dede05f560))
+* **batch:** add follow, scrape and exclude crawl rules ([#3244](https://github.com/context-dot-dev/context-ruby-sdk/issues/3244)) ([a8fec26](https://github.com/context-dot-dev/context-ruby-sdk/commit/a8fec26a3f1b1a4a09a642de9d4f78acdad5667b))
+* **crawl:** say why a crawled page failed ([#3130](https://github.com/context-dot-dev/context-ruby-sdk/issues/3130)) ([3dcced9](https://github.com/context-dot-dev/context-ruby-sdk/commit/3dcced917b5050c870d747b88de85d51d8518718))
+* **feedback:** add bad_brand feedback category ([#3136](https://github.com/context-dot-dev/context-ruby-sdk/issues/3136)) ([9172138](https://github.com/context-dot-dev/context-ruby-sdk/commit/9172138a06083422ef1097b5473527bebdf2ce57))
+* **monitors:** filter monitor credit usage by tag ([#3077](https://github.com/context-dot-dev/context-ruby-sdk/issues/3077)) ([3550172](https://github.com/context-dot-dev/context-ruby-sdk/commit/3550172ff2bb9f67554334d921d0db1279cca65c))
+* **scholar:** add POST /scholar/search endpoint ([#2997](https://github.com/context-dot-dev/context-ruby-sdk/issues/2997)) ([93c4980](https://github.com/context-dot-dev/context-ruby-sdk/commit/93c49809362e9542e7393215652034cb2ae1cd53))
+* **scrape:** accept includeFrames auto and make it the default ([#3280](https://github.com/context-dot-dev/context-ruby-sdk/issues/3280)) ([65cbad4](https://github.com/context-dot-dev/context-ruby-sdk/commit/65cbad42f27f374a1d2e69eca92184345803c536))
+* **scrape:** add a car-rental-locations parser for avis and budget branches ([#3021](https://github.com/context-dot-dev/context-ruby-sdk/issues/3021)) ([c056ba5](https://github.com/context-dot-dev/context-ruby-sdk/commit/c056ba5284dfb54e1bd2a34a8daa1a3d5935bb82))
+* **scrape:** include price and availability on product variants ([#3113](https://github.com/context-dot-dev/context-ruby-sdk/issues/3113)) ([3dcced9](https://github.com/context-dot-dev/context-ruby-sdk/commit/3dcced917b5050c870d747b88de85d51d8518718))
+
+
+### Bug Fixes
+
+* **access-policies:** tell callers to drop `policies` when the feature is off ([#3090](https://github.com/context-dot-dev/context-ruby-sdk/issues/3090)) ([e9dd06c](https://github.com/context-dot-dev/context-ruby-sdk/commit/e9dd06c830c0510e206647f660c1de92a5c2f675))
+* **answers:** flag list items that came back unresearched and send incomplete answers back once ([#3145](https://github.com/context-dot-dev/context-ruby-sdk/issues/3145)) ([262c56e](https://github.com/context-dot-dev/context-ruby-sdk/commit/262c56e2003a35301efc73d064562c19777ea140))
+* **batch:** list every batch and remove shouldIncludeUnified ([#3322](https://github.com/context-dot-dev/context-ruby-sdk/issues/3322)) ([32b2c8a](https://github.com/context-dot-dev/context-ruby-sdk/commit/32b2c8a7895ddbd02df1c7e7f4670379f2de44db))
+* **brand:** rename country_gl to country and CountryGL to LowercaseCountryCode ([#3326](https://github.com/context-dot-dev/context-ruby-sdk/issues/3326)) ([5a4da1a](https://github.com/context-dot-dev/context-ruby-sdk/commit/5a4da1a3eb224687259888993406dcf913958427))
+* **google-maps:** search from the URL's country, merge two draws, and read the real primary category ([#3158](https://github.com/context-dot-dev/context-ruby-sdk/issues/3158)) ([7715a4d](https://github.com/context-dot-dev/context-ruby-sdk/commit/7715a4dcb8853221d368579356937ea0de23a0f8))
+* **scrape:** read google play ratings from the storefront that offers the app ([#3084](https://github.com/context-dot-dev/context-ruby-sdk/issues/3084)) ([3550172](https://github.com/context-dot-dev/context-ruby-sdk/commit/3550172ff2bb9f67554334d921d0db1279cca65c))
+* **web-search:** explain why a result's page content is missing ([#3074](https://github.com/context-dot-dev/context-ruby-sdk/issues/3074)) ([27d4367](https://github.com/context-dot-dev/context-ruby-sdk/commit/27d436768aa251b0aea93e5da9eb9f5e78e64904))
+
+
+### Documentation
+
+* **answers:** state the 2000-character task limit in its description ([#3137](https://github.com/context-dot-dev/context-ruby-sdk/issues/3137)) ([9172138](https://github.com/context-dot-dev/context-ruby-sdk/commit/9172138a06083422ef1097b5473527bebdf2ce57))
+* **openapi:** hide superseded inputs and document missing 403 and 402 responses ([#3323](https://github.com/context-dot-dev/context-ruby-sdk/issues/3323)) ([c21840d](https://github.com/context-dot-dev/context-ruby-sdk/commit/c21840dabb1dab3173e749150701b4ff9b869ddc))
+* **openapi:** rewrite public reference copy and normalize field order ([#3325](https://github.com/context-dot-dev/context-ruby-sdk/issues/3325)) ([0d6e540](https://github.com/context-dot-dev/context-ruby-sdk/commit/0d6e540a3f12a962339b5d0d204d474c8a53f47a))
+* **scrape:** describe late scrape outputs as per-output REQUEST_TIMEOUT in a 200 ([#3080](https://github.com/context-dot-dev/context-ruby-sdk/issues/3080)) ([f79e309](https://github.com/context-dot-dev/context-ruby-sdk/commit/f79e3090349c1597261dd53f2e57679d21f02d33))
+
 ## [2.38.2](https://github.com/context-dot-dev/context-ruby-sdk/compare/v2.38.1...v2.38.2) (2026-11-23)
 
 
