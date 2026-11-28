@@ -5,7 +5,7 @@ module ContextDev
     # @see ContextDev::Resources::Parse#handle
     class ParseHandleResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute markdown
-      #   Input bytes converted to GitHub Flavored Markdown
+      #   The file content as GitHub Flavored Markdown.
       #
       #   @return [String]
       required :markdown, String
@@ -18,13 +18,13 @@ module ContextDev
       required :request_id, String
 
       # @!attribute success
-      #   Indicates success
+      #   Always `true` for a successful parse.
       #
       #   @return [Boolean, ContextDev::Models::ParseHandleResponse::Success]
       required :success, enum: -> { ContextDev::Models::ParseHandleResponse::Success }
 
       # @!attribute type
-      #   Detected content type used for parsing
+      #   File type the input was parsed as.
       #
       #   @return [Symbol, ContextDev::Models::ParseHandleResponse::Type]
       required :type, enum: -> { ContextDev::Models::ParseHandleResponse::Type }
@@ -39,17 +39,17 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::ParseHandleResponse} for more details.
       #
-      #   @param markdown [String] Input bytes converted to GitHub Flavored Markdown
+      #   @param markdown [String] The file content as GitHub Flavored Markdown.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param success [Boolean, ContextDev::Models::ParseHandleResponse::Success] Indicates success
+      #   @param success [Boolean, ContextDev::Models::ParseHandleResponse::Success] Always `true` for a successful parse.
       #
-      #   @param type [Symbol, ContextDev::Models::ParseHandleResponse::Type] Detected content type used for parsing
+      #   @param type [Symbol, ContextDev::Models::ParseHandleResponse::Type] File type the input was parsed as.
       #
       #   @param key_metadata [ContextDev::Models::ParseHandleResponse::KeyMetadata] Credits this request used and your remaining balance.
 
-      # Indicates success
+      # Always `true` for a successful parse.
       #
       # @see ContextDev::Models::ParseHandleResponse#success
       module Success
@@ -61,7 +61,7 @@ module ContextDev
         #   @return [Array<Boolean>]
       end
 
-      # Detected content type used for parsing
+      # File type the input was parsed as.
       #
       # @see ContextDev::Models::ParseHandleResponse#type
       module Type
@@ -123,7 +123,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -133,7 +133,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

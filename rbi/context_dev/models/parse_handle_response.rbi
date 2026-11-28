@@ -11,7 +11,7 @@ module ContextDev
           )
         end
 
-      # Input bytes converted to GitHub Flavored Markdown
+      # The file content as GitHub Flavored Markdown.
       sig { returns(String) }
       attr_accessor :markdown
 
@@ -20,13 +20,13 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Indicates success
+      # Always `true` for a successful parse.
       sig do
         returns(ContextDev::Models::ParseHandleResponse::Success::TaggedBoolean)
       end
       attr_accessor :success
 
-      # Detected content type used for parsing
+      # File type the input was parsed as.
       sig do
         returns(ContextDev::Models::ParseHandleResponse::Type::TaggedSymbol)
       end
@@ -57,14 +57,14 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Input bytes converted to GitHub Flavored Markdown
+        # The file content as GitHub Flavored Markdown.
         markdown:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # Indicates success
+        # Always `true` for a successful parse.
         success:,
-        # Detected content type used for parsing
+        # File type the input was parsed as.
         type:,
         # Credits this request used and your remaining balance.
         key_metadata: nil
@@ -86,7 +86,7 @@ module ContextDev
       def to_hash
       end
 
-      # Indicates success
+      # Always `true` for a successful parse.
       module Success
         extend ContextDev::Internal::Type::Enum
 
@@ -113,7 +113,7 @@ module ContextDev
         end
       end
 
-      # Detected content type used for parsing
+      # File type the input was parsed as.
       module Type
         extend ContextDev::Internal::Type::Enum
 
@@ -358,7 +358,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -371,7 +371,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

@@ -11,7 +11,7 @@ module ContextDev
           T.any(ContextDev::LogRetrieveParams, ContextDev::Internal::AnyHash)
         end
 
-      # The request ID of the logged API call.
+      # ID of the request, from its response's `request_id` or `X-Request-Id` header.
       sig { returns(String) }
       attr_accessor :request_id
 
@@ -22,7 +22,7 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # The request ID of the logged API call.
+        # ID of the request, from its response's `request_id` or `X-Request-Id` header.
         request_id:,
         request_options: {}
       )

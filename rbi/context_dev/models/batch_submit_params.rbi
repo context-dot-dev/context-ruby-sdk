@@ -11,7 +11,7 @@ module ContextDev
           T.any(ContextDev::BatchSubmitParams, ContextDev::Internal::AnyHash)
         end
 
-      # Choose a URL list or a site crawl.
+      # What to scrape: a list of URLs (`scrape`) or a site crawl (`crawl`).
       sig do
         returns(
           T.any(
@@ -22,24 +22,24 @@ module ContextDev
       end
       attr_accessor :input
 
-      # Access policy IDs to apply to every page. A URL must pass every policy. Leave it
-      # out unless access policies are enabled for your organization; otherwise the
-      # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
+      # Access policy IDs to apply to every page; each URL must pass all of them.
+      # Requires access policies enabled for your organization; otherwise returns
+      # `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
       sig { params(policies: T::Array[String]).void }
       attr_writer :policies
 
-      # Tags stored on the batch. Filter the batch list by them later.
+      # Tags to store on the batch. Filter `GET /batch/list` by them later.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Where to send the batch's final-status event. Omit `retry` for one attempt; `{}`
-      # uses the default retry schedule.
+      # Webhook to notify when the batch finishes. Omit `retry` for a single attempt, or
+      # pass `retry: {}` for the default retry schedule.
       sig { returns(T.nilable(ContextDev::BatchSubmitParams::Webhook)) }
       attr_reader :webhook
 
@@ -48,8 +48,8 @@ module ContextDev
       end
       attr_writer :webhook
 
-      # Unique key per submission. Retrying with the same key and body returns the
-      # original batch; a different body returns `409`.
+      # Unique key for this submission. Retrying with the same key and body returns the
+      # original batch instead of creating another; a different body returns `409`.
       sig { returns(T.nilable(String)) }
       attr_reader :idempotency_key
 
@@ -71,19 +71,19 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Choose a URL list or a site crawl.
+        # What to scrape: a list of URLs (`scrape`) or a site crawl (`crawl`).
         input:,
-        # Access policy IDs to apply to every page. A URL must pass every policy. Leave it
-        # out unless access policies are enabled for your organization; otherwise the
-        # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
+        # Access policy IDs to apply to every page; each URL must pass all of them.
+        # Requires access policies enabled for your organization; otherwise returns
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
-        # Tags stored on the batch. Filter the batch list by them later.
+        # Tags to store on the batch. Filter `GET /batch/list` by them later.
         tags: nil,
-        # Where to send the batch's final-status event. Omit `retry` for one attempt; `{}`
-        # uses the default retry schedule.
+        # Webhook to notify when the batch finishes. Omit `retry` for a single attempt, or
+        # pass `retry: {}` for the default retry schedule.
         webhook: nil,
-        # Unique key per submission. Retrying with the same key and body returns the
-        # original batch; a different body returns `409`.
+        # Unique key for this submission. Retrying with the same key and body returns the
+        # original batch instead of creating another; a different body returns `409`.
         idempotency_key: nil,
         request_options: {}
       )
@@ -108,7 +108,7 @@ module ContextDev
       def to_hash
       end
 
-      # Choose a URL list or a site crawl.
+      # What to scrape: a list of URLs (`scrape`) or a site crawl (`crawl`).
       module Input
         extend ContextDev::Internal::Type::Union
 
@@ -129,13 +129,13 @@ module ContextDev
               )
             end
 
-          # Pages to scrape and their output format.
+          # URLs to scrape, with the formats and options to apply to each page.
           sig do
             returns(
               T.any(
+                ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData,
                 ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown,
-                ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML,
-                ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData
+                ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML
               )
             )
           end
@@ -150,15 +150,15 @@ module ContextDev
             params(
               data:
                 T.any(
+                  ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::OrHash,
                   ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown::OrHash,
-                  ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::OrHash,
-                  ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::OrHash
+                  ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML::OrHash
                 ),
               mode: Symbol
             ).returns(T.attached_class)
           end
           def self.new(
-            # Pages to scrape and their output format.
+            # URLs to scrape, with the formats and options to apply to each page.
             data:,
             # Scrape the pages in `data.urls`.
             mode: :scrape
@@ -170,9 +170,9 @@ module ContextDev
               {
                 data:
                   T.any(
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData,
                     ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown,
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML,
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML
                   ),
                 mode: Symbol
               }
@@ -181,18 +181,3774 @@ module ContextDev
           def to_hash
           end
 
-          # Pages to scrape and their output format.
+          # URLs to scrape, with the formats and options to apply to each page.
           module Data
             extend ContextDev::Internal::Type::Union
 
             Variants =
               T.type_alias do
                 T.any(
+                  ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData,
                   ContextDev::BatchSubmitParams::Input::Scrape::Data::Markdown,
-                  ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML,
-                  ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData
+                  ContextDev::BatchSubmitParams::Input::Scrape::Data::HTML
                 )
               end
+
+            class BatchUnifiedScrapeData < ContextDev::Internal::Type::BaseModel
+              OrHash =
+                T.type_alias do
+                  T.any(
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData,
+                    ContextDev::Internal::AnyHash
+                  )
+                end
+
+              # Outputs to return. Set at least one to `true`.
+              sig do
+                returns(
+                  ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Formats
+                )
+              end
+              attr_reader :formats
+
+              sig do
+                params(
+                  formats:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Formats::OrHash
+                ).void
+              end
+              attr_writer :formats
+
+              # Pages to scrape, up to 100,000.
+              sig do
+                returns(
+                  T::Array[
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::URL
+                  ]
+                )
+              end
+              attr_accessor :urls
+
+              # Query for the `highlights` output. Required when `formats.highlights` is `true`,
+              # and allowed only then.
+              sig do
+                returns(
+                  T.nilable(
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::HighlightsParams
+                  )
+                )
+              end
+              attr_reader :highlights_params
+
+              sig do
+                params(
+                  highlights_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::HighlightsParams::OrHash
+                ).void
+              end
+              attr_writer :highlights_params
+
+              # Options for the `images` output. Requires `formats.images: true`.
+              sig do
+                returns(
+                  T.nilable(
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams
+                  )
+                )
+              end
+              attr_reader :image_params
+
+              sig do
+                params(
+                  image_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::OrHash
+                ).void
+              end
+              attr_writer :image_params
+
+              # Schema and instructions for the `json` output. Required when `formats.json` is
+              # `true`, and allowed only then.
+              sig do
+                returns(
+                  T.nilable(
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::JsonParams
+                  )
+                )
+              end
+              attr_reader :json_params
+
+              sig do
+                params(
+                  json_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::JsonParams::OrHash
+                ).void
+              end
+              attr_writer :json_params
+
+              # Options for the `markdown` output. Requires `formats.markdown: true`.
+              sig do
+                returns(
+                  T.nilable(
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams
+                  )
+                )
+              end
+              attr_reader :markdown_params
+
+              sig do
+                params(
+                  markdown_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::OrHash
+                ).void
+              end
+              attr_writer :markdown_params
+
+              # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+              # Defaults to 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
+              sig { returns(T.nilable(Integer)) }
+              attr_reader :max_age_ms
+
+              sig { params(max_age_ms: Integer).void }
+              attr_writer :max_age_ms
+
+              # Custom rules or a prebuilt parser for the `parsed` output. Required when
+              # `formats.parse` is `true`, and allowed only then.
+              sig do
+                returns(
+                  T.nilable(
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser
+                    )
+                  )
+                )
+              end
+              attr_reader :parse_params
+
+              sig do
+                params(
+                  parse_params:
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::OrHash,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::OrHash
+                    )
+                ).void
+              end
+              attr_writer :parse_params
+
+              # Options for the `product` output. Requires `formats.product: true`.
+              sig do
+                returns(
+                  T.nilable(
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ProductParams
+                  )
+                )
+              end
+              attr_reader :product_params
+
+              sig do
+                params(
+                  product_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ProductParams::OrHash
+                ).void
+              end
+              attr_writer :product_params
+
+              # Options for the `screenshot` output. Requires `formats.screenshot: true`.
+              sig do
+                returns(
+                  T.nilable(
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams
+                  )
+                )
+              end
+              attr_reader :screenshot_params
+
+              sig do
+                params(
+                  screenshot_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::OrHash
+                ).void
+              end
+              attr_writer :screenshot_params
+
+              # Browser and content settings shared by all outputs.
+              sig do
+                returns(
+                  T.nilable(
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams
+                  )
+                )
+              end
+              attr_reader :shared_params
+
+              sig do
+                params(
+                  shared_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::OrHash
+                ).void
+              end
+              attr_writer :shared_params
+
+              # Labels for this request. Filter usage and request logs by them in the dashboard
+              # or with `GET /org/logs`.
+              sig { returns(T.nilable(T::Array[String])) }
+              attr_reader :tags
+
+              sig { params(tags: T::Array[String]).void }
+              attr_writer :tags
+
+              # Time limit for each page, with the same behavior and defaults as in
+              # `POST /web/scrape`.
+              sig do
+                returns(
+                  T.nilable(
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts
+                  )
+                )
+              end
+              attr_reader :timeout_opts
+
+              sig do
+                params(
+                  timeout_opts:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::OrHash
+                ).void
+              end
+              attr_writer :timeout_opts
+
+              # Zero data retention is not available for batches, because batches store their
+              # results. Sending `enabled` returns `ZDR_NOT_SUPPORTED`.
+              sig do
+                returns(
+                  T.nilable(
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::OrSymbol
+                  )
+                )
+              end
+              attr_reader :zdr
+
+              sig do
+                params(
+                  zdr:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::OrSymbol
+                ).void
+              end
+              attr_writer :zdr
+
+              # The same formats and options as `POST /web/scrape`, with `urls` in place of
+              # `url`. Options apply to every page.
+              sig do
+                params(
+                  formats:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Formats::OrHash,
+                  urls:
+                    T::Array[
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::URL::OrHash
+                    ],
+                  highlights_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::HighlightsParams::OrHash,
+                  image_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::OrHash,
+                  json_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::JsonParams::OrHash,
+                  markdown_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::OrHash,
+                  max_age_ms: Integer,
+                  parse_params:
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::OrHash,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::OrHash
+                    ),
+                  product_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ProductParams::OrHash,
+                  screenshot_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::OrHash,
+                  shared_params:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::OrHash,
+                  tags: T::Array[String],
+                  timeout_opts:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::OrHash,
+                  zdr:
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::OrSymbol
+                ).returns(T.attached_class)
+              end
+              def self.new(
+                # Outputs to return. Set at least one to `true`.
+                formats:,
+                # Pages to scrape, up to 100,000.
+                urls:,
+                # Query for the `highlights` output. Required when `formats.highlights` is `true`,
+                # and allowed only then.
+                highlights_params: nil,
+                # Options for the `images` output. Requires `formats.images: true`.
+                image_params: nil,
+                # Schema and instructions for the `json` output. Required when `formats.json` is
+                # `true`, and allowed only then.
+                json_params: nil,
+                # Options for the `markdown` output. Requires `formats.markdown: true`.
+                markdown_params: nil,
+                # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+                # Defaults to 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
+                max_age_ms: nil,
+                # Custom rules or a prebuilt parser for the `parsed` output. Required when
+                # `formats.parse` is `true`, and allowed only then.
+                parse_params: nil,
+                # Options for the `product` output. Requires `formats.product: true`.
+                product_params: nil,
+                # Options for the `screenshot` output. Requires `formats.screenshot: true`.
+                screenshot_params: nil,
+                # Browser and content settings shared by all outputs.
+                shared_params: nil,
+                # Labels for this request. Filter usage and request logs by them in the dashboard
+                # or with `GET /org/logs`.
+                tags: nil,
+                # Time limit for each page, with the same behavior and defaults as in
+                # `POST /web/scrape`.
+                timeout_opts: nil,
+                # Zero data retention is not available for batches, because batches store their
+                # results. Sending `enabled` returns `ZDR_NOT_SUPPORTED`.
+                zdr: nil
+              )
+              end
+
+              sig do
+                override.returns(
+                  {
+                    formats:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Formats,
+                    urls:
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::URL
+                      ],
+                    highlights_params:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::HighlightsParams,
+                    image_params:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams,
+                    json_params:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::JsonParams,
+                    markdown_params:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams,
+                    max_age_ms: Integer,
+                    parse_params:
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser
+                      ),
+                    product_params:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ProductParams,
+                    screenshot_params:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams,
+                    shared_params:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams,
+                    tags: T::Array[String],
+                    timeout_opts:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts,
+                    zdr:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::OrSymbol
+                  }
+                )
+              end
+              def to_hash
+              end
+
+              class Formats < ContextDev::Internal::Type::BaseModel
+                OrHash =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Formats,
+                      ContextDev::Internal::AnyHash
+                    )
+                  end
+
+                # Return the original HTTP response body.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :bytes
+
+                sig { params(bytes: T::Boolean).void }
+                attr_writer :bytes
+
+                # Return Markdown excerpts relevant to `highlightsParams.query`.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :highlights
+
+                sig { params(highlights: T::Boolean).void }
+                attr_writer :highlights
+
+                # Return the rendered HTML.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :html
+
+                sig { params(html: T::Boolean).void }
+                attr_writer :html
+
+                # Return the images found on the page.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :images
+
+                sig { params(images: T::Boolean).void }
+                attr_writer :images
+
+                # Return an object matching `jsonParams.schema`, extracted from the page text and
+                # embedded data such as JSON-LD, meta tags, and framework state.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :json
+
+                sig { params(json: T::Boolean).void }
+                attr_writer :json
+
+                # Return the page content, or a video transcript, as Markdown.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :markdown
+
+                sig { params(markdown: T::Boolean).void }
+                attr_writer :markdown
+
+                # Return fields extracted with custom rules or a prebuilt parser, as `parsed`.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :parse
+
+                sig { params(parse: T::Boolean).void }
+                attr_writer :parse
+
+                # Return product details such as name, price, and availability.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :product
+
+                sig { params(product: T::Boolean).void }
+                attr_writer :product
+
+                # Return a screenshot of the page.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :screenshot
+
+                sig { params(screenshot: T::Boolean).void }
+                attr_writer :screenshot
+
+                # Outputs to return. Set at least one to `true`.
+                sig do
+                  params(
+                    bytes: T::Boolean,
+                    highlights: T::Boolean,
+                    html: T::Boolean,
+                    images: T::Boolean,
+                    json: T::Boolean,
+                    markdown: T::Boolean,
+                    parse: T::Boolean,
+                    product: T::Boolean,
+                    screenshot: T::Boolean
+                  ).returns(T.attached_class)
+                end
+                def self.new(
+                  # Return the original HTTP response body.
+                  bytes: nil,
+                  # Return Markdown excerpts relevant to `highlightsParams.query`.
+                  highlights: nil,
+                  # Return the rendered HTML.
+                  html: nil,
+                  # Return the images found on the page.
+                  images: nil,
+                  # Return an object matching `jsonParams.schema`, extracted from the page text and
+                  # embedded data such as JSON-LD, meta tags, and framework state.
+                  json: nil,
+                  # Return the page content, or a video transcript, as Markdown.
+                  markdown: nil,
+                  # Return fields extracted with custom rules or a prebuilt parser, as `parsed`.
+                  parse: nil,
+                  # Return product details such as name, price, and availability.
+                  product: nil,
+                  # Return a screenshot of the page.
+                  screenshot: nil
+                )
+                end
+
+                sig do
+                  override.returns(
+                    {
+                      bytes: T::Boolean,
+                      highlights: T::Boolean,
+                      html: T::Boolean,
+                      images: T::Boolean,
+                      json: T::Boolean,
+                      markdown: T::Boolean,
+                      parse: T::Boolean,
+                      product: T::Boolean,
+                      screenshot: T::Boolean
+                    }
+                  )
+                end
+                def to_hash
+                end
+              end
+
+              class URL < ContextDev::Internal::Type::BaseModel
+                OrHash =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::URL,
+                      ContextDev::Internal::AnyHash
+                    )
+                  end
+
+                # URL of the page.
+                sig { returns(String) }
+                attr_accessor :url
+
+                # Your ID for this page, returned with its result. The same URL can use different
+                # IDs.
+                sig { returns(T.nilable(String)) }
+                attr_reader :item_id
+
+                sig { params(item_id: String).void }
+                attr_writer :item_id
+
+                # Custom JSON returned unchanged with this page's result.
+                sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
+                attr_reader :meta
+
+                sig { params(meta: T::Hash[Symbol, T.anything]).void }
+                attr_writer :meta
+
+                # A page to scrape, with optional `itemId` and `meta` to match it to its result.
+                sig do
+                  params(
+                    url: String,
+                    item_id: String,
+                    meta: T::Hash[Symbol, T.anything]
+                  ).returns(T.attached_class)
+                end
+                def self.new(
+                  # URL of the page.
+                  url:,
+                  # Your ID for this page, returned with its result. The same URL can use different
+                  # IDs.
+                  item_id: nil,
+                  # Custom JSON returned unchanged with this page's result.
+                  meta: nil
+                )
+                end
+
+                sig do
+                  override.returns(
+                    {
+                      url: String,
+                      item_id: String,
+                      meta: T::Hash[Symbol, T.anything]
+                    }
+                  )
+                end
+                def to_hash
+                end
+              end
+
+              class HighlightsParams < ContextDev::Internal::Type::BaseModel
+                OrHash =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::HighlightsParams,
+                      ContextDev::Internal::AnyHash
+                    )
+                  end
+
+                # Question or topic to find relevant passages for.
+                sig { returns(String) }
+                attr_accessor :query
+
+                # Maximum combined length of the returned passages, in characters.
+                sig { returns(T.nilable(Integer)) }
+                attr_reader :max_characters
+
+                sig { params(max_characters: Integer).void }
+                attr_writer :max_characters
+
+                # Query for the `highlights` output. Required when `formats.highlights` is `true`,
+                # and allowed only then.
+                sig do
+                  params(query: String, max_characters: Integer).returns(
+                    T.attached_class
+                  )
+                end
+                def self.new(
+                  # Question or topic to find relevant passages for.
+                  query:,
+                  # Maximum combined length of the returned passages, in characters.
+                  max_characters: nil
+                )
+                end
+
+                sig do
+                  override.returns({ query: String, max_characters: Integer })
+                end
+                def to_hash
+                end
+              end
+
+              class ImageParams < ContextDev::Internal::Type::BaseModel
+                OrHash =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams,
+                      ContextDev::Internal::AnyHash
+                    )
+                  end
+
+                # Set to `visual` to drop visually duplicate images, keeping the largest copy.
+                sig do
+                  returns(
+                    T.nilable(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::OrSymbol
+                    )
+                  )
+                end
+                attr_reader :dedupe
+
+                sig do
+                  params(
+                    dedupe:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::OrSymbol
+                  ).void
+                end
+                attr_writer :dedupe
+
+                # Extra data to add to each image: `dimensions` adds `width` and `height`,
+                # `classification` adds `classification`, and `file` adds a hosted `fileUrl`.
+                sig do
+                  returns(
+                    T.nilable(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::OrSymbol
+                      ]
+                    )
+                  )
+                end
+                attr_reader :enrich
+
+                sig do
+                  params(
+                    enrich:
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::OrSymbol
+                      ]
+                  ).void
+                end
+                attr_writer :enrich
+
+                # Options for the `images` output. Requires `formats.images: true`.
+                sig do
+                  params(
+                    dedupe:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::OrSymbol,
+                    enrich:
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::OrSymbol
+                      ]
+                  ).returns(T.attached_class)
+                end
+                def self.new(
+                  # Set to `visual` to drop visually duplicate images, keeping the largest copy.
+                  dedupe: nil,
+                  # Extra data to add to each image: `dimensions` adds `width` and `height`,
+                  # `classification` adds `classification`, and `file` adds a hosted `fileUrl`.
+                  enrich: nil
+                )
+                end
+
+                sig do
+                  override.returns(
+                    {
+                      dedupe:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::OrSymbol,
+                      enrich:
+                        T::Array[
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::OrSymbol
+                        ]
+                    }
+                  )
+                end
+                def to_hash
+                end
+
+                # Set to `visual` to drop visually duplicate images, keeping the largest copy.
+                module Dedupe
+                  extend ContextDev::Internal::Type::Enum
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  NONE =
+                    T.let(
+                      :none,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::TaggedSymbol
+                    )
+                  VISUAL =
+                    T.let(
+                      :visual,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::TaggedSymbol
+                    )
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::TaggedSymbol
+                      ]
+                    )
+                  end
+                  def self.values
+                  end
+                end
+
+                module Enrich
+                  extend ContextDev::Internal::Type::Enum
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  DIMENSIONS =
+                    T.let(
+                      :dimensions,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::TaggedSymbol
+                    )
+                  CLASSIFICATION =
+                    T.let(
+                      :classification,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::TaggedSymbol
+                    )
+                  FILE =
+                    T.let(
+                      :file,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::TaggedSymbol
+                    )
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::TaggedSymbol
+                      ]
+                    )
+                  end
+                  def self.values
+                  end
+                end
+              end
+
+              class JsonParams < ContextDev::Internal::Type::BaseModel
+                OrHash =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::JsonParams,
+                      ContextDev::Internal::AnyHash
+                    )
+                  end
+
+                # JSON Schema for the object to extract, not an example object. Must describe a
+                # top-level object, up to 50 KB. Make fields optional or nullable when the page
+                # may not state them.
+                sig { returns(T::Hash[Symbol, T.anything]) }
+                attr_accessor :schema
+
+                # Extra guidance, such as which facts to prefer or how to read a field.
+                sig { returns(T.nilable(String)) }
+                attr_reader :instructions
+
+                sig { params(instructions: String).void }
+                attr_writer :instructions
+
+                # Schema and instructions for the `json` output. Required when `formats.json` is
+                # `true`, and allowed only then.
+                sig do
+                  params(
+                    schema: T::Hash[Symbol, T.anything],
+                    instructions: String
+                  ).returns(T.attached_class)
+                end
+                def self.new(
+                  # JSON Schema for the object to extract, not an example object. Must describe a
+                  # top-level object, up to 50 KB. Make fields optional or nullable when the page
+                  # may not state them.
+                  schema:,
+                  # Extra guidance, such as which facts to prefer or how to read a field.
+                  instructions: nil
+                )
+                end
+
+                sig do
+                  override.returns(
+                    {
+                      schema: T::Hash[Symbol, T.anything],
+                      instructions: String
+                    }
+                  )
+                end
+                def to_hash
+                end
+              end
+
+              class MarkdownParams < ContextDev::Internal::Type::BaseModel
+                OrHash =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams,
+                      ContextDev::Internal::AnyHash
+                    )
+                  end
+
+                # Include image references in the Markdown (`html-conversion` only).
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :include_images
+
+                sig { params(include_images: T::Boolean).void }
+                attr_writer :include_images
+
+                # Keep link URLs in the Markdown (`html-conversion` only).
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :include_links
+
+                sig { params(include_links: T::Boolean).void }
+                attr_writer :include_links
+
+                # How to write base64 images when `includeImages` is `true`: `placeholder`
+                # shortens the data, `preserve` keeps it in full (`html-conversion` only).
+                sig do
+                  returns(
+                    T.nilable(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::OrSymbol
+                    )
+                  )
+                end
+                attr_reader :inline_images
+
+                sig do
+                  params(
+                    inline_images:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::OrSymbol
+                  ).void
+                end
+                attr_writer :inline_images
+
+                # Markdown sources in order of preference: `html-conversion` converts the page
+                # HTML, `markdown-direct` uses Markdown the site publishes.
+                sig do
+                  returns(
+                    T.nilable(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::OrSymbol
+                      ]
+                    )
+                  )
+                end
+                attr_reader :source_preference
+
+                sig do
+                  params(
+                    source_preference:
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::OrSymbol
+                      ]
+                  ).void
+                end
+                attr_writer :source_preference
+
+                # Options for the `markdown` output. Requires `formats.markdown: true`.
+                sig do
+                  params(
+                    include_images: T::Boolean,
+                    include_links: T::Boolean,
+                    inline_images:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::OrSymbol,
+                    source_preference:
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::OrSymbol
+                      ]
+                  ).returns(T.attached_class)
+                end
+                def self.new(
+                  # Include image references in the Markdown (`html-conversion` only).
+                  include_images: nil,
+                  # Keep link URLs in the Markdown (`html-conversion` only).
+                  include_links: nil,
+                  # How to write base64 images when `includeImages` is `true`: `placeholder`
+                  # shortens the data, `preserve` keeps it in full (`html-conversion` only).
+                  inline_images: nil,
+                  # Markdown sources in order of preference: `html-conversion` converts the page
+                  # HTML, `markdown-direct` uses Markdown the site publishes.
+                  source_preference: nil
+                )
+                end
+
+                sig do
+                  override.returns(
+                    {
+                      include_images: T::Boolean,
+                      include_links: T::Boolean,
+                      inline_images:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::OrSymbol,
+                      source_preference:
+                        T::Array[
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::OrSymbol
+                        ]
+                    }
+                  )
+                end
+                def to_hash
+                end
+
+                # How to write base64 images when `includeImages` is `true`: `placeholder`
+                # shortens the data, `preserve` keeps it in full (`html-conversion` only).
+                module InlineImages
+                  extend ContextDev::Internal::Type::Enum
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  PLACEHOLDER =
+                    T.let(
+                      :placeholder,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::TaggedSymbol
+                    )
+                  PRESERVE =
+                    T.let(
+                      :preserve,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::TaggedSymbol
+                    )
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::TaggedSymbol
+                      ]
+                    )
+                  end
+                  def self.values
+                  end
+                end
+
+                module SourcePreference
+                  extend ContextDev::Internal::Type::Enum
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  HTML_CONVERSION =
+                    T.let(
+                      :"html-conversion",
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::TaggedSymbol
+                    )
+                  MARKDOWN_DIRECT =
+                    T.let(
+                      :"markdown-direct",
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::TaggedSymbol
+                    )
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::TaggedSymbol
+                      ]
+                    )
+                  end
+                  def self.values
+                  end
+                end
+              end
+
+              # Custom rules or a prebuilt parser for the `parsed` output. Required when
+              # `formats.parse` is `true`, and allowed only then.
+              module ParseParams
+                extend ContextDev::Internal::Type::Union
+
+                Variants =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser
+                    )
+                  end
+
+                class CustomParser < ContextDev::Internal::Type::BaseModel
+                  OrHash =
+                    T.type_alias do
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser,
+                        ContextDev::Internal::AnyHash
+                      )
+                    end
+
+                  # Output field names mapped to a CSS selector (such as `h1` or `a@href`) or a rule
+                  # object. Up to 100 fields, nested up to 5 levels.
+                  sig do
+                    returns(
+                      T::Hash[
+                        Symbol,
+                        T.any(
+                          String,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1
+                        )
+                      ]
+                    )
+                  end
+                  attr_accessor :rules
+
+                  # Extract fields with custom CSS rules. The default when `type` is omitted.
+                  sig do
+                    returns(
+                      T.nilable(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::OrSymbol
+                      )
+                    )
+                  end
+                  attr_reader :type
+
+                  sig do
+                    params(
+                      type:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::OrSymbol
+                    ).void
+                  end
+                  attr_writer :type
+
+                  sig do
+                    params(
+                      rules:
+                        T::Hash[
+                          Symbol,
+                          T.any(
+                            String,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::OrHash
+                          )
+                        ],
+                      type:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::OrSymbol
+                    ).returns(T.attached_class)
+                  end
+                  def self.new(
+                    # Output field names mapped to a CSS selector (such as `h1` or `a@href`) or a rule
+                    # object. Up to 100 fields, nested up to 5 levels.
+                    rules:,
+                    # Extract fields with custom CSS rules. The default when `type` is omitted.
+                    type: nil
+                  )
+                  end
+
+                  sig do
+                    override.returns(
+                      {
+                        rules:
+                          T::Hash[
+                            Symbol,
+                            T.any(
+                              String,
+                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1
+                            )
+                          ],
+                        type:
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::OrSymbol
+                      }
+                    )
+                  end
+                  def to_hash
+                  end
+
+                  module Rule
+                    extend ContextDev::Internal::Type::Union
+
+                    Variants =
+                      T.type_alias do
+                        T.any(
+                          String,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1
+                        )
+                      end
+
+                    class UnionMember1 < ContextDev::Internal::Type::BaseModel
+                      OrHash =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1,
+                            ContextDev::Internal::AnyHash
+                          )
+                        end
+
+                      # CSS selector to match within the current page or parent rule.
+                      sig { returns(String) }
+                      attr_accessor :selector
+
+                      # What to return: `text`, `html`, an attribute such as `@href`, or nested field
+                      # rules. Defaults to `text`.
+                      sig do
+                        returns(
+                          T.nilable(
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
+                              String,
+                              T.anything
+                            )
+                          )
+                        )
+                      end
+                      attr_reader :output
+
+                      sig do
+                        params(
+                          output:
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
+                              String,
+                              T.anything
+                            )
+                        ).void
+                      end
+                      attr_writer :output
+
+                      # Return the first match with `item` or all matches with `list`.
+                      sig do
+                        returns(
+                          T.nilable(
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
+                          )
+                        )
+                      end
+                      attr_reader :type
+
+                      sig do
+                        params(
+                          type:
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
+                        ).void
+                      end
+                      attr_writer :type
+
+                      sig do
+                        params(
+                          selector: String,
+                          output:
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
+                              String,
+                              T.anything
+                            ),
+                          type:
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
+                        ).returns(T.attached_class)
+                      end
+                      def self.new(
+                        # CSS selector to match within the current page or parent rule.
+                        selector:,
+                        # What to return: `text`, `html`, an attribute such as `@href`, or nested field
+                        # rules. Defaults to `text`.
+                        output: nil,
+                        # Return the first match with `item` or all matches with `list`.
+                        type: nil
+                      )
+                      end
+
+                      sig do
+                        override.returns(
+                          {
+                            selector: String,
+                            output:
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
+                                String,
+                                T.anything
+                              ),
+                            type:
+                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
+                          }
+                        )
+                      end
+                      def to_hash
+                      end
+
+                      # What to return: `text`, `html`, an attribute such as `@href`, or nested field
+                      # rules. Defaults to `text`.
+                      module Output
+                        extend ContextDev::Internal::Type::Union
+
+                        Variants =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol,
+                              String,
+                              T.anything
+                            )
+                          end
+
+                        sig do
+                          override.returns(
+                            T::Array[
+                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::Variants
+                            ]
+                          )
+                        end
+                        def self.variants
+                        end
+
+                        TaggedSymbol =
+                          T.type_alias do
+                            T.all(
+                              Symbol,
+                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output
+                            )
+                          end
+                        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                        TEXT =
+                          T.let(
+                            :text,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol
+                          )
+                        HTML =
+                          T.let(
+                            :html,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol
+                          )
+                      end
+
+                      # Return the first match with `item` or all matches with `list`.
+                      module Type
+                        extend ContextDev::Internal::Type::Enum
+
+                        TaggedSymbol =
+                          T.type_alias do
+                            T.all(
+                              Symbol,
+                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type
+                            )
+                          end
+                        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                        ITEM =
+                          T.let(
+                            :item,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
+                          )
+                        LIST =
+                          T.let(
+                            :list,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
+                          )
+
+                        sig do
+                          override.returns(
+                            T::Array[
+                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
+                            ]
+                          )
+                        end
+                        def self.values
+                        end
+                      end
+                    end
+
+                    sig do
+                      override.returns(
+                        T::Array[
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::Variants
+                        ]
+                      )
+                    end
+                    def self.variants
+                    end
+                  end
+
+                  # Extract fields with custom CSS rules. The default when `type` is omitted.
+                  module Type
+                    extend ContextDev::Internal::Type::Enum
+
+                    TaggedSymbol =
+                      T.type_alias do
+                        T.all(
+                          Symbol,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type
+                        )
+                      end
+                    OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                    CUSTOM =
+                      T.let(
+                        :custom,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::TaggedSymbol
+                      )
+
+                    sig do
+                      override.returns(
+                        T::Array[
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::TaggedSymbol
+                        ]
+                      )
+                    end
+                    def self.values
+                    end
+                  end
+                end
+
+                class PrebuiltParser < ContextDev::Internal::Type::BaseModel
+                  OrHash =
+                    T.type_alias do
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser,
+                        ContextDev::Internal::AnyHash
+                      )
+                    end
+
+                  # Prebuilt parser to run. Each one accepts specific URLs and returns its result in
+                  # `parsed.data`. `emails`, `phone-numbers`, and `links` read the rendered page and
+                  # respect content filters; the others read their source directly, independently of
+                  # content filters and other outputs.
+                  #
+                  # - `google-maps`: Google Maps place, search, and internal data URLs. Returns
+                  #   businesses in `data.results`; a search URL returns up to 200 places. Results
+                  #   use the country set in the URL, or the US when none is set, and come back with
+                  #   English labels.
+                  # - `google-maps-reviews`: Google Maps place, search, and `?cid=` URLs, plus
+                  #   `search.google.com/local/reviews` URLs, so the `google_maps_url` and
+                  #   `google_reviews_url` fields of `google-maps` results work as input. Returns
+                  #   the reviews of the place in `data.reviews` (`rating`, `date`, `isoDate`,
+                  #   `snippet`, `translatedSnippet`, `likes`, `user`, `media`, `response`, `link`,
+                  #   `id`, `language`, guided ratings in `details`, and `user.isLocalGuide`), plus
+                  #   the place `featureId`, `cid`, and `sort` in `data`. `sort` and `limit` set the
+                  #   order and count; `oldest` is exact. An unknown place returns no reviews.
+                  # - `google-play`: Play Store app details URLs
+                  #   (`play.google.com/store/apps/details?id=…`). Returns one app in `data`:
+                  #   details, developer contact, ratings, price, permissions, data safety, the
+                  #   storefront country the record describes, and `is_available` (whether the app
+                  #   is offered there). Ratings are counted per storefront, so `rating`,
+                  #   `rating_count`, and `rating_histogram` are `null` where nobody rated the app.
+                  #   The language and storefront country set in the URL apply (default English and
+                  #   the US); without a storefront country, an app not offered in the US is read
+                  #   from the country of its developer.
+                  # - `google-play-reviews`: Same URLs as `google-play`. Returns up to the 200
+                  #   newest reviews in the language set in the URL, with developer replies, in
+                  #   `data.reviews`; an app with fewer such reviews returns them all.
+                  # - `app-store`: App Store app URLs (`apps.apple.com/us/app/…/id…`). Returns one
+                  #   app in `data`: details, developer, ratings, price, version, and screenshots.
+                  #   The country in the path sets the storefront (default `us`).
+                  # - `app-store-reviews`: Same URLs as `app-store`. Returns up to the 500 newest
+                  #   reviews in `data.reviews`.
+                  # - `g2-reviews`: G2 product URLs (`g2.com/products/…`), following renamed
+                  #   products. Returns the 25 most recently published reviews in `data.reviews`
+                  #   (rating, title, likes, dislikes, `problems_solved`, reviewer role, company
+                  #   size, and industry), plus `data.product`. Keeps star-rating filters from the
+                  #   URL (`filters[nps_score][]=1` to `5`) and ignores other filters, sort orders,
+                  #   and pages.
+                  # - `instagram-profile`: Public profile URLs (`instagram.com/{username}`). Returns
+                  #   one profile in `data`: bio, links, follower and post counts, category,
+                  #   business address, `similar_accounts`, and `latest_posts` (up to the 12 posts
+                  #   at the top of the profile, newest first). Instagram lists pinned posts first,
+                  #   so posts with `is_pinned: true` can be older. When Instagram shows only a
+                  #   rounded post count (such as 32K), `post_count` is that rounded number and
+                  #   `is_post_count_rounded` is `true`.
+                  # - `instagram-post`: Post and reel URLs (`/p/…`, `/reel/…`). Returns one post in
+                  #   `data`: caption, hashtags, mentions, like, comment, and view counts
+                  #   (`like_count` and `view_count` are `null` when the owner hides them), media
+                  #   URLs, tagged users, collaborators, location, and about the top 14 comments in
+                  #   `data.comments`.
+                  # - `instagram-feed`: Hashtag and keyword URLs (`/explore/tags/…`, `/popular/…`)
+                  #   return the top posts; location URLs (`/explore/locations/{id}/…`) return
+                  #   recent posts. Posts are in `data.posts`; keyword posts carry only the
+                  #   shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
+                  #   it. All three Instagram parsers read public data without signing in, so
+                  #   private accounts return no posts and follower lists are unavailable.
+                  # - `tiktok-profile`: Public profile URLs (`tiktok.com/@{username}`). Returns one
+                  #   profile in `data`: nickname, bio, bio link, follower, following, like, and
+                  #   video counts, verified, private, and business flags, and business category.
+                  #   Does not list videos.
+                  # - `tiktok-video`: Video and photo post URLs (`/@{username}/video/{id}`,
+                  #   `/@{username}/photo/{id}`). Returns one post in `data`: caption, hashtags,
+                  #   mentions, author, view, like, comment, share, save, and repost counts,
+                  #   duration, thumbnail, a `video_url` that downloads without cookies,
+                  #   `image_urls` for photo posts, music, location, and ad, paid-partnership, and
+                  #   AI-generated flags.
+                  # - `tiktok-feed`: Returns videos in the `tiktok-video` shape in `data.videos`:
+                  #   the latest 15 from a profile URL, the top 30 from a hashtag URL
+                  #   (`/tag/{name}`), or the top 12 from a search URL (`/search?q={query}`).
+                  # - `tiktok-comments`: Video and photo post URLs. Returns the first 20 comments in
+                  #   `data.comments`: text, `posted_at`, like and reply counts, whether the author
+                  #   liked it, and the commenter.
+                  # - `tiktok-followers`, `tiktok-following`: Profile URLs. Return up to 30 accounts
+                  #   in `data.users`, in the `tiktok-profile` shape.
+                  # - `tiktok-user-search`: User search URLs (`/search/user?q={query}`). Returns the
+                  #   top 10 accounts in `data.users`: `id`, `username`, `nickname`, `biography`,
+                  #   `avatar_url`, `sec_uid`, `follower_count`, `like_count`, and `is_verified`.
+                  #   The TikTok parsers accept `tiktok.com`, `www.tiktok.com`, and `m.tiktok.com`
+                  #   URLs, not short links (`vm.tiktok.com`, `vt.tiktok.com`, `tiktok.com/t/…`).
+                  # - `reddit-post`: Post URLs (`reddit.com/r/{subreddit}/comments/{id}`,
+                  #   `reddit.com/comments/{id}`, `redd.it/{id}`). Returns the post in `data.post`:
+                  #   title, body as Markdown, type (`text`, `link`, `image`, `gallery`, or
+                  #   `video`), `link_url`, subreddit, author, flairs, score, `upvote_ratio`,
+                  #   comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
+                  #   flags, images (every gallery image in order), and video (an MP4 `url` plus an
+                  #   `hls_url` that carries the audio). `data.comments` holds the comment tree;
+                  #   each comment has `id`, `author`, `body` (Markdown), `score`, `posted_at`,
+                  #   `depth`, `parent_id`, `url`, `is_submitter`, `is_deleted`, and its `replies`.
+                  #   `limit` caps the total number of comments (default 100), filled shallowest
+                  #   first so whole conversations are kept, and `data.has_more_comments` says
+                  #   whether the thread has more. The `sort` in the URL (`best`, `top`, `new`,
+                  #   `controversial`, `old`, `qa`) orders the comments.
+                  # - `reddit-search`: Search URLs (`reddit.com/search?q={query}`, or
+                  #   `reddit.com/r/{subreddit}/search?q={query}` to search one subreddit). With
+                  #   `type=link` or no `type`, returns posts in the `reddit-post` shape in
+                  #   `data.posts`, ordered by the `sort` in the URL (`relevance`, `hot`, `top`,
+                  #   `new`, `comments`) within its `t` time range (`hour`, `day`, `week`, `month`,
+                  #   `year`, `all`). `type=sr` returns communities in `data.communities` (name,
+                  #   title, description, sidebar, `subscriber_count`, `created_at`, type, NSFW and
+                  #   quarantine flags, language, category, icon and banner URLs, and allowed post
+                  #   types). `type=user` returns accounts in `data.users` (username,
+                  #   `display_name`, bio, `created_at`, post and comment karma, avatar and banner
+                  #   URLs, and verified, employee, moderator, premium, and NSFW flags). `limit`
+                  #   caps the number of results (default 100), in the order Reddit returns them,
+                  #   and `data.has_more` says whether Reddit has more.
+                  # - `reddit-subreddit`: Subreddit URLs (`reddit.com/r/{subreddit}`, optionally
+                  #   followed by `/hot`, `/new`, `/top`, `/rising`, or `/controversial`, with `t`
+                  #   setting the time range of `top` and `controversial`, default `day`). Returns
+                  #   `data.subreddit` in the community shape of `reddit-search`, `data.rules`
+                  #   (`name`, `description`, `applies_to`, `violation_reason`, `created_at`), and
+                  #   `data.posts` in the `reddit-post` shape, ordered like the tab (default `hot`)
+                  #   with stickied posts flagged. `r/all` and `r/popular` return posts with `null`
+                  #   `subreddit` and `rules`. `limit` caps the posts (default 100) and
+                  #   `data.has_more` says whether Reddit has more. Private and quarantined
+                  #   subreddits return `WEBSITE_ACCESS_ERROR`.
+                  # - `reddit-user`: Profile URLs (`reddit.com/user/{username}` or
+                  #   `reddit.com/u/{username}`, optionally followed by `/overview`, `/submitted`,
+                  #   or `/comments`, with `sort` set to `new`, `hot`, `top`, or `controversial` and
+                  #   `t` setting the time range of `top` and `controversial`, default `all`).
+                  #   Returns `data.user` (`id`, `username`, `display_name`, bio, `created_at`,
+                  #   total, post, comment, awardee, and awarder karma, avatar and banner URLs, and
+                  #   verified, suspended, employee, moderator, premium, and NSFW flags),
+                  #   `data.trophies` (`name`, `description`, `icon_url`, `granted_at`, `url`),
+                  #   `data.moderated_communities` (`name`, `title`, `url`, `subscriber_count`,
+                  #   `icon_url`, `is_nsfw`), `data.posts` in the `reddit-post` shape, and
+                  #   `data.comments`, each with `id`, `author`, `body` (Markdown), `score`,
+                  #   `posted_at`, `edited_at`, `url`, `subreddit`, `parent_id` (`null` for a
+                  #   top-level comment), `is_submitter`, `is_stickied`, `distinguished`,
+                  #   `award_count`, and the post it was left on (`id`, `title`, `url`, `author`,
+                  #   `is_nsfw`). The overview tab returns both posts and comments; `submitted`
+                  #   returns `null` comments and `comments` returns `null` posts. `limit` caps
+                  #   posts and comments together (default 100) and `data.has_more` says whether
+                  #   Reddit has more. Users who hide their activity return empty lists, and
+                  #   suspended accounts return their profile with `null` posts and comments.
+                  # - `yelp-search`: Yelp search URLs with `find_desc` and `find_loc`; `start` sets
+                  #   the result offset. Returns up to 20 ranked organic businesses in
+                  #   `data.businesses`, with `total` and `pagination`.
+                  # - `yelp-reviews`: Yelp business URLs (`yelp.com/biz/{alias}`); optional `start`
+                  #   sets the offset. Returns up to 20 of the latest public reviews, always newest
+                  #   first, in `data.reviews`, with business details and `pagination.next_offset`.
+                  #   Each review has rating, full text, `updated_at`, and author (`id` from the
+                  #   reviewer profile URL, `url` linking to that profile, `name`, `location`, and
+                  #   `review_count`); owner replies and photos are not included. Unsupported sort
+                  #   and review filters are rejected; tracking parameters are ignored.
+                  # - `tripadvisor-reviews`: Tripadvisor hotel, restaurant, and attraction review
+                  #   URLs (`tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html`, on any
+                  #   Tripadvisor country domain); `-or{N}-` in the path sets the offset. Returns 20
+                  #   reviews in `data.reviews` in the order Tripadvisor shows them, with
+                  #   `data.location` (`id`, `name`, `type`, `url`, `review_count`) and
+                  #   `pagination.next_offset`. Each review has `id`, `url`, `title`, full text,
+                  #   `rating`, `language`, `published_at`, `visit_month`, `helpful_votes`,
+                  #   `subratings`, `photo_urls`, `owner_response` (`text`, `published_at`,
+                  #   `author_name`), and `author` (`id`, `username`, `name`, `url`,
+                  #   `contribution_count`). An unknown location returns no reviews.
+                  # - `car-rental-availability`: avis.com and budget.com vehicle-availability search
+                  #   URLs. Returns every vehicle with pay-now and pay-later prices in
+                  #   `data.vehicles`.
+                  # - `car-rental-locations`: avis.com and budget.com `/locations?keyword=` URLs.
+                  #   Returns rental branches with codes, addresses, coordinates, and hours in
+                  #   `data.locations`.
+                  # - `emails`: Any page. Returns its email addresses in `data.emails`
+                  #   (`[{ email }]`), read from `mailto:` links, Cloudflare-protected addresses,
+                  #   and visible text.
+                  # - `phone-numbers`: Any page. Returns its valid phone numbers in E.164 format in
+                  #   `data.phone_numbers` (`[{ phone }]`), read from `tel:` links and visible text.
+                  #   Numbers without a country code are read for the country of the site TLD (US by
+                  #   default).
+                  # - `links`: Any page. Returns its unique HTTP and HTTPS links as absolute URLs in
+                  #   `data.links` (`[{ url, text }]`). `text` falls back to `aria-label` or image
+                  #   alt text and is `null` when a link has none.
+                  sig do
+                    returns(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::OrSymbol
+                    )
+                  end
+                  attr_accessor :parser
+
+                  # Use a prebuilt parser instead of custom rules.
+                  sig { returns(Symbol) }
+                  attr_accessor :type
+
+                  # Maximum number of reviews (`google-maps-reviews`, default 100), comments
+                  # (`reddit-post`, default 100), or results (`reddit-search`, `reddit-subreddit`,
+                  # and `reddit-user`, default 100) to return. Only these parsers accept it.
+                  sig { returns(T.nilable(Integer)) }
+                  attr_reader :limit
+
+                  sig { params(limit: Integer).void }
+                  attr_writer :limit
+
+                  # Order of `data.reviews` for `google-maps-reviews`. `newest`, `relevant`,
+                  # `highest`, and `lowest` use the same orders as Google Maps; `oldest` returns the
+                  # earliest reviews first.
+                  sig do
+                    returns(
+                      T.nilable(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::OrSymbol
+                      )
+                    )
+                  end
+                  attr_reader :sort
+
+                  sig do
+                    params(
+                      sort:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::OrSymbol
+                    ).void
+                  end
+                  attr_writer :sort
+
+                  sig do
+                    params(
+                      parser:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::OrSymbol,
+                      limit: Integer,
+                      sort:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::OrSymbol,
+                      type: Symbol
+                    ).returns(T.attached_class)
+                  end
+                  def self.new(
+                    # Prebuilt parser to run. Each one accepts specific URLs and returns its result in
+                    # `parsed.data`. `emails`, `phone-numbers`, and `links` read the rendered page and
+                    # respect content filters; the others read their source directly, independently of
+                    # content filters and other outputs.
+                    #
+                    # - `google-maps`: Google Maps place, search, and internal data URLs. Returns
+                    #   businesses in `data.results`; a search URL returns up to 200 places. Results
+                    #   use the country set in the URL, or the US when none is set, and come back with
+                    #   English labels.
+                    # - `google-maps-reviews`: Google Maps place, search, and `?cid=` URLs, plus
+                    #   `search.google.com/local/reviews` URLs, so the `google_maps_url` and
+                    #   `google_reviews_url` fields of `google-maps` results work as input. Returns
+                    #   the reviews of the place in `data.reviews` (`rating`, `date`, `isoDate`,
+                    #   `snippet`, `translatedSnippet`, `likes`, `user`, `media`, `response`, `link`,
+                    #   `id`, `language`, guided ratings in `details`, and `user.isLocalGuide`), plus
+                    #   the place `featureId`, `cid`, and `sort` in `data`. `sort` and `limit` set the
+                    #   order and count; `oldest` is exact. An unknown place returns no reviews.
+                    # - `google-play`: Play Store app details URLs
+                    #   (`play.google.com/store/apps/details?id=…`). Returns one app in `data`:
+                    #   details, developer contact, ratings, price, permissions, data safety, the
+                    #   storefront country the record describes, and `is_available` (whether the app
+                    #   is offered there). Ratings are counted per storefront, so `rating`,
+                    #   `rating_count`, and `rating_histogram` are `null` where nobody rated the app.
+                    #   The language and storefront country set in the URL apply (default English and
+                    #   the US); without a storefront country, an app not offered in the US is read
+                    #   from the country of its developer.
+                    # - `google-play-reviews`: Same URLs as `google-play`. Returns up to the 200
+                    #   newest reviews in the language set in the URL, with developer replies, in
+                    #   `data.reviews`; an app with fewer such reviews returns them all.
+                    # - `app-store`: App Store app URLs (`apps.apple.com/us/app/…/id…`). Returns one
+                    #   app in `data`: details, developer, ratings, price, version, and screenshots.
+                    #   The country in the path sets the storefront (default `us`).
+                    # - `app-store-reviews`: Same URLs as `app-store`. Returns up to the 500 newest
+                    #   reviews in `data.reviews`.
+                    # - `g2-reviews`: G2 product URLs (`g2.com/products/…`), following renamed
+                    #   products. Returns the 25 most recently published reviews in `data.reviews`
+                    #   (rating, title, likes, dislikes, `problems_solved`, reviewer role, company
+                    #   size, and industry), plus `data.product`. Keeps star-rating filters from the
+                    #   URL (`filters[nps_score][]=1` to `5`) and ignores other filters, sort orders,
+                    #   and pages.
+                    # - `instagram-profile`: Public profile URLs (`instagram.com/{username}`). Returns
+                    #   one profile in `data`: bio, links, follower and post counts, category,
+                    #   business address, `similar_accounts`, and `latest_posts` (up to the 12 posts
+                    #   at the top of the profile, newest first). Instagram lists pinned posts first,
+                    #   so posts with `is_pinned: true` can be older. When Instagram shows only a
+                    #   rounded post count (such as 32K), `post_count` is that rounded number and
+                    #   `is_post_count_rounded` is `true`.
+                    # - `instagram-post`: Post and reel URLs (`/p/…`, `/reel/…`). Returns one post in
+                    #   `data`: caption, hashtags, mentions, like, comment, and view counts
+                    #   (`like_count` and `view_count` are `null` when the owner hides them), media
+                    #   URLs, tagged users, collaborators, location, and about the top 14 comments in
+                    #   `data.comments`.
+                    # - `instagram-feed`: Hashtag and keyword URLs (`/explore/tags/…`, `/popular/…`)
+                    #   return the top posts; location URLs (`/explore/locations/{id}/…`) return
+                    #   recent posts. Posts are in `data.posts`; keyword posts carry only the
+                    #   shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
+                    #   it. All three Instagram parsers read public data without signing in, so
+                    #   private accounts return no posts and follower lists are unavailable.
+                    # - `tiktok-profile`: Public profile URLs (`tiktok.com/@{username}`). Returns one
+                    #   profile in `data`: nickname, bio, bio link, follower, following, like, and
+                    #   video counts, verified, private, and business flags, and business category.
+                    #   Does not list videos.
+                    # - `tiktok-video`: Video and photo post URLs (`/@{username}/video/{id}`,
+                    #   `/@{username}/photo/{id}`). Returns one post in `data`: caption, hashtags,
+                    #   mentions, author, view, like, comment, share, save, and repost counts,
+                    #   duration, thumbnail, a `video_url` that downloads without cookies,
+                    #   `image_urls` for photo posts, music, location, and ad, paid-partnership, and
+                    #   AI-generated flags.
+                    # - `tiktok-feed`: Returns videos in the `tiktok-video` shape in `data.videos`:
+                    #   the latest 15 from a profile URL, the top 30 from a hashtag URL
+                    #   (`/tag/{name}`), or the top 12 from a search URL (`/search?q={query}`).
+                    # - `tiktok-comments`: Video and photo post URLs. Returns the first 20 comments in
+                    #   `data.comments`: text, `posted_at`, like and reply counts, whether the author
+                    #   liked it, and the commenter.
+                    # - `tiktok-followers`, `tiktok-following`: Profile URLs. Return up to 30 accounts
+                    #   in `data.users`, in the `tiktok-profile` shape.
+                    # - `tiktok-user-search`: User search URLs (`/search/user?q={query}`). Returns the
+                    #   top 10 accounts in `data.users`: `id`, `username`, `nickname`, `biography`,
+                    #   `avatar_url`, `sec_uid`, `follower_count`, `like_count`, and `is_verified`.
+                    #   The TikTok parsers accept `tiktok.com`, `www.tiktok.com`, and `m.tiktok.com`
+                    #   URLs, not short links (`vm.tiktok.com`, `vt.tiktok.com`, `tiktok.com/t/…`).
+                    # - `reddit-post`: Post URLs (`reddit.com/r/{subreddit}/comments/{id}`,
+                    #   `reddit.com/comments/{id}`, `redd.it/{id}`). Returns the post in `data.post`:
+                    #   title, body as Markdown, type (`text`, `link`, `image`, `gallery`, or
+                    #   `video`), `link_url`, subreddit, author, flairs, score, `upvote_ratio`,
+                    #   comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
+                    #   flags, images (every gallery image in order), and video (an MP4 `url` plus an
+                    #   `hls_url` that carries the audio). `data.comments` holds the comment tree;
+                    #   each comment has `id`, `author`, `body` (Markdown), `score`, `posted_at`,
+                    #   `depth`, `parent_id`, `url`, `is_submitter`, `is_deleted`, and its `replies`.
+                    #   `limit` caps the total number of comments (default 100), filled shallowest
+                    #   first so whole conversations are kept, and `data.has_more_comments` says
+                    #   whether the thread has more. The `sort` in the URL (`best`, `top`, `new`,
+                    #   `controversial`, `old`, `qa`) orders the comments.
+                    # - `reddit-search`: Search URLs (`reddit.com/search?q={query}`, or
+                    #   `reddit.com/r/{subreddit}/search?q={query}` to search one subreddit). With
+                    #   `type=link` or no `type`, returns posts in the `reddit-post` shape in
+                    #   `data.posts`, ordered by the `sort` in the URL (`relevance`, `hot`, `top`,
+                    #   `new`, `comments`) within its `t` time range (`hour`, `day`, `week`, `month`,
+                    #   `year`, `all`). `type=sr` returns communities in `data.communities` (name,
+                    #   title, description, sidebar, `subscriber_count`, `created_at`, type, NSFW and
+                    #   quarantine flags, language, category, icon and banner URLs, and allowed post
+                    #   types). `type=user` returns accounts in `data.users` (username,
+                    #   `display_name`, bio, `created_at`, post and comment karma, avatar and banner
+                    #   URLs, and verified, employee, moderator, premium, and NSFW flags). `limit`
+                    #   caps the number of results (default 100), in the order Reddit returns them,
+                    #   and `data.has_more` says whether Reddit has more.
+                    # - `reddit-subreddit`: Subreddit URLs (`reddit.com/r/{subreddit}`, optionally
+                    #   followed by `/hot`, `/new`, `/top`, `/rising`, or `/controversial`, with `t`
+                    #   setting the time range of `top` and `controversial`, default `day`). Returns
+                    #   `data.subreddit` in the community shape of `reddit-search`, `data.rules`
+                    #   (`name`, `description`, `applies_to`, `violation_reason`, `created_at`), and
+                    #   `data.posts` in the `reddit-post` shape, ordered like the tab (default `hot`)
+                    #   with stickied posts flagged. `r/all` and `r/popular` return posts with `null`
+                    #   `subreddit` and `rules`. `limit` caps the posts (default 100) and
+                    #   `data.has_more` says whether Reddit has more. Private and quarantined
+                    #   subreddits return `WEBSITE_ACCESS_ERROR`.
+                    # - `reddit-user`: Profile URLs (`reddit.com/user/{username}` or
+                    #   `reddit.com/u/{username}`, optionally followed by `/overview`, `/submitted`,
+                    #   or `/comments`, with `sort` set to `new`, `hot`, `top`, or `controversial` and
+                    #   `t` setting the time range of `top` and `controversial`, default `all`).
+                    #   Returns `data.user` (`id`, `username`, `display_name`, bio, `created_at`,
+                    #   total, post, comment, awardee, and awarder karma, avatar and banner URLs, and
+                    #   verified, suspended, employee, moderator, premium, and NSFW flags),
+                    #   `data.trophies` (`name`, `description`, `icon_url`, `granted_at`, `url`),
+                    #   `data.moderated_communities` (`name`, `title`, `url`, `subscriber_count`,
+                    #   `icon_url`, `is_nsfw`), `data.posts` in the `reddit-post` shape, and
+                    #   `data.comments`, each with `id`, `author`, `body` (Markdown), `score`,
+                    #   `posted_at`, `edited_at`, `url`, `subreddit`, `parent_id` (`null` for a
+                    #   top-level comment), `is_submitter`, `is_stickied`, `distinguished`,
+                    #   `award_count`, and the post it was left on (`id`, `title`, `url`, `author`,
+                    #   `is_nsfw`). The overview tab returns both posts and comments; `submitted`
+                    #   returns `null` comments and `comments` returns `null` posts. `limit` caps
+                    #   posts and comments together (default 100) and `data.has_more` says whether
+                    #   Reddit has more. Users who hide their activity return empty lists, and
+                    #   suspended accounts return their profile with `null` posts and comments.
+                    # - `yelp-search`: Yelp search URLs with `find_desc` and `find_loc`; `start` sets
+                    #   the result offset. Returns up to 20 ranked organic businesses in
+                    #   `data.businesses`, with `total` and `pagination`.
+                    # - `yelp-reviews`: Yelp business URLs (`yelp.com/biz/{alias}`); optional `start`
+                    #   sets the offset. Returns up to 20 of the latest public reviews, always newest
+                    #   first, in `data.reviews`, with business details and `pagination.next_offset`.
+                    #   Each review has rating, full text, `updated_at`, and author (`id` from the
+                    #   reviewer profile URL, `url` linking to that profile, `name`, `location`, and
+                    #   `review_count`); owner replies and photos are not included. Unsupported sort
+                    #   and review filters are rejected; tracking parameters are ignored.
+                    # - `tripadvisor-reviews`: Tripadvisor hotel, restaurant, and attraction review
+                    #   URLs (`tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html`, on any
+                    #   Tripadvisor country domain); `-or{N}-` in the path sets the offset. Returns 20
+                    #   reviews in `data.reviews` in the order Tripadvisor shows them, with
+                    #   `data.location` (`id`, `name`, `type`, `url`, `review_count`) and
+                    #   `pagination.next_offset`. Each review has `id`, `url`, `title`, full text,
+                    #   `rating`, `language`, `published_at`, `visit_month`, `helpful_votes`,
+                    #   `subratings`, `photo_urls`, `owner_response` (`text`, `published_at`,
+                    #   `author_name`), and `author` (`id`, `username`, `name`, `url`,
+                    #   `contribution_count`). An unknown location returns no reviews.
+                    # - `car-rental-availability`: avis.com and budget.com vehicle-availability search
+                    #   URLs. Returns every vehicle with pay-now and pay-later prices in
+                    #   `data.vehicles`.
+                    # - `car-rental-locations`: avis.com and budget.com `/locations?keyword=` URLs.
+                    #   Returns rental branches with codes, addresses, coordinates, and hours in
+                    #   `data.locations`.
+                    # - `emails`: Any page. Returns its email addresses in `data.emails`
+                    #   (`[{ email }]`), read from `mailto:` links, Cloudflare-protected addresses,
+                    #   and visible text.
+                    # - `phone-numbers`: Any page. Returns its valid phone numbers in E.164 format in
+                    #   `data.phone_numbers` (`[{ phone }]`), read from `tel:` links and visible text.
+                    #   Numbers without a country code are read for the country of the site TLD (US by
+                    #   default).
+                    # - `links`: Any page. Returns its unique HTTP and HTTPS links as absolute URLs in
+                    #   `data.links` (`[{ url, text }]`). `text` falls back to `aria-label` or image
+                    #   alt text and is `null` when a link has none.
+                    parser:,
+                    # Maximum number of reviews (`google-maps-reviews`, default 100), comments
+                    # (`reddit-post`, default 100), or results (`reddit-search`, `reddit-subreddit`,
+                    # and `reddit-user`, default 100) to return. Only these parsers accept it.
+                    limit: nil,
+                    # Order of `data.reviews` for `google-maps-reviews`. `newest`, `relevant`,
+                    # `highest`, and `lowest` use the same orders as Google Maps; `oldest` returns the
+                    # earliest reviews first.
+                    sort: nil,
+                    # Use a prebuilt parser instead of custom rules.
+                    type: :prebuilt
+                  )
+                  end
+
+                  sig do
+                    override.returns(
+                      {
+                        parser:
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::OrSymbol,
+                        type: Symbol,
+                        limit: Integer,
+                        sort:
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::OrSymbol
+                      }
+                    )
+                  end
+                  def to_hash
+                  end
+
+                  # Prebuilt parser to run. Each one accepts specific URLs and returns its result in
+                  # `parsed.data`. `emails`, `phone-numbers`, and `links` read the rendered page and
+                  # respect content filters; the others read their source directly, independently of
+                  # content filters and other outputs.
+                  #
+                  # - `google-maps`: Google Maps place, search, and internal data URLs. Returns
+                  #   businesses in `data.results`; a search URL returns up to 200 places. Results
+                  #   use the country set in the URL, or the US when none is set, and come back with
+                  #   English labels.
+                  # - `google-maps-reviews`: Google Maps place, search, and `?cid=` URLs, plus
+                  #   `search.google.com/local/reviews` URLs, so the `google_maps_url` and
+                  #   `google_reviews_url` fields of `google-maps` results work as input. Returns
+                  #   the reviews of the place in `data.reviews` (`rating`, `date`, `isoDate`,
+                  #   `snippet`, `translatedSnippet`, `likes`, `user`, `media`, `response`, `link`,
+                  #   `id`, `language`, guided ratings in `details`, and `user.isLocalGuide`), plus
+                  #   the place `featureId`, `cid`, and `sort` in `data`. `sort` and `limit` set the
+                  #   order and count; `oldest` is exact. An unknown place returns no reviews.
+                  # - `google-play`: Play Store app details URLs
+                  #   (`play.google.com/store/apps/details?id=…`). Returns one app in `data`:
+                  #   details, developer contact, ratings, price, permissions, data safety, the
+                  #   storefront country the record describes, and `is_available` (whether the app
+                  #   is offered there). Ratings are counted per storefront, so `rating`,
+                  #   `rating_count`, and `rating_histogram` are `null` where nobody rated the app.
+                  #   The language and storefront country set in the URL apply (default English and
+                  #   the US); without a storefront country, an app not offered in the US is read
+                  #   from the country of its developer.
+                  # - `google-play-reviews`: Same URLs as `google-play`. Returns up to the 200
+                  #   newest reviews in the language set in the URL, with developer replies, in
+                  #   `data.reviews`; an app with fewer such reviews returns them all.
+                  # - `app-store`: App Store app URLs (`apps.apple.com/us/app/…/id…`). Returns one
+                  #   app in `data`: details, developer, ratings, price, version, and screenshots.
+                  #   The country in the path sets the storefront (default `us`).
+                  # - `app-store-reviews`: Same URLs as `app-store`. Returns up to the 500 newest
+                  #   reviews in `data.reviews`.
+                  # - `g2-reviews`: G2 product URLs (`g2.com/products/…`), following renamed
+                  #   products. Returns the 25 most recently published reviews in `data.reviews`
+                  #   (rating, title, likes, dislikes, `problems_solved`, reviewer role, company
+                  #   size, and industry), plus `data.product`. Keeps star-rating filters from the
+                  #   URL (`filters[nps_score][]=1` to `5`) and ignores other filters, sort orders,
+                  #   and pages.
+                  # - `instagram-profile`: Public profile URLs (`instagram.com/{username}`). Returns
+                  #   one profile in `data`: bio, links, follower and post counts, category,
+                  #   business address, `similar_accounts`, and `latest_posts` (up to the 12 posts
+                  #   at the top of the profile, newest first). Instagram lists pinned posts first,
+                  #   so posts with `is_pinned: true` can be older. When Instagram shows only a
+                  #   rounded post count (such as 32K), `post_count` is that rounded number and
+                  #   `is_post_count_rounded` is `true`.
+                  # - `instagram-post`: Post and reel URLs (`/p/…`, `/reel/…`). Returns one post in
+                  #   `data`: caption, hashtags, mentions, like, comment, and view counts
+                  #   (`like_count` and `view_count` are `null` when the owner hides them), media
+                  #   URLs, tagged users, collaborators, location, and about the top 14 comments in
+                  #   `data.comments`.
+                  # - `instagram-feed`: Hashtag and keyword URLs (`/explore/tags/…`, `/popular/…`)
+                  #   return the top posts; location URLs (`/explore/locations/{id}/…`) return
+                  #   recent posts. Posts are in `data.posts`; keyword posts carry only the
+                  #   shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
+                  #   it. All three Instagram parsers read public data without signing in, so
+                  #   private accounts return no posts and follower lists are unavailable.
+                  # - `tiktok-profile`: Public profile URLs (`tiktok.com/@{username}`). Returns one
+                  #   profile in `data`: nickname, bio, bio link, follower, following, like, and
+                  #   video counts, verified, private, and business flags, and business category.
+                  #   Does not list videos.
+                  # - `tiktok-video`: Video and photo post URLs (`/@{username}/video/{id}`,
+                  #   `/@{username}/photo/{id}`). Returns one post in `data`: caption, hashtags,
+                  #   mentions, author, view, like, comment, share, save, and repost counts,
+                  #   duration, thumbnail, a `video_url` that downloads without cookies,
+                  #   `image_urls` for photo posts, music, location, and ad, paid-partnership, and
+                  #   AI-generated flags.
+                  # - `tiktok-feed`: Returns videos in the `tiktok-video` shape in `data.videos`:
+                  #   the latest 15 from a profile URL, the top 30 from a hashtag URL
+                  #   (`/tag/{name}`), or the top 12 from a search URL (`/search?q={query}`).
+                  # - `tiktok-comments`: Video and photo post URLs. Returns the first 20 comments in
+                  #   `data.comments`: text, `posted_at`, like and reply counts, whether the author
+                  #   liked it, and the commenter.
+                  # - `tiktok-followers`, `tiktok-following`: Profile URLs. Return up to 30 accounts
+                  #   in `data.users`, in the `tiktok-profile` shape.
+                  # - `tiktok-user-search`: User search URLs (`/search/user?q={query}`). Returns the
+                  #   top 10 accounts in `data.users`: `id`, `username`, `nickname`, `biography`,
+                  #   `avatar_url`, `sec_uid`, `follower_count`, `like_count`, and `is_verified`.
+                  #   The TikTok parsers accept `tiktok.com`, `www.tiktok.com`, and `m.tiktok.com`
+                  #   URLs, not short links (`vm.tiktok.com`, `vt.tiktok.com`, `tiktok.com/t/…`).
+                  # - `reddit-post`: Post URLs (`reddit.com/r/{subreddit}/comments/{id}`,
+                  #   `reddit.com/comments/{id}`, `redd.it/{id}`). Returns the post in `data.post`:
+                  #   title, body as Markdown, type (`text`, `link`, `image`, `gallery`, or
+                  #   `video`), `link_url`, subreddit, author, flairs, score, `upvote_ratio`,
+                  #   comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
+                  #   flags, images (every gallery image in order), and video (an MP4 `url` plus an
+                  #   `hls_url` that carries the audio). `data.comments` holds the comment tree;
+                  #   each comment has `id`, `author`, `body` (Markdown), `score`, `posted_at`,
+                  #   `depth`, `parent_id`, `url`, `is_submitter`, `is_deleted`, and its `replies`.
+                  #   `limit` caps the total number of comments (default 100), filled shallowest
+                  #   first so whole conversations are kept, and `data.has_more_comments` says
+                  #   whether the thread has more. The `sort` in the URL (`best`, `top`, `new`,
+                  #   `controversial`, `old`, `qa`) orders the comments.
+                  # - `reddit-search`: Search URLs (`reddit.com/search?q={query}`, or
+                  #   `reddit.com/r/{subreddit}/search?q={query}` to search one subreddit). With
+                  #   `type=link` or no `type`, returns posts in the `reddit-post` shape in
+                  #   `data.posts`, ordered by the `sort` in the URL (`relevance`, `hot`, `top`,
+                  #   `new`, `comments`) within its `t` time range (`hour`, `day`, `week`, `month`,
+                  #   `year`, `all`). `type=sr` returns communities in `data.communities` (name,
+                  #   title, description, sidebar, `subscriber_count`, `created_at`, type, NSFW and
+                  #   quarantine flags, language, category, icon and banner URLs, and allowed post
+                  #   types). `type=user` returns accounts in `data.users` (username,
+                  #   `display_name`, bio, `created_at`, post and comment karma, avatar and banner
+                  #   URLs, and verified, employee, moderator, premium, and NSFW flags). `limit`
+                  #   caps the number of results (default 100), in the order Reddit returns them,
+                  #   and `data.has_more` says whether Reddit has more.
+                  # - `reddit-subreddit`: Subreddit URLs (`reddit.com/r/{subreddit}`, optionally
+                  #   followed by `/hot`, `/new`, `/top`, `/rising`, or `/controversial`, with `t`
+                  #   setting the time range of `top` and `controversial`, default `day`). Returns
+                  #   `data.subreddit` in the community shape of `reddit-search`, `data.rules`
+                  #   (`name`, `description`, `applies_to`, `violation_reason`, `created_at`), and
+                  #   `data.posts` in the `reddit-post` shape, ordered like the tab (default `hot`)
+                  #   with stickied posts flagged. `r/all` and `r/popular` return posts with `null`
+                  #   `subreddit` and `rules`. `limit` caps the posts (default 100) and
+                  #   `data.has_more` says whether Reddit has more. Private and quarantined
+                  #   subreddits return `WEBSITE_ACCESS_ERROR`.
+                  # - `reddit-user`: Profile URLs (`reddit.com/user/{username}` or
+                  #   `reddit.com/u/{username}`, optionally followed by `/overview`, `/submitted`,
+                  #   or `/comments`, with `sort` set to `new`, `hot`, `top`, or `controversial` and
+                  #   `t` setting the time range of `top` and `controversial`, default `all`).
+                  #   Returns `data.user` (`id`, `username`, `display_name`, bio, `created_at`,
+                  #   total, post, comment, awardee, and awarder karma, avatar and banner URLs, and
+                  #   verified, suspended, employee, moderator, premium, and NSFW flags),
+                  #   `data.trophies` (`name`, `description`, `icon_url`, `granted_at`, `url`),
+                  #   `data.moderated_communities` (`name`, `title`, `url`, `subscriber_count`,
+                  #   `icon_url`, `is_nsfw`), `data.posts` in the `reddit-post` shape, and
+                  #   `data.comments`, each with `id`, `author`, `body` (Markdown), `score`,
+                  #   `posted_at`, `edited_at`, `url`, `subreddit`, `parent_id` (`null` for a
+                  #   top-level comment), `is_submitter`, `is_stickied`, `distinguished`,
+                  #   `award_count`, and the post it was left on (`id`, `title`, `url`, `author`,
+                  #   `is_nsfw`). The overview tab returns both posts and comments; `submitted`
+                  #   returns `null` comments and `comments` returns `null` posts. `limit` caps
+                  #   posts and comments together (default 100) and `data.has_more` says whether
+                  #   Reddit has more. Users who hide their activity return empty lists, and
+                  #   suspended accounts return their profile with `null` posts and comments.
+                  # - `yelp-search`: Yelp search URLs with `find_desc` and `find_loc`; `start` sets
+                  #   the result offset. Returns up to 20 ranked organic businesses in
+                  #   `data.businesses`, with `total` and `pagination`.
+                  # - `yelp-reviews`: Yelp business URLs (`yelp.com/biz/{alias}`); optional `start`
+                  #   sets the offset. Returns up to 20 of the latest public reviews, always newest
+                  #   first, in `data.reviews`, with business details and `pagination.next_offset`.
+                  #   Each review has rating, full text, `updated_at`, and author (`id` from the
+                  #   reviewer profile URL, `url` linking to that profile, `name`, `location`, and
+                  #   `review_count`); owner replies and photos are not included. Unsupported sort
+                  #   and review filters are rejected; tracking parameters are ignored.
+                  # - `tripadvisor-reviews`: Tripadvisor hotel, restaurant, and attraction review
+                  #   URLs (`tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html`, on any
+                  #   Tripadvisor country domain); `-or{N}-` in the path sets the offset. Returns 20
+                  #   reviews in `data.reviews` in the order Tripadvisor shows them, with
+                  #   `data.location` (`id`, `name`, `type`, `url`, `review_count`) and
+                  #   `pagination.next_offset`. Each review has `id`, `url`, `title`, full text,
+                  #   `rating`, `language`, `published_at`, `visit_month`, `helpful_votes`,
+                  #   `subratings`, `photo_urls`, `owner_response` (`text`, `published_at`,
+                  #   `author_name`), and `author` (`id`, `username`, `name`, `url`,
+                  #   `contribution_count`). An unknown location returns no reviews.
+                  # - `car-rental-availability`: avis.com and budget.com vehicle-availability search
+                  #   URLs. Returns every vehicle with pay-now and pay-later prices in
+                  #   `data.vehicles`.
+                  # - `car-rental-locations`: avis.com and budget.com `/locations?keyword=` URLs.
+                  #   Returns rental branches with codes, addresses, coordinates, and hours in
+                  #   `data.locations`.
+                  # - `emails`: Any page. Returns its email addresses in `data.emails`
+                  #   (`[{ email }]`), read from `mailto:` links, Cloudflare-protected addresses,
+                  #   and visible text.
+                  # - `phone-numbers`: Any page. Returns its valid phone numbers in E.164 format in
+                  #   `data.phone_numbers` (`[{ phone }]`), read from `tel:` links and visible text.
+                  #   Numbers without a country code are read for the country of the site TLD (US by
+                  #   default).
+                  # - `links`: Any page. Returns its unique HTTP and HTTPS links as absolute URLs in
+                  #   `data.links` (`[{ url, text }]`). `text` falls back to `aria-label` or image
+                  #   alt text and is `null` when a link has none.
+                  module Parser
+                    extend ContextDev::Internal::Type::Enum
+
+                    TaggedSymbol =
+                      T.type_alias do
+                        T.all(
+                          Symbol,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser
+                        )
+                      end
+                    OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                    GOOGLE_MAPS =
+                      T.let(
+                        :"google-maps",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    GOOGLE_MAPS_REVIEWS =
+                      T.let(
+                        :"google-maps-reviews",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    GOOGLE_PLAY =
+                      T.let(
+                        :"google-play",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    GOOGLE_PLAY_REVIEWS =
+                      T.let(
+                        :"google-play-reviews",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    APP_STORE =
+                      T.let(
+                        :"app-store",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    APP_STORE_REVIEWS =
+                      T.let(
+                        :"app-store-reviews",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    G2_REVIEWS =
+                      T.let(
+                        :"g2-reviews",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    INSTAGRAM_PROFILE =
+                      T.let(
+                        :"instagram-profile",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    INSTAGRAM_POST =
+                      T.let(
+                        :"instagram-post",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    INSTAGRAM_FEED =
+                      T.let(
+                        :"instagram-feed",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    TIKTOK_PROFILE =
+                      T.let(
+                        :"tiktok-profile",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    TIKTOK_VIDEO =
+                      T.let(
+                        :"tiktok-video",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    TIKTOK_FEED =
+                      T.let(
+                        :"tiktok-feed",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    TIKTOK_COMMENTS =
+                      T.let(
+                        :"tiktok-comments",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    TIKTOK_FOLLOWERS =
+                      T.let(
+                        :"tiktok-followers",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    TIKTOK_FOLLOWING =
+                      T.let(
+                        :"tiktok-following",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    TIKTOK_USER_SEARCH =
+                      T.let(
+                        :"tiktok-user-search",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    REDDIT_POST =
+                      T.let(
+                        :"reddit-post",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    REDDIT_SEARCH =
+                      T.let(
+                        :"reddit-search",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    REDDIT_SUBREDDIT =
+                      T.let(
+                        :"reddit-subreddit",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    REDDIT_USER =
+                      T.let(
+                        :"reddit-user",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    YELP_SEARCH =
+                      T.let(
+                        :"yelp-search",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    YELP_REVIEWS =
+                      T.let(
+                        :"yelp-reviews",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    TRIPADVISOR_REVIEWS =
+                      T.let(
+                        :"tripadvisor-reviews",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    CAR_RENTAL_AVAILABILITY =
+                      T.let(
+                        :"car-rental-availability",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    CAR_RENTAL_LOCATIONS =
+                      T.let(
+                        :"car-rental-locations",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    EMAILS =
+                      T.let(
+                        :emails,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    PHONE_NUMBERS =
+                      T.let(
+                        :"phone-numbers",
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+                    LINKS =
+                      T.let(
+                        :links,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                      )
+
+                    sig do
+                      override.returns(
+                        T::Array[
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ]
+                      )
+                    end
+                    def self.values
+                    end
+                  end
+
+                  # Order of `data.reviews` for `google-maps-reviews`. `newest`, `relevant`,
+                  # `highest`, and `lowest` use the same orders as Google Maps; `oldest` returns the
+                  # earliest reviews first.
+                  module Sort
+                    extend ContextDev::Internal::Type::Enum
+
+                    TaggedSymbol =
+                      T.type_alias do
+                        T.all(
+                          Symbol,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort
+                        )
+                      end
+                    OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                    NEWEST =
+                      T.let(
+                        :newest,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                      )
+                    OLDEST =
+                      T.let(
+                        :oldest,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                      )
+                    RELEVANT =
+                      T.let(
+                        :relevant,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                      )
+                    HIGHEST =
+                      T.let(
+                        :highest,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                      )
+                    LOWEST =
+                      T.let(
+                        :lowest,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                      )
+
+                    sig do
+                      override.returns(
+                        T::Array[
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                        ]
+                      )
+                    end
+                    def self.values
+                    end
+                  end
+                end
+
+                sig do
+                  override.returns(
+                    T::Array[
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::Variants
+                    ]
+                  )
+                end
+                def self.variants
+                end
+              end
+
+              class ProductParams < ContextDev::Internal::Type::BaseModel
+                OrHash =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ProductParams,
+                      ContextDev::Internal::AnyHash
+                    )
+                  end
+
+                # Drop visually duplicate product images, keeping the largest copy.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :dedupe_images
+
+                sig { params(dedupe_images: T::Boolean).void }
+                attr_writer :dedupe_images
+
+                # Ignored. The AI fallback runs automatically.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :use_ai_fallback
+
+                sig { params(use_ai_fallback: T::Boolean).void }
+                attr_writer :use_ai_fallback
+
+                # Options for the `product` output. Requires `formats.product: true`.
+                sig do
+                  params(
+                    dedupe_images: T::Boolean,
+                    use_ai_fallback: T::Boolean
+                  ).returns(T.attached_class)
+                end
+                def self.new(
+                  # Drop visually duplicate product images, keeping the largest copy.
+                  dedupe_images: nil,
+                  # Ignored. The AI fallback runs automatically.
+                  use_ai_fallback: nil
+                )
+                end
+
+                sig do
+                  override.returns(
+                    { dedupe_images: T::Boolean, use_ai_fallback: T::Boolean }
+                  )
+                end
+                def to_hash
+                end
+              end
+
+              class ScreenshotParams < ContextDev::Internal::Type::BaseModel
+                OrHash =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams,
+                      ContextDev::Internal::AnyHash
+                    )
+                  end
+
+                # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Up to 40
+                # megapixels.
+                sig do
+                  returns(
+                    T.nilable(
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::OrSymbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle
+                      )
+                    )
+                  )
+                end
+                attr_reader :area
+
+                sig do
+                  params(
+                    area:
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::OrSymbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element::OrHash,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle::OrHash
+                      )
+                  ).void
+                end
+                attr_writer :area
+
+                # Image format for the screenshot.
+                sig do
+                  returns(
+                    T.nilable(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::OrSymbol
+                    )
+                  )
+                end
+                attr_reader :format_
+
+                sig do
+                  params(
+                    format_:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::OrSymbol
+                  ).void
+                end
+                attr_writer :format_
+
+                # Options for the `screenshot` output. Requires `formats.screenshot: true`.
+                sig do
+                  params(
+                    area:
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::OrSymbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element::OrHash,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle::OrHash
+                      ),
+                    format_:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::OrSymbol
+                  ).returns(T.attached_class)
+                end
+                def self.new(
+                  # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Up to 40
+                  # megapixels.
+                  area: nil,
+                  # Image format for the screenshot.
+                  format_: nil
+                )
+                end
+
+                sig do
+                  override.returns(
+                    {
+                      area:
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::OrSymbol,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle
+                        ),
+                      format_:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::OrSymbol
+                    }
+                  )
+                end
+                def to_hash
+                end
+
+                # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Up to 40
+                # megapixels.
+                module Area
+                  extend ContextDev::Internal::Type::Union
+
+                  Variants =
+                    T.type_alias do
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::TaggedSymbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle
+                      )
+                    end
+
+                  module Page
+                    extend ContextDev::Internal::Type::Enum
+
+                    TaggedSymbol =
+                      T.type_alias do
+                        T.all(
+                          Symbol,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page
+                        )
+                      end
+                    OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                    VIEWPORT =
+                      T.let(
+                        :viewport,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::TaggedSymbol
+                      )
+                    FULL_PAGE =
+                      T.let(
+                        :fullPage,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::TaggedSymbol
+                      )
+
+                    sig do
+                      override.returns(
+                        T::Array[
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::TaggedSymbol
+                        ]
+                      )
+                    end
+                    def self.values
+                    end
+                  end
+
+                  class Element < ContextDev::Internal::Type::BaseModel
+                    OrHash =
+                      T.type_alias do
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element,
+                          ContextDev::Internal::AnyHash
+                        )
+                      end
+
+                    # CSS selector matching exactly one visible element.
+                    sig { returns(String) }
+                    attr_accessor :selector
+
+                    sig { params(selector: String).returns(T.attached_class) }
+                    def self.new(
+                      # CSS selector matching exactly one visible element.
+                      selector:
+                    )
+                    end
+
+                    sig { override.returns({ selector: String }) }
+                    def to_hash
+                    end
+                  end
+
+                  class Rectangle < ContextDev::Internal::Type::BaseModel
+                    OrHash =
+                      T.type_alias do
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle,
+                          ContextDev::Internal::AnyHash
+                        )
+                      end
+
+                    # Height of the capture in pixels.
+                    sig { returns(Integer) }
+                    attr_accessor :height
+
+                    # Width of the capture in pixels.
+                    sig { returns(Integer) }
+                    attr_accessor :width
+
+                    # Left edge of the capture, in pixels from the document origin.
+                    sig { returns(Integer) }
+                    attr_accessor :x
+
+                    # Top edge of the capture, in pixels from the document origin.
+                    sig { returns(Integer) }
+                    attr_accessor :y_
+
+                    # Rectangle to capture, in pixels from the document origin.
+                    sig do
+                      params(
+                        height: Integer,
+                        width: Integer,
+                        x: Integer,
+                        y_: Integer
+                      ).returns(T.attached_class)
+                    end
+                    def self.new(
+                      # Height of the capture in pixels.
+                      height:,
+                      # Width of the capture in pixels.
+                      width:,
+                      # Left edge of the capture, in pixels from the document origin.
+                      x:,
+                      # Top edge of the capture, in pixels from the document origin.
+                      y_:
+                    )
+                    end
+
+                    sig do
+                      override.returns(
+                        {
+                          height: Integer,
+                          width: Integer,
+                          x: Integer,
+                          y_: Integer
+                        }
+                      )
+                    end
+                    def to_hash
+                    end
+                  end
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Variants
+                      ]
+                    )
+                  end
+                  def self.variants
+                  end
+                end
+
+                # Image format for the screenshot.
+                module Format
+                  extend ContextDev::Internal::Type::Enum
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  PNG =
+                    T.let(
+                      :png,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::TaggedSymbol
+                    )
+                  JPEG =
+                    T.let(
+                      :jpeg,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::TaggedSymbol
+                    )
+                  WEBP =
+                    T.let(
+                      :webp,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::TaggedSymbol
+                    )
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::TaggedSymbol
+                      ]
+                    )
+                  end
+                  def self.values
+                  end
+                end
+              end
+
+              class SharedParams < ContextDev::Internal::Type::BaseModel
+                OrHash =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams,
+                      ContextDev::Internal::AnyHash
+                    )
+                  end
+
+                # Browser steps to run in order before capture. Requires a paid plan. Skips the
+                # cache.
+                sig do
+                  returns(
+                    T.nilable(
+                      T::Array[
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor
+                        )
+                      ]
+                    )
+                  )
+                end
+                attr_reader :actions
+
+                sig do
+                  params(
+                    actions:
+                      T::Array[
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor::OrHash
+                        )
+                      ]
+                  ).void
+                end
+                attr_writer :actions
+
+                # Country to fetch from, as an ISO 3166-1 alpha-2 code such as `US`.
+                # Case-insensitive.
+                sig { returns(T.nilable(String)) }
+                attr_reader :country
+
+                sig { params(country: String).void }
+                attr_writer :country
+
+                # Accept cookie banners before actions and capture.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :dismiss_cookies
+
+                sig { params(dismiss_cookies: T::Boolean).void }
+                attr_writer :dismiss_cookies
+
+                # Close other popups before actions and capture.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :dismiss_popups
+
+                sig { params(dismiss_popups: T::Boolean).void }
+                attr_writer :dismiss_popups
+
+                # Remove elements matching these CSS selectors. Overrides `includeSelectors`.
+                sig { returns(T.nilable(T::Array[String])) }
+                attr_reader :exclude_selectors
+
+                sig { params(exclude_selectors: T::Array[String]).void }
+                attr_writer :exclude_selectors
+
+                # HTTP headers to send to the target site. Requests with headers skip the cache.
+                sig { returns(T.nilable(T::Hash[Symbol, String])) }
+                attr_reader :headers
+
+                sig { params(headers: T::Hash[Symbol, String]).void }
+                attr_writer :headers
+
+                # Which iframes to inline in HTML and text outputs. Screenshots always show
+                # visible frames. `auto` inlines only iframes that hold page content, such as
+                # same-site documents, framesets, job boards, forms, and embedded documents, and
+                # skips ads and widgets. `true` inlines every iframe; `false` inlines none.
+                sig do
+                  returns(
+                    T.nilable(
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                      )
+                    )
+                  )
+                end
+                attr_reader :include_frames
+
+                sig do
+                  params(
+                    include_frames:
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                      )
+                  ).void
+                end
+                attr_writer :include_frames
+
+                # Keep only elements matching these CSS selectors.
+                sig { returns(T.nilable(T::Array[String])) }
+                attr_reader :include_selectors
+
+                sig { params(include_selectors: T::Array[String]).void }
+                attr_writer :include_selectors
+
+                # Keep only the main content, without navigation, headers, footers, or sidebars.
+                # Does not affect `screenshot`, `bytes`, or `product`.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :main_content_only
+
+                sig { params(main_content_only: T::Boolean).void }
+                attr_writer :main_content_only
+
+                # Options for parsing documents such as PDFs.
+                sig do
+                  returns(
+                    T.nilable(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers
+                    )
+                  )
+                end
+                attr_reader :parsers
+
+                sig do
+                  params(
+                    parsers:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::OrHash
+                  ).void
+                end
+                attr_writer :parsers
+
+                # Scrape as a signed-in user. Create a profile with `type: "new"` and your
+                # credentials, then reuse it with `type: "existing"`. Requires a paid plan and an
+                # HTTPS URL. Profiles keep their session between requests, skip the cache, and
+                # cannot be combined with ZDR, custom headers, `formats.bytes`, or prebuilt
+                # parsers other than `emails`, `phone-numbers`, and `links`.
+                sig do
+                  returns(
+                    T.nilable(
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New
+                      )
+                    )
+                  )
+                end
+                attr_reader :profile
+
+                sig do
+                  params(
+                    profile:
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing::OrHash,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New::OrHash
+                      )
+                  ).void
+                end
+                attr_writer :profile
+
+                # Wait for CSS animations to finish before capture. Defaults to `true` when
+                # `formats.screenshot` is `true`.
+                sig { returns(T.nilable(T::Boolean)) }
+                attr_reader :settle_animations
+
+                sig { params(settle_animations: T::Boolean).void }
+                attr_writer :settle_animations
+
+                # Emulate a light or dark color scheme.
+                sig do
+                  returns(
+                    T.nilable(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::OrSymbol
+                    )
+                  )
+                end
+                attr_reader :theme
+
+                sig do
+                  params(
+                    theme:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::OrSymbol
+                  ).void
+                end
+                attr_writer :theme
+
+                # Browser viewport in pixels. Defaults to 1920 × 1080. If you pass `viewport`, a
+                # missing `width` defaults to 1440 and a missing `height` to 900.
+                sig do
+                  returns(
+                    T.nilable(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Viewport
+                    )
+                  )
+                end
+                attr_reader :viewport
+
+                sig do
+                  params(
+                    viewport:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Viewport::OrHash
+                  ).void
+                end
+                attr_writer :viewport
+
+                # Time to wait after actions, in milliseconds, or a CSS selector to wait for.
+                # Defaults to 500 ms, or 2000 ms when `includeFrames` is `true` or the URL ends in
+                # `.xml`.
+                sig do
+                  returns(
+                    T.nilable(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::WaitFor::Variants
+                    )
+                  )
+                end
+                attr_reader :wait_for
+
+                sig do
+                  params(
+                    wait_for:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::WaitFor::Variants
+                  ).void
+                end
+                attr_writer :wait_for
+
+                # Browser and content settings shared by all outputs.
+                sig do
+                  params(
+                    actions:
+                      T::Array[
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor::OrHash
+                        )
+                      ],
+                    country: String,
+                    dismiss_cookies: T::Boolean,
+                    dismiss_popups: T::Boolean,
+                    exclude_selectors: T::Array[String],
+                    headers: T::Hash[Symbol, String],
+                    include_frames:
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                      ),
+                    include_selectors: T::Array[String],
+                    main_content_only: T::Boolean,
+                    parsers:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::OrHash,
+                    profile:
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing::OrHash,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New::OrHash
+                      ),
+                    settle_animations: T::Boolean,
+                    theme:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::OrSymbol,
+                    viewport:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Viewport::OrHash,
+                    wait_for:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::WaitFor::Variants
+                  ).returns(T.attached_class)
+                end
+                def self.new(
+                  # Browser steps to run in order before capture. Requires a paid plan. Skips the
+                  # cache.
+                  actions: nil,
+                  # Country to fetch from, as an ISO 3166-1 alpha-2 code such as `US`.
+                  # Case-insensitive.
+                  country: nil,
+                  # Accept cookie banners before actions and capture.
+                  dismiss_cookies: nil,
+                  # Close other popups before actions and capture.
+                  dismiss_popups: nil,
+                  # Remove elements matching these CSS selectors. Overrides `includeSelectors`.
+                  exclude_selectors: nil,
+                  # HTTP headers to send to the target site. Requests with headers skip the cache.
+                  headers: nil,
+                  # Which iframes to inline in HTML and text outputs. Screenshots always show
+                  # visible frames. `auto` inlines only iframes that hold page content, such as
+                  # same-site documents, framesets, job boards, forms, and embedded documents, and
+                  # skips ads and widgets. `true` inlines every iframe; `false` inlines none.
+                  include_frames: nil,
+                  # Keep only elements matching these CSS selectors.
+                  include_selectors: nil,
+                  # Keep only the main content, without navigation, headers, footers, or sidebars.
+                  # Does not affect `screenshot`, `bytes`, or `product`.
+                  main_content_only: nil,
+                  # Options for parsing documents such as PDFs.
+                  parsers: nil,
+                  # Scrape as a signed-in user. Create a profile with `type: "new"` and your
+                  # credentials, then reuse it with `type: "existing"`. Requires a paid plan and an
+                  # HTTPS URL. Profiles keep their session between requests, skip the cache, and
+                  # cannot be combined with ZDR, custom headers, `formats.bytes`, or prebuilt
+                  # parsers other than `emails`, `phone-numbers`, and `links`.
+                  profile: nil,
+                  # Wait for CSS animations to finish before capture. Defaults to `true` when
+                  # `formats.screenshot` is `true`.
+                  settle_animations: nil,
+                  # Emulate a light or dark color scheme.
+                  theme: nil,
+                  # Browser viewport in pixels. Defaults to 1920 × 1080. If you pass `viewport`, a
+                  # missing `width` defaults to 1440 and a missing `height` to 900.
+                  viewport: nil,
+                  # Time to wait after actions, in milliseconds, or a CSS selector to wait for.
+                  # Defaults to 500 ms, or 2000 ms when `includeFrames` is `true` or the URL ends in
+                  # `.xml`.
+                  wait_for: nil
+                )
+                end
+
+                sig do
+                  override.returns(
+                    {
+                      actions:
+                        T::Array[
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor
+                          )
+                        ],
+                      country: String,
+                      dismiss_cookies: T::Boolean,
+                      dismiss_popups: T::Boolean,
+                      exclude_selectors: T::Array[String],
+                      headers: T::Hash[Symbol, String],
+                      include_frames:
+                        T.any(
+                          T::Boolean,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                        ),
+                      include_selectors: T::Array[String],
+                      main_content_only: T::Boolean,
+                      parsers:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers,
+                      profile:
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New
+                        ),
+                      settle_animations: T::Boolean,
+                      theme:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::OrSymbol,
+                      viewport:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Viewport,
+                      wait_for:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::WaitFor::Variants
+                    }
+                  )
+                end
+                def to_hash
+                end
+
+                module Action
+                  extend ContextDev::Internal::Type::Union
+
+                  Variants =
+                    T.type_alias do
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor
+                      )
+                    end
+
+                  class Perform < ContextDev::Internal::Type::BaseModel
+                    OrHash =
+                      T.type_alias do
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform,
+                          ContextDev::Internal::AnyHash
+                        )
+                      end
+
+                    # One browser instruction, such as clicking a button or entering text.
+                    sig { returns(String) }
+                    attr_accessor :action
+
+                    # Follow a plain-language instruction.
+                    sig { returns(Symbol) }
+                    attr_accessor :type
+
+                    sig do
+                      params(action: String, type: Symbol).returns(
+                        T.attached_class
+                      )
+                    end
+                    def self.new(
+                      # One browser instruction, such as clicking a button or entering text.
+                      action:,
+                      # Follow a plain-language instruction.
+                      type: :perform
+                    )
+                    end
+
+                    sig { override.returns({ action: String, type: Symbol }) }
+                    def to_hash
+                    end
+                  end
+
+                  class Scroll < ContextDev::Internal::Type::BaseModel
+                    OrHash =
+                      T.type_alias do
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll,
+                          ContextDev::Internal::AnyHash
+                        )
+                      end
+
+                    # Scroll the page or a container.
+                    sig { returns(Symbol) }
+                    attr_accessor :type
+
+                    # Distance per scroll step: a number of pixels, one `viewport`, or `max` to reach
+                    # the end.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T.any(
+                            Integer,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::OrSymbol
+                          )
+                        )
+                      )
+                    end
+                    attr_reader :amount
+
+                    sig do
+                      params(
+                        amount:
+                          T.any(
+                            Integer,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::OrSymbol
+                          )
+                      ).void
+                    end
+                    attr_writer :amount
+
+                    # Direction to scroll.
+                    sig do
+                      returns(
+                        T.nilable(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::OrSymbol
+                        )
+                      )
+                    end
+                    attr_reader :direction
+
+                    sig do
+                      params(
+                        direction:
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::OrSymbol
+                      ).void
+                    end
+                    attr_writer :direction
+
+                    # Maximum number of scroll steps for this action.
+                    sig { returns(T.nilable(Integer)) }
+                    attr_reader :max_scrolls
+
+                    sig { params(max_scrolls: Integer).void }
+                    attr_writer :max_scrolls
+
+                    # CSS selector of the container to scroll. Omit to scroll the page.
+                    sig { returns(T.nilable(String)) }
+                    attr_reader :selector
+
+                    sig { params(selector: String).void }
+                    attr_writer :selector
+
+                    sig do
+                      params(
+                        amount:
+                          T.any(
+                            Integer,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::OrSymbol
+                          ),
+                        direction:
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::OrSymbol,
+                        max_scrolls: Integer,
+                        selector: String,
+                        type: Symbol
+                      ).returns(T.attached_class)
+                    end
+                    def self.new(
+                      # Distance per scroll step: a number of pixels, one `viewport`, or `max` to reach
+                      # the end.
+                      amount: nil,
+                      # Direction to scroll.
+                      direction: nil,
+                      # Maximum number of scroll steps for this action.
+                      max_scrolls: nil,
+                      # CSS selector of the container to scroll. Omit to scroll the page.
+                      selector: nil,
+                      # Scroll the page or a container.
+                      type: :scroll
+                    )
+                    end
+
+                    sig do
+                      override.returns(
+                        {
+                          type: Symbol,
+                          amount:
+                            T.any(
+                              Integer,
+                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::OrSymbol
+                            ),
+                          direction:
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::OrSymbol,
+                          max_scrolls: Integer,
+                          selector: String
+                        }
+                      )
+                    end
+                    def to_hash
+                    end
+
+                    # Distance per scroll step: a number of pixels, one `viewport`, or `max` to reach
+                    # the end.
+                    module Amount
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            Integer,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::TaggedSymbol
+                          )
+                        end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+
+                      TaggedSymbol =
+                        T.type_alias do
+                          T.all(
+                            Symbol,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount
+                          )
+                        end
+                      OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                      VIEWPORT =
+                        T.let(
+                          :viewport,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::TaggedSymbol
+                        )
+                      MAX =
+                        T.let(
+                          :max,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::TaggedSymbol
+                        )
+                    end
+
+                    # Direction to scroll.
+                    module Direction
+                      extend ContextDev::Internal::Type::Enum
+
+                      TaggedSymbol =
+                        T.type_alias do
+                          T.all(
+                            Symbol,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction
+                          )
+                        end
+                      OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                      DOWN =
+                        T.let(
+                          :down,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::TaggedSymbol
+                        )
+                      UP =
+                        T.let(
+                          :up,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::TaggedSymbol
+                        )
+                      LEFT =
+                        T.let(
+                          :left,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::TaggedSymbol
+                        )
+                      RIGHT =
+                        T.let(
+                          :right,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::TaggedSymbol
+                        )
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::TaggedSymbol
+                          ]
+                        )
+                      end
+                      def self.values
+                      end
+                    end
+                  end
+
+                  class Wait < ContextDev::Internal::Type::BaseModel
+                    OrHash =
+                      T.type_alias do
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait,
+                          ContextDev::Internal::AnyHash
+                        )
+                      end
+
+                    # How long to pause before the next action, in milliseconds.
+                    sig { returns(Integer) }
+                    attr_accessor :milliseconds
+
+                    # Pause for a fixed time.
+                    sig { returns(Symbol) }
+                    attr_accessor :type
+
+                    sig do
+                      params(milliseconds: Integer, type: Symbol).returns(
+                        T.attached_class
+                      )
+                    end
+                    def self.new(
+                      # How long to pause before the next action, in milliseconds.
+                      milliseconds:,
+                      # Pause for a fixed time.
+                      type: :wait
+                    )
+                    end
+
+                    sig do
+                      override.returns({ milliseconds: Integer, type: Symbol })
+                    end
+                    def to_hash
+                    end
+                  end
+
+                  class WaitFor < ContextDev::Internal::Type::BaseModel
+                    OrHash =
+                      T.type_alias do
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor,
+                          ContextDev::Internal::AnyHash
+                        )
+                      end
+
+                    # CSS selector to wait for before continuing.
+                    sig { returns(String) }
+                    attr_accessor :selector
+
+                    # Wait for an element matching `selector`.
+                    sig { returns(Symbol) }
+                    attr_accessor :type
+
+                    sig do
+                      params(selector: String, type: Symbol).returns(
+                        T.attached_class
+                      )
+                    end
+                    def self.new(
+                      # CSS selector to wait for before continuing.
+                      selector:,
+                      # Wait for an element matching `selector`.
+                      type: :waitFor
+                    )
+                    end
+
+                    sig { override.returns({ selector: String, type: Symbol }) }
+                    def to_hash
+                    end
+                  end
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Variants
+                      ]
+                    )
+                  end
+                  def self.variants
+                  end
+                end
+
+                # Which iframes to inline in HTML and text outputs. Screenshots always show
+                # visible frames. `auto` inlines only iframes that hold page content, such as
+                # same-site documents, framesets, job boards, forms, and embedded documents, and
+                # skips ads and widgets. `true` inlines every iframe; `false` inlines none.
+                module IncludeFrames
+                  extend ContextDev::Internal::Type::Union
+
+                  Variants =
+                    T.type_alias do
+                      T.any(
+                        T::Boolean,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::TaggedSymbol
+                      )
+                    end
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::Variants
+                      ]
+                    )
+                  end
+                  def self.variants
+                  end
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  AUTO =
+                    T.let(
+                      :auto,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::TaggedSymbol
+                    )
+                end
+
+                class Parsers < ContextDev::Internal::Type::BaseModel
+                  OrHash =
+                    T.type_alias do
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers,
+                        ContextDev::Internal::AnyHash
+                      )
+                    end
+
+                  # Page range, OCR, and page markers for PDFs.
+                  sig do
+                    returns(
+                      T.nilable(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf
+                      )
+                    )
+                  end
+                  attr_reader :pdf
+
+                  sig do
+                    params(
+                      pdf:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::OrHash
+                    ).void
+                  end
+                  attr_writer :pdf
+
+                  # Options for parsing documents such as PDFs.
+                  sig do
+                    params(
+                      pdf:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::OrHash
+                    ).returns(T.attached_class)
+                  end
+                  def self.new(
+                    # Page range, OCR, and page markers for PDFs.
+                    pdf: nil
+                  )
+                  end
+
+                  sig do
+                    override.returns(
+                      {
+                        pdf:
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf
+                      }
+                    )
+                  end
+                  def to_hash
+                  end
+
+                  class Pdf < ContextDev::Internal::Type::BaseModel
+                    OrHash =
+                      T.type_alias do
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf,
+                          ContextDev::Internal::AnyHash
+                        )
+                      end
+
+                    # Last page to parse. Defaults to the last page. Must be at least `startPage`.
+                    sig { returns(T.nilable(Integer)) }
+                    attr_reader :end_page
+
+                    sig { params(end_page: Integer).void }
+                    attr_writer :end_page
+
+                    # Start each PDF page in the Markdown with a `<!-- page N -->` line, where `N` is
+                    # the original 1-based page number. These responses are never served from cache.
+                    sig { returns(T.nilable(T::Boolean)) }
+                    attr_reader :include_numbered_pages
+
+                    sig { params(include_numbered_pages: T::Boolean).void }
+                    attr_writer :include_numbered_pages
+
+                    # Set to `auto` to read scanned pages with OCR. Adds 1 credit per page read.
+                    sig do
+                      returns(
+                        T.nilable(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::OrSymbol
+                        )
+                      )
+                    end
+                    attr_reader :ocr
+
+                    sig do
+                      params(
+                        ocr:
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::OrSymbol
+                      ).void
+                    end
+                    attr_writer :ocr
+
+                    # First page to parse, starting at 1.
+                    sig { returns(T.nilable(Integer)) }
+                    attr_reader :start_page
+
+                    sig { params(start_page: Integer).void }
+                    attr_writer :start_page
+
+                    # Page range, OCR, and page markers for PDFs.
+                    sig do
+                      params(
+                        end_page: Integer,
+                        include_numbered_pages: T::Boolean,
+                        ocr:
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::OrSymbol,
+                        start_page: Integer
+                      ).returns(T.attached_class)
+                    end
+                    def self.new(
+                      # Last page to parse. Defaults to the last page. Must be at least `startPage`.
+                      end_page: nil,
+                      # Start each PDF page in the Markdown with a `<!-- page N -->` line, where `N` is
+                      # the original 1-based page number. These responses are never served from cache.
+                      include_numbered_pages: nil,
+                      # Set to `auto` to read scanned pages with OCR. Adds 1 credit per page read.
+                      ocr: nil,
+                      # First page to parse, starting at 1.
+                      start_page: nil
+                    )
+                    end
+
+                    sig do
+                      override.returns(
+                        {
+                          end_page: Integer,
+                          include_numbered_pages: T::Boolean,
+                          ocr:
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::OrSymbol,
+                          start_page: Integer
+                        }
+                      )
+                    end
+                    def to_hash
+                    end
+
+                    # Set to `auto` to read scanned pages with OCR. Adds 1 credit per page read.
+                    module Ocr
+                      extend ContextDev::Internal::Type::Enum
+
+                      TaggedSymbol =
+                        T.type_alias do
+                          T.all(
+                            Symbol,
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr
+                          )
+                        end
+                      OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                      OFF =
+                        T.let(
+                          :off,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
+                        )
+                      AUTO =
+                        T.let(
+                          :auto,
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
+                        )
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
+                          ]
+                        )
+                      end
+                      def self.values
+                      end
+                    end
+                  end
+                end
+
+                # Scrape as a signed-in user. Create a profile with `type: "new"` and your
+                # credentials, then reuse it with `type: "existing"`. Requires a paid plan and an
+                # HTTPS URL. Profiles keep their session between requests, skip the cache, and
+                # cannot be combined with ZDR, custom headers, `formats.bytes`, or prebuilt
+                # parsers other than `emails`, `phone-numbers`, and `links`.
+                module Profile
+                  extend ContextDev::Internal::Type::Union
+
+                  Variants =
+                    T.type_alias do
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New
+                      )
+                    end
+
+                  class Existing < ContextDev::Internal::Type::BaseModel
+                    OrHash =
+                      T.type_alias do
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing,
+                          ContextDev::Internal::AnyHash
+                        )
+                      end
+
+                    # ID of the browser profile, from `profile.id` in an earlier scrape response.
+                    sig { returns(String) }
+                    attr_accessor :profile_id
+
+                    # Reuse a saved browser profile.
+                    sig { returns(Symbol) }
+                    attr_accessor :type
+
+                    sig do
+                      params(profile_id: String, type: Symbol).returns(
+                        T.attached_class
+                      )
+                    end
+                    def self.new(
+                      # ID of the browser profile, from `profile.id` in an earlier scrape response.
+                      profile_id:,
+                      # Reuse a saved browser profile.
+                      type: :existing
+                    )
+                    end
+
+                    sig do
+                      override.returns({ profile_id: String, type: Symbol })
+                    end
+                    def to_hash
+                    end
+                  end
+
+                  class New < ContextDev::Internal::Type::BaseModel
+                    OrHash =
+                      T.type_alias do
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New,
+                          ContextDev::Internal::AnyHash
+                        )
+                      end
+
+                    # Username or email address for the website.
+                    sig { returns(String) }
+                    attr_accessor :identifier
+
+                    # Sign in and save a new browser profile.
+                    sig { returns(Symbol) }
+                    attr_accessor :type
+
+                    # Label for the profile, shown by `GET /org/browser/profiles`.
+                    sig { returns(T.nilable(String)) }
+                    attr_reader :description
+
+                    sig { params(description: String).void }
+                    attr_writer :description
+
+                    # Password for the website. Used to sign in and never stored.
+                    sig { returns(String) }
+                    attr_accessor :password
+
+                    sig do
+                      params(
+                        identifier: String,
+                        password: String,
+                        description: String,
+                        type: Symbol
+                      ).returns(T.attached_class)
+                    end
+                    def self.new(
+                      # Username or email address for the website.
+                      identifier:,
+                      # Password for the website. Used to sign in and never stored.
+                      password:,
+                      # Label for the profile, shown by `GET /org/browser/profiles`.
+                      description: nil,
+                      # Sign in and save a new browser profile.
+                      type: :new
+                    )
+                    end
+
+                    sig do
+                      override.returns(
+                        {
+                          identifier: String,
+                          password: String,
+                          type: Symbol,
+                          description: String
+                        }
+                      )
+                    end
+                    def to_hash
+                    end
+                  end
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Variants
+                      ]
+                    )
+                  end
+                  def self.variants
+                  end
+                end
+
+                # Emulate a light or dark color scheme.
+                module Theme
+                  extend ContextDev::Internal::Type::Enum
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  LIGHT =
+                    T.let(
+                      :light,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::TaggedSymbol
+                    )
+                  DARK =
+                    T.let(
+                      :dark,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::TaggedSymbol
+                    )
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::TaggedSymbol
+                      ]
+                    )
+                  end
+                  def self.values
+                  end
+                end
+
+                class Viewport < ContextDev::Internal::Type::BaseModel
+                  OrHash =
+                    T.type_alias do
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Viewport,
+                        ContextDev::Internal::AnyHash
+                      )
+                    end
+
+                  # Browser viewport height in pixels.
+                  sig { returns(T.nilable(Integer)) }
+                  attr_reader :height
+
+                  sig { params(height: Integer).void }
+                  attr_writer :height
+
+                  # Browser viewport width in pixels.
+                  sig { returns(T.nilable(Integer)) }
+                  attr_reader :width
+
+                  sig { params(width: Integer).void }
+                  attr_writer :width
+
+                  # Browser viewport in pixels. Defaults to 1920 × 1080. If you pass `viewport`, a
+                  # missing `width` defaults to 1440 and a missing `height` to 900.
+                  sig do
+                    params(height: Integer, width: Integer).returns(
+                      T.attached_class
+                    )
+                  end
+                  def self.new(
+                    # Browser viewport height in pixels.
+                    height: nil,
+                    # Browser viewport width in pixels.
+                    width: nil
+                  )
+                  end
+
+                  sig { override.returns({ height: Integer, width: Integer }) }
+                  def to_hash
+                  end
+                end
+
+                # Time to wait after actions, in milliseconds, or a CSS selector to wait for.
+                # Defaults to 500 ms, or 2000 ms when `includeFrames` is `true` or the URL ends in
+                # `.xml`.
+                module WaitFor
+                  extend ContextDev::Internal::Type::Union
+
+                  Variants = T.type_alias { T.any(Integer, String) }
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::WaitFor::Variants
+                      ]
+                    )
+                  end
+                  def self.variants
+                  end
+                end
+              end
+
+              class TimeoutOpts < ContextDev::Internal::Type::BaseModel
+                OrHash =
+                  T.type_alias do
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts,
+                      ContextDev::Internal::AnyHash
+                    )
+                  end
+
+                # Deadline in milliseconds.
+                sig { returns(Integer) }
+                attr_accessor :milliseconds
+
+                # `fail` returns 408 at the deadline. `return-partial` returns the results
+                # collected so far and marks the response as partial. `return-partial` requires at
+                # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+                # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+                # the whole request could not respond by the deadline.
+                sig do
+                  returns(
+                    T.nilable(
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::OrSymbol
+                    )
+                  )
+                end
+                attr_reader :behavior
+
+                sig do
+                  params(
+                    behavior:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::OrSymbol
+                  ).void
+                end
+                attr_writer :behavior
+
+                # Time limit for each page, with the same behavior and defaults as in
+                # `POST /web/scrape`.
+                sig do
+                  params(
+                    milliseconds: Integer,
+                    behavior:
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::OrSymbol
+                  ).returns(T.attached_class)
+                end
+                def self.new(
+                  # Deadline in milliseconds.
+                  milliseconds:,
+                  # `fail` returns 408 at the deadline. `return-partial` returns the results
+                  # collected so far and marks the response as partial. `return-partial` requires at
+                  # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+                  # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+                  # the whole request could not respond by the deadline.
+                  behavior: nil
+                )
+                end
+
+                sig do
+                  override.returns(
+                    {
+                      milliseconds: Integer,
+                      behavior:
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::OrSymbol
+                    }
+                  )
+                end
+                def to_hash
+                end
+
+                # `fail` returns 408 at the deadline. `return-partial` returns the results
+                # collected so far and marks the response as partial. `return-partial` requires at
+                # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+                # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+                # the whole request could not respond by the deadline.
+                module Behavior
+                  extend ContextDev::Internal::Type::Enum
+
+                  TaggedSymbol =
+                    T.type_alias do
+                      T.all(
+                        Symbol,
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior
+                      )
+                    end
+                  OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                  FAIL =
+                    T.let(
+                      :fail,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::TaggedSymbol
+                    )
+                  RETURN_PARTIAL =
+                    T.let(
+                      :"return-partial",
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::TaggedSymbol
+                    )
+
+                  sig do
+                    override.returns(
+                      T::Array[
+                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::TaggedSymbol
+                      ]
+                    )
+                  end
+                  def self.values
+                  end
+                end
+              end
+
+              # Zero data retention is not available for batches, because batches store their
+              # results. Sending `enabled` returns `ZDR_NOT_SUPPORTED`.
+              module Zdr
+                extend ContextDev::Internal::Type::Enum
+
+                TaggedSymbol =
+                  T.type_alias do
+                    T.all(
+                      Symbol,
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr
+                    )
+                  end
+                OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                DISABLED =
+                  T.let(
+                    :disabled,
+                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::TaggedSymbol
+                  )
+
+                sig do
+                  override.returns(
+                    T::Array[
+                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::TaggedSymbol
+                    ]
+                  )
+                end
+                def self.values
+                end
+              end
+            end
 
             class Markdown < ContextDev::Internal::Type::BaseModel
               OrHash =
@@ -211,7 +3967,7 @@ module ContextDev
               end
               attr_accessor :format_
 
-              # Pages to scrape. Maximum 100000.
+              # Pages to scrape, up to 100,000.
               sig do
                 returns(
                   T::Array[
@@ -255,7 +4011,7 @@ module ContextDev
               def self.new(
                 # Return page content as Markdown.
                 format_:,
-                # Pages to scrape. Maximum 100000.
+                # Pages to scrape, up to 100,000.
                 urls:,
                 # Options for Markdown output.
                 options: nil
@@ -318,7 +4074,7 @@ module ContextDev
                     )
                   end
 
-                # Page URL to scrape.
+                # URL of the page.
                 sig { returns(String) }
                 attr_accessor :url
 
@@ -330,14 +4086,14 @@ module ContextDev
                 sig { params(item_id: String).void }
                 attr_writer :item_id
 
-                # Custom JSON returned unchanged with this page result.
+                # Custom JSON returned unchanged with this page's result.
                 sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
                 attr_reader :meta
 
                 sig { params(meta: T::Hash[Symbol, T.anything]).void }
                 attr_writer :meta
 
-                # A page to scrape, with optional data for matching results.
+                # A page to scrape, with optional `itemId` and `meta` to match it to its result.
                 sig do
                   params(
                     url: String,
@@ -346,12 +4102,12 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Page URL to scrape.
+                  # URL of the page.
                   url:,
                   # Your ID for this page, returned with its result. The same URL can use different
                   # IDs.
                   item_id: nil,
-                  # Custom JSON returned unchanged with this page result.
+                  # Custom JSON returned unchanged with this page's result.
                   meta: nil
                 )
                 end
@@ -378,7 +4134,7 @@ module ContextDev
                     )
                   end
 
-                # Fetch from this country (ISO 3166-1 alpha-2).
+                # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                 sig do
                   returns(
                     T.nilable(
@@ -432,7 +4188,7 @@ module ContextDev
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
-                # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                # Whether to parse PDFs and which pages to read.
                 sig do
                   returns(
                     T.nilable(
@@ -525,7 +4281,7 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Fetch from this country (ISO 3166-1 alpha-2).
+                  # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                   country: nil,
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
@@ -542,7 +4298,7 @@ module ContextDev
                   # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                   # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
-                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                  # Whether to parse PDFs and which pages to read.
                   pdf: nil,
                   # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
@@ -585,7 +4341,7 @@ module ContextDev
                 def to_hash
                 end
 
-                # Fetch from this country (ISO 3166-1 alpha-2).
+                # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                 module Country
                   extend ContextDev::Internal::Type::Enum
 
@@ -1639,15 +5395,14 @@ module ContextDev
                       )
                     end
 
-                  # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-                  # be >= start.
+                  # Last page to parse. Defaults to the last page. Must be at least `start`.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :end_
 
                   sig { params(end_: Integer).void }
                   attr_writer :end_
 
-                  # Read scanned PDF pages with OCR; preserve pages that already have text.
+                  # Read scanned PDF pages with OCR. Pages that already have text are kept as is.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
@@ -1661,14 +5416,14 @@ module ContextDev
                   sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
-                  # First 1-based PDF page to parse.
+                  # First page to parse, starting at 1.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :start
 
                   sig { params(start: Integer).void }
                   attr_writer :start
 
-                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                  # Whether to parse PDFs and which pages to read.
                   sig do
                     params(
                       end_: Integer,
@@ -1678,14 +5433,13 @@ module ContextDev
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-                    # be >= start.
+                    # Last page to parse. Defaults to the last page. Must be at least `start`.
                     end_: nil,
-                    # Read scanned PDF pages with OCR; preserve pages that already have text.
+                    # Read scanned PDF pages with OCR. Pages that already have text are kept as is.
                     ocr: nil,
                     # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
-                    # First 1-based PDF page to parse.
+                    # First page to parse, starting at 1.
                     start: nil
                   )
                   end
@@ -1757,7 +5511,7 @@ module ContextDev
               end
               attr_accessor :format_
 
-              # Pages to scrape. Maximum 100000.
+              # Pages to scrape, up to 100,000.
               sig do
                 returns(
                   T::Array[
@@ -1801,7 +5555,7 @@ module ContextDev
               def self.new(
                 # Return page content as HTML.
                 format_:,
-                # Pages to scrape. Maximum 100000.
+                # Pages to scrape, up to 100,000.
                 urls:,
                 # Options for HTML output.
                 options: nil
@@ -1864,7 +5618,7 @@ module ContextDev
                     )
                   end
 
-                # Page URL to scrape.
+                # URL of the page.
                 sig { returns(String) }
                 attr_accessor :url
 
@@ -1876,14 +5630,14 @@ module ContextDev
                 sig { params(item_id: String).void }
                 attr_writer :item_id
 
-                # Custom JSON returned unchanged with this page result.
+                # Custom JSON returned unchanged with this page's result.
                 sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
                 attr_reader :meta
 
                 sig { params(meta: T::Hash[Symbol, T.anything]).void }
                 attr_writer :meta
 
-                # A page to scrape, with optional data for matching results.
+                # A page to scrape, with optional `itemId` and `meta` to match it to its result.
                 sig do
                   params(
                     url: String,
@@ -1892,12 +5646,12 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Page URL to scrape.
+                  # URL of the page.
                   url:,
                   # Your ID for this page, returned with its result. The same URL can use different
                   # IDs.
                   item_id: nil,
-                  # Custom JSON returned unchanged with this page result.
+                  # Custom JSON returned unchanged with this page's result.
                   meta: nil
                 )
                 end
@@ -1924,7 +5678,7 @@ module ContextDev
                     )
                   end
 
-                # Fetch from this country (ISO 3166-1 alpha-2).
+                # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                 sig do
                   returns(
                     T.nilable(
@@ -1957,7 +5711,7 @@ module ContextDev
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
-                # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                # Whether to parse PDFs and which pages to read.
                 sig do
                   returns(
                     T.nilable(
@@ -2012,7 +5766,7 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Fetch from this country (ISO 3166-1 alpha-2).
+                  # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                   country: nil,
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
@@ -2023,7 +5777,7 @@ module ContextDev
                   # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                   # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
-                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                  # Whether to parse PDFs and which pages to read.
                   pdf: nil,
                   # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
@@ -2053,7 +5807,7 @@ module ContextDev
                 def to_hash
                 end
 
-                # Fetch from this country (ISO 3166-1 alpha-2).
+                # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                 module Country
                   extend ContextDev::Internal::Type::Enum
 
@@ -3107,15 +6861,14 @@ module ContextDev
                       )
                     end
 
-                  # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-                  # be >= start.
+                  # Last page to parse. Defaults to the last page. Must be at least `start`.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :end_
 
                   sig { params(end_: Integer).void }
                   attr_writer :end_
 
-                  # Read scanned PDF pages with OCR; preserve pages that already have text.
+                  # Read scanned PDF pages with OCR. Pages that already have text are kept as is.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
@@ -3129,14 +6882,14 @@ module ContextDev
                   sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
-                  # First 1-based PDF page to parse.
+                  # First page to parse, starting at 1.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :start
 
                   sig { params(start: Integer).void }
                   attr_writer :start
 
-                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                  # Whether to parse PDFs and which pages to read.
                   sig do
                     params(
                       end_: Integer,
@@ -3146,14 +6899,13 @@ module ContextDev
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-                    # be >= start.
+                    # Last page to parse. Defaults to the last page. Must be at least `start`.
                     end_: nil,
-                    # Read scanned PDF pages with OCR; preserve pages that already have text.
+                    # Read scanned PDF pages with OCR. Pages that already have text are kept as is.
                     ocr: nil,
                     # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
-                    # First 1-based PDF page to parse.
+                    # First page to parse, starting at 1.
                     start: nil
                   )
                   end
@@ -3174,11 +6926,97 @@ module ContextDev
               end
             end
 
-            class BatchUnifiedScrapeData < ContextDev::Internal::Type::BaseModel
+            sig do
+              override.returns(
+                T::Array[
+                  ContextDev::BatchSubmitParams::Input::Scrape::Data::Variants
+                ]
+              )
+            end
+            def self.variants
+            end
+          end
+        end
+
+        class Crawl < ContextDev::Internal::Type::BaseModel
+          OrHash =
+            T.type_alias do
+              T.any(
+                ContextDev::BatchSubmitParams::Input::Crawl,
+                ContextDev::Internal::AnyHash
+              )
+            end
+
+          # Where to find pages, with the formats and options to apply to each page.
+          sig do
+            returns(
+              T.any(
+                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData,
+                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown,
+                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML
+              )
+            )
+          end
+          attr_accessor :data
+
+          # Discover and scrape pages from `data.source`.
+          sig { returns(Symbol) }
+          attr_accessor :mode
+
+          # Crawl pages starting from a URL or from a domain's sitemap.
+          sig do
+            params(
+              data:
+                T.any(
+                  ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::OrHash,
+                  ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::OrHash,
+                  ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::OrHash
+                ),
+              mode: Symbol
+            ).returns(T.attached_class)
+          end
+          def self.new(
+            # Where to find pages, with the formats and options to apply to each page.
+            data:,
+            # Discover and scrape pages from `data.source`.
+            mode: :crawl
+          )
+          end
+
+          sig do
+            override.returns(
+              {
+                data:
+                  T.any(
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML
+                  ),
+                mode: Symbol
+              }
+            )
+          end
+          def to_hash
+          end
+
+          # Where to find pages, with the formats and options to apply to each page.
+          module Data
+            extend ContextDev::Internal::Type::Union
+
+            Variants =
+              T.type_alias do
+                T.any(
+                  ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData,
+                  ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown,
+                  ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML
+                )
+              end
+
+            class BatchUnifiedCrawlData < ContextDev::Internal::Type::BaseModel
               OrHash =
                 T.type_alias do
                   T.any(
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData,
                     ContextDev::Internal::AnyHash
                   )
                 end
@@ -3186,7 +7024,7 @@ module ContextDev
               # Outputs to return. Set at least one to `true`.
               sig do
                 returns(
-                  ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Formats
+                  ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Formats
                 )
               end
               attr_reader :formats
@@ -3194,26 +7032,28 @@ module ContextDev
               sig do
                 params(
                   formats:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Formats::OrHash
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Formats::OrHash
                 ).void
               end
               attr_writer :formats
 
-              # Pages to scrape. Maximum 100000.
+              # How to find pages to crawl.
               sig do
                 returns(
-                  T::Array[
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::URL
-                  ]
+                  T.any(
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap
+                  )
                 )
               end
-              attr_accessor :urls
+              attr_accessor :source
 
-              # Requires `formats.highlights: true`; required when it is set.
+              # Query for the `highlights` output. Required when `formats.highlights` is `true`,
+              # and allowed only then.
               sig do
                 returns(
                   T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::HighlightsParams
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::HighlightsParams
                   )
                 )
               end
@@ -3222,16 +7062,16 @@ module ContextDev
               sig do
                 params(
                   highlights_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::HighlightsParams::OrHash
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::HighlightsParams::OrHash
                 ).void
               end
               attr_writer :highlights_params
 
-              # Image options. Requires formats.images: true.
+              # Options for the `images` output. Requires `formats.images: true`.
               sig do
                 returns(
                   T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams
                   )
                 )
               end
@@ -3240,16 +7080,17 @@ module ContextDev
               sig do
                 params(
                   image_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::OrHash
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::OrHash
                 ).void
               end
               attr_writer :image_params
 
-              # Requires `formats.json: true`; required when it is set.
+              # Schema and instructions for the `json` output. Required when `formats.json` is
+              # `true`, and allowed only then.
               sig do
                 returns(
                   T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::JsonParams
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::JsonParams
                   )
                 )
               end
@@ -3258,16 +7099,16 @@ module ContextDev
               sig do
                 params(
                   json_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::JsonParams::OrHash
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::JsonParams::OrHash
                 ).void
               end
               attr_writer :json_params
 
-              # Markdown options. Requires `formats.markdown`.
+              # Options for the `markdown` output. Requires `formats.markdown: true`.
               sig do
                 returns(
                   T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams
                   )
                 )
               end
@@ -3276,26 +7117,27 @@ module ContextDev
               sig do
                 params(
                   markdown_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::OrHash
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::OrHash
                 ).void
               end
               attr_writer :markdown_params
 
-              # Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
-              # 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
+              # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+              # Defaults to 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
               sig { returns(T.nilable(Integer)) }
               attr_reader :max_age_ms
 
               sig { params(max_age_ms: Integer).void }
               attr_writer :max_age_ms
 
-              # Requires `formats.parse: true`; required when it is set.
+              # Custom rules or a prebuilt parser for the `parsed` output. Required when
+              # `formats.parse` is `true`, and allowed only then.
               sig do
                 returns(
                   T.nilable(
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser
                     )
                   )
                 )
@@ -3306,18 +7148,18 @@ module ContextDev
                 params(
                   parse_params:
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::OrHash,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::OrHash
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::OrHash,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::OrHash
                     )
                 ).void
               end
               attr_writer :parse_params
 
-              # Product options. Requires formats.product: true.
+              # Options for the `product` output. Requires `formats.product: true`.
               sig do
                 returns(
                   T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ProductParams
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ProductParams
                   )
                 )
               end
@@ -3326,16 +7168,16 @@ module ContextDev
               sig do
                 params(
                   product_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ProductParams::OrHash
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ProductParams::OrHash
                 ).void
               end
               attr_writer :product_params
 
-              # Screenshot options. Requires formats.screenshot: true.
+              # Options for the `screenshot` output. Requires `formats.screenshot: true`.
               sig do
                 returns(
                   T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams
                   )
                 )
               end
@@ -3344,7 +7186,7 @@ module ContextDev
               sig do
                 params(
                   screenshot_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::OrHash
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::OrHash
                 ).void
               end
               attr_writer :screenshot_params
@@ -3353,7 +7195,7 @@ module ContextDev
               sig do
                 returns(
                   T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams
                   )
                 )
               end
@@ -3362,24 +7204,25 @@ module ContextDev
               sig do
                 params(
                   shared_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::OrHash
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::OrHash
                 ).void
               end
               attr_writer :shared_params
 
-              # Labels for filtering usage in the dashboard.
+              # Labels for this request. Filter usage and request logs by them in the dashboard
+              # or with `GET /org/logs`.
               sig { returns(T.nilable(T::Array[String])) }
               attr_reader :tags
 
               sig { params(tags: T::Array[String]).void }
               attr_writer :tags
 
-              # Deadline for each page, using the same behavior and defaults as POST
-              # /web/scrape.
+              # Time limit for each page, with the same behavior and defaults as in
+              # `POST /web/scrape`.
               sig do
                 returns(
                   T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts
                   )
                 )
               end
@@ -3388,17 +7231,17 @@ module ContextDev
               sig do
                 params(
                   timeout_opts:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::OrHash
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::OrHash
                 ).void
               end
               attr_writer :timeout_opts
 
-              # Batches persist their results. Only disabled is supported; enabled returns
-              # ZDR_NOT_SUPPORTED.
+              # Zero data retention is not available for batches, because batches store their
+              # results. Sending `enabled` returns `ZDR_NOT_SUPPORTED`.
               sig do
                 returns(
                   T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::OrSymbol
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::OrSymbol
                   )
                 )
               end
@@ -3407,79 +7250,84 @@ module ContextDev
               sig do
                 params(
                   zdr:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::OrSymbol
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::OrSymbol
                 ).void
               end
               attr_writer :zdr
 
-              # Use the same formats and parameters as POST /web/scrape, replacing url with
-              # urls. Options apply to every page.
+              # The same formats and options as `POST /web/scrape`, with `source` in place of
+              # `url`. Options apply to every page.
               sig do
                 params(
                   formats:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Formats::OrHash,
-                  urls:
-                    T::Array[
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::URL::OrHash
-                    ],
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Formats::OrHash,
+                  source:
+                    T.any(
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::OrHash,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::OrHash
+                    ),
                   highlights_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::HighlightsParams::OrHash,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::HighlightsParams::OrHash,
                   image_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::OrHash,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::OrHash,
                   json_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::JsonParams::OrHash,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::JsonParams::OrHash,
                   markdown_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::OrHash,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::OrHash,
                   max_age_ms: Integer,
                   parse_params:
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::OrHash,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::OrHash
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::OrHash,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::OrHash
                     ),
                   product_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ProductParams::OrHash,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ProductParams::OrHash,
                   screenshot_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::OrHash,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::OrHash,
                   shared_params:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::OrHash,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::OrHash,
                   tags: T::Array[String],
                   timeout_opts:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::OrHash,
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::OrHash,
                   zdr:
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::OrSymbol
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::OrSymbol
                 ).returns(T.attached_class)
               end
               def self.new(
                 # Outputs to return. Set at least one to `true`.
                 formats:,
-                # Pages to scrape. Maximum 100000.
-                urls:,
-                # Requires `formats.highlights: true`; required when it is set.
+                # How to find pages to crawl.
+                source:,
+                # Query for the `highlights` output. Required when `formats.highlights` is `true`,
+                # and allowed only then.
                 highlights_params: nil,
-                # Image options. Requires formats.images: true.
+                # Options for the `images` output. Requires `formats.images: true`.
                 image_params: nil,
-                # Requires `formats.json: true`; required when it is set.
+                # Schema and instructions for the `json` output. Required when `formats.json` is
+                # `true`, and allowed only then.
                 json_params: nil,
-                # Markdown options. Requires `formats.markdown`.
+                # Options for the `markdown` output. Requires `formats.markdown: true`.
                 markdown_params: nil,
-                # Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
-                # 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
+                # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+                # Defaults to 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
                 max_age_ms: nil,
-                # Requires `formats.parse: true`; required when it is set.
+                # Custom rules or a prebuilt parser for the `parsed` output. Required when
+                # `formats.parse` is `true`, and allowed only then.
                 parse_params: nil,
-                # Product options. Requires formats.product: true.
+                # Options for the `product` output. Requires `formats.product: true`.
                 product_params: nil,
-                # Screenshot options. Requires formats.screenshot: true.
+                # Options for the `screenshot` output. Requires `formats.screenshot: true`.
                 screenshot_params: nil,
                 # Browser and content settings shared by all outputs.
                 shared_params: nil,
-                # Labels for filtering usage in the dashboard.
+                # Labels for this request. Filter usage and request logs by them in the dashboard
+                # or with `GET /org/logs`.
                 tags: nil,
-                # Deadline for each page, using the same behavior and defaults as POST
-                # /web/scrape.
+                # Time limit for each page, with the same behavior and defaults as in
+                # `POST /web/scrape`.
                 timeout_opts: nil,
-                # Batches persist their results. Only disabled is supported; enabled returns
-                # ZDR_NOT_SUPPORTED.
+                # Zero data retention is not available for batches, because batches store their
+                # results. Sending `enabled` returns `ZDR_NOT_SUPPORTED`.
                 zdr: nil
               )
               end
@@ -3488,36 +7336,37 @@ module ContextDev
                 override.returns(
                   {
                     formats:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Formats,
-                    urls:
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::URL
-                      ],
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Formats,
+                    source:
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap
+                      ),
                     highlights_params:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::HighlightsParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::HighlightsParams,
                     image_params:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams,
                     json_params:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::JsonParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::JsonParams,
                     markdown_params:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams,
                     max_age_ms: Integer,
                     parse_params:
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser
                       ),
                     product_params:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ProductParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ProductParams,
                     screenshot_params:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams,
                     shared_params:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams,
                     tags: T::Array[String],
                     timeout_opts:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts,
                     zdr:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::OrSymbol
                   }
                 )
               end
@@ -3528,69 +7377,69 @@ module ContextDev
                 OrHash =
                   T.type_alias do
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Formats,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Formats,
                       ContextDev::Internal::AnyHash
                     )
                   end
 
-                # The original HTTP response body.
+                # Return the original HTTP response body.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :bytes
 
                 sig { params(bytes: T::Boolean).void }
                 attr_writer :bytes
 
-                # Markdown excerpts relevant to `highlightsParams.query`.
+                # Return Markdown excerpts relevant to `highlightsParams.query`.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :highlights
 
                 sig { params(highlights: T::Boolean).void }
                 attr_writer :highlights
 
-                # Rendered HTML.
+                # Return the rendered HTML.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :html
 
                 sig { params(html: T::Boolean).void }
                 attr_writer :html
 
-                # Images found on the page.
+                # Return the images found on the page.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :images
 
                 sig { params(images: T::Boolean).void }
                 attr_writer :images
 
-                # An object matching `jsonParams.schema`, extracted from the page text and its
-                # embedded data (JSON-LD, meta tags, framework state).
+                # Return an object matching `jsonParams.schema`, extracted from the page text and
+                # embedded data such as JSON-LD, meta tags, and framework state.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :json
 
                 sig { params(json: T::Boolean).void }
                 attr_writer :json
 
-                # Page content or video transcript as Markdown.
+                # Return the page content, or a video transcript, as Markdown.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :markdown
 
                 sig { params(markdown: T::Boolean).void }
                 attr_writer :markdown
 
-                # Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
+                # Return fields extracted with custom rules or a prebuilt parser, as `parsed`.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :parse
 
                 sig { params(parse: T::Boolean).void }
                 attr_writer :parse
 
-                # Product details such as name, price, and availability.
+                # Return product details such as name, price, and availability.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :product
 
                 sig { params(product: T::Boolean).void }
                 attr_writer :product
 
-                # A screenshot of the page.
+                # Return a screenshot of the page.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :screenshot
 
@@ -3612,24 +7461,24 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # The original HTTP response body.
+                  # Return the original HTTP response body.
                   bytes: nil,
-                  # Markdown excerpts relevant to `highlightsParams.query`.
+                  # Return Markdown excerpts relevant to `highlightsParams.query`.
                   highlights: nil,
-                  # Rendered HTML.
+                  # Return the rendered HTML.
                   html: nil,
-                  # Images found on the page.
+                  # Return the images found on the page.
                   images: nil,
-                  # An object matching `jsonParams.schema`, extracted from the page text and its
-                  # embedded data (JSON-LD, meta tags, framework state).
+                  # Return an object matching `jsonParams.schema`, extracted from the page text and
+                  # embedded data such as JSON-LD, meta tags, and framework state.
                   json: nil,
-                  # Page content or video transcript as Markdown.
+                  # Return the page content, or a video transcript, as Markdown.
                   markdown: nil,
-                  # Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
+                  # Return fields extracted with custom rules or a prebuilt parser, as `parsed`.
                   parse: nil,
-                  # Product details such as name, price, and availability.
+                  # Return product details such as name, price, and availability.
                   product: nil,
-                  # A screenshot of the page.
+                  # Return a screenshot of the page.
                   screenshot: nil
                 )
                 end
@@ -3653,63 +7502,1463 @@ module ContextDev
                 end
               end
 
-              class URL < ContextDev::Internal::Type::BaseModel
-                OrHash =
+              # How to find pages to crawl.
+              module Source
+                extend ContextDev::Internal::Type::Union
+
+                Variants =
                   T.type_alias do
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::URL,
-                      ContextDev::Internal::AnyHash
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap
                     )
                   end
 
-                # Page URL to scrape.
-                sig { returns(String) }
-                attr_accessor :url
+                class StartURL < ContextDev::Internal::Type::BaseModel
+                  OrHash =
+                    T.type_alias do
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL,
+                        ContextDev::Internal::AnyHash
+                      )
+                    end
 
-                # Your ID for this page, returned with its result. The same URL can use different
-                # IDs.
-                sig { returns(T.nilable(String)) }
-                attr_reader :item_id
+                  # Follow links from one URL.
+                  sig { returns(Symbol) }
+                  attr_accessor :type
 
-                sig { params(item_id: String).void }
-                attr_writer :item_id
+                  # Page where crawling begins. A URL without a scheme is treated as `https://`.
+                  sig { returns(String) }
+                  attr_accessor :url
 
-                # Custom JSON returned unchanged with this page result.
-                sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
-                attr_reader :meta
+                  # Limits and filters for page discovery.
+                  sig do
+                    returns(
+                      T.nilable(
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls
+                      )
+                    )
+                  end
+                  attr_reader :controls
 
-                sig { params(meta: T::Hash[Symbol, T.anything]).void }
-                attr_writer :meta
+                  sig do
+                    params(
+                      controls:
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::OrHash
+                    ).void
+                  end
+                  attr_writer :controls
 
-                # A page to scrape, with optional data for matching results.
-                sig do
-                  params(
-                    url: String,
-                    item_id: String,
-                    meta: T::Hash[Symbol, T.anything]
-                  ).returns(T.attached_class)
+                  # Discover pages by following links from one URL.
+                  sig do
+                    params(
+                      url: String,
+                      controls:
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::OrHash,
+                      type: Symbol
+                    ).returns(T.attached_class)
+                  end
+                  def self.new(
+                    # Page where crawling begins. A URL without a scheme is treated as `https://`.
+                    url:,
+                    # Limits and filters for page discovery.
+                    controls: nil,
+                    # Follow links from one URL.
+                    type: :start_url
+                  )
+                  end
+
+                  sig do
+                    override.returns(
+                      {
+                        type: Symbol,
+                        url: String,
+                        controls:
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls
+                      }
+                    )
+                  end
+                  def to_hash
+                  end
+
+                  class Controls < ContextDev::Internal::Type::BaseModel
+                    OrHash =
+                      T.type_alias do
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls,
+                          ContextDev::Internal::AnyHash
+                        )
+                      end
+
+                    # Pages to skip entirely, even when they match `follow` or `scrape`.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :exclude
+
+                    sig do
+                      params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :exclude
+
+                    # Links to follow from each page; every followed page is checked for links again.
+                    # Follows all links when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :follow
+
+                    sig do
+                      params(
+                        follow:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :follow
+
+                    # Follow links to subdomains.
+                    sig { returns(T.nilable(T::Boolean)) }
+                    attr_reader :follow_subdomains
+
+                    sig { params(follow_subdomains: T::Boolean).void }
+                    attr_writer :follow_subdomains
+
+                    # Only follow pages in these languages, or pass `same_as_start_url` to match the
+                    # start page. Follows all languages when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::OrSymbol,
+                            T::Array[
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::OrSymbol
+                            ]
+                          )
+                        )
+                      )
+                    end
+                    attr_reader :languages
+
+                    sig do
+                      params(
+                        languages:
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::OrSymbol,
+                            T::Array[
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::OrSymbol
+                            ]
+                          )
+                      ).void
+                    end
+                    attr_writer :languages
+
+                    # Maximum link depth, where the start page is depth `0`. No limit when omitted.
+                    sig { returns(T.nilable(Integer)) }
+                    attr_reader :max_depth
+
+                    sig { params(max_depth: Integer).void }
+                    attr_writer :max_depth
+
+                    # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                    # many pages and the unused part is refunded.
+                    sig { returns(T.nilable(Integer)) }
+                    attr_reader :max_urls
+
+                    sig { params(max_urls: Integer).void }
+                    attr_writer :max_urls
+
+                    # Pages to return in the results. Returns every fetched page when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :scrape
+
+                    sig do
+                      params(
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :scrape
+
+                    # Limits and filters for page discovery.
+                    sig do
+                      params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product::OrHash
+                            )
+                          ],
+                        follow:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product::OrHash
+                            )
+                          ],
+                        follow_subdomains: T::Boolean,
+                        languages:
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::OrSymbol,
+                            T::Array[
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::OrSymbol
+                            ]
+                          ),
+                        max_depth: Integer,
+                        max_urls: Integer,
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product::OrHash
+                            )
+                          ]
+                      ).returns(T.attached_class)
+                    end
+                    def self.new(
+                      # Pages to skip entirely, even when they match `follow` or `scrape`.
+                      exclude: nil,
+                      # Links to follow from each page; every followed page is checked for links again.
+                      # Follows all links when omitted.
+                      follow: nil,
+                      # Follow links to subdomains.
+                      follow_subdomains: nil,
+                      # Only follow pages in these languages, or pass `same_as_start_url` to match the
+                      # start page. Follows all languages when omitted.
+                      languages: nil,
+                      # Maximum link depth, where the start page is depth `0`. No limit when omitted.
+                      max_depth: nil,
+                      # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                      # many pages and the unused part is refunded.
+                      max_urls: nil,
+                      # Pages to return in the results. Returns every fetched page when omitted.
+                      scrape: nil
+                    )
+                    end
+
+                    sig do
+                      override.returns(
+                        {
+                          exclude:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product
+                              )
+                            ],
+                          follow:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product
+                              )
+                            ],
+                          follow_subdomains: T::Boolean,
+                          languages:
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::OrSymbol,
+                              T::Array[
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::OrSymbol
+                              ]
+                            ),
+                          max_depth: Integer,
+                          max_urls: Integer,
+                          scrape:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product
+                              )
+                            ]
+                        }
+                      )
+                    end
+                    def to_hash
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regular expression matched against the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regular expression matched against the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
+
+                    # Selects links by URL pattern, by kind of page, or as the next page of a list.
+                    module Follow
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regular expression matched against the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regular expression matched against the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Pagination < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match the further pages of a paginated list.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Further pages of a paginated list, such as page 2 of a catalog.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match the further pages of a paginated list.
+                          kind: :pagination
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
+
+                    # Only follow pages in these languages, or pass `same_as_start_url` to match the
+                    # start page. Follows all languages when omitted.
+                    module Languages
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::TaggedSymbol,
+                            T::Array[
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                            ]
+                          )
+                        end
+
+                      module UnionMember1
+                        extend ContextDev::Internal::Type::Enum
+
+                        TaggedSymbol =
+                          T.type_alias do
+                            T.all(
+                              Symbol,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1
+                            )
+                          end
+                        OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                        AM =
+                          T.let(
+                            :am,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        AR =
+                          T.let(
+                            :ar,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        AZ =
+                          T.let(
+                            :az,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        BE =
+                          T.let(
+                            :be,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        BG =
+                          T.let(
+                            :bg,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        BN =
+                          T.let(
+                            :bn,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        CA =
+                          T.let(
+                            :ca,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        CEB =
+                          T.let(
+                            :ceb,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        CS =
+                          T.let(
+                            :cs,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        CY =
+                          T.let(
+                            :cy,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        DA =
+                          T.let(
+                            :da,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        DE =
+                          T.let(
+                            :de,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        EL =
+                          T.let(
+                            :el,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        EN =
+                          T.let(
+                            :en,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        ES =
+                          T.let(
+                            :es,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        ET =
+                          T.let(
+                            :et,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        EU =
+                          T.let(
+                            :eu,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        FA =
+                          T.let(
+                            :fa,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        FI =
+                          T.let(
+                            :fi,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        FR =
+                          T.let(
+                            :fr,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        GU =
+                          T.let(
+                            :gu,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        HA =
+                          T.let(
+                            :ha,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        HAW =
+                          T.let(
+                            :haw,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        HE =
+                          T.let(
+                            :he,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        HI =
+                          T.let(
+                            :hi,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        HR =
+                          T.let(
+                            :hr,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        HU =
+                          T.let(
+                            :hu,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        HY =
+                          T.let(
+                            :hy,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        ID =
+                          T.let(
+                            :id,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        IS =
+                          T.let(
+                            :is,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        IT =
+                          T.let(
+                            :it,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        JA =
+                          T.let(
+                            :ja,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        KA =
+                          T.let(
+                            :ka,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        KK =
+                          T.let(
+                            :kk,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        KN =
+                          T.let(
+                            :kn,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        KO =
+                          T.let(
+                            :ko,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        KU =
+                          T.let(
+                            :ku,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        KY =
+                          T.let(
+                            :ky,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        LO =
+                          T.let(
+                            :lo,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        LT =
+                          T.let(
+                            :lt,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        LV =
+                          T.let(
+                            :lv,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        MK =
+                          T.let(
+                            :mk,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        ML =
+                          T.let(
+                            :ml,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        MN =
+                          T.let(
+                            :mn,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        MR =
+                          T.let(
+                            :mr,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        MS =
+                          T.let(
+                            :ms,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        NE =
+                          T.let(
+                            :ne,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        NL =
+                          T.let(
+                            :nl,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        NO =
+                          T.let(
+                            :no,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        OR =
+                          T.let(
+                            :or,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        PA =
+                          T.let(
+                            :pa,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        PL =
+                          T.let(
+                            :pl,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        PS =
+                          T.let(
+                            :ps,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        PT =
+                          T.let(
+                            :pt,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        RO =
+                          T.let(
+                            :ro,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        RU =
+                          T.let(
+                            :ru,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        SK =
+                          T.let(
+                            :sk,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        SL =
+                          T.let(
+                            :sl,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        SO =
+                          T.let(
+                            :so,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        SQ =
+                          T.let(
+                            :sq,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        SR =
+                          T.let(
+                            :sr,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        SV =
+                          T.let(
+                            :sv,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        SW =
+                          T.let(
+                            :sw,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        TA =
+                          T.let(
+                            :ta,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        TE =
+                          T.let(
+                            :te,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        TH =
+                          T.let(
+                            :th,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        TL =
+                          T.let(
+                            :tl,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        TR =
+                          T.let(
+                            :tr,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        UK =
+                          T.let(
+                            :uk,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        UR =
+                          T.let(
+                            :ur,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        UZ =
+                          T.let(
+                            :uz,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        VI =
+                          T.let(
+                            :vi,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        YO =
+                          T.let(
+                            :yo,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+                        ZH =
+                          T.let(
+                            :zh,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                          )
+
+                        sig do
+                          override.returns(
+                            T::Array[
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
+                            ]
+                          )
+                        end
+                        def self.values
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+
+                      TaggedSymbol =
+                        T.type_alias do
+                          T.all(
+                            Symbol,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages
+                          )
+                        end
+                      OrSymbol = T.type_alias { T.any(Symbol, String) }
+
+                      SAME_AS_START_URL =
+                        T.let(
+                          :same_as_start_url,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::TaggedSymbol
+                        )
+
+                      UnionMember1Array =
+                        T.let(
+                          ContextDev::Internal::Type::ArrayOf[
+                            enum:
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1
+                          ],
+                          ContextDev::Internal::Type::Converter
+                        )
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regular expression matched against the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regular expression matched against the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
+                  end
                 end
-                def self.new(
-                  # Page URL to scrape.
-                  url:,
-                  # Your ID for this page, returned with its result. The same URL can use different
-                  # IDs.
-                  item_id: nil,
-                  # Custom JSON returned unchanged with this page result.
-                  meta: nil
-                )
+
+                class Sitemap < ContextDev::Internal::Type::BaseModel
+                  OrHash =
+                    T.type_alias do
+                      T.any(
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap,
+                        ContextDev::Internal::AnyHash
+                      )
+                    end
+
+                  # Domain whose sitemap lists the pages to scrape. A full URL is reduced to its
+                  # domain.
+                  sig { returns(String) }
+                  attr_accessor :domain
+
+                  # Scrape the URLs in the domain's sitemap.
+                  sig { returns(Symbol) }
+                  attr_accessor :type
+
+                  # Limits and filters for the sitemap URLs. Links on sitemap pages are never
+                  # followed.
+                  sig do
+                    returns(
+                      T.nilable(
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls
+                      )
+                    )
+                  end
+                  attr_reader :controls
+
+                  sig do
+                    params(
+                      controls:
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::OrHash
+                    ).void
+                  end
+                  attr_writer :controls
+
+                  # Scrape the pages listed in a domain's sitemap. Links on those pages are not
+                  # followed.
+                  sig do
+                    params(
+                      domain: String,
+                      controls:
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::OrHash,
+                      type: Symbol
+                    ).returns(T.attached_class)
+                  end
+                  def self.new(
+                    # Domain whose sitemap lists the pages to scrape. A full URL is reduced to its
+                    # domain.
+                    domain:,
+                    # Limits and filters for the sitemap URLs. Links on sitemap pages are never
+                    # followed.
+                    controls: nil,
+                    # Scrape the URLs in the domain's sitemap.
+                    type: :sitemap
+                  )
+                  end
+
+                  sig do
+                    override.returns(
+                      {
+                        domain: String,
+                        type: Symbol,
+                        controls:
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls
+                      }
+                    )
+                  end
+                  def to_hash
+                  end
+
+                  class Controls < ContextDev::Internal::Type::BaseModel
+                    OrHash =
+                      T.type_alias do
+                        T.any(
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls,
+                          ContextDev::Internal::AnyHash
+                        )
+                      end
+
+                    # Sitemap pages to skip, even when they match `scrape`.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :exclude
+
+                    sig do
+                      params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :exclude
+
+                    # Path fragments that exclude a sitemap URL. Applies in addition to `scrape` and
+                    # `exclude`; pass `[]` to keep every listed URL.
+                    sig { returns(T.nilable(T::Array[String])) }
+                    attr_reader :exclude_paths
+
+                    sig { params(exclude_paths: T::Array[String]).void }
+                    attr_writer :exclude_paths
+
+                    # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                    # many pages and the unused part is refunded.
+                    sig { returns(T.nilable(Integer)) }
+                    attr_reader :max_urls
+
+                    sig { params(max_urls: Integer).void }
+                    attr_writer :max_urls
+
+                    # Sitemap pages to return in the results. Returns every listed page when omitted.
+                    sig do
+                      returns(
+                        T.nilable(
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product
+                            )
+                          ]
+                        )
+                      )
+                    end
+                    attr_reader :scrape
+
+                    sig do
+                      params(
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product::OrHash
+                            )
+                          ]
+                      ).void
+                    end
+                    attr_writer :scrape
+
+                    # Limits and filters for the sitemap URLs. Links on sitemap pages are never
+                    # followed.
+                    sig do
+                      params(
+                        exclude:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product::OrHash
+                            )
+                          ],
+                        exclude_paths: T::Array[String],
+                        max_urls: Integer,
+                        scrape:
+                          T::Array[
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex::OrHash,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product::OrHash
+                            )
+                          ]
+                      ).returns(T.attached_class)
+                    end
+                    def self.new(
+                      # Sitemap pages to skip, even when they match `scrape`.
+                      exclude: nil,
+                      # Path fragments that exclude a sitemap URL. Applies in addition to `scrape` and
+                      # `exclude`; pass `[]` to keep every listed URL.
+                      exclude_paths: nil,
+                      # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                      # many pages and the unused part is refunded.
+                      max_urls: nil,
+                      # Sitemap pages to return in the results. Returns every listed page when omitted.
+                      scrape: nil
+                    )
+                    end
+
+                    sig do
+                      override.returns(
+                        {
+                          exclude:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product
+                              )
+                            ],
+                          exclude_paths: T::Array[String],
+                          max_urls: Integer,
+                          scrape:
+                            T::Array[
+                              T.any(
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product
+                              )
+                            ]
+                        }
+                      )
+                    end
+                    def to_hash
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Exclude
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regular expression matched against the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regular expression matched against the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
+
+                    # Selects pages by URL pattern or by kind of page.
+                    module Scrape
+                      extend ContextDev::Internal::Type::Union
+
+                      Variants =
+                        T.type_alias do
+                          T.any(
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product
+                          )
+                        end
+
+                      class Regex < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match pages by URL pattern.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Regular expression matched against the page URL.
+                        sig { returns(String) }
+                        attr_accessor :pattern
+
+                        # Pages whose URL matches a regex pattern.
+                        sig do
+                          params(pattern: String, kind: Symbol).returns(
+                            T.attached_class
+                          )
+                        end
+                        def self.new(
+                          # Regular expression matched against the page URL.
+                          pattern:,
+                          # Match pages by URL pattern.
+                          kind: :regex
+                        )
+                        end
+
+                        sig do
+                          override.returns({ kind: Symbol, pattern: String })
+                        end
+                        def to_hash
+                        end
+                      end
+
+                      class Product < ContextDev::Internal::Type::BaseModel
+                        OrHash =
+                          T.type_alias do
+                            T.any(
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product,
+                              ContextDev::Internal::AnyHash
+                            )
+                          end
+
+                        # Match product detail pages.
+                        sig { returns(Symbol) }
+                        attr_accessor :kind
+
+                        # Product detail pages.
+                        sig { params(kind: Symbol).returns(T.attached_class) }
+                        def self.new(
+                          # Match product detail pages.
+                          kind: :product
+                        )
+                        end
+
+                        sig { override.returns({ kind: Symbol }) }
+                        def to_hash
+                        end
+                      end
+
+                      sig do
+                        override.returns(
+                          T::Array[
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Variants
+                          ]
+                        )
+                      end
+                      def self.variants
+                      end
+                    end
+                  end
                 end
 
                 sig do
                   override.returns(
-                    {
-                      url: String,
-                      item_id: String,
-                      meta: T::Hash[Symbol, T.anything]
-                    }
+                    T::Array[
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Variants
+                    ]
                   )
                 end
-                def to_hash
+                def self.variants
                 end
               end
 
@@ -3717,32 +8966,33 @@ module ContextDev
                 OrHash =
                   T.type_alias do
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::HighlightsParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::HighlightsParams,
                       ContextDev::Internal::AnyHash
                     )
                   end
 
-                # The question or topic to find passages for.
+                # Question or topic to find relevant passages for.
                 sig { returns(String) }
                 attr_accessor :query
 
-                # Maximum combined length of returned passages.
+                # Maximum combined length of the returned passages, in characters.
                 sig { returns(T.nilable(Integer)) }
                 attr_reader :max_characters
 
                 sig { params(max_characters: Integer).void }
                 attr_writer :max_characters
 
-                # Requires `formats.highlights: true`; required when it is set.
+                # Query for the `highlights` output. Required when `formats.highlights` is `true`,
+                # and allowed only then.
                 sig do
                   params(query: String, max_characters: Integer).returns(
                     T.attached_class
                   )
                 end
                 def self.new(
-                  # The question or topic to find passages for.
+                  # Question or topic to find relevant passages for.
                   query:,
-                  # Maximum combined length of returned passages.
+                  # Maximum combined length of the returned passages, in characters.
                   max_characters: nil
                 )
                 end
@@ -3758,16 +9008,16 @@ module ContextDev
                 OrHash =
                   T.type_alias do
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams,
                       ContextDev::Internal::AnyHash
                     )
                   end
 
-                # Set `visual` to drop visual duplicates, keeping the largest copy.
+                # Set to `visual` to drop visually duplicate images, keeping the largest copy.
                 sig do
                   returns(
                     T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::OrSymbol
                     )
                   )
                 end
@@ -3776,17 +9026,18 @@ module ContextDev
                 sig do
                   params(
                     dedupe:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::OrSymbol
                   ).void
                 end
                 attr_writer :dedupe
 
-                # Extra data per image: `dimensions`, `classification`, or a hosted `file` URL.
+                # Extra data to add to each image: `dimensions` adds `width` and `height`,
+                # `classification` adds `classification`, and `file` adds a hosted `fileUrl`.
                 sig do
                   returns(
                     T.nilable(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::OrSymbol
                       ]
                     )
                   )
@@ -3797,27 +9048,28 @@ module ContextDev
                   params(
                     enrich:
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::OrSymbol
                       ]
                   ).void
                 end
                 attr_writer :enrich
 
-                # Image options. Requires formats.images: true.
+                # Options for the `images` output. Requires `formats.images: true`.
                 sig do
                   params(
                     dedupe:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::OrSymbol,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::OrSymbol,
                     enrich:
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::OrSymbol
                       ]
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Set `visual` to drop visual duplicates, keeping the largest copy.
+                  # Set to `visual` to drop visually duplicate images, keeping the largest copy.
                   dedupe: nil,
-                  # Extra data per image: `dimensions`, `classification`, or a hosted `file` URL.
+                  # Extra data to add to each image: `dimensions` adds `width` and `height`,
+                  # `classification` adds `classification`, and `file` adds a hosted `fileUrl`.
                   enrich: nil
                 )
                 end
@@ -3826,10 +9078,10 @@ module ContextDev
                   override.returns(
                     {
                       dedupe:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::OrSymbol,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::OrSymbol,
                       enrich:
                         T::Array[
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::OrSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::OrSymbol
                         ]
                     }
                   )
@@ -3837,7 +9089,7 @@ module ContextDev
                 def to_hash
                 end
 
-                # Set `visual` to drop visual duplicates, keeping the largest copy.
+                # Set to `visual` to drop visually duplicate images, keeping the largest copy.
                 module Dedupe
                   extend ContextDev::Internal::Type::Enum
 
@@ -3845,7 +9097,7 @@ module ContextDev
                     T.type_alias do
                       T.all(
                         Symbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe
                       )
                     end
                   OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -3853,18 +9105,18 @@ module ContextDev
                   NONE =
                     T.let(
                       :none,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::TaggedSymbol
                     )
                   VISUAL =
                     T.let(
                       :visual,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::TaggedSymbol
                     )
 
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Dedupe::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::TaggedSymbol
                       ]
                     )
                   end
@@ -3879,7 +9131,7 @@ module ContextDev
                     T.type_alias do
                       T.all(
                         Symbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich
                       )
                     end
                   OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -3887,23 +9139,23 @@ module ContextDev
                   DIMENSIONS =
                     T.let(
                       :dimensions,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::TaggedSymbol
                     )
                   CLASSIFICATION =
                     T.let(
                       :classification,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::TaggedSymbol
                     )
                   FILE =
                     T.let(
                       :file,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::TaggedSymbol
                     )
 
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ImageParams::Enrich::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::TaggedSymbol
                       ]
                     )
                   end
@@ -3916,13 +9168,14 @@ module ContextDev
                 OrHash =
                   T.type_alias do
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::JsonParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::JsonParams,
                       ContextDev::Internal::AnyHash
                     )
                   end
 
-                # JSON Schema (not an example object) for a top-level object, up to 50 KB. Use
-                # optional or nullable fields for missing facts.
+                # JSON Schema for the object to extract, not an example object. Must describe a
+                # top-level object, up to 50 KB. Make fields optional or nullable when the page
+                # may not state them.
                 sig { returns(T::Hash[Symbol, T.anything]) }
                 attr_accessor :schema
 
@@ -3933,7 +9186,8 @@ module ContextDev
                 sig { params(instructions: String).void }
                 attr_writer :instructions
 
-                # Requires `formats.json: true`; required when it is set.
+                # Schema and instructions for the `json` output. Required when `formats.json` is
+                # `true`, and allowed only then.
                 sig do
                   params(
                     schema: T::Hash[Symbol, T.anything],
@@ -3941,8 +9195,9 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # JSON Schema (not an example object) for a top-level object, up to 50 KB. Use
-                  # optional or nullable fields for missing facts.
+                  # JSON Schema for the object to extract, not an example object. Must describe a
+                  # top-level object, up to 50 KB. Make fields optional or nullable when the page
+                  # may not state them.
                   schema:,
                   # Extra guidance, such as which facts to prefer or how to read a field.
                   instructions: nil
@@ -3965,12 +9220,12 @@ module ContextDev
                 OrHash =
                   T.type_alias do
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams,
                       ContextDev::Internal::AnyHash
                     )
                   end
 
-                # Include images in the Markdown (`html-conversion` only).
+                # Include image references in the Markdown (`html-conversion` only).
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :include_images
 
@@ -3984,11 +9239,12 @@ module ContextDev
                 sig { params(include_links: T::Boolean).void }
                 attr_writer :include_links
 
-                # How base64 images appear when `includeImages` is set (`html-conversion` only).
+                # How to write base64 images when `includeImages` is `true`: `placeholder`
+                # shortens the data, `preserve` keeps it in full (`html-conversion` only).
                 sig do
                   returns(
                     T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::OrSymbol
                     )
                   )
                 end
@@ -3997,7 +9253,7 @@ module ContextDev
                 sig do
                   params(
                     inline_images:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::OrSymbol
                   ).void
                 end
                 attr_writer :inline_images
@@ -4008,7 +9264,7 @@ module ContextDev
                   returns(
                     T.nilable(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::OrSymbol
                       ]
                     )
                   )
@@ -4019,31 +9275,32 @@ module ContextDev
                   params(
                     source_preference:
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::OrSymbol
                       ]
                   ).void
                 end
                 attr_writer :source_preference
 
-                # Markdown options. Requires `formats.markdown`.
+                # Options for the `markdown` output. Requires `formats.markdown: true`.
                 sig do
                   params(
                     include_images: T::Boolean,
                     include_links: T::Boolean,
                     inline_images:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::OrSymbol,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::OrSymbol,
                     source_preference:
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::OrSymbol
                       ]
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Include images in the Markdown (`html-conversion` only).
+                  # Include image references in the Markdown (`html-conversion` only).
                   include_images: nil,
                   # Keep link URLs in the Markdown (`html-conversion` only).
                   include_links: nil,
-                  # How base64 images appear when `includeImages` is set (`html-conversion` only).
+                  # How to write base64 images when `includeImages` is `true`: `placeholder`
+                  # shortens the data, `preserve` keeps it in full (`html-conversion` only).
                   inline_images: nil,
                   # Markdown sources in order of preference: `html-conversion` converts the page
                   # HTML, `markdown-direct` uses Markdown the site publishes.
@@ -4057,10 +9314,10 @@ module ContextDev
                       include_images: T::Boolean,
                       include_links: T::Boolean,
                       inline_images:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::OrSymbol,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::OrSymbol,
                       source_preference:
                         T::Array[
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::OrSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::OrSymbol
                         ]
                     }
                   )
@@ -4068,7 +9325,8 @@ module ContextDev
                 def to_hash
                 end
 
-                # How base64 images appear when `includeImages` is set (`html-conversion` only).
+                # How to write base64 images when `includeImages` is `true`: `placeholder`
+                # shortens the data, `preserve` keeps it in full (`html-conversion` only).
                 module InlineImages
                   extend ContextDev::Internal::Type::Enum
 
@@ -4076,7 +9334,7 @@ module ContextDev
                     T.type_alias do
                       T.all(
                         Symbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages
                       )
                     end
                   OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -4084,18 +9342,18 @@ module ContextDev
                   PLACEHOLDER =
                     T.let(
                       :placeholder,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::TaggedSymbol
                     )
                   PRESERVE =
                     T.let(
                       :preserve,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::TaggedSymbol
                     )
 
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::InlineImages::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::TaggedSymbol
                       ]
                     )
                   end
@@ -4110,7 +9368,7 @@ module ContextDev
                     T.type_alias do
                       T.all(
                         Symbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference
                       )
                     end
                   OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -4118,18 +9376,18 @@ module ContextDev
                   HTML_CONVERSION =
                     T.let(
                       :"html-conversion",
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::TaggedSymbol
                     )
                   MARKDOWN_DIRECT =
                     T.let(
                       :"markdown-direct",
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::TaggedSymbol
                     )
 
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::MarkdownParams::SourcePreference::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::TaggedSymbol
                       ]
                     )
                   end
@@ -4138,15 +9396,16 @@ module ContextDev
                 end
               end
 
-              # Requires `formats.parse: true`; required when it is set.
+              # Custom rules or a prebuilt parser for the `parsed` output. Required when
+              # `formats.parse` is `true`, and allowed only then.
               module ParseParams
                 extend ContextDev::Internal::Type::Union
 
                 Variants =
                   T.type_alias do
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser
                     )
                   end
 
@@ -4154,31 +9413,31 @@ module ContextDev
                   OrHash =
                     T.type_alias do
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser,
                         ContextDev::Internal::AnyHash
                       )
                     end
 
-                  # Field names mapped to CSS selectors (`h1`, `a@href`) or rule objects. Max 100
-                  # fields, 5 levels.
+                  # Output field names mapped to a CSS selector (such as `h1` or `a@href`) or a rule
+                  # object. Up to 100 fields, nested up to 5 levels.
                   sig do
                     returns(
                       T::Hash[
                         Symbol,
                         T.any(
                           String,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1
                         )
                       ]
                     )
                   end
                   attr_accessor :rules
 
-                  # Extract fields using custom CSS rules. This is the default when type is omitted.
+                  # Extract fields with custom CSS rules. The default when `type` is omitted.
                   sig do
                     returns(
                       T.nilable(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::OrSymbol
                       )
                     )
                   end
@@ -4187,7 +9446,7 @@ module ContextDev
                   sig do
                     params(
                       type:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::OrSymbol
                     ).void
                   end
                   attr_writer :type
@@ -4199,18 +9458,18 @@ module ContextDev
                           Symbol,
                           T.any(
                             String,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::OrHash
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::OrHash
                           )
                         ],
                       type:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::OrSymbol
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # Field names mapped to CSS selectors (`h1`, `a@href`) or rule objects. Max 100
-                    # fields, 5 levels.
+                    # Output field names mapped to a CSS selector (such as `h1` or `a@href`) or a rule
+                    # object. Up to 100 fields, nested up to 5 levels.
                     rules:,
-                    # Extract fields using custom CSS rules. This is the default when type is omitted.
+                    # Extract fields with custom CSS rules. The default when `type` is omitted.
                     type: nil
                   )
                   end
@@ -4223,11 +9482,11 @@ module ContextDev
                             Symbol,
                             T.any(
                               String,
-                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1
                             )
                           ],
                         type:
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::OrSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::OrSymbol
                       }
                     )
                   end
@@ -4241,7 +9500,7 @@ module ContextDev
                       T.type_alias do
                         T.any(
                           String,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1
                         )
                       end
 
@@ -4249,7 +9508,7 @@ module ContextDev
                       OrHash =
                         T.type_alias do
                           T.any(
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1,
                             ContextDev::Internal::AnyHash
                           )
                         end
@@ -4258,13 +9517,13 @@ module ContextDev
                       sig { returns(String) }
                       attr_accessor :selector
 
-                      # Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
-                      # to text.
+                      # What to return: `text`, `html`, an attribute such as `@href`, or nested field
+                      # rules. Defaults to `text`.
                       sig do
                         returns(
                           T.nilable(
                             T.any(
-                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
                               String,
                               T.anything
                             )
@@ -4277,7 +9536,7 @@ module ContextDev
                         params(
                           output:
                             T.any(
-                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
                               String,
                               T.anything
                             )
@@ -4289,7 +9548,7 @@ module ContextDev
                       sig do
                         returns(
                           T.nilable(
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
                           )
                         )
                       end
@@ -4298,7 +9557,7 @@ module ContextDev
                       sig do
                         params(
                           type:
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
                         ).void
                       end
                       attr_writer :type
@@ -4308,19 +9567,19 @@ module ContextDev
                           selector: String,
                           output:
                             T.any(
-                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
                               String,
                               T.anything
                             ),
                           type:
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
                         ).returns(T.attached_class)
                       end
                       def self.new(
                         # CSS selector to match within the current page or parent rule.
                         selector:,
-                        # Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
-                        # to text.
+                        # What to return: `text`, `html`, an attribute such as `@href`, or nested field
+                        # rules. Defaults to `text`.
                         output: nil,
                         # Return the first match with `item` or all matches with `list`.
                         type: nil
@@ -4333,27 +9592,27 @@ module ContextDev
                             selector: String,
                             output:
                               T.any(
-                                ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
+                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
                                 String,
                                 T.anything
                               ),
                             type:
-                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
                           }
                         )
                       end
                       def to_hash
                       end
 
-                      # Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
-                      # to text.
+                      # What to return: `text`, `html`, an attribute such as `@href`, or nested field
+                      # rules. Defaults to `text`.
                       module Output
                         extend ContextDev::Internal::Type::Union
 
                         Variants =
                           T.type_alias do
                             T.any(
-                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol,
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol,
                               String,
                               T.anything
                             )
@@ -4362,7 +9621,7 @@ module ContextDev
                         sig do
                           override.returns(
                             T::Array[
-                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::Variants
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::Variants
                             ]
                           )
                         end
@@ -4373,7 +9632,7 @@ module ContextDev
                           T.type_alias do
                             T.all(
                               Symbol,
-                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output
                             )
                           end
                         OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -4381,12 +9640,12 @@ module ContextDev
                         TEXT =
                           T.let(
                             :text,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol
                           )
                         HTML =
                           T.let(
                             :html,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol
                           )
                       end
 
@@ -4398,7 +9657,7 @@ module ContextDev
                           T.type_alias do
                             T.all(
                               Symbol,
-                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type
                             )
                           end
                         OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -4406,18 +9665,18 @@ module ContextDev
                         ITEM =
                           T.let(
                             :item,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
                           )
                         LIST =
                           T.let(
                             :list,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
                           )
 
                         sig do
                           override.returns(
                             T::Array[
-                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
                             ]
                           )
                         end
@@ -4429,7 +9688,7 @@ module ContextDev
                     sig do
                       override.returns(
                         T::Array[
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Rule::Variants
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::Variants
                         ]
                       )
                     end
@@ -4437,7 +9696,7 @@ module ContextDev
                     end
                   end
 
-                  # Extract fields using custom CSS rules. This is the default when type is omitted.
+                  # Extract fields with custom CSS rules. The default when `type` is omitted.
                   module Type
                     extend ContextDev::Internal::Type::Enum
 
@@ -4445,7 +9704,7 @@ module ContextDev
                       T.type_alias do
                         T.all(
                           Symbol,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type
                         )
                       end
                     OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -4453,13 +9712,13 @@ module ContextDev
                     CUSTOM =
                       T.let(
                         :custom,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::TaggedSymbol
                       )
 
                     sig do
                       override.returns(
                         T::Array[
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::CustomParser::Type::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::TaggedSymbol
                         ]
                       )
                     end
@@ -4472,158 +9731,186 @@ module ContextDev
                   OrHash =
                     T.type_alias do
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser,
                         ContextDev::Internal::AnyHash
                       )
                     end
 
-                  # google-maps parses Google Maps business data into data.results. Accepts Maps
-                  # place, search, and internal data URLs; a search page returns up to 200 places,
-                  # ranked as Google ranks them. Uses an exit in the gl country of the URL (US when
-                  # absent) and English labels regardless of hl or Accept-Language.
-                  # google-maps-reviews returns the reviews of a place in data.reviews, in the same
-                  # shape as the Serper reviews API (rating, date, isoDate, snippet,
-                  # translatedSnippet, likes, user, media, response, link, id), plus language,
-                  # guided ratings in details, and user.isLocalGuide; data also carries the place
-                  # featureId, cid, and sort. sort and limit pick the order and count, and oldest is
-                  # exact. It accepts Maps place, search, and ?cid= URLs, plus
-                  # search.google.com/local/reviews URLs, so the google_maps_url and
-                  # google_reviews_url fields of google-maps results work as input. An unknown place
-                  # returns no reviews. google-play parses a Play Store app into data: details,
-                  # developer contact, ratings, price, permissions, and data safety, plus the
-                  # country storefront the record describes and is_available, whether the app is
-                  # offered there. Ratings are counted per storefront, so rating, rating_count, and
-                  # rating_histogram are null in a storefront where nobody rated the app.
-                  # google-play-reviews returns up to the 200 newest reviews written in the hl
-                  # language, with developer replies, in data.reviews; an app with fewer such
-                  # reviews returns them all. Both Play parsers accept app details URLs
-                  # (play.google.com/store/apps/details?id=…); hl and gl set the language and
-                  # storefront, defaulting to en and us. Without gl, google-play reads an app that
-                  # is not offered in the US from the country of its developer instead. app-store
-                  # parses an App Store app into data: details, developer, ratings, price, version,
-                  # and screenshots. app-store-reviews returns up to the 500 newest reviews in
-                  # data.reviews. Both App Store parsers accept app URLs
-                  # (apps.apple.com/us/app/…/id…); the country in the path sets the storefront,
-                  # defaulting to us. g2-reviews returns the 25 most recently published reviews of a
-                  # G2 product in data.reviews (rating, title, likes, dislikes, problems_solved,
-                  # reviewer role, company size, and industry), plus data.product. It accepts G2
-                  # product URLs (g2.com/products/…), follows renamed products, and keeps
-                  # star-rating filters from the URL (filters[nps_score][]=1 to 5); other filters,
-                  # sort orders, and pages are ignored. instagram-profile parses a public profile
-                  # (instagram.com/{username}) into data: bio, links, follower and post counts,
-                  # category, business address, similar_accounts, and latest_posts (up to the 12
-                  # posts at the top of the profile, newest first). Instagram lists pinned posts
-                  # there ahead of newer ones, so posts with is_pinned true can be older; when
-                  # Instagram shows only a rounded post count (32K), post_count is that rounded
-                  # number and is_post_count_rounded is true. instagram-post parses a post or reel
-                  # (/p/…, /reel/…) into data: caption, hashtags, mentions, like, comment, and view
-                  # counts (like_count and view_count are null when the owner hides them), media
-                  # URLs, tagged users, collaborators, location, and the top ~14 comments in
-                  # data.comments. instagram-feed returns the top posts for a hashtag or keyword
-                  # (/explore/tags/…, /popular/…) or the recent posts at a location
-                  # (/explore/locations/{id}/…) in data.posts; keyword posts carry only the
-                  # shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
-                  # it. All three Instagram parsers read public data without logging in, so private
-                  # accounts return no posts and follower lists are unavailable. tiktok-profile
-                  # parses a public profile (tiktok.com/@{username}) into data: nickname, bio, bio
-                  # link, follower, following, like, and video counts, verified, private, and
-                  # business flags, and business category; it does not list videos. tiktok-video
-                  # parses a video or photo post (/@{username}/video/{id} or
-                  # /@{username}/photo/{id}) into data: caption, hashtags, mentions, author, view,
-                  # like, comment, share, save, and repost counts, duration, thumbnail, a video_url
-                  # that downloads without cookies, image_urls for photo posts, music, location, and
-                  # ad, paid-partnership, and AI-generated flags. tiktok-feed returns videos in the
-                  # tiktok-video shape as data.videos: the latest 15 from a profile URL, the top 30
-                  # from a hashtag URL (/tag/{name}), or the top 12 from a search URL
-                  # (/search?q={query}). tiktok-comments returns the first 20 comments of a video or
-                  # photo post as data.comments: text, posted_at, like and reply counts, whether the
-                  # author liked it, and the commenter. tiktok-followers and tiktok-following return
-                  # up to 30 accounts of a profile as data.users, in the tiktok-profile shape.
-                  # tiktok-user-search returns the top 10 accounts for a user search URL
-                  # (/search/user?q={query}) as data.users: id, username, nickname, biography,
-                  # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
-                  # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). reddit-post parses a post
-                  # (reddit.com/r/{subreddit}/comments/{id}, reddit.com/comments/{id}, or
-                  # redd.it/{id}) into data.post: title, body as Markdown, type (text, link, image,
-                  # gallery, or video), link_url, subreddit, author, flairs, score, upvote_ratio,
-                  # comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
-                  # flags, images (every gallery image in order), and video (an MP4 url plus an
-                  # hls_url that carries the audio). data.comments holds the comment tree, each
-                  # comment with id, author, body as Markdown, score, posted_at, depth, parent_id,
-                  # url, is_submitter, is_deleted, and its replies; limit caps the total number of
-                  # comments (default 100), filled shallowest first so whole conversations are kept,
-                  # and data.has_more_comments says whether the thread has more. The sort query of
-                  # the URL (best, top, new, controversial, old, qa) orders the comments.
-                  # reddit-search returns search results for a search URL
-                  # (reddit.com/search?q={query}, or reddit.com/r/{subreddit}/search?q={query} to
-                  # search one subreddit). With type=link or no type it returns posts in the
-                  # reddit-post shape as data.posts, ordered by the sort (relevance, hot, top, new,
-                  # comments) and limited to the t time range (hour, day, week, month, year, all) of
-                  # the URL; type=sr returns communities as data.communities (name, title,
-                  # description, sidebar, subscriber_count, created_at, type, NSFW and quarantine
-                  # flags, language, category, icon and banner URLs, and allowed post types);
-                  # type=user returns accounts as data.users (username, display_name, bio,
-                  # created_at, post and comment karma, avatar and banner URLs, and verified,
-                  # employee, moderator, premium, and NSFW flags). limit caps the number of results
-                  # (default 100), in the order Reddit returns them, and data.has_more says whether
-                  # Reddit has more. reddit-subreddit reads a subreddit URL
-                  # (reddit.com/r/{subreddit}, optionally followed by /hot, /new, /top, /rising, or
-                  # /controversial, with t setting the time range of top and controversial, default
-                  # day) into data.subreddit in the community shape of reddit-search, data.rules
-                  # (name, description, applies_to, violation_reason, created_at), and data.posts in
-                  # the reddit-post shape, ordered like the tab (default hot) and with stickied
-                  # posts flagged; r/all and r/popular return posts with a null subreddit and rules.
-                  # limit caps the posts (default 100) and data.has_more says whether Reddit has
-                  # more. Private and quarantined subreddits return WEBSITE_ACCESS_ERROR.
-                  # reddit-user reads a profile URL (reddit.com/user/{username} or
-                  # reddit.com/u/{username}, optionally followed by /overview, /submitted, or
-                  # /comments, with sort set to new, hot, top, or controversial and t setting the
-                  # time range of top and controversial, default all) into data.user (id, username,
-                  # display_name, bio, created_at, total, post, comment, awardee, and awarder karma,
-                  # avatar and banner URLs, and verified, suspended, employee, moderator, premium,
-                  # and NSFW flags), data.trophies (name, description, icon_url, granted_at, url),
-                  # data.moderated_communities (name, title, url, subscriber_count, icon_url,
-                  # is_nsfw), data.posts in the reddit-post shape, and data.comments, each with id,
-                  # author, body as Markdown, score, posted_at, edited_at, url, subreddit, parent_id
-                  # (null for a top-level comment), is_submitter, is_stickied, distinguished,
-                  # award_count, and the post it was left on (id, title, url, author, is_nsfw). The
-                  # overview tab returns both posts and comments; submitted returns null comments
-                  # and comments returns null posts. limit caps the posts and comments together
-                  # (default 100) and data.has_more says whether Reddit has more. Users who hide
-                  # their activity return empty lists, and suspended accounts return their profile
-                  # with null posts and comments. yelp-search accepts Yelp search URLs with
-                  # find_desc and find_loc, reads start as the result offset, and returns up to 20
-                  # ranked organic businesses in data.businesses with total and pagination.
-                  # yelp-reviews accepts a Yelp business URL (yelp.com/biz/{alias}), uses optional
-                  # start for the offset, and always sorts newest first; unsupported sort and review
-                  # filters are rejected, while tracking params are ignored. It returns up to 20
-                  # latest public reviews in data.reviews with business details and
-                  # pagination.next_offset. Each review has rating, full text, updated_at, and
-                  # author (id is the Yelp user id from the reviewer profile URL, url links to that
-                  # profile, plus name, location, and review_count); owner replies and photos are
-                  # not included. tripadvisor-reviews accepts a Tripadvisor hotel, restaurant, or
-                  # attraction review URL (tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html,
-                  # on any Tripadvisor country domain), reads -or{N}- in the path as the offset, and
-                  # returns 20 reviews in data.reviews in the order Tripadvisor shows them, with
-                  # data.location (id, name, type, url, review_count) and pagination.next_offset.
-                  # Each review has id, url, title, full text, rating, language, published_at,
-                  # visit_month, helpful_votes, subratings, photo_urls, owner_response (text,
-                  # published_at, author_name), and author (id, username, name, url,
-                  # contribution_count); an unknown location returns no reviews. emails accepts any
-                  # page and returns its email addresses as data.emails ([{ email }]), read from
-                  # mailto links, Cloudflare-protected addresses, and visible text. phone-numbers
-                  # accepts any page and returns its valid phone numbers in E.164 as
-                  # data.phone_numbers ([{ phone }]), read from tel links and visible text; numbers
-                  # without a country code are read for the country of the site TLD, defaulting to
-                  # US. links accepts any page and returns its unique http(s) links as data.links
-                  # ([{ url, text }]), with absolute URLs; text falls back to aria-label or image
-                  # alt and is null when a link has none. The emails parser reads the rendered page
-                  # and respects content filters; the other prebuilt parsers read their data
-                  # independently of DOM filters.
+                  # Prebuilt parser to run. Each one accepts specific URLs and returns its result in
+                  # `parsed.data`. `emails`, `phone-numbers`, and `links` read the rendered page and
+                  # respect content filters; the others read their source directly, independently of
+                  # content filters and other outputs.
+                  #
+                  # - `google-maps`: Google Maps place, search, and internal data URLs. Returns
+                  #   businesses in `data.results`; a search URL returns up to 200 places. Results
+                  #   use the country set in the URL, or the US when none is set, and come back with
+                  #   English labels.
+                  # - `google-maps-reviews`: Google Maps place, search, and `?cid=` URLs, plus
+                  #   `search.google.com/local/reviews` URLs, so the `google_maps_url` and
+                  #   `google_reviews_url` fields of `google-maps` results work as input. Returns
+                  #   the reviews of the place in `data.reviews` (`rating`, `date`, `isoDate`,
+                  #   `snippet`, `translatedSnippet`, `likes`, `user`, `media`, `response`, `link`,
+                  #   `id`, `language`, guided ratings in `details`, and `user.isLocalGuide`), plus
+                  #   the place `featureId`, `cid`, and `sort` in `data`. `sort` and `limit` set the
+                  #   order and count; `oldest` is exact. An unknown place returns no reviews.
+                  # - `google-play`: Play Store app details URLs
+                  #   (`play.google.com/store/apps/details?id=…`). Returns one app in `data`:
+                  #   details, developer contact, ratings, price, permissions, data safety, the
+                  #   storefront country the record describes, and `is_available` (whether the app
+                  #   is offered there). Ratings are counted per storefront, so `rating`,
+                  #   `rating_count`, and `rating_histogram` are `null` where nobody rated the app.
+                  #   The language and storefront country set in the URL apply (default English and
+                  #   the US); without a storefront country, an app not offered in the US is read
+                  #   from the country of its developer.
+                  # - `google-play-reviews`: Same URLs as `google-play`. Returns up to the 200
+                  #   newest reviews in the language set in the URL, with developer replies, in
+                  #   `data.reviews`; an app with fewer such reviews returns them all.
+                  # - `app-store`: App Store app URLs (`apps.apple.com/us/app/…/id…`). Returns one
+                  #   app in `data`: details, developer, ratings, price, version, and screenshots.
+                  #   The country in the path sets the storefront (default `us`).
+                  # - `app-store-reviews`: Same URLs as `app-store`. Returns up to the 500 newest
+                  #   reviews in `data.reviews`.
+                  # - `g2-reviews`: G2 product URLs (`g2.com/products/…`), following renamed
+                  #   products. Returns the 25 most recently published reviews in `data.reviews`
+                  #   (rating, title, likes, dislikes, `problems_solved`, reviewer role, company
+                  #   size, and industry), plus `data.product`. Keeps star-rating filters from the
+                  #   URL (`filters[nps_score][]=1` to `5`) and ignores other filters, sort orders,
+                  #   and pages.
+                  # - `instagram-profile`: Public profile URLs (`instagram.com/{username}`). Returns
+                  #   one profile in `data`: bio, links, follower and post counts, category,
+                  #   business address, `similar_accounts`, and `latest_posts` (up to the 12 posts
+                  #   at the top of the profile, newest first). Instagram lists pinned posts first,
+                  #   so posts with `is_pinned: true` can be older. When Instagram shows only a
+                  #   rounded post count (such as 32K), `post_count` is that rounded number and
+                  #   `is_post_count_rounded` is `true`.
+                  # - `instagram-post`: Post and reel URLs (`/p/…`, `/reel/…`). Returns one post in
+                  #   `data`: caption, hashtags, mentions, like, comment, and view counts
+                  #   (`like_count` and `view_count` are `null` when the owner hides them), media
+                  #   URLs, tagged users, collaborators, location, and about the top 14 comments in
+                  #   `data.comments`.
+                  # - `instagram-feed`: Hashtag and keyword URLs (`/explore/tags/…`, `/popular/…`)
+                  #   return the top posts; location URLs (`/explore/locations/{id}/…`) return
+                  #   recent posts. Posts are in `data.posts`; keyword posts carry only the
+                  #   shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
+                  #   it. All three Instagram parsers read public data without signing in, so
+                  #   private accounts return no posts and follower lists are unavailable.
+                  # - `tiktok-profile`: Public profile URLs (`tiktok.com/@{username}`). Returns one
+                  #   profile in `data`: nickname, bio, bio link, follower, following, like, and
+                  #   video counts, verified, private, and business flags, and business category.
+                  #   Does not list videos.
+                  # - `tiktok-video`: Video and photo post URLs (`/@{username}/video/{id}`,
+                  #   `/@{username}/photo/{id}`). Returns one post in `data`: caption, hashtags,
+                  #   mentions, author, view, like, comment, share, save, and repost counts,
+                  #   duration, thumbnail, a `video_url` that downloads without cookies,
+                  #   `image_urls` for photo posts, music, location, and ad, paid-partnership, and
+                  #   AI-generated flags.
+                  # - `tiktok-feed`: Returns videos in the `tiktok-video` shape in `data.videos`:
+                  #   the latest 15 from a profile URL, the top 30 from a hashtag URL
+                  #   (`/tag/{name}`), or the top 12 from a search URL (`/search?q={query}`).
+                  # - `tiktok-comments`: Video and photo post URLs. Returns the first 20 comments in
+                  #   `data.comments`: text, `posted_at`, like and reply counts, whether the author
+                  #   liked it, and the commenter.
+                  # - `tiktok-followers`, `tiktok-following`: Profile URLs. Return up to 30 accounts
+                  #   in `data.users`, in the `tiktok-profile` shape.
+                  # - `tiktok-user-search`: User search URLs (`/search/user?q={query}`). Returns the
+                  #   top 10 accounts in `data.users`: `id`, `username`, `nickname`, `biography`,
+                  #   `avatar_url`, `sec_uid`, `follower_count`, `like_count`, and `is_verified`.
+                  #   The TikTok parsers accept `tiktok.com`, `www.tiktok.com`, and `m.tiktok.com`
+                  #   URLs, not short links (`vm.tiktok.com`, `vt.tiktok.com`, `tiktok.com/t/…`).
+                  # - `reddit-post`: Post URLs (`reddit.com/r/{subreddit}/comments/{id}`,
+                  #   `reddit.com/comments/{id}`, `redd.it/{id}`). Returns the post in `data.post`:
+                  #   title, body as Markdown, type (`text`, `link`, `image`, `gallery`, or
+                  #   `video`), `link_url`, subreddit, author, flairs, score, `upvote_ratio`,
+                  #   comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
+                  #   flags, images (every gallery image in order), and video (an MP4 `url` plus an
+                  #   `hls_url` that carries the audio). `data.comments` holds the comment tree;
+                  #   each comment has `id`, `author`, `body` (Markdown), `score`, `posted_at`,
+                  #   `depth`, `parent_id`, `url`, `is_submitter`, `is_deleted`, and its `replies`.
+                  #   `limit` caps the total number of comments (default 100), filled shallowest
+                  #   first so whole conversations are kept, and `data.has_more_comments` says
+                  #   whether the thread has more. The `sort` in the URL (`best`, `top`, `new`,
+                  #   `controversial`, `old`, `qa`) orders the comments.
+                  # - `reddit-search`: Search URLs (`reddit.com/search?q={query}`, or
+                  #   `reddit.com/r/{subreddit}/search?q={query}` to search one subreddit). With
+                  #   `type=link` or no `type`, returns posts in the `reddit-post` shape in
+                  #   `data.posts`, ordered by the `sort` in the URL (`relevance`, `hot`, `top`,
+                  #   `new`, `comments`) within its `t` time range (`hour`, `day`, `week`, `month`,
+                  #   `year`, `all`). `type=sr` returns communities in `data.communities` (name,
+                  #   title, description, sidebar, `subscriber_count`, `created_at`, type, NSFW and
+                  #   quarantine flags, language, category, icon and banner URLs, and allowed post
+                  #   types). `type=user` returns accounts in `data.users` (username,
+                  #   `display_name`, bio, `created_at`, post and comment karma, avatar and banner
+                  #   URLs, and verified, employee, moderator, premium, and NSFW flags). `limit`
+                  #   caps the number of results (default 100), in the order Reddit returns them,
+                  #   and `data.has_more` says whether Reddit has more.
+                  # - `reddit-subreddit`: Subreddit URLs (`reddit.com/r/{subreddit}`, optionally
+                  #   followed by `/hot`, `/new`, `/top`, `/rising`, or `/controversial`, with `t`
+                  #   setting the time range of `top` and `controversial`, default `day`). Returns
+                  #   `data.subreddit` in the community shape of `reddit-search`, `data.rules`
+                  #   (`name`, `description`, `applies_to`, `violation_reason`, `created_at`), and
+                  #   `data.posts` in the `reddit-post` shape, ordered like the tab (default `hot`)
+                  #   with stickied posts flagged. `r/all` and `r/popular` return posts with `null`
+                  #   `subreddit` and `rules`. `limit` caps the posts (default 100) and
+                  #   `data.has_more` says whether Reddit has more. Private and quarantined
+                  #   subreddits return `WEBSITE_ACCESS_ERROR`.
+                  # - `reddit-user`: Profile URLs (`reddit.com/user/{username}` or
+                  #   `reddit.com/u/{username}`, optionally followed by `/overview`, `/submitted`,
+                  #   or `/comments`, with `sort` set to `new`, `hot`, `top`, or `controversial` and
+                  #   `t` setting the time range of `top` and `controversial`, default `all`).
+                  #   Returns `data.user` (`id`, `username`, `display_name`, bio, `created_at`,
+                  #   total, post, comment, awardee, and awarder karma, avatar and banner URLs, and
+                  #   verified, suspended, employee, moderator, premium, and NSFW flags),
+                  #   `data.trophies` (`name`, `description`, `icon_url`, `granted_at`, `url`),
+                  #   `data.moderated_communities` (`name`, `title`, `url`, `subscriber_count`,
+                  #   `icon_url`, `is_nsfw`), `data.posts` in the `reddit-post` shape, and
+                  #   `data.comments`, each with `id`, `author`, `body` (Markdown), `score`,
+                  #   `posted_at`, `edited_at`, `url`, `subreddit`, `parent_id` (`null` for a
+                  #   top-level comment), `is_submitter`, `is_stickied`, `distinguished`,
+                  #   `award_count`, and the post it was left on (`id`, `title`, `url`, `author`,
+                  #   `is_nsfw`). The overview tab returns both posts and comments; `submitted`
+                  #   returns `null` comments and `comments` returns `null` posts. `limit` caps
+                  #   posts and comments together (default 100) and `data.has_more` says whether
+                  #   Reddit has more. Users who hide their activity return empty lists, and
+                  #   suspended accounts return their profile with `null` posts and comments.
+                  # - `yelp-search`: Yelp search URLs with `find_desc` and `find_loc`; `start` sets
+                  #   the result offset. Returns up to 20 ranked organic businesses in
+                  #   `data.businesses`, with `total` and `pagination`.
+                  # - `yelp-reviews`: Yelp business URLs (`yelp.com/biz/{alias}`); optional `start`
+                  #   sets the offset. Returns up to 20 of the latest public reviews, always newest
+                  #   first, in `data.reviews`, with business details and `pagination.next_offset`.
+                  #   Each review has rating, full text, `updated_at`, and author (`id` from the
+                  #   reviewer profile URL, `url` linking to that profile, `name`, `location`, and
+                  #   `review_count`); owner replies and photos are not included. Unsupported sort
+                  #   and review filters are rejected; tracking parameters are ignored.
+                  # - `tripadvisor-reviews`: Tripadvisor hotel, restaurant, and attraction review
+                  #   URLs (`tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html`, on any
+                  #   Tripadvisor country domain); `-or{N}-` in the path sets the offset. Returns 20
+                  #   reviews in `data.reviews` in the order Tripadvisor shows them, with
+                  #   `data.location` (`id`, `name`, `type`, `url`, `review_count`) and
+                  #   `pagination.next_offset`. Each review has `id`, `url`, `title`, full text,
+                  #   `rating`, `language`, `published_at`, `visit_month`, `helpful_votes`,
+                  #   `subratings`, `photo_urls`, `owner_response` (`text`, `published_at`,
+                  #   `author_name`), and `author` (`id`, `username`, `name`, `url`,
+                  #   `contribution_count`). An unknown location returns no reviews.
+                  # - `car-rental-availability`: avis.com and budget.com vehicle-availability search
+                  #   URLs. Returns every vehicle with pay-now and pay-later prices in
+                  #   `data.vehicles`.
+                  # - `car-rental-locations`: avis.com and budget.com `/locations?keyword=` URLs.
+                  #   Returns rental branches with codes, addresses, coordinates, and hours in
+                  #   `data.locations`.
+                  # - `emails`: Any page. Returns its email addresses in `data.emails`
+                  #   (`[{ email }]`), read from `mailto:` links, Cloudflare-protected addresses,
+                  #   and visible text.
+                  # - `phone-numbers`: Any page. Returns its valid phone numbers in E.164 format in
+                  #   `data.phone_numbers` (`[{ phone }]`), read from `tel:` links and visible text.
+                  #   Numbers without a country code are read for the country of the site TLD (US by
+                  #   default).
+                  # - `links`: Any page. Returns its unique HTTP and HTTPS links as absolute URLs in
+                  #   `data.links` (`[{ url, text }]`). `text` falls back to `aria-label` or image
+                  #   alt text and is `null` when a link has none.
                   sig do
                     returns(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::OrSymbol
                     )
                   end
                   attr_accessor :parser
@@ -4632,23 +9919,22 @@ module ContextDev
                   sig { returns(Symbol) }
                   attr_accessor :type
 
-                  # google-maps-reviews and reddit parsers only. Maximum number of reviews
-                  # (google-maps-reviews, default 100), comments (reddit-post, default 100), or
-                  # results (reddit-search, reddit-subreddit, and reddit-user, default 100) to
-                  # return; maximum 1000.
+                  # Maximum number of reviews (`google-maps-reviews`, default 100), comments
+                  # (`reddit-post`, default 100), or results (`reddit-search`, `reddit-subreddit`,
+                  # and `reddit-user`, default 100) to return. Only these parsers accept it.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :limit
 
                   sig { params(limit: Integer).void }
                   attr_writer :limit
 
-                  # google-maps-reviews only. Order of data.reviews. newest, relevant, highest, and
-                  # lowest follow Google; oldest returns the earliest reviews first, which Google
-                  # itself does not offer.
+                  # Order of `data.reviews` for `google-maps-reviews`. `newest`, `relevant`,
+                  # `highest`, and `lowest` use the same orders as Google Maps; `oldest` returns the
+                  # earliest reviews first.
                   sig do
                     returns(
                       T.nilable(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::OrSymbol
                       )
                     )
                   end
@@ -4657,7 +9943,7 @@ module ContextDev
                   sig do
                     params(
                       sort:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::OrSymbol
                     ).void
                   end
                   attr_writer :sort
@@ -4665,167 +9951,194 @@ module ContextDev
                   sig do
                     params(
                       parser:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::OrSymbol,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::OrSymbol,
                       limit: Integer,
                       sort:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::OrSymbol,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::OrSymbol,
                       type: Symbol
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # google-maps parses Google Maps business data into data.results. Accepts Maps
-                    # place, search, and internal data URLs; a search page returns up to 200 places,
-                    # ranked as Google ranks them. Uses an exit in the gl country of the URL (US when
-                    # absent) and English labels regardless of hl or Accept-Language.
-                    # google-maps-reviews returns the reviews of a place in data.reviews, in the same
-                    # shape as the Serper reviews API (rating, date, isoDate, snippet,
-                    # translatedSnippet, likes, user, media, response, link, id), plus language,
-                    # guided ratings in details, and user.isLocalGuide; data also carries the place
-                    # featureId, cid, and sort. sort and limit pick the order and count, and oldest is
-                    # exact. It accepts Maps place, search, and ?cid= URLs, plus
-                    # search.google.com/local/reviews URLs, so the google_maps_url and
-                    # google_reviews_url fields of google-maps results work as input. An unknown place
-                    # returns no reviews. google-play parses a Play Store app into data: details,
-                    # developer contact, ratings, price, permissions, and data safety, plus the
-                    # country storefront the record describes and is_available, whether the app is
-                    # offered there. Ratings are counted per storefront, so rating, rating_count, and
-                    # rating_histogram are null in a storefront where nobody rated the app.
-                    # google-play-reviews returns up to the 200 newest reviews written in the hl
-                    # language, with developer replies, in data.reviews; an app with fewer such
-                    # reviews returns them all. Both Play parsers accept app details URLs
-                    # (play.google.com/store/apps/details?id=…); hl and gl set the language and
-                    # storefront, defaulting to en and us. Without gl, google-play reads an app that
-                    # is not offered in the US from the country of its developer instead. app-store
-                    # parses an App Store app into data: details, developer, ratings, price, version,
-                    # and screenshots. app-store-reviews returns up to the 500 newest reviews in
-                    # data.reviews. Both App Store parsers accept app URLs
-                    # (apps.apple.com/us/app/…/id…); the country in the path sets the storefront,
-                    # defaulting to us. g2-reviews returns the 25 most recently published reviews of a
-                    # G2 product in data.reviews (rating, title, likes, dislikes, problems_solved,
-                    # reviewer role, company size, and industry), plus data.product. It accepts G2
-                    # product URLs (g2.com/products/…), follows renamed products, and keeps
-                    # star-rating filters from the URL (filters[nps_score][]=1 to 5); other filters,
-                    # sort orders, and pages are ignored. instagram-profile parses a public profile
-                    # (instagram.com/{username}) into data: bio, links, follower and post counts,
-                    # category, business address, similar_accounts, and latest_posts (up to the 12
-                    # posts at the top of the profile, newest first). Instagram lists pinned posts
-                    # there ahead of newer ones, so posts with is_pinned true can be older; when
-                    # Instagram shows only a rounded post count (32K), post_count is that rounded
-                    # number and is_post_count_rounded is true. instagram-post parses a post or reel
-                    # (/p/…, /reel/…) into data: caption, hashtags, mentions, like, comment, and view
-                    # counts (like_count and view_count are null when the owner hides them), media
-                    # URLs, tagged users, collaborators, location, and the top ~14 comments in
-                    # data.comments. instagram-feed returns the top posts for a hashtag or keyword
-                    # (/explore/tags/…, /popular/…) or the recent posts at a location
-                    # (/explore/locations/{id}/…) in data.posts; keyword posts carry only the
-                    # shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
-                    # it. All three Instagram parsers read public data without logging in, so private
-                    # accounts return no posts and follower lists are unavailable. tiktok-profile
-                    # parses a public profile (tiktok.com/@{username}) into data: nickname, bio, bio
-                    # link, follower, following, like, and video counts, verified, private, and
-                    # business flags, and business category; it does not list videos. tiktok-video
-                    # parses a video or photo post (/@{username}/video/{id} or
-                    # /@{username}/photo/{id}) into data: caption, hashtags, mentions, author, view,
-                    # like, comment, share, save, and repost counts, duration, thumbnail, a video_url
-                    # that downloads without cookies, image_urls for photo posts, music, location, and
-                    # ad, paid-partnership, and AI-generated flags. tiktok-feed returns videos in the
-                    # tiktok-video shape as data.videos: the latest 15 from a profile URL, the top 30
-                    # from a hashtag URL (/tag/{name}), or the top 12 from a search URL
-                    # (/search?q={query}). tiktok-comments returns the first 20 comments of a video or
-                    # photo post as data.comments: text, posted_at, like and reply counts, whether the
-                    # author liked it, and the commenter. tiktok-followers and tiktok-following return
-                    # up to 30 accounts of a profile as data.users, in the tiktok-profile shape.
-                    # tiktok-user-search returns the top 10 accounts for a user search URL
-                    # (/search/user?q={query}) as data.users: id, username, nickname, biography,
-                    # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
-                    # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                    # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). reddit-post parses a post
-                    # (reddit.com/r/{subreddit}/comments/{id}, reddit.com/comments/{id}, or
-                    # redd.it/{id}) into data.post: title, body as Markdown, type (text, link, image,
-                    # gallery, or video), link_url, subreddit, author, flairs, score, upvote_ratio,
-                    # comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
-                    # flags, images (every gallery image in order), and video (an MP4 url plus an
-                    # hls_url that carries the audio). data.comments holds the comment tree, each
-                    # comment with id, author, body as Markdown, score, posted_at, depth, parent_id,
-                    # url, is_submitter, is_deleted, and its replies; limit caps the total number of
-                    # comments (default 100), filled shallowest first so whole conversations are kept,
-                    # and data.has_more_comments says whether the thread has more. The sort query of
-                    # the URL (best, top, new, controversial, old, qa) orders the comments.
-                    # reddit-search returns search results for a search URL
-                    # (reddit.com/search?q={query}, or reddit.com/r/{subreddit}/search?q={query} to
-                    # search one subreddit). With type=link or no type it returns posts in the
-                    # reddit-post shape as data.posts, ordered by the sort (relevance, hot, top, new,
-                    # comments) and limited to the t time range (hour, day, week, month, year, all) of
-                    # the URL; type=sr returns communities as data.communities (name, title,
-                    # description, sidebar, subscriber_count, created_at, type, NSFW and quarantine
-                    # flags, language, category, icon and banner URLs, and allowed post types);
-                    # type=user returns accounts as data.users (username, display_name, bio,
-                    # created_at, post and comment karma, avatar and banner URLs, and verified,
-                    # employee, moderator, premium, and NSFW flags). limit caps the number of results
-                    # (default 100), in the order Reddit returns them, and data.has_more says whether
-                    # Reddit has more. reddit-subreddit reads a subreddit URL
-                    # (reddit.com/r/{subreddit}, optionally followed by /hot, /new, /top, /rising, or
-                    # /controversial, with t setting the time range of top and controversial, default
-                    # day) into data.subreddit in the community shape of reddit-search, data.rules
-                    # (name, description, applies_to, violation_reason, created_at), and data.posts in
-                    # the reddit-post shape, ordered like the tab (default hot) and with stickied
-                    # posts flagged; r/all and r/popular return posts with a null subreddit and rules.
-                    # limit caps the posts (default 100) and data.has_more says whether Reddit has
-                    # more. Private and quarantined subreddits return WEBSITE_ACCESS_ERROR.
-                    # reddit-user reads a profile URL (reddit.com/user/{username} or
-                    # reddit.com/u/{username}, optionally followed by /overview, /submitted, or
-                    # /comments, with sort set to new, hot, top, or controversial and t setting the
-                    # time range of top and controversial, default all) into data.user (id, username,
-                    # display_name, bio, created_at, total, post, comment, awardee, and awarder karma,
-                    # avatar and banner URLs, and verified, suspended, employee, moderator, premium,
-                    # and NSFW flags), data.trophies (name, description, icon_url, granted_at, url),
-                    # data.moderated_communities (name, title, url, subscriber_count, icon_url,
-                    # is_nsfw), data.posts in the reddit-post shape, and data.comments, each with id,
-                    # author, body as Markdown, score, posted_at, edited_at, url, subreddit, parent_id
-                    # (null for a top-level comment), is_submitter, is_stickied, distinguished,
-                    # award_count, and the post it was left on (id, title, url, author, is_nsfw). The
-                    # overview tab returns both posts and comments; submitted returns null comments
-                    # and comments returns null posts. limit caps the posts and comments together
-                    # (default 100) and data.has_more says whether Reddit has more. Users who hide
-                    # their activity return empty lists, and suspended accounts return their profile
-                    # with null posts and comments. yelp-search accepts Yelp search URLs with
-                    # find_desc and find_loc, reads start as the result offset, and returns up to 20
-                    # ranked organic businesses in data.businesses with total and pagination.
-                    # yelp-reviews accepts a Yelp business URL (yelp.com/biz/{alias}), uses optional
-                    # start for the offset, and always sorts newest first; unsupported sort and review
-                    # filters are rejected, while tracking params are ignored. It returns up to 20
-                    # latest public reviews in data.reviews with business details and
-                    # pagination.next_offset. Each review has rating, full text, updated_at, and
-                    # author (id is the Yelp user id from the reviewer profile URL, url links to that
-                    # profile, plus name, location, and review_count); owner replies and photos are
-                    # not included. tripadvisor-reviews accepts a Tripadvisor hotel, restaurant, or
-                    # attraction review URL (tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html,
-                    # on any Tripadvisor country domain), reads -or{N}- in the path as the offset, and
-                    # returns 20 reviews in data.reviews in the order Tripadvisor shows them, with
-                    # data.location (id, name, type, url, review_count) and pagination.next_offset.
-                    # Each review has id, url, title, full text, rating, language, published_at,
-                    # visit_month, helpful_votes, subratings, photo_urls, owner_response (text,
-                    # published_at, author_name), and author (id, username, name, url,
-                    # contribution_count); an unknown location returns no reviews. emails accepts any
-                    # page and returns its email addresses as data.emails ([{ email }]), read from
-                    # mailto links, Cloudflare-protected addresses, and visible text. phone-numbers
-                    # accepts any page and returns its valid phone numbers in E.164 as
-                    # data.phone_numbers ([{ phone }]), read from tel links and visible text; numbers
-                    # without a country code are read for the country of the site TLD, defaulting to
-                    # US. links accepts any page and returns its unique http(s) links as data.links
-                    # ([{ url, text }]), with absolute URLs; text falls back to aria-label or image
-                    # alt and is null when a link has none. The emails parser reads the rendered page
-                    # and respects content filters; the other prebuilt parsers read their data
-                    # independently of DOM filters.
+                    # Prebuilt parser to run. Each one accepts specific URLs and returns its result in
+                    # `parsed.data`. `emails`, `phone-numbers`, and `links` read the rendered page and
+                    # respect content filters; the others read their source directly, independently of
+                    # content filters and other outputs.
+                    #
+                    # - `google-maps`: Google Maps place, search, and internal data URLs. Returns
+                    #   businesses in `data.results`; a search URL returns up to 200 places. Results
+                    #   use the country set in the URL, or the US when none is set, and come back with
+                    #   English labels.
+                    # - `google-maps-reviews`: Google Maps place, search, and `?cid=` URLs, plus
+                    #   `search.google.com/local/reviews` URLs, so the `google_maps_url` and
+                    #   `google_reviews_url` fields of `google-maps` results work as input. Returns
+                    #   the reviews of the place in `data.reviews` (`rating`, `date`, `isoDate`,
+                    #   `snippet`, `translatedSnippet`, `likes`, `user`, `media`, `response`, `link`,
+                    #   `id`, `language`, guided ratings in `details`, and `user.isLocalGuide`), plus
+                    #   the place `featureId`, `cid`, and `sort` in `data`. `sort` and `limit` set the
+                    #   order and count; `oldest` is exact. An unknown place returns no reviews.
+                    # - `google-play`: Play Store app details URLs
+                    #   (`play.google.com/store/apps/details?id=…`). Returns one app in `data`:
+                    #   details, developer contact, ratings, price, permissions, data safety, the
+                    #   storefront country the record describes, and `is_available` (whether the app
+                    #   is offered there). Ratings are counted per storefront, so `rating`,
+                    #   `rating_count`, and `rating_histogram` are `null` where nobody rated the app.
+                    #   The language and storefront country set in the URL apply (default English and
+                    #   the US); without a storefront country, an app not offered in the US is read
+                    #   from the country of its developer.
+                    # - `google-play-reviews`: Same URLs as `google-play`. Returns up to the 200
+                    #   newest reviews in the language set in the URL, with developer replies, in
+                    #   `data.reviews`; an app with fewer such reviews returns them all.
+                    # - `app-store`: App Store app URLs (`apps.apple.com/us/app/…/id…`). Returns one
+                    #   app in `data`: details, developer, ratings, price, version, and screenshots.
+                    #   The country in the path sets the storefront (default `us`).
+                    # - `app-store-reviews`: Same URLs as `app-store`. Returns up to the 500 newest
+                    #   reviews in `data.reviews`.
+                    # - `g2-reviews`: G2 product URLs (`g2.com/products/…`), following renamed
+                    #   products. Returns the 25 most recently published reviews in `data.reviews`
+                    #   (rating, title, likes, dislikes, `problems_solved`, reviewer role, company
+                    #   size, and industry), plus `data.product`. Keeps star-rating filters from the
+                    #   URL (`filters[nps_score][]=1` to `5`) and ignores other filters, sort orders,
+                    #   and pages.
+                    # - `instagram-profile`: Public profile URLs (`instagram.com/{username}`). Returns
+                    #   one profile in `data`: bio, links, follower and post counts, category,
+                    #   business address, `similar_accounts`, and `latest_posts` (up to the 12 posts
+                    #   at the top of the profile, newest first). Instagram lists pinned posts first,
+                    #   so posts with `is_pinned: true` can be older. When Instagram shows only a
+                    #   rounded post count (such as 32K), `post_count` is that rounded number and
+                    #   `is_post_count_rounded` is `true`.
+                    # - `instagram-post`: Post and reel URLs (`/p/…`, `/reel/…`). Returns one post in
+                    #   `data`: caption, hashtags, mentions, like, comment, and view counts
+                    #   (`like_count` and `view_count` are `null` when the owner hides them), media
+                    #   URLs, tagged users, collaborators, location, and about the top 14 comments in
+                    #   `data.comments`.
+                    # - `instagram-feed`: Hashtag and keyword URLs (`/explore/tags/…`, `/popular/…`)
+                    #   return the top posts; location URLs (`/explore/locations/{id}/…`) return
+                    #   recent posts. Posts are in `data.posts`; keyword posts carry only the
+                    #   shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
+                    #   it. All three Instagram parsers read public data without signing in, so
+                    #   private accounts return no posts and follower lists are unavailable.
+                    # - `tiktok-profile`: Public profile URLs (`tiktok.com/@{username}`). Returns one
+                    #   profile in `data`: nickname, bio, bio link, follower, following, like, and
+                    #   video counts, verified, private, and business flags, and business category.
+                    #   Does not list videos.
+                    # - `tiktok-video`: Video and photo post URLs (`/@{username}/video/{id}`,
+                    #   `/@{username}/photo/{id}`). Returns one post in `data`: caption, hashtags,
+                    #   mentions, author, view, like, comment, share, save, and repost counts,
+                    #   duration, thumbnail, a `video_url` that downloads without cookies,
+                    #   `image_urls` for photo posts, music, location, and ad, paid-partnership, and
+                    #   AI-generated flags.
+                    # - `tiktok-feed`: Returns videos in the `tiktok-video` shape in `data.videos`:
+                    #   the latest 15 from a profile URL, the top 30 from a hashtag URL
+                    #   (`/tag/{name}`), or the top 12 from a search URL (`/search?q={query}`).
+                    # - `tiktok-comments`: Video and photo post URLs. Returns the first 20 comments in
+                    #   `data.comments`: text, `posted_at`, like and reply counts, whether the author
+                    #   liked it, and the commenter.
+                    # - `tiktok-followers`, `tiktok-following`: Profile URLs. Return up to 30 accounts
+                    #   in `data.users`, in the `tiktok-profile` shape.
+                    # - `tiktok-user-search`: User search URLs (`/search/user?q={query}`). Returns the
+                    #   top 10 accounts in `data.users`: `id`, `username`, `nickname`, `biography`,
+                    #   `avatar_url`, `sec_uid`, `follower_count`, `like_count`, and `is_verified`.
+                    #   The TikTok parsers accept `tiktok.com`, `www.tiktok.com`, and `m.tiktok.com`
+                    #   URLs, not short links (`vm.tiktok.com`, `vt.tiktok.com`, `tiktok.com/t/…`).
+                    # - `reddit-post`: Post URLs (`reddit.com/r/{subreddit}/comments/{id}`,
+                    #   `reddit.com/comments/{id}`, `redd.it/{id}`). Returns the post in `data.post`:
+                    #   title, body as Markdown, type (`text`, `link`, `image`, `gallery`, or
+                    #   `video`), `link_url`, subreddit, author, flairs, score, `upvote_ratio`,
+                    #   comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
+                    #   flags, images (every gallery image in order), and video (an MP4 `url` plus an
+                    #   `hls_url` that carries the audio). `data.comments` holds the comment tree;
+                    #   each comment has `id`, `author`, `body` (Markdown), `score`, `posted_at`,
+                    #   `depth`, `parent_id`, `url`, `is_submitter`, `is_deleted`, and its `replies`.
+                    #   `limit` caps the total number of comments (default 100), filled shallowest
+                    #   first so whole conversations are kept, and `data.has_more_comments` says
+                    #   whether the thread has more. The `sort` in the URL (`best`, `top`, `new`,
+                    #   `controversial`, `old`, `qa`) orders the comments.
+                    # - `reddit-search`: Search URLs (`reddit.com/search?q={query}`, or
+                    #   `reddit.com/r/{subreddit}/search?q={query}` to search one subreddit). With
+                    #   `type=link` or no `type`, returns posts in the `reddit-post` shape in
+                    #   `data.posts`, ordered by the `sort` in the URL (`relevance`, `hot`, `top`,
+                    #   `new`, `comments`) within its `t` time range (`hour`, `day`, `week`, `month`,
+                    #   `year`, `all`). `type=sr` returns communities in `data.communities` (name,
+                    #   title, description, sidebar, `subscriber_count`, `created_at`, type, NSFW and
+                    #   quarantine flags, language, category, icon and banner URLs, and allowed post
+                    #   types). `type=user` returns accounts in `data.users` (username,
+                    #   `display_name`, bio, `created_at`, post and comment karma, avatar and banner
+                    #   URLs, and verified, employee, moderator, premium, and NSFW flags). `limit`
+                    #   caps the number of results (default 100), in the order Reddit returns them,
+                    #   and `data.has_more` says whether Reddit has more.
+                    # - `reddit-subreddit`: Subreddit URLs (`reddit.com/r/{subreddit}`, optionally
+                    #   followed by `/hot`, `/new`, `/top`, `/rising`, or `/controversial`, with `t`
+                    #   setting the time range of `top` and `controversial`, default `day`). Returns
+                    #   `data.subreddit` in the community shape of `reddit-search`, `data.rules`
+                    #   (`name`, `description`, `applies_to`, `violation_reason`, `created_at`), and
+                    #   `data.posts` in the `reddit-post` shape, ordered like the tab (default `hot`)
+                    #   with stickied posts flagged. `r/all` and `r/popular` return posts with `null`
+                    #   `subreddit` and `rules`. `limit` caps the posts (default 100) and
+                    #   `data.has_more` says whether Reddit has more. Private and quarantined
+                    #   subreddits return `WEBSITE_ACCESS_ERROR`.
+                    # - `reddit-user`: Profile URLs (`reddit.com/user/{username}` or
+                    #   `reddit.com/u/{username}`, optionally followed by `/overview`, `/submitted`,
+                    #   or `/comments`, with `sort` set to `new`, `hot`, `top`, or `controversial` and
+                    #   `t` setting the time range of `top` and `controversial`, default `all`).
+                    #   Returns `data.user` (`id`, `username`, `display_name`, bio, `created_at`,
+                    #   total, post, comment, awardee, and awarder karma, avatar and banner URLs, and
+                    #   verified, suspended, employee, moderator, premium, and NSFW flags),
+                    #   `data.trophies` (`name`, `description`, `icon_url`, `granted_at`, `url`),
+                    #   `data.moderated_communities` (`name`, `title`, `url`, `subscriber_count`,
+                    #   `icon_url`, `is_nsfw`), `data.posts` in the `reddit-post` shape, and
+                    #   `data.comments`, each with `id`, `author`, `body` (Markdown), `score`,
+                    #   `posted_at`, `edited_at`, `url`, `subreddit`, `parent_id` (`null` for a
+                    #   top-level comment), `is_submitter`, `is_stickied`, `distinguished`,
+                    #   `award_count`, and the post it was left on (`id`, `title`, `url`, `author`,
+                    #   `is_nsfw`). The overview tab returns both posts and comments; `submitted`
+                    #   returns `null` comments and `comments` returns `null` posts. `limit` caps
+                    #   posts and comments together (default 100) and `data.has_more` says whether
+                    #   Reddit has more. Users who hide their activity return empty lists, and
+                    #   suspended accounts return their profile with `null` posts and comments.
+                    # - `yelp-search`: Yelp search URLs with `find_desc` and `find_loc`; `start` sets
+                    #   the result offset. Returns up to 20 ranked organic businesses in
+                    #   `data.businesses`, with `total` and `pagination`.
+                    # - `yelp-reviews`: Yelp business URLs (`yelp.com/biz/{alias}`); optional `start`
+                    #   sets the offset. Returns up to 20 of the latest public reviews, always newest
+                    #   first, in `data.reviews`, with business details and `pagination.next_offset`.
+                    #   Each review has rating, full text, `updated_at`, and author (`id` from the
+                    #   reviewer profile URL, `url` linking to that profile, `name`, `location`, and
+                    #   `review_count`); owner replies and photos are not included. Unsupported sort
+                    #   and review filters are rejected; tracking parameters are ignored.
+                    # - `tripadvisor-reviews`: Tripadvisor hotel, restaurant, and attraction review
+                    #   URLs (`tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html`, on any
+                    #   Tripadvisor country domain); `-or{N}-` in the path sets the offset. Returns 20
+                    #   reviews in `data.reviews` in the order Tripadvisor shows them, with
+                    #   `data.location` (`id`, `name`, `type`, `url`, `review_count`) and
+                    #   `pagination.next_offset`. Each review has `id`, `url`, `title`, full text,
+                    #   `rating`, `language`, `published_at`, `visit_month`, `helpful_votes`,
+                    #   `subratings`, `photo_urls`, `owner_response` (`text`, `published_at`,
+                    #   `author_name`), and `author` (`id`, `username`, `name`, `url`,
+                    #   `contribution_count`). An unknown location returns no reviews.
+                    # - `car-rental-availability`: avis.com and budget.com vehicle-availability search
+                    #   URLs. Returns every vehicle with pay-now and pay-later prices in
+                    #   `data.vehicles`.
+                    # - `car-rental-locations`: avis.com and budget.com `/locations?keyword=` URLs.
+                    #   Returns rental branches with codes, addresses, coordinates, and hours in
+                    #   `data.locations`.
+                    # - `emails`: Any page. Returns its email addresses in `data.emails`
+                    #   (`[{ email }]`), read from `mailto:` links, Cloudflare-protected addresses,
+                    #   and visible text.
+                    # - `phone-numbers`: Any page. Returns its valid phone numbers in E.164 format in
+                    #   `data.phone_numbers` (`[{ phone }]`), read from `tel:` links and visible text.
+                    #   Numbers without a country code are read for the country of the site TLD (US by
+                    #   default).
+                    # - `links`: Any page. Returns its unique HTTP and HTTPS links as absolute URLs in
+                    #   `data.links` (`[{ url, text }]`). `text` falls back to `aria-label` or image
+                    #   alt text and is `null` when a link has none.
                     parser:,
-                    # google-maps-reviews and reddit parsers only. Maximum number of reviews
-                    # (google-maps-reviews, default 100), comments (reddit-post, default 100), or
-                    # results (reddit-search, reddit-subreddit, and reddit-user, default 100) to
-                    # return; maximum 1000.
+                    # Maximum number of reviews (`google-maps-reviews`, default 100), comments
+                    # (`reddit-post`, default 100), or results (`reddit-search`, `reddit-subreddit`,
+                    # and `reddit-user`, default 100) to return. Only these parsers accept it.
                     limit: nil,
-                    # google-maps-reviews only. Order of data.reviews. newest, relevant, highest, and
-                    # lowest follow Google; oldest returns the earliest reviews first, which Google
-                    # itself does not offer.
+                    # Order of `data.reviews` for `google-maps-reviews`. `newest`, `relevant`,
+                    # `highest`, and `lowest` use the same orders as Google Maps; `oldest` returns the
+                    # earliest reviews first.
                     sort: nil,
                     # Use a prebuilt parser instead of custom rules.
                     type: :prebuilt
@@ -4836,161 +10149,189 @@ module ContextDev
                     override.returns(
                       {
                         parser:
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::OrSymbol,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::OrSymbol,
                         type: Symbol,
                         limit: Integer,
                         sort:
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::OrSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::OrSymbol
                       }
                     )
                   end
                   def to_hash
                   end
 
-                  # google-maps parses Google Maps business data into data.results. Accepts Maps
-                  # place, search, and internal data URLs; a search page returns up to 200 places,
-                  # ranked as Google ranks them. Uses an exit in the gl country of the URL (US when
-                  # absent) and English labels regardless of hl or Accept-Language.
-                  # google-maps-reviews returns the reviews of a place in data.reviews, in the same
-                  # shape as the Serper reviews API (rating, date, isoDate, snippet,
-                  # translatedSnippet, likes, user, media, response, link, id), plus language,
-                  # guided ratings in details, and user.isLocalGuide; data also carries the place
-                  # featureId, cid, and sort. sort and limit pick the order and count, and oldest is
-                  # exact. It accepts Maps place, search, and ?cid= URLs, plus
-                  # search.google.com/local/reviews URLs, so the google_maps_url and
-                  # google_reviews_url fields of google-maps results work as input. An unknown place
-                  # returns no reviews. google-play parses a Play Store app into data: details,
-                  # developer contact, ratings, price, permissions, and data safety, plus the
-                  # country storefront the record describes and is_available, whether the app is
-                  # offered there. Ratings are counted per storefront, so rating, rating_count, and
-                  # rating_histogram are null in a storefront where nobody rated the app.
-                  # google-play-reviews returns up to the 200 newest reviews written in the hl
-                  # language, with developer replies, in data.reviews; an app with fewer such
-                  # reviews returns them all. Both Play parsers accept app details URLs
-                  # (play.google.com/store/apps/details?id=…); hl and gl set the language and
-                  # storefront, defaulting to en and us. Without gl, google-play reads an app that
-                  # is not offered in the US from the country of its developer instead. app-store
-                  # parses an App Store app into data: details, developer, ratings, price, version,
-                  # and screenshots. app-store-reviews returns up to the 500 newest reviews in
-                  # data.reviews. Both App Store parsers accept app URLs
-                  # (apps.apple.com/us/app/…/id…); the country in the path sets the storefront,
-                  # defaulting to us. g2-reviews returns the 25 most recently published reviews of a
-                  # G2 product in data.reviews (rating, title, likes, dislikes, problems_solved,
-                  # reviewer role, company size, and industry), plus data.product. It accepts G2
-                  # product URLs (g2.com/products/…), follows renamed products, and keeps
-                  # star-rating filters from the URL (filters[nps_score][]=1 to 5); other filters,
-                  # sort orders, and pages are ignored. instagram-profile parses a public profile
-                  # (instagram.com/{username}) into data: bio, links, follower and post counts,
-                  # category, business address, similar_accounts, and latest_posts (up to the 12
-                  # posts at the top of the profile, newest first). Instagram lists pinned posts
-                  # there ahead of newer ones, so posts with is_pinned true can be older; when
-                  # Instagram shows only a rounded post count (32K), post_count is that rounded
-                  # number and is_post_count_rounded is true. instagram-post parses a post or reel
-                  # (/p/…, /reel/…) into data: caption, hashtags, mentions, like, comment, and view
-                  # counts (like_count and view_count are null when the owner hides them), media
-                  # URLs, tagged users, collaborators, location, and the top ~14 comments in
-                  # data.comments. instagram-feed returns the top posts for a hashtag or keyword
-                  # (/explore/tags/…, /popular/…) or the recent posts at a location
-                  # (/explore/locations/{id}/…) in data.posts; keyword posts carry only the
-                  # shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
-                  # it. All three Instagram parsers read public data without logging in, so private
-                  # accounts return no posts and follower lists are unavailable. tiktok-profile
-                  # parses a public profile (tiktok.com/@{username}) into data: nickname, bio, bio
-                  # link, follower, following, like, and video counts, verified, private, and
-                  # business flags, and business category; it does not list videos. tiktok-video
-                  # parses a video or photo post (/@{username}/video/{id} or
-                  # /@{username}/photo/{id}) into data: caption, hashtags, mentions, author, view,
-                  # like, comment, share, save, and repost counts, duration, thumbnail, a video_url
-                  # that downloads without cookies, image_urls for photo posts, music, location, and
-                  # ad, paid-partnership, and AI-generated flags. tiktok-feed returns videos in the
-                  # tiktok-video shape as data.videos: the latest 15 from a profile URL, the top 30
-                  # from a hashtag URL (/tag/{name}), or the top 12 from a search URL
-                  # (/search?q={query}). tiktok-comments returns the first 20 comments of a video or
-                  # photo post as data.comments: text, posted_at, like and reply counts, whether the
-                  # author liked it, and the commenter. tiktok-followers and tiktok-following return
-                  # up to 30 accounts of a profile as data.users, in the tiktok-profile shape.
-                  # tiktok-user-search returns the top 10 accounts for a user search URL
-                  # (/search/user?q={query}) as data.users: id, username, nickname, biography,
-                  # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
-                  # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). reddit-post parses a post
-                  # (reddit.com/r/{subreddit}/comments/{id}, reddit.com/comments/{id}, or
-                  # redd.it/{id}) into data.post: title, body as Markdown, type (text, link, image,
-                  # gallery, or video), link_url, subreddit, author, flairs, score, upvote_ratio,
-                  # comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
-                  # flags, images (every gallery image in order), and video (an MP4 url plus an
-                  # hls_url that carries the audio). data.comments holds the comment tree, each
-                  # comment with id, author, body as Markdown, score, posted_at, depth, parent_id,
-                  # url, is_submitter, is_deleted, and its replies; limit caps the total number of
-                  # comments (default 100), filled shallowest first so whole conversations are kept,
-                  # and data.has_more_comments says whether the thread has more. The sort query of
-                  # the URL (best, top, new, controversial, old, qa) orders the comments.
-                  # reddit-search returns search results for a search URL
-                  # (reddit.com/search?q={query}, or reddit.com/r/{subreddit}/search?q={query} to
-                  # search one subreddit). With type=link or no type it returns posts in the
-                  # reddit-post shape as data.posts, ordered by the sort (relevance, hot, top, new,
-                  # comments) and limited to the t time range (hour, day, week, month, year, all) of
-                  # the URL; type=sr returns communities as data.communities (name, title,
-                  # description, sidebar, subscriber_count, created_at, type, NSFW and quarantine
-                  # flags, language, category, icon and banner URLs, and allowed post types);
-                  # type=user returns accounts as data.users (username, display_name, bio,
-                  # created_at, post and comment karma, avatar and banner URLs, and verified,
-                  # employee, moderator, premium, and NSFW flags). limit caps the number of results
-                  # (default 100), in the order Reddit returns them, and data.has_more says whether
-                  # Reddit has more. reddit-subreddit reads a subreddit URL
-                  # (reddit.com/r/{subreddit}, optionally followed by /hot, /new, /top, /rising, or
-                  # /controversial, with t setting the time range of top and controversial, default
-                  # day) into data.subreddit in the community shape of reddit-search, data.rules
-                  # (name, description, applies_to, violation_reason, created_at), and data.posts in
-                  # the reddit-post shape, ordered like the tab (default hot) and with stickied
-                  # posts flagged; r/all and r/popular return posts with a null subreddit and rules.
-                  # limit caps the posts (default 100) and data.has_more says whether Reddit has
-                  # more. Private and quarantined subreddits return WEBSITE_ACCESS_ERROR.
-                  # reddit-user reads a profile URL (reddit.com/user/{username} or
-                  # reddit.com/u/{username}, optionally followed by /overview, /submitted, or
-                  # /comments, with sort set to new, hot, top, or controversial and t setting the
-                  # time range of top and controversial, default all) into data.user (id, username,
-                  # display_name, bio, created_at, total, post, comment, awardee, and awarder karma,
-                  # avatar and banner URLs, and verified, suspended, employee, moderator, premium,
-                  # and NSFW flags), data.trophies (name, description, icon_url, granted_at, url),
-                  # data.moderated_communities (name, title, url, subscriber_count, icon_url,
-                  # is_nsfw), data.posts in the reddit-post shape, and data.comments, each with id,
-                  # author, body as Markdown, score, posted_at, edited_at, url, subreddit, parent_id
-                  # (null for a top-level comment), is_submitter, is_stickied, distinguished,
-                  # award_count, and the post it was left on (id, title, url, author, is_nsfw). The
-                  # overview tab returns both posts and comments; submitted returns null comments
-                  # and comments returns null posts. limit caps the posts and comments together
-                  # (default 100) and data.has_more says whether Reddit has more. Users who hide
-                  # their activity return empty lists, and suspended accounts return their profile
-                  # with null posts and comments. yelp-search accepts Yelp search URLs with
-                  # find_desc and find_loc, reads start as the result offset, and returns up to 20
-                  # ranked organic businesses in data.businesses with total and pagination.
-                  # yelp-reviews accepts a Yelp business URL (yelp.com/biz/{alias}), uses optional
-                  # start for the offset, and always sorts newest first; unsupported sort and review
-                  # filters are rejected, while tracking params are ignored. It returns up to 20
-                  # latest public reviews in data.reviews with business details and
-                  # pagination.next_offset. Each review has rating, full text, updated_at, and
-                  # author (id is the Yelp user id from the reviewer profile URL, url links to that
-                  # profile, plus name, location, and review_count); owner replies and photos are
-                  # not included. tripadvisor-reviews accepts a Tripadvisor hotel, restaurant, or
-                  # attraction review URL (tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html,
-                  # on any Tripadvisor country domain), reads -or{N}- in the path as the offset, and
-                  # returns 20 reviews in data.reviews in the order Tripadvisor shows them, with
-                  # data.location (id, name, type, url, review_count) and pagination.next_offset.
-                  # Each review has id, url, title, full text, rating, language, published_at,
-                  # visit_month, helpful_votes, subratings, photo_urls, owner_response (text,
-                  # published_at, author_name), and author (id, username, name, url,
-                  # contribution_count); an unknown location returns no reviews. emails accepts any
-                  # page and returns its email addresses as data.emails ([{ email }]), read from
-                  # mailto links, Cloudflare-protected addresses, and visible text. phone-numbers
-                  # accepts any page and returns its valid phone numbers in E.164 as
-                  # data.phone_numbers ([{ phone }]), read from tel links and visible text; numbers
-                  # without a country code are read for the country of the site TLD, defaulting to
-                  # US. links accepts any page and returns its unique http(s) links as data.links
-                  # ([{ url, text }]), with absolute URLs; text falls back to aria-label or image
-                  # alt and is null when a link has none. The emails parser reads the rendered page
-                  # and respects content filters; the other prebuilt parsers read their data
-                  # independently of DOM filters.
+                  # Prebuilt parser to run. Each one accepts specific URLs and returns its result in
+                  # `parsed.data`. `emails`, `phone-numbers`, and `links` read the rendered page and
+                  # respect content filters; the others read their source directly, independently of
+                  # content filters and other outputs.
+                  #
+                  # - `google-maps`: Google Maps place, search, and internal data URLs. Returns
+                  #   businesses in `data.results`; a search URL returns up to 200 places. Results
+                  #   use the country set in the URL, or the US when none is set, and come back with
+                  #   English labels.
+                  # - `google-maps-reviews`: Google Maps place, search, and `?cid=` URLs, plus
+                  #   `search.google.com/local/reviews` URLs, so the `google_maps_url` and
+                  #   `google_reviews_url` fields of `google-maps` results work as input. Returns
+                  #   the reviews of the place in `data.reviews` (`rating`, `date`, `isoDate`,
+                  #   `snippet`, `translatedSnippet`, `likes`, `user`, `media`, `response`, `link`,
+                  #   `id`, `language`, guided ratings in `details`, and `user.isLocalGuide`), plus
+                  #   the place `featureId`, `cid`, and `sort` in `data`. `sort` and `limit` set the
+                  #   order and count; `oldest` is exact. An unknown place returns no reviews.
+                  # - `google-play`: Play Store app details URLs
+                  #   (`play.google.com/store/apps/details?id=…`). Returns one app in `data`:
+                  #   details, developer contact, ratings, price, permissions, data safety, the
+                  #   storefront country the record describes, and `is_available` (whether the app
+                  #   is offered there). Ratings are counted per storefront, so `rating`,
+                  #   `rating_count`, and `rating_histogram` are `null` where nobody rated the app.
+                  #   The language and storefront country set in the URL apply (default English and
+                  #   the US); without a storefront country, an app not offered in the US is read
+                  #   from the country of its developer.
+                  # - `google-play-reviews`: Same URLs as `google-play`. Returns up to the 200
+                  #   newest reviews in the language set in the URL, with developer replies, in
+                  #   `data.reviews`; an app with fewer such reviews returns them all.
+                  # - `app-store`: App Store app URLs (`apps.apple.com/us/app/…/id…`). Returns one
+                  #   app in `data`: details, developer, ratings, price, version, and screenshots.
+                  #   The country in the path sets the storefront (default `us`).
+                  # - `app-store-reviews`: Same URLs as `app-store`. Returns up to the 500 newest
+                  #   reviews in `data.reviews`.
+                  # - `g2-reviews`: G2 product URLs (`g2.com/products/…`), following renamed
+                  #   products. Returns the 25 most recently published reviews in `data.reviews`
+                  #   (rating, title, likes, dislikes, `problems_solved`, reviewer role, company
+                  #   size, and industry), plus `data.product`. Keeps star-rating filters from the
+                  #   URL (`filters[nps_score][]=1` to `5`) and ignores other filters, sort orders,
+                  #   and pages.
+                  # - `instagram-profile`: Public profile URLs (`instagram.com/{username}`). Returns
+                  #   one profile in `data`: bio, links, follower and post counts, category,
+                  #   business address, `similar_accounts`, and `latest_posts` (up to the 12 posts
+                  #   at the top of the profile, newest first). Instagram lists pinned posts first,
+                  #   so posts with `is_pinned: true` can be older. When Instagram shows only a
+                  #   rounded post count (such as 32K), `post_count` is that rounded number and
+                  #   `is_post_count_rounded` is `true`.
+                  # - `instagram-post`: Post and reel URLs (`/p/…`, `/reel/…`). Returns one post in
+                  #   `data`: caption, hashtags, mentions, like, comment, and view counts
+                  #   (`like_count` and `view_count` are `null` when the owner hides them), media
+                  #   URLs, tagged users, collaborators, location, and about the top 14 comments in
+                  #   `data.comments`.
+                  # - `instagram-feed`: Hashtag and keyword URLs (`/explore/tags/…`, `/popular/…`)
+                  #   return the top posts; location URLs (`/explore/locations/{id}/…`) return
+                  #   recent posts. Posts are in `data.posts`; keyword posts carry only the
+                  #   shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
+                  #   it. All three Instagram parsers read public data without signing in, so
+                  #   private accounts return no posts and follower lists are unavailable.
+                  # - `tiktok-profile`: Public profile URLs (`tiktok.com/@{username}`). Returns one
+                  #   profile in `data`: nickname, bio, bio link, follower, following, like, and
+                  #   video counts, verified, private, and business flags, and business category.
+                  #   Does not list videos.
+                  # - `tiktok-video`: Video and photo post URLs (`/@{username}/video/{id}`,
+                  #   `/@{username}/photo/{id}`). Returns one post in `data`: caption, hashtags,
+                  #   mentions, author, view, like, comment, share, save, and repost counts,
+                  #   duration, thumbnail, a `video_url` that downloads without cookies,
+                  #   `image_urls` for photo posts, music, location, and ad, paid-partnership, and
+                  #   AI-generated flags.
+                  # - `tiktok-feed`: Returns videos in the `tiktok-video` shape in `data.videos`:
+                  #   the latest 15 from a profile URL, the top 30 from a hashtag URL
+                  #   (`/tag/{name}`), or the top 12 from a search URL (`/search?q={query}`).
+                  # - `tiktok-comments`: Video and photo post URLs. Returns the first 20 comments in
+                  #   `data.comments`: text, `posted_at`, like and reply counts, whether the author
+                  #   liked it, and the commenter.
+                  # - `tiktok-followers`, `tiktok-following`: Profile URLs. Return up to 30 accounts
+                  #   in `data.users`, in the `tiktok-profile` shape.
+                  # - `tiktok-user-search`: User search URLs (`/search/user?q={query}`). Returns the
+                  #   top 10 accounts in `data.users`: `id`, `username`, `nickname`, `biography`,
+                  #   `avatar_url`, `sec_uid`, `follower_count`, `like_count`, and `is_verified`.
+                  #   The TikTok parsers accept `tiktok.com`, `www.tiktok.com`, and `m.tiktok.com`
+                  #   URLs, not short links (`vm.tiktok.com`, `vt.tiktok.com`, `tiktok.com/t/…`).
+                  # - `reddit-post`: Post URLs (`reddit.com/r/{subreddit}/comments/{id}`,
+                  #   `reddit.com/comments/{id}`, `redd.it/{id}`). Returns the post in `data.post`:
+                  #   title, body as Markdown, type (`text`, `link`, `image`, `gallery`, or
+                  #   `video`), `link_url`, subreddit, author, flairs, score, `upvote_ratio`,
+                  #   comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
+                  #   flags, images (every gallery image in order), and video (an MP4 `url` plus an
+                  #   `hls_url` that carries the audio). `data.comments` holds the comment tree;
+                  #   each comment has `id`, `author`, `body` (Markdown), `score`, `posted_at`,
+                  #   `depth`, `parent_id`, `url`, `is_submitter`, `is_deleted`, and its `replies`.
+                  #   `limit` caps the total number of comments (default 100), filled shallowest
+                  #   first so whole conversations are kept, and `data.has_more_comments` says
+                  #   whether the thread has more. The `sort` in the URL (`best`, `top`, `new`,
+                  #   `controversial`, `old`, `qa`) orders the comments.
+                  # - `reddit-search`: Search URLs (`reddit.com/search?q={query}`, or
+                  #   `reddit.com/r/{subreddit}/search?q={query}` to search one subreddit). With
+                  #   `type=link` or no `type`, returns posts in the `reddit-post` shape in
+                  #   `data.posts`, ordered by the `sort` in the URL (`relevance`, `hot`, `top`,
+                  #   `new`, `comments`) within its `t` time range (`hour`, `day`, `week`, `month`,
+                  #   `year`, `all`). `type=sr` returns communities in `data.communities` (name,
+                  #   title, description, sidebar, `subscriber_count`, `created_at`, type, NSFW and
+                  #   quarantine flags, language, category, icon and banner URLs, and allowed post
+                  #   types). `type=user` returns accounts in `data.users` (username,
+                  #   `display_name`, bio, `created_at`, post and comment karma, avatar and banner
+                  #   URLs, and verified, employee, moderator, premium, and NSFW flags). `limit`
+                  #   caps the number of results (default 100), in the order Reddit returns them,
+                  #   and `data.has_more` says whether Reddit has more.
+                  # - `reddit-subreddit`: Subreddit URLs (`reddit.com/r/{subreddit}`, optionally
+                  #   followed by `/hot`, `/new`, `/top`, `/rising`, or `/controversial`, with `t`
+                  #   setting the time range of `top` and `controversial`, default `day`). Returns
+                  #   `data.subreddit` in the community shape of `reddit-search`, `data.rules`
+                  #   (`name`, `description`, `applies_to`, `violation_reason`, `created_at`), and
+                  #   `data.posts` in the `reddit-post` shape, ordered like the tab (default `hot`)
+                  #   with stickied posts flagged. `r/all` and `r/popular` return posts with `null`
+                  #   `subreddit` and `rules`. `limit` caps the posts (default 100) and
+                  #   `data.has_more` says whether Reddit has more. Private and quarantined
+                  #   subreddits return `WEBSITE_ACCESS_ERROR`.
+                  # - `reddit-user`: Profile URLs (`reddit.com/user/{username}` or
+                  #   `reddit.com/u/{username}`, optionally followed by `/overview`, `/submitted`,
+                  #   or `/comments`, with `sort` set to `new`, `hot`, `top`, or `controversial` and
+                  #   `t` setting the time range of `top` and `controversial`, default `all`).
+                  #   Returns `data.user` (`id`, `username`, `display_name`, bio, `created_at`,
+                  #   total, post, comment, awardee, and awarder karma, avatar and banner URLs, and
+                  #   verified, suspended, employee, moderator, premium, and NSFW flags),
+                  #   `data.trophies` (`name`, `description`, `icon_url`, `granted_at`, `url`),
+                  #   `data.moderated_communities` (`name`, `title`, `url`, `subscriber_count`,
+                  #   `icon_url`, `is_nsfw`), `data.posts` in the `reddit-post` shape, and
+                  #   `data.comments`, each with `id`, `author`, `body` (Markdown), `score`,
+                  #   `posted_at`, `edited_at`, `url`, `subreddit`, `parent_id` (`null` for a
+                  #   top-level comment), `is_submitter`, `is_stickied`, `distinguished`,
+                  #   `award_count`, and the post it was left on (`id`, `title`, `url`, `author`,
+                  #   `is_nsfw`). The overview tab returns both posts and comments; `submitted`
+                  #   returns `null` comments and `comments` returns `null` posts. `limit` caps
+                  #   posts and comments together (default 100) and `data.has_more` says whether
+                  #   Reddit has more. Users who hide their activity return empty lists, and
+                  #   suspended accounts return their profile with `null` posts and comments.
+                  # - `yelp-search`: Yelp search URLs with `find_desc` and `find_loc`; `start` sets
+                  #   the result offset. Returns up to 20 ranked organic businesses in
+                  #   `data.businesses`, with `total` and `pagination`.
+                  # - `yelp-reviews`: Yelp business URLs (`yelp.com/biz/{alias}`); optional `start`
+                  #   sets the offset. Returns up to 20 of the latest public reviews, always newest
+                  #   first, in `data.reviews`, with business details and `pagination.next_offset`.
+                  #   Each review has rating, full text, `updated_at`, and author (`id` from the
+                  #   reviewer profile URL, `url` linking to that profile, `name`, `location`, and
+                  #   `review_count`); owner replies and photos are not included. Unsupported sort
+                  #   and review filters are rejected; tracking parameters are ignored.
+                  # - `tripadvisor-reviews`: Tripadvisor hotel, restaurant, and attraction review
+                  #   URLs (`tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html`, on any
+                  #   Tripadvisor country domain); `-or{N}-` in the path sets the offset. Returns 20
+                  #   reviews in `data.reviews` in the order Tripadvisor shows them, with
+                  #   `data.location` (`id`, `name`, `type`, `url`, `review_count`) and
+                  #   `pagination.next_offset`. Each review has `id`, `url`, `title`, full text,
+                  #   `rating`, `language`, `published_at`, `visit_month`, `helpful_votes`,
+                  #   `subratings`, `photo_urls`, `owner_response` (`text`, `published_at`,
+                  #   `author_name`), and `author` (`id`, `username`, `name`, `url`,
+                  #   `contribution_count`). An unknown location returns no reviews.
+                  # - `car-rental-availability`: avis.com and budget.com vehicle-availability search
+                  #   URLs. Returns every vehicle with pay-now and pay-later prices in
+                  #   `data.vehicles`.
+                  # - `car-rental-locations`: avis.com and budget.com `/locations?keyword=` URLs.
+                  #   Returns rental branches with codes, addresses, coordinates, and hours in
+                  #   `data.locations`.
+                  # - `emails`: Any page. Returns its email addresses in `data.emails`
+                  #   (`[{ email }]`), read from `mailto:` links, Cloudflare-protected addresses,
+                  #   and visible text.
+                  # - `phone-numbers`: Any page. Returns its valid phone numbers in E.164 format in
+                  #   `data.phone_numbers` (`[{ phone }]`), read from `tel:` links and visible text.
+                  #   Numbers without a country code are read for the country of the site TLD (US by
+                  #   default).
+                  # - `links`: Any page. Returns its unique HTTP and HTTPS links as absolute URLs in
+                  #   `data.links` (`[{ url, text }]`). `text` falls back to `aria-label` or image
+                  #   alt text and is `null` when a link has none.
                   module Parser
                     extend ContextDev::Internal::Type::Enum
 
@@ -4998,7 +10339,7 @@ module ContextDev
                       T.type_alias do
                         T.all(
                           Symbol,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser
                         )
                       end
                     OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -5006,153 +10347,153 @@ module ContextDev
                     GOOGLE_MAPS =
                       T.let(
                         :"google-maps",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     GOOGLE_MAPS_REVIEWS =
                       T.let(
                         :"google-maps-reviews",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     GOOGLE_PLAY =
                       T.let(
                         :"google-play",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     GOOGLE_PLAY_REVIEWS =
                       T.let(
                         :"google-play-reviews",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     APP_STORE =
                       T.let(
                         :"app-store",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     APP_STORE_REVIEWS =
                       T.let(
                         :"app-store-reviews",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     G2_REVIEWS =
                       T.let(
                         :"g2-reviews",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     INSTAGRAM_PROFILE =
                       T.let(
                         :"instagram-profile",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     INSTAGRAM_POST =
                       T.let(
                         :"instagram-post",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     INSTAGRAM_FEED =
                       T.let(
                         :"instagram-feed",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     TIKTOK_PROFILE =
                       T.let(
                         :"tiktok-profile",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     TIKTOK_VIDEO =
                       T.let(
                         :"tiktok-video",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     TIKTOK_FEED =
                       T.let(
                         :"tiktok-feed",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     TIKTOK_COMMENTS =
                       T.let(
                         :"tiktok-comments",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     TIKTOK_FOLLOWERS =
                       T.let(
                         :"tiktok-followers",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     TIKTOK_FOLLOWING =
                       T.let(
                         :"tiktok-following",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     TIKTOK_USER_SEARCH =
                       T.let(
                         :"tiktok-user-search",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     REDDIT_POST =
                       T.let(
                         :"reddit-post",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     REDDIT_SEARCH =
                       T.let(
                         :"reddit-search",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     REDDIT_SUBREDDIT =
                       T.let(
                         :"reddit-subreddit",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     REDDIT_USER =
                       T.let(
                         :"reddit-user",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     YELP_SEARCH =
                       T.let(
                         :"yelp-search",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     YELP_REVIEWS =
                       T.let(
                         :"yelp-reviews",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     TRIPADVISOR_REVIEWS =
                       T.let(
                         :"tripadvisor-reviews",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     CAR_RENTAL_AVAILABILITY =
                       T.let(
                         :"car-rental-availability",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     CAR_RENTAL_LOCATIONS =
                       T.let(
                         :"car-rental-locations",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     EMAILS =
                       T.let(
                         :emails,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     PHONE_NUMBERS =
                       T.let(
                         :"phone-numbers",
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
                     LINKS =
                       T.let(
                         :links,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                       )
 
                     sig do
                       override.returns(
                         T::Array[
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
                         ]
                       )
                     end
@@ -5160,9 +10501,9 @@ module ContextDev
                     end
                   end
 
-                  # google-maps-reviews only. Order of data.reviews. newest, relevant, highest, and
-                  # lowest follow Google; oldest returns the earliest reviews first, which Google
-                  # itself does not offer.
+                  # Order of `data.reviews` for `google-maps-reviews`. `newest`, `relevant`,
+                  # `highest`, and `lowest` use the same orders as Google Maps; `oldest` returns the
+                  # earliest reviews first.
                   module Sort
                     extend ContextDev::Internal::Type::Enum
 
@@ -5170,7 +10511,7 @@ module ContextDev
                       T.type_alias do
                         T.all(
                           Symbol,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort
                         )
                       end
                     OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -5178,33 +10519,33 @@ module ContextDev
                     NEWEST =
                       T.let(
                         :newest,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
                       )
                     OLDEST =
                       T.let(
                         :oldest,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
                       )
                     RELEVANT =
                       T.let(
                         :relevant,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
                       )
                     HIGHEST =
                       T.let(
                         :highest,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
                       )
                     LOWEST =
                       T.let(
                         :lowest,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
                       )
 
                     sig do
                       override.returns(
                         T::Array[
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
                         ]
                       )
                     end
@@ -5216,7 +10557,7 @@ module ContextDev
                 sig do
                   override.returns(
                     T::Array[
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ParseParams::Variants
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::Variants
                     ]
                   )
                 end
@@ -5228,7 +10569,7 @@ module ContextDev
                 OrHash =
                   T.type_alias do
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ProductParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ProductParams,
                       ContextDev::Internal::AnyHash
                     )
                   end
@@ -5247,7 +10588,7 @@ module ContextDev
                 sig { params(use_ai_fallback: T::Boolean).void }
                 attr_writer :use_ai_fallback
 
-                # Product options. Requires formats.product: true.
+                # Options for the `product` output. Requires `formats.product: true`.
                 sig do
                   params(
                     dedupe_images: T::Boolean,
@@ -5275,20 +10616,20 @@ module ContextDev
                 OrHash =
                   T.type_alias do
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams,
                       ContextDev::Internal::AnyHash
                     )
                   end
 
-                # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
+                # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Up to 40
                 # megapixels.
                 sig do
                   returns(
                     T.nilable(
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::OrSymbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::OrSymbol,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle
                       )
                     )
                   )
@@ -5299,9 +10640,9 @@ module ContextDev
                   params(
                     area:
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::OrSymbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element::OrHash,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle::OrHash
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::OrSymbol,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element::OrHash,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle::OrHash
                       )
                   ).void
                 end
@@ -5311,7 +10652,7 @@ module ContextDev
                 sig do
                   returns(
                     T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::OrSymbol
                     )
                   )
                 end
@@ -5320,26 +10661,26 @@ module ContextDev
                 sig do
                   params(
                     format_:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::OrSymbol
                   ).void
                 end
                 attr_writer :format_
 
-                # Screenshot options. Requires formats.screenshot: true.
+                # Options for the `screenshot` output. Requires `formats.screenshot: true`.
                 sig do
                   params(
                     area:
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::OrSymbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element::OrHash,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle::OrHash
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::OrSymbol,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element::OrHash,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle::OrHash
                       ),
                     format_:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::OrSymbol
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
+                  # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Up to 40
                   # megapixels.
                   area: nil,
                   # Image format for the screenshot.
@@ -5352,19 +10693,19 @@ module ContextDev
                     {
                       area:
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::OrSymbol,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::OrSymbol,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle
                         ),
                       format_:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::OrSymbol
                     }
                   )
                 end
                 def to_hash
                 end
 
-                # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
+                # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Up to 40
                 # megapixels.
                 module Area
                   extend ContextDev::Internal::Type::Union
@@ -5372,9 +10713,9 @@ module ContextDev
                   Variants =
                     T.type_alias do
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::TaggedSymbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::TaggedSymbol,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle
                       )
                     end
 
@@ -5385,7 +10726,7 @@ module ContextDev
                       T.type_alias do
                         T.all(
                           Symbol,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page
                         )
                       end
                     OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -5393,18 +10734,18 @@ module ContextDev
                     VIEWPORT =
                       T.let(
                         :viewport,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::TaggedSymbol
                       )
                     FULL_PAGE =
                       T.let(
                         :fullPage,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::TaggedSymbol
                       )
 
                     sig do
                       override.returns(
                         T::Array[
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Page::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::TaggedSymbol
                         ]
                       )
                     end
@@ -5416,7 +10757,7 @@ module ContextDev
                     OrHash =
                       T.type_alias do
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Element,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element,
                           ContextDev::Internal::AnyHash
                         )
                       end
@@ -5441,7 +10782,7 @@ module ContextDev
                     OrHash =
                       T.type_alias do
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Rectangle,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle,
                           ContextDev::Internal::AnyHash
                         )
                       end
@@ -5462,7 +10803,7 @@ module ContextDev
                     sig { returns(Integer) }
                     attr_accessor :y_
 
-                    # Pixels from the document origin.
+                    # Rectangle to capture, in pixels from the document origin.
                     sig do
                       params(
                         height: Integer,
@@ -5500,7 +10841,7 @@ module ContextDev
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Area::Variants
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Variants
                       ]
                     )
                   end
@@ -5516,7 +10857,7 @@ module ContextDev
                     T.type_alias do
                       T.all(
                         Symbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format
                       )
                     end
                   OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -5524,23 +10865,23 @@ module ContextDev
                   PNG =
                     T.let(
                       :png,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::TaggedSymbol
                     )
                   JPEG =
                     T.let(
                       :jpeg,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::TaggedSymbol
                     )
                   WEBP =
                     T.let(
                       :webp,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::TaggedSymbol
                     )
 
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::ScreenshotParams::Format::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::TaggedSymbol
                       ]
                     )
                   end
@@ -5553,22 +10894,22 @@ module ContextDev
                 OrHash =
                   T.type_alias do
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams,
                       ContextDev::Internal::AnyHash
                     )
                   end
 
-                # Browser steps run in order before capture. Requires a paid plan. Skips the
+                # Browser steps to run in order before capture. Requires a paid plan. Skips the
                 # cache.
                 sig do
                   returns(
                     T.nilable(
                       T::Array[
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor
                         )
                       ]
                     )
@@ -5581,17 +10922,18 @@ module ContextDev
                     actions:
                       T::Array[
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor::OrHash
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor::OrHash
                         )
                       ]
                   ).void
                 end
                 attr_writer :actions
 
-                # Proxy country as a two-letter code, such as `US`. Case-insensitive.
+                # Country to fetch from, as an ISO 3166-1 alpha-2 code such as `US`.
+                # Case-insensitive.
                 sig { returns(T.nilable(String)) }
                 attr_reader :country
 
@@ -5626,17 +10968,16 @@ module ContextDev
                 sig { params(headers: T::Hash[Symbol, String]).void }
                 attr_writer :headers
 
-                # Which iframe contents to include in HTML and text outputs. Screenshots always
-                # show visible frames. `auto` (default) inlines only iframes that hold page
-                # content, such as same-site documents, framesets, job boards, forms and embedded
-                # documents, and skips ads and widgets. `true` inlines every iframe. `false`
-                # inlines none.
+                # Which iframes to inline in HTML and text outputs. Screenshots always show
+                # visible frames. `auto` inlines only iframes that hold page content, such as
+                # same-site documents, framesets, job boards, forms, and embedded documents, and
+                # skips ads and widgets. `true` inlines every iframe; `false` inlines none.
                 sig do
                   returns(
                     T.nilable(
                       T.any(
                         T::Boolean,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
                       )
                     )
                   )
@@ -5648,7 +10989,7 @@ module ContextDev
                     include_frames:
                       T.any(
                         T::Boolean,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
                       )
                   ).void
                 end
@@ -5661,18 +11002,19 @@ module ContextDev
                 sig { params(include_selectors: T::Array[String]).void }
                 attr_writer :include_selectors
 
-                # Keep only the main content. Doesn't affect `screenshot`, `bytes`, or `product`.
+                # Keep only the main content, without navigation, headers, footers, or sidebars.
+                # Does not affect `screenshot`, `bytes`, or `product`.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :main_content_only
 
                 sig { params(main_content_only: T::Boolean).void }
                 attr_writer :main_content_only
 
-                # Document parsing options.
+                # Options for parsing documents such as PDFs.
                 sig do
                   returns(
                     T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers
                     )
                   )
                 end
@@ -5681,20 +11023,22 @@ module ContextDev
                 sig do
                   params(
                     parsers:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::OrHash
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::OrHash
                   ).void
                 end
                 attr_writer :parsers
 
-                # Create or reuse an authenticated browser profile. Requires a paid plan and an
-                # HTTPS target. Profiles persist session state, bypass shared caches, and cannot
-                # be combined with ZDR, custom headers, raw bytes, or prebuilt parsers.
+                # Scrape as a signed-in user. Create a profile with `type: "new"` and your
+                # credentials, then reuse it with `type: "existing"`. Requires a paid plan and an
+                # HTTPS URL. Profiles keep their session between requests, skip the cache, and
+                # cannot be combined with ZDR, custom headers, `formats.bytes`, or prebuilt
+                # parsers other than `emails`, `phone-numbers`, and `links`.
                 sig do
                   returns(
                     T.nilable(
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New
                       )
                     )
                   )
@@ -5705,15 +11049,15 @@ module ContextDev
                   params(
                     profile:
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing::OrHash,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New::OrHash
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing::OrHash,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New::OrHash
                       )
                   ).void
                 end
                 attr_writer :profile
 
                 # Wait for CSS animations to finish before capture. Defaults to `true` when
-                # `screenshot` is requested.
+                # `formats.screenshot` is `true`.
                 sig { returns(T.nilable(T::Boolean)) }
                 attr_reader :settle_animations
 
@@ -5724,7 +11068,7 @@ module ContextDev
                 sig do
                   returns(
                     T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::OrSymbol
                     )
                   )
                 end
@@ -5733,17 +11077,17 @@ module ContextDev
                 sig do
                   params(
                     theme:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::OrSymbol
                   ).void
                 end
                 attr_writer :theme
 
-                # Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
-                # default to 1440 × 900.
+                # Browser viewport in pixels. Defaults to 1920 × 1080. If you pass `viewport`, a
+                # missing `width` defaults to 1440 and a missing `height` to 900.
                 sig do
                   returns(
                     T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Viewport
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Viewport
                     )
                   )
                 end
@@ -5752,17 +11096,18 @@ module ContextDev
                 sig do
                   params(
                     viewport:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Viewport::OrHash
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Viewport::OrHash
                   ).void
                 end
                 attr_writer :viewport
 
-                # Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
-                # (2000 with frames or XML).
+                # Time to wait after actions, in milliseconds, or a CSS selector to wait for.
+                # Defaults to 500 ms, or 2000 ms when `includeFrames` is `true` or the URL ends in
+                # `.xml`.
                 sig do
                   returns(
                     T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::WaitFor::Variants
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::WaitFor::Variants
                     )
                   )
                 end
@@ -5771,7 +11116,7 @@ module ContextDev
                 sig do
                   params(
                     wait_for:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::WaitFor::Variants
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::WaitFor::Variants
                   ).void
                 end
                 attr_writer :wait_for
@@ -5782,10 +11127,10 @@ module ContextDev
                     actions:
                       T::Array[
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor::OrHash
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait::OrHash,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor::OrHash
                         )
                       ],
                     country: String,
@@ -5796,31 +11141,32 @@ module ContextDev
                     include_frames:
                       T.any(
                         T::Boolean,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
                       ),
                     include_selectors: T::Array[String],
                     main_content_only: T::Boolean,
                     parsers:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::OrHash,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::OrHash,
                     profile:
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing::OrHash,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New::OrHash
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing::OrHash,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New::OrHash
                       ),
                     settle_animations: T::Boolean,
                     theme:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::OrSymbol,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::OrSymbol,
                     viewport:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Viewport::OrHash,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Viewport::OrHash,
                     wait_for:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::WaitFor::Variants
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::WaitFor::Variants
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Browser steps run in order before capture. Requires a paid plan. Skips the
+                  # Browser steps to run in order before capture. Requires a paid plan. Skips the
                   # cache.
                   actions: nil,
-                  # Proxy country as a two-letter code, such as `US`. Case-insensitive.
+                  # Country to fetch from, as an ISO 3166-1 alpha-2 code such as `US`.
+                  # Case-insensitive.
                   country: nil,
                   # Accept cookie banners before actions and capture.
                   dismiss_cookies: nil,
@@ -5830,32 +11176,35 @@ module ContextDev
                   exclude_selectors: nil,
                   # HTTP headers to send to the target site. Requests with headers skip the cache.
                   headers: nil,
-                  # Which iframe contents to include in HTML and text outputs. Screenshots always
-                  # show visible frames. `auto` (default) inlines only iframes that hold page
-                  # content, such as same-site documents, framesets, job boards, forms and embedded
-                  # documents, and skips ads and widgets. `true` inlines every iframe. `false`
-                  # inlines none.
+                  # Which iframes to inline in HTML and text outputs. Screenshots always show
+                  # visible frames. `auto` inlines only iframes that hold page content, such as
+                  # same-site documents, framesets, job boards, forms, and embedded documents, and
+                  # skips ads and widgets. `true` inlines every iframe; `false` inlines none.
                   include_frames: nil,
                   # Keep only elements matching these CSS selectors.
                   include_selectors: nil,
-                  # Keep only the main content. Doesn't affect `screenshot`, `bytes`, or `product`.
+                  # Keep only the main content, without navigation, headers, footers, or sidebars.
+                  # Does not affect `screenshot`, `bytes`, or `product`.
                   main_content_only: nil,
-                  # Document parsing options.
+                  # Options for parsing documents such as PDFs.
                   parsers: nil,
-                  # Create or reuse an authenticated browser profile. Requires a paid plan and an
-                  # HTTPS target. Profiles persist session state, bypass shared caches, and cannot
-                  # be combined with ZDR, custom headers, raw bytes, or prebuilt parsers.
+                  # Scrape as a signed-in user. Create a profile with `type: "new"` and your
+                  # credentials, then reuse it with `type: "existing"`. Requires a paid plan and an
+                  # HTTPS URL. Profiles keep their session between requests, skip the cache, and
+                  # cannot be combined with ZDR, custom headers, `formats.bytes`, or prebuilt
+                  # parsers other than `emails`, `phone-numbers`, and `links`.
                   profile: nil,
                   # Wait for CSS animations to finish before capture. Defaults to `true` when
-                  # `screenshot` is requested.
+                  # `formats.screenshot` is `true`.
                   settle_animations: nil,
                   # Emulate a light or dark color scheme.
                   theme: nil,
-                  # Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
-                  # default to 1440 × 900.
+                  # Browser viewport in pixels. Defaults to 1920 × 1080. If you pass `viewport`, a
+                  # missing `width` defaults to 1440 and a missing `height` to 900.
                   viewport: nil,
-                  # Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
-                  # (2000 with frames or XML).
+                  # Time to wait after actions, in milliseconds, or a CSS selector to wait for.
+                  # Defaults to 500 ms, or 2000 ms when `includeFrames` is `true` or the URL ends in
+                  # `.xml`.
                   wait_for: nil
                 )
                 end
@@ -5866,10 +11215,10 @@ module ContextDev
                       actions:
                         T::Array[
                           T.any(
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor
                           )
                         ],
                       country: String,
@@ -5880,24 +11229,24 @@ module ContextDev
                       include_frames:
                         T.any(
                           T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::OrSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
                         ),
                       include_selectors: T::Array[String],
                       main_content_only: T::Boolean,
                       parsers:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers,
                       profile:
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New
                         ),
                       settle_animations: T::Boolean,
                       theme:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::OrSymbol,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::OrSymbol,
                       viewport:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Viewport,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Viewport,
                       wait_for:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::WaitFor::Variants
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::WaitFor::Variants
                     }
                   )
                 end
@@ -5910,10 +11259,10 @@ module ContextDev
                   Variants =
                     T.type_alias do
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor
                       )
                     end
 
@@ -5921,7 +11270,7 @@ module ContextDev
                     OrHash =
                       T.type_alias do
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Perform,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform,
                           ContextDev::Internal::AnyHash
                         )
                       end
@@ -5930,7 +11279,7 @@ module ContextDev
                     sig { returns(String) }
                     attr_accessor :action
 
-                    # Use `perform` for a plain-language browser instruction.
+                    # Follow a plain-language instruction.
                     sig { returns(Symbol) }
                     attr_accessor :type
 
@@ -5942,7 +11291,7 @@ module ContextDev
                     def self.new(
                       # One browser instruction, such as clicking a button or entering text.
                       action:,
-                      # Use `perform` for a plain-language browser instruction.
+                      # Follow a plain-language instruction.
                       type: :perform
                     )
                     end
@@ -5956,22 +11305,23 @@ module ContextDev
                     OrHash =
                       T.type_alias do
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll,
                           ContextDev::Internal::AnyHash
                         )
                       end
 
-                    # Use `scroll` to move through the page or a container.
+                    # Scroll the page or a container.
                     sig { returns(Symbol) }
                     attr_accessor :type
 
-                    # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
+                    # Distance per scroll step: a number of pixels, one `viewport`, or `max` to reach
+                    # the end.
                     sig do
                       returns(
                         T.nilable(
                           T.any(
                             Integer,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::OrSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::OrSymbol
                           )
                         )
                       )
@@ -5983,7 +11333,7 @@ module ContextDev
                         amount:
                           T.any(
                             Integer,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::OrSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::OrSymbol
                           )
                       ).void
                     end
@@ -5993,7 +11343,7 @@ module ContextDev
                     sig do
                       returns(
                         T.nilable(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::OrSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::OrSymbol
                         )
                       )
                     end
@@ -6002,7 +11352,7 @@ module ContextDev
                     sig do
                       params(
                         direction:
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::OrSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::OrSymbol
                       ).void
                     end
                     attr_writer :direction
@@ -6014,7 +11364,7 @@ module ContextDev
                     sig { params(max_scrolls: Integer).void }
                     attr_writer :max_scrolls
 
-                    # Scroll this container. Omit to scroll the page.
+                    # CSS selector of the container to scroll. Omit to scroll the page.
                     sig { returns(T.nilable(String)) }
                     attr_reader :selector
 
@@ -6026,25 +11376,26 @@ module ContextDev
                         amount:
                           T.any(
                             Integer,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::OrSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::OrSymbol
                           ),
                         direction:
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::OrSymbol,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::OrSymbol,
                         max_scrolls: Integer,
                         selector: String,
                         type: Symbol
                       ).returns(T.attached_class)
                     end
                     def self.new(
-                      # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
+                      # Distance per scroll step: a number of pixels, one `viewport`, or `max` to reach
+                      # the end.
                       amount: nil,
                       # Direction to scroll.
                       direction: nil,
                       # Maximum number of scroll steps for this action.
                       max_scrolls: nil,
-                      # Scroll this container. Omit to scroll the page.
+                      # CSS selector of the container to scroll. Omit to scroll the page.
                       selector: nil,
-                      # Use `scroll` to move through the page or a container.
+                      # Scroll the page or a container.
                       type: :scroll
                     )
                     end
@@ -6056,10 +11407,10 @@ module ContextDev
                           amount:
                             T.any(
                               Integer,
-                              ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::OrSymbol
+                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::OrSymbol
                             ),
                           direction:
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::OrSymbol,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::OrSymbol,
                           max_scrolls: Integer,
                           selector: String
                         }
@@ -6068,7 +11419,8 @@ module ContextDev
                     def to_hash
                     end
 
-                    # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
+                    # Distance per scroll step: a number of pixels, one `viewport`, or `max` to reach
+                    # the end.
                     module Amount
                       extend ContextDev::Internal::Type::Union
 
@@ -6076,14 +11428,14 @@ module ContextDev
                         T.type_alias do
                           T.any(
                             Integer,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::TaggedSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::TaggedSymbol
                           )
                         end
 
                       sig do
                         override.returns(
                           T::Array[
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::Variants
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::Variants
                           ]
                         )
                       end
@@ -6094,7 +11446,7 @@ module ContextDev
                         T.type_alias do
                           T.all(
                             Symbol,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount
                           )
                         end
                       OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -6102,12 +11454,12 @@ module ContextDev
                       VIEWPORT =
                         T.let(
                           :viewport,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::TaggedSymbol
                         )
                       MAX =
                         T.let(
                           :max,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Amount::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::TaggedSymbol
                         )
                     end
 
@@ -6119,7 +11471,7 @@ module ContextDev
                         T.type_alias do
                           T.all(
                             Symbol,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction
                           )
                         end
                       OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -6127,28 +11479,28 @@ module ContextDev
                       DOWN =
                         T.let(
                           :down,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::TaggedSymbol
                         )
                       UP =
                         T.let(
                           :up,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::TaggedSymbol
                         )
                       LEFT =
                         T.let(
                           :left,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::TaggedSymbol
                         )
                       RIGHT =
                         T.let(
                           :right,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::TaggedSymbol
                         )
 
                       sig do
                         override.returns(
                           T::Array[
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Scroll::Direction::TaggedSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::TaggedSymbol
                           ]
                         )
                       end
@@ -6161,16 +11513,16 @@ module ContextDev
                     OrHash =
                       T.type_alias do
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Wait,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait,
                           ContextDev::Internal::AnyHash
                         )
                       end
 
-                    # Time to pause in milliseconds before the next action.
+                    # How long to pause before the next action, in milliseconds.
                     sig { returns(Integer) }
                     attr_accessor :milliseconds
 
-                    # Use `wait` to pause for a fixed duration.
+                    # Pause for a fixed time.
                     sig { returns(Symbol) }
                     attr_accessor :type
 
@@ -6180,9 +11532,9 @@ module ContextDev
                       )
                     end
                     def self.new(
-                      # Time to pause in milliseconds before the next action.
+                      # How long to pause before the next action, in milliseconds.
                       milliseconds:,
-                      # Use `wait` to pause for a fixed duration.
+                      # Pause for a fixed time.
                       type: :wait
                     )
                     end
@@ -6198,7 +11550,7 @@ module ContextDev
                     OrHash =
                       T.type_alias do
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::WaitFor,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor,
                           ContextDev::Internal::AnyHash
                         )
                       end
@@ -6207,7 +11559,7 @@ module ContextDev
                     sig { returns(String) }
                     attr_accessor :selector
 
-                    # Use `waitFor` to wait for a matching element.
+                    # Wait for an element matching `selector`.
                     sig { returns(Symbol) }
                     attr_accessor :type
 
@@ -6219,7 +11571,7 @@ module ContextDev
                     def self.new(
                       # CSS selector to wait for before continuing.
                       selector:,
-                      # Use `waitFor` to wait for a matching element.
+                      # Wait for an element matching `selector`.
                       type: :waitFor
                     )
                     end
@@ -6232,7 +11584,7 @@ module ContextDev
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Action::Variants
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Variants
                       ]
                     )
                   end
@@ -6240,11 +11592,10 @@ module ContextDev
                   end
                 end
 
-                # Which iframe contents to include in HTML and text outputs. Screenshots always
-                # show visible frames. `auto` (default) inlines only iframes that hold page
-                # content, such as same-site documents, framesets, job boards, forms and embedded
-                # documents, and skips ads and widgets. `true` inlines every iframe. `false`
-                # inlines none.
+                # Which iframes to inline in HTML and text outputs. Screenshots always show
+                # visible frames. `auto` inlines only iframes that hold page content, such as
+                # same-site documents, framesets, job boards, forms, and embedded documents, and
+                # skips ads and widgets. `true` inlines every iframe; `false` inlines none.
                 module IncludeFrames
                   extend ContextDev::Internal::Type::Union
 
@@ -6252,14 +11603,14 @@ module ContextDev
                     T.type_alias do
                       T.any(
                         T::Boolean,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::TaggedSymbol
                       )
                     end
 
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::Variants
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::Variants
                       ]
                     )
                   end
@@ -6270,7 +11621,7 @@ module ContextDev
                     T.type_alias do
                       T.all(
                         Symbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames
                       )
                     end
                   OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -6278,7 +11629,7 @@ module ContextDev
                   AUTO =
                     T.let(
                       :auto,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::IncludeFrames::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::TaggedSymbol
                     )
                 end
 
@@ -6286,16 +11637,16 @@ module ContextDev
                   OrHash =
                     T.type_alias do
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers,
                         ContextDev::Internal::AnyHash
                       )
                     end
 
-                  # PDF page range and OCR.
+                  # Page range, OCR, and page markers for PDFs.
                   sig do
                     returns(
                       T.nilable(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf
                       )
                     )
                   end
@@ -6304,20 +11655,20 @@ module ContextDev
                   sig do
                     params(
                       pdf:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::OrHash
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::OrHash
                     ).void
                   end
                   attr_writer :pdf
 
-                  # Document parsing options.
+                  # Options for parsing documents such as PDFs.
                   sig do
                     params(
                       pdf:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::OrHash
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::OrHash
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # PDF page range and OCR.
+                    # Page range, OCR, and page markers for PDFs.
                     pdf: nil
                   )
                   end
@@ -6326,7 +11677,7 @@ module ContextDev
                     override.returns(
                       {
                         pdf:
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf
                       }
                     )
                   end
@@ -6337,31 +11688,31 @@ module ContextDev
                     OrHash =
                       T.type_alias do
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf,
                           ContextDev::Internal::AnyHash
                         )
                       end
 
-                    # Last page to parse. Must be at least `startPage`.
+                    # Last page to parse. Defaults to the last page. Must be at least `startPage`.
                     sig { returns(T.nilable(Integer)) }
                     attr_reader :end_page
 
                     sig { params(end_page: Integer).void }
                     attr_writer :end_page
 
-                    # Start each page in the Markdown with a `<!-- page N -->` line using its original
-                    # 1-based page number; these responses are never served from cache.
+                    # Start each PDF page in the Markdown with a `<!-- page N -->` line, where `N` is
+                    # the original 1-based page number. These responses are never served from cache.
                     sig { returns(T.nilable(T::Boolean)) }
                     attr_reader :include_numbered_pages
 
                     sig { params(include_numbered_pages: T::Boolean).void }
                     attr_writer :include_numbered_pages
 
-                    # Set `auto` to read scanned pages with OCR.
+                    # Set to `auto` to read scanned pages with OCR. Adds 1 credit per page read.
                     sig do
                       returns(
                         T.nilable(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::OrSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::OrSymbol
                         )
                       )
                     end
@@ -6370,7 +11721,7 @@ module ContextDev
                     sig do
                       params(
                         ocr:
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::OrSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::OrSymbol
                       ).void
                     end
                     attr_writer :ocr
@@ -6382,23 +11733,23 @@ module ContextDev
                     sig { params(start_page: Integer).void }
                     attr_writer :start_page
 
-                    # PDF page range and OCR.
+                    # Page range, OCR, and page markers for PDFs.
                     sig do
                       params(
                         end_page: Integer,
                         include_numbered_pages: T::Boolean,
                         ocr:
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::OrSymbol,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::OrSymbol,
                         start_page: Integer
                       ).returns(T.attached_class)
                     end
                     def self.new(
-                      # Last page to parse. Must be at least `startPage`.
+                      # Last page to parse. Defaults to the last page. Must be at least `startPage`.
                       end_page: nil,
-                      # Start each page in the Markdown with a `<!-- page N -->` line using its original
-                      # 1-based page number; these responses are never served from cache.
+                      # Start each PDF page in the Markdown with a `<!-- page N -->` line, where `N` is
+                      # the original 1-based page number. These responses are never served from cache.
                       include_numbered_pages: nil,
-                      # Set `auto` to read scanned pages with OCR.
+                      # Set to `auto` to read scanned pages with OCR. Adds 1 credit per page read.
                       ocr: nil,
                       # First page to parse, starting at 1.
                       start_page: nil
@@ -6411,7 +11762,7 @@ module ContextDev
                           end_page: Integer,
                           include_numbered_pages: T::Boolean,
                           ocr:
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::OrSymbol,
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::OrSymbol,
                           start_page: Integer
                         }
                       )
@@ -6419,7 +11770,7 @@ module ContextDev
                     def to_hash
                     end
 
-                    # Set `auto` to read scanned pages with OCR.
+                    # Set to `auto` to read scanned pages with OCR. Adds 1 credit per page read.
                     module Ocr
                       extend ContextDev::Internal::Type::Enum
 
@@ -6427,7 +11778,7 @@ module ContextDev
                         T.type_alias do
                           T.all(
                             Symbol,
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr
                           )
                         end
                       OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -6435,18 +11786,18 @@ module ContextDev
                       OFF =
                         T.let(
                           :off,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
                         )
                       AUTO =
                         T.let(
                           :auto,
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
                         )
 
                       sig do
                         override.returns(
                           T::Array[
-                            ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
+                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
                           ]
                         )
                       end
@@ -6456,17 +11807,19 @@ module ContextDev
                   end
                 end
 
-                # Create or reuse an authenticated browser profile. Requires a paid plan and an
-                # HTTPS target. Profiles persist session state, bypass shared caches, and cannot
-                # be combined with ZDR, custom headers, raw bytes, or prebuilt parsers.
+                # Scrape as a signed-in user. Create a profile with `type: "new"` and your
+                # credentials, then reuse it with `type: "existing"`. Requires a paid plan and an
+                # HTTPS URL. Profiles keep their session between requests, skip the cache, and
+                # cannot be combined with ZDR, custom headers, `formats.bytes`, or prebuilt
+                # parsers other than `emails`, `phone-numbers`, and `links`.
                 module Profile
                   extend ContextDev::Internal::Type::Union
 
                   Variants =
                     T.type_alias do
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New
                       )
                     end
 
@@ -6474,12 +11827,12 @@ module ContextDev
                     OrHash =
                       T.type_alias do
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Existing,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing,
                           ContextDev::Internal::AnyHash
                         )
                       end
 
-                    # The ID returned in profile.id by an earlier scrape.
+                    # ID of the browser profile, from `profile.id` in an earlier scrape response.
                     sig { returns(String) }
                     attr_accessor :profile_id
 
@@ -6493,7 +11846,7 @@ module ContextDev
                       )
                     end
                     def self.new(
-                      # The ID returned in profile.id by an earlier scrape.
+                      # ID of the browser profile, from `profile.id` in an earlier scrape response.
                       profile_id:,
                       # Reuse a saved browser profile.
                       type: :existing
@@ -6511,27 +11864,27 @@ module ContextDev
                     OrHash =
                       T.type_alias do
                         T.any(
-                          ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::New,
+                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New,
                           ContextDev::Internal::AnyHash
                         )
                       end
 
-                    # Username or email for the target website.
+                    # Username or email address for the website.
                     sig { returns(String) }
                     attr_accessor :identifier
 
-                    # Sign in and create a browser profile.
+                    # Sign in and save a new browser profile.
                     sig { returns(Symbol) }
                     attr_accessor :type
 
-                    # Optional label shown when listing profiles with `GET /org/browser/profiles`.
+                    # Label for the profile, shown by `GET /org/browser/profiles`.
                     sig { returns(T.nilable(String)) }
                     attr_reader :description
 
                     sig { params(description: String).void }
                     attr_writer :description
 
-                    # Password used to sign in. It is never stored in the profile.
+                    # Password for the website. Used to sign in and never stored.
                     sig { returns(String) }
                     attr_accessor :password
 
@@ -6544,13 +11897,13 @@ module ContextDev
                       ).returns(T.attached_class)
                     end
                     def self.new(
-                      # Username or email for the target website.
+                      # Username or email address for the website.
                       identifier:,
-                      # Password used to sign in. It is never stored in the profile.
+                      # Password for the website. Used to sign in and never stored.
                       password:,
-                      # Optional label shown when listing profiles with `GET /org/browser/profiles`.
+                      # Label for the profile, shown by `GET /org/browser/profiles`.
                       description: nil,
-                      # Sign in and create a browser profile.
+                      # Sign in and save a new browser profile.
                       type: :new
                     )
                     end
@@ -6572,7 +11925,7 @@ module ContextDev
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Profile::Variants
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Variants
                       ]
                     )
                   end
@@ -6588,7 +11941,7 @@ module ContextDev
                     T.type_alias do
                       T.all(
                         Symbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme
                       )
                     end
                   OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -6596,18 +11949,18 @@ module ContextDev
                   LIGHT =
                     T.let(
                       :light,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::TaggedSymbol
                     )
                   DARK =
                     T.let(
                       :dark,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::TaggedSymbol
                     )
 
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Theme::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::TaggedSymbol
                       ]
                     )
                   end
@@ -6619,7 +11972,7 @@ module ContextDev
                   OrHash =
                     T.type_alias do
                       T.any(
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::Viewport,
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Viewport,
                         ContextDev::Internal::AnyHash
                       )
                     end
@@ -6638,8 +11991,8 @@ module ContextDev
                   sig { params(width: Integer).void }
                   attr_writer :width
 
-                  # Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
-                  # default to 1440 × 900.
+                  # Browser viewport in pixels. Defaults to 1920 × 1080. If you pass `viewport`, a
+                  # missing `width` defaults to 1440 and a missing `height` to 900.
                   sig do
                     params(height: Integer, width: Integer).returns(
                       T.attached_class
@@ -6658,8 +12011,9 @@ module ContextDev
                   end
                 end
 
-                # Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
-                # (2000 with frames or XML).
+                # Time to wait after actions, in milliseconds, or a CSS selector to wait for.
+                # Defaults to 500 ms, or 2000 ms when `includeFrames` is `true` or the URL ends in
+                # `.xml`.
                 module WaitFor
                   extend ContextDev::Internal::Type::Union
 
@@ -6668,7 +12022,7 @@ module ContextDev
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::SharedParams::WaitFor::Variants
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::WaitFor::Variants
                       ]
                     )
                   end
@@ -6681,7 +12035,7 @@ module ContextDev
                 OrHash =
                   T.type_alias do
                     T.any(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts,
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts,
                       ContextDev::Internal::AnyHash
                     )
                   end
@@ -6690,15 +12044,15 @@ module ContextDev
                 sig { returns(Integer) }
                 attr_accessor :milliseconds
 
-                # "fail" returns 408 at the deadline. "return-partial" returns available results;
-                # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-                # On POST /web/scrape, an output that is not ready in time fails with error_code
-                # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-                # only when the whole request cannot respond by the deadline.
+                # `fail` returns 408 at the deadline. `return-partial` returns the results
+                # collected so far and marks the response as partial. `return-partial` requires at
+                # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+                # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+                # the whole request could not respond by the deadline.
                 sig do
                   returns(
                     T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::OrSymbol
                     )
                   )
                 end
@@ -6707,28 +12061,28 @@ module ContextDev
                 sig do
                   params(
                     behavior:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::OrSymbol
                   ).void
                 end
                 attr_writer :behavior
 
-                # Deadline for each page, using the same behavior and defaults as POST
-                # /web/scrape.
+                # Time limit for each page, with the same behavior and defaults as in
+                # `POST /web/scrape`.
                 sig do
                   params(
                     milliseconds: Integer,
                     behavior:
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::OrSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::OrSymbol
                   ).returns(T.attached_class)
                 end
                 def self.new(
                   # Deadline in milliseconds.
                   milliseconds:,
-                  # "fail" returns 408 at the deadline. "return-partial" returns available results;
-                  # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-                  # On POST /web/scrape, an output that is not ready in time fails with error_code
-                  # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-                  # only when the whole request cannot respond by the deadline.
+                  # `fail` returns 408 at the deadline. `return-partial` returns the results
+                  # collected so far and marks the response as partial. `return-partial` requires at
+                  # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+                  # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+                  # the whole request could not respond by the deadline.
                   behavior: nil
                 )
                 end
@@ -6738,18 +12092,18 @@ module ContextDev
                     {
                       milliseconds: Integer,
                       behavior:
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::OrSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::OrSymbol
                     }
                   )
                 end
                 def to_hash
                 end
 
-                # "fail" returns 408 at the deadline. "return-partial" returns available results;
-                # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-                # On POST /web/scrape, an output that is not ready in time fails with error_code
-                # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-                # only when the whole request cannot respond by the deadline.
+                # `fail` returns 408 at the deadline. `return-partial` returns the results
+                # collected so far and marks the response as partial. `return-partial` requires at
+                # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+                # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+                # the whole request could not respond by the deadline.
                 module Behavior
                   extend ContextDev::Internal::Type::Enum
 
@@ -6757,7 +12111,7 @@ module ContextDev
                     T.type_alias do
                       T.all(
                         Symbol,
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior
                       )
                     end
                   OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -6765,18 +12119,18 @@ module ContextDev
                   FAIL =
                     T.let(
                       :fail,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::TaggedSymbol
                     )
                   RETURN_PARTIAL =
                     T.let(
                       :"return-partial",
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::TaggedSymbol
                     )
 
                   sig do
                     override.returns(
                       T::Array[
-                        ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::TimeoutOpts::Behavior::TaggedSymbol
+                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::TaggedSymbol
                       ]
                     )
                   end
@@ -6785,8 +12139,8 @@ module ContextDev
                 end
               end
 
-              # Batches persist their results. Only disabled is supported; enabled returns
-              # ZDR_NOT_SUPPORTED.
+              # Zero data retention is not available for batches, because batches store their
+              # results. Sending `enabled` returns `ZDR_NOT_SUPPORTED`.
               module Zdr
                 extend ContextDev::Internal::Type::Enum
 
@@ -6794,7 +12148,7 @@ module ContextDev
                   T.type_alias do
                     T.all(
                       Symbol,
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr
                     )
                   end
                 OrSymbol = T.type_alias { T.any(Symbol, String) }
@@ -6802,13 +12156,13 @@ module ContextDev
                 DISABLED =
                   T.let(
                     :disabled,
-                    ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::TaggedSymbol
+                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::TaggedSymbol
                   )
 
                 sig do
                   override.returns(
                     T::Array[
-                      ContextDev::BatchSubmitParams::Input::Scrape::Data::BatchUnifiedScrapeData::Zdr::TaggedSymbol
+                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::TaggedSymbol
                     ]
                   )
                 end
@@ -6816,92 +12170,6 @@ module ContextDev
                 end
               end
             end
-
-            sig do
-              override.returns(
-                T::Array[
-                  ContextDev::BatchSubmitParams::Input::Scrape::Data::Variants
-                ]
-              )
-            end
-            def self.variants
-            end
-          end
-        end
-
-        class Crawl < ContextDev::Internal::Type::BaseModel
-          OrHash =
-            T.type_alias do
-              T.any(
-                ContextDev::BatchSubmitParams::Input::Crawl,
-                ContextDev::Internal::AnyHash
-              )
-            end
-
-          # Crawl source and output format.
-          sig do
-            returns(
-              T.any(
-                ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown,
-                ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML,
-                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData
-              )
-            )
-          end
-          attr_accessor :data
-
-          # Discover and scrape pages from `data.source`.
-          sig { returns(Symbol) }
-          attr_accessor :mode
-
-          # Crawl pages starting from a URL or from a domain's sitemap.
-          sig do
-            params(
-              data:
-                T.any(
-                  ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown::OrHash,
-                  ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML::OrHash,
-                  ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::OrHash
-                ),
-              mode: Symbol
-            ).returns(T.attached_class)
-          end
-          def self.new(
-            # Crawl source and output format.
-            data:,
-            # Discover and scrape pages from `data.source`.
-            mode: :crawl
-          )
-          end
-
-          sig do
-            override.returns(
-              {
-                data:
-                  T.any(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown,
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML,
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData
-                  ),
-                mode: Symbol
-              }
-            )
-          end
-          def to_hash
-          end
-
-          # Crawl source and output format.
-          module Data
-            extend ContextDev::Internal::Type::Union
-
-            Variants =
-              T.type_alias do
-                T.any(
-                  ContextDev::BatchSubmitParams::Input::Crawl::Data::Markdown,
-                  ContextDev::BatchSubmitParams::Input::Crawl::Data::HTML,
-                  ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData
-                )
-              end
 
             class Markdown < ContextDev::Internal::Type::BaseModel
               OrHash =
@@ -7042,11 +12310,11 @@ module ContextDev
                       )
                     end
 
-                  # Start from one page.
+                  # Follow links from one URL.
                   sig { returns(Symbol) }
                   attr_accessor :type
 
-                  # Page where crawling begins. A URL without a scheme is read as https://.
+                  # Page where crawling begins. A URL without a scheme is treated as `https://`.
                   sig { returns(String) }
                   attr_accessor :url
 
@@ -7078,11 +12346,11 @@ module ContextDev
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # Page where crawling begins. A URL without a scheme is read as https://.
+                    # Page where crawling begins. A URL without a scheme is treated as `https://`.
                     url:,
                     # Limits and filters for page discovery.
                     controls: nil,
-                    # Start from one page.
+                    # Follow links from one URL.
                     type: :start_url
                   )
                   end
@@ -7175,8 +12443,8 @@ module ContextDev
                     sig { params(follow_subdomains: T::Boolean).void }
                     attr_writer :follow_subdomains
 
-                    # Only follow pages in these languages, or `same_as_start_url`; all languages when
-                    # omitted.
+                    # Only follow pages in these languages, or pass `same_as_start_url` to match the
+                    # start page. Follows all languages when omitted.
                     sig do
                       returns(
                         T.nilable(
@@ -7204,14 +12472,15 @@ module ContextDev
                     end
                     attr_writer :languages
 
-                    # Maximum link depth. Source pages are depth 0. No limit when omitted.
+                    # Maximum link depth, where the start page is depth `0`. No limit when omitted.
                     sig { returns(T.nilable(Integer)) }
                     attr_reader :max_depth
 
                     sig { params(max_depth: Integer).void }
                     attr_writer :max_depth
 
-                    # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
+                    # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                    # many pages and the unused part is refunded.
                     sig { returns(T.nilable(Integer)) }
                     attr_reader :max_urls
 
@@ -7291,12 +12560,13 @@ module ContextDev
                       follow: nil,
                       # Follow links to subdomains.
                       follow_subdomains: nil,
-                      # Only follow pages in these languages, or `same_as_start_url`; all languages when
-                      # omitted.
+                      # Only follow pages in these languages, or pass `same_as_start_url` to match the
+                      # start page. Follows all languages when omitted.
                       languages: nil,
-                      # Maximum link depth. Source pages are depth 0. No limit when omitted.
+                      # Maximum link depth, where the start page is depth `0`. No limit when omitted.
                       max_depth: nil,
-                      # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
+                      # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                      # many pages and the unused part is refunded.
                       max_urls: nil,
                       # Pages to return in the results. Returns every fetched page when omitted.
                       scrape: nil
@@ -7369,7 +12639,7 @@ module ContextDev
                         sig { returns(Symbol) }
                         attr_accessor :kind
 
-                        # Regex pattern for the page URL.
+                        # Regular expression matched against the page URL.
                         sig { returns(String) }
                         attr_accessor :pattern
 
@@ -7380,7 +12650,7 @@ module ContextDev
                           )
                         end
                         def self.new(
-                          # Regex pattern for the page URL.
+                          # Regular expression matched against the page URL.
                           pattern:,
                           # Match pages by URL pattern.
                           kind: :regex
@@ -7457,7 +12727,7 @@ module ContextDev
                         sig { returns(Symbol) }
                         attr_accessor :kind
 
-                        # Regex pattern for the page URL.
+                        # Regular expression matched against the page URL.
                         sig { returns(String) }
                         attr_accessor :pattern
 
@@ -7468,7 +12738,7 @@ module ContextDev
                           )
                         end
                         def self.new(
-                          # Regex pattern for the page URL.
+                          # Regular expression matched against the page URL.
                           pattern:,
                           # Match pages by URL pattern.
                           kind: :regex
@@ -7545,8 +12815,8 @@ module ContextDev
                       end
                     end
 
-                    # Only follow pages in these languages, or `same_as_start_url`; all languages when
-                    # omitted.
+                    # Only follow pages in these languages, or pass `same_as_start_url` to match the
+                    # start page. Follows all languages when omitted.
                     module Languages
                       extend ContextDev::Internal::Type::Union
 
@@ -8014,7 +13284,7 @@ module ContextDev
                         sig { returns(Symbol) }
                         attr_accessor :kind
 
-                        # Regex pattern for the page URL.
+                        # Regular expression matched against the page URL.
                         sig { returns(String) }
                         attr_accessor :pattern
 
@@ -8025,7 +13295,7 @@ module ContextDev
                           )
                         end
                         def self.new(
-                          # Regex pattern for the page URL.
+                          # Regular expression matched against the page URL.
                           pattern:,
                           # Match pages by URL pattern.
                           kind: :regex
@@ -8096,8 +13366,8 @@ module ContextDev
                   sig { returns(Symbol) }
                   attr_accessor :type
 
-                  # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
-                  # URLs and never follows links off them, so there is no crawl depth here.
+                  # Limits and filters for the sitemap URLs. Links on sitemap pages are never
+                  # followed.
                   sig do
                     returns(
                       T.nilable(
@@ -8129,8 +13399,8 @@ module ContextDev
                     # Domain whose sitemap lists the pages to scrape. A full URL is reduced to its
                     # domain.
                     domain:,
-                    # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
-                    # URLs and never follows links off them, so there is no crawl depth here.
+                    # Limits and filters for the sitemap URLs. Links on sitemap pages are never
+                    # followed.
                     controls: nil,
                     # Scrape the URLs in the domain's sitemap.
                     type: :sitemap
@@ -8187,17 +13457,16 @@ module ContextDev
                     end
                     attr_writer :exclude
 
-                    # Path fragments that skip a sitemap URL in a crawl. Works separately from
-                    # `scrape` and `exclude`. Defaults to
-                    # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
-                    # every listed URL.
+                    # Path fragments that exclude a sitemap URL. Applies in addition to `scrape` and
+                    # `exclude`; pass `[]` to keep every listed URL.
                     sig { returns(T.nilable(T::Array[String])) }
                     attr_reader :exclude_paths
 
                     sig { params(exclude_paths: T::Array[String]).void }
                     attr_writer :exclude_paths
 
-                    # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
+                    # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                    # many pages and the unused part is refunded.
                     sig { returns(T.nilable(Integer)) }
                     attr_reader :max_urls
 
@@ -8232,8 +13501,8 @@ module ContextDev
                     end
                     attr_writer :scrape
 
-                    # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
-                    # URLs and never follows links off them, so there is no crawl depth here.
+                    # Limits and filters for the sitemap URLs. Links on sitemap pages are never
+                    # followed.
                     sig do
                       params(
                         exclude:
@@ -8257,12 +13526,11 @@ module ContextDev
                     def self.new(
                       # Sitemap pages to skip, even when they match `scrape`.
                       exclude: nil,
-                      # Path fragments that skip a sitemap URL in a crawl. Works separately from
-                      # `scrape` and `exclude`. Defaults to
-                      # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
-                      # every listed URL.
+                      # Path fragments that exclude a sitemap URL. Applies in addition to `scrape` and
+                      # `exclude`; pass `[]` to keep every listed URL.
                       exclude_paths: nil,
-                      # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
+                      # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                      # many pages and the unused part is refunded.
                       max_urls: nil,
                       # Sitemap pages to return in the results. Returns every listed page when omitted.
                       scrape: nil
@@ -8319,7 +13587,7 @@ module ContextDev
                         sig { returns(Symbol) }
                         attr_accessor :kind
 
-                        # Regex pattern for the page URL.
+                        # Regular expression matched against the page URL.
                         sig { returns(String) }
                         attr_accessor :pattern
 
@@ -8330,7 +13598,7 @@ module ContextDev
                           )
                         end
                         def self.new(
-                          # Regex pattern for the page URL.
+                          # Regular expression matched against the page URL.
                           pattern:,
                           # Match pages by URL pattern.
                           kind: :regex
@@ -8406,7 +13674,7 @@ module ContextDev
                         sig { returns(Symbol) }
                         attr_accessor :kind
 
-                        # Regex pattern for the page URL.
+                        # Regular expression matched against the page URL.
                         sig { returns(String) }
                         attr_accessor :pattern
 
@@ -8417,7 +13685,7 @@ module ContextDev
                           )
                         end
                         def self.new(
-                          # Regex pattern for the page URL.
+                          # Regular expression matched against the page URL.
                           pattern:,
                           # Match pages by URL pattern.
                           kind: :regex
@@ -8490,7 +13758,7 @@ module ContextDev
                     )
                   end
 
-                # Fetch from this country (ISO 3166-1 alpha-2).
+                # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                 sig do
                   returns(
                     T.nilable(
@@ -8544,7 +13812,7 @@ module ContextDev
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
-                # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                # Whether to parse PDFs and which pages to read.
                 sig do
                   returns(
                     T.nilable(
@@ -8637,7 +13905,7 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Fetch from this country (ISO 3166-1 alpha-2).
+                  # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                   country: nil,
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
@@ -8654,7 +13922,7 @@ module ContextDev
                   # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                   # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
-                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                  # Whether to parse PDFs and which pages to read.
                   pdf: nil,
                   # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
@@ -8697,7 +13965,7 @@ module ContextDev
                 def to_hash
                 end
 
-                # Fetch from this country (ISO 3166-1 alpha-2).
+                # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                 module Country
                   extend ContextDev::Internal::Type::Enum
 
@@ -9751,15 +15019,14 @@ module ContextDev
                       )
                     end
 
-                  # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-                  # be >= start.
+                  # Last page to parse. Defaults to the last page. Must be at least `start`.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :end_
 
                   sig { params(end_: Integer).void }
                   attr_writer :end_
 
-                  # Read scanned PDF pages with OCR; preserve pages that already have text.
+                  # Read scanned PDF pages with OCR. Pages that already have text are kept as is.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
@@ -9773,14 +15040,14 @@ module ContextDev
                   sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
-                  # First 1-based PDF page to parse.
+                  # First page to parse, starting at 1.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :start
 
                   sig { params(start: Integer).void }
                   attr_writer :start
 
-                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                  # Whether to parse PDFs and which pages to read.
                   sig do
                     params(
                       end_: Integer,
@@ -9790,14 +15057,13 @@ module ContextDev
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-                    # be >= start.
+                    # Last page to parse. Defaults to the last page. Must be at least `start`.
                     end_: nil,
-                    # Read scanned PDF pages with OCR; preserve pages that already have text.
+                    # Read scanned PDF pages with OCR. Pages that already have text are kept as is.
                     ocr: nil,
                     # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
-                    # First 1-based PDF page to parse.
+                    # First page to parse, starting at 1.
                     start: nil
                   )
                   end
@@ -9991,11 +15257,11 @@ module ContextDev
                       )
                     end
 
-                  # Start from one page.
+                  # Follow links from one URL.
                   sig { returns(Symbol) }
                   attr_accessor :type
 
-                  # Page where crawling begins. A URL without a scheme is read as https://.
+                  # Page where crawling begins. A URL without a scheme is treated as `https://`.
                   sig { returns(String) }
                   attr_accessor :url
 
@@ -10027,11 +15293,11 @@ module ContextDev
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # Page where crawling begins. A URL without a scheme is read as https://.
+                    # Page where crawling begins. A URL without a scheme is treated as `https://`.
                     url:,
                     # Limits and filters for page discovery.
                     controls: nil,
-                    # Start from one page.
+                    # Follow links from one URL.
                     type: :start_url
                   )
                   end
@@ -10124,8 +15390,8 @@ module ContextDev
                     sig { params(follow_subdomains: T::Boolean).void }
                     attr_writer :follow_subdomains
 
-                    # Only follow pages in these languages, or `same_as_start_url`; all languages when
-                    # omitted.
+                    # Only follow pages in these languages, or pass `same_as_start_url` to match the
+                    # start page. Follows all languages when omitted.
                     sig do
                       returns(
                         T.nilable(
@@ -10153,14 +15419,15 @@ module ContextDev
                     end
                     attr_writer :languages
 
-                    # Maximum link depth. Source pages are depth 0. No limit when omitted.
+                    # Maximum link depth, where the start page is depth `0`. No limit when omitted.
                     sig { returns(T.nilable(Integer)) }
                     attr_reader :max_depth
 
                     sig { params(max_depth: Integer).void }
                     attr_writer :max_depth
 
-                    # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
+                    # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                    # many pages and the unused part is refunded.
                     sig { returns(T.nilable(Integer)) }
                     attr_reader :max_urls
 
@@ -10240,12 +15507,13 @@ module ContextDev
                       follow: nil,
                       # Follow links to subdomains.
                       follow_subdomains: nil,
-                      # Only follow pages in these languages, or `same_as_start_url`; all languages when
-                      # omitted.
+                      # Only follow pages in these languages, or pass `same_as_start_url` to match the
+                      # start page. Follows all languages when omitted.
                       languages: nil,
-                      # Maximum link depth. Source pages are depth 0. No limit when omitted.
+                      # Maximum link depth, where the start page is depth `0`. No limit when omitted.
                       max_depth: nil,
-                      # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
+                      # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                      # many pages and the unused part is refunded.
                       max_urls: nil,
                       # Pages to return in the results. Returns every fetched page when omitted.
                       scrape: nil
@@ -10318,7 +15586,7 @@ module ContextDev
                         sig { returns(Symbol) }
                         attr_accessor :kind
 
-                        # Regex pattern for the page URL.
+                        # Regular expression matched against the page URL.
                         sig { returns(String) }
                         attr_accessor :pattern
 
@@ -10329,7 +15597,7 @@ module ContextDev
                           )
                         end
                         def self.new(
-                          # Regex pattern for the page URL.
+                          # Regular expression matched against the page URL.
                           pattern:,
                           # Match pages by URL pattern.
                           kind: :regex
@@ -10406,7 +15674,7 @@ module ContextDev
                         sig { returns(Symbol) }
                         attr_accessor :kind
 
-                        # Regex pattern for the page URL.
+                        # Regular expression matched against the page URL.
                         sig { returns(String) }
                         attr_accessor :pattern
 
@@ -10417,7 +15685,7 @@ module ContextDev
                           )
                         end
                         def self.new(
-                          # Regex pattern for the page URL.
+                          # Regular expression matched against the page URL.
                           pattern:,
                           # Match pages by URL pattern.
                           kind: :regex
@@ -10494,8 +15762,8 @@ module ContextDev
                       end
                     end
 
-                    # Only follow pages in these languages, or `same_as_start_url`; all languages when
-                    # omitted.
+                    # Only follow pages in these languages, or pass `same_as_start_url` to match the
+                    # start page. Follows all languages when omitted.
                     module Languages
                       extend ContextDev::Internal::Type::Union
 
@@ -10963,7 +16231,7 @@ module ContextDev
                         sig { returns(Symbol) }
                         attr_accessor :kind
 
-                        # Regex pattern for the page URL.
+                        # Regular expression matched against the page URL.
                         sig { returns(String) }
                         attr_accessor :pattern
 
@@ -10974,7 +16242,7 @@ module ContextDev
                           )
                         end
                         def self.new(
-                          # Regex pattern for the page URL.
+                          # Regular expression matched against the page URL.
                           pattern:,
                           # Match pages by URL pattern.
                           kind: :regex
@@ -11045,8 +16313,8 @@ module ContextDev
                   sig { returns(Symbol) }
                   attr_accessor :type
 
-                  # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
-                  # URLs and never follows links off them, so there is no crawl depth here.
+                  # Limits and filters for the sitemap URLs. Links on sitemap pages are never
+                  # followed.
                   sig do
                     returns(
                       T.nilable(
@@ -11078,8 +16346,8 @@ module ContextDev
                     # Domain whose sitemap lists the pages to scrape. A full URL is reduced to its
                     # domain.
                     domain:,
-                    # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
-                    # URLs and never follows links off them, so there is no crawl depth here.
+                    # Limits and filters for the sitemap URLs. Links on sitemap pages are never
+                    # followed.
                     controls: nil,
                     # Scrape the URLs in the domain's sitemap.
                     type: :sitemap
@@ -11136,17 +16404,16 @@ module ContextDev
                     end
                     attr_writer :exclude
 
-                    # Path fragments that skip a sitemap URL in a crawl. Works separately from
-                    # `scrape` and `exclude`. Defaults to
-                    # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
-                    # every listed URL.
+                    # Path fragments that exclude a sitemap URL. Applies in addition to `scrape` and
+                    # `exclude`; pass `[]` to keep every listed URL.
                     sig { returns(T.nilable(T::Array[String])) }
                     attr_reader :exclude_paths
 
                     sig { params(exclude_paths: T::Array[String]).void }
                     attr_writer :exclude_paths
 
-                    # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
+                    # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                    # many pages and the unused part is refunded.
                     sig { returns(T.nilable(Integer)) }
                     attr_reader :max_urls
 
@@ -11181,8 +16448,8 @@ module ContextDev
                     end
                     attr_writer :scrape
 
-                    # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
-                    # URLs and never follows links off them, so there is no crawl depth here.
+                    # Limits and filters for the sitemap URLs. Links on sitemap pages are never
+                    # followed.
                     sig do
                       params(
                         exclude:
@@ -11206,12 +16473,11 @@ module ContextDev
                     def self.new(
                       # Sitemap pages to skip, even when they match `scrape`.
                       exclude: nil,
-                      # Path fragments that skip a sitemap URL in a crawl. Works separately from
-                      # `scrape` and `exclude`. Defaults to
-                      # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
-                      # every listed URL.
+                      # Path fragments that exclude a sitemap URL. Applies in addition to `scrape` and
+                      # `exclude`; pass `[]` to keep every listed URL.
                       exclude_paths: nil,
-                      # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
+                      # Maximum number of pages to fetch, up to 100,000. Credits are reserved for this
+                      # many pages and the unused part is refunded.
                       max_urls: nil,
                       # Sitemap pages to return in the results. Returns every listed page when omitted.
                       scrape: nil
@@ -11268,7 +16534,7 @@ module ContextDev
                         sig { returns(Symbol) }
                         attr_accessor :kind
 
-                        # Regex pattern for the page URL.
+                        # Regular expression matched against the page URL.
                         sig { returns(String) }
                         attr_accessor :pattern
 
@@ -11279,7 +16545,7 @@ module ContextDev
                           )
                         end
                         def self.new(
-                          # Regex pattern for the page URL.
+                          # Regular expression matched against the page URL.
                           pattern:,
                           # Match pages by URL pattern.
                           kind: :regex
@@ -11355,7 +16621,7 @@ module ContextDev
                         sig { returns(Symbol) }
                         attr_accessor :kind
 
-                        # Regex pattern for the page URL.
+                        # Regular expression matched against the page URL.
                         sig { returns(String) }
                         attr_accessor :pattern
 
@@ -11366,7 +16632,7 @@ module ContextDev
                           )
                         end
                         def self.new(
-                          # Regex pattern for the page URL.
+                          # Regular expression matched against the page URL.
                           pattern:,
                           # Match pages by URL pattern.
                           kind: :regex
@@ -11439,7 +16705,7 @@ module ContextDev
                     )
                   end
 
-                # Fetch from this country (ISO 3166-1 alpha-2).
+                # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                 sig do
                   returns(
                     T.nilable(
@@ -11472,7 +16738,7 @@ module ContextDev
                 sig { returns(T.nilable(Integer)) }
                 attr_accessor :max_age_ms
 
-                # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                # Whether to parse PDFs and which pages to read.
                 sig do
                   returns(
                     T.nilable(
@@ -11527,7 +16793,7 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Fetch from this country (ISO 3166-1 alpha-2).
+                  # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                   country: nil,
                   # Remove elements matching these CSS selectors. Applied after `includeSelectors`,
                   # so an element matching both is removed.
@@ -11538,7 +16804,7 @@ module ContextDev
                   # Maximum cache age in milliseconds. Defaults to 3 days (259200000 ms). Maximum: 1
                   # year (31536000000 ms). `0` fetches fresh.
                   max_age_ms: nil,
-                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                  # Whether to parse PDFs and which pages to read.
                   pdf: nil,
                   # Wait for CSS animations to finish before extracting, on browser-rendered pages.
                   settle_animations: nil,
@@ -11568,7 +16834,7 @@ module ContextDev
                 def to_hash
                 end
 
-                # Fetch from this country (ISO 3166-1 alpha-2).
+                # Country to fetch from, as an ISO 3166-1 alpha-2 code.
                 module Country
                   extend ContextDev::Internal::Type::Enum
 
@@ -12622,15 +17888,14 @@ module ContextDev
                       )
                     end
 
-                  # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-                  # be >= start.
+                  # Last page to parse. Defaults to the last page. Must be at least `start`.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :end_
 
                   sig { params(end_: Integer).void }
                   attr_writer :end_
 
-                  # Read scanned PDF pages with OCR; preserve pages that already have text.
+                  # Read scanned PDF pages with OCR. Pages that already have text are kept as is.
                   sig { returns(T.nilable(T::Boolean)) }
                   attr_reader :ocr
 
@@ -12644,14 +17909,14 @@ module ContextDev
                   sig { params(should_parse: T::Boolean).void }
                   attr_writer :should_parse
 
-                  # First 1-based PDF page to parse.
+                  # First page to parse, starting at 1.
                   sig { returns(T.nilable(Integer)) }
                   attr_reader :start
 
                   sig { params(start: Integer).void }
                   attr_writer :start
 
-                  # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+                  # Whether to parse PDFs and which pages to read.
                   sig do
                     params(
                       end_: Integer,
@@ -12661,14 +17926,13 @@ module ContextDev
                     ).returns(T.attached_class)
                   end
                   def self.new(
-                    # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-                    # be >= start.
+                    # Last page to parse. Defaults to the last page. Must be at least `start`.
                     end_: nil,
-                    # Read scanned PDF pages with OCR; preserve pages that already have text.
+                    # Read scanned PDF pages with OCR. Pages that already have text are kept as is.
                     ocr: nil,
                     # Parse PDF URLs. When false, PDFs fail with `PDF_SKIPPED`.
                     should_parse: nil,
-                    # First 1-based PDF page to parse.
+                    # First page to parse, starting at 1.
                     start: nil
                   )
                   end
@@ -12685,5052 +17949,6 @@ module ContextDev
                   end
                   def to_hash
                   end
-                end
-              end
-            end
-
-            class BatchUnifiedCrawlData < ContextDev::Internal::Type::BaseModel
-              OrHash =
-                T.type_alias do
-                  T.any(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData,
-                    ContextDev::Internal::AnyHash
-                  )
-                end
-
-              # Outputs to return. Set at least one to `true`.
-              sig do
-                returns(
-                  ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Formats
-                )
-              end
-              attr_reader :formats
-
-              sig do
-                params(
-                  formats:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Formats::OrHash
-                ).void
-              end
-              attr_writer :formats
-
-              # How to find pages to crawl.
-              sig do
-                returns(
-                  T.any(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL,
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap
-                  )
-                )
-              end
-              attr_accessor :source
-
-              # Requires `formats.highlights: true`; required when it is set.
-              sig do
-                returns(
-                  T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::HighlightsParams
-                  )
-                )
-              end
-              attr_reader :highlights_params
-
-              sig do
-                params(
-                  highlights_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::HighlightsParams::OrHash
-                ).void
-              end
-              attr_writer :highlights_params
-
-              # Image options. Requires formats.images: true.
-              sig do
-                returns(
-                  T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams
-                  )
-                )
-              end
-              attr_reader :image_params
-
-              sig do
-                params(
-                  image_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::OrHash
-                ).void
-              end
-              attr_writer :image_params
-
-              # Requires `formats.json: true`; required when it is set.
-              sig do
-                returns(
-                  T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::JsonParams
-                  )
-                )
-              end
-              attr_reader :json_params
-
-              sig do
-                params(
-                  json_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::JsonParams::OrHash
-                ).void
-              end
-              attr_writer :json_params
-
-              # Markdown options. Requires `formats.markdown`.
-              sig do
-                returns(
-                  T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams
-                  )
-                )
-              end
-              attr_reader :markdown_params
-
-              sig do
-                params(
-                  markdown_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::OrHash
-                ).void
-              end
-              attr_writer :markdown_params
-
-              # Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
-              # 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
-              sig { returns(T.nilable(Integer)) }
-              attr_reader :max_age_ms
-
-              sig { params(max_age_ms: Integer).void }
-              attr_writer :max_age_ms
-
-              # Requires `formats.parse: true`; required when it is set.
-              sig do
-                returns(
-                  T.nilable(
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser
-                    )
-                  )
-                )
-              end
-              attr_reader :parse_params
-
-              sig do
-                params(
-                  parse_params:
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::OrHash,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::OrHash
-                    )
-                ).void
-              end
-              attr_writer :parse_params
-
-              # Product options. Requires formats.product: true.
-              sig do
-                returns(
-                  T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ProductParams
-                  )
-                )
-              end
-              attr_reader :product_params
-
-              sig do
-                params(
-                  product_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ProductParams::OrHash
-                ).void
-              end
-              attr_writer :product_params
-
-              # Screenshot options. Requires formats.screenshot: true.
-              sig do
-                returns(
-                  T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams
-                  )
-                )
-              end
-              attr_reader :screenshot_params
-
-              sig do
-                params(
-                  screenshot_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::OrHash
-                ).void
-              end
-              attr_writer :screenshot_params
-
-              # Browser and content settings shared by all outputs.
-              sig do
-                returns(
-                  T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams
-                  )
-                )
-              end
-              attr_reader :shared_params
-
-              sig do
-                params(
-                  shared_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::OrHash
-                ).void
-              end
-              attr_writer :shared_params
-
-              # Labels for filtering usage in the dashboard.
-              sig { returns(T.nilable(T::Array[String])) }
-              attr_reader :tags
-
-              sig { params(tags: T::Array[String]).void }
-              attr_writer :tags
-
-              # Deadline for each page, using the same behavior and defaults as POST
-              # /web/scrape.
-              sig do
-                returns(
-                  T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts
-                  )
-                )
-              end
-              attr_reader :timeout_opts
-
-              sig do
-                params(
-                  timeout_opts:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::OrHash
-                ).void
-              end
-              attr_writer :timeout_opts
-
-              # Batches persist their results. Only disabled is supported; enabled returns
-              # ZDR_NOT_SUPPORTED.
-              sig do
-                returns(
-                  T.nilable(
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::OrSymbol
-                  )
-                )
-              end
-              attr_reader :zdr
-
-              sig do
-                params(
-                  zdr:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::OrSymbol
-                ).void
-              end
-              attr_writer :zdr
-
-              # Use the same formats and parameters as POST /web/scrape, replacing url with
-              # source. Options apply to every page.
-              sig do
-                params(
-                  formats:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Formats::OrHash,
-                  source:
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::OrHash,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::OrHash
-                    ),
-                  highlights_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::HighlightsParams::OrHash,
-                  image_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::OrHash,
-                  json_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::JsonParams::OrHash,
-                  markdown_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::OrHash,
-                  max_age_ms: Integer,
-                  parse_params:
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::OrHash,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::OrHash
-                    ),
-                  product_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ProductParams::OrHash,
-                  screenshot_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::OrHash,
-                  shared_params:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::OrHash,
-                  tags: T::Array[String],
-                  timeout_opts:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::OrHash,
-                  zdr:
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::OrSymbol
-                ).returns(T.attached_class)
-              end
-              def self.new(
-                # Outputs to return. Set at least one to `true`.
-                formats:,
-                # How to find pages to crawl.
-                source:,
-                # Requires `formats.highlights: true`; required when it is set.
-                highlights_params: nil,
-                # Image options. Requires formats.images: true.
-                image_params: nil,
-                # Requires `formats.json: true`; required when it is set.
-                json_params: nil,
-                # Markdown options. Requires `formats.markdown`.
-                markdown_params: nil,
-                # Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
-                # 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
-                max_age_ms: nil,
-                # Requires `formats.parse: true`; required when it is set.
-                parse_params: nil,
-                # Product options. Requires formats.product: true.
-                product_params: nil,
-                # Screenshot options. Requires formats.screenshot: true.
-                screenshot_params: nil,
-                # Browser and content settings shared by all outputs.
-                shared_params: nil,
-                # Labels for filtering usage in the dashboard.
-                tags: nil,
-                # Deadline for each page, using the same behavior and defaults as POST
-                # /web/scrape.
-                timeout_opts: nil,
-                # Batches persist their results. Only disabled is supported; enabled returns
-                # ZDR_NOT_SUPPORTED.
-                zdr: nil
-              )
-              end
-
-              sig do
-                override.returns(
-                  {
-                    formats:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Formats,
-                    source:
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap
-                      ),
-                    highlights_params:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::HighlightsParams,
-                    image_params:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams,
-                    json_params:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::JsonParams,
-                    markdown_params:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams,
-                    max_age_ms: Integer,
-                    parse_params:
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser
-                      ),
-                    product_params:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ProductParams,
-                    screenshot_params:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams,
-                    shared_params:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams,
-                    tags: T::Array[String],
-                    timeout_opts:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts,
-                    zdr:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::OrSymbol
-                  }
-                )
-              end
-              def to_hash
-              end
-
-              class Formats < ContextDev::Internal::Type::BaseModel
-                OrHash =
-                  T.type_alias do
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Formats,
-                      ContextDev::Internal::AnyHash
-                    )
-                  end
-
-                # The original HTTP response body.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :bytes
-
-                sig { params(bytes: T::Boolean).void }
-                attr_writer :bytes
-
-                # Markdown excerpts relevant to `highlightsParams.query`.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :highlights
-
-                sig { params(highlights: T::Boolean).void }
-                attr_writer :highlights
-
-                # Rendered HTML.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :html
-
-                sig { params(html: T::Boolean).void }
-                attr_writer :html
-
-                # Images found on the page.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :images
-
-                sig { params(images: T::Boolean).void }
-                attr_writer :images
-
-                # An object matching `jsonParams.schema`, extracted from the page text and its
-                # embedded data (JSON-LD, meta tags, framework state).
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :json
-
-                sig { params(json: T::Boolean).void }
-                attr_writer :json
-
-                # Page content or video transcript as Markdown.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :markdown
-
-                sig { params(markdown: T::Boolean).void }
-                attr_writer :markdown
-
-                # Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :parse
-
-                sig { params(parse: T::Boolean).void }
-                attr_writer :parse
-
-                # Product details such as name, price, and availability.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :product
-
-                sig { params(product: T::Boolean).void }
-                attr_writer :product
-
-                # A screenshot of the page.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :screenshot
-
-                sig { params(screenshot: T::Boolean).void }
-                attr_writer :screenshot
-
-                # Outputs to return. Set at least one to `true`.
-                sig do
-                  params(
-                    bytes: T::Boolean,
-                    highlights: T::Boolean,
-                    html: T::Boolean,
-                    images: T::Boolean,
-                    json: T::Boolean,
-                    markdown: T::Boolean,
-                    parse: T::Boolean,
-                    product: T::Boolean,
-                    screenshot: T::Boolean
-                  ).returns(T.attached_class)
-                end
-                def self.new(
-                  # The original HTTP response body.
-                  bytes: nil,
-                  # Markdown excerpts relevant to `highlightsParams.query`.
-                  highlights: nil,
-                  # Rendered HTML.
-                  html: nil,
-                  # Images found on the page.
-                  images: nil,
-                  # An object matching `jsonParams.schema`, extracted from the page text and its
-                  # embedded data (JSON-LD, meta tags, framework state).
-                  json: nil,
-                  # Page content or video transcript as Markdown.
-                  markdown: nil,
-                  # Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
-                  parse: nil,
-                  # Product details such as name, price, and availability.
-                  product: nil,
-                  # A screenshot of the page.
-                  screenshot: nil
-                )
-                end
-
-                sig do
-                  override.returns(
-                    {
-                      bytes: T::Boolean,
-                      highlights: T::Boolean,
-                      html: T::Boolean,
-                      images: T::Boolean,
-                      json: T::Boolean,
-                      markdown: T::Boolean,
-                      parse: T::Boolean,
-                      product: T::Boolean,
-                      screenshot: T::Boolean
-                    }
-                  )
-                end
-                def to_hash
-                end
-              end
-
-              # How to find pages to crawl.
-              module Source
-                extend ContextDev::Internal::Type::Union
-
-                Variants =
-                  T.type_alias do
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap
-                    )
-                  end
-
-                class StartURL < ContextDev::Internal::Type::BaseModel
-                  OrHash =
-                    T.type_alias do
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL,
-                        ContextDev::Internal::AnyHash
-                      )
-                    end
-
-                  # Start from one page.
-                  sig { returns(Symbol) }
-                  attr_accessor :type
-
-                  # Page where crawling begins. A URL without a scheme is read as https://.
-                  sig { returns(String) }
-                  attr_accessor :url
-
-                  # Limits and filters for page discovery.
-                  sig do
-                    returns(
-                      T.nilable(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls
-                      )
-                    )
-                  end
-                  attr_reader :controls
-
-                  sig do
-                    params(
-                      controls:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::OrHash
-                    ).void
-                  end
-                  attr_writer :controls
-
-                  # Discover pages by following links from one URL.
-                  sig do
-                    params(
-                      url: String,
-                      controls:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::OrHash,
-                      type: Symbol
-                    ).returns(T.attached_class)
-                  end
-                  def self.new(
-                    # Page where crawling begins. A URL without a scheme is read as https://.
-                    url:,
-                    # Limits and filters for page discovery.
-                    controls: nil,
-                    # Start from one page.
-                    type: :start_url
-                  )
-                  end
-
-                  sig do
-                    override.returns(
-                      {
-                        type: Symbol,
-                        url: String,
-                        controls:
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls
-                      }
-                    )
-                  end
-                  def to_hash
-                  end
-
-                  class Controls < ContextDev::Internal::Type::BaseModel
-                    OrHash =
-                      T.type_alias do
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls,
-                          ContextDev::Internal::AnyHash
-                        )
-                      end
-
-                    # Pages to skip entirely, even when they match `follow` or `scrape`.
-                    sig do
-                      returns(
-                        T.nilable(
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product
-                            )
-                          ]
-                        )
-                      )
-                    end
-                    attr_reader :exclude
-
-                    sig do
-                      params(
-                        exclude:
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product::OrHash
-                            )
-                          ]
-                      ).void
-                    end
-                    attr_writer :exclude
-
-                    # Links to follow from each page; every followed page is checked for links again.
-                    # Follows all links when omitted.
-                    sig do
-                      returns(
-                        T.nilable(
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product
-                            )
-                          ]
-                        )
-                      )
-                    end
-                    attr_reader :follow
-
-                    sig do
-                      params(
-                        follow:
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product::OrHash
-                            )
-                          ]
-                      ).void
-                    end
-                    attr_writer :follow
-
-                    # Follow links to subdomains.
-                    sig { returns(T.nilable(T::Boolean)) }
-                    attr_reader :follow_subdomains
-
-                    sig { params(follow_subdomains: T::Boolean).void }
-                    attr_writer :follow_subdomains
-
-                    # Only follow pages in these languages, or `same_as_start_url`; all languages when
-                    # omitted.
-                    sig do
-                      returns(
-                        T.nilable(
-                          T.any(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::OrSymbol,
-                            T::Array[
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::OrSymbol
-                            ]
-                          )
-                        )
-                      )
-                    end
-                    attr_reader :languages
-
-                    sig do
-                      params(
-                        languages:
-                          T.any(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::OrSymbol,
-                            T::Array[
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::OrSymbol
-                            ]
-                          )
-                      ).void
-                    end
-                    attr_writer :languages
-
-                    # Maximum link depth. Source pages are depth 0. No limit when omitted.
-                    sig { returns(T.nilable(Integer)) }
-                    attr_reader :max_depth
-
-                    sig { params(max_depth: Integer).void }
-                    attr_writer :max_depth
-
-                    # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
-                    sig { returns(T.nilable(Integer)) }
-                    attr_reader :max_urls
-
-                    sig { params(max_urls: Integer).void }
-                    attr_writer :max_urls
-
-                    # Pages to return in the results. Returns every fetched page when omitted.
-                    sig do
-                      returns(
-                        T.nilable(
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product
-                            )
-                          ]
-                        )
-                      )
-                    end
-                    attr_reader :scrape
-
-                    sig do
-                      params(
-                        scrape:
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product::OrHash
-                            )
-                          ]
-                      ).void
-                    end
-                    attr_writer :scrape
-
-                    # Limits and filters for page discovery.
-                    sig do
-                      params(
-                        exclude:
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product::OrHash
-                            )
-                          ],
-                        follow:
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product::OrHash
-                            )
-                          ],
-                        follow_subdomains: T::Boolean,
-                        languages:
-                          T.any(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::OrSymbol,
-                            T::Array[
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::OrSymbol
-                            ]
-                          ),
-                        max_depth: Integer,
-                        max_urls: Integer,
-                        scrape:
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product::OrHash
-                            )
-                          ]
-                      ).returns(T.attached_class)
-                    end
-                    def self.new(
-                      # Pages to skip entirely, even when they match `follow` or `scrape`.
-                      exclude: nil,
-                      # Links to follow from each page; every followed page is checked for links again.
-                      # Follows all links when omitted.
-                      follow: nil,
-                      # Follow links to subdomains.
-                      follow_subdomains: nil,
-                      # Only follow pages in these languages, or `same_as_start_url`; all languages when
-                      # omitted.
-                      languages: nil,
-                      # Maximum link depth. Source pages are depth 0. No limit when omitted.
-                      max_depth: nil,
-                      # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
-                      max_urls: nil,
-                      # Pages to return in the results. Returns every fetched page when omitted.
-                      scrape: nil
-                    )
-                    end
-
-                    sig do
-                      override.returns(
-                        {
-                          exclude:
-                            T::Array[
-                              T.any(
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product
-                              )
-                            ],
-                          follow:
-                            T::Array[
-                              T.any(
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product
-                              )
-                            ],
-                          follow_subdomains: T::Boolean,
-                          languages:
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::OrSymbol,
-                              T::Array[
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::OrSymbol
-                              ]
-                            ),
-                          max_depth: Integer,
-                          max_urls: Integer,
-                          scrape:
-                            T::Array[
-                              T.any(
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product
-                              )
-                            ]
-                        }
-                      )
-                    end
-                    def to_hash
-                    end
-
-                    # Selects pages by URL pattern or by kind of page.
-                    module Exclude
-                      extend ContextDev::Internal::Type::Union
-
-                      Variants =
-                        T.type_alias do
-                          T.any(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product
-                          )
-                        end
-
-                      class Regex < ContextDev::Internal::Type::BaseModel
-                        OrHash =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Regex,
-                              ContextDev::Internal::AnyHash
-                            )
-                          end
-
-                        # Match pages by URL pattern.
-                        sig { returns(Symbol) }
-                        attr_accessor :kind
-
-                        # Regex pattern for the page URL.
-                        sig { returns(String) }
-                        attr_accessor :pattern
-
-                        # Pages whose URL matches a regex pattern.
-                        sig do
-                          params(pattern: String, kind: Symbol).returns(
-                            T.attached_class
-                          )
-                        end
-                        def self.new(
-                          # Regex pattern for the page URL.
-                          pattern:,
-                          # Match pages by URL pattern.
-                          kind: :regex
-                        )
-                        end
-
-                        sig do
-                          override.returns({ kind: Symbol, pattern: String })
-                        end
-                        def to_hash
-                        end
-                      end
-
-                      class Product < ContextDev::Internal::Type::BaseModel
-                        OrHash =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Product,
-                              ContextDev::Internal::AnyHash
-                            )
-                          end
-
-                        # Match product detail pages.
-                        sig { returns(Symbol) }
-                        attr_accessor :kind
-
-                        # Product detail pages.
-                        sig { params(kind: Symbol).returns(T.attached_class) }
-                        def self.new(
-                          # Match product detail pages.
-                          kind: :product
-                        )
-                        end
-
-                        sig { override.returns({ kind: Symbol }) }
-                        def to_hash
-                        end
-                      end
-
-                      sig do
-                        override.returns(
-                          T::Array[
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Exclude::Variants
-                          ]
-                        )
-                      end
-                      def self.variants
-                      end
-                    end
-
-                    # Selects links by URL pattern, by kind of page, or as the next page of a list.
-                    module Follow
-                      extend ContextDev::Internal::Type::Union
-
-                      Variants =
-                        T.type_alias do
-                          T.any(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product
-                          )
-                        end
-
-                      class Regex < ContextDev::Internal::Type::BaseModel
-                        OrHash =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Regex,
-                              ContextDev::Internal::AnyHash
-                            )
-                          end
-
-                        # Match pages by URL pattern.
-                        sig { returns(Symbol) }
-                        attr_accessor :kind
-
-                        # Regex pattern for the page URL.
-                        sig { returns(String) }
-                        attr_accessor :pattern
-
-                        # Pages whose URL matches a regex pattern.
-                        sig do
-                          params(pattern: String, kind: Symbol).returns(
-                            T.attached_class
-                          )
-                        end
-                        def self.new(
-                          # Regex pattern for the page URL.
-                          pattern:,
-                          # Match pages by URL pattern.
-                          kind: :regex
-                        )
-                        end
-
-                        sig do
-                          override.returns({ kind: Symbol, pattern: String })
-                        end
-                        def to_hash
-                        end
-                      end
-
-                      class Pagination < ContextDev::Internal::Type::BaseModel
-                        OrHash =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Pagination,
-                              ContextDev::Internal::AnyHash
-                            )
-                          end
-
-                        # Match the further pages of a paginated list.
-                        sig { returns(Symbol) }
-                        attr_accessor :kind
-
-                        # Further pages of a paginated list, such as page 2 of a catalog.
-                        sig { params(kind: Symbol).returns(T.attached_class) }
-                        def self.new(
-                          # Match the further pages of a paginated list.
-                          kind: :pagination
-                        )
-                        end
-
-                        sig { override.returns({ kind: Symbol }) }
-                        def to_hash
-                        end
-                      end
-
-                      class Product < ContextDev::Internal::Type::BaseModel
-                        OrHash =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Product,
-                              ContextDev::Internal::AnyHash
-                            )
-                          end
-
-                        # Match product detail pages.
-                        sig { returns(Symbol) }
-                        attr_accessor :kind
-
-                        # Product detail pages.
-                        sig { params(kind: Symbol).returns(T.attached_class) }
-                        def self.new(
-                          # Match product detail pages.
-                          kind: :product
-                        )
-                        end
-
-                        sig { override.returns({ kind: Symbol }) }
-                        def to_hash
-                        end
-                      end
-
-                      sig do
-                        override.returns(
-                          T::Array[
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Follow::Variants
-                          ]
-                        )
-                      end
-                      def self.variants
-                      end
-                    end
-
-                    # Only follow pages in these languages, or `same_as_start_url`; all languages when
-                    # omitted.
-                    module Languages
-                      extend ContextDev::Internal::Type::Union
-
-                      Variants =
-                        T.type_alias do
-                          T.any(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::TaggedSymbol,
-                            T::Array[
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                            ]
-                          )
-                        end
-
-                      module UnionMember1
-                        extend ContextDev::Internal::Type::Enum
-
-                        TaggedSymbol =
-                          T.type_alias do
-                            T.all(
-                              Symbol,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1
-                            )
-                          end
-                        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                        AM =
-                          T.let(
-                            :am,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        AR =
-                          T.let(
-                            :ar,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        AZ =
-                          T.let(
-                            :az,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        BE =
-                          T.let(
-                            :be,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        BG =
-                          T.let(
-                            :bg,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        BN =
-                          T.let(
-                            :bn,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        CA =
-                          T.let(
-                            :ca,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        CEB =
-                          T.let(
-                            :ceb,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        CS =
-                          T.let(
-                            :cs,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        CY =
-                          T.let(
-                            :cy,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        DA =
-                          T.let(
-                            :da,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        DE =
-                          T.let(
-                            :de,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        EL =
-                          T.let(
-                            :el,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        EN =
-                          T.let(
-                            :en,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        ES =
-                          T.let(
-                            :es,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        ET =
-                          T.let(
-                            :et,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        EU =
-                          T.let(
-                            :eu,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        FA =
-                          T.let(
-                            :fa,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        FI =
-                          T.let(
-                            :fi,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        FR =
-                          T.let(
-                            :fr,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        GU =
-                          T.let(
-                            :gu,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        HA =
-                          T.let(
-                            :ha,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        HAW =
-                          T.let(
-                            :haw,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        HE =
-                          T.let(
-                            :he,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        HI =
-                          T.let(
-                            :hi,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        HR =
-                          T.let(
-                            :hr,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        HU =
-                          T.let(
-                            :hu,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        HY =
-                          T.let(
-                            :hy,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        ID =
-                          T.let(
-                            :id,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        IS =
-                          T.let(
-                            :is,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        IT =
-                          T.let(
-                            :it,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        JA =
-                          T.let(
-                            :ja,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        KA =
-                          T.let(
-                            :ka,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        KK =
-                          T.let(
-                            :kk,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        KN =
-                          T.let(
-                            :kn,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        KO =
-                          T.let(
-                            :ko,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        KU =
-                          T.let(
-                            :ku,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        KY =
-                          T.let(
-                            :ky,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        LO =
-                          T.let(
-                            :lo,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        LT =
-                          T.let(
-                            :lt,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        LV =
-                          T.let(
-                            :lv,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        MK =
-                          T.let(
-                            :mk,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        ML =
-                          T.let(
-                            :ml,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        MN =
-                          T.let(
-                            :mn,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        MR =
-                          T.let(
-                            :mr,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        MS =
-                          T.let(
-                            :ms,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        NE =
-                          T.let(
-                            :ne,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        NL =
-                          T.let(
-                            :nl,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        NO =
-                          T.let(
-                            :no,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        OR =
-                          T.let(
-                            :or,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        PA =
-                          T.let(
-                            :pa,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        PL =
-                          T.let(
-                            :pl,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        PS =
-                          T.let(
-                            :ps,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        PT =
-                          T.let(
-                            :pt,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        RO =
-                          T.let(
-                            :ro,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        RU =
-                          T.let(
-                            :ru,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        SK =
-                          T.let(
-                            :sk,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        SL =
-                          T.let(
-                            :sl,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        SO =
-                          T.let(
-                            :so,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        SQ =
-                          T.let(
-                            :sq,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        SR =
-                          T.let(
-                            :sr,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        SV =
-                          T.let(
-                            :sv,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        SW =
-                          T.let(
-                            :sw,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        TA =
-                          T.let(
-                            :ta,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        TE =
-                          T.let(
-                            :te,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        TH =
-                          T.let(
-                            :th,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        TL =
-                          T.let(
-                            :tl,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        TR =
-                          T.let(
-                            :tr,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        UK =
-                          T.let(
-                            :uk,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        UR =
-                          T.let(
-                            :ur,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        UZ =
-                          T.let(
-                            :uz,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        VI =
-                          T.let(
-                            :vi,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        YO =
-                          T.let(
-                            :yo,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-                        ZH =
-                          T.let(
-                            :zh,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                          )
-
-                        sig do
-                          override.returns(
-                            T::Array[
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1::TaggedSymbol
-                            ]
-                          )
-                        end
-                        def self.values
-                        end
-                      end
-
-                      sig do
-                        override.returns(
-                          T::Array[
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::Variants
-                          ]
-                        )
-                      end
-                      def self.variants
-                      end
-
-                      TaggedSymbol =
-                        T.type_alias do
-                          T.all(
-                            Symbol,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages
-                          )
-                        end
-                      OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                      SAME_AS_START_URL =
-                        T.let(
-                          :same_as_start_url,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::TaggedSymbol
-                        )
-
-                      UnionMember1Array =
-                        T.let(
-                          ContextDev::Internal::Type::ArrayOf[
-                            enum:
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Languages::UnionMember1
-                          ],
-                          ContextDev::Internal::Type::Converter
-                        )
-                    end
-
-                    # Selects pages by URL pattern or by kind of page.
-                    module Scrape
-                      extend ContextDev::Internal::Type::Union
-
-                      Variants =
-                        T.type_alias do
-                          T.any(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product
-                          )
-                        end
-
-                      class Regex < ContextDev::Internal::Type::BaseModel
-                        OrHash =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Regex,
-                              ContextDev::Internal::AnyHash
-                            )
-                          end
-
-                        # Match pages by URL pattern.
-                        sig { returns(Symbol) }
-                        attr_accessor :kind
-
-                        # Regex pattern for the page URL.
-                        sig { returns(String) }
-                        attr_accessor :pattern
-
-                        # Pages whose URL matches a regex pattern.
-                        sig do
-                          params(pattern: String, kind: Symbol).returns(
-                            T.attached_class
-                          )
-                        end
-                        def self.new(
-                          # Regex pattern for the page URL.
-                          pattern:,
-                          # Match pages by URL pattern.
-                          kind: :regex
-                        )
-                        end
-
-                        sig do
-                          override.returns({ kind: Symbol, pattern: String })
-                        end
-                        def to_hash
-                        end
-                      end
-
-                      class Product < ContextDev::Internal::Type::BaseModel
-                        OrHash =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Product,
-                              ContextDev::Internal::AnyHash
-                            )
-                          end
-
-                        # Match product detail pages.
-                        sig { returns(Symbol) }
-                        attr_accessor :kind
-
-                        # Product detail pages.
-                        sig { params(kind: Symbol).returns(T.attached_class) }
-                        def self.new(
-                          # Match product detail pages.
-                          kind: :product
-                        )
-                        end
-
-                        sig { override.returns({ kind: Symbol }) }
-                        def to_hash
-                        end
-                      end
-
-                      sig do
-                        override.returns(
-                          T::Array[
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::StartURL::Controls::Scrape::Variants
-                          ]
-                        )
-                      end
-                      def self.variants
-                      end
-                    end
-                  end
-                end
-
-                class Sitemap < ContextDev::Internal::Type::BaseModel
-                  OrHash =
-                    T.type_alias do
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap,
-                        ContextDev::Internal::AnyHash
-                      )
-                    end
-
-                  # Domain whose sitemap lists the pages to scrape. A full URL is reduced to its
-                  # domain.
-                  sig { returns(String) }
-                  attr_accessor :domain
-
-                  # Scrape the URLs in the domain's sitemap.
-                  sig { returns(Symbol) }
-                  attr_accessor :type
-
-                  # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
-                  # URLs and never follows links off them, so there is no crawl depth here.
-                  sig do
-                    returns(
-                      T.nilable(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls
-                      )
-                    )
-                  end
-                  attr_reader :controls
-
-                  sig do
-                    params(
-                      controls:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::OrHash
-                    ).void
-                  end
-                  attr_writer :controls
-
-                  # Scrape the pages listed in a domain's sitemap. Links on those pages are not
-                  # followed.
-                  sig do
-                    params(
-                      domain: String,
-                      controls:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::OrHash,
-                      type: Symbol
-                    ).returns(T.attached_class)
-                  end
-                  def self.new(
-                    # Domain whose sitemap lists the pages to scrape. A full URL is reduced to its
-                    # domain.
-                    domain:,
-                    # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
-                    # URLs and never follows links off them, so there is no crawl depth here.
-                    controls: nil,
-                    # Scrape the URLs in the domain's sitemap.
-                    type: :sitemap
-                  )
-                  end
-
-                  sig do
-                    override.returns(
-                      {
-                        domain: String,
-                        type: Symbol,
-                        controls:
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls
-                      }
-                    )
-                  end
-                  def to_hash
-                  end
-
-                  class Controls < ContextDev::Internal::Type::BaseModel
-                    OrHash =
-                      T.type_alias do
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls,
-                          ContextDev::Internal::AnyHash
-                        )
-                      end
-
-                    # Sitemap pages to skip, even when they match `scrape`.
-                    sig do
-                      returns(
-                        T.nilable(
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product
-                            )
-                          ]
-                        )
-                      )
-                    end
-                    attr_reader :exclude
-
-                    sig do
-                      params(
-                        exclude:
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product::OrHash
-                            )
-                          ]
-                      ).void
-                    end
-                    attr_writer :exclude
-
-                    # Path fragments that skip a sitemap URL in a crawl. Works separately from
-                    # `scrape` and `exclude`. Defaults to
-                    # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
-                    # every listed URL.
-                    sig { returns(T.nilable(T::Array[String])) }
-                    attr_reader :exclude_paths
-
-                    sig { params(exclude_paths: T::Array[String]).void }
-                    attr_writer :exclude_paths
-
-                    # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
-                    sig { returns(T.nilable(Integer)) }
-                    attr_reader :max_urls
-
-                    sig { params(max_urls: Integer).void }
-                    attr_writer :max_urls
-
-                    # Sitemap pages to return in the results. Returns every listed page when omitted.
-                    sig do
-                      returns(
-                        T.nilable(
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product
-                            )
-                          ]
-                        )
-                      )
-                    end
-                    attr_reader :scrape
-
-                    sig do
-                      params(
-                        scrape:
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product::OrHash
-                            )
-                          ]
-                      ).void
-                    end
-                    attr_writer :scrape
-
-                    # Limits and filters for the sitemap URLs. A sitemap batch scrapes exactly those
-                    # URLs and never follows links off them, so there is no crawl depth here.
-                    sig do
-                      params(
-                        exclude:
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product::OrHash
-                            )
-                          ],
-                        exclude_paths: T::Array[String],
-                        max_urls: Integer,
-                        scrape:
-                          T::Array[
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex::OrHash,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product::OrHash
-                            )
-                          ]
-                      ).returns(T.attached_class)
-                    end
-                    def self.new(
-                      # Sitemap pages to skip, even when they match `scrape`.
-                      exclude: nil,
-                      # Path fragments that skip a sitemap URL in a crawl. Works separately from
-                      # `scrape` and `exclude`. Defaults to
-                      # ["/feed","/rss","/atom","/api/","/cdn-cgi/","/_next/","/__"]. Pass `[]` to keep
-                      # every listed URL.
-                      exclude_paths: nil,
-                      # Maximum pages to fetch. Unused reserved credits are refunded. Maximum 100000.
-                      max_urls: nil,
-                      # Sitemap pages to return in the results. Returns every listed page when omitted.
-                      scrape: nil
-                    )
-                    end
-
-                    sig do
-                      override.returns(
-                        {
-                          exclude:
-                            T::Array[
-                              T.any(
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product
-                              )
-                            ],
-                          exclude_paths: T::Array[String],
-                          max_urls: Integer,
-                          scrape:
-                            T::Array[
-                              T.any(
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product
-                              )
-                            ]
-                        }
-                      )
-                    end
-                    def to_hash
-                    end
-
-                    # Selects pages by URL pattern or by kind of page.
-                    module Exclude
-                      extend ContextDev::Internal::Type::Union
-
-                      Variants =
-                        T.type_alias do
-                          T.any(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product
-                          )
-                        end
-
-                      class Regex < ContextDev::Internal::Type::BaseModel
-                        OrHash =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Regex,
-                              ContextDev::Internal::AnyHash
-                            )
-                          end
-
-                        # Match pages by URL pattern.
-                        sig { returns(Symbol) }
-                        attr_accessor :kind
-
-                        # Regex pattern for the page URL.
-                        sig { returns(String) }
-                        attr_accessor :pattern
-
-                        # Pages whose URL matches a regex pattern.
-                        sig do
-                          params(pattern: String, kind: Symbol).returns(
-                            T.attached_class
-                          )
-                        end
-                        def self.new(
-                          # Regex pattern for the page URL.
-                          pattern:,
-                          # Match pages by URL pattern.
-                          kind: :regex
-                        )
-                        end
-
-                        sig do
-                          override.returns({ kind: Symbol, pattern: String })
-                        end
-                        def to_hash
-                        end
-                      end
-
-                      class Product < ContextDev::Internal::Type::BaseModel
-                        OrHash =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Product,
-                              ContextDev::Internal::AnyHash
-                            )
-                          end
-
-                        # Match product detail pages.
-                        sig { returns(Symbol) }
-                        attr_accessor :kind
-
-                        # Product detail pages.
-                        sig { params(kind: Symbol).returns(T.attached_class) }
-                        def self.new(
-                          # Match product detail pages.
-                          kind: :product
-                        )
-                        end
-
-                        sig { override.returns({ kind: Symbol }) }
-                        def to_hash
-                        end
-                      end
-
-                      sig do
-                        override.returns(
-                          T::Array[
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Exclude::Variants
-                          ]
-                        )
-                      end
-                      def self.variants
-                      end
-                    end
-
-                    # Selects pages by URL pattern or by kind of page.
-                    module Scrape
-                      extend ContextDev::Internal::Type::Union
-
-                      Variants =
-                        T.type_alias do
-                          T.any(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product
-                          )
-                        end
-
-                      class Regex < ContextDev::Internal::Type::BaseModel
-                        OrHash =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Regex,
-                              ContextDev::Internal::AnyHash
-                            )
-                          end
-
-                        # Match pages by URL pattern.
-                        sig { returns(Symbol) }
-                        attr_accessor :kind
-
-                        # Regex pattern for the page URL.
-                        sig { returns(String) }
-                        attr_accessor :pattern
-
-                        # Pages whose URL matches a regex pattern.
-                        sig do
-                          params(pattern: String, kind: Symbol).returns(
-                            T.attached_class
-                          )
-                        end
-                        def self.new(
-                          # Regex pattern for the page URL.
-                          pattern:,
-                          # Match pages by URL pattern.
-                          kind: :regex
-                        )
-                        end
-
-                        sig do
-                          override.returns({ kind: Symbol, pattern: String })
-                        end
-                        def to_hash
-                        end
-                      end
-
-                      class Product < ContextDev::Internal::Type::BaseModel
-                        OrHash =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Product,
-                              ContextDev::Internal::AnyHash
-                            )
-                          end
-
-                        # Match product detail pages.
-                        sig { returns(Symbol) }
-                        attr_accessor :kind
-
-                        # Product detail pages.
-                        sig { params(kind: Symbol).returns(T.attached_class) }
-                        def self.new(
-                          # Match product detail pages.
-                          kind: :product
-                        )
-                        end
-
-                        sig { override.returns({ kind: Symbol }) }
-                        def to_hash
-                        end
-                      end
-
-                      sig do
-                        override.returns(
-                          T::Array[
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Sitemap::Controls::Scrape::Variants
-                          ]
-                        )
-                      end
-                      def self.variants
-                      end
-                    end
-                  end
-                end
-
-                sig do
-                  override.returns(
-                    T::Array[
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Source::Variants
-                    ]
-                  )
-                end
-                def self.variants
-                end
-              end
-
-              class HighlightsParams < ContextDev::Internal::Type::BaseModel
-                OrHash =
-                  T.type_alias do
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::HighlightsParams,
-                      ContextDev::Internal::AnyHash
-                    )
-                  end
-
-                # The question or topic to find passages for.
-                sig { returns(String) }
-                attr_accessor :query
-
-                # Maximum combined length of returned passages.
-                sig { returns(T.nilable(Integer)) }
-                attr_reader :max_characters
-
-                sig { params(max_characters: Integer).void }
-                attr_writer :max_characters
-
-                # Requires `formats.highlights: true`; required when it is set.
-                sig do
-                  params(query: String, max_characters: Integer).returns(
-                    T.attached_class
-                  )
-                end
-                def self.new(
-                  # The question or topic to find passages for.
-                  query:,
-                  # Maximum combined length of returned passages.
-                  max_characters: nil
-                )
-                end
-
-                sig do
-                  override.returns({ query: String, max_characters: Integer })
-                end
-                def to_hash
-                end
-              end
-
-              class ImageParams < ContextDev::Internal::Type::BaseModel
-                OrHash =
-                  T.type_alias do
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams,
-                      ContextDev::Internal::AnyHash
-                    )
-                  end
-
-                # Set `visual` to drop visual duplicates, keeping the largest copy.
-                sig do
-                  returns(
-                    T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::OrSymbol
-                    )
-                  )
-                end
-                attr_reader :dedupe
-
-                sig do
-                  params(
-                    dedupe:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::OrSymbol
-                  ).void
-                end
-                attr_writer :dedupe
-
-                # Extra data per image: `dimensions`, `classification`, or a hosted `file` URL.
-                sig do
-                  returns(
-                    T.nilable(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::OrSymbol
-                      ]
-                    )
-                  )
-                end
-                attr_reader :enrich
-
-                sig do
-                  params(
-                    enrich:
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::OrSymbol
-                      ]
-                  ).void
-                end
-                attr_writer :enrich
-
-                # Image options. Requires formats.images: true.
-                sig do
-                  params(
-                    dedupe:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::OrSymbol,
-                    enrich:
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::OrSymbol
-                      ]
-                  ).returns(T.attached_class)
-                end
-                def self.new(
-                  # Set `visual` to drop visual duplicates, keeping the largest copy.
-                  dedupe: nil,
-                  # Extra data per image: `dimensions`, `classification`, or a hosted `file` URL.
-                  enrich: nil
-                )
-                end
-
-                sig do
-                  override.returns(
-                    {
-                      dedupe:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::OrSymbol,
-                      enrich:
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::OrSymbol
-                        ]
-                    }
-                  )
-                end
-                def to_hash
-                end
-
-                # Set `visual` to drop visual duplicates, keeping the largest copy.
-                module Dedupe
-                  extend ContextDev::Internal::Type::Enum
-
-                  TaggedSymbol =
-                    T.type_alias do
-                      T.all(
-                        Symbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe
-                      )
-                    end
-                  OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                  NONE =
-                    T.let(
-                      :none,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::TaggedSymbol
-                    )
-                  VISUAL =
-                    T.let(
-                      :visual,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::TaggedSymbol
-                    )
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Dedupe::TaggedSymbol
-                      ]
-                    )
-                  end
-                  def self.values
-                  end
-                end
-
-                module Enrich
-                  extend ContextDev::Internal::Type::Enum
-
-                  TaggedSymbol =
-                    T.type_alias do
-                      T.all(
-                        Symbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich
-                      )
-                    end
-                  OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                  DIMENSIONS =
-                    T.let(
-                      :dimensions,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::TaggedSymbol
-                    )
-                  CLASSIFICATION =
-                    T.let(
-                      :classification,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::TaggedSymbol
-                    )
-                  FILE =
-                    T.let(
-                      :file,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::TaggedSymbol
-                    )
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ImageParams::Enrich::TaggedSymbol
-                      ]
-                    )
-                  end
-                  def self.values
-                  end
-                end
-              end
-
-              class JsonParams < ContextDev::Internal::Type::BaseModel
-                OrHash =
-                  T.type_alias do
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::JsonParams,
-                      ContextDev::Internal::AnyHash
-                    )
-                  end
-
-                # JSON Schema (not an example object) for a top-level object, up to 50 KB. Use
-                # optional or nullable fields for missing facts.
-                sig { returns(T::Hash[Symbol, T.anything]) }
-                attr_accessor :schema
-
-                # Extra guidance, such as which facts to prefer or how to read a field.
-                sig { returns(T.nilable(String)) }
-                attr_reader :instructions
-
-                sig { params(instructions: String).void }
-                attr_writer :instructions
-
-                # Requires `formats.json: true`; required when it is set.
-                sig do
-                  params(
-                    schema: T::Hash[Symbol, T.anything],
-                    instructions: String
-                  ).returns(T.attached_class)
-                end
-                def self.new(
-                  # JSON Schema (not an example object) for a top-level object, up to 50 KB. Use
-                  # optional or nullable fields for missing facts.
-                  schema:,
-                  # Extra guidance, such as which facts to prefer or how to read a field.
-                  instructions: nil
-                )
-                end
-
-                sig do
-                  override.returns(
-                    {
-                      schema: T::Hash[Symbol, T.anything],
-                      instructions: String
-                    }
-                  )
-                end
-                def to_hash
-                end
-              end
-
-              class MarkdownParams < ContextDev::Internal::Type::BaseModel
-                OrHash =
-                  T.type_alias do
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams,
-                      ContextDev::Internal::AnyHash
-                    )
-                  end
-
-                # Include images in the Markdown (`html-conversion` only).
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :include_images
-
-                sig { params(include_images: T::Boolean).void }
-                attr_writer :include_images
-
-                # Keep link URLs in the Markdown (`html-conversion` only).
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :include_links
-
-                sig { params(include_links: T::Boolean).void }
-                attr_writer :include_links
-
-                # How base64 images appear when `includeImages` is set (`html-conversion` only).
-                sig do
-                  returns(
-                    T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::OrSymbol
-                    )
-                  )
-                end
-                attr_reader :inline_images
-
-                sig do
-                  params(
-                    inline_images:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::OrSymbol
-                  ).void
-                end
-                attr_writer :inline_images
-
-                # Markdown sources in order of preference: `html-conversion` converts the page
-                # HTML, `markdown-direct` uses Markdown the site publishes.
-                sig do
-                  returns(
-                    T.nilable(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::OrSymbol
-                      ]
-                    )
-                  )
-                end
-                attr_reader :source_preference
-
-                sig do
-                  params(
-                    source_preference:
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::OrSymbol
-                      ]
-                  ).void
-                end
-                attr_writer :source_preference
-
-                # Markdown options. Requires `formats.markdown`.
-                sig do
-                  params(
-                    include_images: T::Boolean,
-                    include_links: T::Boolean,
-                    inline_images:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::OrSymbol,
-                    source_preference:
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::OrSymbol
-                      ]
-                  ).returns(T.attached_class)
-                end
-                def self.new(
-                  # Include images in the Markdown (`html-conversion` only).
-                  include_images: nil,
-                  # Keep link URLs in the Markdown (`html-conversion` only).
-                  include_links: nil,
-                  # How base64 images appear when `includeImages` is set (`html-conversion` only).
-                  inline_images: nil,
-                  # Markdown sources in order of preference: `html-conversion` converts the page
-                  # HTML, `markdown-direct` uses Markdown the site publishes.
-                  source_preference: nil
-                )
-                end
-
-                sig do
-                  override.returns(
-                    {
-                      include_images: T::Boolean,
-                      include_links: T::Boolean,
-                      inline_images:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::OrSymbol,
-                      source_preference:
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::OrSymbol
-                        ]
-                    }
-                  )
-                end
-                def to_hash
-                end
-
-                # How base64 images appear when `includeImages` is set (`html-conversion` only).
-                module InlineImages
-                  extend ContextDev::Internal::Type::Enum
-
-                  TaggedSymbol =
-                    T.type_alias do
-                      T.all(
-                        Symbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages
-                      )
-                    end
-                  OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                  PLACEHOLDER =
-                    T.let(
-                      :placeholder,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::TaggedSymbol
-                    )
-                  PRESERVE =
-                    T.let(
-                      :preserve,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::TaggedSymbol
-                    )
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::InlineImages::TaggedSymbol
-                      ]
-                    )
-                  end
-                  def self.values
-                  end
-                end
-
-                module SourcePreference
-                  extend ContextDev::Internal::Type::Enum
-
-                  TaggedSymbol =
-                    T.type_alias do
-                      T.all(
-                        Symbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference
-                      )
-                    end
-                  OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                  HTML_CONVERSION =
-                    T.let(
-                      :"html-conversion",
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::TaggedSymbol
-                    )
-                  MARKDOWN_DIRECT =
-                    T.let(
-                      :"markdown-direct",
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::TaggedSymbol
-                    )
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::MarkdownParams::SourcePreference::TaggedSymbol
-                      ]
-                    )
-                  end
-                  def self.values
-                  end
-                end
-              end
-
-              # Requires `formats.parse: true`; required when it is set.
-              module ParseParams
-                extend ContextDev::Internal::Type::Union
-
-                Variants =
-                  T.type_alias do
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser
-                    )
-                  end
-
-                class CustomParser < ContextDev::Internal::Type::BaseModel
-                  OrHash =
-                    T.type_alias do
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser,
-                        ContextDev::Internal::AnyHash
-                      )
-                    end
-
-                  # Field names mapped to CSS selectors (`h1`, `a@href`) or rule objects. Max 100
-                  # fields, 5 levels.
-                  sig do
-                    returns(
-                      T::Hash[
-                        Symbol,
-                        T.any(
-                          String,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1
-                        )
-                      ]
-                    )
-                  end
-                  attr_accessor :rules
-
-                  # Extract fields using custom CSS rules. This is the default when type is omitted.
-                  sig do
-                    returns(
-                      T.nilable(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::OrSymbol
-                      )
-                    )
-                  end
-                  attr_reader :type
-
-                  sig do
-                    params(
-                      type:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::OrSymbol
-                    ).void
-                  end
-                  attr_writer :type
-
-                  sig do
-                    params(
-                      rules:
-                        T::Hash[
-                          Symbol,
-                          T.any(
-                            String,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::OrHash
-                          )
-                        ],
-                      type:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::OrSymbol
-                    ).returns(T.attached_class)
-                  end
-                  def self.new(
-                    # Field names mapped to CSS selectors (`h1`, `a@href`) or rule objects. Max 100
-                    # fields, 5 levels.
-                    rules:,
-                    # Extract fields using custom CSS rules. This is the default when type is omitted.
-                    type: nil
-                  )
-                  end
-
-                  sig do
-                    override.returns(
-                      {
-                        rules:
-                          T::Hash[
-                            Symbol,
-                            T.any(
-                              String,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1
-                            )
-                          ],
-                        type:
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::OrSymbol
-                      }
-                    )
-                  end
-                  def to_hash
-                  end
-
-                  module Rule
-                    extend ContextDev::Internal::Type::Union
-
-                    Variants =
-                      T.type_alias do
-                        T.any(
-                          String,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1
-                        )
-                      end
-
-                    class UnionMember1 < ContextDev::Internal::Type::BaseModel
-                      OrHash =
-                        T.type_alias do
-                          T.any(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1,
-                            ContextDev::Internal::AnyHash
-                          )
-                        end
-
-                      # CSS selector to match within the current page or parent rule.
-                      sig { returns(String) }
-                      attr_accessor :selector
-
-                      # Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
-                      # to text.
-                      sig do
-                        returns(
-                          T.nilable(
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
-                              String,
-                              T.anything
-                            )
-                          )
-                        )
-                      end
-                      attr_reader :output
-
-                      sig do
-                        params(
-                          output:
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
-                              String,
-                              T.anything
-                            )
-                        ).void
-                      end
-                      attr_writer :output
-
-                      # Return the first match with `item` or all matches with `list`.
-                      sig do
-                        returns(
-                          T.nilable(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
-                          )
-                        )
-                      end
-                      attr_reader :type
-
-                      sig do
-                        params(
-                          type:
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
-                        ).void
-                      end
-                      attr_writer :type
-
-                      sig do
-                        params(
-                          selector: String,
-                          output:
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
-                              String,
-                              T.anything
-                            ),
-                          type:
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
-                        ).returns(T.attached_class)
-                      end
-                      def self.new(
-                        # CSS selector to match within the current page or parent rule.
-                        selector:,
-                        # Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
-                        # to text.
-                        output: nil,
-                        # Return the first match with `item` or all matches with `list`.
-                        type: nil
-                      )
-                      end
-
-                      sig do
-                        override.returns(
-                          {
-                            selector: String,
-                            output:
-                              T.any(
-                                ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::OrSymbol,
-                                String,
-                                T.anything
-                              ),
-                            type:
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::OrSymbol
-                          }
-                        )
-                      end
-                      def to_hash
-                      end
-
-                      # Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
-                      # to text.
-                      module Output
-                        extend ContextDev::Internal::Type::Union
-
-                        Variants =
-                          T.type_alias do
-                            T.any(
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol,
-                              String,
-                              T.anything
-                            )
-                          end
-
-                        sig do
-                          override.returns(
-                            T::Array[
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::Variants
-                            ]
-                          )
-                        end
-                        def self.variants
-                        end
-
-                        TaggedSymbol =
-                          T.type_alias do
-                            T.all(
-                              Symbol,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output
-                            )
-                          end
-                        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                        TEXT =
-                          T.let(
-                            :text,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol
-                          )
-                        HTML =
-                          T.let(
-                            :html,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Output::TaggedSymbol
-                          )
-                      end
-
-                      # Return the first match with `item` or all matches with `list`.
-                      module Type
-                        extend ContextDev::Internal::Type::Enum
-
-                        TaggedSymbol =
-                          T.type_alias do
-                            T.all(
-                              Symbol,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type
-                            )
-                          end
-                        OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                        ITEM =
-                          T.let(
-                            :item,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
-                          )
-                        LIST =
-                          T.let(
-                            :list,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
-                          )
-
-                        sig do
-                          override.returns(
-                            T::Array[
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::UnionMember1::Type::TaggedSymbol
-                            ]
-                          )
-                        end
-                        def self.values
-                        end
-                      end
-                    end
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Rule::Variants
-                        ]
-                      )
-                    end
-                    def self.variants
-                    end
-                  end
-
-                  # Extract fields using custom CSS rules. This is the default when type is omitted.
-                  module Type
-                    extend ContextDev::Internal::Type::Enum
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    CUSTOM =
-                      T.let(
-                        :custom,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::TaggedSymbol
-                      )
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::CustomParser::Type::TaggedSymbol
-                        ]
-                      )
-                    end
-                    def self.values
-                    end
-                  end
-                end
-
-                class PrebuiltParser < ContextDev::Internal::Type::BaseModel
-                  OrHash =
-                    T.type_alias do
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser,
-                        ContextDev::Internal::AnyHash
-                      )
-                    end
-
-                  # google-maps parses Google Maps business data into data.results. Accepts Maps
-                  # place, search, and internal data URLs; a search page returns up to 200 places,
-                  # ranked as Google ranks them. Uses an exit in the gl country of the URL (US when
-                  # absent) and English labels regardless of hl or Accept-Language.
-                  # google-maps-reviews returns the reviews of a place in data.reviews, in the same
-                  # shape as the Serper reviews API (rating, date, isoDate, snippet,
-                  # translatedSnippet, likes, user, media, response, link, id), plus language,
-                  # guided ratings in details, and user.isLocalGuide; data also carries the place
-                  # featureId, cid, and sort. sort and limit pick the order and count, and oldest is
-                  # exact. It accepts Maps place, search, and ?cid= URLs, plus
-                  # search.google.com/local/reviews URLs, so the google_maps_url and
-                  # google_reviews_url fields of google-maps results work as input. An unknown place
-                  # returns no reviews. google-play parses a Play Store app into data: details,
-                  # developer contact, ratings, price, permissions, and data safety, plus the
-                  # country storefront the record describes and is_available, whether the app is
-                  # offered there. Ratings are counted per storefront, so rating, rating_count, and
-                  # rating_histogram are null in a storefront where nobody rated the app.
-                  # google-play-reviews returns up to the 200 newest reviews written in the hl
-                  # language, with developer replies, in data.reviews; an app with fewer such
-                  # reviews returns them all. Both Play parsers accept app details URLs
-                  # (play.google.com/store/apps/details?id=…); hl and gl set the language and
-                  # storefront, defaulting to en and us. Without gl, google-play reads an app that
-                  # is not offered in the US from the country of its developer instead. app-store
-                  # parses an App Store app into data: details, developer, ratings, price, version,
-                  # and screenshots. app-store-reviews returns up to the 500 newest reviews in
-                  # data.reviews. Both App Store parsers accept app URLs
-                  # (apps.apple.com/us/app/…/id…); the country in the path sets the storefront,
-                  # defaulting to us. g2-reviews returns the 25 most recently published reviews of a
-                  # G2 product in data.reviews (rating, title, likes, dislikes, problems_solved,
-                  # reviewer role, company size, and industry), plus data.product. It accepts G2
-                  # product URLs (g2.com/products/…), follows renamed products, and keeps
-                  # star-rating filters from the URL (filters[nps_score][]=1 to 5); other filters,
-                  # sort orders, and pages are ignored. instagram-profile parses a public profile
-                  # (instagram.com/{username}) into data: bio, links, follower and post counts,
-                  # category, business address, similar_accounts, and latest_posts (up to the 12
-                  # posts at the top of the profile, newest first). Instagram lists pinned posts
-                  # there ahead of newer ones, so posts with is_pinned true can be older; when
-                  # Instagram shows only a rounded post count (32K), post_count is that rounded
-                  # number and is_post_count_rounded is true. instagram-post parses a post or reel
-                  # (/p/…, /reel/…) into data: caption, hashtags, mentions, like, comment, and view
-                  # counts (like_count and view_count are null when the owner hides them), media
-                  # URLs, tagged users, collaborators, location, and the top ~14 comments in
-                  # data.comments. instagram-feed returns the top posts for a hashtag or keyword
-                  # (/explore/tags/…, /popular/…) or the recent posts at a location
-                  # (/explore/locations/{id}/…) in data.posts; keyword posts carry only the
-                  # shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
-                  # it. All three Instagram parsers read public data without logging in, so private
-                  # accounts return no posts and follower lists are unavailable. tiktok-profile
-                  # parses a public profile (tiktok.com/@{username}) into data: nickname, bio, bio
-                  # link, follower, following, like, and video counts, verified, private, and
-                  # business flags, and business category; it does not list videos. tiktok-video
-                  # parses a video or photo post (/@{username}/video/{id} or
-                  # /@{username}/photo/{id}) into data: caption, hashtags, mentions, author, view,
-                  # like, comment, share, save, and repost counts, duration, thumbnail, a video_url
-                  # that downloads without cookies, image_urls for photo posts, music, location, and
-                  # ad, paid-partnership, and AI-generated flags. tiktok-feed returns videos in the
-                  # tiktok-video shape as data.videos: the latest 15 from a profile URL, the top 30
-                  # from a hashtag URL (/tag/{name}), or the top 12 from a search URL
-                  # (/search?q={query}). tiktok-comments returns the first 20 comments of a video or
-                  # photo post as data.comments: text, posted_at, like and reply counts, whether the
-                  # author liked it, and the commenter. tiktok-followers and tiktok-following return
-                  # up to 30 accounts of a profile as data.users, in the tiktok-profile shape.
-                  # tiktok-user-search returns the top 10 accounts for a user search URL
-                  # (/search/user?q={query}) as data.users: id, username, nickname, biography,
-                  # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
-                  # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). reddit-post parses a post
-                  # (reddit.com/r/{subreddit}/comments/{id}, reddit.com/comments/{id}, or
-                  # redd.it/{id}) into data.post: title, body as Markdown, type (text, link, image,
-                  # gallery, or video), link_url, subreddit, author, flairs, score, upvote_ratio,
-                  # comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
-                  # flags, images (every gallery image in order), and video (an MP4 url plus an
-                  # hls_url that carries the audio). data.comments holds the comment tree, each
-                  # comment with id, author, body as Markdown, score, posted_at, depth, parent_id,
-                  # url, is_submitter, is_deleted, and its replies; limit caps the total number of
-                  # comments (default 100), filled shallowest first so whole conversations are kept,
-                  # and data.has_more_comments says whether the thread has more. The sort query of
-                  # the URL (best, top, new, controversial, old, qa) orders the comments.
-                  # reddit-search returns search results for a search URL
-                  # (reddit.com/search?q={query}, or reddit.com/r/{subreddit}/search?q={query} to
-                  # search one subreddit). With type=link or no type it returns posts in the
-                  # reddit-post shape as data.posts, ordered by the sort (relevance, hot, top, new,
-                  # comments) and limited to the t time range (hour, day, week, month, year, all) of
-                  # the URL; type=sr returns communities as data.communities (name, title,
-                  # description, sidebar, subscriber_count, created_at, type, NSFW and quarantine
-                  # flags, language, category, icon and banner URLs, and allowed post types);
-                  # type=user returns accounts as data.users (username, display_name, bio,
-                  # created_at, post and comment karma, avatar and banner URLs, and verified,
-                  # employee, moderator, premium, and NSFW flags). limit caps the number of results
-                  # (default 100), in the order Reddit returns them, and data.has_more says whether
-                  # Reddit has more. reddit-subreddit reads a subreddit URL
-                  # (reddit.com/r/{subreddit}, optionally followed by /hot, /new, /top, /rising, or
-                  # /controversial, with t setting the time range of top and controversial, default
-                  # day) into data.subreddit in the community shape of reddit-search, data.rules
-                  # (name, description, applies_to, violation_reason, created_at), and data.posts in
-                  # the reddit-post shape, ordered like the tab (default hot) and with stickied
-                  # posts flagged; r/all and r/popular return posts with a null subreddit and rules.
-                  # limit caps the posts (default 100) and data.has_more says whether Reddit has
-                  # more. Private and quarantined subreddits return WEBSITE_ACCESS_ERROR.
-                  # reddit-user reads a profile URL (reddit.com/user/{username} or
-                  # reddit.com/u/{username}, optionally followed by /overview, /submitted, or
-                  # /comments, with sort set to new, hot, top, or controversial and t setting the
-                  # time range of top and controversial, default all) into data.user (id, username,
-                  # display_name, bio, created_at, total, post, comment, awardee, and awarder karma,
-                  # avatar and banner URLs, and verified, suspended, employee, moderator, premium,
-                  # and NSFW flags), data.trophies (name, description, icon_url, granted_at, url),
-                  # data.moderated_communities (name, title, url, subscriber_count, icon_url,
-                  # is_nsfw), data.posts in the reddit-post shape, and data.comments, each with id,
-                  # author, body as Markdown, score, posted_at, edited_at, url, subreddit, parent_id
-                  # (null for a top-level comment), is_submitter, is_stickied, distinguished,
-                  # award_count, and the post it was left on (id, title, url, author, is_nsfw). The
-                  # overview tab returns both posts and comments; submitted returns null comments
-                  # and comments returns null posts. limit caps the posts and comments together
-                  # (default 100) and data.has_more says whether Reddit has more. Users who hide
-                  # their activity return empty lists, and suspended accounts return their profile
-                  # with null posts and comments. yelp-search accepts Yelp search URLs with
-                  # find_desc and find_loc, reads start as the result offset, and returns up to 20
-                  # ranked organic businesses in data.businesses with total and pagination.
-                  # yelp-reviews accepts a Yelp business URL (yelp.com/biz/{alias}), uses optional
-                  # start for the offset, and always sorts newest first; unsupported sort and review
-                  # filters are rejected, while tracking params are ignored. It returns up to 20
-                  # latest public reviews in data.reviews with business details and
-                  # pagination.next_offset. Each review has rating, full text, updated_at, and
-                  # author (id is the Yelp user id from the reviewer profile URL, url links to that
-                  # profile, plus name, location, and review_count); owner replies and photos are
-                  # not included. tripadvisor-reviews accepts a Tripadvisor hotel, restaurant, or
-                  # attraction review URL (tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html,
-                  # on any Tripadvisor country domain), reads -or{N}- in the path as the offset, and
-                  # returns 20 reviews in data.reviews in the order Tripadvisor shows them, with
-                  # data.location (id, name, type, url, review_count) and pagination.next_offset.
-                  # Each review has id, url, title, full text, rating, language, published_at,
-                  # visit_month, helpful_votes, subratings, photo_urls, owner_response (text,
-                  # published_at, author_name), and author (id, username, name, url,
-                  # contribution_count); an unknown location returns no reviews. emails accepts any
-                  # page and returns its email addresses as data.emails ([{ email }]), read from
-                  # mailto links, Cloudflare-protected addresses, and visible text. phone-numbers
-                  # accepts any page and returns its valid phone numbers in E.164 as
-                  # data.phone_numbers ([{ phone }]), read from tel links and visible text; numbers
-                  # without a country code are read for the country of the site TLD, defaulting to
-                  # US. links accepts any page and returns its unique http(s) links as data.links
-                  # ([{ url, text }]), with absolute URLs; text falls back to aria-label or image
-                  # alt and is null when a link has none. The emails parser reads the rendered page
-                  # and respects content filters; the other prebuilt parsers read their data
-                  # independently of DOM filters.
-                  sig do
-                    returns(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::OrSymbol
-                    )
-                  end
-                  attr_accessor :parser
-
-                  # Use a prebuilt parser instead of custom rules.
-                  sig { returns(Symbol) }
-                  attr_accessor :type
-
-                  # google-maps-reviews and reddit parsers only. Maximum number of reviews
-                  # (google-maps-reviews, default 100), comments (reddit-post, default 100), or
-                  # results (reddit-search, reddit-subreddit, and reddit-user, default 100) to
-                  # return; maximum 1000.
-                  sig { returns(T.nilable(Integer)) }
-                  attr_reader :limit
-
-                  sig { params(limit: Integer).void }
-                  attr_writer :limit
-
-                  # google-maps-reviews only. Order of data.reviews. newest, relevant, highest, and
-                  # lowest follow Google; oldest returns the earliest reviews first, which Google
-                  # itself does not offer.
-                  sig do
-                    returns(
-                      T.nilable(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::OrSymbol
-                      )
-                    )
-                  end
-                  attr_reader :sort
-
-                  sig do
-                    params(
-                      sort:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::OrSymbol
-                    ).void
-                  end
-                  attr_writer :sort
-
-                  sig do
-                    params(
-                      parser:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::OrSymbol,
-                      limit: Integer,
-                      sort:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::OrSymbol,
-                      type: Symbol
-                    ).returns(T.attached_class)
-                  end
-                  def self.new(
-                    # google-maps parses Google Maps business data into data.results. Accepts Maps
-                    # place, search, and internal data URLs; a search page returns up to 200 places,
-                    # ranked as Google ranks them. Uses an exit in the gl country of the URL (US when
-                    # absent) and English labels regardless of hl or Accept-Language.
-                    # google-maps-reviews returns the reviews of a place in data.reviews, in the same
-                    # shape as the Serper reviews API (rating, date, isoDate, snippet,
-                    # translatedSnippet, likes, user, media, response, link, id), plus language,
-                    # guided ratings in details, and user.isLocalGuide; data also carries the place
-                    # featureId, cid, and sort. sort and limit pick the order and count, and oldest is
-                    # exact. It accepts Maps place, search, and ?cid= URLs, plus
-                    # search.google.com/local/reviews URLs, so the google_maps_url and
-                    # google_reviews_url fields of google-maps results work as input. An unknown place
-                    # returns no reviews. google-play parses a Play Store app into data: details,
-                    # developer contact, ratings, price, permissions, and data safety, plus the
-                    # country storefront the record describes and is_available, whether the app is
-                    # offered there. Ratings are counted per storefront, so rating, rating_count, and
-                    # rating_histogram are null in a storefront where nobody rated the app.
-                    # google-play-reviews returns up to the 200 newest reviews written in the hl
-                    # language, with developer replies, in data.reviews; an app with fewer such
-                    # reviews returns them all. Both Play parsers accept app details URLs
-                    # (play.google.com/store/apps/details?id=…); hl and gl set the language and
-                    # storefront, defaulting to en and us. Without gl, google-play reads an app that
-                    # is not offered in the US from the country of its developer instead. app-store
-                    # parses an App Store app into data: details, developer, ratings, price, version,
-                    # and screenshots. app-store-reviews returns up to the 500 newest reviews in
-                    # data.reviews. Both App Store parsers accept app URLs
-                    # (apps.apple.com/us/app/…/id…); the country in the path sets the storefront,
-                    # defaulting to us. g2-reviews returns the 25 most recently published reviews of a
-                    # G2 product in data.reviews (rating, title, likes, dislikes, problems_solved,
-                    # reviewer role, company size, and industry), plus data.product. It accepts G2
-                    # product URLs (g2.com/products/…), follows renamed products, and keeps
-                    # star-rating filters from the URL (filters[nps_score][]=1 to 5); other filters,
-                    # sort orders, and pages are ignored. instagram-profile parses a public profile
-                    # (instagram.com/{username}) into data: bio, links, follower and post counts,
-                    # category, business address, similar_accounts, and latest_posts (up to the 12
-                    # posts at the top of the profile, newest first). Instagram lists pinned posts
-                    # there ahead of newer ones, so posts with is_pinned true can be older; when
-                    # Instagram shows only a rounded post count (32K), post_count is that rounded
-                    # number and is_post_count_rounded is true. instagram-post parses a post or reel
-                    # (/p/…, /reel/…) into data: caption, hashtags, mentions, like, comment, and view
-                    # counts (like_count and view_count are null when the owner hides them), media
-                    # URLs, tagged users, collaborators, location, and the top ~14 comments in
-                    # data.comments. instagram-feed returns the top posts for a hashtag or keyword
-                    # (/explore/tags/…, /popular/…) or the recent posts at a location
-                    # (/explore/locations/{id}/…) in data.posts; keyword posts carry only the
-                    # shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
-                    # it. All three Instagram parsers read public data without logging in, so private
-                    # accounts return no posts and follower lists are unavailable. tiktok-profile
-                    # parses a public profile (tiktok.com/@{username}) into data: nickname, bio, bio
-                    # link, follower, following, like, and video counts, verified, private, and
-                    # business flags, and business category; it does not list videos. tiktok-video
-                    # parses a video or photo post (/@{username}/video/{id} or
-                    # /@{username}/photo/{id}) into data: caption, hashtags, mentions, author, view,
-                    # like, comment, share, save, and repost counts, duration, thumbnail, a video_url
-                    # that downloads without cookies, image_urls for photo posts, music, location, and
-                    # ad, paid-partnership, and AI-generated flags. tiktok-feed returns videos in the
-                    # tiktok-video shape as data.videos: the latest 15 from a profile URL, the top 30
-                    # from a hashtag URL (/tag/{name}), or the top 12 from a search URL
-                    # (/search?q={query}). tiktok-comments returns the first 20 comments of a video or
-                    # photo post as data.comments: text, posted_at, like and reply counts, whether the
-                    # author liked it, and the commenter. tiktok-followers and tiktok-following return
-                    # up to 30 accounts of a profile as data.users, in the tiktok-profile shape.
-                    # tiktok-user-search returns the top 10 accounts for a user search URL
-                    # (/search/user?q={query}) as data.users: id, username, nickname, biography,
-                    # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
-                    # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                    # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). reddit-post parses a post
-                    # (reddit.com/r/{subreddit}/comments/{id}, reddit.com/comments/{id}, or
-                    # redd.it/{id}) into data.post: title, body as Markdown, type (text, link, image,
-                    # gallery, or video), link_url, subreddit, author, flairs, score, upvote_ratio,
-                    # comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
-                    # flags, images (every gallery image in order), and video (an MP4 url plus an
-                    # hls_url that carries the audio). data.comments holds the comment tree, each
-                    # comment with id, author, body as Markdown, score, posted_at, depth, parent_id,
-                    # url, is_submitter, is_deleted, and its replies; limit caps the total number of
-                    # comments (default 100), filled shallowest first so whole conversations are kept,
-                    # and data.has_more_comments says whether the thread has more. The sort query of
-                    # the URL (best, top, new, controversial, old, qa) orders the comments.
-                    # reddit-search returns search results for a search URL
-                    # (reddit.com/search?q={query}, or reddit.com/r/{subreddit}/search?q={query} to
-                    # search one subreddit). With type=link or no type it returns posts in the
-                    # reddit-post shape as data.posts, ordered by the sort (relevance, hot, top, new,
-                    # comments) and limited to the t time range (hour, day, week, month, year, all) of
-                    # the URL; type=sr returns communities as data.communities (name, title,
-                    # description, sidebar, subscriber_count, created_at, type, NSFW and quarantine
-                    # flags, language, category, icon and banner URLs, and allowed post types);
-                    # type=user returns accounts as data.users (username, display_name, bio,
-                    # created_at, post and comment karma, avatar and banner URLs, and verified,
-                    # employee, moderator, premium, and NSFW flags). limit caps the number of results
-                    # (default 100), in the order Reddit returns them, and data.has_more says whether
-                    # Reddit has more. reddit-subreddit reads a subreddit URL
-                    # (reddit.com/r/{subreddit}, optionally followed by /hot, /new, /top, /rising, or
-                    # /controversial, with t setting the time range of top and controversial, default
-                    # day) into data.subreddit in the community shape of reddit-search, data.rules
-                    # (name, description, applies_to, violation_reason, created_at), and data.posts in
-                    # the reddit-post shape, ordered like the tab (default hot) and with stickied
-                    # posts flagged; r/all and r/popular return posts with a null subreddit and rules.
-                    # limit caps the posts (default 100) and data.has_more says whether Reddit has
-                    # more. Private and quarantined subreddits return WEBSITE_ACCESS_ERROR.
-                    # reddit-user reads a profile URL (reddit.com/user/{username} or
-                    # reddit.com/u/{username}, optionally followed by /overview, /submitted, or
-                    # /comments, with sort set to new, hot, top, or controversial and t setting the
-                    # time range of top and controversial, default all) into data.user (id, username,
-                    # display_name, bio, created_at, total, post, comment, awardee, and awarder karma,
-                    # avatar and banner URLs, and verified, suspended, employee, moderator, premium,
-                    # and NSFW flags), data.trophies (name, description, icon_url, granted_at, url),
-                    # data.moderated_communities (name, title, url, subscriber_count, icon_url,
-                    # is_nsfw), data.posts in the reddit-post shape, and data.comments, each with id,
-                    # author, body as Markdown, score, posted_at, edited_at, url, subreddit, parent_id
-                    # (null for a top-level comment), is_submitter, is_stickied, distinguished,
-                    # award_count, and the post it was left on (id, title, url, author, is_nsfw). The
-                    # overview tab returns both posts and comments; submitted returns null comments
-                    # and comments returns null posts. limit caps the posts and comments together
-                    # (default 100) and data.has_more says whether Reddit has more. Users who hide
-                    # their activity return empty lists, and suspended accounts return their profile
-                    # with null posts and comments. yelp-search accepts Yelp search URLs with
-                    # find_desc and find_loc, reads start as the result offset, and returns up to 20
-                    # ranked organic businesses in data.businesses with total and pagination.
-                    # yelp-reviews accepts a Yelp business URL (yelp.com/biz/{alias}), uses optional
-                    # start for the offset, and always sorts newest first; unsupported sort and review
-                    # filters are rejected, while tracking params are ignored. It returns up to 20
-                    # latest public reviews in data.reviews with business details and
-                    # pagination.next_offset. Each review has rating, full text, updated_at, and
-                    # author (id is the Yelp user id from the reviewer profile URL, url links to that
-                    # profile, plus name, location, and review_count); owner replies and photos are
-                    # not included. tripadvisor-reviews accepts a Tripadvisor hotel, restaurant, or
-                    # attraction review URL (tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html,
-                    # on any Tripadvisor country domain), reads -or{N}- in the path as the offset, and
-                    # returns 20 reviews in data.reviews in the order Tripadvisor shows them, with
-                    # data.location (id, name, type, url, review_count) and pagination.next_offset.
-                    # Each review has id, url, title, full text, rating, language, published_at,
-                    # visit_month, helpful_votes, subratings, photo_urls, owner_response (text,
-                    # published_at, author_name), and author (id, username, name, url,
-                    # contribution_count); an unknown location returns no reviews. emails accepts any
-                    # page and returns its email addresses as data.emails ([{ email }]), read from
-                    # mailto links, Cloudflare-protected addresses, and visible text. phone-numbers
-                    # accepts any page and returns its valid phone numbers in E.164 as
-                    # data.phone_numbers ([{ phone }]), read from tel links and visible text; numbers
-                    # without a country code are read for the country of the site TLD, defaulting to
-                    # US. links accepts any page and returns its unique http(s) links as data.links
-                    # ([{ url, text }]), with absolute URLs; text falls back to aria-label or image
-                    # alt and is null when a link has none. The emails parser reads the rendered page
-                    # and respects content filters; the other prebuilt parsers read their data
-                    # independently of DOM filters.
-                    parser:,
-                    # google-maps-reviews and reddit parsers only. Maximum number of reviews
-                    # (google-maps-reviews, default 100), comments (reddit-post, default 100), or
-                    # results (reddit-search, reddit-subreddit, and reddit-user, default 100) to
-                    # return; maximum 1000.
-                    limit: nil,
-                    # google-maps-reviews only. Order of data.reviews. newest, relevant, highest, and
-                    # lowest follow Google; oldest returns the earliest reviews first, which Google
-                    # itself does not offer.
-                    sort: nil,
-                    # Use a prebuilt parser instead of custom rules.
-                    type: :prebuilt
-                  )
-                  end
-
-                  sig do
-                    override.returns(
-                      {
-                        parser:
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::OrSymbol,
-                        type: Symbol,
-                        limit: Integer,
-                        sort:
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::OrSymbol
-                      }
-                    )
-                  end
-                  def to_hash
-                  end
-
-                  # google-maps parses Google Maps business data into data.results. Accepts Maps
-                  # place, search, and internal data URLs; a search page returns up to 200 places,
-                  # ranked as Google ranks them. Uses an exit in the gl country of the URL (US when
-                  # absent) and English labels regardless of hl or Accept-Language.
-                  # google-maps-reviews returns the reviews of a place in data.reviews, in the same
-                  # shape as the Serper reviews API (rating, date, isoDate, snippet,
-                  # translatedSnippet, likes, user, media, response, link, id), plus language,
-                  # guided ratings in details, and user.isLocalGuide; data also carries the place
-                  # featureId, cid, and sort. sort and limit pick the order and count, and oldest is
-                  # exact. It accepts Maps place, search, and ?cid= URLs, plus
-                  # search.google.com/local/reviews URLs, so the google_maps_url and
-                  # google_reviews_url fields of google-maps results work as input. An unknown place
-                  # returns no reviews. google-play parses a Play Store app into data: details,
-                  # developer contact, ratings, price, permissions, and data safety, plus the
-                  # country storefront the record describes and is_available, whether the app is
-                  # offered there. Ratings are counted per storefront, so rating, rating_count, and
-                  # rating_histogram are null in a storefront where nobody rated the app.
-                  # google-play-reviews returns up to the 200 newest reviews written in the hl
-                  # language, with developer replies, in data.reviews; an app with fewer such
-                  # reviews returns them all. Both Play parsers accept app details URLs
-                  # (play.google.com/store/apps/details?id=…); hl and gl set the language and
-                  # storefront, defaulting to en and us. Without gl, google-play reads an app that
-                  # is not offered in the US from the country of its developer instead. app-store
-                  # parses an App Store app into data: details, developer, ratings, price, version,
-                  # and screenshots. app-store-reviews returns up to the 500 newest reviews in
-                  # data.reviews. Both App Store parsers accept app URLs
-                  # (apps.apple.com/us/app/…/id…); the country in the path sets the storefront,
-                  # defaulting to us. g2-reviews returns the 25 most recently published reviews of a
-                  # G2 product in data.reviews (rating, title, likes, dislikes, problems_solved,
-                  # reviewer role, company size, and industry), plus data.product. It accepts G2
-                  # product URLs (g2.com/products/…), follows renamed products, and keeps
-                  # star-rating filters from the URL (filters[nps_score][]=1 to 5); other filters,
-                  # sort orders, and pages are ignored. instagram-profile parses a public profile
-                  # (instagram.com/{username}) into data: bio, links, follower and post counts,
-                  # category, business address, similar_accounts, and latest_posts (up to the 12
-                  # posts at the top of the profile, newest first). Instagram lists pinned posts
-                  # there ahead of newer ones, so posts with is_pinned true can be older; when
-                  # Instagram shows only a rounded post count (32K), post_count is that rounded
-                  # number and is_post_count_rounded is true. instagram-post parses a post or reel
-                  # (/p/…, /reel/…) into data: caption, hashtags, mentions, like, comment, and view
-                  # counts (like_count and view_count are null when the owner hides them), media
-                  # URLs, tagged users, collaborators, location, and the top ~14 comments in
-                  # data.comments. instagram-feed returns the top posts for a hashtag or keyword
-                  # (/explore/tags/…, /popular/…) or the recent posts at a location
-                  # (/explore/locations/{id}/…) in data.posts; keyword posts carry only the
-                  # shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
-                  # it. All three Instagram parsers read public data without logging in, so private
-                  # accounts return no posts and follower lists are unavailable. tiktok-profile
-                  # parses a public profile (tiktok.com/@{username}) into data: nickname, bio, bio
-                  # link, follower, following, like, and video counts, verified, private, and
-                  # business flags, and business category; it does not list videos. tiktok-video
-                  # parses a video or photo post (/@{username}/video/{id} or
-                  # /@{username}/photo/{id}) into data: caption, hashtags, mentions, author, view,
-                  # like, comment, share, save, and repost counts, duration, thumbnail, a video_url
-                  # that downloads without cookies, image_urls for photo posts, music, location, and
-                  # ad, paid-partnership, and AI-generated flags. tiktok-feed returns videos in the
-                  # tiktok-video shape as data.videos: the latest 15 from a profile URL, the top 30
-                  # from a hashtag URL (/tag/{name}), or the top 12 from a search URL
-                  # (/search?q={query}). tiktok-comments returns the first 20 comments of a video or
-                  # photo post as data.comments: text, posted_at, like and reply counts, whether the
-                  # author liked it, and the commenter. tiktok-followers and tiktok-following return
-                  # up to 30 accounts of a profile as data.users, in the tiktok-profile shape.
-                  # tiktok-user-search returns the top 10 accounts for a user search URL
-                  # (/search/user?q={query}) as data.users: id, username, nickname, biography,
-                  # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
-                  # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-                  # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). reddit-post parses a post
-                  # (reddit.com/r/{subreddit}/comments/{id}, reddit.com/comments/{id}, or
-                  # redd.it/{id}) into data.post: title, body as Markdown, type (text, link, image,
-                  # gallery, or video), link_url, subreddit, author, flairs, score, upvote_ratio,
-                  # comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
-                  # flags, images (every gallery image in order), and video (an MP4 url plus an
-                  # hls_url that carries the audio). data.comments holds the comment tree, each
-                  # comment with id, author, body as Markdown, score, posted_at, depth, parent_id,
-                  # url, is_submitter, is_deleted, and its replies; limit caps the total number of
-                  # comments (default 100), filled shallowest first so whole conversations are kept,
-                  # and data.has_more_comments says whether the thread has more. The sort query of
-                  # the URL (best, top, new, controversial, old, qa) orders the comments.
-                  # reddit-search returns search results for a search URL
-                  # (reddit.com/search?q={query}, or reddit.com/r/{subreddit}/search?q={query} to
-                  # search one subreddit). With type=link or no type it returns posts in the
-                  # reddit-post shape as data.posts, ordered by the sort (relevance, hot, top, new,
-                  # comments) and limited to the t time range (hour, day, week, month, year, all) of
-                  # the URL; type=sr returns communities as data.communities (name, title,
-                  # description, sidebar, subscriber_count, created_at, type, NSFW and quarantine
-                  # flags, language, category, icon and banner URLs, and allowed post types);
-                  # type=user returns accounts as data.users (username, display_name, bio,
-                  # created_at, post and comment karma, avatar and banner URLs, and verified,
-                  # employee, moderator, premium, and NSFW flags). limit caps the number of results
-                  # (default 100), in the order Reddit returns them, and data.has_more says whether
-                  # Reddit has more. reddit-subreddit reads a subreddit URL
-                  # (reddit.com/r/{subreddit}, optionally followed by /hot, /new, /top, /rising, or
-                  # /controversial, with t setting the time range of top and controversial, default
-                  # day) into data.subreddit in the community shape of reddit-search, data.rules
-                  # (name, description, applies_to, violation_reason, created_at), and data.posts in
-                  # the reddit-post shape, ordered like the tab (default hot) and with stickied
-                  # posts flagged; r/all and r/popular return posts with a null subreddit and rules.
-                  # limit caps the posts (default 100) and data.has_more says whether Reddit has
-                  # more. Private and quarantined subreddits return WEBSITE_ACCESS_ERROR.
-                  # reddit-user reads a profile URL (reddit.com/user/{username} or
-                  # reddit.com/u/{username}, optionally followed by /overview, /submitted, or
-                  # /comments, with sort set to new, hot, top, or controversial and t setting the
-                  # time range of top and controversial, default all) into data.user (id, username,
-                  # display_name, bio, created_at, total, post, comment, awardee, and awarder karma,
-                  # avatar and banner URLs, and verified, suspended, employee, moderator, premium,
-                  # and NSFW flags), data.trophies (name, description, icon_url, granted_at, url),
-                  # data.moderated_communities (name, title, url, subscriber_count, icon_url,
-                  # is_nsfw), data.posts in the reddit-post shape, and data.comments, each with id,
-                  # author, body as Markdown, score, posted_at, edited_at, url, subreddit, parent_id
-                  # (null for a top-level comment), is_submitter, is_stickied, distinguished,
-                  # award_count, and the post it was left on (id, title, url, author, is_nsfw). The
-                  # overview tab returns both posts and comments; submitted returns null comments
-                  # and comments returns null posts. limit caps the posts and comments together
-                  # (default 100) and data.has_more says whether Reddit has more. Users who hide
-                  # their activity return empty lists, and suspended accounts return their profile
-                  # with null posts and comments. yelp-search accepts Yelp search URLs with
-                  # find_desc and find_loc, reads start as the result offset, and returns up to 20
-                  # ranked organic businesses in data.businesses with total and pagination.
-                  # yelp-reviews accepts a Yelp business URL (yelp.com/biz/{alias}), uses optional
-                  # start for the offset, and always sorts newest first; unsupported sort and review
-                  # filters are rejected, while tracking params are ignored. It returns up to 20
-                  # latest public reviews in data.reviews with business details and
-                  # pagination.next_offset. Each review has rating, full text, updated_at, and
-                  # author (id is the Yelp user id from the reviewer profile URL, url links to that
-                  # profile, plus name, location, and review_count); owner replies and photos are
-                  # not included. tripadvisor-reviews accepts a Tripadvisor hotel, restaurant, or
-                  # attraction review URL (tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html,
-                  # on any Tripadvisor country domain), reads -or{N}- in the path as the offset, and
-                  # returns 20 reviews in data.reviews in the order Tripadvisor shows them, with
-                  # data.location (id, name, type, url, review_count) and pagination.next_offset.
-                  # Each review has id, url, title, full text, rating, language, published_at,
-                  # visit_month, helpful_votes, subratings, photo_urls, owner_response (text,
-                  # published_at, author_name), and author (id, username, name, url,
-                  # contribution_count); an unknown location returns no reviews. emails accepts any
-                  # page and returns its email addresses as data.emails ([{ email }]), read from
-                  # mailto links, Cloudflare-protected addresses, and visible text. phone-numbers
-                  # accepts any page and returns its valid phone numbers in E.164 as
-                  # data.phone_numbers ([{ phone }]), read from tel links and visible text; numbers
-                  # without a country code are read for the country of the site TLD, defaulting to
-                  # US. links accepts any page and returns its unique http(s) links as data.links
-                  # ([{ url, text }]), with absolute URLs; text falls back to aria-label or image
-                  # alt and is null when a link has none. The emails parser reads the rendered page
-                  # and respects content filters; the other prebuilt parsers read their data
-                  # independently of DOM filters.
-                  module Parser
-                    extend ContextDev::Internal::Type::Enum
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    GOOGLE_MAPS =
-                      T.let(
-                        :"google-maps",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    GOOGLE_MAPS_REVIEWS =
-                      T.let(
-                        :"google-maps-reviews",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    GOOGLE_PLAY =
-                      T.let(
-                        :"google-play",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    GOOGLE_PLAY_REVIEWS =
-                      T.let(
-                        :"google-play-reviews",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    APP_STORE =
-                      T.let(
-                        :"app-store",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    APP_STORE_REVIEWS =
-                      T.let(
-                        :"app-store-reviews",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    G2_REVIEWS =
-                      T.let(
-                        :"g2-reviews",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    INSTAGRAM_PROFILE =
-                      T.let(
-                        :"instagram-profile",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    INSTAGRAM_POST =
-                      T.let(
-                        :"instagram-post",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    INSTAGRAM_FEED =
-                      T.let(
-                        :"instagram-feed",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    TIKTOK_PROFILE =
-                      T.let(
-                        :"tiktok-profile",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    TIKTOK_VIDEO =
-                      T.let(
-                        :"tiktok-video",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    TIKTOK_FEED =
-                      T.let(
-                        :"tiktok-feed",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    TIKTOK_COMMENTS =
-                      T.let(
-                        :"tiktok-comments",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    TIKTOK_FOLLOWERS =
-                      T.let(
-                        :"tiktok-followers",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    TIKTOK_FOLLOWING =
-                      T.let(
-                        :"tiktok-following",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    TIKTOK_USER_SEARCH =
-                      T.let(
-                        :"tiktok-user-search",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    REDDIT_POST =
-                      T.let(
-                        :"reddit-post",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    REDDIT_SEARCH =
-                      T.let(
-                        :"reddit-search",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    REDDIT_SUBREDDIT =
-                      T.let(
-                        :"reddit-subreddit",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    REDDIT_USER =
-                      T.let(
-                        :"reddit-user",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    YELP_SEARCH =
-                      T.let(
-                        :"yelp-search",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    YELP_REVIEWS =
-                      T.let(
-                        :"yelp-reviews",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    TRIPADVISOR_REVIEWS =
-                      T.let(
-                        :"tripadvisor-reviews",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    CAR_RENTAL_AVAILABILITY =
-                      T.let(
-                        :"car-rental-availability",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    CAR_RENTAL_LOCATIONS =
-                      T.let(
-                        :"car-rental-locations",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    EMAILS =
-                      T.let(
-                        :emails,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    PHONE_NUMBERS =
-                      T.let(
-                        :"phone-numbers",
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-                    LINKS =
-                      T.let(
-                        :links,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                      )
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Parser::TaggedSymbol
-                        ]
-                      )
-                    end
-                    def self.values
-                    end
-                  end
-
-                  # google-maps-reviews only. Order of data.reviews. newest, relevant, highest, and
-                  # lowest follow Google; oldest returns the earliest reviews first, which Google
-                  # itself does not offer.
-                  module Sort
-                    extend ContextDev::Internal::Type::Enum
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    NEWEST =
-                      T.let(
-                        :newest,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
-                      )
-                    OLDEST =
-                      T.let(
-                        :oldest,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
-                      )
-                    RELEVANT =
-                      T.let(
-                        :relevant,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
-                      )
-                    HIGHEST =
-                      T.let(
-                        :highest,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
-                      )
-                    LOWEST =
-                      T.let(
-                        :lowest,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
-                      )
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::PrebuiltParser::Sort::TaggedSymbol
-                        ]
-                      )
-                    end
-                    def self.values
-                    end
-                  end
-                end
-
-                sig do
-                  override.returns(
-                    T::Array[
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ParseParams::Variants
-                    ]
-                  )
-                end
-                def self.variants
-                end
-              end
-
-              class ProductParams < ContextDev::Internal::Type::BaseModel
-                OrHash =
-                  T.type_alias do
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ProductParams,
-                      ContextDev::Internal::AnyHash
-                    )
-                  end
-
-                # Drop visually duplicate product images, keeping the largest copy.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :dedupe_images
-
-                sig { params(dedupe_images: T::Boolean).void }
-                attr_writer :dedupe_images
-
-                # Ignored. The AI fallback runs automatically.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :use_ai_fallback
-
-                sig { params(use_ai_fallback: T::Boolean).void }
-                attr_writer :use_ai_fallback
-
-                # Product options. Requires formats.product: true.
-                sig do
-                  params(
-                    dedupe_images: T::Boolean,
-                    use_ai_fallback: T::Boolean
-                  ).returns(T.attached_class)
-                end
-                def self.new(
-                  # Drop visually duplicate product images, keeping the largest copy.
-                  dedupe_images: nil,
-                  # Ignored. The AI fallback runs automatically.
-                  use_ai_fallback: nil
-                )
-                end
-
-                sig do
-                  override.returns(
-                    { dedupe_images: T::Boolean, use_ai_fallback: T::Boolean }
-                  )
-                end
-                def to_hash
-                end
-              end
-
-              class ScreenshotParams < ContextDev::Internal::Type::BaseModel
-                OrHash =
-                  T.type_alias do
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams,
-                      ContextDev::Internal::AnyHash
-                    )
-                  end
-
-                # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
-                # megapixels.
-                sig do
-                  returns(
-                    T.nilable(
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::OrSymbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle
-                      )
-                    )
-                  )
-                end
-                attr_reader :area
-
-                sig do
-                  params(
-                    area:
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::OrSymbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element::OrHash,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle::OrHash
-                      )
-                  ).void
-                end
-                attr_writer :area
-
-                # Image format for the screenshot.
-                sig do
-                  returns(
-                    T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::OrSymbol
-                    )
-                  )
-                end
-                attr_reader :format_
-
-                sig do
-                  params(
-                    format_:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::OrSymbol
-                  ).void
-                end
-                attr_writer :format_
-
-                # Screenshot options. Requires formats.screenshot: true.
-                sig do
-                  params(
-                    area:
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::OrSymbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element::OrHash,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle::OrHash
-                      ),
-                    format_:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::OrSymbol
-                  ).returns(T.attached_class)
-                end
-                def self.new(
-                  # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
-                  # megapixels.
-                  area: nil,
-                  # Image format for the screenshot.
-                  format_: nil
-                )
-                end
-
-                sig do
-                  override.returns(
-                    {
-                      area:
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::OrSymbol,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle
-                        ),
-                      format_:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::OrSymbol
-                    }
-                  )
-                end
-                def to_hash
-                end
-
-                # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
-                # megapixels.
-                module Area
-                  extend ContextDev::Internal::Type::Union
-
-                  Variants =
-                    T.type_alias do
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::TaggedSymbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle
-                      )
-                    end
-
-                  module Page
-                    extend ContextDev::Internal::Type::Enum
-
-                    TaggedSymbol =
-                      T.type_alias do
-                        T.all(
-                          Symbol,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page
-                        )
-                      end
-                    OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                    VIEWPORT =
-                      T.let(
-                        :viewport,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::TaggedSymbol
-                      )
-                    FULL_PAGE =
-                      T.let(
-                        :fullPage,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::TaggedSymbol
-                      )
-
-                    sig do
-                      override.returns(
-                        T::Array[
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Page::TaggedSymbol
-                        ]
-                      )
-                    end
-                    def self.values
-                    end
-                  end
-
-                  class Element < ContextDev::Internal::Type::BaseModel
-                    OrHash =
-                      T.type_alias do
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Element,
-                          ContextDev::Internal::AnyHash
-                        )
-                      end
-
-                    # CSS selector matching exactly one visible element.
-                    sig { returns(String) }
-                    attr_accessor :selector
-
-                    sig { params(selector: String).returns(T.attached_class) }
-                    def self.new(
-                      # CSS selector matching exactly one visible element.
-                      selector:
-                    )
-                    end
-
-                    sig { override.returns({ selector: String }) }
-                    def to_hash
-                    end
-                  end
-
-                  class Rectangle < ContextDev::Internal::Type::BaseModel
-                    OrHash =
-                      T.type_alias do
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Rectangle,
-                          ContextDev::Internal::AnyHash
-                        )
-                      end
-
-                    # Height of the capture in pixels.
-                    sig { returns(Integer) }
-                    attr_accessor :height
-
-                    # Width of the capture in pixels.
-                    sig { returns(Integer) }
-                    attr_accessor :width
-
-                    # Left edge of the capture, in pixels from the document origin.
-                    sig { returns(Integer) }
-                    attr_accessor :x
-
-                    # Top edge of the capture, in pixels from the document origin.
-                    sig { returns(Integer) }
-                    attr_accessor :y_
-
-                    # Pixels from the document origin.
-                    sig do
-                      params(
-                        height: Integer,
-                        width: Integer,
-                        x: Integer,
-                        y_: Integer
-                      ).returns(T.attached_class)
-                    end
-                    def self.new(
-                      # Height of the capture in pixels.
-                      height:,
-                      # Width of the capture in pixels.
-                      width:,
-                      # Left edge of the capture, in pixels from the document origin.
-                      x:,
-                      # Top edge of the capture, in pixels from the document origin.
-                      y_:
-                    )
-                    end
-
-                    sig do
-                      override.returns(
-                        {
-                          height: Integer,
-                          width: Integer,
-                          x: Integer,
-                          y_: Integer
-                        }
-                      )
-                    end
-                    def to_hash
-                    end
-                  end
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Area::Variants
-                      ]
-                    )
-                  end
-                  def self.variants
-                  end
-                end
-
-                # Image format for the screenshot.
-                module Format
-                  extend ContextDev::Internal::Type::Enum
-
-                  TaggedSymbol =
-                    T.type_alias do
-                      T.all(
-                        Symbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format
-                      )
-                    end
-                  OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                  PNG =
-                    T.let(
-                      :png,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::TaggedSymbol
-                    )
-                  JPEG =
-                    T.let(
-                      :jpeg,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::TaggedSymbol
-                    )
-                  WEBP =
-                    T.let(
-                      :webp,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::TaggedSymbol
-                    )
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::ScreenshotParams::Format::TaggedSymbol
-                      ]
-                    )
-                  end
-                  def self.values
-                  end
-                end
-              end
-
-              class SharedParams < ContextDev::Internal::Type::BaseModel
-                OrHash =
-                  T.type_alias do
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams,
-                      ContextDev::Internal::AnyHash
-                    )
-                  end
-
-                # Browser steps run in order before capture. Requires a paid plan. Skips the
-                # cache.
-                sig do
-                  returns(
-                    T.nilable(
-                      T::Array[
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor
-                        )
-                      ]
-                    )
-                  )
-                end
-                attr_reader :actions
-
-                sig do
-                  params(
-                    actions:
-                      T::Array[
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor::OrHash
-                        )
-                      ]
-                  ).void
-                end
-                attr_writer :actions
-
-                # Proxy country as a two-letter code, such as `US`. Case-insensitive.
-                sig { returns(T.nilable(String)) }
-                attr_reader :country
-
-                sig { params(country: String).void }
-                attr_writer :country
-
-                # Accept cookie banners before actions and capture.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :dismiss_cookies
-
-                sig { params(dismiss_cookies: T::Boolean).void }
-                attr_writer :dismiss_cookies
-
-                # Close other popups before actions and capture.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :dismiss_popups
-
-                sig { params(dismiss_popups: T::Boolean).void }
-                attr_writer :dismiss_popups
-
-                # Remove elements matching these CSS selectors. Overrides `includeSelectors`.
-                sig { returns(T.nilable(T::Array[String])) }
-                attr_reader :exclude_selectors
-
-                sig { params(exclude_selectors: T::Array[String]).void }
-                attr_writer :exclude_selectors
-
-                # HTTP headers to send to the target site. Requests with headers skip the cache.
-                sig { returns(T.nilable(T::Hash[Symbol, String])) }
-                attr_reader :headers
-
-                sig { params(headers: T::Hash[Symbol, String]).void }
-                attr_writer :headers
-
-                # Which iframe contents to include in HTML and text outputs. Screenshots always
-                # show visible frames. `auto` (default) inlines only iframes that hold page
-                # content, such as same-site documents, framesets, job boards, forms and embedded
-                # documents, and skips ads and widgets. `true` inlines every iframe. `false`
-                # inlines none.
-                sig do
-                  returns(
-                    T.nilable(
-                      T.any(
-                        T::Boolean,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
-                      )
-                    )
-                  )
-                end
-                attr_reader :include_frames
-
-                sig do
-                  params(
-                    include_frames:
-                      T.any(
-                        T::Boolean,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
-                      )
-                  ).void
-                end
-                attr_writer :include_frames
-
-                # Keep only elements matching these CSS selectors.
-                sig { returns(T.nilable(T::Array[String])) }
-                attr_reader :include_selectors
-
-                sig { params(include_selectors: T::Array[String]).void }
-                attr_writer :include_selectors
-
-                # Keep only the main content. Doesn't affect `screenshot`, `bytes`, or `product`.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :main_content_only
-
-                sig { params(main_content_only: T::Boolean).void }
-                attr_writer :main_content_only
-
-                # Document parsing options.
-                sig do
-                  returns(
-                    T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers
-                    )
-                  )
-                end
-                attr_reader :parsers
-
-                sig do
-                  params(
-                    parsers:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::OrHash
-                  ).void
-                end
-                attr_writer :parsers
-
-                # Create or reuse an authenticated browser profile. Requires a paid plan and an
-                # HTTPS target. Profiles persist session state, bypass shared caches, and cannot
-                # be combined with ZDR, custom headers, raw bytes, or prebuilt parsers.
-                sig do
-                  returns(
-                    T.nilable(
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New
-                      )
-                    )
-                  )
-                end
-                attr_reader :profile
-
-                sig do
-                  params(
-                    profile:
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing::OrHash,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New::OrHash
-                      )
-                  ).void
-                end
-                attr_writer :profile
-
-                # Wait for CSS animations to finish before capture. Defaults to `true` when
-                # `screenshot` is requested.
-                sig { returns(T.nilable(T::Boolean)) }
-                attr_reader :settle_animations
-
-                sig { params(settle_animations: T::Boolean).void }
-                attr_writer :settle_animations
-
-                # Emulate a light or dark color scheme.
-                sig do
-                  returns(
-                    T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::OrSymbol
-                    )
-                  )
-                end
-                attr_reader :theme
-
-                sig do
-                  params(
-                    theme:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::OrSymbol
-                  ).void
-                end
-                attr_writer :theme
-
-                # Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
-                # default to 1440 × 900.
-                sig do
-                  returns(
-                    T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Viewport
-                    )
-                  )
-                end
-                attr_reader :viewport
-
-                sig do
-                  params(
-                    viewport:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Viewport::OrHash
-                  ).void
-                end
-                attr_writer :viewport
-
-                # Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
-                # (2000 with frames or XML).
-                sig do
-                  returns(
-                    T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::WaitFor::Variants
-                    )
-                  )
-                end
-                attr_reader :wait_for
-
-                sig do
-                  params(
-                    wait_for:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::WaitFor::Variants
-                  ).void
-                end
-                attr_writer :wait_for
-
-                # Browser and content settings shared by all outputs.
-                sig do
-                  params(
-                    actions:
-                      T::Array[
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait::OrHash,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor::OrHash
-                        )
-                      ],
-                    country: String,
-                    dismiss_cookies: T::Boolean,
-                    dismiss_popups: T::Boolean,
-                    exclude_selectors: T::Array[String],
-                    headers: T::Hash[Symbol, String],
-                    include_frames:
-                      T.any(
-                        T::Boolean,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
-                      ),
-                    include_selectors: T::Array[String],
-                    main_content_only: T::Boolean,
-                    parsers:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::OrHash,
-                    profile:
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing::OrHash,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New::OrHash
-                      ),
-                    settle_animations: T::Boolean,
-                    theme:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::OrSymbol,
-                    viewport:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Viewport::OrHash,
-                    wait_for:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::WaitFor::Variants
-                  ).returns(T.attached_class)
-                end
-                def self.new(
-                  # Browser steps run in order before capture. Requires a paid plan. Skips the
-                  # cache.
-                  actions: nil,
-                  # Proxy country as a two-letter code, such as `US`. Case-insensitive.
-                  country: nil,
-                  # Accept cookie banners before actions and capture.
-                  dismiss_cookies: nil,
-                  # Close other popups before actions and capture.
-                  dismiss_popups: nil,
-                  # Remove elements matching these CSS selectors. Overrides `includeSelectors`.
-                  exclude_selectors: nil,
-                  # HTTP headers to send to the target site. Requests with headers skip the cache.
-                  headers: nil,
-                  # Which iframe contents to include in HTML and text outputs. Screenshots always
-                  # show visible frames. `auto` (default) inlines only iframes that hold page
-                  # content, such as same-site documents, framesets, job boards, forms and embedded
-                  # documents, and skips ads and widgets. `true` inlines every iframe. `false`
-                  # inlines none.
-                  include_frames: nil,
-                  # Keep only elements matching these CSS selectors.
-                  include_selectors: nil,
-                  # Keep only the main content. Doesn't affect `screenshot`, `bytes`, or `product`.
-                  main_content_only: nil,
-                  # Document parsing options.
-                  parsers: nil,
-                  # Create or reuse an authenticated browser profile. Requires a paid plan and an
-                  # HTTPS target. Profiles persist session state, bypass shared caches, and cannot
-                  # be combined with ZDR, custom headers, raw bytes, or prebuilt parsers.
-                  profile: nil,
-                  # Wait for CSS animations to finish before capture. Defaults to `true` when
-                  # `screenshot` is requested.
-                  settle_animations: nil,
-                  # Emulate a light or dark color scheme.
-                  theme: nil,
-                  # Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
-                  # default to 1440 × 900.
-                  viewport: nil,
-                  # Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
-                  # (2000 with frames or XML).
-                  wait_for: nil
-                )
-                end
-
-                sig do
-                  override.returns(
-                    {
-                      actions:
-                        T::Array[
-                          T.any(
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor
-                          )
-                        ],
-                      country: String,
-                      dismiss_cookies: T::Boolean,
-                      dismiss_popups: T::Boolean,
-                      exclude_selectors: T::Array[String],
-                      headers: T::Hash[Symbol, String],
-                      include_frames:
-                        T.any(
-                          T::Boolean,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::OrSymbol
-                        ),
-                      include_selectors: T::Array[String],
-                      main_content_only: T::Boolean,
-                      parsers:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers,
-                      profile:
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New
-                        ),
-                      settle_animations: T::Boolean,
-                      theme:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::OrSymbol,
-                      viewport:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Viewport,
-                      wait_for:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::WaitFor::Variants
-                    }
-                  )
-                end
-                def to_hash
-                end
-
-                module Action
-                  extend ContextDev::Internal::Type::Union
-
-                  Variants =
-                    T.type_alias do
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor
-                      )
-                    end
-
-                  class Perform < ContextDev::Internal::Type::BaseModel
-                    OrHash =
-                      T.type_alias do
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Perform,
-                          ContextDev::Internal::AnyHash
-                        )
-                      end
-
-                    # One browser instruction, such as clicking a button or entering text.
-                    sig { returns(String) }
-                    attr_accessor :action
-
-                    # Use `perform` for a plain-language browser instruction.
-                    sig { returns(Symbol) }
-                    attr_accessor :type
-
-                    sig do
-                      params(action: String, type: Symbol).returns(
-                        T.attached_class
-                      )
-                    end
-                    def self.new(
-                      # One browser instruction, such as clicking a button or entering text.
-                      action:,
-                      # Use `perform` for a plain-language browser instruction.
-                      type: :perform
-                    )
-                    end
-
-                    sig { override.returns({ action: String, type: Symbol }) }
-                    def to_hash
-                    end
-                  end
-
-                  class Scroll < ContextDev::Internal::Type::BaseModel
-                    OrHash =
-                      T.type_alias do
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll,
-                          ContextDev::Internal::AnyHash
-                        )
-                      end
-
-                    # Use `scroll` to move through the page or a container.
-                    sig { returns(Symbol) }
-                    attr_accessor :type
-
-                    # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
-                    sig do
-                      returns(
-                        T.nilable(
-                          T.any(
-                            Integer,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::OrSymbol
-                          )
-                        )
-                      )
-                    end
-                    attr_reader :amount
-
-                    sig do
-                      params(
-                        amount:
-                          T.any(
-                            Integer,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::OrSymbol
-                          )
-                      ).void
-                    end
-                    attr_writer :amount
-
-                    # Direction to scroll.
-                    sig do
-                      returns(
-                        T.nilable(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::OrSymbol
-                        )
-                      )
-                    end
-                    attr_reader :direction
-
-                    sig do
-                      params(
-                        direction:
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::OrSymbol
-                      ).void
-                    end
-                    attr_writer :direction
-
-                    # Maximum number of scroll steps for this action.
-                    sig { returns(T.nilable(Integer)) }
-                    attr_reader :max_scrolls
-
-                    sig { params(max_scrolls: Integer).void }
-                    attr_writer :max_scrolls
-
-                    # Scroll this container. Omit to scroll the page.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :selector
-
-                    sig { params(selector: String).void }
-                    attr_writer :selector
-
-                    sig do
-                      params(
-                        amount:
-                          T.any(
-                            Integer,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::OrSymbol
-                          ),
-                        direction:
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::OrSymbol,
-                        max_scrolls: Integer,
-                        selector: String,
-                        type: Symbol
-                      ).returns(T.attached_class)
-                    end
-                    def self.new(
-                      # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
-                      amount: nil,
-                      # Direction to scroll.
-                      direction: nil,
-                      # Maximum number of scroll steps for this action.
-                      max_scrolls: nil,
-                      # Scroll this container. Omit to scroll the page.
-                      selector: nil,
-                      # Use `scroll` to move through the page or a container.
-                      type: :scroll
-                    )
-                    end
-
-                    sig do
-                      override.returns(
-                        {
-                          type: Symbol,
-                          amount:
-                            T.any(
-                              Integer,
-                              ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::OrSymbol
-                            ),
-                          direction:
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::OrSymbol,
-                          max_scrolls: Integer,
-                          selector: String
-                        }
-                      )
-                    end
-                    def to_hash
-                    end
-
-                    # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
-                    module Amount
-                      extend ContextDev::Internal::Type::Union
-
-                      Variants =
-                        T.type_alias do
-                          T.any(
-                            Integer,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::TaggedSymbol
-                          )
-                        end
-
-                      sig do
-                        override.returns(
-                          T::Array[
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::Variants
-                          ]
-                        )
-                      end
-                      def self.variants
-                      end
-
-                      TaggedSymbol =
-                        T.type_alias do
-                          T.all(
-                            Symbol,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount
-                          )
-                        end
-                      OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                      VIEWPORT =
-                        T.let(
-                          :viewport,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::TaggedSymbol
-                        )
-                      MAX =
-                        T.let(
-                          :max,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Amount::TaggedSymbol
-                        )
-                    end
-
-                    # Direction to scroll.
-                    module Direction
-                      extend ContextDev::Internal::Type::Enum
-
-                      TaggedSymbol =
-                        T.type_alias do
-                          T.all(
-                            Symbol,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction
-                          )
-                        end
-                      OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                      DOWN =
-                        T.let(
-                          :down,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::TaggedSymbol
-                        )
-                      UP =
-                        T.let(
-                          :up,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::TaggedSymbol
-                        )
-                      LEFT =
-                        T.let(
-                          :left,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::TaggedSymbol
-                        )
-                      RIGHT =
-                        T.let(
-                          :right,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::TaggedSymbol
-                        )
-
-                      sig do
-                        override.returns(
-                          T::Array[
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Scroll::Direction::TaggedSymbol
-                          ]
-                        )
-                      end
-                      def self.values
-                      end
-                    end
-                  end
-
-                  class Wait < ContextDev::Internal::Type::BaseModel
-                    OrHash =
-                      T.type_alias do
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Wait,
-                          ContextDev::Internal::AnyHash
-                        )
-                      end
-
-                    # Time to pause in milliseconds before the next action.
-                    sig { returns(Integer) }
-                    attr_accessor :milliseconds
-
-                    # Use `wait` to pause for a fixed duration.
-                    sig { returns(Symbol) }
-                    attr_accessor :type
-
-                    sig do
-                      params(milliseconds: Integer, type: Symbol).returns(
-                        T.attached_class
-                      )
-                    end
-                    def self.new(
-                      # Time to pause in milliseconds before the next action.
-                      milliseconds:,
-                      # Use `wait` to pause for a fixed duration.
-                      type: :wait
-                    )
-                    end
-
-                    sig do
-                      override.returns({ milliseconds: Integer, type: Symbol })
-                    end
-                    def to_hash
-                    end
-                  end
-
-                  class WaitFor < ContextDev::Internal::Type::BaseModel
-                    OrHash =
-                      T.type_alias do
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::WaitFor,
-                          ContextDev::Internal::AnyHash
-                        )
-                      end
-
-                    # CSS selector to wait for before continuing.
-                    sig { returns(String) }
-                    attr_accessor :selector
-
-                    # Use `waitFor` to wait for a matching element.
-                    sig { returns(Symbol) }
-                    attr_accessor :type
-
-                    sig do
-                      params(selector: String, type: Symbol).returns(
-                        T.attached_class
-                      )
-                    end
-                    def self.new(
-                      # CSS selector to wait for before continuing.
-                      selector:,
-                      # Use `waitFor` to wait for a matching element.
-                      type: :waitFor
-                    )
-                    end
-
-                    sig { override.returns({ selector: String, type: Symbol }) }
-                    def to_hash
-                    end
-                  end
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Action::Variants
-                      ]
-                    )
-                  end
-                  def self.variants
-                  end
-                end
-
-                # Which iframe contents to include in HTML and text outputs. Screenshots always
-                # show visible frames. `auto` (default) inlines only iframes that hold page
-                # content, such as same-site documents, framesets, job boards, forms and embedded
-                # documents, and skips ads and widgets. `true` inlines every iframe. `false`
-                # inlines none.
-                module IncludeFrames
-                  extend ContextDev::Internal::Type::Union
-
-                  Variants =
-                    T.type_alias do
-                      T.any(
-                        T::Boolean,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::TaggedSymbol
-                      )
-                    end
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::Variants
-                      ]
-                    )
-                  end
-                  def self.variants
-                  end
-
-                  TaggedSymbol =
-                    T.type_alias do
-                      T.all(
-                        Symbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames
-                      )
-                    end
-                  OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                  AUTO =
-                    T.let(
-                      :auto,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::IncludeFrames::TaggedSymbol
-                    )
-                end
-
-                class Parsers < ContextDev::Internal::Type::BaseModel
-                  OrHash =
-                    T.type_alias do
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers,
-                        ContextDev::Internal::AnyHash
-                      )
-                    end
-
-                  # PDF page range and OCR.
-                  sig do
-                    returns(
-                      T.nilable(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf
-                      )
-                    )
-                  end
-                  attr_reader :pdf
-
-                  sig do
-                    params(
-                      pdf:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::OrHash
-                    ).void
-                  end
-                  attr_writer :pdf
-
-                  # Document parsing options.
-                  sig do
-                    params(
-                      pdf:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::OrHash
-                    ).returns(T.attached_class)
-                  end
-                  def self.new(
-                    # PDF page range and OCR.
-                    pdf: nil
-                  )
-                  end
-
-                  sig do
-                    override.returns(
-                      {
-                        pdf:
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf
-                      }
-                    )
-                  end
-                  def to_hash
-                  end
-
-                  class Pdf < ContextDev::Internal::Type::BaseModel
-                    OrHash =
-                      T.type_alias do
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf,
-                          ContextDev::Internal::AnyHash
-                        )
-                      end
-
-                    # Last page to parse. Must be at least `startPage`.
-                    sig { returns(T.nilable(Integer)) }
-                    attr_reader :end_page
-
-                    sig { params(end_page: Integer).void }
-                    attr_writer :end_page
-
-                    # Start each page in the Markdown with a `<!-- page N -->` line using its original
-                    # 1-based page number; these responses are never served from cache.
-                    sig { returns(T.nilable(T::Boolean)) }
-                    attr_reader :include_numbered_pages
-
-                    sig { params(include_numbered_pages: T::Boolean).void }
-                    attr_writer :include_numbered_pages
-
-                    # Set `auto` to read scanned pages with OCR.
-                    sig do
-                      returns(
-                        T.nilable(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::OrSymbol
-                        )
-                      )
-                    end
-                    attr_reader :ocr
-
-                    sig do
-                      params(
-                        ocr:
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::OrSymbol
-                      ).void
-                    end
-                    attr_writer :ocr
-
-                    # First page to parse, starting at 1.
-                    sig { returns(T.nilable(Integer)) }
-                    attr_reader :start_page
-
-                    sig { params(start_page: Integer).void }
-                    attr_writer :start_page
-
-                    # PDF page range and OCR.
-                    sig do
-                      params(
-                        end_page: Integer,
-                        include_numbered_pages: T::Boolean,
-                        ocr:
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::OrSymbol,
-                        start_page: Integer
-                      ).returns(T.attached_class)
-                    end
-                    def self.new(
-                      # Last page to parse. Must be at least `startPage`.
-                      end_page: nil,
-                      # Start each page in the Markdown with a `<!-- page N -->` line using its original
-                      # 1-based page number; these responses are never served from cache.
-                      include_numbered_pages: nil,
-                      # Set `auto` to read scanned pages with OCR.
-                      ocr: nil,
-                      # First page to parse, starting at 1.
-                      start_page: nil
-                    )
-                    end
-
-                    sig do
-                      override.returns(
-                        {
-                          end_page: Integer,
-                          include_numbered_pages: T::Boolean,
-                          ocr:
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::OrSymbol,
-                          start_page: Integer
-                        }
-                      )
-                    end
-                    def to_hash
-                    end
-
-                    # Set `auto` to read scanned pages with OCR.
-                    module Ocr
-                      extend ContextDev::Internal::Type::Enum
-
-                      TaggedSymbol =
-                        T.type_alias do
-                          T.all(
-                            Symbol,
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr
-                          )
-                        end
-                      OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                      OFF =
-                        T.let(
-                          :off,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
-                        )
-                      AUTO =
-                        T.let(
-                          :auto,
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
-                        )
-
-                      sig do
-                        override.returns(
-                          T::Array[
-                            ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Parsers::Pdf::Ocr::TaggedSymbol
-                          ]
-                        )
-                      end
-                      def self.values
-                      end
-                    end
-                  end
-                end
-
-                # Create or reuse an authenticated browser profile. Requires a paid plan and an
-                # HTTPS target. Profiles persist session state, bypass shared caches, and cannot
-                # be combined with ZDR, custom headers, raw bytes, or prebuilt parsers.
-                module Profile
-                  extend ContextDev::Internal::Type::Union
-
-                  Variants =
-                    T.type_alias do
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New
-                      )
-                    end
-
-                  class Existing < ContextDev::Internal::Type::BaseModel
-                    OrHash =
-                      T.type_alias do
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Existing,
-                          ContextDev::Internal::AnyHash
-                        )
-                      end
-
-                    # The ID returned in profile.id by an earlier scrape.
-                    sig { returns(String) }
-                    attr_accessor :profile_id
-
-                    # Reuse a saved browser profile.
-                    sig { returns(Symbol) }
-                    attr_accessor :type
-
-                    sig do
-                      params(profile_id: String, type: Symbol).returns(
-                        T.attached_class
-                      )
-                    end
-                    def self.new(
-                      # The ID returned in profile.id by an earlier scrape.
-                      profile_id:,
-                      # Reuse a saved browser profile.
-                      type: :existing
-                    )
-                    end
-
-                    sig do
-                      override.returns({ profile_id: String, type: Symbol })
-                    end
-                    def to_hash
-                    end
-                  end
-
-                  class New < ContextDev::Internal::Type::BaseModel
-                    OrHash =
-                      T.type_alias do
-                        T.any(
-                          ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::New,
-                          ContextDev::Internal::AnyHash
-                        )
-                      end
-
-                    # Username or email for the target website.
-                    sig { returns(String) }
-                    attr_accessor :identifier
-
-                    # Sign in and create a browser profile.
-                    sig { returns(Symbol) }
-                    attr_accessor :type
-
-                    # Optional label shown when listing profiles with `GET /org/browser/profiles`.
-                    sig { returns(T.nilable(String)) }
-                    attr_reader :description
-
-                    sig { params(description: String).void }
-                    attr_writer :description
-
-                    # Password used to sign in. It is never stored in the profile.
-                    sig { returns(String) }
-                    attr_accessor :password
-
-                    sig do
-                      params(
-                        identifier: String,
-                        password: String,
-                        description: String,
-                        type: Symbol
-                      ).returns(T.attached_class)
-                    end
-                    def self.new(
-                      # Username or email for the target website.
-                      identifier:,
-                      # Password used to sign in. It is never stored in the profile.
-                      password:,
-                      # Optional label shown when listing profiles with `GET /org/browser/profiles`.
-                      description: nil,
-                      # Sign in and create a browser profile.
-                      type: :new
-                    )
-                    end
-
-                    sig do
-                      override.returns(
-                        {
-                          identifier: String,
-                          password: String,
-                          type: Symbol,
-                          description: String
-                        }
-                      )
-                    end
-                    def to_hash
-                    end
-                  end
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Profile::Variants
-                      ]
-                    )
-                  end
-                  def self.variants
-                  end
-                end
-
-                # Emulate a light or dark color scheme.
-                module Theme
-                  extend ContextDev::Internal::Type::Enum
-
-                  TaggedSymbol =
-                    T.type_alias do
-                      T.all(
-                        Symbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme
-                      )
-                    end
-                  OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                  LIGHT =
-                    T.let(
-                      :light,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::TaggedSymbol
-                    )
-                  DARK =
-                    T.let(
-                      :dark,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::TaggedSymbol
-                    )
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Theme::TaggedSymbol
-                      ]
-                    )
-                  end
-                  def self.values
-                  end
-                end
-
-                class Viewport < ContextDev::Internal::Type::BaseModel
-                  OrHash =
-                    T.type_alias do
-                      T.any(
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::Viewport,
-                        ContextDev::Internal::AnyHash
-                      )
-                    end
-
-                  # Browser viewport height in pixels.
-                  sig { returns(T.nilable(Integer)) }
-                  attr_reader :height
-
-                  sig { params(height: Integer).void }
-                  attr_writer :height
-
-                  # Browser viewport width in pixels.
-                  sig { returns(T.nilable(Integer)) }
-                  attr_reader :width
-
-                  sig { params(width: Integer).void }
-                  attr_writer :width
-
-                  # Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
-                  # default to 1440 × 900.
-                  sig do
-                    params(height: Integer, width: Integer).returns(
-                      T.attached_class
-                    )
-                  end
-                  def self.new(
-                    # Browser viewport height in pixels.
-                    height: nil,
-                    # Browser viewport width in pixels.
-                    width: nil
-                  )
-                  end
-
-                  sig { override.returns({ height: Integer, width: Integer }) }
-                  def to_hash
-                  end
-                end
-
-                # Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
-                # (2000 with frames or XML).
-                module WaitFor
-                  extend ContextDev::Internal::Type::Union
-
-                  Variants = T.type_alias { T.any(Integer, String) }
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::SharedParams::WaitFor::Variants
-                      ]
-                    )
-                  end
-                  def self.variants
-                  end
-                end
-              end
-
-              class TimeoutOpts < ContextDev::Internal::Type::BaseModel
-                OrHash =
-                  T.type_alias do
-                    T.any(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts,
-                      ContextDev::Internal::AnyHash
-                    )
-                  end
-
-                # Deadline in milliseconds.
-                sig { returns(Integer) }
-                attr_accessor :milliseconds
-
-                # "fail" returns 408 at the deadline. "return-partial" returns available results;
-                # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-                # On POST /web/scrape, an output that is not ready in time fails with error_code
-                # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-                # only when the whole request cannot respond by the deadline.
-                sig do
-                  returns(
-                    T.nilable(
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::OrSymbol
-                    )
-                  )
-                end
-                attr_reader :behavior
-
-                sig do
-                  params(
-                    behavior:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::OrSymbol
-                  ).void
-                end
-                attr_writer :behavior
-
-                # Deadline for each page, using the same behavior and defaults as POST
-                # /web/scrape.
-                sig do
-                  params(
-                    milliseconds: Integer,
-                    behavior:
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::OrSymbol
-                  ).returns(T.attached_class)
-                end
-                def self.new(
-                  # Deadline in milliseconds.
-                  milliseconds:,
-                  # "fail" returns 408 at the deadline. "return-partial" returns available results;
-                  # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-                  # On POST /web/scrape, an output that is not ready in time fails with error_code
-                  # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-                  # only when the whole request cannot respond by the deadline.
-                  behavior: nil
-                )
-                end
-
-                sig do
-                  override.returns(
-                    {
-                      milliseconds: Integer,
-                      behavior:
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::OrSymbol
-                    }
-                  )
-                end
-                def to_hash
-                end
-
-                # "fail" returns 408 at the deadline. "return-partial" returns available results;
-                # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-                # On POST /web/scrape, an output that is not ready in time fails with error_code
-                # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-                # only when the whole request cannot respond by the deadline.
-                module Behavior
-                  extend ContextDev::Internal::Type::Enum
-
-                  TaggedSymbol =
-                    T.type_alias do
-                      T.all(
-                        Symbol,
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior
-                      )
-                    end
-                  OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                  FAIL =
-                    T.let(
-                      :fail,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::TaggedSymbol
-                    )
-                  RETURN_PARTIAL =
-                    T.let(
-                      :"return-partial",
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::TaggedSymbol
-                    )
-
-                  sig do
-                    override.returns(
-                      T::Array[
-                        ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::TimeoutOpts::Behavior::TaggedSymbol
-                      ]
-                    )
-                  end
-                  def self.values
-                  end
-                end
-              end
-
-              # Batches persist their results. Only disabled is supported; enabled returns
-              # ZDR_NOT_SUPPORTED.
-              module Zdr
-                extend ContextDev::Internal::Type::Enum
-
-                TaggedSymbol =
-                  T.type_alias do
-                    T.all(
-                      Symbol,
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr
-                    )
-                  end
-                OrSymbol = T.type_alias { T.any(Symbol, String) }
-
-                DISABLED =
-                  T.let(
-                    :disabled,
-                    ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::TaggedSymbol
-                  )
-
-                sig do
-                  override.returns(
-                    T::Array[
-                      ContextDev::BatchSubmitParams::Input::Crawl::Data::BatchUnifiedCrawlData::Zdr::TaggedSymbol
-                    ]
-                  )
-                end
-                def self.values
                 end
               end
             end
@@ -17765,30 +17983,30 @@ module ContextDev
             )
           end
 
-        # Public HTTP(S) URL that receives batch completion, failure, or cancellation
-        # events.
+        # Public HTTP or HTTPS URL that receives the `batch.completed`, `batch.failed`, or
+        # `batch.cancelled` event.
         sig { returns(String) }
         attr_accessor :url
 
-        # Webhook retry settings. Use {} for the default schedule.
+        # Automatic retry settings. Pass `{}` for the default schedule.
         sig { returns(T.nilable(ContextDev::RetryConfig)) }
         attr_reader :retry_
 
         sig { params(retry_: ContextDev::RetryConfig::OrHash).void }
         attr_writer :retry_
 
-        # Where to send the batch's final-status event. Omit `retry` for one attempt; `{}`
-        # uses the default retry schedule.
+        # Webhook to notify when the batch finishes. Omit `retry` for a single attempt, or
+        # pass `retry: {}` for the default retry schedule.
         sig do
           params(url: String, retry_: ContextDev::RetryConfig::OrHash).returns(
             T.attached_class
           )
         end
         def self.new(
-          # Public HTTP(S) URL that receives batch completion, failure, or cancellation
-          # events.
+          # Public HTTP or HTTPS URL that receives the `batch.completed`, `batch.failed`, or
+          # `batch.cancelled` event.
           url:,
-          # Webhook retry settings. Use {} for the default schedule.
+          # Automatic retry settings. Pass `{}` for the default schedule.
           retry_: nil
         )
         end

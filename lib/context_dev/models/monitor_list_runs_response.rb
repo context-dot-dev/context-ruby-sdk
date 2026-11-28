@@ -5,17 +5,20 @@ module ContextDev
     # @see ContextDev::Resources::Monitors#list_runs
     class MonitorListRunsResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute data
+      #   Runs on this page.
       #
       #   @return [Array<ContextDev::Models::MonitorListRunsResponse::Data>]
       required :data,
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorListRunsResponse::Data] }
 
       # @!attribute has_more
+      #   Whether more results are available after this page.
       #
       #   @return [Boolean]
       required :has_more, ContextDev::Internal::Type::Boolean
 
       # @!attribute next_cursor
+      #   Pass as `cursor` to fetch the next page. `null` on the last page.
       #
       #   @return [String, nil]
       required :next_cursor, String, nil?: true
@@ -37,11 +40,11 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorListRunsResponse} for more details.
       #
-      #   @param data [Array<ContextDev::Models::MonitorListRunsResponse::Data>]
+      #   @param data [Array<ContextDev::Models::MonitorListRunsResponse::Data>] Runs on this page.
       #
-      #   @param has_more [Boolean]
+      #   @param has_more [Boolean] Whether more results are available after this page.
       #
-      #   @param next_cursor [String, nil]
+      #   @param next_cursor [String, nil] Pass as `cursor` to fetch the next page. `null` on the last page.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
@@ -49,63 +52,70 @@ module ContextDev
 
       class Data < ContextDev::Internal::Type::BaseModel
         # @!attribute id
+        #   Unique ID of the run.
         #
         #   @return [String]
         required :id, String
 
         # @!attribute baseline_created
-        #   True when this run established the monitor's initial baseline; baseline runs
-        #   perform no change detection.
+        #   `true` when this run captured the monitor's baseline instead of checking for
+        #   changes.
         #
         #   @return [Boolean]
         required :baseline_created, ContextDev::Internal::Type::Boolean
 
         # @!attribute change_detected
+        #   Whether the run detected a change.
         #
         #   @return [Boolean]
         required :change_detected, ContextDev::Internal::Type::Boolean
 
         # @!attribute change_detection_type
+        #   Change detection type the monitor uses.
         #
         #   @return [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::ChangeDetectionType]
         required :change_detection_type,
                  enum: -> { ContextDev::Models::MonitorListRunsResponse::Data::ChangeDetectionType }
 
         # @!attribute credits_charged
-        #   Credits charged for this run (0 for skipped/failed runs).
+        #   Credits charged for this run. `0` for skipped and failed runs.
         #
         #   @return [Integer]
         required :credits_charged, Integer
 
         # @!attribute monitor_id
+        #   ID of the monitor this run belongs to.
         #
         #   @return [String]
         required :monitor_id, String
 
         # @!attribute run_type
-        #   A baseline run follows creation or a target or detection change.
+        #   `baseline` runs capture a fresh baseline after creation or a target or detection
+        #   change. `scheduled` runs, including on-demand ones, check for changes.
         #
         #   @return [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::RunType]
         required :run_type, enum: -> { ContextDev::Models::MonitorListRunsResponse::Data::RunType }
 
         # @!attribute status
-        #   Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-        #   (insufficient credits, monitor paused, or superseded by a concurrent run).
+        #   Run status. `skipped` runs never executed; `skip_reason` says why.
         #
         #   @return [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::Status]
         required :status, enum: -> { ContextDev::Models::MonitorListRunsResponse::Data::Status }
 
         # @!attribute target_type
+        #   Type of target the monitor watches.
         #
         #   @return [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::TargetType]
         required :target_type, enum: -> { ContextDev::Models::MonitorListRunsResponse::Data::TargetType }
 
         # @!attribute change_id
+        #   ID of the change this run detected. `null` when it found none.
         #
         #   @return [String, nil]
         optional :change_id, String, nil?: true
 
         # @!attribute completed_at
+        #   When the run ended. `null` until it ends.
         #
         #   @return [Time, nil]
         optional :completed_at, Time, nil?: true
@@ -116,7 +126,8 @@ module ContextDev
         optional :error, -> { ContextDev::Models::MonitorListRunsResponse::Data::Error }, nil?: true
 
         # @!attribute skip_reason
-        #   Why a skipped run never executed; null unless status is `skipped`.
+        #   Why the run was skipped; `superseded` means a concurrent run took its place or
+        #   the monitor was deleted. `null` unless `status` is `skipped`.
         #
         #   @return [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::SkipReason, nil]
         optional :skip_reason,
@@ -124,14 +135,14 @@ module ContextDev
                  nil?: true
 
         # @!attribute started_at
+        #   When the run started. `null` until it starts.
         #
         #   @return [Time, nil]
         optional :started_at, Time, nil?: true
 
         # @!attribute webhook_deliveries
-        #   All webhook deliveries attempted by this run — one per subscribed event that
-        #   fired. Omitted when no webhook was attempted, including runs created before
-        #   event selection was added.
+        #   Webhook deliveries for this run, one per subscribed event that fired. Omitted
+        #   when no delivery was attempted.
         #
         #   @return [Array<ContextDev::Models::WebhookDelivery>, nil]
         optional :webhook_deliveries, -> { ContextDev::Internal::Type::ArrayOf[ContextDev::WebhookDelivery] }
@@ -145,7 +156,7 @@ module ContextDev
         optional :webhook_delivery, -> { ContextDev::WebhookDelivery }
 
         # @!attribute webhook_delivery_ids
-        #   Webhook delivery IDs for this run.
+        #   IDs of the webhook deliveries sent for this run.
         #
         #   @return [Array<String>, nil]
         optional :webhook_delivery_ids, ContextDev::Internal::Type::ArrayOf[String]
@@ -154,40 +165,42 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::MonitorListRunsResponse::Data} for more details.
         #
-        #   @param id [String]
+        #   @param id [String] Unique ID of the run.
         #
-        #   @param baseline_created [Boolean] True when this run established the monitor's initial baseline; baseline runs per
+        #   @param baseline_created [Boolean] `true` when this run captured the monitor's baseline instead of checking for cha
         #
-        #   @param change_detected [Boolean]
+        #   @param change_detected [Boolean] Whether the run detected a change.
         #
-        #   @param change_detection_type [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::ChangeDetectionType]
+        #   @param change_detection_type [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::ChangeDetectionType] Change detection type the monitor uses.
         #
-        #   @param credits_charged [Integer] Credits charged for this run (0 for skipped/failed runs).
+        #   @param credits_charged [Integer] Credits charged for this run. `0` for skipped and failed runs.
         #
-        #   @param monitor_id [String]
+        #   @param monitor_id [String] ID of the monitor this run belongs to.
         #
-        #   @param run_type [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::RunType] A baseline run follows creation or a target or detection change.
+        #   @param run_type [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::RunType] `baseline` runs capture a fresh baseline after creation or a target or detection
         #
-        #   @param status [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::Status] Lifecycle status of a run. `skipped` runs never executed — see `skip_reason` (in
+        #   @param status [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::Status] Run status. `skipped` runs never executed; `skip_reason` says why.
         #
-        #   @param target_type [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::TargetType]
+        #   @param target_type [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::TargetType] Type of target the monitor watches.
         #
-        #   @param change_id [String, nil]
+        #   @param change_id [String, nil] ID of the change this run detected. `null` when it found none.
         #
-        #   @param completed_at [Time, nil]
+        #   @param completed_at [Time, nil] When the run ended. `null` until it ends.
         #
         #   @param error [ContextDev::Models::MonitorListRunsResponse::Data::Error, nil]
         #
-        #   @param skip_reason [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::SkipReason, nil] Why a skipped run never executed; null unless status is `skipped`.
+        #   @param skip_reason [Symbol, ContextDev::Models::MonitorListRunsResponse::Data::SkipReason, nil] Why the run was skipped; `superseded` means a concurrent run took its place or t
         #
-        #   @param started_at [Time, nil]
+        #   @param started_at [Time, nil] When the run started. `null` until it starts.
         #
-        #   @param webhook_deliveries [Array<ContextDev::Models::WebhookDelivery>] All webhook deliveries attempted by this run — one per subscribed event that fir
+        #   @param webhook_deliveries [Array<ContextDev::Models::WebhookDelivery>] Webhook deliveries for this run, one per subscribed event that fired. Omitted wh
         #
         #   @param webhook_delivery [ContextDev::Models::WebhookDelivery] Deprecated. Use `webhook_deliveries` for all attempts.
         #
-        #   @param webhook_delivery_ids [Array<String>] Webhook delivery IDs for this run.
+        #   @param webhook_delivery_ids [Array<String>] IDs of the webhook deliveries sent for this run.
 
+        # Change detection type the monitor uses.
+        #
         # @see ContextDev::Models::MonitorListRunsResponse::Data#change_detection_type
         module ChangeDetectionType
           extend ContextDev::Internal::Type::Enum
@@ -199,7 +212,8 @@ module ContextDev
           #   @return [Array<Symbol>]
         end
 
-        # A baseline run follows creation or a target or detection change.
+        # `baseline` runs capture a fresh baseline after creation or a target or detection
+        # change. `scheduled` runs, including on-demand ones, check for changes.
         #
         # @see ContextDev::Models::MonitorListRunsResponse::Data#run_type
         module RunType
@@ -212,8 +226,7 @@ module ContextDev
           #   @return [Array<Symbol>]
         end
 
-        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-        # (insufficient credits, monitor paused, or superseded by a concurrent run).
+        # Run status. `skipped` runs never executed; `skip_reason` says why.
         #
         # @see ContextDev::Models::MonitorListRunsResponse::Data#status
         module Status
@@ -229,6 +242,8 @@ module ContextDev
           #   @return [Array<Symbol>]
         end
 
+        # Type of target the monitor watches.
+        #
         # @see ContextDev::Models::MonitorListRunsResponse::Data#target_type
         module TargetType
           extend ContextDev::Internal::Type::Enum
@@ -245,21 +260,25 @@ module ContextDev
         # @see ContextDev::Models::MonitorListRunsResponse::Data#error
         class Error < ContextDev::Internal::Type::BaseModel
           # @!attribute code
+          #   Machine-readable error code, such as `fetch_failed`.
           #
           #   @return [String]
           required :code, String
 
           # @!attribute message
+          #   Human-readable explanation of the error.
           #
           #   @return [String]
           required :message, String
 
           # @!method initialize(code:, message:)
-          #   @param code [String]
-          #   @param message [String]
+          #   @param code [String] Machine-readable error code, such as `fetch_failed`.
+          #
+          #   @param message [String] Human-readable explanation of the error.
         end
 
-        # Why a skipped run never executed; null unless status is `skipped`.
+        # Why the run was skipped; `superseded` means a concurrent run took its place or
+        # the monitor was deleted. `null` unless `status` is `skipped`.
         #
         # @see ContextDev::Models::MonitorListRunsResponse::Data#skip_reason
         module SkipReason
@@ -283,7 +302,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -293,7 +312,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

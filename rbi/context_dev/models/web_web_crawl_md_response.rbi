@@ -11,7 +11,7 @@ module ContextDev
           )
         end
 
-      # Whether this response came from cache.
+      # Cache status of this response.
       sig { returns(ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata) }
       attr_reader :cache_metadata
 
@@ -59,9 +59,9 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # True when timeoutOpts.behavior=return-partial returned the usable results
-      # collected before the deadline. Partial collections are not cached as complete
-      # results.
+      # `true` when the deadline passed with `timeoutOpts.behavior` set to
+      # `return-partial`. Only results finished in time are included. Partial results
+      # are not cached.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :partial
 
@@ -82,7 +82,7 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Whether this response came from cache.
+        # Cache status of this response.
         cache_metadata:,
         metadata:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
@@ -91,9 +91,9 @@ module ContextDev
         results:,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
-        # True when timeoutOpts.behavior=return-partial returned the usable results
-        # collected before the deadline. Partial collections are not cached as complete
-        # results.
+        # `true` when the deadline passed with `timeoutOpts.behavior` set to
+        # `return-partial`. Only results finished in time are included. Partial results
+        # are not cached.
         partial: nil
       )
       end
@@ -125,12 +125,12 @@ module ContextDev
             )
           end
 
-        # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         sig { returns(Integer) }
         attr_accessor :age_ms
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         sig do
           returns(
             ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata::Status::TaggedSymbol
@@ -138,7 +138,7 @@ module ContextDev
         end
         attr_accessor :status
 
-        # Whether this response came from cache.
+        # Cache status of this response.
         sig do
           params(
             age_ms: Integer,
@@ -147,10 +147,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+          # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
           age_ms:,
-          # Whether the response was served from cache, required fresh work, or honored
-          # zero-data-retention cache bypass.
+          # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+          # retention bypassed the cache.
           status:
         )
         end
@@ -167,8 +167,8 @@ module ContextDev
         def to_hash
         end
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         module Status
           extend ContextDev::Internal::Type::Enum
 
@@ -218,24 +218,24 @@ module ContextDev
             )
           end
 
-        # Maximum crawl depth reached during the crawl
+        # Deepest link depth reached.
         sig { returns(Integer) }
         attr_accessor :max_crawl_depth
 
-        # Number of pages that failed to crawl
+        # Number of pages that failed.
         sig { returns(Integer) }
         attr_accessor :num_failed
 
-        # Number of URLs skipped (PDFs when pdf.shouldParse=false, URLs not matching
-        # urlRegex, or URLs matching excludeUrlRegex)
+        # Number of URLs skipped: PDFs when `pdf.shouldParse` is `false`, URLs that do not
+        # match `urlRegex`, and URLs that match `excludeUrlRegex`.
         sig { returns(Integer) }
         attr_accessor :num_skipped
 
-        # Number of pages successfully crawled
+        # Number of pages crawled successfully.
         sig { returns(Integer) }
         attr_accessor :num_succeeded
 
-        # Total number of URLs crawled
+        # Number of URLs crawled.
         sig { returns(Integer) }
         attr_accessor :num_urls
 
@@ -249,16 +249,16 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Maximum crawl depth reached during the crawl
+          # Deepest link depth reached.
           max_crawl_depth:,
-          # Number of pages that failed to crawl
+          # Number of pages that failed.
           num_failed:,
-          # Number of URLs skipped (PDFs when pdf.shouldParse=false, URLs not matching
-          # urlRegex, or URLs matching excludeUrlRegex)
+          # Number of URLs skipped: PDFs when `pdf.shouldParse` is `false`, URLs that do not
+          # match `urlRegex`, and URLs that match `excludeUrlRegex`.
           num_skipped:,
-          # Number of pages successfully crawled
+          # Number of pages crawled successfully.
           num_succeeded:,
-          # Total number of URLs crawled
+          # Number of URLs crawled.
           num_urls:
         )
         end
@@ -287,7 +287,7 @@ module ContextDev
             )
           end
 
-        # Extracted page content as Markdown (empty string on failure)
+        # Page content as Markdown. Empty string when the page failed.
         sig { returns(String) }
         attr_accessor :markdown
 
@@ -312,7 +312,7 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Extracted page content as Markdown (empty string on failure)
+          # Page content as Markdown. Empty string when the page failed.
           markdown:,
           metadata:
         )
@@ -339,36 +339,35 @@ module ContextDev
               )
             end
 
-          # Depth relative to the start URL. 0 = start URL, 1 = one link away.
+          # Link depth from the start URL. `0` is the start URL, `1` is one link away.
           sig { returns(Integer) }
           attr_accessor :crawl_depth
 
-          # Final URL scraped after redirects or scraper fallback, when known. Falls back to
-          # sourceUrl when unavailable.
+          # URL that was scraped, after redirects. Same as `sourceUrl` when unknown.
           sig { returns(String) }
           attr_accessor :final_url
 
-          # Original URL requested by the caller.
+          # URL that was requested, before redirects.
           sig { returns(String) }
           attr_accessor :source_url
 
-          # HTTP status code of the response (0 when the page could not be retrieved)
+          # HTTP status code of the page. `0` when the page could not be retrieved.
           sig { returns(Integer) }
           attr_accessor :status_code
 
-          # true if the page was fetched and parsed successfully
+          # Whether the page was fetched and parsed.
           sig { returns(T::Boolean) }
           attr_accessor :success
 
-          # Best page title extracted from the page (empty string if unavailable).
+          # Page title. Empty string when unavailable.
           sig { returns(String) }
           attr_accessor :title
 
-          # The crawl URL fetched for this page.
+          # URL fetched for this page.
           sig { returns(String) }
           attr_accessor :url
 
-          # Additional non-social meta tags not promoted to top-level metadata fields.
+          # Other non-social meta tags that don't have their own field.
           sig do
             returns(
               T.nilable(
@@ -392,7 +391,7 @@ module ContextDev
           end
           attr_writer :additional_meta
 
-          # Resolved alternate links from link rel=alternate tags.
+          # Alternate links from `link rel="alternate"` tags, as absolute URLs.
           sig do
             returns(
               T.nilable(
@@ -414,21 +413,21 @@ module ContextDev
           end
           attr_writer :alternates
 
-          # Author metadata, when present.
+          # Author, when present.
           sig { returns(T.nilable(String)) }
           attr_reader :author
 
           sig { params(author: String).void }
           attr_writer :author
 
-          # Resolved canonical URL, when present.
+          # Absolute canonical URL, when present.
           sig { returns(T.nilable(String)) }
           attr_reader :canonical_url
 
           sig { params(canonical_url: String).void }
           attr_writer :canonical_url
 
-          # Best description extracted from standard, Open Graph, or Twitter metadata.
+          # Best available description, from standard, Open Graph, or Twitter meta tags.
           sig { returns(T.nilable(String)) }
           attr_reader :description
 
@@ -445,15 +444,15 @@ module ContextDev
           sig { params(error_code: String).void }
           attr_writer :error_code
 
-          # Resolved favicon URL, when present.
+          # Absolute favicon URL, when present.
           sig { returns(T.nilable(String)) }
           attr_reader :favicon
 
           sig { params(favicon: String).void }
           attr_writer :favicon
 
-          # Page headings (h1–h6) in document order, extracted from the unfiltered document.
-          # Capped at the first 500 headings. Omitted when the page has none.
+          # Headings (`h1` to `h6`) in document order, from the full page before any
+          # filtering. Up to 500. Omitted when the page has none.
           sig do
             returns(
               T.nilable(
@@ -475,7 +474,7 @@ module ContextDev
           end
           attr_writer :headings
 
-          # Primary resolved preview image from Open Graph, Twitter, or image metadata.
+          # Main preview image URL, from Open Graph, Twitter, or image meta tags.
           sig { returns(T.nilable(String)) }
           attr_reader :image
 
@@ -489,28 +488,28 @@ module ContextDev
           sig { params(json_ld: T::Array[T::Hash[Symbol, T.anything]]).void }
           attr_writer :json_ld
 
-          # Keywords extracted from the page's keywords meta tag.
+          # Keywords from the page's `keywords` meta tag.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :keywords
 
           sig { params(keywords: T::Array[String]).void }
           attr_writer :keywords
 
-          # Language extracted from html lang or language meta tags.
+          # Page language, from the `html` `lang` attribute or language meta tags.
           sig { returns(T.nilable(String)) }
           attr_reader :language
 
           sig { params(language: String).void }
           attr_writer :language
 
-          # Modified timestamp/date from page metadata, when present.
+          # Last-modified date or timestamp from page metadata, when present.
           sig { returns(T.nilable(String)) }
           attr_reader :modified_time
 
           sig { params(modified_time: String).void }
           attr_writer :modified_time
 
-          # Open Graph metadata with the og: prefix removed and keys camel-cased.
+          # Open Graph tags, with the `og:` prefix removed and keys in camelCase.
           sig do
             returns(
               T.nilable(
@@ -534,28 +533,28 @@ module ContextDev
           end
           attr_writer :open_graph
 
-          # Published timestamp/date from page metadata, when present.
+          # Publish date or timestamp from page metadata, when present.
           sig { returns(T.nilable(String)) }
           attr_reader :published_time
 
           sig { params(published_time: String).void }
           attr_writer :published_time
 
-          # Robots meta directive, when present.
+          # `robots` meta directive, when present.
           sig { returns(T.nilable(String)) }
           attr_reader :robots
 
           sig { params(robots: String).void }
           attr_writer :robots
 
-          # Site or application name from page metadata.
+          # Site or app name from page metadata.
           sig { returns(T.nilable(String)) }
           attr_reader :site_name
 
           sig { params(site_name: String).void }
           attr_writer :site_name
 
-          # Twitter card metadata with the twitter: prefix removed and keys camel-cased.
+          # Twitter card tags, with the `twitter:` prefix removed and keys in camelCase.
           sig do
             returns(
               T.nilable(
@@ -627,60 +626,59 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Depth relative to the start URL. 0 = start URL, 1 = one link away.
+            # Link depth from the start URL. `0` is the start URL, `1` is one link away.
             crawl_depth:,
-            # Final URL scraped after redirects or scraper fallback, when known. Falls back to
-            # sourceUrl when unavailable.
+            # URL that was scraped, after redirects. Same as `sourceUrl` when unknown.
             final_url:,
-            # Original URL requested by the caller.
+            # URL that was requested, before redirects.
             source_url:,
-            # HTTP status code of the response (0 when the page could not be retrieved)
+            # HTTP status code of the page. `0` when the page could not be retrieved.
             status_code:,
-            # true if the page was fetched and parsed successfully
+            # Whether the page was fetched and parsed.
             success:,
-            # Best page title extracted from the page (empty string if unavailable).
+            # Page title. Empty string when unavailable.
             title:,
-            # The crawl URL fetched for this page.
+            # URL fetched for this page.
             url:,
-            # Additional non-social meta tags not promoted to top-level metadata fields.
+            # Other non-social meta tags that don't have their own field.
             additional_meta: nil,
-            # Resolved alternate links from link rel=alternate tags.
+            # Alternate links from `link rel="alternate"` tags, as absolute URLs.
             alternates: nil,
-            # Author metadata, when present.
+            # Author, when present.
             author: nil,
-            # Resolved canonical URL, when present.
+            # Absolute canonical URL, when present.
             canonical_url: nil,
-            # Best description extracted from standard, Open Graph, or Twitter metadata.
+            # Best available description, from standard, Open Graph, or Twitter meta tags.
             description: nil,
             # Why the page failed. Present only when `success` is `false`: `WEBSITE_BLOCKED`
             # (the site served an anti-bot challenge or access wall), `WEBSITE_ACCESS_ERROR`
             # (the page could not be retrieved or had no usable content), `NOT_FOUND`,
             # `UNSUPPORTED_CONTENT`, `NO_PUBLISHED_MARKDOWN`, or `INTERNAL_ERROR`.
             error_code: nil,
-            # Resolved favicon URL, when present.
+            # Absolute favicon URL, when present.
             favicon: nil,
-            # Page headings (h1–h6) in document order, extracted from the unfiltered document.
-            # Capped at the first 500 headings. Omitted when the page has none.
+            # Headings (`h1` to `h6`) in document order, from the full page before any
+            # filtering. Up to 500. Omitted when the page has none.
             headings: nil,
-            # Primary resolved preview image from Open Graph, Twitter, or image metadata.
+            # Main preview image URL, from Open Graph, Twitter, or image meta tags.
             image: nil,
             # JSON-LD structured data blocks parsed from the page.
             json_ld: nil,
-            # Keywords extracted from the page's keywords meta tag.
+            # Keywords from the page's `keywords` meta tag.
             keywords: nil,
-            # Language extracted from html lang or language meta tags.
+            # Page language, from the `html` `lang` attribute or language meta tags.
             language: nil,
-            # Modified timestamp/date from page metadata, when present.
+            # Last-modified date or timestamp from page metadata, when present.
             modified_time: nil,
-            # Open Graph metadata with the og: prefix removed and keys camel-cased.
+            # Open Graph tags, with the `og:` prefix removed and keys in camelCase.
             open_graph: nil,
-            # Published timestamp/date from page metadata, when present.
+            # Publish date or timestamp from page metadata, when present.
             published_time: nil,
-            # Robots meta directive, when present.
+            # `robots` meta directive, when present.
             robots: nil,
-            # Site or application name from page metadata.
+            # Site or app name from page metadata.
             site_name: nil,
-            # Twitter card metadata with the twitter: prefix removed and keys camel-cased.
+            # Twitter card tags, with the `twitter:` prefix removed and keys in camelCase.
             twitter: nil
           )
           end
@@ -768,25 +766,25 @@ module ContextDev
                 )
               end
 
-            # Resolved alternate URL.
+            # Absolute URL of the alternate version.
             sig { returns(String) }
             attr_accessor :href
 
-            # Language or locale for the alternate URL, when present.
+            # Language or locale of the alternate version, when present.
             sig { returns(T.nilable(String)) }
             attr_reader :hreflang
 
             sig { params(hreflang: String).void }
             attr_writer :hreflang
 
-            # Alternate resource title, when present.
+            # Title of the alternate version, when present.
             sig { returns(T.nilable(String)) }
             attr_reader :title
 
             sig { params(title: String).void }
             attr_writer :title
 
-            # Alternate resource MIME type, when present.
+            # MIME type of the alternate version, when present.
             sig { returns(T.nilable(String)) }
             attr_reader :type
 
@@ -802,13 +800,13 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Resolved alternate URL.
+              # Absolute URL of the alternate version.
               href:,
-              # Language or locale for the alternate URL, when present.
+              # Language or locale of the alternate version, when present.
               hreflang: nil,
-              # Alternate resource title, when present.
+              # Title of the alternate version, when present.
               title: nil,
-              # Alternate resource MIME type, when present.
+              # MIME type of the alternate version, when present.
               type: nil
             )
             end
@@ -831,7 +829,7 @@ module ContextDev
                 )
               end
 
-            # Heading level, 1–6 (from h1–h6).
+            # Heading level, from 1 (`h1`) to 6 (`h6`).
             sig { returns(Integer) }
             attr_accessor :level
 
@@ -843,7 +841,7 @@ module ContextDev
               params(level: Integer, text: String).returns(T.attached_class)
             end
             def self.new(
-              # Heading level, 1–6 (from h1–h6).
+              # Heading level, from 1 (`h1`) to 6 (`h6`).
               level:,
               # Heading text with whitespace collapsed, truncated to 1000 characters.
               text:
@@ -914,7 +912,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -927,7 +925,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

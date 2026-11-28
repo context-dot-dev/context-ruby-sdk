@@ -18,7 +18,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :monitor_id
 
-      # ID of the monitor run.
+      # ID of the run.
       sig { returns(String) }
       attr_accessor :run_id
 
@@ -32,7 +32,7 @@ module ContextDev
       def self.new(
         # ID of the monitor.
         monitor_id:,
-        # ID of the monitor run.
+        # ID of the run.
         run_id:,
         request_options: {}
       )

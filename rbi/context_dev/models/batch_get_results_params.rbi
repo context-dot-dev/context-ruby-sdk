@@ -14,19 +14,19 @@ module ContextDev
           )
         end
 
-      # Batch ID.
+      # ID of the batch.
       sig { returns(String) }
       attr_accessor :batch_id
 
-      # next_cursor from the previous page.
+      # Cursor from the previous page's `next_cursor`. Omit for the first page.
       sig { returns(T.nilable(String)) }
       attr_reader :cursor
 
       sig { params(cursor: String).void }
       attr_writer :cursor
 
-      # Records per page. Defaults to 25. A page can close early so its payload stays
-      # under ~8 MB; rely on next_cursor rather than counting records.
+      # Maximum number of results to return per page. A page can hold fewer to stay
+      # under about 8 MB, so page with `next_cursor` instead of counting records.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
@@ -42,12 +42,12 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Batch ID.
+        # ID of the batch.
         batch_id:,
-        # next_cursor from the previous page.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page.
         cursor: nil,
-        # Records per page. Defaults to 25. A page can close early so its payload stays
-        # under ~8 MB; rely on next_cursor rather than counting records.
+        # Maximum number of results to return per page. A page can hold fewer to stay
+        # under about 8 MB, so page with `next_cursor` instead of counting records.
         limit: nil,
         request_options: {}
       )

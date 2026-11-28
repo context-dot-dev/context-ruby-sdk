@@ -117,7 +117,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -127,7 +127,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

@@ -5,7 +5,7 @@ module ContextDev
     class Webhooks
       # Inspect and retry batch and monitor webhook deliveries.
       class Deliveries
-        # Retrieve a webhook delivery’s status and original payload.
+        # Retrieve a webhook delivery's status, retry settings, and most recent attempt.
         sig do
           params(
             delivery_id: String,
@@ -14,15 +14,17 @@ module ContextDev
           ).returns(ContextDev::Models::Webhooks::DeliveryRetrieveResponse)
         end
         def retrieve(
-          # Delivery ID.
+          # ID of the delivery.
           delivery_id,
-          # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+          # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+          # usage and request logs by them.
           tags: nil,
           request_options: {}
         )
         end
 
-        # List batch and monitor webhook deliveries from the last 30 days.
+        # List webhook deliveries for your batches or monitors from the last 30 days,
+        # newest first. Filter by source, status, or creation time.
         sig do
           params(
             body:
@@ -36,7 +38,7 @@ module ContextDev
         def list(body:, request_options: {})
         end
 
-        # List a delivery’s attempts, newest first.
+        # List a webhook delivery's attempts, newest first.
         sig do
           params(
             delivery_id: String,
@@ -47,20 +49,21 @@ module ContextDev
           ).returns(ContextDev::Models::Webhooks::DeliveryListAttemptsResponse)
         end
         def list_attempts(
-          # Delivery ID.
+          # ID of the delivery.
           delivery_id,
-          # The next_cursor from the previous response.
+          # Cursor from the previous page's `next_cursor`. Omit for the first page.
           cursor: nil,
-          # Number of attempts to return.
+          # Maximum number of attempts to return per page.
           limit: nil,
-          # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+          # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+          # usage and request logs by them.
           tags: nil,
           request_options: {}
         )
         end
 
-        # Resend the original payload using the source’s current URL and secret. Available
-        # for 7 days after the event.
+        # Resend a delivery's original payload to the source's current webhook URL, signed
+        # with its current secret. Available for 7 days after the event.
         sig do
           params(
             delivery_id: String,
@@ -71,13 +74,15 @@ module ContextDev
           ).returns(ContextDev::Models::Webhooks::DeliveryRetryResponse)
         end
         def retry_(
-          # Path param: Delivery ID.
+          # Path param: ID of the delivery.
           delivery_id,
-          # Body param: Resend even if the delivery already succeeded. Defaults to false.
+          # Body param: Resend even if the delivery already succeeded.
           force: nil,
-          # Body param: Labels for filtering usage in the dashboard.
+          # Body param: Labels for this request. Filter usage and request logs by them in
+          # the dashboard or with `GET /org/logs`.
           tags: nil,
-          # Header param: Unique key to prevent duplicate retry requests.
+          # Header param: Unique key for this retry. Repeating the request with the same key
+          # does not send the payload again.
           idempotency_key: nil,
           request_options: {}
         )

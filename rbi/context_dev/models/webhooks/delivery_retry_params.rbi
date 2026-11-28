@@ -15,25 +15,27 @@ module ContextDev
             )
           end
 
-        # Delivery ID.
+        # ID of the delivery.
         sig { returns(String) }
         attr_accessor :delivery_id
 
-        # Resend even if the delivery already succeeded. Defaults to false.
+        # Resend even if the delivery already succeeded.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :force
 
         sig { params(force: T::Boolean).void }
         attr_writer :force
 
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :tags
 
         sig { params(tags: T::Array[String]).void }
         attr_writer :tags
 
-        # Unique key to prevent duplicate retry requests.
+        # Unique key for this retry. Repeating the request with the same key does not send
+        # the payload again.
         sig { returns(T.nilable(String)) }
         attr_reader :idempotency_key
 
@@ -50,13 +52,15 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Delivery ID.
+          # ID of the delivery.
           delivery_id:,
-          # Resend even if the delivery already succeeded. Defaults to false.
+          # Resend even if the delivery already succeeded.
           force: nil,
-          # Labels for filtering usage in the dashboard.
+          # Labels for this request. Filter usage and request logs by them in the dashboard
+          # or with `GET /org/logs`.
           tags: nil,
-          # Unique key to prevent duplicate retry requests.
+          # Unique key for this retry. Repeating the request with the same key does not send
+          # the payload again.
           idempotency_key: nil,
           request_options: {}
         )

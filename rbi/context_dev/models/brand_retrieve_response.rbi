@@ -11,7 +11,7 @@ module ContextDev
           )
         end
 
-      # Detailed brand information
+      # The brand's identity, visual assets, and company details.
       sig { returns(ContextDev::Models::BrandRetrieveResponse::Brand) }
       attr_reader :brand
 
@@ -22,7 +22,7 @@ module ContextDev
       end
       attr_writer :brand
 
-      # Whether this response came from cache.
+      # Cache status of this response.
       sig { returns(ContextDev::Models::BrandRetrieveResponse::CacheMetadata) }
       attr_reader :cache_metadata
 
@@ -34,7 +34,7 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
-      # HTTP status code
+      # HTTP status code. Always `200` on success.
       sig { returns(Integer) }
       attr_accessor :code
 
@@ -63,8 +63,8 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # True when the timeout ended processing and this response contains the usable
-      # data completed so far. Unfinished fields are omitted.
+      # `true` when the `timeoutOpts` deadline ended processing early. The response
+      # holds the data completed so far; unfinished fields are omitted.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :partial
 
@@ -85,11 +85,11 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Detailed brand information
+        # The brand's identity, visual assets, and company details.
         brand:,
-        # Whether this response came from cache.
+        # Cache status of this response.
         cache_metadata:,
-        # HTTP status code
+        # HTTP status code. Always `200` on success.
         code:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
@@ -98,8 +98,8 @@ module ContextDev
         status:,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
-        # True when the timeout ended processing and this response contains the usable
-        # data completed so far. Unfinished fields are omitted.
+        # `true` when the `timeoutOpts` deadline ended processing early. The response
+        # holds the data completed so far; unfinished fields are omitted.
         partial: nil
       )
       end
@@ -131,7 +131,7 @@ module ContextDev
             )
           end
 
-        # Physical address of the brand
+        # Physical address of the brand. Omitted when unknown.
         sig do
           returns(
             T.nilable(ContextDev::Models::BrandRetrieveResponse::Brand::Address)
@@ -147,7 +147,7 @@ module ContextDev
         end
         attr_writer :address
 
-        # An array of backdrop images for the brand
+        # Backdrop images for the brand, such as social profile banners.
         sig do
           returns(
             T.nilable(
@@ -169,7 +169,7 @@ module ContextDev
         end
         attr_writer :backdrops
 
-        # An array of brand colors
+        # Brand colors from the website and logos.
         sig do
           returns(
             T.nilable(
@@ -189,28 +189,28 @@ module ContextDev
         end
         attr_writer :colors
 
-        # A brief description of the brand
+        # Short description of the brand.
         sig { returns(T.nilable(String)) }
         attr_reader :description
 
         sig { params(description: String).void }
         attr_writer :description
 
-        # The domain name of the brand
+        # Domain of the brand.
         sig { returns(T.nilable(String)) }
         attr_reader :domain
 
         sig { params(domain: String).void }
         attr_writer :domain
 
-        # Company email address
+        # Contact email address for the company.
         sig { returns(T.nilable(String)) }
         attr_reader :email
 
         sig { params(email: String).void }
         attr_writer :email
 
-        # Employee headcount information for the brand (will be null if unknown)
+        # Employee headcount. Omitted when unknown.
         sig do
           returns(
             T.nilable(
@@ -228,7 +228,7 @@ module ContextDev
         end
         attr_writer :employees
 
-        # Industry classification information for the brand
+        # Industry classification of the brand.
         sig do
           returns(
             T.nilable(
@@ -246,14 +246,14 @@ module ContextDev
         end
         attr_writer :industries
 
-        # Indicates whether the brand content is not safe for work (NSFW)
+        # Whether the brand's content is not safe for work (NSFW).
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :is_nsfw
 
         sig { params(is_nsfw: T::Boolean).void }
         attr_writer :is_nsfw
 
-        # Important website links for the brand
+        # Key pages on the brand's website.
         sig do
           returns(
             T.nilable(ContextDev::Models::BrandRetrieveResponse::Brand::Links)
@@ -269,9 +269,8 @@ module ContextDev
         end
         attr_writer :links
 
-        # An array of logos associated with the brand. When a similarly shaped SVG variant
-        # exists, it is returned ahead of its raster equivalent; otherwise relevance order
-        # is preserved
+        # Brand logos, most relevant first. An SVG is listed ahead of a raster logo of the
+        # same shape.
         sig do
           returns(
             T.nilable(
@@ -291,14 +290,14 @@ module ContextDev
         end
         attr_writer :logos
 
-        # Company phone number
+        # Contact phone number for the company.
         sig { returns(T.nilable(String)) }
         attr_reader :phone
 
         sig { params(phone: String).void }
         attr_writer :phone
 
-        # Language, e.g. `english`.
+        # Lowercase language name, such as `english`.
         sig do
           returns(
             T.nilable(
@@ -308,14 +307,14 @@ module ContextDev
         end
         attr_accessor :primary_language
 
-        # The brand's slogan
+        # Brand slogan or tagline.
         sig { returns(T.nilable(String)) }
         attr_reader :slogan
 
         sig { params(slogan: String).void }
         attr_writer :slogan
 
-        # An array of social media links for the brand
+        # Social media profiles of the brand.
         sig do
           returns(
             T.nilable(
@@ -335,8 +334,7 @@ module ContextDev
         end
         attr_writer :socials
 
-        # Stock market information for this brand (will be null if not a publicly traded
-        # company)
+        # Stock listing. Omitted when the company is not publicly traded.
         sig do
           returns(
             T.nilable(ContextDev::Models::BrandRetrieveResponse::Brand::Stock)
@@ -352,14 +350,14 @@ module ContextDev
         end
         attr_writer :stock
 
-        # The title or name of the brand
+        # Brand name.
         sig { returns(T.nilable(String)) }
         attr_reader :title
 
         sig { params(title: String).void }
         attr_writer :title
 
-        # Detailed brand information
+        # The brand's identity, visual assets, and company details.
         sig do
           params(
             address:
@@ -402,42 +400,40 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Physical address of the brand
+          # Physical address of the brand. Omitted when unknown.
           address: nil,
-          # An array of backdrop images for the brand
+          # Backdrop images for the brand, such as social profile banners.
           backdrops: nil,
-          # An array of brand colors
+          # Brand colors from the website and logos.
           colors: nil,
-          # A brief description of the brand
+          # Short description of the brand.
           description: nil,
-          # The domain name of the brand
+          # Domain of the brand.
           domain: nil,
-          # Company email address
+          # Contact email address for the company.
           email: nil,
-          # Employee headcount information for the brand (will be null if unknown)
+          # Employee headcount. Omitted when unknown.
           employees: nil,
-          # Industry classification information for the brand
+          # Industry classification of the brand.
           industries: nil,
-          # Indicates whether the brand content is not safe for work (NSFW)
+          # Whether the brand's content is not safe for work (NSFW).
           is_nsfw: nil,
-          # Important website links for the brand
+          # Key pages on the brand's website.
           links: nil,
-          # An array of logos associated with the brand. When a similarly shaped SVG variant
-          # exists, it is returned ahead of its raster equivalent; otherwise relevance order
-          # is preserved
+          # Brand logos, most relevant first. An SVG is listed ahead of a raster logo of the
+          # same shape.
           logos: nil,
-          # Company phone number
+          # Contact phone number for the company.
           phone: nil,
-          # Language, e.g. `english`.
+          # Lowercase language name, such as `english`.
           primary_language: nil,
-          # The brand's slogan
+          # Brand slogan or tagline.
           slogan: nil,
-          # An array of social media links for the brand
+          # Social media profiles of the brand.
           socials: nil,
-          # Stock market information for this brand (will be null if not a publicly traded
-          # company)
+          # Stock listing. Omitted when the company is not publicly traded.
           stock: nil,
-          # The title or name of the brand
+          # Brand name.
           title: nil
         )
         end
@@ -495,56 +491,56 @@ module ContextDev
               )
             end
 
-          # City name
+          # City.
           sig { returns(T.nilable(String)) }
           attr_reader :city
 
           sig { params(city: String).void }
           attr_writer :city
 
-          # Country name
+          # Country name.
           sig { returns(T.nilable(String)) }
           attr_reader :country
 
           sig { params(country: String).void }
           attr_writer :country
 
-          # Country code
+          # Country code, such as `US`.
           sig { returns(T.nilable(String)) }
           attr_reader :country_code
 
           sig { params(country_code: String).void }
           attr_writer :country_code
 
-          # Postal or ZIP code
+          # Postal or ZIP code.
           sig { returns(T.nilable(String)) }
           attr_reader :postal_code
 
           sig { params(postal_code: String).void }
           attr_writer :postal_code
 
-          # State or province code
+          # State or province code.
           sig { returns(T.nilable(String)) }
           attr_reader :state_code
 
           sig { params(state_code: String).void }
           attr_writer :state_code
 
-          # State or province name
+          # State or province name.
           sig { returns(T.nilable(String)) }
           attr_reader :state_province
 
           sig { params(state_province: String).void }
           attr_writer :state_province
 
-          # Street address
+          # Street address.
           sig { returns(T.nilable(String)) }
           attr_reader :street
 
           sig { params(street: String).void }
           attr_writer :street
 
-          # Physical address of the brand
+          # Physical address of the brand. Omitted when unknown.
           sig do
             params(
               city: String,
@@ -557,19 +553,19 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # City name
+            # City.
             city: nil,
-            # Country name
+            # Country name.
             country: nil,
-            # Country code
+            # Country code, such as `US`.
             country_code: nil,
-            # Postal or ZIP code
+            # Postal or ZIP code.
             postal_code: nil,
-            # State or province code
+            # State or province code.
             state_code: nil,
-            # State or province name
+            # State or province name.
             state_province: nil,
-            # Street address
+            # Street address.
             street: nil
           )
           end
@@ -600,7 +596,7 @@ module ContextDev
               )
             end
 
-          # Array of colors in the backdrop image
+          # Colors in the backdrop image.
           sig do
             returns(
               T.nilable(
@@ -622,7 +618,7 @@ module ContextDev
           end
           attr_writer :colors
 
-          # Resolution of the backdrop image
+          # Size of the backdrop image.
           sig do
             returns(
               T.nilable(
@@ -640,7 +636,7 @@ module ContextDev
           end
           attr_writer :resolution
 
-          # URL of the backdrop image
+          # URL of the backdrop image.
           sig { returns(T.nilable(String)) }
           attr_reader :url
 
@@ -659,11 +655,11 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Array of colors in the backdrop image
+            # Colors in the backdrop image.
             colors: nil,
-            # Resolution of the backdrop image
+            # Size of the backdrop image.
             resolution: nil,
-            # URL of the backdrop image
+            # URL of the backdrop image.
             url: nil
           )
           end
@@ -693,14 +689,14 @@ module ContextDev
                 )
               end
 
-            # Color in hexadecimal format
+            # Hex color code, such as `#635BFF`.
             sig { returns(T.nilable(String)) }
             attr_reader :hex
 
             sig { params(hex: String).void }
             attr_writer :hex
 
-            # Name of the color
+            # Human-readable color name.
             sig { returns(T.nilable(String)) }
             attr_reader :name
 
@@ -709,9 +705,9 @@ module ContextDev
 
             sig { params(hex: String, name: String).returns(T.attached_class) }
             def self.new(
-              # Color in hexadecimal format
+              # Hex color code, such as `#635BFF`.
               hex: nil,
-              # Name of the color
+              # Human-readable color name.
               name: nil
             )
             end
@@ -730,28 +726,28 @@ module ContextDev
                 )
               end
 
-            # Aspect ratio of the image (width/height)
+            # Aspect ratio, as width divided by height.
             sig { returns(T.nilable(Float)) }
             attr_reader :aspect_ratio
 
             sig { params(aspect_ratio: Float).void }
             attr_writer :aspect_ratio
 
-            # Height of the image in pixels
+            # Height, in pixels.
             sig { returns(T.nilable(Integer)) }
             attr_reader :height
 
             sig { params(height: Integer).void }
             attr_writer :height
 
-            # Width of the image in pixels
+            # Width, in pixels.
             sig { returns(T.nilable(Integer)) }
             attr_reader :width
 
             sig { params(width: Integer).void }
             attr_writer :width
 
-            # Resolution of the backdrop image
+            # Size of the backdrop image.
             sig do
               params(
                 aspect_ratio: Float,
@@ -760,11 +756,11 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Aspect ratio of the image (width/height)
+              # Aspect ratio, as width divided by height.
               aspect_ratio: nil,
-              # Height of the image in pixels
+              # Height, in pixels.
               height: nil,
-              # Width of the image in pixels
+              # Width, in pixels.
               width: nil
             )
             end
@@ -788,23 +784,22 @@ module ContextDev
               )
             end
 
-          # Color in hexadecimal format
+          # Hex color code, such as `#635BFF`.
           sig { returns(T.nilable(String)) }
           attr_reader :hex
 
           sig { params(hex: String).void }
           attr_writer :hex
 
-          # Name of the color
+          # Human-readable color name.
           sig { returns(T.nilable(String)) }
           attr_reader :name
 
           sig { params(name: String).void }
           attr_writer :name
 
-          # Where the color was observed: 'site' colors come from the website's own theme
-          # signals (rendered page colors, manifest, theme-color meta), 'logo' colors from
-          # logo image pixels.
+          # `site` colors come from the website's own theme (rendered page colors, web app
+          # manifest, `theme-color` meta tag); `logo` colors come from logo pixels.
           sig do
             returns(
               T.nilable(
@@ -831,13 +826,12 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Color in hexadecimal format
+            # Hex color code, such as `#635BFF`.
             hex: nil,
-            # Name of the color
+            # Human-readable color name.
             name: nil,
-            # Where the color was observed: 'site' colors come from the website's own theme
-            # signals (rendered page colors, manifest, theme-color meta), 'logo' colors from
-            # logo image pixels.
+            # `site` colors come from the website's own theme (rendered page colors, web app
+            # manifest, `theme-color` meta tag); `logo` colors come from logo pixels.
             source: nil
           )
           end
@@ -855,9 +849,8 @@ module ContextDev
           def to_hash
           end
 
-          # Where the color was observed: 'site' colors come from the website's own theme
-          # signals (rendered page colors, manifest, theme-color meta), 'logo' colors from
-          # logo image pixels.
+          # `site` colors come from the website's own theme (rendered page colors, web app
+          # manifest, `theme-color` meta tag); `logo` colors come from logo pixels.
           module Source
             extend ContextDev::Internal::Type::Enum
 
@@ -902,14 +895,14 @@ module ContextDev
               )
             end
 
-          # Exact employee count when a precise headcount is known
+          # Exact employee count, when known.
           sig { returns(T.nilable(Integer)) }
           attr_reader :exact
 
           sig { params(exact: Integer).void }
           attr_writer :exact
 
-          # Employee count range for the brand (e.g. '11 to 50')
+          # Headcount range, such as `11 to 50`.
           sig do
             returns(
               T.nilable(
@@ -927,7 +920,7 @@ module ContextDev
           end
           attr_writer :range
 
-          # Employee headcount information for the brand (will be null if unknown)
+          # Employee headcount. Omitted when unknown.
           sig do
             params(
               exact: Integer,
@@ -936,9 +929,9 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Exact employee count when a precise headcount is known
+            # Exact employee count, when known.
             exact: nil,
-            # Employee count range for the brand (e.g. '11 to 50')
+            # Headcount range, such as `11 to 50`.
             range: nil
           )
           end
@@ -955,7 +948,7 @@ module ContextDev
           def to_hash
           end
 
-          # Employee count range for the brand (e.g. '11 to 50')
+          # Headcount range, such as `11 to 50`.
           module Range
             extend ContextDev::Internal::Type::Enum
 
@@ -1030,7 +1023,8 @@ module ContextDev
               )
             end
 
-          # Easy Industry Classification - array of industry and subindustry pairs
+          # Industry and subindustry pairs from Context.dev's Easy Industry Classification
+          # (EIC).
           sig do
             returns(
               T.nilable(
@@ -1052,7 +1046,7 @@ module ContextDev
           end
           attr_writer :eic
 
-          # Industry classification information for the brand
+          # Industry classification of the brand.
           sig do
             params(
               eic:
@@ -1062,7 +1056,8 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Easy Industry Classification - array of industry and subindustry pairs
+            # Industry and subindustry pairs from Context.dev's Easy Industry Classification
+            # (EIC).
             eic: nil
           )
           end
@@ -1089,7 +1084,7 @@ module ContextDev
                 )
               end
 
-            # Industry classification enum
+            # Top-level industry in the Easy Industry Classification (EIC).
             sig do
               returns(
                 ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Industry::TaggedSymbol
@@ -1097,7 +1092,7 @@ module ContextDev
             end
             attr_accessor :industry
 
-            # Subindustry classification enum
+            # Subindustry in the Easy Industry Classification (EIC).
             sig do
               returns(
                 ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Subindustry::TaggedSymbol
@@ -1114,9 +1109,9 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Industry classification enum
+              # Top-level industry in the Easy Industry Classification (EIC).
               industry:,
-              # Subindustry classification enum
+              # Subindustry in the Easy Industry Classification (EIC).
               subindustry:
             )
             end
@@ -1134,7 +1129,7 @@ module ContextDev
             def to_hash
             end
 
-            # Industry classification enum
+            # Top-level industry in the Easy Industry Classification (EIC).
             module Industry
               extend ContextDev::Internal::Type::Enum
 
@@ -1279,7 +1274,7 @@ module ContextDev
               end
             end
 
-            # Subindustry classification enum
+            # Subindustry in the Easy Industry Classification (EIC).
             module Subindustry
               extend ContextDev::Internal::Type::Enum
 
@@ -2415,31 +2410,31 @@ module ContextDev
               )
             end
 
-          # URL to the brand's blog or news page
+          # URL of the blog or newsroom. `null` when not found.
           sig { returns(T.nilable(String)) }
           attr_accessor :blog
 
-          # URL to the brand's careers or job opportunities page
+          # URL of the careers page. `null` when not found.
           sig { returns(T.nilable(String)) }
           attr_accessor :careers
 
-          # URL to the brand's contact or contact us page
+          # URL of the contact page. `null` when not found.
           sig { returns(T.nilable(String)) }
           attr_accessor :contact
 
-          # URL to the brand's pricing or plans page
+          # URL of the pricing page. `null` when not found.
           sig { returns(T.nilable(String)) }
           attr_accessor :pricing
 
-          # URL to the brand's privacy policy page
+          # URL of the privacy policy. `null` when not found.
           sig { returns(T.nilable(String)) }
           attr_accessor :privacy
 
-          # URL to the brand's terms of service or terms and conditions page
+          # URL of the terms of service. `null` when not found.
           sig { returns(T.nilable(String)) }
           attr_accessor :terms
 
-          # Important website links for the brand
+          # Key pages on the brand's website.
           sig do
             params(
               blog: T.nilable(String),
@@ -2451,17 +2446,17 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # URL to the brand's blog or news page
+            # URL of the blog or newsroom. `null` when not found.
             blog: nil,
-            # URL to the brand's careers or job opportunities page
+            # URL of the careers page. `null` when not found.
             careers: nil,
-            # URL to the brand's contact or contact us page
+            # URL of the contact page. `null` when not found.
             contact: nil,
-            # URL to the brand's pricing or plans page
+            # URL of the pricing page. `null` when not found.
             pricing: nil,
-            # URL to the brand's privacy policy page
+            # URL of the privacy policy. `null` when not found.
             privacy: nil,
-            # URL to the brand's terms of service or terms and conditions page
+            # URL of the terms of service. `null` when not found.
             terms: nil
           )
           end
@@ -2491,7 +2486,7 @@ module ContextDev
               )
             end
 
-          # Array of colors in the logo
+          # Colors in the logo.
           sig do
             returns(
               T.nilable(
@@ -2513,9 +2508,9 @@ module ContextDev
           end
           attr_writer :colors
 
-          # Indicates when this logo is best used: 'light' = best for light mode, 'dark' =
-          # best for dark mode, 'has_opaque_background' = can be used for either as image
-          # has its own background
+          # `light` works best in light mode, `dark` works best in dark mode, and
+          # `has_opaque_background` works in either because the image has its own
+          # background.
           sig do
             returns(
               T.nilable(
@@ -2533,7 +2528,7 @@ module ContextDev
           end
           attr_writer :mode
 
-          # Resolution of the logo image
+          # Size of the logo image.
           sig do
             returns(
               T.nilable(
@@ -2551,7 +2546,7 @@ module ContextDev
           end
           attr_writer :resolution
 
-          # Type of the logo based on resolution (e.g., 'icon', 'logo')
+          # Whether the image is an `icon` or a full `logo`, based on its dimensions.
           sig do
             returns(
               T.nilable(
@@ -2569,7 +2564,7 @@ module ContextDev
           end
           attr_writer :type
 
-          # Hosted logo URL.
+          # URL of the hosted logo image.
           sig { returns(T.nilable(String)) }
           attr_reader :url
 
@@ -2592,17 +2587,17 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Array of colors in the logo
+            # Colors in the logo.
             colors: nil,
-            # Indicates when this logo is best used: 'light' = best for light mode, 'dark' =
-            # best for dark mode, 'has_opaque_background' = can be used for either as image
-            # has its own background
+            # `light` works best in light mode, `dark` works best in dark mode, and
+            # `has_opaque_background` works in either because the image has its own
+            # background.
             mode: nil,
-            # Resolution of the logo image
+            # Size of the logo image.
             resolution: nil,
-            # Type of the logo based on resolution (e.g., 'icon', 'logo')
+            # Whether the image is an `icon` or a full `logo`, based on its dimensions.
             type: nil,
-            # Hosted logo URL.
+            # URL of the hosted logo image.
             url: nil
           )
           end
@@ -2636,14 +2631,14 @@ module ContextDev
                 )
               end
 
-            # Color in hexadecimal format
+            # Hex color code, such as `#635BFF`.
             sig { returns(T.nilable(String)) }
             attr_reader :hex
 
             sig { params(hex: String).void }
             attr_writer :hex
 
-            # Name of the color
+            # Human-readable color name.
             sig { returns(T.nilable(String)) }
             attr_reader :name
 
@@ -2652,9 +2647,9 @@ module ContextDev
 
             sig { params(hex: String, name: String).returns(T.attached_class) }
             def self.new(
-              # Color in hexadecimal format
+              # Hex color code, such as `#635BFF`.
               hex: nil,
-              # Name of the color
+              # Human-readable color name.
               name: nil
             )
             end
@@ -2664,9 +2659,9 @@ module ContextDev
             end
           end
 
-          # Indicates when this logo is best used: 'light' = best for light mode, 'dark' =
-          # best for dark mode, 'has_opaque_background' = can be used for either as image
-          # has its own background
+          # `light` works best in light mode, `dark` works best in dark mode, and
+          # `has_opaque_background` works in either because the image has its own
+          # background.
           module Mode
             extend ContextDev::Internal::Type::Enum
 
@@ -2715,28 +2710,28 @@ module ContextDev
                 )
               end
 
-            # Aspect ratio of the image (width/height)
+            # Aspect ratio, as width divided by height.
             sig { returns(T.nilable(Float)) }
             attr_reader :aspect_ratio
 
             sig { params(aspect_ratio: Float).void }
             attr_writer :aspect_ratio
 
-            # Height of the image in pixels
+            # Height, in pixels.
             sig { returns(T.nilable(Integer)) }
             attr_reader :height
 
             sig { params(height: Integer).void }
             attr_writer :height
 
-            # Width of the image in pixels
+            # Width, in pixels.
             sig { returns(T.nilable(Integer)) }
             attr_reader :width
 
             sig { params(width: Integer).void }
             attr_writer :width
 
-            # Resolution of the logo image
+            # Size of the logo image.
             sig do
               params(
                 aspect_ratio: Float,
@@ -2745,11 +2740,11 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Aspect ratio of the image (width/height)
+              # Aspect ratio, as width divided by height.
               aspect_ratio: nil,
-              # Height of the image in pixels
+              # Height, in pixels.
               height: nil,
-              # Width of the image in pixels
+              # Width, in pixels.
               width: nil
             )
             end
@@ -2763,7 +2758,7 @@ module ContextDev
             end
           end
 
-          # Type of the logo based on resolution (e.g., 'icon', 'logo')
+          # Whether the image is an `icon` or a full `logo`, based on its dimensions.
           module Type
             extend ContextDev::Internal::Type::Enum
 
@@ -2799,7 +2794,7 @@ module ContextDev
           end
         end
 
-        # Language, e.g. `english`.
+        # Lowercase language name, such as `english`.
         module PrimaryLanguage
           extend ContextDev::Internal::Type::Enum
 
@@ -3433,7 +3428,7 @@ module ContextDev
               )
             end
 
-          # Type of social media platform
+          # Social platform.
           sig do
             returns(
               T.nilable(
@@ -3451,7 +3446,7 @@ module ContextDev
           end
           attr_writer :type
 
-          # URL of the social media page
+          # URL of the brand's profile on that platform.
           sig { returns(T.nilable(String)) }
           attr_reader :url
 
@@ -3466,9 +3461,9 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Type of social media platform
+            # Social platform.
             type: nil,
-            # URL of the social media page
+            # URL of the brand's profile on that platform.
             url: nil
           )
           end
@@ -3485,7 +3480,7 @@ module ContextDev
           def to_hash
           end
 
-          # Type of social media platform
+          # Social platform.
           module Type
             extend ContextDev::Internal::Type::Enum
 
@@ -3675,29 +3670,28 @@ module ContextDev
               )
             end
 
-          # Stock exchange name
+          # Exchange the stock trades on.
           sig { returns(T.nilable(String)) }
           attr_reader :exchange
 
           sig { params(exchange: String).void }
           attr_writer :exchange
 
-          # Stock ticker symbol
+          # Stock ticker symbol.
           sig { returns(T.nilable(String)) }
           attr_reader :ticker
 
           sig { params(ticker: String).void }
           attr_writer :ticker
 
-          # Stock market information for this brand (will be null if not a publicly traded
-          # company)
+          # Stock listing. Omitted when the company is not publicly traded.
           sig do
             params(exchange: String, ticker: String).returns(T.attached_class)
           end
           def self.new(
-            # Stock exchange name
+            # Exchange the stock trades on.
             exchange: nil,
-            # Stock ticker symbol
+            # Stock ticker symbol.
             ticker: nil
           )
           end
@@ -3717,12 +3711,12 @@ module ContextDev
             )
           end
 
-        # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         sig { returns(Integer) }
         attr_accessor :age_ms
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         sig do
           returns(
             ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status::TaggedSymbol
@@ -3730,7 +3724,7 @@ module ContextDev
         end
         attr_accessor :status
 
-        # Whether this response came from cache.
+        # Cache status of this response.
         sig do
           params(
             age_ms: Integer,
@@ -3739,10 +3733,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+          # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
           age_ms:,
-          # Whether the response was served from cache, required fresh work, or honored
-          # zero-data-retention cache bypass.
+          # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+          # retention bypassed the cache.
           status:
         )
         end
@@ -3759,8 +3753,8 @@ module ContextDev
         def to_hash
         end
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         module Status
           extend ContextDev::Internal::Type::Enum
 
@@ -3814,7 +3808,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -3827,7 +3821,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

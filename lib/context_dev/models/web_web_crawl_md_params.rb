@@ -14,13 +14,13 @@ module ContextDev
       required :url, String
 
       # @!attribute country
-      #   Fetch from this country (ISO 3166-1 alpha-2).
+      #   Country to fetch from, as an ISO 3166-1 alpha-2 code.
       #
       #   @return [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country, nil]
       optional :country, enum: -> { ContextDev::WebWebCrawlMdParams::Country }
 
       # @!attribute exclude_selectors
-      #   Remove matching elements after inclusions. Exclusions take precedence.
+      #   Remove elements matching these CSS selectors. Overrides `includeSelectors`.
       #
       #   @return [Array<String>, nil]
       optional :exclude_selectors,
@@ -29,25 +29,24 @@ module ContextDev
                nil?: true
 
       # @!attribute exclude_url_regex
-      #   Regex pattern. URLs matching this pattern are never followed or scraped, even
-      #   when they match urlRegex. The starting URL is always scraped.
+      #   Never follow or scrape URLs matching this regex, even when they match
+      #   `urlRegex`. The start URL is always scraped.
       #
       #   @return [String, nil]
       optional :exclude_url_regex, String, api_name: :excludeUrlRegex
 
       # @!attribute follow_subdomains
-      #   When true, follow links on subdomains of the starting URL's domain (e.g.
-      #   docs.example.com when starting from example.com). www and apex are always
-      #   treated as equivalent.
+      #   Follow links to subdomains of the start URL's domain, such as `docs.example.com`
+      #   from `example.com`. `www` and the apex domain always count as the same site.
       #
       #   @return [Boolean, nil]
       optional :follow_subdomains, ContextDev::Internal::Type::Boolean, api_name: :followSubdomains
 
       # @!attribute include_frames
-      #   Which iframe contents to render to Markdown for each crawled page. `auto`
-      #   (default) inlines only iframes that hold page content, such as same-site
-      #   documents, framesets, job boards, forms and embedded documents, and skips ads
-      #   and widgets. `true` inlines every iframe. `false` inlines none.
+      #   Which iframe contents to include in each page's Markdown. `auto` inlines only
+      #   iframes that hold page content, such as same-site documents, framesets, job
+      #   boards, forms, and embedded documents, and skips ads and widgets. `true` inlines
+      #   every iframe; `false` inlines none.
       #
       #   @return [Boolean, Symbol, ContextDev::Models::WebWebCrawlMdParams::IncludeFrames, nil]
       optional :include_frames,
@@ -55,19 +54,19 @@ module ContextDev
                api_name: :includeFrames
 
       # @!attribute include_images
-      #   Include image references in the Markdown output (`html-conversion` only).
+      #   Include image references in the Markdown (`html-conversion` only).
       #
       #   @return [Boolean, nil]
       optional :include_images, ContextDev::Internal::Type::Boolean, api_name: :includeImages
 
       # @!attribute include_links
-      #   Preserve hyperlinks in the Markdown output (`html-conversion` only).
+      #   Keep link URLs in the Markdown (`html-conversion` only).
       #
       #   @return [Boolean, nil]
       optional :include_links, ContextDev::Internal::Type::Boolean, api_name: :includeLinks
 
       # @!attribute include_selectors
-      #   Keep matching HTML subtrees before converting each page to Markdown.
+      #   Keep only elements matching these CSS selectors.
       #
       #   @return [Array<String>, nil]
       optional :include_selectors,
@@ -76,33 +75,35 @@ module ContextDev
                nil?: true
 
       # @!attribute max_age_ms
-      #   Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
+      #   Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+      #   Defaults to 1 day (86400000 ms). Maximum: 30 days (2592000000 ms).
       #
       #   @return [Integer, nil]
       optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
 
       # @!attribute max_depth
-      #   Maximum link depth from the starting URL (0 = only the starting page)
+      #   Maximum link depth from the start URL. `0` crawls only the start URL. Omit for
+      #   no depth limit.
       #
       #   @return [Integer, nil]
       optional :max_depth, Integer, api_name: :maxDepth
 
       # @!attribute max_pages
-      #   Maximum pages to crawl.
+      #   Maximum number of pages to crawl.
       #
       #   @return [Integer, nil]
       optional :max_pages, Integer, api_name: :maxPages
 
       # @!attribute pdf
-      #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+      #   Whether to parse PDFs and which pages to read.
       #
       #   @return [ContextDev::Models::WebWebCrawlMdParams::Pdf, nil]
       optional :pdf, -> { ContextDev::WebWebCrawlMdParams::Pdf }
 
       # @!attribute policies
-      #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-      #   access policies are enabled for your organization; otherwise the request fails
-      #   with `ACCESS_POLICIES_NOT_ENABLED`.
+      #   Access policy IDs to apply; each URL must pass all of them. Requires access
+      #   policies enabled for your organization; otherwise returns
+      #   `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
@@ -115,8 +116,7 @@ module ContextDev
       optional :settle_animations, ContextDev::Internal::Type::Boolean, api_name: :settleAnimations
 
       # @!attribute shorten_base64_images
-      #   Truncate base64-encoded image data in the Markdown output (`html-conversion`
-      #   only).
+      #   Shorten inline base64 image data (`html-conversion` only).
       #
       #   @return [Boolean, nil]
       optional :shorten_base64_images, ContextDev::Internal::Type::Boolean, api_name: :shortenBase64Images
@@ -133,14 +133,15 @@ module ContextDev
                api_name: :sourcePreference
 
       # @!attribute stop_after_ms
-      #   Soft crawl deadline in milliseconds. Returns pages collected before the next
-      #   deadline check.
+      #   Soft time budget for the crawl, in milliseconds. When it runs out, the crawl
+      #   returns the pages collected so far. Larger values are capped at 110 seconds.
       #
       #   @return [Integer, nil]
       optional :stop_after_ms, Integer, api_name: :stopAfterMs
 
       # @!attribute tags
-      #   Labels for filtering usage in the dashboard.
+      #   Labels for this request. Filter usage and request logs by them in the dashboard
+      #   or with `GET /org/logs`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -152,23 +153,22 @@ module ContextDev
       optional :timeout_opts, -> { ContextDev::WebWebCrawlMdParams::TimeoutOpts }, api_name: :timeoutOpts
 
       # @!attribute url_regex
-      #   Regex pattern. Only URLs matching this pattern will be followed and scraped. An
-      #   automatic prefix scope in the form ^<starting URL> follows a redirect of the
-      #   starting page.
+      #   Only follow and scrape URLs matching this regex. A prefix pattern of the form
+      #   `^<start URL>` also follows a redirect of the start page.
       #
       #   @return [String, nil]
       optional :url_regex, String, api_name: :urlRegex
 
       # @!attribute use_main_content_only
-      #   Extract only the main content, stripping headers, footers, sidebars, and
-      #   navigation
+      #   Keep only the main content, without navigation, headers, footers, or sidebars.
       #
       #   @return [Boolean, nil]
       optional :use_main_content_only, ContextDev::Internal::Type::Boolean, api_name: :useMainContentOnly
 
       # @!attribute wait_for_ms
-      #   Browser wait time in milliseconds after initial page load for each crawled page.
-      #   Defaults to 3500 (3.5 seconds). Min: 0. Max: 30000 (30 seconds).
+      #   Time to wait after each page loads before reading it, in milliseconds. `0` waits
+      #   500 ms. `timeoutOpts.milliseconds` must be at least `waitForMs` plus 10000 ms,
+      #   or the request fails with `TIMEOUT_TOO_SHORT_FOR_WAIT`.
       #
       #   @return [Integer, nil]
       optional :wait_for_ms, Integer, api_name: :waitForMs, nil?: true
@@ -186,55 +186,55 @@ module ContextDev
       #
       #   @param url [String] Start URL, including `http://` or `https://`.
       #
-      #   @param country [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country] Fetch from this country (ISO 3166-1 alpha-2).
+      #   @param country [Symbol, ContextDev::Models::WebWebCrawlMdParams::Country] Country to fetch from, as an ISO 3166-1 alpha-2 code.
       #
-      #   @param exclude_selectors [Array<String>, nil] Remove matching elements after inclusions. Exclusions take precedence.
+      #   @param exclude_selectors [Array<String>, nil] Remove elements matching these CSS selectors. Overrides `includeSelectors`.
       #
-      #   @param exclude_url_regex [String] Regex pattern. URLs matching this pattern are never followed or scraped, even wh
+      #   @param exclude_url_regex [String] Never follow or scrape URLs matching this regex, even when they match `urlRegex`
       #
-      #   @param follow_subdomains [Boolean] When true, follow links on subdomains of the starting URL's domain (e.g. docs.ex
+      #   @param follow_subdomains [Boolean] Follow links to subdomains of the start URL's domain, such as `docs.example.com`
       #
-      #   @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebCrawlMdParams::IncludeFrames] Which iframe contents to render to Markdown for each crawled page. `auto` (defau
+      #   @param include_frames [Boolean, Symbol, ContextDev::Models::WebWebCrawlMdParams::IncludeFrames] Which iframe contents to include in each page's Markdown. `auto` inlines only if
       #
-      #   @param include_images [Boolean] Include image references in the Markdown output (`html-conversion` only).
+      #   @param include_images [Boolean] Include image references in the Markdown (`html-conversion` only).
       #
-      #   @param include_links [Boolean] Preserve hyperlinks in the Markdown output (`html-conversion` only).
+      #   @param include_links [Boolean] Keep link URLs in the Markdown (`html-conversion` only).
       #
-      #   @param include_selectors [Array<String>, nil] Keep matching HTML subtrees before converting each page to Markdown.
+      #   @param include_selectors [Array<String>, nil] Keep only elements matching these CSS selectors.
       #
-      #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
+      #   @param max_age_ms [Integer, nil] Maximum age of a cached result, in milliseconds. `0` always fetches fresh. Defau
       #
-      #   @param max_depth [Integer] Maximum link depth from the starting URL (0 = only the starting page)
+      #   @param max_depth [Integer] Maximum link depth from the start URL. `0` crawls only the start URL. Omit for n
       #
-      #   @param max_pages [Integer] Maximum pages to crawl.
+      #   @param max_pages [Integer] Maximum number of pages to crawl.
       #
-      #   @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+      #   @param pdf [ContextDev::Models::WebWebCrawlMdParams::Pdf] Whether to parse PDFs and which pages to read.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+      #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
       #
       #   @param settle_animations [Boolean] Wait briefly for CSS animations and transitions to settle before reading each pa
       #
-      #   @param shorten_base64_images [Boolean] Truncate base64-encoded image data in the Markdown output (`html-conversion` onl
+      #   @param shorten_base64_images [Boolean] Shorten inline base64 image data (`html-conversion` only).
       #
       #   @param source_preference [Array<Symbol, ContextDev::Models::WebWebCrawlMdParams::SourcePreference>] Markdown sources in order of preference: `html-conversion` converts the page HTM
       #
-      #   @param stop_after_ms [Integer] Soft crawl deadline in milliseconds. Returns pages collected before the next dea
+      #   @param stop_after_ms [Integer] Soft time budget for the crawl, in milliseconds. When it runs out, the crawl ret
       #
-      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
       #
       #   @param timeout_opts [ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
-      #   @param url_regex [String] Regex pattern. Only URLs matching this pattern will be followed and scraped. An
+      #   @param url_regex [String] Only follow and scrape URLs matching this regex. A prefix pattern of the form `^
       #
-      #   @param use_main_content_only [Boolean] Extract only the main content, stripping headers, footers, sidebars, and navigat
+      #   @param use_main_content_only [Boolean] Keep only the main content, without navigation, headers, footers, or sidebars.
       #
-      #   @param wait_for_ms [Integer, nil] Browser wait time in milliseconds after initial page load for each crawled page.
+      #   @param wait_for_ms [Integer, nil] Time to wait after each page loads before reading it, in milliseconds. `0` waits
       #
       #   @param zdr [Symbol, ContextDev::Models::WebWebCrawlMdParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Fetch from this country (ISO 3166-1 alpha-2).
+      # Country to fetch from, as an ISO 3166-1 alpha-2 code.
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -447,10 +447,10 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Which iframe contents to render to Markdown for each crawled page. `auto`
-      # (default) inlines only iframes that hold page content, such as same-site
-      # documents, framesets, job boards, forms and embedded documents, and skips ads
-      # and widgets. `true` inlines every iframe. `false` inlines none.
+      # Which iframe contents to include in each page's Markdown. `auto` inlines only
+      # iframes that hold page content, such as same-site documents, framesets, job
+      # boards, forms, and embedded documents, and skips ads and widgets. `true` inlines
+      # every iframe; `false` inlines none.
       module IncludeFrames
         extend ContextDev::Internal::Type::Union
 
@@ -474,27 +474,26 @@ module ContextDev
 
       class Pdf < ContextDev::Internal::Type::BaseModel
         # @!attribute end_
-        #   Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-        #   be >= start.
+        #   Last page to parse. Defaults to the last page. Must be at least `start`.
         #
         #   @return [Integer, nil]
         optional :end_, Integer, api_name: :end
 
         # @!attribute ocr
-        #   Read scanned PDF pages with OCR; preserve pages that already have text.
+        #   Read scanned PDF pages with OCR. Pages that already have text are kept as is.
         #
         #   @return [Boolean, nil]
         optional :ocr, ContextDev::Internal::Type::Boolean
 
         # @!attribute should_parse
-        #   When true, PDF pages are fetched and parsed. When false, PDF pages are skipped
-        #   entirely (not included in results and not counted as failures).
+        #   Parse PDF pages. When `false`, PDFs are left out of the results and not counted
+        #   as failures.
         #
         #   @return [Boolean, nil]
         optional :should_parse, ContextDev::Internal::Type::Boolean, api_name: :shouldParse
 
         # @!attribute start
-        #   First 1-based PDF page to parse.
+        #   First page to parse, starting at 1.
         #
         #   @return [Integer, nil]
         optional :start, Integer
@@ -503,15 +502,15 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebWebCrawlMdParams::Pdf} for more details.
         #
-        #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+        #   Whether to parse PDFs and which pages to read.
         #
-        #   @param end_ [Integer] Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must be
+        #   @param end_ [Integer] Last page to parse. Defaults to the last page. Must be at least `start`.
         #
-        #   @param ocr [Boolean] Read scanned PDF pages with OCR; preserve pages that already have text.
+        #   @param ocr [Boolean] Read scanned PDF pages with OCR. Pages that already have text are kept as is.
         #
-        #   @param should_parse [Boolean] When true, PDF pages are fetched and parsed. When false, PDF pages are skipped e
+        #   @param should_parse [Boolean] Parse PDF pages. When `false`, PDFs are left out of the results and not counted
         #
-        #   @param start [Integer] First 1-based PDF page to parse.
+        #   @param start [Integer] First page to parse, starting at 1.
       end
 
       module SourcePreference
@@ -532,8 +531,8 @@ module ContextDev
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-        #   inspect the response’s partial flag.
+        #   `fail` returns 408 at the deadline. `return-partial` returns the results
+        #   collected so far and marks the response as partial.
         #
         #   @return [Symbol, ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebWebCrawlMdParams::TimeoutOpts::Behavior }
@@ -546,10 +545,10 @@ module ContextDev
         #
         #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   @param behavior [Symbol, ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         #
         # @see ContextDev::Models::WebWebCrawlMdParams::TimeoutOpts#behavior
         module Behavior

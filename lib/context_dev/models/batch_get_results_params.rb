@@ -8,20 +8,20 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute batch_id
-      #   Batch ID.
+      #   ID of the batch.
       #
       #   @return [String]
       required :batch_id, String
 
       # @!attribute cursor
-      #   next_cursor from the previous page.
+      #   Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
       #   @return [String, nil]
       optional :cursor, String
 
       # @!attribute limit
-      #   Records per page. Defaults to 25. A page can close early so its payload stays
-      #   under ~8 MB; rely on next_cursor rather than counting records.
+      #   Maximum number of results to return per page. A page can hold fewer to stay
+      #   under about 8 MB, so page with `next_cursor` instead of counting records.
       #
       #   @return [Integer, nil]
       optional :limit, Integer
@@ -30,11 +30,11 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchGetResultsParams} for more details.
       #
-      #   @param batch_id [String] Batch ID.
+      #   @param batch_id [String] ID of the batch.
       #
-      #   @param cursor [String] next_cursor from the previous page.
+      #   @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
-      #   @param limit [Integer] Records per page. Defaults to 25. A page can close early so its payload stays un
+      #   @param limit [Integer] Maximum number of results to return per page. A page can hold fewer to stay unde
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
     end

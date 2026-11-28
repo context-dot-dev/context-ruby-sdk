@@ -14,26 +14,25 @@ module ContextDev
       optional :error_code, String
 
       # @!attribute errors_only
-      #   Only include requests that returned a 4xx or 5xx status.
+      #   Return only requests that failed with a 4xx or 5xx status.
       #
       #   @return [Boolean, nil]
       optional :errors_only, ContextDev::Internal::Type::Boolean
 
       # @!attribute from
-      #   Only include requests at or after this ISO 8601 timestamp. Defaults to 24 hours
-      #   before `to`.
+      #   Return requests at or after this time. Defaults to 24 hours before `to`.
       #
       #   @return [Time, nil]
       optional :from, Time
 
       # @!attribute key_id
-      #   Filter by the API key that made the request.
+      #   Filter by the ID of the API key that made the request.
       #
       #   @return [String, nil]
       optional :key_id, String
 
       # @!attribute limit
-      #   Number of log entries per page.
+      #   Maximum number of log entries to return per page.
       #
       #   @return [Integer, nil]
       optional :limit, Integer
@@ -45,14 +44,13 @@ module ContextDev
       optional :page, Integer
 
       # @!attribute path
-      #   Filter by endpoint path, with or without the /v1 prefix.
+      #   Filter by endpoint path, with or without the `/v1` prefix.
       #
       #   @return [String, nil]
       optional :path, String
 
       # @!attribute search
-      #   Case-insensitive substring match against the request query and body, e.g. a
-      #   domain.
+      #   Case-insensitive text to find in the request query or body, such as a domain.
       #
       #   @return [String, nil]
       optional :search, String
@@ -64,14 +62,14 @@ module ContextDev
       optional :status_code, Integer
 
       # @!attribute tags
-      #   Comma-separated request tags. Matches requests carrying any of them. Up to 20
-      #   tags, each 1-50 characters.
+      #   Comma-separated tags. Returns log entries that have any of them. Up to 20 tags
+      #   of 1 to 50 characters each.
       #
       #   @return [String, nil]
       optional :tags, String
 
       # @!attribute to
-      #   Only include requests at or before this ISO 8601 timestamp. Defaults to now.
+      #   Return requests at or before this time. Defaults to now.
       #
       #   @return [Time, nil]
       optional :to, Time
@@ -82,25 +80,25 @@ module ContextDev
       #
       #   @param error_code [String] Filter by the `error_code` returned in the response.
       #
-      #   @param errors_only [Boolean] Only include requests that returned a 4xx or 5xx status.
+      #   @param errors_only [Boolean] Return only requests that failed with a 4xx or 5xx status.
       #
-      #   @param from [Time] Only include requests at or after this ISO 8601 timestamp. Defaults to 24 hours
+      #   @param from [Time] Return requests at or after this time. Defaults to 24 hours before `to`.
       #
-      #   @param key_id [String] Filter by the API key that made the request.
+      #   @param key_id [String] Filter by the ID of the API key that made the request.
       #
-      #   @param limit [Integer] Number of log entries per page.
+      #   @param limit [Integer] Maximum number of log entries to return per page.
       #
       #   @param page [Integer] Page number, starting at 1.
       #
-      #   @param path [String] Filter by endpoint path, with or without the /v1 prefix.
+      #   @param path [String] Filter by endpoint path, with or without the `/v1` prefix.
       #
-      #   @param search [String] Case-insensitive substring match against the request query and body, e.g. a doma
+      #   @param search [String] Case-insensitive text to find in the request query or body, such as a domain.
       #
       #   @param status_code [Integer] Filter by exact HTTP status code.
       #
-      #   @param tags [String] Comma-separated request tags. Matches requests carrying any of them. Up to 20 ta
+      #   @param tags [String] Comma-separated tags. Returns log entries that have any of them. Up to 20 tags o
       #
-      #   @param to [Time] Only include requests at or before this ISO 8601 timestamp. Defaults to now.
+      #   @param to [Time] Return requests at or before this time. Defaults to now.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
     end

@@ -5,26 +5,26 @@ module ContextDev
     # @see ContextDev::Resources::Scholar#search
     class ScholarSearchResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute data
-      #   Matching papers in the requested order.
+      #   Papers on this page, in the requested order.
       #
       #   @return [Array<ContextDev::Models::ScholarSearchResponse::Data>]
       required :data,
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::ScholarSearchResponse::Data] }
 
       # @!attribute has_more
-      #   Whether another page is available.
+      #   Whether more results are available after this page.
       #
       #   @return [Boolean]
       required :has_more, ContextDev::Internal::Type::Boolean
 
       # @!attribute meta
-      #   Page summary.
+      #   Summary of this page.
       #
       #   @return [ContextDev::Models::ScholarSearchResponse::Meta]
       required :meta, -> { ContextDev::Models::ScholarSearchResponse::Meta }
 
       # @!attribute next_cursor
-      #   Cursor for the next page, or null on the last page.
+      #   Pass as `cursor` to fetch the next page. `null` on the last page.
       #
       #   @return [String, nil]
       required :next_cursor, String, nil?: true
@@ -46,13 +46,13 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::ScholarSearchResponse} for more details.
       #
-      #   @param data [Array<ContextDev::Models::ScholarSearchResponse::Data>] Matching papers in the requested order.
+      #   @param data [Array<ContextDev::Models::ScholarSearchResponse::Data>] Papers on this page, in the requested order.
       #
-      #   @param has_more [Boolean] Whether another page is available.
+      #   @param has_more [Boolean] Whether more results are available after this page.
       #
-      #   @param meta [ContextDev::Models::ScholarSearchResponse::Meta] Page summary.
+      #   @param meta [ContextDev::Models::ScholarSearchResponse::Meta] Summary of this page.
       #
-      #   @param next_cursor [String, nil] Cursor for the next page, or null on the last page.
+      #   @param next_cursor [String, nil] Pass as `cursor` to fetch the next page. `null` on the last page.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
@@ -60,63 +60,67 @@ module ContextDev
 
       class Data < ContextDev::Internal::Type::BaseModel
         # @!attribute id
-        #   Stable paper identifier.
+        #   Unique ID of the paper.
         #
         #   @return [String]
         required :id, String
 
         # @!attribute full_text_format
-        #   Format of the linked full text. jats is XML.
+        #   Format of the full text at `full_text_url`. `jats` is JATS XML.
         #
         #   @return [Symbol, ContextDev::Models::ScholarSearchResponse::Data::FullTextFormat]
         required :full_text_format, enum: -> { ContextDev::Models::ScholarSearchResponse::Data::FullTextFormat }
 
         # @!attribute full_text_url
-        #   Direct link to the full text.
+        #   Direct URL of the full text.
         #
         #   @return [String]
         required :full_text_url, String
 
         # @!attribute published_at
-        #   Publication time in ISO 8601, or null when unknown.
+        #   When the paper was published. `null` when unknown.
         #
         #   @return [Time, nil]
         required :published_at, Time, nil?: true
 
         # @!attribute snippet
-        #   Matching passage, or opening passage for an ID-only query.
+        #   Passage that matches the query, or the opening passage when the query is only a
+        #   paper ID.
         #
         #   @return [String]
         required :snippet, String
 
         # @!attribute title
-        #   Paper title.
+        #   Title of the paper.
         #
         #   @return [String]
         required :title, String
 
         # @!attribute url
-        #   Paper landing page.
+        #   URL of the paper's landing page.
         #
         #   @return [String]
         required :url, String
 
         # @!method initialize(id:, full_text_format:, full_text_url:, published_at:, snippet:, title:, url:)
-        #   @param id [String] Stable paper identifier.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::ScholarSearchResponse::Data} for more details.
         #
-        #   @param full_text_format [Symbol, ContextDev::Models::ScholarSearchResponse::Data::FullTextFormat] Format of the linked full text. jats is XML.
+        #   @param id [String] Unique ID of the paper.
         #
-        #   @param full_text_url [String] Direct link to the full text.
+        #   @param full_text_format [Symbol, ContextDev::Models::ScholarSearchResponse::Data::FullTextFormat] Format of the full text at `full_text_url`. `jats` is JATS XML.
         #
-        #   @param published_at [Time, nil] Publication time in ISO 8601, or null when unknown.
+        #   @param full_text_url [String] Direct URL of the full text.
         #
-        #   @param snippet [String] Matching passage, or opening passage for an ID-only query.
+        #   @param published_at [Time, nil] When the paper was published. `null` when unknown.
         #
-        #   @param title [String] Paper title.
+        #   @param snippet [String] Passage that matches the query, or the opening passage when the query is only a
         #
-        #   @param url [String] Paper landing page.
+        #   @param title [String] Title of the paper.
+        #
+        #   @param url [String] URL of the paper's landing page.
 
-        # Format of the linked full text. jats is XML.
+        # Format of the full text at `full_text_url`. `jats` is JATS XML.
         #
         # @see ContextDev::Models::ScholarSearchResponse::Data#full_text_format
         module FullTextFormat
@@ -134,15 +138,15 @@ module ContextDev
       # @see ContextDev::Models::ScholarSearchResponse#meta
       class Meta < ContextDev::Internal::Type::BaseModel
         # @!attribute count
-        #   Papers in this page.
+        #   Number of papers on this page.
         #
         #   @return [Integer]
         required :count, Integer
 
         # @!method initialize(count:)
-        #   Page summary.
+        #   Summary of this page.
         #
-        #   @param count [Integer] Papers in this page.
+        #   @param count [Integer] Number of papers on this page.
       end
 
       # @see ContextDev::Models::ScholarSearchResponse#key_metadata
@@ -154,7 +158,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -164,7 +168,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

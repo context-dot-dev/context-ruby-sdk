@@ -14,15 +14,16 @@ module ContextDev
       sig { returns(ContextDev::Internal::FileInput) }
       attr_accessor :body
 
-      # Optional client identifier used for usage attribution.
+      # Client identifier for usage attribution.
       sig { returns(T.nilable(String)) }
       attr_reader :client
 
       sig { params(client: String).void }
       attr_writer :client
 
-      # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
-      # md, py, rtf, jpg, png, txt, warc, or warc.gz.
+      # File type hint, such as `pdf`, `docx`, `xlsx`, `pptx`, `html`, `json`, `csv`,
+      # `md`, `py`, `rtf`, `jpg`, `png`, `txt`, `warc`, or `warc.gz`. Use it when the
+      # `Content-Type` header is missing or generic.
       sig do
         returns(T.nilable(ContextDev::ParseHandleParams::Extension::OrSymbol))
       end
@@ -35,21 +36,21 @@ module ContextDev
       end
       attr_writer :extension
 
-      # Include image references in Markdown output
+      # Include image references in the Markdown.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :include_images
 
       sig { params(include_images: T::Boolean).void }
       attr_writer :include_images
 
-      # Preserve hyperlinks in Markdown output
+      # Keep link URLs in the Markdown.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :include_links
 
       sig { params(include_links: T::Boolean).void }
       attr_writer :include_links
 
-      # Start each PDF page in the Markdown with a `<!-- page N -->` line, where N is
+      # Start each PDF page in the Markdown with a `<!-- page N -->` line, where `N` is
       # the original 1-based page number.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :include_numbered_pages
@@ -57,35 +58,38 @@ module ContextDev
       sig { params(include_numbered_pages: T::Boolean).void }
       attr_writer :include_numbered_pages
 
-      # Read text from images and scanned PDF pages. PDF page ranges still apply.
+      # Read text from images and scanned PDF pages with OCR, within the `pdf` page
+      # range. Adds 1 credit per page read.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :ocr
 
       sig { params(ocr: T::Boolean).void }
       attr_writer :ocr
 
-      # PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
+      # PDF page range as a JSON object, such as `{"start": 2, "end": 5}`.
       sig { returns(T.nilable(ContextDev::ParseHandleParams::Pdf)) }
       attr_reader :pdf
 
       sig { params(pdf: ContextDev::ParseHandleParams::Pdf::OrHash).void }
       attr_writer :pdf
 
-      # Shorten base64-encoded image data in the Markdown output
+      # Shorten inline base64 image data.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :shorten_base64_images
 
       sig { params(shorten_base64_images: T::Boolean).void }
       attr_writer :shorten_base64_images
 
-      # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+      # usage and request logs by them.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Extract only the main content from HTML-like inputs
+      # Keep only the main content, without navigation, headers, footers, or sidebars.
+      # Applies to HTML-like inputs.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :use_main_content_only
 
@@ -119,27 +123,31 @@ module ContextDev
       end
       def self.new(
         body:,
-        # Optional client identifier used for usage attribution.
+        # Client identifier for usage attribution.
         client: nil,
-        # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
-        # md, py, rtf, jpg, png, txt, warc, or warc.gz.
+        # File type hint, such as `pdf`, `docx`, `xlsx`, `pptx`, `html`, `json`, `csv`,
+        # `md`, `py`, `rtf`, `jpg`, `png`, `txt`, `warc`, or `warc.gz`. Use it when the
+        # `Content-Type` header is missing or generic.
         extension: nil,
-        # Include image references in Markdown output
+        # Include image references in the Markdown.
         include_images: nil,
-        # Preserve hyperlinks in Markdown output
+        # Keep link URLs in the Markdown.
         include_links: nil,
-        # Start each PDF page in the Markdown with a `<!-- page N -->` line, where N is
+        # Start each PDF page in the Markdown with a `<!-- page N -->` line, where `N` is
         # the original 1-based page number.
         include_numbered_pages: nil,
-        # Read text from images and scanned PDF pages. PDF page ranges still apply.
+        # Read text from images and scanned PDF pages with OCR, within the `pdf` page
+        # range. Adds 1 credit per page read.
         ocr: nil,
-        # PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
+        # PDF page range as a JSON object, such as `{"start": 2, "end": 5}`.
         pdf: nil,
-        # Shorten base64-encoded image data in the Markdown output
+        # Shorten inline base64 image data.
         shorten_base64_images: nil,
-        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        # usage and request logs by them.
         tags: nil,
-        # Extract only the main content from HTML-like inputs
+        # Keep only the main content, without navigation, headers, footers, or sidebars.
+        # Applies to HTML-like inputs.
         use_main_content_only: nil,
         # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
         # your organization has ZDR.
@@ -170,8 +178,9 @@ module ContextDev
       def to_hash
       end
 
-      # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
-      # md, py, rtf, jpg, png, txt, warc, or warc.gz.
+      # File type hint, such as `pdf`, `docx`, `xlsx`, `pptx`, `html`, `json`, `csv`,
+      # `md`, `py`, `rtf`, `jpg`, `png`, `txt`, `warc`, or `warc.gz`. Use it when the
+      # `Content-Type` header is missing or generic.
       module Extension
         extend ContextDev::Internal::Type::Enum
 
@@ -344,28 +353,26 @@ module ContextDev
             )
           end
 
-        # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-        # be >= start.
+        # Last page to parse. Defaults to the last page. Must be at least `start`.
         sig { returns(T.nilable(Integer)) }
         attr_reader :end_
 
         sig { params(end_: Integer).void }
         attr_writer :end_
 
-        # First 1-based PDF page to parse.
+        # First page to parse, starting at 1.
         sig { returns(T.nilable(Integer)) }
         attr_reader :start
 
         sig { params(start: Integer).void }
         attr_writer :start
 
-        # PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
+        # PDF page range as a JSON object, such as `{"start": 2, "end": 5}`.
         sig { params(end_: Integer, start: Integer).returns(T.attached_class) }
         def self.new(
-          # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-          # be >= start.
+          # Last page to parse. Defaults to the last page. Must be at least `start`.
           end_: nil,
-          # First 1-based PDF page to parse.
+          # First page to parse, starting at 1.
           start: nil
         )
         end

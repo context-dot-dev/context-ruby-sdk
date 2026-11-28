@@ -15,14 +15,14 @@ module ContextDev
             )
           end
 
-        # The `next_cursor` from the previous page.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page.
         sig { returns(T.nilable(String)) }
         attr_reader :cursor
 
         sig { params(cursor: String).void }
         attr_writer :cursor
 
-        # Number of profiles per page.
+        # Maximum number of profiles to return per page.
         sig { returns(T.nilable(Integer)) }
         attr_reader :limit
 
@@ -37,9 +37,9 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # The `next_cursor` from the previous page.
+          # Cursor from the previous page's `next_cursor`. Omit for the first page.
           cursor: nil,
-          # Number of profiles per page.
+          # Maximum number of profiles to return per page.
           limit: nil,
           request_options: {}
         )

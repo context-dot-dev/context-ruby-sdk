@@ -4,24 +4,24 @@ module ContextDev
   module Models
     class Failure < ContextDev::Internal::Type::BaseModel
       # @!attribute code
-      #   Why the batch itself stopped.
+      #   Machine-readable failure code, such as `stalled` or `USAGE_EXCEEDED`.
       #
       #   @return [String]
       required :code, String
 
       # @!attribute message
-      #   Human-readable explanation.
+      #   Human-readable explanation of the failure.
       #
       #   @return [String]
       required :message, String
 
       # @!method initialize(code:, message:)
-      #   A failure of the batch as a whole, distinct from the per-page failures in
+      #   Why the batch as a whole failed. Individual page failures are counted in
       #   `page_errors`.
       #
-      #   @param code [String] Why the batch itself stopped.
+      #   @param code [String] Machine-readable failure code, such as `stalled` or `USAGE_EXCEEDED`.
       #
-      #   @param message [String] Human-readable explanation.
+      #   @param message [String] Human-readable explanation of the failure.
     end
   end
 end

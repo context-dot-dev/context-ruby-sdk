@@ -16,8 +16,8 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Up to 10 matching brands, name matches first, then domain matches, most popular
-      # first within each group. Empty when nothing matches.
+      # Up to 10 matching brands: name matches first, then domain matches, each group
+      # ordered by popularity. Empty when nothing matches.
       sig { returns(T::Array[ContextDev::Models::BrandSearchResponse::Result]) }
       attr_accessor :results
 
@@ -48,8 +48,8 @@ module ContextDev
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # Up to 10 matching brands, name matches first, then domain matches, most popular
-        # first within each group. Empty when nothing matches.
+        # Up to 10 matching brands: name matches first, then domain matches, each group
+        # ordered by popularity. Empty when nothing matches.
         results:,
         # Credits this request used and your remaining balance.
         key_metadata: nil
@@ -77,20 +77,21 @@ module ContextDev
             )
           end
 
-        # The brand's domain.
+        # Domain of the brand.
         sig { returns(String) }
         attr_accessor :domain
 
-        # Logo link URL that serves the brand's logo, generated per request for the
-        # calling organization.
+        # Logo Link URL that serves the brand's logo with your organization's client ID.
+        # Use it directly as an image source.
         sig { returns(String) }
         attr_accessor :logo
 
-        # The brand's name. Empty string when unknown.
+        # Name of the brand. Empty string when unknown.
         sig { returns(String) }
         attr_accessor :name
 
-        # The brand's country, when available, as an uppercase ISO 3166-1 alpha-2 code.
+        # Country of the brand, as an uppercase ISO 3166-1 alpha-2 code. Omitted when
+        # unknown.
         sig do
           returns(
             T.nilable(
@@ -108,14 +109,14 @@ module ContextDev
         end
         attr_writer :country
 
-        # The brand's description, when available.
+        # Short description of the brand. Omitted when unknown.
         sig { returns(T.nilable(String)) }
         attr_reader :description
 
         sig { params(description: String).void }
         attr_writer :description
 
-        # The brand's primary language, when available.
+        # Primary language of the brand. Omitted when unknown.
         sig do
           returns(
             T.nilable(
@@ -146,18 +147,19 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # The brand's domain.
+          # Domain of the brand.
           domain:,
-          # Logo link URL that serves the brand's logo, generated per request for the
-          # calling organization.
+          # Logo Link URL that serves the brand's logo with your organization's client ID.
+          # Use it directly as an image source.
           logo:,
-          # The brand's name. Empty string when unknown.
+          # Name of the brand. Empty string when unknown.
           name:,
-          # The brand's country, when available, as an uppercase ISO 3166-1 alpha-2 code.
+          # Country of the brand, as an uppercase ISO 3166-1 alpha-2 code. Omitted when
+          # unknown.
           country: nil,
-          # The brand's description, when available.
+          # Short description of the brand. Omitted when unknown.
           description: nil,
-          # The brand's primary language, when available.
+          # Primary language of the brand. Omitted when unknown.
           language: nil
         )
         end
@@ -179,7 +181,8 @@ module ContextDev
         def to_hash
         end
 
-        # The brand's country, when available, as an uppercase ISO 3166-1 alpha-2 code.
+        # Country of the brand, as an uppercase ISO 3166-1 alpha-2 code. Omitted when
+        # unknown.
         module Country
           extend ContextDev::Internal::Type::Enum
 
@@ -1449,7 +1452,7 @@ module ContextDev
           end
         end
 
-        # The brand's primary language, when available.
+        # Primary language of the brand. Omitted when unknown.
         module Language
           extend ContextDev::Internal::Type::Enum
 
@@ -2088,7 +2091,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -2101,7 +2104,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

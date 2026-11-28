@@ -15,11 +15,12 @@ module ContextDev
             )
           end
 
-        # Delivery ID.
+        # ID of the delivery.
         sig { returns(String) }
         attr_accessor :delivery_id
 
-        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        # usage and request logs by them.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :tags
 
@@ -34,9 +35,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Delivery ID.
+          # ID of the delivery.
           delivery_id:,
-          # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+          # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+          # usage and request logs by them.
           tags: nil,
           request_options: {}
         )

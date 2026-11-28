@@ -2,12 +2,11 @@
 
 module ContextDev
   module Resources
-    # Read your organization's API request logs.
+    # Inspect your organization's API requests, including retained inputs and
+    # responses.
     class Logs
-      # Retrieve a request’s metadata, retained input, and response. An entry becomes
-      # retrievable a few seconds after its request completes, so a 404 NOT_FOUND for a
-      # request that just finished means ingestion has not caught up yet; retry after a
-      # few seconds.
+      # Retrieve a request's metadata, retained input, and response. A request that just
+      # finished can return 404 `NOT_FOUND` for a few seconds, so retry shortly.
       sig do
         params(
           request_id: String,
@@ -15,14 +14,15 @@ module ContextDev
         ).returns(ContextDev::Models::LogRetrieveResponse)
       end
       def retrieve(
-        # The request ID of the logged API call.
+        # ID of the request, from its response's `request_id` or `X-Request-Id` header.
         request_id,
         request_options: {}
       )
       end
 
-      # List your organization’s request logs with filters and pagination. Logs also
-      # include batch settlements and monitor runs.
+      # List your organization's API requests, newest first. Filter by time, endpoint,
+      # API key, status, error code, tags, or text. Includes batch settlements and
+      # monitor runs.
       sig do
         params(
           error_code: String,
@@ -42,28 +42,26 @@ module ContextDev
       def list(
         # Filter by the `error_code` returned in the response.
         error_code: nil,
-        # Only include requests that returned a 4xx or 5xx status.
+        # Return only requests that failed with a 4xx or 5xx status.
         errors_only: nil,
-        # Only include requests at or after this ISO 8601 timestamp. Defaults to 24 hours
-        # before `to`.
+        # Return requests at or after this time. Defaults to 24 hours before `to`.
         from: nil,
-        # Filter by the API key that made the request.
+        # Filter by the ID of the API key that made the request.
         key_id: nil,
-        # Number of log entries per page.
+        # Maximum number of log entries to return per page.
         limit: nil,
         # Page number, starting at 1.
         page: nil,
-        # Filter by endpoint path, with or without the /v1 prefix.
+        # Filter by endpoint path, with or without the `/v1` prefix.
         path: nil,
-        # Case-insensitive substring match against the request query and body, e.g. a
-        # domain.
+        # Case-insensitive text to find in the request query or body, such as a domain.
         search: nil,
         # Filter by exact HTTP status code.
         status_code: nil,
-        # Comma-separated request tags. Matches requests carrying any of them. Up to 20
-        # tags, each 1-50 characters.
+        # Comma-separated tags. Returns log entries that have any of them. Up to 20 tags
+        # of 1 to 50 characters each.
         tags: nil,
-        # Only include requests at or before this ISO 8601 timestamp. Defaults to now.
+        # Return requests at or before this time. Defaults to now.
         to: nil,
         request_options: {}
       )

@@ -12,25 +12,25 @@ module ContextDev
             )
           end
 
-        # Delivery ID.
+        # Unique ID of the delivery.
         sig { returns(String) }
         attr_accessor :id
 
-        # Event creation time.
+        # When the event was created.
         sig { returns(Time) }
         attr_accessor :created_at
 
-        # Last successful delivery time, or null if never delivered.
+        # When the delivery last succeeded. `null` until it succeeds.
         sig { returns(T.nilable(Time)) }
         attr_accessor :delivered_at
 
-        # Webhook event type.
+        # Event that triggered the delivery.
         sig do
           returns(ContextDev::Webhooks::DeliverySummary::Event::TaggedSymbol)
         end
         attr_accessor :event
 
-        # Latest delivery error, or null if none.
+        # Most recent delivery error. `null` when there is none.
         sig do
           returns(T.nilable(ContextDev::Webhooks::DeliverySummary::LastError))
         end
@@ -46,11 +46,11 @@ module ContextDev
         end
         attr_writer :last_error
 
-        # Next scheduled attempt, or null if none.
+        # When the next attempt is scheduled. `null` when none is scheduled.
         sig { returns(T.nilable(Time)) }
         attr_accessor :next_attempt_at
 
-        # Last time you can retry manually (7 days after the event).
+        # Last time you can retry the delivery manually, 7 days after the event.
         sig { returns(Time) }
         attr_accessor :retry_expires_at
 
@@ -58,14 +58,16 @@ module ContextDev
         sig { returns(ContextDev::Webhooks::DeliverySummary::Source::Variants) }
         attr_accessor :source
 
-        # `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled`
-        # (source or its webhook was removed).
+        # Delivery state. `pending` is waiting for an attempt, `delivering` has an attempt
+        # in progress, `retrying` is waiting for an automatic retry, `delivered` was
+        # acknowledged with a 2xx, `failed` has no automatic retries left, and `cancelled`
+        # means the source or its webhook was removed.
         sig do
           returns(ContextDev::Webhooks::DeliverySummary::Status::TaggedSymbol)
         end
         attr_accessor :status
 
-        # Webhook destination URL.
+        # URL the webhook is sent to.
         sig { returns(String) }
         attr_accessor :url
 
@@ -91,26 +93,28 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Delivery ID.
+          # Unique ID of the delivery.
           id:,
-          # Event creation time.
+          # When the event was created.
           created_at:,
-          # Last successful delivery time, or null if never delivered.
+          # When the delivery last succeeded. `null` until it succeeds.
           delivered_at:,
-          # Webhook event type.
+          # Event that triggered the delivery.
           event:,
-          # Latest delivery error, or null if none.
+          # Most recent delivery error. `null` when there is none.
           last_error:,
-          # Next scheduled attempt, or null if none.
+          # When the next attempt is scheduled. `null` when none is scheduled.
           next_attempt_at:,
-          # Last time you can retry manually (7 days after the event).
+          # Last time you can retry the delivery manually, 7 days after the event.
           retry_expires_at:,
           # Batch or monitor run that produced the event.
           source:,
-          # `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled`
-          # (source or its webhook was removed).
+          # Delivery state. `pending` is waiting for an attempt, `delivering` has an attempt
+          # in progress, `retrying` is waiting for an automatic retry, `delivered` was
+          # acknowledged with a 2xx, `failed` has no automatic retries left, and `cancelled`
+          # means the source or its webhook was removed.
           status:,
-          # Webhook destination URL.
+          # URL the webhook is sent to.
           url:
         )
         end
@@ -136,7 +140,7 @@ module ContextDev
         def to_hash
         end
 
-        # Webhook event type.
+        # Event that triggered the delivery.
         module Event
           extend ContextDev::Internal::Type::Enum
 
@@ -192,22 +196,22 @@ module ContextDev
               )
             end
 
-          # Error code.
+          # Machine-readable error code.
           sig { returns(String) }
           attr_accessor :code
 
-          # Error details.
+          # Human-readable explanation of the error.
           sig { returns(String) }
           attr_accessor :message
 
-          # Latest delivery error, or null if none.
+          # Most recent delivery error. `null` when there is none.
           sig do
             params(code: String, message: String).returns(T.attached_class)
           end
           def self.new(
-            # Error code.
+            # Machine-readable error code.
             code:,
-            # Error details.
+            # Human-readable explanation of the error.
             message:
           )
           end
@@ -238,11 +242,11 @@ module ContextDev
                 )
               end
 
-            # Batch ID.
+            # ID of the batch.
             sig { returns(String) }
             attr_accessor :batch_id
 
-            # Which deliveries to list: `batch` or `monitor`.
+            # The event came from a batch.
             sig do
               returns(
                 ContextDev::Webhooks::DeliverySummary::Source::Batch::Type::TaggedSymbol
@@ -258,9 +262,9 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Batch ID.
+              # ID of the batch.
               batch_id:,
-              # Which deliveries to list: `batch` or `monitor`.
+              # The event came from a batch.
               type:
             )
             end
@@ -277,7 +281,7 @@ module ContextDev
             def to_hash
             end
 
-            # Which deliveries to list: `batch` or `monitor`.
+            # The event came from a batch.
             module Type
               extend ContextDev::Internal::Type::Enum
 
@@ -317,15 +321,15 @@ module ContextDev
                 )
               end
 
-            # Monitor ID.
+            # ID of the monitor.
             sig { returns(String) }
             attr_accessor :monitor_id
 
-            # Monitor run ID.
+            # ID of the monitor run.
             sig { returns(String) }
             attr_accessor :run_id
 
-            # Which deliveries to list: `batch` or `monitor`.
+            # The event came from a monitor run.
             sig do
               returns(
                 ContextDev::Webhooks::DeliverySummary::Source::Monitor::Type::TaggedSymbol
@@ -342,11 +346,11 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Monitor ID.
+              # ID of the monitor.
               monitor_id:,
-              # Monitor run ID.
+              # ID of the monitor run.
               run_id:,
-              # Which deliveries to list: `batch` or `monitor`.
+              # The event came from a monitor run.
               type:
             )
             end
@@ -364,7 +368,7 @@ module ContextDev
             def to_hash
             end
 
-            # Which deliveries to list: `batch` or `monitor`.
+            # The event came from a monitor run.
             module Type
               extend ContextDev::Internal::Type::Enum
 
@@ -404,8 +408,10 @@ module ContextDev
           end
         end
 
-        # `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled`
-        # (source or its webhook was removed).
+        # Delivery state. `pending` is waiting for an attempt, `delivering` has an attempt
+        # in progress, `retrying` is waiting for an automatic retry, `delivered` was
+        # acknowledged with a 2xx, `failed` has no automatic retries left, and `cancelled`
+        # means the source or its webhook was removed.
         module Status
           extend ContextDev::Internal::Type::Enum
 

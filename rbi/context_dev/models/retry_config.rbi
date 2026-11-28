@@ -8,21 +8,21 @@ module ContextDev
           T.any(ContextDev::RetryConfig, ContextDev::Internal::AnyHash)
         end
 
-      # Retry delays in seconds, totaling at most 72 hours. Use [] to disable automatic
-      # retries.
+      # Delay before each automatic retry, in seconds, totaling at most 72 hours. Pass
+      # `[]` to disable automatic retries.
       sig { returns(T.nilable(T::Array[Integer])) }
       attr_reader :delays_seconds
 
       sig { params(delays_seconds: T::Array[Integer]).void }
       attr_writer :delays_seconds
 
-      # Webhook retry settings. Use {} for the default schedule.
+      # Automatic retry settings. Pass `{}` for the default schedule.
       sig do
         params(delays_seconds: T::Array[Integer]).returns(T.attached_class)
       end
       def self.new(
-        # Retry delays in seconds, totaling at most 72 hours. Use [] to disable automatic
-        # retries.
+        # Delay before each automatic retry, in seconds, totaling at most 72 hours. Pass
+        # `[]` to disable automatic retries.
         delays_seconds: nil
       )
       end

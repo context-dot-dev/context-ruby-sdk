@@ -8,13 +8,13 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute change_id
-      #   ID of the detected change.
+      #   ID of the change.
       #
       #   @return [String]
       required :change_id, String
 
       # @!method initialize(change_id:, request_options: {})
-      #   @param change_id [String] ID of the detected change.
+      #   @param change_id [String] ID of the change.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
     end

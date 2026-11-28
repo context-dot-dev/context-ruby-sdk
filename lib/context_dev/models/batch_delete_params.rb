@@ -8,13 +8,13 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute batch_id
-      #   Batch ID.
+      #   ID of the batch.
       #
       #   @return [String]
       required :batch_id, String
 
       # @!method initialize(batch_id:, request_options: {})
-      #   @param batch_id [String] Batch ID.
+      #   @param batch_id [String] ID of the batch.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
     end

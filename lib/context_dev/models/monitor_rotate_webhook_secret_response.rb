@@ -5,30 +5,34 @@ module ContextDev
     # @see ContextDev::Resources::Monitors#rotate_webhook_secret
     class MonitorRotateWebhookSecretResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute id
+      #   Unique ID of the monitor.
       #
       #   @return [String]
       required :id, String
 
       # @!attribute change_detection
       #   How changes are judged. Defaults to `semantic` for extract and search targets
-      #   and page targets with `instructions`, otherwise `exact`.
+      #   and for page targets with `instructions`; otherwise `exact`. Sitemap targets
+      #   support only `exact`, and extract targets only `semantic`.
       #
       #   @return [ContextDev::Models::MonitorRotateWebhookSecretResponse::ChangeDetection::Exact, ContextDev::Models::MonitorRotateWebhookSecretResponse::ChangeDetection::Semantic]
       required :change_detection,
                union: -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::ChangeDetection }
 
       # @!attribute created_at
+      #   When the monitor was created.
       #
       #   @return [Time]
       required :created_at, Time
 
       # @!attribute mode
-      #   Always `web`. Optional.
+      #   Monitor category. Always `web`.
       #
       #   @return [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Mode]
       required :mode, enum: -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Mode }
 
       # @!attribute name
+      #   Display name of the monitor.
       #
       #   @return [String]
       required :name, String
@@ -41,8 +45,10 @@ module ContextDev
       required :request_id, String
 
       # @!attribute status
-      #   Current state. Failed monitors keep running; paused monitors must be resumed
-      #   with `status: "active"`.
+      #   `active` monitors run on schedule. `failed` monitors keep running after a failed
+      #   run and return to `active` on the next success. `paused` monitors don't run
+      #   until you set `status` to `active`; Context.dev also pauses monitors after
+      #   repeated failures or credit shortfalls.
       #
       #   @return [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Status]
       required :status, enum: -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Status }
@@ -55,13 +61,15 @@ module ContextDev
       required :target, union: -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Target }
 
       # @!attribute updated_at
+      #   When the monitor was last updated.
       #
       #   @return [Time]
       required :updated_at, Time
 
       # @!attribute baseline
-      #   Comparison baseline, included on Retrieve. Null until capture completes or after
-      #   target changes.
+      #   What the next run compares against. Returned only by
+      #   `GET /monitors/{monitor_id}`; `null` until the first capture finishes or after
+      #   the target changes.
       #
       #   @return [ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsExtractBaseline, ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSearchBaseline, nil]
       optional :baseline,
@@ -75,23 +83,25 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::KeyMetadata }
 
       # @!attribute last_change_at
+      #   When the monitor last detected a change. `null` until it detects one.
       #
       #   @return [Time, nil]
       optional :last_change_at, Time, nil?: true
 
       # @!attribute last_error
-      #   Error from the most recent failed run; null when the last run succeeded.
+      #   Error from the most recent failed run. `null` when the last run succeeded.
       #
       #   @return [ContextDev::Models::MonitorRotateWebhookSecretResponse::LastError, nil]
       optional :last_error, -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::LastError }, nil?: true
 
       # @!attribute last_run_at
+      #   When the most recent run ended. `null` until the first run ends.
       #
       #   @return [Time, nil]
       optional :last_run_at, Time, nil?: true
 
       # @!attribute next_run_at
-      #   When the next scheduled run is due; null while paused.
+      #   When the next scheduled run is due. `null` while paused.
       #
       #   @return [Time, nil]
       optional :next_run_at, Time, nil?: true
@@ -103,29 +113,28 @@ module ContextDev
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute schedule
-      #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-      #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
-      #   between 10 minutes and 1 year.
+      #   Run the monitor at a fixed interval, such as every 6 hours or every 2 days. The
+      #   interval must be between 10 minutes and 1 year.
       #
       #   @return [ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule, nil]
       optional :schedule, -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule }
 
       # @!attribute tags
-      #   Labels for filtering monitors, their changes, and their usage.
+      #   Labels for grouping monitors. Filter monitors, changes, and credit usage by tag.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute webhook
-      #   Webhook destination and delivery settings. Null means no webhook is configured.
+      #   Webhook that receives monitor events. `null` when no webhook is configured.
       #
       #   @return [ContextDev::Models::MonitorRotateWebhookSecretResponse::Webhook, nil]
       optional :webhook, -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Webhook }, nil?: true
 
       # @!attribute webhook_failure
-      #   Present while webhook deliveries are failing consecutively; null when deliveries
-      #   are healthy or no webhook is configured. Cleared on the next successful delivery
-      #   and when the webhook URL changes.
+      #   Details of failing webhook deliveries. `null` when deliveries succeed or no
+      #   webhook is configured; cleared by the next successful delivery or a new webhook
+      #   URL.
       #
       #   @return [ContextDev::Models::MonitorRotateWebhookSecretResponse::WebhookFailure, nil]
       optional :webhook_failure,
@@ -136,48 +145,49 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorRotateWebhookSecretResponse} for more details.
       #
-      #   @param id [String]
+      #   @param id [String] Unique ID of the monitor.
       #
       #   @param change_detection [ContextDev::Models::MonitorRotateWebhookSecretResponse::ChangeDetection::Exact, ContextDev::Models::MonitorRotateWebhookSecretResponse::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract and search targets an
       #
-      #   @param created_at [Time]
+      #   @param created_at [Time] When the monitor was created.
       #
-      #   @param mode [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Mode] Always `web`. Optional.
+      #   @param mode [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Mode] Monitor category. Always `web`.
       #
-      #   @param name [String]
+      #   @param name [String] Display name of the monitor.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param status [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Status] Current state. Failed monitors keep running; paused monitors must be resumed wit
+      #   @param status [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Status] `active` monitors run on schedule. `failed` monitors keep running after a failed
       #
       #   @param target [ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Sitemap, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Extract, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Search] What to watch: a page, a sitemap, data extracted from a site, or web search resu
       #
-      #   @param updated_at [Time]
+      #   @param updated_at [Time] When the monitor was last updated.
       #
-      #   @param baseline [ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsExtractBaseline, ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSearchBaseline, nil] Comparison baseline, included on Retrieve. Null until capture completes or after
+      #   @param baseline [ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsPageBaseline, ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSitemapBaseline, ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsExtractBaseline, ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSearchBaseline, nil] What the next run compares against. Returned only by `GET /monitors/{monitor_id}
       #
       #   @param key_metadata [ContextDev::Models::MonitorRotateWebhookSecretResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param last_change_at [Time, nil]
+      #   @param last_change_at [Time, nil] When the monitor last detected a change. `null` until it detects one.
       #
-      #   @param last_error [ContextDev::Models::MonitorRotateWebhookSecretResponse::LastError, nil] Error from the most recent failed run; null when the last run succeeded.
+      #   @param last_error [ContextDev::Models::MonitorRotateWebhookSecretResponse::LastError, nil] Error from the most recent failed run. `null` when the last run succeeded.
       #
-      #   @param last_run_at [Time, nil]
+      #   @param last_run_at [Time, nil] When the most recent run ended. `null` until the first run ends.
       #
-      #   @param next_run_at [Time, nil] When the next scheduled run is due; null while paused.
+      #   @param next_run_at [Time, nil] When the next scheduled run is due. `null` while paused.
       #
       #   @param policies [Array<String>] Access policy IDs applied to every run.
       #
-      #   @param schedule [ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
+      #   @param schedule [ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule] Run the monitor at a fixed interval, such as every 6 hours or every 2 days. The
       #
-      #   @param tags [Array<String>] Labels for filtering monitors, their changes, and their usage.
+      #   @param tags [Array<String>] Labels for grouping monitors. Filter monitors, changes, and credit usage by tag.
       #
-      #   @param webhook [ContextDev::Models::MonitorRotateWebhookSecretResponse::Webhook, nil] Webhook destination and delivery settings. Null means no webhook is configured.
+      #   @param webhook [ContextDev::Models::MonitorRotateWebhookSecretResponse::Webhook, nil] Webhook that receives monitor events. `null` when no webhook is configured.
       #
-      #   @param webhook_failure [ContextDev::Models::MonitorRotateWebhookSecretResponse::WebhookFailure, nil] Present while webhook deliveries are failing consecutively; null when deliveries
+      #   @param webhook_failure [ContextDev::Models::MonitorRotateWebhookSecretResponse::WebhookFailure, nil] Details of failing webhook deliveries. `null` when deliveries succeed or no webh
 
       # How changes are judged. Defaults to `semantic` for extract and search targets
-      # and page targets with `instructions`, otherwise `exact`.
+      # and for page targets with `instructions`; otherwise `exact`. Sitemap targets
+      # support only `exact`, and extract targets only `semantic`.
       #
       # @see ContextDev::Models::MonitorRotateWebhookSecretResponse#change_detection
       module ChangeDetection
@@ -185,10 +195,10 @@ module ContextDev
 
         discriminator :type
 
-        # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals. For search targets, this means every new result.
+        # Report every change: visible-text diffs for pages, added or removed URLs for sitemaps, and every new result for searches.
         variant :exact, -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::ChangeDetection::Exact }
 
-        # Detect meaningful content changes using the target’s instructions and optional schema.
+        # Report only changes that matter, judged against the target's `instructions` and, for extract targets, its `schema`.
         variant :semantic,
                 -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::ChangeDetection::Semantic }
 
@@ -200,40 +210,44 @@ module ContextDev
           required :type, const: :exact
 
           # @!method initialize(type: :exact)
-          #   Detect exact changes. For page targets, this means visible text diffs. For
-          #   sitemap targets, this means URL additions and removals. For search targets, this
-          #   means every new result.
+          #   Report every change: visible-text diffs for pages, added or removed URLs for
+          #   sitemaps, and every new result for searches.
           #
           #   @param type [Symbol, :exact] Use `exact` to compare visible text, sitemap URLs, or search results.
         end
 
         class Semantic < ContextDev::Internal::Type::BaseModel
           # @!attribute type
-          #   Use `semantic` to judge changes against the target instructions.
+          #   Use `semantic` to report only changes that match the target's `instructions`.
           #
           #   @return [Symbol, :semantic]
           required :type, const: :semantic
 
           # @!attribute confidence_threshold
-          #   Minimum confidence required to report a meaningful change, from 0 to 1.
+          #   Minimum confidence a change needs to be reported. Higher values mean fewer, more
+          #   certain alerts.
           #
           #   @return [Float, nil]
           optional :confidence_threshold, Float
 
           # @!method initialize(confidence_threshold: nil, type: :semantic)
-          #   Detect meaningful content changes using the target’s instructions and optional
-          #   schema.
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::MonitorRotateWebhookSecretResponse::ChangeDetection::Semantic}
+          #   for more details.
           #
-          #   @param confidence_threshold [Float] Minimum confidence required to report a meaningful change, from 0 to 1.
+          #   Report only changes that matter, judged against the target's `instructions` and,
+          #   for extract targets, its `schema`.
           #
-          #   @param type [Symbol, :semantic] Use `semantic` to judge changes against the target instructions.
+          #   @param confidence_threshold [Float] Minimum confidence a change needs to be reported. Higher values mean fewer, more
+          #
+          #   @param type [Symbol, :semantic] Use `semantic` to report only changes that match the target's `instructions`.
         end
 
         # @!method self.variants
         #   @return [Array(ContextDev::Models::MonitorRotateWebhookSecretResponse::ChangeDetection::Exact, ContextDev::Models::MonitorRotateWebhookSecretResponse::ChangeDetection::Semantic)]
       end
 
-      # Always `web`. Optional.
+      # Monitor category. Always `web`.
       #
       # @see ContextDev::Models::MonitorRotateWebhookSecretResponse#mode
       module Mode
@@ -245,8 +259,10 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Current state. Failed monitors keep running; paused monitors must be resumed
-      # with `status: "active"`.
+      # `active` monitors run on schedule. `failed` monitors keep running after a failed
+      # run and return to `active` on the next success. `paused` monitors don't run
+      # until you set `status` to `active`; Context.dev also pauses monitors after
+      # repeated failures or credit shortfalls.
       #
       # @see ContextDev::Models::MonitorRotateWebhookSecretResponse#status
       module Status
@@ -269,16 +285,16 @@ module ContextDev
 
         discriminator :type
 
-        # Watch a single web page. Exact detection reports visible-text diffs; semantic detection judges confirmed stable diffs against `instructions`.
+        # Watch one web page. `exact` detection reports any change to the visible text; `semantic` detection reports only confirmed changes that match `instructions`.
         variant :page, -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page }
 
-        # Watch a site’s URL inventory for confirmed additions and removals.
+        # Watch a sitemap and report URLs that are added or removed.
         variant :sitemap, -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Sitemap }
 
-        # Track relevant pages selected by `schema` and `instructions`; refresh the page set periodically.
+        # Extract structured data from the most relevant pages of a site and report meaningful changes. Pages are chosen from `schema` and `instructions`, and the page set is refreshed periodically.
         variant :extract, -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Extract }
 
-        # Search the web on every run and report results not seen before, listed in the change’s `matched_urls` and `evidence`. Semantic detection reports only results describing a new development that matches `instructions`; exact detection reports every new result.
+        # Search the web on every run and report results not seen before, listed in the change's `matched_urls` and `evidence`. `semantic` detection reports only results about a new development that matches `instructions`; `exact` detection reports every new result.
         variant :search, -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Search }
 
         class Page < ContextDev::Internal::Type::BaseModel
@@ -289,15 +305,14 @@ module ContextDev
           required :type, const: :page
 
           # @!attribute url
-          #   Public HTTP(S) page URL to monitor.
+          #   Public HTTP(S) URL of the page to watch.
           #
           #   @return [String]
           required :url, String
 
           # @!attribute actions
-          #   Optional browser actions executed in array order after the page loads, before
-          #   content is captured, on every run. Requires a paid plan. Maximum: 5 actions.
-          #   Changes create a new baseline.
+          #   Browser actions to run in order after the page loads and before each capture.
+          #   Requires a paid plan. Changing it resets the baseline.
           #
           #   @return [Array<ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Wait, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Perform, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll>, nil]
           optional :actions,
@@ -305,27 +320,29 @@ module ContextDev
                    nil?: true
 
           # @!attribute exclude_selectors
-          #   Remove matching regions after inclusions. Changes create a new baseline.
+          #   CSS selectors for regions to ignore, applied after `include_selectors`. Changing
+          #   it resets the baseline.
           #
           #   @return [Array<String>, nil]
           optional :exclude_selectors, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute include_selectors
-          #   Monitor these CSS-selected regions. Empty or omitted uses main content. Changes
-          #   create a new baseline.
+          #   CSS selectors for the regions to watch. Omit or leave empty to watch the main
+          #   content. Changing it resets the baseline.
           #
           #   @return [Array<String>, nil]
           optional :include_selectors, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute instructions
-          #   Plain-language goal describing which page changes matter. When provided without
-          #   change_detection, semantic detection is inferred.
+          #   Plain-language description of the changes that matter. Requires `semantic`
+          #   detection, which is selected when `change_detection` is omitted.
           #
           #   @return [String, nil]
           optional :instructions, String
 
           # @!attribute normalize_whitespace
-          #   Normalize whitespace before comparing or analyzing text.
+          #   Collapse whitespace before comparing text, so spacing-only edits are not
+          #   reported.
           #
           #   @return [Boolean, nil]
           optional :normalize_whitespace, ContextDev::Internal::Type::Boolean
@@ -335,38 +352,37 @@ module ContextDev
           #   {ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page} for more
           #   details.
           #
-          #   Watch a single web page. Exact detection reports visible-text diffs; semantic
-          #   detection judges confirmed stable diffs against `instructions`.
+          #   Watch one web page. `exact` detection reports any change to the visible text;
+          #   `semantic` detection reports only confirmed changes that match `instructions`.
           #
-          #   @param url [String] Public HTTP(S) page URL to monitor.
+          #   @param url [String] Public HTTP(S) URL of the page to watch.
           #
-          #   @param actions [Array<ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Wait, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Perform, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll>, nil] Optional browser actions executed in array order after the page loads, before co
+          #   @param actions [Array<ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Wait, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Perform, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll>, nil] Browser actions to run in order after the page loads and before each capture. Re
           #
-          #   @param exclude_selectors [Array<String>] Remove matching regions after inclusions. Changes create a new baseline.
+          #   @param exclude_selectors [Array<String>] CSS selectors for regions to ignore, applied after `include_selectors`. Changing
           #
-          #   @param include_selectors [Array<String>] Monitor these CSS-selected regions. Empty or omitted uses main content. Changes
+          #   @param include_selectors [Array<String>] CSS selectors for the regions to watch. Omit or leave empty to watch the main co
           #
-          #   @param instructions [String] Plain-language goal describing which page changes matter. When provided without
+          #   @param instructions [String] Plain-language description of the changes that matter. Requires `semantic` detec
           #
-          #   @param normalize_whitespace [Boolean] Normalize whitespace before comparing or analyzing text.
+          #   @param normalize_whitespace [Boolean] Collapse whitespace before comparing text, so spacing-only edits are not reporte
           #
           #   @param type [Symbol, :page] Use `page` to watch one web page.
 
-          # Browser action discriminated by `do`. Each variant exposes only its applicable
-          # fields.
+          # One browser action. `do` selects the type: `wait`, `perform`, or `scroll`.
           module Action
             extend ContextDev::Internal::Type::Union
 
             discriminator :do
 
-            # Pause for a fixed number of milliseconds before continuing to the next action.
+            # Pause for a fixed time before the next action.
             variant :wait, -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Wait }
 
-            # Resolve and perform one natural-language browser action.
+            # Perform one browser instruction written in plain language.
             variant :perform,
                     -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Perform }
 
-            # Scroll the page or a selected scrollable container, waiting adaptively for content and dimensions to settle after each iteration.
+            # Scroll the page or a scrollable container. Waits for new content to settle after each scroll.
             variant :scroll,
                     -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll }
 
@@ -384,7 +400,7 @@ module ContextDev
               required :time_ms, Integer, api_name: :timeMs
 
               # @!method initialize(time_ms:, do_: :wait)
-              #   Pause for a fixed number of milliseconds before continuing to the next action.
+              #   Pause for a fixed time before the next action.
               #
               #   @param time_ms [Integer] Time to pause in milliseconds before the next action.
               #
@@ -405,7 +421,7 @@ module ContextDev
               required :do_, const: :perform, api_name: :do
 
               # @!method initialize(action:, do_: :perform)
-              #   Resolve and perform one natural-language browser action.
+              #   Perform one browser instruction written in plain language.
               #
               #   @param action [String] One browser instruction, such as clicking a button or entering text.
               #
@@ -420,53 +436,46 @@ module ContextDev
               required :do_, const: :scroll, api_name: :do
 
               # @!attribute amount
-              #   Pixels per scroll, one visible viewport, or the current scroll boundary.
-              #   Defaults to viewport.
+              #   Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
               #
               #   @return [Integer, Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll::Amount, nil]
               optional :amount,
                        union: -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll::Amount }
 
               # @!attribute container
-              #   CSS selector for the first matching scroll container. Defaults to the page.
+              #   Scroll the first container matching this CSS selector. Omit to scroll the page.
               #
               #   @return [String, nil]
               optional :container, String
 
               # @!attribute direction
-              #   Direction to scroll. Defaults to down.
+              #   Direction to scroll.
               #
               #   @return [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll::Direction, nil]
               optional :direction,
                        enum: -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll::Direction }
 
               # @!attribute max_scrolls
-              #   Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
-              #   changing. Defaults to 1.
+              #   Maximum number of scroll steps. Stops early when the page stops changing.
               #
               #   @return [Integer, nil]
               optional :max_scrolls, Integer, api_name: :maxScrolls
 
               # @!method initialize(amount: nil, container: nil, direction: nil, max_scrolls: nil, do_: :scroll)
-              #   Some parameter documentations has been truncated, see
-              #   {ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll}
-              #   for more details.
+              #   Scroll the page or a scrollable container. Waits for new content to settle after
+              #   each scroll.
               #
-              #   Scroll the page or a selected scrollable container, waiting adaptively for
-              #   content and dimensions to settle after each iteration.
+              #   @param amount [Integer, Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll::Amount] Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
               #
-              #   @param amount [Integer, Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll::Amount] Pixels per scroll, one visible viewport, or the current scroll boundary. Default
+              #   @param container [String] Scroll the first container matching this CSS selector. Omit to scroll the page.
               #
-              #   @param container [String] CSS selector for the first matching scroll container. Defaults to the page.
+              #   @param direction [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll::Direction] Direction to scroll.
               #
-              #   @param direction [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll::Direction] Direction to scroll. Defaults to down.
-              #
-              #   @param max_scrolls [Integer] Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+              #   @param max_scrolls [Integer] Maximum number of scroll steps. Stops early when the page stops changing.
               #
               #   @param do_ [Symbol, :scroll] Use `scroll` to move through the page or a container.
 
-              # Pixels per scroll, one visible viewport, or the current scroll boundary.
-              # Defaults to viewport.
+              # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
               #
               # @see ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll#amount
               module Amount
@@ -498,7 +507,7 @@ module ContextDev
                 # @!endgroup
               end
 
-              # Direction to scroll. Defaults to down.
+              # Direction to scroll.
               #
               # @see ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page::Action::Scroll#direction
               module Direction
@@ -527,47 +536,47 @@ module ContextDev
           required :type, const: :sitemap
 
           # @!attribute url
-          #   Sitemap URL to monitor.
+          #   Public HTTP(S) URL of the sitemap to watch.
           #
           #   @return [String]
           required :url, String
 
           # @!attribute exclude
-          #   URL path patterns to exclude (max 50).
+          #   Path patterns of URLs to ignore, such as `/legal/*`.
           #
           #   @return [Array<String>, nil]
           optional :exclude, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute include
-          #   URL path patterns to include (max 50).
+          #   Path patterns of URLs to track, such as `/blog/*`.
           #
           #   @return [Array<String>, nil]
           optional :include, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute max_urls
-          #   Maximum number of sitemap URLs to track (capped at 10,000).
+          #   Maximum number of URLs to track.
           #
           #   @return [Integer, nil]
           optional :max_urls, Integer
 
           # @!method initialize(url:, exclude: nil, include: nil, max_urls: nil, type: :sitemap)
-          #   Watch a site’s URL inventory for confirmed additions and removals.
+          #   Watch a sitemap and report URLs that are added or removed.
           #
-          #   @param url [String] Sitemap URL to monitor.
+          #   @param url [String] Public HTTP(S) URL of the sitemap to watch.
           #
-          #   @param exclude [Array<String>] URL path patterns to exclude (max 50).
+          #   @param exclude [Array<String>] Path patterns of URLs to ignore, such as `/legal/*`.
           #
-          #   @param include [Array<String>] URL path patterns to include (max 50).
+          #   @param include [Array<String>] Path patterns of URLs to track, such as `/blog/*`.
           #
-          #   @param max_urls [Integer] Maximum number of sitemap URLs to track (capped at 10,000).
+          #   @param max_urls [Integer] Maximum number of URLs to track.
           #
           #   @param type [Symbol, :sitemap] Use `sitemap` to watch a site for added or removed URLs.
         end
 
         class Extract < ContextDev::Internal::Type::BaseModel
           # @!attribute instructions
-          #   Natural-language instructions guiding which pages and facts to track and which
-          #   changes to report.
+          #   Plain-language description of the pages and facts to track and the changes to
+          #   report.
           #
           #   @return [String]
           required :instructions, String
@@ -579,19 +588,19 @@ module ContextDev
           required :type, const: :extract
 
           # @!attribute url
-          #   Root URL to extract structured data from.
+          #   Public HTTP(S) URL where page discovery starts, usually the site home page.
           #
           #   @return [String]
           required :url, String
 
           # @!attribute follow_subdomains
-          #   Allow page discovery on subdomains of the target site.
+          #   Also discover pages on subdomains of the site.
           #
           #   @return [Boolean, nil]
           optional :follow_subdomains, ContextDev::Internal::Type::Boolean
 
           # @!attribute max_depth
-          #   Optional maximum link depth from the starting URL (0 = only the starting page).
+          #   Maximum link depth from `url`. `0` tracks only the starting page.
           #
           #   @return [Integer, nil]
           optional :max_depth, Integer
@@ -603,8 +612,8 @@ module ContextDev
           optional :max_pages, Integer
 
           # @!attribute schema
-          #   JSON Schema for page selection and the baseline snapshot. Changes return diffs
-          #   and evidence.
+          #   JSON Schema for the data to extract, up to 20,000 characters; it also guides
+          #   which pages are tracked. Defaults to a `summary` string and a `key_points` list.
           #
           #   @return [Hash{Symbol=>Object}, nil]
           optional :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
@@ -614,40 +623,42 @@ module ContextDev
           #   {ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Extract} for
           #   more details.
           #
-          #   Track relevant pages selected by `schema` and `instructions`; refresh the page
-          #   set periodically.
+          #   Extract structured data from the most relevant pages of a site and report
+          #   meaningful changes. Pages are chosen from `schema` and `instructions`, and the
+          #   page set is refreshed periodically.
           #
-          #   @param instructions [String] Natural-language instructions guiding which pages and facts to track and which c
+          #   @param instructions [String] Plain-language description of the pages and facts to track and the changes to re
           #
-          #   @param url [String] Root URL to extract structured data from.
+          #   @param url [String] Public HTTP(S) URL where page discovery starts, usually the site home page.
           #
-          #   @param follow_subdomains [Boolean] Allow page discovery on subdomains of the target site.
+          #   @param follow_subdomains [Boolean] Also discover pages on subdomains of the site.
           #
-          #   @param max_depth [Integer] Optional maximum link depth from the starting URL (0 = only the starting page).
+          #   @param max_depth [Integer] Maximum link depth from `url`. `0` tracks only the starting page.
           #
           #   @param max_pages [Integer] Maximum number of pages to track.
           #
-          #   @param schema [Hash{Symbol=>Object}] JSON Schema for page selection and the baseline snapshot. Changes return diffs a
+          #   @param schema [Hash{Symbol=>Object}] JSON Schema for the data to extract, up to 20,000 characters; it also guides whi
           #
           #   @param type [Symbol, :extract] Use `extract` to watch structured data across selected pages.
         end
 
         class Search < ContextDev::Internal::Type::BaseModel
           # @!attribute query
-          #   Web search query to run on every check. Supports operators such as `site:`,
-          #   `-site:`, and quoted phrases.
+          #   Web search query to run on every check. Supports `site:`, `-site:`, and quoted
+          #   phrases.
           #
           #   @return [String]
           required :query, String
 
           # @!attribute type
-          #   Use `search` to watch the whole web for new results about a topic.
+          #   Use `search` to watch the web for new results about a topic.
           #
           #   @return [Symbol, :search]
           required :type, const: :search
 
           # @!attribute instructions
-          #   Plain-language description of which new results matter. Defaults to the query.
+          #   Plain-language description of the new results that matter. Defaults to `query`.
+          #   Not allowed with `exact` detection.
           #
           #   @return [String, nil]
           optional :instructions, String
@@ -658,64 +669,65 @@ module ContextDev
           #   more details.
           #
           #   Search the web on every run and report results not seen before, listed in the
-          #   change’s `matched_urls` and `evidence`. Semantic detection reports only results
-          #   describing a new development that matches `instructions`; exact detection
+          #   change's `matched_urls` and `evidence`. `semantic` detection reports only
+          #   results about a new development that matches `instructions`; `exact` detection
           #   reports every new result.
           #
-          #   @param query [String] Web search query to run on every check. Supports operators such as `site:`, `-si
+          #   @param query [String] Web search query to run on every check. Supports `site:`, `-site:`, and quoted p
           #
-          #   @param instructions [String] Plain-language description of which new results matter. Defaults to the query.
+          #   @param instructions [String] Plain-language description of the new results that matter. Defaults to `query`.
           #
-          #   @param type [Symbol, :search] Use `search` to watch the whole web for new results about a topic.
+          #   @param type [Symbol, :search] Use `search` to watch the web for new results about a topic.
         end
 
         # @!method self.variants
         #   @return [Array(ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Page, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Sitemap, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Extract, ContextDev::Models::MonitorRotateWebhookSecretResponse::Target::Search)]
       end
 
-      # Comparison baseline, included on Retrieve. Null until capture completes or after
-      # target changes.
+      # What the next run compares against. Returned only by
+      # `GET /monitors/{monitor_id}`; `null` until the first capture finishes or after
+      # the target changes.
       #
       # @see ContextDev::Models::MonitorRotateWebhookSecretResponse#baseline
       module Baseline
         extend ContextDev::Internal::Type::Union
 
-        # Current baseline of a `page` monitor: the visible page text as last observed.
+        # Baseline for a `page` target: the page's visible text from the last capture.
         variant -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsPageBaseline }
 
-        # Current baseline of a `sitemap` monitor: the normalized URL set as last observed.
+        # Baseline for a `sitemap` target: the normalized set of URLs from the last capture.
         variant -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSitemapBaseline }
 
-        # Current baseline of an `extract` monitor: the pages it tracks and the structured data as last extracted.
+        # Baseline for an `extract` target: the tracked pages and the data last extracted from them.
         variant -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsExtractBaseline }
 
-        # Current baseline of a `search` monitor: the search results as last observed.
+        # Baseline for a `search` target: the results from the last capture.
         variant -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSearchBaseline }
 
         class MonitorsPageBaseline < ContextDev::Internal::Type::BaseModel
           # @!attribute captured_at
-          #   When this baseline was last captured or replaced.
+          #   When the baseline was last captured or updated.
           #
           #   @return [Time]
           required :captured_at, Time
 
           # @!attribute text
-          #   The page's visible text as last observed.
+          #   Visible page text from the last capture.
           #
           #   @return [String]
           required :text, String
 
           # @!method initialize(captured_at:, text:)
-          #   Current baseline of a `page` monitor: the visible page text as last observed.
+          #   Baseline for a `page` target: the page's visible text from the last capture.
           #
-          #   @param captured_at [Time] When this baseline was last captured or replaced.
+          #   @param captured_at [Time] When the baseline was last captured or updated.
           #
-          #   @param text [String] The page's visible text as last observed.
+          #   @param text [String] Visible page text from the last capture.
         end
 
         class MonitorsSitemapBaseline < ContextDev::Internal::Type::BaseModel
           # @!attribute captured_at
-          #   When this baseline was last captured or replaced.
+          #   When the baseline was last captured or updated.
           #
           #   @return [Time]
           required :captured_at, Time
@@ -727,38 +739,38 @@ module ContextDev
           required :url_count, Integer
 
           # @!attribute urls
-          #   The sitemap URLs as last observed (sorted, normalized).
+          #   Normalized sitemap URLs from the last capture, sorted.
           #
           #   @return [Array<String>]
           required :urls, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!method initialize(captured_at:, url_count:, urls:)
-          #   Current baseline of a `sitemap` monitor: the normalized URL set as last
-          #   observed.
+          #   Baseline for a `sitemap` target: the normalized set of URLs from the last
+          #   capture.
           #
-          #   @param captured_at [Time] When this baseline was last captured or replaced.
+          #   @param captured_at [Time] When the baseline was last captured or updated.
           #
           #   @param url_count [Integer] Number of URLs in the baseline.
           #
-          #   @param urls [Array<String>] The sitemap URLs as last observed (sorted, normalized).
+          #   @param urls [Array<String>] Normalized sitemap URLs from the last capture, sorted.
         end
 
         class MonitorsExtractBaseline < ContextDev::Internal::Type::BaseModel
           # @!attribute captured_at
-          #   When this baseline was last captured or replaced.
+          #   When the baseline was last captured or updated.
           #
           #   @return [Time]
           required :captured_at, Time
 
           # @!attribute data
-          #   Latest structured snapshot matching the extraction schema, refreshed at most
-          #   daily; `null` before capture.
+          #   Latest extracted data, matching the target's `schema`. Refreshed at most once a
+          #   day; `null` before the first capture.
           #
           #   @return [Object]
           required :data, ContextDev::Internal::Type::Unknown
 
           # @!attribute urls_analyzed
-          #   The page URLs the monitor tracks and analyzes for changes.
+          #   Pages the monitor tracks for changes.
           #
           #   @return [Array<String>]
           required :urls_analyzed, ContextDev::Internal::Type::ArrayOf[String]
@@ -768,36 +780,36 @@ module ContextDev
           #   {ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsExtractBaseline}
           #   for more details.
           #
-          #   Current baseline of an `extract` monitor: the pages it tracks and the structured
-          #   data as last extracted.
+          #   Baseline for an `extract` target: the tracked pages and the data last extracted
+          #   from them.
           #
-          #   @param captured_at [Time] When this baseline was last captured or replaced.
+          #   @param captured_at [Time] When the baseline was last captured or updated.
           #
-          #   @param data [Object] Latest structured snapshot matching the extraction schema, refreshed at most dai
+          #   @param data [Object] Latest extracted data, matching the target's `schema`. Refreshed at most once a
           #
-          #   @param urls_analyzed [Array<String>] The page URLs the monitor tracks and analyzes for changes.
+          #   @param urls_analyzed [Array<String>] Pages the monitor tracks for changes.
         end
 
         class MonitorsSearchBaseline < ContextDev::Internal::Type::BaseModel
           # @!attribute captured_at
-          #   When this baseline was last captured or replaced.
+          #   When the baseline was last captured or updated.
           #
           #   @return [Time]
           required :captured_at, Time
 
           # @!attribute results
-          #   Search results as last observed.
+          #   Search results from the last capture.
           #
           #   @return [Array<ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSearchBaseline::Result>]
           required :results,
                    -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSearchBaseline::Result] }
 
           # @!method initialize(captured_at:, results:)
-          #   Current baseline of a `search` monitor: the search results as last observed.
+          #   Baseline for a `search` target: the results from the last capture.
           #
-          #   @param captured_at [Time] When this baseline was last captured or replaced.
+          #   @param captured_at [Time] When the baseline was last captured or updated.
           #
-          #   @param results [Array<ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSearchBaseline::Result>] Search results as last observed.
+          #   @param results [Array<ContextDev::Models::MonitorRotateWebhookSecretResponse::Baseline::MonitorsSearchBaseline::Result>] Search results from the last capture.
 
           class Result < ContextDev::Internal::Type::BaseModel
             # @!attribute description
@@ -807,17 +819,19 @@ module ContextDev
             required :description, String
 
             # @!attribute published_at
-            #   When the result was published, when known.
+            #   When the result was published. `null` when unknown.
             #
             #   @return [Time, nil]
             required :published_at, Time, nil?: true
 
             # @!attribute title
+            #   Title of the result.
             #
             #   @return [String]
             required :title, String
 
             # @!attribute url
+            #   URL of the result.
             #
             #   @return [String]
             required :url, String
@@ -825,11 +839,11 @@ module ContextDev
             # @!method initialize(description:, published_at:, title:, url:)
             #   @param description [String] Result snippet.
             #
-            #   @param published_at [Time, nil] When the result was published, when known.
+            #   @param published_at [Time, nil] When the result was published. `null` when unknown.
             #
-            #   @param title [String]
+            #   @param title [String] Title of the result.
             #
-            #   @param url [String]
+            #   @param url [String] URL of the result.
           end
         end
 
@@ -846,7 +860,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -856,34 +870,36 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
 
       # @see ContextDev::Models::MonitorRotateWebhookSecretResponse#last_error
       class LastError < ContextDev::Internal::Type::BaseModel
         # @!attribute code
+        #   Machine-readable error code, such as `fetch_failed`.
         #
         #   @return [String]
         required :code, String
 
         # @!attribute message
+        #   Human-readable explanation of the error.
         #
         #   @return [String]
         required :message, String
 
         # @!method initialize(code:, message:)
-        #   Error from the most recent failed run; null when the last run succeeded.
+        #   Error from the most recent failed run. `null` when the last run succeeded.
         #
-        #   @param code [String]
-        #   @param message [String]
+        #   @param code [String] Machine-readable error code, such as `fetch_failed`.
+        #
+        #   @param message [String] Human-readable explanation of the error.
       end
 
       # @see ContextDev::Models::MonitorRotateWebhookSecretResponse#schedule
       class Schedule < ContextDev::Internal::Type::BaseModel
         # @!attribute frequency
-        #   Number of units between runs. The resulting interval (frequency × unit) must be
-        #   at least 10 minutes and at most 1 year (e.g. minimum 10 when unit is minutes;
-        #   maximum 365 when unit is days).
+        #   Number of `unit` periods between runs. The interval must be between 10 minutes
+        #   and 1 year, so at least `10` with `minutes` and at most `365` with `days`.
         #
         #   @return [Integer]
         required :frequency, Integer
@@ -895,7 +911,7 @@ module ContextDev
         required :type, enum: -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule::Type }
 
         # @!attribute unit
-        #   Time unit used with `frequency` to set the run interval.
+        #   Time unit for `frequency`.
         #
         #   @return [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule::Unit]
         required :unit, enum: -> { ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule::Unit }
@@ -905,15 +921,14 @@ module ContextDev
         #   {ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule} for more
         #   details.
         #
-        #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-        #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
-        #   between 10 minutes and 1 year.
+        #   Run the monitor at a fixed interval, such as every 6 hours or every 2 days. The
+        #   interval must be between 10 minutes and 1 year.
         #
-        #   @param frequency [Integer] Number of units between runs. The resulting interval (frequency × unit) must be
+        #   @param frequency [Integer] Number of `unit` periods between runs. The interval must be between 10 minutes a
         #
         #   @param type [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule::Type] Use `interval` to run on a repeating schedule.
         #
-        #   @param unit [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule::Unit] Time unit used with `frequency` to set the run interval.
+        #   @param unit [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule::Unit] Time unit for `frequency`.
 
         # Use `interval` to run on a repeating schedule.
         #
@@ -927,7 +942,7 @@ module ContextDev
           #   @return [Array<Symbol>]
         end
 
-        # Time unit used with `frequency` to set the run interval.
+        # Time unit for `frequency`.
         #
         # @see ContextDev::Models::MonitorRotateWebhookSecretResponse::Schedule#unit
         module Unit
@@ -945,30 +960,30 @@ module ContextDev
       # @see ContextDev::Models::MonitorRotateWebhookSecretResponse#webhook
       class Webhook < ContextDev::Internal::Type::BaseModel
         # @!attribute url
-        #   Public HTTP(S) URL that receives events. Slack and GovSlack URLs get formatted
-        #   messages.
+        #   Public HTTP(S) URL that receives events. Slack and GovSlack webhook URLs get
+        #   formatted messages.
         #
         #   @return [String]
         required :url, String
 
         # @!attribute events
-        #   Events to deliver. Defaults to `change.detected`; `run.completed` also includes
-        #   unchanged runs.
+        #   Events to send. Defaults to `change.detected`. Add `run.completed` to get a
+        #   delivery after every completed run, including runs with no change.
         #
         #   @return [Array<Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Webhook::Event>, nil]
         optional :events,
                  -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::Models::MonitorRotateWebhookSecretResponse::Webhook::Event] }
 
         # @!attribute retry_
-        #   Webhook retry settings. Use {} for the default schedule.
+        #   Automatic retry settings. Pass `{}` for the default schedule.
         #
         #   @return [ContextDev::Models::RetryConfig, nil]
         optional :retry_, -> { ContextDev::RetryConfig }, api_name: :retry
 
         response_only do
           # @!attribute secret
-          #   API-generated signing secret. Visible only with full access or `monitors:write`
-          #   permission.
+          #   Signing secret for verifying deliveries, generated by Context.dev. Returned only
+          #   to API keys with full access or the `monitors:write` permission.
           #
           #   @return [String, nil]
           optional :secret, String
@@ -979,15 +994,15 @@ module ContextDev
         #   {ContextDev::Models::MonitorRotateWebhookSecretResponse::Webhook} for more
         #   details.
         #
-        #   Webhook destination and delivery settings. Null means no webhook is configured.
+        #   Webhook that receives monitor events. `null` when no webhook is configured.
         #
-        #   @param url [String] Public HTTP(S) URL that receives events. Slack and GovSlack URLs get formatted m
+        #   @param url [String] Public HTTP(S) URL that receives events. Slack and GovSlack webhook URLs get for
         #
-        #   @param events [Array<Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Webhook::Event>] Events to deliver. Defaults to `change.detected`; `run.completed` also includes
+        #   @param events [Array<Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::Webhook::Event>] Events to send. Defaults to `change.detected`. Add `run.completed` to get a deli
         #
-        #   @param retry_ [ContextDev::Models::RetryConfig] Webhook retry settings. Use {} for the default schedule.
+        #   @param retry_ [ContextDev::Models::RetryConfig] Automatic retry settings. Pass `{}` for the default schedule.
         #
-        #   @param secret [String] API-generated signing secret. Visible only with full access or `monitors:write`
+        #   @param secret [String] Signing secret for verifying deliveries, generated by Context.dev. Returned only
 
         module Event
           extend ContextDev::Internal::Type::Enum
@@ -1003,26 +1018,27 @@ module ContextDev
       # @see ContextDev::Models::MonitorRotateWebhookSecretResponse#webhook_failure
       class WebhookFailure < ContextDev::Internal::Type::BaseModel
         # @!attribute consecutive_failures
-        #   Number of consecutive delivery attempts that did not succeed.
+        #   Number of failed delivery attempts in a row.
         #
         #   @return [Integer]
         required :consecutive_failures, Integer
 
         # @!attribute last_failed_at
+        #   When the most recent delivery failed.
         #
         #   @return [Time]
         required :last_failed_at, Time
 
         # @!attribute last_message
-        #   Human-readable description of the most recent failure.
+        #   Human-readable explanation of the most recent failure.
         #
         #   @return [String]
         required :last_message, String
 
         # @!attribute last_status
-        #   Outcome of the most recent failed delivery. rejected means a non-2xx response;
-        #   failed means no HTTP response was received; skipped_unsafe_url means the URL
-        #   failed the public-endpoint safety check.
+        #   Outcome of the most recent failed delivery: `rejected` (non-2xx response),
+        #   `failed` (no response), or `skipped_unsafe_url` (the URL isn't a safe public
+        #   endpoint).
         #
         #   @return [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::WebhookFailure::LastStatus]
         required :last_status,
@@ -1033,21 +1049,21 @@ module ContextDev
         #   {ContextDev::Models::MonitorRotateWebhookSecretResponse::WebhookFailure} for
         #   more details.
         #
-        #   Present while webhook deliveries are failing consecutively; null when deliveries
-        #   are healthy or no webhook is configured. Cleared on the next successful delivery
-        #   and when the webhook URL changes.
+        #   Details of failing webhook deliveries. `null` when deliveries succeed or no
+        #   webhook is configured; cleared by the next successful delivery or a new webhook
+        #   URL.
         #
-        #   @param consecutive_failures [Integer] Number of consecutive delivery attempts that did not succeed.
+        #   @param consecutive_failures [Integer] Number of failed delivery attempts in a row.
         #
-        #   @param last_failed_at [Time]
+        #   @param last_failed_at [Time] When the most recent delivery failed.
         #
-        #   @param last_message [String] Human-readable description of the most recent failure.
+        #   @param last_message [String] Human-readable explanation of the most recent failure.
         #
-        #   @param last_status [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::WebhookFailure::LastStatus] Outcome of the most recent failed delivery. rejected means a non-2xx response; f
+        #   @param last_status [Symbol, ContextDev::Models::MonitorRotateWebhookSecretResponse::WebhookFailure::LastStatus] Outcome of the most recent failed delivery: `rejected` (non-2xx response), `fail
 
-        # Outcome of the most recent failed delivery. rejected means a non-2xx response;
-        # failed means no HTTP response was received; skipped_unsafe_url means the URL
-        # failed the public-endpoint safety check.
+        # Outcome of the most recent failed delivery: `rejected` (non-2xx response),
+        # `failed` (no response), or `skipped_unsafe_url` (the URL isn't a safe public
+        # endpoint).
         #
         # @see ContextDev::Models::MonitorRotateWebhookSecretResponse::WebhookFailure#last_status
         module LastStatus

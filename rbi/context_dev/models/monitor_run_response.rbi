@@ -11,9 +11,11 @@ module ContextDev
           )
         end
 
+      # ID of the monitor.
       sig { returns(String) }
       attr_accessor :monitor_id
 
+      # Whether the run was queued.
       sig { returns(T::Boolean) }
       attr_accessor :queued
 
@@ -22,7 +24,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # ID of the queued run; pass it to Retrieve a monitor run.
+      # ID of the queued run. Poll it with `GET /monitors/{monitor_id}/runs/{run_id}`.
       sig { returns(String) }
       attr_accessor :run_id
 
@@ -51,12 +53,14 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # ID of the monitor.
         monitor_id:,
+        # Whether the run was queued.
         queued:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # ID of the queued run; pass it to Retrieve a monitor run.
+        # ID of the queued run. Poll it with `GET /monitors/{monitor_id}/runs/{run_id}`.
         run_id:,
         # Credits this request used and your remaining balance.
         key_metadata: nil
@@ -90,7 +94,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -103,7 +107,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

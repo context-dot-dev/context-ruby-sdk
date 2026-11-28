@@ -14,31 +14,31 @@ module ContextDev
       required :monitor_id, String
 
       # @!attribute cursor
-      #   Opaque pagination cursor from a previous response.
+      #   Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
       #   @return [String, nil]
       optional :cursor, String
 
       # @!attribute limit
-      #   Maximum number of items to return per page (1-100). Defaults to 25.
+      #   Maximum number of changes to return per page. Defaults to 25.
       #
       #   @return [Integer, nil]
       optional :limit, Integer
 
       # @!attribute since
-      #   Only include items at or after this ISO 8601 timestamp.
+      #   Return only changes detected at or after this time.
       #
       #   @return [Time, nil]
       optional :since, Time
 
       # @!attribute tag
-      #   Filter to items that have this tag.
+      #   Return only changes that have this tag.
       #
       #   @return [String, nil]
       optional :tag, String
 
       # @!attribute until_
-      #   Only include items before this ISO 8601 timestamp.
+      #   Return only changes detected at or before this time.
       #
       #   @return [Time, nil]
       optional :until_, Time
@@ -46,15 +46,15 @@ module ContextDev
       # @!method initialize(monitor_id:, cursor: nil, limit: nil, since: nil, tag: nil, until_: nil, request_options: {})
       #   @param monitor_id [String] ID of the monitor.
       #
-      #   @param cursor [String] Opaque pagination cursor from a previous response.
+      #   @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
-      #   @param limit [Integer] Maximum number of items to return per page (1-100). Defaults to 25.
+      #   @param limit [Integer] Maximum number of changes to return per page. Defaults to 25.
       #
-      #   @param since [Time] Only include items at or after this ISO 8601 timestamp.
+      #   @param since [Time] Return only changes detected at or after this time.
       #
-      #   @param tag [String] Filter to items that have this tag.
+      #   @param tag [String] Return only changes that have this tag.
       #
-      #   @param until_ [Time] Only include items before this ISO 8601 timestamp.
+      #   @param until_ [Time] Return only changes detected at or before this time.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
     end

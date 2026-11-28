@@ -41,56 +41,56 @@ module ContextDev
         required :credits_used, Integer
 
         # @!attribute error_code
-        #   The `error_code` from the response, or null on success.
+        #   The response's `error_code`. `null` on success.
         #
         #   @return [String, nil]
         required :error_code, String, nil?: true
 
         # @!attribute input
-        #   What was sent with the request.
+        #   Input retained from the request.
         #
         #   @return [ContextDev::Models::LogRetrieveResponse::Data::Input]
         required :input, -> { ContextDev::Models::LogRetrieveResponse::Data::Input }
 
         # @!attribute key_id
-        #   ID of the API key that made the request.
+        #   ID of the API key that made the request. Can be `null` for `MONITOR` and `BATCH`
+        #   entries.
         #
         #   @return [String, nil]
         required :key_id, String, nil?: true
 
         # @!attribute latency_ms
-        #   Server-side processing time in milliseconds.
+        #   Server-side processing time, in milliseconds.
         #
         #   @return [Float]
         required :latency_ms, Float
 
         # @!attribute method_
-        #   HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement
-        #   entries.
+        #   HTTP method, or `MONITOR` for a monitor run and `BATCH` for a batch settlement.
         #
         #   @return [String]
         required :method_, String, api_name: :method
 
         # @!attribute path
-        #   Endpoint path as called.
+        #   Endpoint path that was called.
         #
         #   @return [String]
         required :path, String
 
         # @!attribute request_id
-        #   Request ID of the logged API call.
+        #   ID of the logged request.
         #
         #   @return [String]
         required :request_id, String
 
         # @!attribute status_code
-        #   HTTP status code returned.
+        #   HTTP status code of the response.
         #
         #   @return [Integer]
         required :status_code, Integer
 
         # @!attribute tags
-        #   Request tags supplied by the caller.
+        #   Tags sent with the request.
         #
         #   @return [Array<String>]
         required :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -102,19 +102,20 @@ module ContextDev
         required :timestamp, Time
 
         # @!attribute user_agent
-        #   User-Agent header of the request.
+        #   The request's `User-Agent` header.
         #
         #   @return [String, nil]
         required :user_agent, String, nil?: true
 
         # @!attribute zdr
-        #   Whether the request was made under zero data retention.
+        #   Whether the request used zero data retention (ZDR).
         #
         #   @return [Boolean]
         required :zdr, ContextDev::Internal::Type::Boolean
 
         # @!attribute response
-        #   The retained JSON response with credentials redacted, or null when unavailable.
+        #   Retained JSON response with credentials redacted. `null` when unavailable, such
+        #   as under ZDR.
         #
         #   @return [Object, nil]
         optional :response, ContextDev::Internal::Type::Unknown
@@ -125,36 +126,36 @@ module ContextDev
         #
         #   @param credits_used [Integer] Credits charged for this request.
         #
-        #   @param error_code [String, nil] The `error_code` from the response, or null on success.
+        #   @param error_code [String, nil] The response's `error_code`. `null` on success.
         #
-        #   @param input [ContextDev::Models::LogRetrieveResponse::Data::Input] What was sent with the request.
+        #   @param input [ContextDev::Models::LogRetrieveResponse::Data::Input] Input retained from the request.
         #
-        #   @param key_id [String, nil] ID of the API key that made the request.
+        #   @param key_id [String, nil] ID of the API key that made the request. Can be `null` for `MONITOR` and `BATCH`
         #
-        #   @param latency_ms [Float] Server-side processing time in milliseconds.
+        #   @param latency_ms [Float] Server-side processing time, in milliseconds.
         #
-        #   @param method_ [String] HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement entries
+        #   @param method_ [String] HTTP method, or `MONITOR` for a monitor run and `BATCH` for a batch settlement.
         #
-        #   @param path [String] Endpoint path as called.
+        #   @param path [String] Endpoint path that was called.
         #
-        #   @param request_id [String] Request ID of the logged API call.
+        #   @param request_id [String] ID of the logged request.
         #
-        #   @param status_code [Integer] HTTP status code returned.
+        #   @param status_code [Integer] HTTP status code of the response.
         #
-        #   @param tags [Array<String>] Request tags supplied by the caller.
+        #   @param tags [Array<String>] Tags sent with the request.
         #
         #   @param timestamp [Time] When the request completed.
         #
-        #   @param user_agent [String, nil] User-Agent header of the request.
+        #   @param user_agent [String, nil] The request's `User-Agent` header.
         #
-        #   @param zdr [Boolean] Whether the request was made under zero data retention.
+        #   @param zdr [Boolean] Whether the request used zero data retention (ZDR).
         #
-        #   @param response [Object] The retained JSON response with credentials redacted, or null when unavailable.
+        #   @param response [Object] Retained JSON response with credentials redacted. `null` when unavailable, such
 
         # @see ContextDev::Models::LogRetrieveResponse::Data#input
         class Input < ContextDev::Internal::Type::BaseModel
           # @!attribute query
-          #   Query parameters as sent.
+          #   Query parameters of the request.
           #
           #   @return [Hash{Symbol=>Object}]
           required :query, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
@@ -166,9 +167,9 @@ module ContextDev
           optional :body, ContextDev::Internal::Type::Unknown
 
           # @!method initialize(query:, body: nil)
-          #   What was sent with the request.
+          #   Input retained from the request.
           #
-          #   @param query [Hash{Symbol=>Object}] Query parameters as sent.
+          #   @param query [Hash{Symbol=>Object}] Query parameters of the request.
           #
           #   @param body [Object] Request body with credentials and uploaded content redacted.
         end
@@ -183,7 +184,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -193,7 +194,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

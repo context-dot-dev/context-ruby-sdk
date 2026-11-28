@@ -29,7 +29,8 @@ module ContextDev
       optional :min_results, Integer
 
       # @!attribute tags
-      #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      #   Comma-separated labels for this request, such as `production,team-alpha`. Filter
+      #   usage and request logs by them.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -57,7 +58,7 @@ module ContextDev
       #
       #   @param min_results [Integer] Minimum number of NAICS codes to return. Must be at least 1. Defaults to 1.
       #
-      #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      #   @param tags [Array<String>] Comma-separated labels for this request, such as `production,team-alpha`. Filter
       #
       #   @param timeout_opts [ContextDev::Models::IndustryRetrieveNaicsParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
@@ -73,8 +74,8 @@ module ContextDev
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-        #   inspect the response’s partial flag.
+        #   `fail` returns 408 at the deadline. `return-partial` returns the results
+        #   collected so far and marks the response as partial.
         #
         #   @return [Symbol, ContextDev::Models::IndustryRetrieveNaicsParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::IndustryRetrieveNaicsParams::TimeoutOpts::Behavior }
@@ -87,10 +88,10 @@ module ContextDev
         #
         #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::IndustryRetrieveNaicsParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   @param behavior [Symbol, ContextDev::Models::IndustryRetrieveNaicsParams::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         #
         # @see ContextDev::Models::IndustryRetrieveNaicsParams::TimeoutOpts#behavior
         module Behavior

@@ -8,14 +8,15 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute query
-      #   A topic or question. Append one arxiv:, pmcid:, pmid:, or doi: ID to search
-      #   within an indexed paper.
+      #   Topic or question to search for. Append one `arxiv:`, `pmcid:`, `pmid:`, or
+      #   `doi:` ID to search within that paper, such as `protein folding pmid:34265844`,
+      #   or send the ID on its own.
       #
       #   @return [String]
       required :query, String
 
       # @!attribute cursor
-      #   Use next_cursor to fetch the next page.
+      #   Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
       #   @return [String, nil]
       optional :cursor, String, nil?: true
@@ -27,20 +28,21 @@ module ContextDev
       optional :filter_by, -> { ContextDev::ScholarSearchParams::FilterBy }, api_name: :filterBy
 
       # @!attribute limit
-      #   Papers per page.
+      #   Maximum number of papers to return per page.
       #
       #   @return [Integer, nil]
       optional :limit, Integer
 
       # @!attribute sort
-      #   Order the top 250 matches. date_desc puts newest first, with undated papers
-      #   last.
+      #   `relevance` puts the closest matches first; `date_desc` puts the newest papers
+      #   first, with undated papers last. Both orders apply to the top 250 matches.
       #
       #   @return [Symbol, ContextDev::Models::ScholarSearchParams::Sort, nil]
       optional :sort, enum: -> { ContextDev::ScholarSearchParams::Sort }
 
       # @!attribute tags
-      #   Labels for filtering usage in the dashboard.
+      #   Labels for this request. Filter usage and request logs by them in the dashboard
+      #   or with `GET /org/logs`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -49,17 +51,17 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::ScholarSearchParams} for more details.
       #
-      #   @param query [String] A topic or question. Append one arxiv:, pmcid:, pmid:, or doi: ID to search with
+      #   @param query [String] Topic or question to search for. Append one `arxiv:`, `pmcid:`, `pmid:`, or `doi
       #
-      #   @param cursor [String, nil] Use next_cursor to fetch the next page.
+      #   @param cursor [String, nil] Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
       #   @param filter_by [ContextDev::Models::ScholarSearchParams::FilterBy] Filter by publication date.
       #
-      #   @param limit [Integer] Papers per page.
+      #   @param limit [Integer] Maximum number of papers to return per page.
       #
-      #   @param sort [Symbol, ContextDev::Models::ScholarSearchParams::Sort] Order the top 250 matches. date_desc puts newest first, with undated papers last
+      #   @param sort [Symbol, ContextDev::Models::ScholarSearchParams::Sort] `relevance` puts the closest matches first; `date_desc` puts the newest papers f
       #
-      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -98,8 +100,8 @@ module ContextDev
         end
       end
 
-      # Order the top 250 matches. date_desc puts newest first, with undated papers
-      # last.
+      # `relevance` puts the closest matches first; `date_desc` puts the newest papers
+      # first, with undated papers last. Both orders apply to the top 250 matches.
       module Sort
         extend ContextDev::Internal::Type::Enum
 

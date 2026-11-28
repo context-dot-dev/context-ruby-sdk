@@ -11,7 +11,7 @@ module ContextDev
           T.any(ContextDev::BrandRetrieveParams, ContextDev::Internal::AnyHash)
         end
 
-      # One lookup, chosen by `type`.
+      # Brand lookup. Set `type` to choose how to identify the brand.
       sig do
         returns(
           T.any(
@@ -41,7 +41,7 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # One lookup, chosen by `type`.
+        # Brand lookup. Set `type` to choose how to identify the brand.
         body:,
         request_options: {}
       )
@@ -66,7 +66,7 @@ module ContextDev
       def to_hash
       end
 
-      # One lookup, chosen by `type`.
+      # Brand lookup. Set `type` to choose how to identify the brand.
       module Body
         extend ContextDev::Internal::Type::Union
 
@@ -91,14 +91,15 @@ module ContextDev
               )
             end
 
-          # Domain name to retrieve brand data for (e.g., 'stripe.com').
+          # Domain of the brand, such as `stripe.com`.
           sig { returns(String) }
           attr_accessor :domain
 
-          # Discriminator for domain-based brand retrieval.
+          # Set to `by_domain` to look up a brand by domain.
           sig { returns(Symbol) }
           attr_accessor :type
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
           sig do
             returns(
               T.nilable(
@@ -108,33 +109,33 @@ module ContextDev
           end
           attr_accessor :force_language
 
-          # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-          # year. `0` refreshes.
+          # Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+          # Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+          # capped at 1 year.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
           sig { params(max_age_ms: Integer).void }
           attr_writer :max_age_ms
 
-          # Optional parameter to optimize the API call for maximum speed. When set to true,
-          # the API will skip time-consuming operations for faster response at the cost of
-          # less comprehensive data.
+          # Skip slower enrichment steps for a faster, less detailed response.
           sig { returns(T.nilable(T::Boolean)) }
           attr_reader :max_speed
 
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          # access policies are enabled for your organization; otherwise the request fails
-          # with `ACCESS_POLICIES_NOT_ENABLED`.
+          # Access policy IDs to apply; each URL must pass all of them. Requires access
+          # policies enabled for your organization; otherwise returns
+          # `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
           sig { params(policies: T::Array[String]).void }
           attr_writer :policies
 
-          # Labels for filtering usage in the dashboard.
+          # Labels for this request. Filter usage and request logs by them in the dashboard
+          # or with `GET /org/logs`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -159,8 +160,8 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           sig do
             returns(
@@ -179,7 +180,7 @@ module ContextDev
           end
           attr_writer :zdr
 
-          # Retrieve brand data by domain. Cannot be combined with name, email, or ticker.
+          # Look up a brand by its domain.
           sig do
             params(
               domain: String,
@@ -199,29 +200,30 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Domain name to retrieve brand data for (e.g., 'stripe.com').
+            # Domain of the brand, such as `stripe.com`.
             domain:,
+            # Translate the brand's `title`, `description`, and `slogan` into this language.
             force_language: nil,
-            # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-            # year. `0` refreshes.
+            # Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+            # Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+            # capped at 1 year.
             max_age_ms: nil,
-            # Optional parameter to optimize the API call for maximum speed. When set to true,
-            # the API will skip time-consuming operations for faster response at the cost of
-            # less comprehensive data.
+            # Skip slower enrichment steps for a faster, less detailed response.
             max_speed: nil,
-            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-            # access policies are enabled for your organization; otherwise the request fails
-            # with `ACCESS_POLICIES_NOT_ENABLED`.
+            # Access policy IDs to apply; each URL must pass all of them. Requires access
+            # policies enabled for your organization; otherwise returns
+            # `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
-            # Labels for filtering usage in the dashboard.
+            # Labels for this request. Filter usage and request logs by them in the dashboard
+            # or with `GET /org/logs`.
             tags: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
-            # `enabled` disables request logs and traces and omits request and response
-            # content from usage logs. Brand data and hosted assets may still be stored.
+            # `enabled` turns off request logs and traces and keeps request and response
+            # content out of usage logs. Brand data and hosted assets may still be stored.
             # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
             zdr: nil,
-            # Discriminator for domain-based brand retrieval.
+            # Set to `by_domain` to look up a brand by domain.
             type: :by_domain
           )
           end
@@ -249,6 +251,7 @@ module ContextDev
           def to_hash
           end
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
 
@@ -886,8 +889,8 @@ module ContextDev
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             sig do
               returns(
                 T.nilable(
@@ -916,8 +919,8 @@ module ContextDev
             def self.new(
               # Deadline in milliseconds.
               milliseconds:,
-              # "fail" returns 408 at the deadline. "return-partial" returns available results;
-              # inspect the response’s partial flag.
+              # `fail` returns 408 at the deadline. `return-partial` returns the results
+              # collected so far and marks the response as partial.
               behavior: nil
             )
             end
@@ -934,8 +937,8 @@ module ContextDev
             def to_hash
             end
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 
@@ -971,8 +974,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           module Zdr
             extend ContextDev::Internal::Type::Enum
@@ -1018,11 +1021,11 @@ module ContextDev
               )
             end
 
-          # Company name to retrieve brand data for (e.g., 'Apple Inc').
+          # Company name, such as `Apple Inc`.
           sig { returns(String) }
           attr_accessor :name
 
-          # Discriminator for name-based brand retrieval.
+          # Set to `by_name` to look up a brand by company name.
           sig { returns(Symbol) }
           attr_accessor :type
 
@@ -1044,6 +1047,7 @@ module ContextDev
           end
           attr_writer :country
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
           sig do
             returns(
               T.nilable(
@@ -1053,33 +1057,33 @@ module ContextDev
           end
           attr_accessor :force_language
 
-          # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-          # year. `0` refreshes.
+          # Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+          # Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+          # capped at 1 year.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
           sig { params(max_age_ms: Integer).void }
           attr_writer :max_age_ms
 
-          # Optional parameter to optimize the API call for maximum speed. When set to true,
-          # the API will skip time-consuming operations for faster response at the cost of
-          # less comprehensive data.
+          # Skip slower enrichment steps for a faster, less detailed response.
           sig { returns(T.nilable(T::Boolean)) }
           attr_reader :max_speed
 
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          # access policies are enabled for your organization; otherwise the request fails
-          # with `ACCESS_POLICIES_NOT_ENABLED`.
+          # Access policy IDs to apply; each URL must pass all of them. Requires access
+          # policies enabled for your organization; otherwise returns
+          # `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
           sig { params(policies: T::Array[String]).void }
           attr_writer :policies
 
-          # Labels for filtering usage in the dashboard.
+          # Labels for this request. Filter usage and request logs by them in the dashboard
+          # or with `GET /org/logs`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -1104,8 +1108,8 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           sig do
             returns(
@@ -1123,8 +1127,7 @@ module ContextDev
           end
           attr_writer :zdr
 
-          # Retrieve brand data by company name. Cannot be combined with domain, email, or
-          # ticker.
+          # Look up a brand by company name.
           sig do
             params(
               name: String,
@@ -1145,31 +1148,32 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Company name to retrieve brand data for (e.g., 'Apple Inc').
+            # Company name, such as `Apple Inc`.
             name:,
             # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
             country: nil,
+            # Translate the brand's `title`, `description`, and `slogan` into this language.
             force_language: nil,
-            # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-            # year. `0` refreshes.
+            # Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+            # Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+            # capped at 1 year.
             max_age_ms: nil,
-            # Optional parameter to optimize the API call for maximum speed. When set to true,
-            # the API will skip time-consuming operations for faster response at the cost of
-            # less comprehensive data.
+            # Skip slower enrichment steps for a faster, less detailed response.
             max_speed: nil,
-            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-            # access policies are enabled for your organization; otherwise the request fails
-            # with `ACCESS_POLICIES_NOT_ENABLED`.
+            # Access policy IDs to apply; each URL must pass all of them. Requires access
+            # policies enabled for your organization; otherwise returns
+            # `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
-            # Labels for filtering usage in the dashboard.
+            # Labels for this request. Filter usage and request logs by them in the dashboard
+            # or with `GET /org/logs`.
             tags: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
-            # `enabled` disables request logs and traces and omits request and response
-            # content from usage logs. Brand data and hosted assets may still be stored.
+            # `enabled` turns off request logs and traces and keeps request and response
+            # content out of usage logs. Brand data and hosted assets may still be stored.
             # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
             zdr: nil,
-            # Discriminator for name-based brand retrieval.
+            # Set to `by_name` to look up a brand by company name.
             type: :by_name
           )
           end
@@ -2419,6 +2423,7 @@ module ContextDev
             end
           end
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
 
@@ -3056,8 +3061,8 @@ module ContextDev
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             sig do
               returns(
                 T.nilable(
@@ -3086,8 +3091,8 @@ module ContextDev
             def self.new(
               # Deadline in milliseconds.
               milliseconds:,
-              # "fail" returns 408 at the deadline. "return-partial" returns available results;
-              # inspect the response’s partial flag.
+              # `fail` returns 408 at the deadline. `return-partial` returns the results
+              # collected so far and marks the response as partial.
               behavior: nil
             )
             end
@@ -3104,8 +3109,8 @@ module ContextDev
             def to_hash
             end
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 
@@ -3141,8 +3146,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           module Zdr
             extend ContextDev::Internal::Type::Enum
@@ -3188,14 +3193,16 @@ module ContextDev
               )
             end
 
-          # Email address to retrieve brand data for (e.g., 'jane@stripe.com').
+          # Work email address, such as `jane@stripe.com`. The brand is looked up from its
+          # domain.
           sig { returns(String) }
           attr_accessor :email
 
-          # Discriminator for email-based brand retrieval.
+          # Set to `by_email` to look up a brand from a work email address.
           sig { returns(Symbol) }
           attr_accessor :type
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
           sig do
             returns(
               T.nilable(
@@ -3205,33 +3212,33 @@ module ContextDev
           end
           attr_accessor :force_language
 
-          # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-          # year. `0` refreshes.
+          # Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+          # Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+          # capped at 1 year.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
           sig { params(max_age_ms: Integer).void }
           attr_writer :max_age_ms
 
-          # Optional parameter to optimize the API call for maximum speed. When set to true,
-          # the API will skip time-consuming operations for faster response at the cost of
-          # less comprehensive data.
+          # Skip slower enrichment steps for a faster, less detailed response.
           sig { returns(T.nilable(T::Boolean)) }
           attr_reader :max_speed
 
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          # access policies are enabled for your organization; otherwise the request fails
-          # with `ACCESS_POLICIES_NOT_ENABLED`.
+          # Access policy IDs to apply; each URL must pass all of them. Requires access
+          # policies enabled for your organization; otherwise returns
+          # `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
           sig { params(policies: T::Array[String]).void }
           attr_writer :policies
 
-          # Labels for filtering usage in the dashboard.
+          # Labels for this request. Filter usage and request logs by them in the dashboard
+          # or with `GET /org/logs`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -3256,8 +3263,8 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           sig do
             returns(
@@ -3275,9 +3282,8 @@ module ContextDev
           end
           attr_writer :zdr
 
-          # Retrieve brand data by email address. The domain is extracted from the email.
-          # Free and disposable email providers are rejected with 422. Cannot be combined
-          # with domain, name, or ticker.
+          # Look up a brand from a work email address. Free and disposable email providers
+          # return 422.
           sig do
             params(
               email: String,
@@ -3297,29 +3303,31 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Email address to retrieve brand data for (e.g., 'jane@stripe.com').
+            # Work email address, such as `jane@stripe.com`. The brand is looked up from its
+            # domain.
             email:,
+            # Translate the brand's `title`, `description`, and `slogan` into this language.
             force_language: nil,
-            # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-            # year. `0` refreshes.
+            # Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+            # Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+            # capped at 1 year.
             max_age_ms: nil,
-            # Optional parameter to optimize the API call for maximum speed. When set to true,
-            # the API will skip time-consuming operations for faster response at the cost of
-            # less comprehensive data.
+            # Skip slower enrichment steps for a faster, less detailed response.
             max_speed: nil,
-            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-            # access policies are enabled for your organization; otherwise the request fails
-            # with `ACCESS_POLICIES_NOT_ENABLED`.
+            # Access policy IDs to apply; each URL must pass all of them. Requires access
+            # policies enabled for your organization; otherwise returns
+            # `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
-            # Labels for filtering usage in the dashboard.
+            # Labels for this request. Filter usage and request logs by them in the dashboard
+            # or with `GET /org/logs`.
             tags: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
-            # `enabled` disables request logs and traces and omits request and response
-            # content from usage logs. Brand data and hosted assets may still be stored.
+            # `enabled` turns off request logs and traces and keeps request and response
+            # content out of usage logs. Brand data and hosted assets may still be stored.
             # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
             zdr: nil,
-            # Discriminator for email-based brand retrieval.
+            # Set to `by_email` to look up a brand from a work email address.
             type: :by_email
           )
           end
@@ -3347,6 +3355,7 @@ module ContextDev
           def to_hash
           end
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
 
@@ -3984,8 +3993,8 @@ module ContextDev
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             sig do
               returns(
                 T.nilable(
@@ -4014,8 +4023,8 @@ module ContextDev
             def self.new(
               # Deadline in milliseconds.
               milliseconds:,
-              # "fail" returns 408 at the deadline. "return-partial" returns available results;
-              # inspect the response’s partial flag.
+              # `fail` returns 408 at the deadline. `return-partial` returns the results
+              # collected so far and marks the response as partial.
               behavior: nil
             )
             end
@@ -4032,8 +4041,8 @@ module ContextDev
             def to_hash
             end
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 
@@ -4069,8 +4078,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           module Zdr
             extend ContextDev::Internal::Type::Enum
@@ -4116,14 +4125,15 @@ module ContextDev
               )
             end
 
-          # Stock ticker symbol to retrieve brand data for (e.g., 'AAPL').
+          # Stock ticker symbol, such as `AAPL`.
           sig { returns(String) }
           attr_accessor :ticker
 
-          # Discriminator for ticker-based brand retrieval.
+          # Set to `by_ticker` to look up a brand by stock ticker.
           sig { returns(Symbol) }
           attr_accessor :type
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
           sig do
             returns(
               T.nilable(
@@ -4133,40 +4143,40 @@ module ContextDev
           end
           attr_accessor :force_language
 
-          # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-          # year. `0` refreshes.
+          # Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+          # Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+          # capped at 1 year.
           sig { returns(T.nilable(Integer)) }
           attr_reader :max_age_ms
 
           sig { params(max_age_ms: Integer).void }
           attr_writer :max_age_ms
 
-          # Optional parameter to optimize the API call for maximum speed. When set to true,
-          # the API will skip time-consuming operations for faster response at the cost of
-          # less comprehensive data.
+          # Skip slower enrichment steps for a faster, less detailed response.
           sig { returns(T.nilable(T::Boolean)) }
           attr_reader :max_speed
 
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          # access policies are enabled for your organization; otherwise the request fails
-          # with `ACCESS_POLICIES_NOT_ENABLED`.
+          # Access policy IDs to apply; each URL must pass all of them. Requires access
+          # policies enabled for your organization; otherwise returns
+          # `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
           sig { params(policies: T::Array[String]).void }
           attr_writer :policies
 
-          # Labels for filtering usage in the dashboard.
+          # Labels for this request. Filter usage and request logs by them in the dashboard
+          # or with `GET /org/logs`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
           sig { params(tags: T::Array[String]).void }
           attr_writer :tags
 
-          # Stock exchange code.
+          # Stock exchange code, such as `NASDAQ` or `LSE`.
           sig do
             returns(
               T.nilable(
@@ -4202,8 +4212,8 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           sig do
             returns(
@@ -4222,8 +4232,7 @@ module ContextDev
           end
           attr_writer :zdr
 
-          # Retrieve brand data by stock ticker. Cannot be combined with domain, name, or
-          # email.
+          # Look up a publicly traded company by stock ticker.
           sig do
             params(
               ticker: String,
@@ -4245,31 +4254,32 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Stock ticker symbol to retrieve brand data for (e.g., 'AAPL').
+            # Stock ticker symbol, such as `AAPL`.
             ticker:,
+            # Translate the brand's `title`, `description`, and `slogan` into this language.
             force_language: nil,
-            # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-            # year. `0` refreshes.
+            # Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+            # Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+            # capped at 1 year.
             max_age_ms: nil,
-            # Optional parameter to optimize the API call for maximum speed. When set to true,
-            # the API will skip time-consuming operations for faster response at the cost of
-            # less comprehensive data.
+            # Skip slower enrichment steps for a faster, less detailed response.
             max_speed: nil,
-            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-            # access policies are enabled for your organization; otherwise the request fails
-            # with `ACCESS_POLICIES_NOT_ENABLED`.
+            # Access policy IDs to apply; each URL must pass all of them. Requires access
+            # policies enabled for your organization; otherwise returns
+            # `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
-            # Labels for filtering usage in the dashboard.
+            # Labels for this request. Filter usage and request logs by them in the dashboard
+            # or with `GET /org/logs`.
             tags: nil,
-            # Stock exchange code.
+            # Stock exchange code, such as `NASDAQ` or `LSE`.
             ticker_exchange: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
-            # `enabled` disables request logs and traces and omits request and response
-            # content from usage logs. Brand data and hosted assets may still be stored.
+            # `enabled` turns off request logs and traces and keeps request and response
+            # content out of usage logs. Brand data and hosted assets may still be stored.
             # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
             zdr: nil,
-            # Discriminator for ticker-based brand retrieval.
+            # Set to `by_ticker` to look up a brand by stock ticker.
             type: :by_ticker
           )
           end
@@ -4299,6 +4309,7 @@ module ContextDev
           def to_hash
           end
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
 
@@ -4923,7 +4934,7 @@ module ContextDev
             end
           end
 
-          # Stock exchange code.
+          # Stock exchange code, such as `NASDAQ` or `LSE`.
           module TickerExchange
             extend ContextDev::Internal::Type::Enum
 
@@ -5321,8 +5332,8 @@ module ContextDev
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             sig do
               returns(
                 T.nilable(
@@ -5351,8 +5362,8 @@ module ContextDev
             def self.new(
               # Deadline in milliseconds.
               milliseconds:,
-              # "fail" returns 408 at the deadline. "return-partial" returns available results;
-              # inspect the response’s partial flag.
+              # `fail` returns 408 at the deadline. `return-partial` returns the results
+              # collected so far and marks the response as partial.
               behavior: nil
             )
             end
@@ -5369,8 +5380,8 @@ module ContextDev
             def to_hash
             end
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 
@@ -5406,8 +5417,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           module Zdr
             extend ContextDev::Internal::Type::Enum
@@ -5453,26 +5464,26 @@ module ContextDev
               )
             end
 
-          # Full http(s) URL to fetch brand data from (e.g.,
-          # 'https://stripe.com/enterprise'). Only this URL is fetched — not the entire
-          # internet.
+          # Full `http` or `https` URL of the page to read, such as
+          # `https://stripe.com/enterprise`. Only this page is fetched.
           sig { returns(String) }
           attr_accessor :direct_url
 
-          # Discriminator for direct-URL-based brand retrieval.
+          # Set to `by_direct_url` to extract brand data from a single page.
           sig { returns(Symbol) }
           attr_accessor :type
 
-          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          # access policies are enabled for your organization; otherwise the request fails
-          # with `ACCESS_POLICIES_NOT_ENABLED`.
+          # Access policy IDs to apply; each URL must pass all of them. Requires access
+          # policies enabled for your organization; otherwise returns
+          # `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
           sig { params(policies: T::Array[String]).void }
           attr_writer :policies
 
-          # Labels for filtering usage in the dashboard.
+          # Labels for this request. Filter usage and request logs by them in the dashboard
+          # or with `GET /org/logs`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -5497,8 +5508,8 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           sig do
             returns(
@@ -5517,8 +5528,8 @@ module ContextDev
           end
           attr_writer :zdr
 
-          # Retrieve brand data from this exact URL. Cross-site enrichment and other lookup
-          # identifiers are excluded.
+          # Extract brand data from a single page. Only that URL is read, and no data from
+          # other sources is added.
           sig do
             params(
               direct_url: String,
@@ -5532,23 +5543,23 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Full http(s) URL to fetch brand data from (e.g.,
-            # 'https://stripe.com/enterprise'). Only this URL is fetched — not the entire
-            # internet.
+            # Full `http` or `https` URL of the page to read, such as
+            # `https://stripe.com/enterprise`. Only this page is fetched.
             direct_url:,
-            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-            # access policies are enabled for your organization; otherwise the request fails
-            # with `ACCESS_POLICIES_NOT_ENABLED`.
+            # Access policy IDs to apply; each URL must pass all of them. Requires access
+            # policies enabled for your organization; otherwise returns
+            # `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
-            # Labels for filtering usage in the dashboard.
+            # Labels for this request. Filter usage and request logs by them in the dashboard
+            # or with `GET /org/logs`.
             tags: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
-            # `enabled` disables request logs and traces and omits request and response
-            # content from usage logs. Brand data and hosted assets may still be stored.
+            # `enabled` turns off request logs and traces and keeps request and response
+            # content out of usage logs. Brand data and hosted assets may still be stored.
             # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
             zdr: nil,
-            # Discriminator for direct-URL-based brand retrieval.
+            # Set to `by_direct_url` to extract brand data from a single page.
             type: :by_direct_url
           )
           end
@@ -5583,8 +5594,8 @@ module ContextDev
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             sig do
               returns(
                 T.nilable(
@@ -5613,8 +5624,8 @@ module ContextDev
             def self.new(
               # Deadline in milliseconds.
               milliseconds:,
-              # "fail" returns 408 at the deadline. "return-partial" returns available results;
-              # inspect the response’s partial flag.
+              # `fail` returns 408 at the deadline. `return-partial` returns the results
+              # collected so far and marks the response as partial.
               behavior: nil
             )
             end
@@ -5631,8 +5642,8 @@ module ContextDev
             def to_hash
             end
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 
@@ -5668,8 +5679,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           module Zdr
             extend ContextDev::Internal::Type::Enum
@@ -5715,15 +5726,16 @@ module ContextDev
               )
             end
 
-          # Transaction information to identify the brand.
+          # Transaction descriptor from a card or bank statement, such as `SQ *COFFEE SHOP`.
           sig { returns(String) }
           attr_accessor :transaction_info
 
-          # Discriminator for transaction-based brand retrieval.
+          # Set to `by_transaction` to identify the merchant behind a transaction
+          # descriptor.
           sig { returns(Symbol) }
           attr_accessor :type
 
-          # Optional city name to prioritize when searching for the brand.
+          # City where the transaction took place. Brands in this city are preferred.
           sig { returns(T.nilable(String)) }
           attr_reader :city
 
@@ -5748,6 +5760,7 @@ module ContextDev
           end
           attr_writer :country
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
           sig do
             returns(
               T.nilable(
@@ -5757,25 +5770,23 @@ module ContextDev
           end
           attr_accessor :force_language
 
-          # When set to true, the API performs additional verification to ensure the
-          # identified brand matches the transaction with high confidence.
+          # Run extra verification so the returned brand matches the transaction with high
+          # confidence.
           sig { returns(T.nilable(T::Boolean)) }
           attr_reader :high_confidence_only
 
           sig { params(high_confidence_only: T::Boolean).void }
           attr_writer :high_confidence_only
 
-          # Optional parameter to optimize the API call for maximum speed. When set to true,
-          # the API will skip time-consuming operations for faster response at the cost of
-          # less comprehensive data.
+          # Skip slower enrichment steps for a faster, less detailed response.
           sig { returns(T.nilable(T::Boolean)) }
           attr_reader :max_speed
 
           sig { params(max_speed: T::Boolean).void }
           attr_writer :max_speed
 
-          # Optional Merchant Category Code (MCC) to help identify the business category or
-          # industry.
+          # Merchant Category Code (MCC) from the transaction. Helps identify the type of
+          # business.
           sig do
             returns(
               T.nilable(
@@ -5793,7 +5804,7 @@ module ContextDev
           end
           attr_writer :mcc
 
-          # Optional phone number from the transaction to help verify brand match.
+          # Merchant phone number from the transaction. Helps confirm the match.
           sig do
             returns(
               T.nilable(
@@ -5811,16 +5822,17 @@ module ContextDev
           end
           attr_writer :phone
 
-          # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          # access policies are enabled for your organization; otherwise the request fails
-          # with `ACCESS_POLICIES_NOT_ENABLED`.
+          # Access policy IDs to apply; each URL must pass all of them. Requires access
+          # policies enabled for your organization; otherwise returns
+          # `ACCESS_POLICIES_NOT_ENABLED`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :policies
 
           sig { params(policies: T::Array[String]).void }
           attr_writer :policies
 
-          # Labels for filtering usage in the dashboard.
+          # Labels for this request. Filter usage and request logs by them in the dashboard
+          # or with `GET /org/logs`.
           sig { returns(T.nilable(T::Array[String])) }
           attr_reader :tags
 
@@ -5845,8 +5857,8 @@ module ContextDev
           end
           attr_writer :timeout_opts
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           sig do
             returns(
@@ -5865,8 +5877,7 @@ module ContextDev
           end
           attr_writer :zdr
 
-          # Identify brand data from a transaction descriptor. Cannot be combined with
-          # domain, name, email, or ticker.
+          # Identify the merchant behind a card or bank transaction descriptor.
           sig do
             params(
               transaction_info: String,
@@ -5893,38 +5904,39 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Transaction information to identify the brand.
+            # Transaction descriptor from a card or bank statement, such as `SQ *COFFEE SHOP`.
             transaction_info:,
-            # Optional city name to prioritize when searching for the brand.
+            # City where the transaction took place. Brands in this city are preferred.
             city: nil,
             # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
             country: nil,
+            # Translate the brand's `title`, `description`, and `slogan` into this language.
             force_language: nil,
-            # When set to true, the API performs additional verification to ensure the
-            # identified brand matches the transaction with high confidence.
+            # Run extra verification so the returned brand matches the transaction with high
+            # confidence.
             high_confidence_only: nil,
-            # Optional parameter to optimize the API call for maximum speed. When set to true,
-            # the API will skip time-consuming operations for faster response at the cost of
-            # less comprehensive data.
+            # Skip slower enrichment steps for a faster, less detailed response.
             max_speed: nil,
-            # Optional Merchant Category Code (MCC) to help identify the business category or
-            # industry.
+            # Merchant Category Code (MCC) from the transaction. Helps identify the type of
+            # business.
             mcc: nil,
-            # Optional phone number from the transaction to help verify brand match.
+            # Merchant phone number from the transaction. Helps confirm the match.
             phone: nil,
-            # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-            # access policies are enabled for your organization; otherwise the request fails
-            # with `ACCESS_POLICIES_NOT_ENABLED`.
+            # Access policy IDs to apply; each URL must pass all of them. Requires access
+            # policies enabled for your organization; otherwise returns
+            # `ACCESS_POLICIES_NOT_ENABLED`.
             policies: nil,
-            # Labels for filtering usage in the dashboard.
+            # Labels for this request. Filter usage and request logs by them in the dashboard
+            # or with `GET /org/logs`.
             tags: nil,
             # Request deadline and what to return when it passes.
             timeout_opts: nil,
-            # `enabled` disables request logs and traces and omits request and response
-            # content from usage logs. Brand data and hosted assets may still be stored.
+            # `enabled` turns off request logs and traces and keeps request and response
+            # content out of usage logs. Brand data and hosted assets may still be stored.
             # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
             zdr: nil,
-            # Discriminator for transaction-based brand retrieval.
+            # Set to `by_transaction` to identify the merchant behind a transaction
+            # descriptor.
             type: :by_transaction
           )
           end
@@ -7179,6 +7191,7 @@ module ContextDev
             end
           end
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
 
@@ -7803,8 +7816,8 @@ module ContextDev
             end
           end
 
-          # Optional Merchant Category Code (MCC) to help identify the business category or
-          # industry.
+          # Merchant Category Code (MCC) from the transaction. Helps identify the type of
+          # business.
           module Mcc
             extend ContextDev::Internal::Type::Union
 
@@ -7821,7 +7834,7 @@ module ContextDev
             end
           end
 
-          # Optional phone number from the transaction to help verify brand match.
+          # Merchant phone number from the transaction. Helps confirm the match.
           module Phone
             extend ContextDev::Internal::Type::Union
 
@@ -7851,8 +7864,8 @@ module ContextDev
             sig { returns(Integer) }
             attr_accessor :milliseconds
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             sig do
               returns(
                 T.nilable(
@@ -7881,8 +7894,8 @@ module ContextDev
             def self.new(
               # Deadline in milliseconds.
               milliseconds:,
-              # "fail" returns 408 at the deadline. "return-partial" returns available results;
-              # inspect the response’s partial flag.
+              # `fail` returns 408 at the deadline. `return-partial` returns the results
+              # collected so far and marks the response as partial.
               behavior: nil
             )
             end
@@ -7899,8 +7912,8 @@ module ContextDev
             def to_hash
             end
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             module Behavior
               extend ContextDev::Internal::Type::Enum
 
@@ -7936,8 +7949,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           module Zdr
             extend ContextDev::Internal::Type::Enum

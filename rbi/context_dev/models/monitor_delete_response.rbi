@@ -11,9 +11,11 @@ module ContextDev
           )
         end
 
+      # ID of the deleted monitor.
       sig { returns(String) }
       attr_accessor :id
 
+      # Whether the monitor was deleted.
       sig { returns(T::Boolean) }
       attr_accessor :deleted
 
@@ -48,7 +50,9 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # ID of the deleted monitor.
         id:,
+        # Whether the monitor was deleted.
         deleted:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
@@ -84,7 +88,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -97,7 +101,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

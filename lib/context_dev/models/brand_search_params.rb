@@ -8,49 +8,49 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute query
-      #   Search term, matched against the fields selected by queryBy (e.g. 'nike',
-      #   'nike.com', 'nik').
+      #   Search term, matched against the fields in `queryBy`, such as `nike`,
+      #   `nike.com`, or `nik`.
       #
       #   @return [String]
       required :query, String
 
       # @!attribute autocomplete
-      #   Whether the search term matches by prefix, so partial words match as they are
-      #   typed (e.g. 'nik' matches Nike). Set to false to match whole words only.
+      #   Match the search term as a prefix, so `nik` matches Nike while the user is still
+      #   typing. Set to `false` to match whole words only.
       #
       #   @return [Boolean, nil]
       optional :autocomplete, ContextDev::Internal::Type::Boolean
 
       # @!attribute country
       #   Only return brands in this country, as an uppercase ISO 3166-1 alpha-2 code such
-      #   as US or GB.
+      #   as `US` or `GB`.
       #
       #   @return [Symbol, ContextDev::Models::BrandSearchParams::Country, nil]
       optional :country, enum: -> { ContextDev::BrandSearchParams::Country }
 
       # @!attribute language
-      #   Only return brands with this primary language, such as english or french.
+      #   Only return brands with this primary language, such as `english` or `french`.
       #
       #   @return [Symbol, ContextDev::Models::BrandSearchParams::Language, nil]
       optional :language, enum: -> { ContextDev::BrandSearchParams::Language }
 
       # @!attribute query_by
-      #   Fields to match the search term against, as a comma-separated list or repeated
-      #   parameter: 'name', 'domain', or both. Defaults to both.
+      #   Fields to match the search term against: `name`, `domain`, or both. Send a
+      #   comma-separated list or repeat the parameter.
       #
       #   @return [Array<Symbol, ContextDev::Models::BrandSearchParams::QueryBy>, nil]
       optional :query_by,
                -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::BrandSearchParams::QueryBy] }
 
       # @!attribute tags
-      #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      #   Comma-separated labels for this request, such as `production,team-alpha`. Filter
+      #   usage and request logs by them.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute typo_tolerance
-      #   Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
-      #   typo tolerance).
+      #   Maximum number of typos to tolerate when matching. `0` requires exact spelling.
       #
       #   @return [Integer, nil]
       optional :typo_tolerance, Integer
@@ -59,24 +59,24 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BrandSearchParams} for more details.
       #
-      #   @param query [String] Search term, matched against the fields selected by queryBy (e.g. 'nike', 'nike.
+      #   @param query [String] Search term, matched against the fields in `queryBy`, such as `nike`, `nike.com`
       #
-      #   @param autocomplete [Boolean] Whether the search term matches by prefix, so partial words match as they are ty
+      #   @param autocomplete [Boolean] Match the search term as a prefix, so `nik` matches Nike while the user is still
       #
       #   @param country [Symbol, ContextDev::Models::BrandSearchParams::Country] Only return brands in this country, as an uppercase ISO 3166-1 alpha-2 code such
       #
-      #   @param language [Symbol, ContextDev::Models::BrandSearchParams::Language] Only return brands with this primary language, such as english or french.
+      #   @param language [Symbol, ContextDev::Models::BrandSearchParams::Language] Only return brands with this primary language, such as `english` or `french`.
       #
-      #   @param query_by [Array<Symbol, ContextDev::Models::BrandSearchParams::QueryBy>] Fields to match the search term against, as a comma-separated list or repeated p
+      #   @param query_by [Array<Symbol, ContextDev::Models::BrandSearchParams::QueryBy>] Fields to match the search term against: `name`, `domain`, or both. Send a comma
       #
-      #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      #   @param tags [Array<String>] Comma-separated labels for this request, such as `production,team-alpha`. Filter
       #
-      #   @param typo_tolerance [Integer] Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
+      #   @param typo_tolerance [Integer] Maximum number of typos to tolerate when matching. `0` requires exact spelling.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
       # Only return brands in this country, as an uppercase ISO 3166-1 alpha-2 code such
-      # as US or GB.
+      # as `US` or `GB`.
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -334,7 +334,7 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Only return brands with this primary language, such as english or french.
+      # Only return brands with this primary language, such as `english` or `french`.
       module Language
         extend ContextDev::Internal::Type::Enum
 

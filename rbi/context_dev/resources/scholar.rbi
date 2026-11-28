@@ -4,8 +4,9 @@ module ContextDev
   module Resources
     # Search full-text academic papers from arXiv and Europe PMC.
     class Scholar
-      # Search full-text papers from arXiv and Europe PMC. Returns up to 250 relevant
-      # papers with matching passages and full-text links.
+      # Search the full text of papers from arXiv and Europe PMC by topic or question.
+      # Each result includes the matching passage and a direct link to the full text.
+      # Page through up to 250 matches, ranked by relevance or newest first.
       sig do
         params(
           query: String,
@@ -18,19 +19,21 @@ module ContextDev
         ).returns(ContextDev::Models::ScholarSearchResponse)
       end
       def search(
-        # A topic or question. Append one arxiv:, pmcid:, pmid:, or doi: ID to search
-        # within an indexed paper.
+        # Topic or question to search for. Append one `arxiv:`, `pmcid:`, `pmid:`, or
+        # `doi:` ID to search within that paper, such as `protein folding pmid:34265844`,
+        # or send the ID on its own.
         query:,
-        # Use next_cursor to fetch the next page.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page.
         cursor: nil,
         # Filter by publication date.
         filter_by: nil,
-        # Papers per page.
+        # Maximum number of papers to return per page.
         limit: nil,
-        # Order the top 250 matches. date_desc puts newest first, with undated papers
-        # last.
+        # `relevance` puts the closest matches first; `date_desc` puts the newest papers
+        # first, with undated papers last. Both orders apply to the top 250 matches.
         sort: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
         request_options: {}
       )

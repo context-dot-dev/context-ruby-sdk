@@ -7,22 +7,23 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::ScholarSearchParams} for more details.
       #
-      # Search full-text papers from arXiv and Europe PMC. Returns up to 250 relevant
-      # papers with matching passages and full-text links.
+      # Search the full text of papers from arXiv and Europe PMC by topic or question.
+      # Each result includes the matching passage and a direct link to the full text.
+      # Page through up to 250 matches, ranked by relevance or newest first.
       #
       # @overload search(query:, cursor: nil, filter_by: nil, limit: nil, sort: nil, tags: nil, request_options: {})
       #
-      # @param query [String] A topic or question. Append one arxiv:, pmcid:, pmid:, or doi: ID to search with
+      # @param query [String] Topic or question to search for. Append one `arxiv:`, `pmcid:`, `pmid:`, or `doi
       #
-      # @param cursor [String, nil] Use next_cursor to fetch the next page.
+      # @param cursor [String, nil] Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
       # @param filter_by [ContextDev::Models::ScholarSearchParams::FilterBy] Filter by publication date.
       #
-      # @param limit [Integer] Papers per page.
+      # @param limit [Integer] Maximum number of papers to return per page.
       #
-      # @param sort [Symbol, ContextDev::Models::ScholarSearchParams::Sort] Order the top 250 matches. date_desc puts newest first, with undated papers last
+      # @param sort [Symbol, ContextDev::Models::ScholarSearchParams::Sort] `relevance` puts the closest matches first; `date_desc` puts the newest papers f
       #
-      # @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      # @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

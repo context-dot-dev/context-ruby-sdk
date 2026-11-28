@@ -2,14 +2,15 @@
 
 module ContextDev
   module Resources
-    # Scrape many pages or crawl a site asynchronously.
+    # Scrape up to 100,000 URLs or crawl a site asynchronously.
     class Batch
-      # Get batch progress and result download links. Result files are deleted 180 days
-      # after the batch finishes.
+      # Retrieve a batch's status, progress, and credit usage, plus links to download
+      # its results once it finishes. Result files are deleted 180 days after the batch
+      # finishes.
       #
       # @overload retrieve(batch_id, request_options: {})
       #
-      # @param batch_id [String] Batch ID.
+      # @param batch_id [String] ID of the batch.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -28,21 +29,22 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::BatchListParams} for more details.
       #
-      # List your batches, newest first, with optional filters.
+      # List your batches, newest first. Filter by status or tags, or search by batch
+      # ID, crawl source, or tag.
       #
       # @overload list(cursor: nil, limit: nil, q: nil, search_type: nil, status: nil, tags: nil, request_options: {})
       #
-      # @param cursor [String] Cursor from the previous page.
+      # @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
-      # @param limit [Integer] Batches per page. Defaults to 25.
+      # @param limit [Integer] Maximum number of batches to return per page.
       #
-      # @param q [String] Free-text search term, matched against the batch id, crawl source (start URL or
+      # @param q [String] Search term matched against batch IDs, crawl sources (start URL or sitemap domai
       #
-      # @param search_type [Symbol, ContextDev::Models::BatchListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
+      # @param search_type [Symbol, ContextDev::Models::BatchListParams::SearchType] How `q` matches: `prefix` matches the start of a term, for search-as-you-type, a
       #
-      # @param status [Symbol, ContextDev::Models::BatchListParams::Status] Filter by status.
+      # @param status [Symbol, ContextDev::Models::BatchListParams::Status] Filter by batch status.
       #
-      # @param tags [String, Array<String>] Tags to filter by (matches batches having any of them). Pass repeated `tags` par
+      # @param tags [String, Array<String>] Comma-separated tags. Returns batches that have any of them. You can also repeat
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -66,7 +68,7 @@ module ContextDev
       #
       # @overload delete(batch_id, request_options: {})
       #
-      # @param batch_id [String] Batch ID.
+      # @param batch_id [String] ID of the batch.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -82,12 +84,12 @@ module ContextDev
         )
       end
 
-      # Stop a batch from starting new pages. Pages already in progress finish before
-      # the batch becomes cancelled.
+      # Stop a batch from starting new pages. Pages already in progress finish, then the
+      # batch becomes `cancelled` and unused credits are refunded.
       #
       # @overload cancel(batch_id, request_options: {})
       #
-      # @param batch_id [String] Batch ID.
+      # @param batch_id [String] ID of the batch.
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -106,17 +108,17 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::BatchGetResultsParams} for more details.
       #
-      # Page through a finished batch’s results as JSON. Each record contains result
-      # with the same outputs and per-format errors as POST /web/scrape. Results remain
-      # available for 180 days.
+      # Page through a finished batch's results as JSON. Each record's `result` has the
+      # same outputs and per-format errors as `POST /web/scrape`. Results are kept for
+      # 180 days after the batch finishes.
       #
       # @overload get_results(batch_id, cursor: nil, limit: nil, request_options: {})
       #
-      # @param batch_id [String] Batch ID.
+      # @param batch_id [String] ID of the batch.
       #
-      # @param cursor [String] next_cursor from the previous page.
+      # @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
-      # @param limit [Integer] Records per page. Defaults to 25. A page can close early so its payload stays un
+      # @param limit [Integer] Maximum number of results to return per page. A page can hold fewer to stay unde
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #
@@ -138,29 +140,23 @@ module ContextDev
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::BatchSubmitParams} for more details.
       #
-      # Scrape up to 100,000 URLs, or crawl a site, asynchronously using the same
-      # formats and scrape parameters as POST /web/scrape. Choose Markdown, HTML,
-      # screenshots, images, bytes, parsed fields, products, highlights, and JSON.
-      # Submission persists the input and returns immediately with status pending.
-      # Organizations with fewer than 10 available credits and no overage are rejected
-      # with 402 up front. Each organization can submit up to 2,500 batches per minute,
-      # independently of its polling budget. Batches wait pending when execution
-      # capacity is full. Validation, sitemap discovery, the full credit quote, and
-      # shard scheduling happen afterward. Poll the batch ID or receive a webhook when
-      # it finishes. Deferred rejections appear as status failed with a failure code and
-      # message.
+      # Scrape up to 100,000 URLs, or crawl a site, asynchronously with every Scrape
+      # Anything format and option from `POST /web/scrape`. Poll `GET /batch/{batch_id}`
+      # or pass `webhook` to be notified when the batch finishes. URLs and credits are
+      # checked after the batch is accepted, so a batch that fails those checks ends as
+      # `failed` with a `failure` code instead of returning an error.
       #
       # @overload submit(input:, policies: nil, tags: nil, webhook: nil, idempotency_key: nil, request_options: {})
       #
-      # @param input [ContextDev::Models::BatchSubmitParams::Input::Scrape, ContextDev::Models::BatchSubmitParams::Input::Crawl] Body param: Choose a URL list or a site crawl.
+      # @param input [ContextDev::Models::BatchSubmitParams::Input::Scrape, ContextDev::Models::BatchSubmitParams::Input::Crawl] Body param: What to scrape: a list of URLs (`scrape`) or a site crawl (`crawl`).
       #
-      # @param policies [Array<String>] Body param: Access policy IDs to apply to every page. A URL must pass every poli
+      # @param policies [Array<String>] Body param: Access policy IDs to apply to every page; each URL must pass all of
       #
-      # @param tags [Array<String>] Body param: Tags stored on the batch. Filter the batch list by them later.
+      # @param tags [Array<String>] Body param: Tags to store on the batch. Filter `GET /batch/list` by them later.
       #
-      # @param webhook [ContextDev::Models::BatchSubmitParams::Webhook] Body param: Where to send the batch's final-status event. Omit `retry` for one a
+      # @param webhook [ContextDev::Models::BatchSubmitParams::Webhook] Body param: Webhook to notify when the batch finishes. Omit `retry` for a single
       #
-      # @param idempotency_key [String] Header param: Unique key per submission. Retrying with the same key and body ret
+      # @param idempotency_key [String] Header param: Unique key for this submission. Retrying with the same key and bod
       #
       # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
       #

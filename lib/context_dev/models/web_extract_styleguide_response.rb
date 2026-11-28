@@ -5,7 +5,7 @@ module ContextDev
     # @see ContextDev::Resources::Web#extract_styleguide
     class WebExtractStyleguideResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute cache_metadata
-      #   Whether this response came from cache.
+      #   Cache status of this response.
       #
       #   @return [ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata }
@@ -18,13 +18,13 @@ module ContextDev
       required :request_id, String
 
       # @!attribute code
-      #   HTTP status code
+      #   HTTP status code, repeated in the body.
       #
       #   @return [Integer, nil]
       optional :code, Integer
 
       # @!attribute domain
-      #   The normalized domain that was processed
+      #   Normalized domain that was analyzed.
       #
       #   @return [String, nil]
       optional :domain, String
@@ -51,7 +51,7 @@ module ContextDev
       optional :status, String
 
       # @!attribute styleguide
-      #   Comprehensive styleguide data extracted from the website
+      #   Design tokens and component styles extracted from the website.
       #
       #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide, nil]
       optional :styleguide, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide }
@@ -60,13 +60,13 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractStyleguideResponse} for more details.
       #
-      #   @param cache_metadata [ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata] Whether this response came from cache.
+      #   @param cache_metadata [ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata] Cache status of this response.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param code [Integer] HTTP status code
+      #   @param code [Integer] HTTP status code, repeated in the body.
       #
-      #   @param domain [String] The normalized domain that was processed
+      #   @param domain [String] Normalized domain that was analyzed.
       #
       #   @param final_dom_state [Symbol, ContextDev::Models::WebExtractStyleguideResponse::FinalDomState] `loaded`, or `still-loading` when capture ended before the page finished loading
       #
@@ -74,19 +74,19 @@ module ContextDev
       #
       #   @param status [String] Always `ok` on success.
       #
-      #   @param styleguide [ContextDev::Models::WebExtractStyleguideResponse::Styleguide] Comprehensive styleguide data extracted from the website
+      #   @param styleguide [ContextDev::Models::WebExtractStyleguideResponse::Styleguide] Design tokens and component styles extracted from the website.
 
       # @see ContextDev::Models::WebExtractStyleguideResponse#cache_metadata
       class CacheMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute age_ms
-        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
         #   @return [Integer]
         required :age_ms, Integer
 
         # @!attribute status
-        #   Whether the response was served from cache, required fresh work, or honored
-        #   zero-data-retention cache bypass.
+        #   `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        #   retention bypassed the cache.
         #
         #   @return [Symbol, ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::Status]
         required :status, enum: -> { ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::Status }
@@ -96,14 +96,14 @@ module ContextDev
         #   {ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata} for more
         #   details.
         #
-        #   Whether this response came from cache.
+        #   Cache status of this response.
         #
-        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   @param age_ms [Integer] Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
-        #   @param status [Symbol, ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+        #   @param status [Symbol, ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::Status] `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data re
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         #
         # @see ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata#status
         module Status
@@ -141,7 +141,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -151,25 +151,25 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
 
       # @see ContextDev::Models::WebExtractStyleguideResponse#styleguide
       class Styleguide < ContextDev::Internal::Type::BaseModel
         # @!attribute colors
-        #   Primary colors used on the website
+        #   Core colors used on the website.
         #
         #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors]
         required :colors, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors }
 
         # @!attribute components
-        #   UI component styles
+        #   Styles for buttons and cards.
         #
         #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components]
         required :components, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components }
 
         # @!attribute element_spacing
-        #   Spacing system used on the website
+        #   Spacing scale used on the website, from `xs` to `xl`.
         #
         #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing]
         required :element_spacing,
@@ -177,9 +177,9 @@ module ContextDev
                  api_name: :elementSpacing
 
         # @!attribute font_links
-        #   Font assets keyed by family name as it appears in fontFamily/fontFallbacks
-        #   (non-generic names only). Match font style and weight against faces to select a
-        #   file URL.
+        #   Font files keyed by family name, as it appears in `fontFamily` and
+        #   `fontFallbacks`. Generic families are left out. Match style and weight against
+        #   `faces` to pick a file.
         #
         #   @return [Hash{Symbol=>ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink}]
         required :font_links,
@@ -187,19 +187,19 @@ module ContextDev
                  api_name: :fontLinks
 
         # @!attribute mode
-        #   The primary color mode of the website design
+        #   Whether the site's design is mainly light or dark.
         #
         #   @return [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode]
         required :mode, enum: -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode }
 
         # @!attribute shadows
-        #   Shadow styles used on the website
+        #   Box shadow scale used on the website, from `sm` to `xl`, plus `inner`.
         #
         #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows]
         required :shadows, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows }
 
         # @!attribute typography
-        #   Typography styles used on the website
+        #   Text styles for headings and body text.
         #
         #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography]
         required :typography, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography }
@@ -208,72 +208,72 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide} for more details.
         #
-        #   Comprehensive styleguide data extracted from the website
+        #   Design tokens and component styles extracted from the website.
         #
-        #   @param colors [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors] Primary colors used on the website
+        #   @param colors [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors] Core colors used on the website.
         #
-        #   @param components [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components] UI component styles
+        #   @param components [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components] Styles for buttons and cards.
         #
-        #   @param element_spacing [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing] Spacing system used on the website
+        #   @param element_spacing [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing] Spacing scale used on the website, from `xs` to `xl`.
         #
-        #   @param font_links [Hash{Symbol=>ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink}] Font assets keyed by family name as it appears in fontFamily/fontFallbacks (non-
+        #   @param font_links [Hash{Symbol=>ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink}] Font files keyed by family name, as it appears in `fontFamily` and `fontFallback
         #
-        #   @param mode [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode] The primary color mode of the website design
+        #   @param mode [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode] Whether the site's design is mainly light or dark.
         #
-        #   @param shadows [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows] Shadow styles used on the website
+        #   @param shadows [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows] Box shadow scale used on the website, from `sm` to `xl`, plus `inner`.
         #
-        #   @param typography [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography] Typography styles used on the website
+        #   @param typography [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography] Text styles for headings and body text.
 
         # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide#colors
         class Colors < ContextDev::Internal::Type::BaseModel
           # @!attribute accent
-          #   Accent color (hex format)
+          #   Accent color, in hex.
           #
           #   @return [String]
           required :accent, String
 
           # @!attribute background
-          #   Background color (hex format)
+          #   Background color, in hex.
           #
           #   @return [String]
           required :background, String
 
           # @!attribute text
-          #   Text color (hex format)
+          #   Text color, in hex.
           #
           #   @return [String]
           required :text, String
 
           # @!method initialize(accent:, background:, text:)
-          #   Primary colors used on the website
+          #   Core colors used on the website.
           #
-          #   @param accent [String] Accent color (hex format)
+          #   @param accent [String] Accent color, in hex.
           #
-          #   @param background [String] Background color (hex format)
+          #   @param background [String] Background color, in hex.
           #
-          #   @param text [String] Text color (hex format)
+          #   @param text [String] Text color, in hex.
         end
 
         # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide#components
         class Components < ContextDev::Internal::Type::BaseModel
           # @!attribute button
-          #   Button component styles
+          #   Primary, secondary, and link button styles.
           #
           #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button]
           required :button, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button }
 
           # @!attribute card
-          #   Card component style
+          #   Card style.
           #
           #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card, nil]
           optional :card, -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card }
 
           # @!method initialize(button:, card: nil)
-          #   UI component styles
+          #   Styles for buttons and cards.
           #
-          #   @param button [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button] Button component styles
+          #   @param button [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button] Primary, secondary, and link button styles.
           #
-          #   @param card [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card] Card component style
+          #   @param card [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card] Card style.
 
           # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components#button
           class Button < ContextDev::Internal::Type::BaseModel
@@ -296,7 +296,7 @@ module ContextDev
                      -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Secondary }
 
             # @!method initialize(link: nil, primary: nil, secondary: nil)
-            #   Button component styles
+            #   Primary, secondary, and link button styles.
             #
             #   @param link [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Link]
             #   @param primary [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Primary]
@@ -310,8 +310,7 @@ module ContextDev
               required :background_color, String, api_name: :backgroundColor
 
               # @!attribute border_color
-              #   Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-              #   alpha)
+              #   Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
               #
               #   @return [String]
               required :border_color, String, api_name: :borderColor
@@ -332,7 +331,7 @@ module ContextDev
               required :border_width, String, api_name: :borderWidth
 
               # @!attribute box_shadow
-              #   Computed box-shadow (comma-separated layers when present)
+              #   Computed `box-shadow`, with layers separated by commas.
               #
               #   @return [String]
               required :box_shadow, String, api_name: :boxShadow
@@ -343,7 +342,7 @@ module ContextDev
               required :color, String
 
               # @!attribute css
-              #   Ready-to-use CSS declaration block for this component style
+              #   Ready-to-use CSS declarations for this style.
               #
               #   @return [String]
               required :css, String
@@ -359,13 +358,13 @@ module ContextDev
               required :font_weight, Float, api_name: :fontWeight
 
               # @!attribute min_height
-              #   Sampled minimum height of the button box (typically px)
+              #   Minimum height as a CSS length, usually in pixels.
               #
               #   @return [String]
               required :min_height, String, api_name: :minHeight
 
               # @!attribute min_width
-              #   Minimum width (usually px).
+              #   Minimum width as a CSS length, usually in pixels.
               #
               #   @return [String]
               required :min_width, String, api_name: :minWidth
@@ -381,31 +380,27 @@ module ContextDev
               required :text_decoration, String, api_name: :textDecoration
 
               # @!attribute font_fallbacks
-              #   Full ordered font list from computed font-family
+              #   Full font stack from the computed `font-family`, in order.
               #
               #   @return [Array<String>, nil]
               optional :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
 
               # @!attribute font_family
-              #   Primary button typeface (first in fontFallbacks)
+              #   Button typeface, the first entry in `fontFallbacks`.
               #
               #   @return [String, nil]
               optional :font_family, String, api_name: :fontFamily
 
               # @!attribute text_decoration_color
-              #   Hex color of the underline when it differs from the text color
+              #   Underline color in hex, when it differs from the text color.
               #
               #   @return [String, nil]
               optional :text_decoration_color, String, api_name: :textDecorationColor
 
               # @!method initialize(background_color:, border_color:, border_radius:, border_style:, border_width:, box_shadow:, color:, css:, font_size:, font_weight:, min_height:, min_width:, padding:, text_decoration:, font_fallbacks: nil, font_family: nil, text_decoration_color: nil)
-              #   Some parameter documentations has been truncated, see
-              #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Link}
-              #   for more details.
-              #
               #   @param background_color [String]
               #
-              #   @param border_color [String] Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has alp
+              #   @param border_color [String] Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
               #
               #   @param border_radius [String]
               #
@@ -413,29 +408,29 @@ module ContextDev
               #
               #   @param border_width [String]
               #
-              #   @param box_shadow [String] Computed box-shadow (comma-separated layers when present)
+              #   @param box_shadow [String] Computed `box-shadow`, with layers separated by commas.
               #
               #   @param color [String]
               #
-              #   @param css [String] Ready-to-use CSS declaration block for this component style
+              #   @param css [String] Ready-to-use CSS declarations for this style.
               #
               #   @param font_size [String]
               #
               #   @param font_weight [Float]
               #
-              #   @param min_height [String] Sampled minimum height of the button box (typically px)
+              #   @param min_height [String] Minimum height as a CSS length, usually in pixels.
               #
-              #   @param min_width [String] Minimum width (usually px).
+              #   @param min_width [String] Minimum width as a CSS length, usually in pixels.
               #
               #   @param padding [String]
               #
               #   @param text_decoration [String]
               #
-              #   @param font_fallbacks [Array<String>] Full ordered font list from computed font-family
+              #   @param font_fallbacks [Array<String>] Full font stack from the computed `font-family`, in order.
               #
-              #   @param font_family [String] Primary button typeface (first in fontFallbacks)
+              #   @param font_family [String] Button typeface, the first entry in `fontFallbacks`.
               #
-              #   @param text_decoration_color [String] Hex color of the underline when it differs from the text color
+              #   @param text_decoration_color [String] Underline color in hex, when it differs from the text color.
             end
 
             # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button#primary
@@ -446,8 +441,7 @@ module ContextDev
               required :background_color, String, api_name: :backgroundColor
 
               # @!attribute border_color
-              #   Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-              #   alpha)
+              #   Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
               #
               #   @return [String]
               required :border_color, String, api_name: :borderColor
@@ -468,7 +462,7 @@ module ContextDev
               required :border_width, String, api_name: :borderWidth
 
               # @!attribute box_shadow
-              #   Computed box-shadow (comma-separated layers when present)
+              #   Computed `box-shadow`, with layers separated by commas.
               #
               #   @return [String]
               required :box_shadow, String, api_name: :boxShadow
@@ -479,7 +473,7 @@ module ContextDev
               required :color, String
 
               # @!attribute css
-              #   Ready-to-use CSS declaration block for this component style
+              #   Ready-to-use CSS declarations for this style.
               #
               #   @return [String]
               required :css, String
@@ -495,13 +489,13 @@ module ContextDev
               required :font_weight, Float, api_name: :fontWeight
 
               # @!attribute min_height
-              #   Sampled minimum height of the button box (typically px)
+              #   Minimum height as a CSS length, usually in pixels.
               #
               #   @return [String]
               required :min_height, String, api_name: :minHeight
 
               # @!attribute min_width
-              #   Minimum width (usually px).
+              #   Minimum width as a CSS length, usually in pixels.
               #
               #   @return [String]
               required :min_width, String, api_name: :minWidth
@@ -517,31 +511,27 @@ module ContextDev
               required :text_decoration, String, api_name: :textDecoration
 
               # @!attribute font_fallbacks
-              #   Full ordered font list from computed font-family
+              #   Full font stack from the computed `font-family`, in order.
               #
               #   @return [Array<String>, nil]
               optional :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
 
               # @!attribute font_family
-              #   Primary button typeface (first in fontFallbacks)
+              #   Button typeface, the first entry in `fontFallbacks`.
               #
               #   @return [String, nil]
               optional :font_family, String, api_name: :fontFamily
 
               # @!attribute text_decoration_color
-              #   Hex color of the underline when it differs from the text color
+              #   Underline color in hex, when it differs from the text color.
               #
               #   @return [String, nil]
               optional :text_decoration_color, String, api_name: :textDecorationColor
 
               # @!method initialize(background_color:, border_color:, border_radius:, border_style:, border_width:, box_shadow:, color:, css:, font_size:, font_weight:, min_height:, min_width:, padding:, text_decoration:, font_fallbacks: nil, font_family: nil, text_decoration_color: nil)
-              #   Some parameter documentations has been truncated, see
-              #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Primary}
-              #   for more details.
-              #
               #   @param background_color [String]
               #
-              #   @param border_color [String] Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has alp
+              #   @param border_color [String] Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
               #
               #   @param border_radius [String]
               #
@@ -549,29 +539,29 @@ module ContextDev
               #
               #   @param border_width [String]
               #
-              #   @param box_shadow [String] Computed box-shadow (comma-separated layers when present)
+              #   @param box_shadow [String] Computed `box-shadow`, with layers separated by commas.
               #
               #   @param color [String]
               #
-              #   @param css [String] Ready-to-use CSS declaration block for this component style
+              #   @param css [String] Ready-to-use CSS declarations for this style.
               #
               #   @param font_size [String]
               #
               #   @param font_weight [Float]
               #
-              #   @param min_height [String] Sampled minimum height of the button box (typically px)
+              #   @param min_height [String] Minimum height as a CSS length, usually in pixels.
               #
-              #   @param min_width [String] Minimum width (usually px).
+              #   @param min_width [String] Minimum width as a CSS length, usually in pixels.
               #
               #   @param padding [String]
               #
               #   @param text_decoration [String]
               #
-              #   @param font_fallbacks [Array<String>] Full ordered font list from computed font-family
+              #   @param font_fallbacks [Array<String>] Full font stack from the computed `font-family`, in order.
               #
-              #   @param font_family [String] Primary button typeface (first in fontFallbacks)
+              #   @param font_family [String] Button typeface, the first entry in `fontFallbacks`.
               #
-              #   @param text_decoration_color [String] Hex color of the underline when it differs from the text color
+              #   @param text_decoration_color [String] Underline color in hex, when it differs from the text color.
             end
 
             # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button#secondary
@@ -582,8 +572,7 @@ module ContextDev
               required :background_color, String, api_name: :backgroundColor
 
               # @!attribute border_color
-              #   Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-              #   alpha)
+              #   Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
               #
               #   @return [String]
               required :border_color, String, api_name: :borderColor
@@ -604,7 +593,7 @@ module ContextDev
               required :border_width, String, api_name: :borderWidth
 
               # @!attribute box_shadow
-              #   Computed box-shadow (comma-separated layers when present)
+              #   Computed `box-shadow`, with layers separated by commas.
               #
               #   @return [String]
               required :box_shadow, String, api_name: :boxShadow
@@ -615,7 +604,7 @@ module ContextDev
               required :color, String
 
               # @!attribute css
-              #   Ready-to-use CSS declaration block for this component style
+              #   Ready-to-use CSS declarations for this style.
               #
               #   @return [String]
               required :css, String
@@ -631,13 +620,13 @@ module ContextDev
               required :font_weight, Float, api_name: :fontWeight
 
               # @!attribute min_height
-              #   Sampled minimum height of the button box (typically px)
+              #   Minimum height as a CSS length, usually in pixels.
               #
               #   @return [String]
               required :min_height, String, api_name: :minHeight
 
               # @!attribute min_width
-              #   Minimum width (usually px).
+              #   Minimum width as a CSS length, usually in pixels.
               #
               #   @return [String]
               required :min_width, String, api_name: :minWidth
@@ -653,31 +642,27 @@ module ContextDev
               required :text_decoration, String, api_name: :textDecoration
 
               # @!attribute font_fallbacks
-              #   Full ordered font list from computed font-family
+              #   Full font stack from the computed `font-family`, in order.
               #
               #   @return [Array<String>, nil]
               optional :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
 
               # @!attribute font_family
-              #   Primary button typeface (first in fontFallbacks)
+              #   Button typeface, the first entry in `fontFallbacks`.
               #
               #   @return [String, nil]
               optional :font_family, String, api_name: :fontFamily
 
               # @!attribute text_decoration_color
-              #   Hex color of the underline when it differs from the text color
+              #   Underline color in hex, when it differs from the text color.
               #
               #   @return [String, nil]
               optional :text_decoration_color, String, api_name: :textDecorationColor
 
               # @!method initialize(background_color:, border_color:, border_radius:, border_style:, border_width:, box_shadow:, color:, css:, font_size:, font_weight:, min_height:, min_width:, padding:, text_decoration:, font_fallbacks: nil, font_family: nil, text_decoration_color: nil)
-              #   Some parameter documentations has been truncated, see
-              #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button::Secondary}
-              #   for more details.
-              #
               #   @param background_color [String]
               #
-              #   @param border_color [String] Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has alp
+              #   @param border_color [String] Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
               #
               #   @param border_radius [String]
               #
@@ -685,29 +670,29 @@ module ContextDev
               #
               #   @param border_width [String]
               #
-              #   @param box_shadow [String] Computed box-shadow (comma-separated layers when present)
+              #   @param box_shadow [String] Computed `box-shadow`, with layers separated by commas.
               #
               #   @param color [String]
               #
-              #   @param css [String] Ready-to-use CSS declaration block for this component style
+              #   @param css [String] Ready-to-use CSS declarations for this style.
               #
               #   @param font_size [String]
               #
               #   @param font_weight [Float]
               #
-              #   @param min_height [String] Sampled minimum height of the button box (typically px)
+              #   @param min_height [String] Minimum height as a CSS length, usually in pixels.
               #
-              #   @param min_width [String] Minimum width (usually px).
+              #   @param min_width [String] Minimum width as a CSS length, usually in pixels.
               #
               #   @param padding [String]
               #
               #   @param text_decoration [String]
               #
-              #   @param font_fallbacks [Array<String>] Full ordered font list from computed font-family
+              #   @param font_fallbacks [Array<String>] Full font stack from the computed `font-family`, in order.
               #
-              #   @param font_family [String] Primary button typeface (first in fontFallbacks)
+              #   @param font_family [String] Button typeface, the first entry in `fontFallbacks`.
               #
-              #   @param text_decoration_color [String] Hex color of the underline when it differs from the text color
+              #   @param text_decoration_color [String] Underline color in hex, when it differs from the text color.
             end
           end
 
@@ -719,8 +704,7 @@ module ContextDev
             required :background_color, String, api_name: :backgroundColor
 
             # @!attribute border_color
-            #   Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-            #   alpha)
+            #   Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
             #
             #   @return [String]
             required :border_color, String, api_name: :borderColor
@@ -746,7 +730,7 @@ module ContextDev
             required :box_shadow, String, api_name: :boxShadow
 
             # @!attribute css
-            #   Ready-to-use CSS declaration block for this component style
+            #   Ready-to-use CSS declarations for this style.
             #
             #   @return [String]
             required :css, String
@@ -762,15 +746,11 @@ module ContextDev
             required :text_color, String, api_name: :textColor
 
             # @!method initialize(background_color:, border_color:, border_radius:, border_style:, border_width:, box_shadow:, css:, padding:, text_color:)
-            #   Some parameter documentations has been truncated, see
-            #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Card}
-            #   for more details.
-            #
-            #   Card component style
+            #   Card style.
             #
             #   @param background_color [String]
             #
-            #   @param border_color [String] Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has alp
+            #   @param border_color [String] Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
             #
             #   @param border_radius [String]
             #
@@ -780,7 +760,7 @@ module ContextDev
             #
             #   @param box_shadow [String]
             #
-            #   @param css [String] Ready-to-use CSS declaration block for this component style
+            #   @param css [String] Ready-to-use CSS declarations for this style.
             #
             #   @param padding [String]
             #
@@ -816,7 +796,7 @@ module ContextDev
           required :xs, String
 
           # @!method initialize(lg:, md:, sm:, xl:, xs:)
-          #   Spacing system used on the website
+          #   Spacing scale used on the website, from `xs` to `xl`.
           #
           #   @param lg [String]
           #   @param md [String]
@@ -827,26 +807,27 @@ module ContextDev
 
         class FontLink < ContextDev::Internal::Type::BaseModel
           # @!attribute type
+          #   `google` for Google Fonts, `custom` for any other font source.
           #
           #   @return [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type]
           required :type, enum: -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type }
 
           # @!attribute category
-          #   Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
-          #   display, handwriting). Omitted for custom fonts when unknown.
+          #   Google Fonts category, such as `sans-serif`, `serif`, `monospace`, `display`, or
+          #   `handwriting`. Omitted for custom fonts when unknown.
           #
           #   @return [String, nil]
           optional :category, String
 
           # @!attribute display_name
-          #   Human-readable family name. For custom fonts, derived from the fontLinks key;
-          #   for Google fonts, the canonical Google Fonts family name.
+          #   Human-readable family name: the `fontLinks` key for custom fonts, or the
+          #   official Google Fonts name for Google fonts.
           #
           #   @return [String, nil]
           optional :display_name, String, api_name: :displayName
 
           # @!attribute faces
-          #   Discovered font faces, including style, weight, and distinct Unicode subsets.
+          #   Font faces found for this family, one per style, weight, and Unicode subset.
           #
           #   @return [Array<ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face>, nil]
           optional :faces,
@@ -867,16 +848,18 @@ module ContextDev
           #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink} for
           #   more details.
           #
-          #   @param type [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type]
+          #   @param type [Symbol, ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type] `google` for Google Fonts, `custom` for any other font source.
           #
-          #   @param category [String] Google Fonts category when type is google (e.g. sans-serif, serif, monospace, di
+          #   @param category [String] Google Fonts category, such as `sans-serif`, `serif`, `monospace`, `display`, or
           #
-          #   @param display_name [String] Human-readable family name. For custom fonts, derived from the fontLinks key; fo
+          #   @param display_name [String] Human-readable family name: the `fontLinks` key for custom fonts, or the officia
           #
-          #   @param faces [Array<ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face>] Discovered font faces, including style, weight, and distinct Unicode subsets.
+          #   @param faces [Array<ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face>] Font faces found for this family, one per style, weight, and Unicode subset.
           #
           #   @param files [Hash{Symbol=>String}] Deprecated upright font lookup keyed by weight string. A variable font can map s
 
+          # `google` for Google Fonts, `custom` for any other font source.
+          #
           # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink#type
           module Type
             extend ContextDev::Internal::Type::Enum
@@ -890,33 +873,33 @@ module ContextDev
 
           class Face < ContextDev::Internal::Type::BaseModel
             # @!attribute style
-            #   CSS font-style descriptor: normal, italic, or oblique, including an optional
-            #   oblique angle or angle range (e.g. oblique 10deg 20deg).
+            #   CSS `font-style` descriptor: `normal`, `italic`, or `oblique`, with an optional
+            #   angle or angle range such as `oblique 10deg 20deg`.
             #
             #   @return [String]
             required :style, String
 
             # @!attribute url
-            #   Preferred font file URL or inline font data URL.
+            #   URL of the font file, or an inline data URL.
             #
             #   @return [String]
             required :url, String
 
             # @!attribute weight
-            #   CSS font-weight descriptor. A variable font file can have a range such as "300
-            #   500", covering intermediate weights without separate files.
+            #   CSS `font-weight` descriptor. A variable font can have a range such as
+            #   `300 500`, which covers every weight in between with one file.
             #
             #   @return [String]
             required :weight, String
 
             # @!attribute unicode_range
-            #   CSS unicode-range descriptor.
+            #   CSS `unicode-range` descriptor.
             #
             #   @return [String, nil]
             optional :unicode_range, String, api_name: :unicodeRange
 
             # @!attribute width
-            #   CSS font-width or font-stretch descriptor.
+            #   CSS `font-width` or `font-stretch` descriptor.
             #
             #   @return [String, nil]
             optional :width, String
@@ -926,19 +909,19 @@ module ContextDev
             #   {ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Face}
             #   for more details.
             #
-            #   @param style [String] CSS font-style descriptor: normal, italic, or oblique, including an optional obl
+            #   @param style [String] CSS `font-style` descriptor: `normal`, `italic`, or `oblique`, with an optional
             #
-            #   @param url [String] Preferred font file URL or inline font data URL.
+            #   @param url [String] URL of the font file, or an inline data URL.
             #
-            #   @param weight [String] CSS font-weight descriptor. A variable font file can have a range such as "300 5
+            #   @param weight [String] CSS `font-weight` descriptor. A variable font can have a range such as `300 500`
             #
-            #   @param unicode_range [String] CSS unicode-range descriptor.
+            #   @param unicode_range [String] CSS `unicode-range` descriptor.
             #
-            #   @param width [String] CSS font-width or font-stretch descriptor.
+            #   @param width [String] CSS `font-width` or `font-stretch` descriptor.
           end
         end
 
-        # The primary color mode of the website design
+        # Whether the site's design is mainly light or dark.
         #
         # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide#mode
         module Mode
@@ -979,7 +962,7 @@ module ContextDev
           required :xl, String
 
           # @!method initialize(inner:, lg:, md:, sm:, xl:)
-          #   Shadow styles used on the website
+          #   Box shadow scale used on the website, from `sm` to `xl`, plus `inner`.
           #
           #   @param inner [String]
           #   @param lg [String]
@@ -991,7 +974,7 @@ module ContextDev
         # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide#typography
         class Typography < ContextDev::Internal::Type::BaseModel
           # @!attribute headings
-          #   Heading styles
+          #   Styles for `h1` through `h4` headings.
           #
           #   @return [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings]
           required :headings,
@@ -1005,9 +988,9 @@ module ContextDev
                    api_name: :p
 
           # @!method initialize(headings:, p_: nil)
-          #   Typography styles used on the website
+          #   Text styles for headings and body text.
           #
-          #   @param headings [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings] Heading styles
+          #   @param headings [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings] Styles for `h1` through `h4` headings.
           #
           #   @param p_ [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::P]
 
@@ -1038,7 +1021,7 @@ module ContextDev
                      -> { ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H4 }
 
             # @!method initialize(h1: nil, h2: nil, h3: nil, h4: nil)
-            #   Heading styles
+            #   Styles for `h1` through `h4` headings.
             #
             #   @param h1 [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H1]
             #   @param h2 [ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings::H2]
@@ -1048,7 +1031,7 @@ module ContextDev
             # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings#h1
             class H1 < ContextDev::Internal::Type::BaseModel
               # @!attribute font_fallbacks
-              #   Full ordered font list from resolved computed font-family
+              #   Full font stack from the computed `font-family`, in order.
               #
               #   @return [Array<String>]
               required :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
@@ -1080,7 +1063,7 @@ module ContextDev
               required :line_height, String, api_name: :lineHeight
 
               # @!method initialize(font_fallbacks:, font_family:, font_size:, font_weight:, letter_spacing:, line_height:)
-              #   @param font_fallbacks [Array<String>] Full ordered font list from resolved computed font-family
+              #   @param font_fallbacks [Array<String>] Full font stack from the computed `font-family`, in order.
               #
               #   @param font_family [String] First font in the stack.
               #
@@ -1096,7 +1079,7 @@ module ContextDev
             # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings#h2
             class H2 < ContextDev::Internal::Type::BaseModel
               # @!attribute font_fallbacks
-              #   Full ordered font list from resolved computed font-family
+              #   Full font stack from the computed `font-family`, in order.
               #
               #   @return [Array<String>]
               required :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
@@ -1128,7 +1111,7 @@ module ContextDev
               required :line_height, String, api_name: :lineHeight
 
               # @!method initialize(font_fallbacks:, font_family:, font_size:, font_weight:, letter_spacing:, line_height:)
-              #   @param font_fallbacks [Array<String>] Full ordered font list from resolved computed font-family
+              #   @param font_fallbacks [Array<String>] Full font stack from the computed `font-family`, in order.
               #
               #   @param font_family [String] First font in the stack.
               #
@@ -1144,7 +1127,7 @@ module ContextDev
             # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings#h3
             class H3 < ContextDev::Internal::Type::BaseModel
               # @!attribute font_fallbacks
-              #   Full ordered font list from resolved computed font-family
+              #   Full font stack from the computed `font-family`, in order.
               #
               #   @return [Array<String>]
               required :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
@@ -1176,7 +1159,7 @@ module ContextDev
               required :line_height, String, api_name: :lineHeight
 
               # @!method initialize(font_fallbacks:, font_family:, font_size:, font_weight:, letter_spacing:, line_height:)
-              #   @param font_fallbacks [Array<String>] Full ordered font list from resolved computed font-family
+              #   @param font_fallbacks [Array<String>] Full font stack from the computed `font-family`, in order.
               #
               #   @param font_family [String] First font in the stack.
               #
@@ -1192,7 +1175,7 @@ module ContextDev
             # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings#h4
             class H4 < ContextDev::Internal::Type::BaseModel
               # @!attribute font_fallbacks
-              #   Full ordered font list from resolved computed font-family
+              #   Full font stack from the computed `font-family`, in order.
               #
               #   @return [Array<String>]
               required :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
@@ -1224,7 +1207,7 @@ module ContextDev
               required :line_height, String, api_name: :lineHeight
 
               # @!method initialize(font_fallbacks:, font_family:, font_size:, font_weight:, letter_spacing:, line_height:)
-              #   @param font_fallbacks [Array<String>] Full ordered font list from resolved computed font-family
+              #   @param font_fallbacks [Array<String>] Full font stack from the computed `font-family`, in order.
               #
               #   @param font_family [String] First font in the stack.
               #
@@ -1241,7 +1224,7 @@ module ContextDev
           # @see ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography#p_
           class P < ContextDev::Internal::Type::BaseModel
             # @!attribute font_fallbacks
-            #   Full ordered font list from resolved computed font-family
+            #   Full font stack from the computed `font-family`, in order.
             #
             #   @return [Array<String>]
             required :font_fallbacks, ContextDev::Internal::Type::ArrayOf[String], api_name: :fontFallbacks
@@ -1273,7 +1256,7 @@ module ContextDev
             required :line_height, String, api_name: :lineHeight
 
             # @!method initialize(font_fallbacks:, font_family:, font_size:, font_weight:, letter_spacing:, line_height:)
-            #   @param font_fallbacks [Array<String>] Full ordered font list from resolved computed font-family
+            #   @param font_fallbacks [Array<String>] Full font stack from the computed `font-family`, in order.
             #
             #   @param font_family [String] First font in the stack.
             #

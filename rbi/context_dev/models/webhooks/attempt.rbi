@@ -13,11 +13,11 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :attempt
 
-        # Completion time, or null while in progress.
+        # When the attempt finished. `null` while in progress.
         sig { returns(T.nilable(Time)) }
         attr_accessor :completed_at
 
-        # Attempt error, or null if none.
+        # Why the attempt failed. `null` when it did not fail.
         sig { returns(T.nilable(ContextDev::Webhooks::Attempt::Error)) }
         attr_reader :error
 
@@ -28,19 +28,21 @@ module ContextDev
         end
         attr_writer :error
 
-        # HTTP response status, or null if no response was received.
+        # HTTP status your endpoint returned. `null` when no response was received.
         sig { returns(T.nilable(Integer)) }
         attr_accessor :http_status
 
-        # Attempt start time.
+        # When the attempt started.
         sig { returns(Time) }
         attr_accessor :started_at
 
-        # `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
+        # What started the attempt: `initial` is the first send, `automatic` is a
+        # scheduled retry, and `manual` came from
+        # `POST /webhooks/deliveries/{delivery_id}/retry`.
         sig { returns(ContextDev::Webhooks::Attempt::Trigger::TaggedSymbol) }
         attr_accessor :trigger
 
-        # URL used for this attempt.
+        # URL this attempt was sent to.
         sig { returns(String) }
         attr_accessor :url
 
@@ -58,17 +60,19 @@ module ContextDev
         def self.new(
           # Attempt number, starting at 1.
           attempt:,
-          # Completion time, or null while in progress.
+          # When the attempt finished. `null` while in progress.
           completed_at:,
-          # Attempt error, or null if none.
+          # Why the attempt failed. `null` when it did not fail.
           error:,
-          # HTTP response status, or null if no response was received.
+          # HTTP status your endpoint returned. `null` when no response was received.
           http_status:,
-          # Attempt start time.
+          # When the attempt started.
           started_at:,
-          # `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
+          # What started the attempt: `initial` is the first send, `automatic` is a
+          # scheduled retry, and `manual` came from
+          # `POST /webhooks/deliveries/{delivery_id}/retry`.
           trigger:,
-          # URL used for this attempt.
+          # URL this attempt was sent to.
           url:
         )
         end
@@ -98,22 +102,22 @@ module ContextDev
               )
             end
 
-          # Error code.
+          # Machine-readable error code.
           sig { returns(String) }
           attr_accessor :code
 
-          # Error details.
+          # Human-readable explanation of the error.
           sig { returns(String) }
           attr_accessor :message
 
-          # Attempt error, or null if none.
+          # Why the attempt failed. `null` when it did not fail.
           sig do
             params(code: String, message: String).returns(T.attached_class)
           end
           def self.new(
-            # Error code.
+            # Machine-readable error code.
             code:,
-            # Error details.
+            # Human-readable explanation of the error.
             message:
           )
           end
@@ -123,7 +127,9 @@ module ContextDev
           end
         end
 
-        # `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
+        # What started the attempt: `initial` is the first send, `automatic` is a
+        # scheduled retry, and `manual` came from
+        # `POST /webhooks/deliveries/{delivery_id}/retry`.
         module Trigger
           extend ContextDev::Internal::Type::Enum
 

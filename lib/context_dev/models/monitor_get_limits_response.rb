@@ -5,20 +5,21 @@ module ContextDev
     # @see ContextDev::Resources::Monitors#get_limits
     class MonitorGetLimitsResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute monitors_limit
-      #   Most monitors you can have: your plan's allowance or a custom limit.
+      #   Maximum number of monitors your organization can have, from your plan or a
+      #   custom limit.
       #
       #   @return [Integer]
       required :monitors_limit, Integer
 
       # @!attribute monitors_used
-      #   Number of monitors the account currently has.
+      #   Number of monitors your organization has.
       #
       #   @return [Integer]
       required :monitors_used, Integer
 
       # @!attribute plan
-      #   `starter` means Developer; `pro` means Pro or Growth; `scale` means Scale or
-      #   Enterprise.
+      #   Your plan tier. `free` is Free, `starter` is Developer, `pro` is Pro or Growth,
+      #   and `scale` is Scale or Enterprise.
       #
       #   @return [Symbol, ContextDev::Models::MonitorGetLimitsResponse::Plan]
       required :plan, enum: -> { ContextDev::Models::MonitorGetLimitsResponse::Plan }
@@ -40,18 +41,18 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorGetLimitsResponse} for more details.
       #
-      #   @param monitors_limit [Integer] Most monitors you can have: your plan's allowance or a custom limit.
+      #   @param monitors_limit [Integer] Maximum number of monitors your organization can have, from your plan or a custo
       #
-      #   @param monitors_used [Integer] Number of monitors the account currently has.
+      #   @param monitors_used [Integer] Number of monitors your organization has.
       #
-      #   @param plan [Symbol, ContextDev::Models::MonitorGetLimitsResponse::Plan] `starter` means Developer; `pro` means Pro or Growth; `scale` means Scale or Ent
+      #   @param plan [Symbol, ContextDev::Models::MonitorGetLimitsResponse::Plan] Your plan tier. `free` is Free, `starter` is Developer, `pro` is Pro or Growth,
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
       #   @param key_metadata [ContextDev::Models::MonitorGetLimitsResponse::KeyMetadata] Credits this request used and your remaining balance.
 
-      # `starter` means Developer; `pro` means Pro or Growth; `scale` means Scale or
-      # Enterprise.
+      # Your plan tier. `free` is Free, `starter` is Developer, `pro` is Pro or Growth,
+      # and `scale` is Scale or Enterprise.
       #
       # @see ContextDev::Models::MonitorGetLimitsResponse#plan
       module Plan
@@ -75,7 +76,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -85,7 +86,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

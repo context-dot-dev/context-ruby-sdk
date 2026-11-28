@@ -12,8 +12,8 @@ module ContextDev
       required :request_id, String
 
       # @!attribute results
-      #   Up to 10 matching brands, name matches first, then domain matches, most popular
-      #   first within each group. Empty when nothing matches.
+      #   Up to 10 matching brands: name matches first, then domain matches, each group
+      #   ordered by popularity. Empty when nothing matches.
       #
       #   @return [Array<ContextDev::Models::BrandSearchResponse::Result>]
       required :results,
@@ -31,44 +31,45 @@ module ContextDev
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param results [Array<ContextDev::Models::BrandSearchResponse::Result>] Up to 10 matching brands, name matches first, then domain matches, most popular
+      #   @param results [Array<ContextDev::Models::BrandSearchResponse::Result>] Up to 10 matching brands: name matches first, then domain matches, each group or
       #
       #   @param key_metadata [ContextDev::Models::BrandSearchResponse::KeyMetadata] Credits this request used and your remaining balance.
 
       class Result < ContextDev::Internal::Type::BaseModel
         # @!attribute domain
-        #   The brand's domain.
+        #   Domain of the brand.
         #
         #   @return [String]
         required :domain, String
 
         # @!attribute logo
-        #   Logo link URL that serves the brand's logo, generated per request for the
-        #   calling organization.
+        #   Logo Link URL that serves the brand's logo with your organization's client ID.
+        #   Use it directly as an image source.
         #
         #   @return [String]
         required :logo, String
 
         # @!attribute name
-        #   The brand's name. Empty string when unknown.
+        #   Name of the brand. Empty string when unknown.
         #
         #   @return [String]
         required :name, String
 
         # @!attribute country
-        #   The brand's country, when available, as an uppercase ISO 3166-1 alpha-2 code.
+        #   Country of the brand, as an uppercase ISO 3166-1 alpha-2 code. Omitted when
+        #   unknown.
         #
         #   @return [Symbol, ContextDev::Models::BrandSearchResponse::Result::Country, nil]
         optional :country, enum: -> { ContextDev::Models::BrandSearchResponse::Result::Country }
 
         # @!attribute description
-        #   The brand's description, when available.
+        #   Short description of the brand. Omitted when unknown.
         #
         #   @return [String, nil]
         optional :description, String
 
         # @!attribute language
-        #   The brand's primary language, when available.
+        #   Primary language of the brand. Omitted when unknown.
         #
         #   @return [Symbol, ContextDev::Models::BrandSearchResponse::Result::Language, nil]
         optional :language, enum: -> { ContextDev::Models::BrandSearchResponse::Result::Language }
@@ -77,19 +78,20 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::BrandSearchResponse::Result} for more details.
         #
-        #   @param domain [String] The brand's domain.
+        #   @param domain [String] Domain of the brand.
         #
-        #   @param logo [String] Logo link URL that serves the brand's logo, generated per request for the callin
+        #   @param logo [String] Logo Link URL that serves the brand's logo with your organization's client ID. U
         #
-        #   @param name [String] The brand's name. Empty string when unknown.
+        #   @param name [String] Name of the brand. Empty string when unknown.
         #
-        #   @param country [Symbol, ContextDev::Models::BrandSearchResponse::Result::Country] The brand's country, when available, as an uppercase ISO 3166-1 alpha-2 code.
+        #   @param country [Symbol, ContextDev::Models::BrandSearchResponse::Result::Country] Country of the brand, as an uppercase ISO 3166-1 alpha-2 code. Omitted when unkn
         #
-        #   @param description [String] The brand's description, when available.
+        #   @param description [String] Short description of the brand. Omitted when unknown.
         #
-        #   @param language [Symbol, ContextDev::Models::BrandSearchResponse::Result::Language] The brand's primary language, when available.
+        #   @param language [Symbol, ContextDev::Models::BrandSearchResponse::Result::Language] Primary language of the brand. Omitted when unknown.
 
-        # The brand's country, when available, as an uppercase ISO 3166-1 alpha-2 code.
+        # Country of the brand, as an uppercase ISO 3166-1 alpha-2 code. Omitted when
+        # unknown.
         #
         # @see ContextDev::Models::BrandSearchResponse::Result#country
         module Country
@@ -349,7 +351,7 @@ module ContextDev
           #   @return [Array<Symbol>]
         end
 
-        # The brand's primary language, when available.
+        # Primary language of the brand. Omitted when unknown.
         #
         # @see ContextDev::Models::BrandSearchResponse::Result#language
         module Language
@@ -490,7 +492,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -500,7 +502,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

@@ -38,7 +38,7 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # Pass as cursor to fetch the next page; null when there are no more results.
+      # Pass as `cursor` to fetch the next page. `null` on the last page.
       sig { returns(T.nilable(String)) }
       attr_accessor :next_cursor
 
@@ -60,7 +60,7 @@ module ContextDev
         results:,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
-        # Pass as cursor to fetch the next page; null when there are no more results.
+        # Pass as `cursor` to fetch the next page. `null` on the last page.
         next_cursor: nil
       )
       end
@@ -91,7 +91,7 @@ module ContextDev
         sig { returns(T.nilable(String)) }
         attr_accessor :description
 
-        # Whether the person is currently a founder or co-founder.
+        # Whether the person is currently a founder or co-founder. `null` when unknown.
         sig { returns(T.nilable(T::Boolean)) }
         attr_accessor :is_founder
 
@@ -113,11 +113,12 @@ module ContextDev
         sig { returns(T.nilable(String)) }
         attr_accessor :name
 
-        # Public professional profile URLs.
+        # Public professional profile URLs. Send one to `POST /people/enrich` as
+        # `social_urls` for the full profile.
         sig { returns(T::Array[String]) }
         attr_accessor :profiles
 
-        # The person’s current role.
+        # The person's current role.
         sig { returns(ContextDev::Models::PersonSearchResponse::Result::Role) }
         attr_reader :role
 
@@ -136,11 +137,11 @@ module ContextDev
         sig { returns(T::Array[String]) }
         attr_accessor :skills
 
-        # Years of professional experience.
+        # Years of professional experience. `null` when unknown.
         sig { returns(T.nilable(Integer)) }
         attr_accessor :years_of_experience
 
-        # How well the person matches the query. Only returned in `ultra` mode.
+        # How well the person matches the query. Returned only in `ultra` mode.
         sig do
           returns(
             T.nilable(ContextDev::Models::PersonSearchResponse::Result::Match)
@@ -156,7 +157,7 @@ module ContextDev
         end
         attr_writer :match
 
-        # A person matching your search; unavailable details are null or empty lists.
+        # A person who matches your search. Unknown details are `null` or empty lists.
         sig do
           params(
             description: T.nilable(String),
@@ -177,23 +178,24 @@ module ContextDev
         def self.new(
           # What the person does.
           description:,
-          # Whether the person is currently a founder or co-founder.
+          # Whether the person is currently a founder or co-founder. `null` when unknown.
           is_founder:,
           # Where the person lives.
           location:,
           # Full name.
           name:,
-          # Public professional profile URLs.
+          # Public professional profile URLs. Send one to `POST /people/enrich` as
+          # `social_urls` for the full profile.
           profiles:,
-          # The person’s current role.
+          # The person's current role.
           role:,
           # Schools attended.
           schools:,
           # Professional skills.
           skills:,
-          # Years of professional experience.
+          # Years of professional experience. `null` when unknown.
           years_of_experience:,
-          # How well the person matches the query. Only returned in `ultra` mode.
+          # How well the person matches the query. Returned only in `ultra` mode.
           match: nil
         )
         end
@@ -231,7 +233,7 @@ module ContextDev
           sig { returns(T.nilable(String)) }
           attr_accessor :city
 
-          # Country as a two-letter code, such as US or GB.
+          # ISO 3166-1 alpha-2 country code, such as `US`.
           sig { returns(T.nilable(String)) }
           attr_accessor :country_code
 
@@ -250,7 +252,7 @@ module ContextDev
           def self.new(
             # City.
             city:,
-            # Country as a two-letter code, such as US or GB.
+            # ISO 3166-1 alpha-2 country code, such as `US`.
             country_code:,
             # State or region.
             region:
@@ -279,7 +281,7 @@ module ContextDev
               )
             end
 
-          # Current employer, when known.
+          # Current employer. `null` when unknown.
           sig do
             returns(
               T.nilable(
@@ -299,15 +301,15 @@ module ContextDev
           end
           attr_writer :company
 
-          # Areas of responsibility.
+          # Areas of responsibility, such as `sales`.
           sig { returns(T::Array[String]) }
           attr_accessor :functions
 
-          # Seniority level.
+          # Seniority level, such as `executive`.
           sig { returns(T.nilable(String)) }
           attr_accessor :seniority
 
-          # Role start date (YYYY-MM-DD).
+          # When the role started, as `YYYY-MM-DD`.
           sig { returns(T.nilable(String)) }
           attr_accessor :started_on
 
@@ -315,7 +317,7 @@ module ContextDev
           sig { returns(T.nilable(String)) }
           attr_accessor :title
 
-          # The person’s current role.
+          # The person's current role.
           sig do
             params(
               company:
@@ -329,13 +331,13 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Current employer, when known.
+            # Current employer. `null` when unknown.
             company:,
-            # Areas of responsibility.
+            # Areas of responsibility, such as `sales`.
             functions:,
-            # Seniority level.
+            # Seniority level, such as `executive`.
             seniority:,
-            # Role start date (YYYY-MM-DD).
+            # When the role started, as `YYYY-MM-DD`.
             started_on:,
             # Job title.
             title:
@@ -368,7 +370,7 @@ module ContextDev
                 )
               end
 
-            # The company’s website domain.
+            # Website domain of the company.
             sig { returns(T.nilable(String)) }
             attr_accessor :domain
 
@@ -376,7 +378,7 @@ module ContextDev
             sig { returns(T.nilable(String)) }
             attr_accessor :name
 
-            # Current employer, when known.
+            # Current employer. `null` when unknown.
             sig do
               params(
                 domain: T.nilable(String),
@@ -384,7 +386,7 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # The company’s website domain.
+              # Website domain of the company.
               domain:,
               # Company name.
               name:
@@ -414,7 +416,7 @@ module ContextDev
           sig { returns(Float) }
           attr_accessor :confidence
 
-          # How well the person matches the query. Only returned in `ultra` mode.
+          # How well the person matches the query. Returned only in `ultra` mode.
           sig { params(confidence: Float).returns(T.attached_class) }
           def self.new(
             # How well the person matches the query, from 0 to 1.
@@ -441,7 +443,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -454,7 +456,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

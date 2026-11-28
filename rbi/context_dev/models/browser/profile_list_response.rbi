@@ -12,7 +12,7 @@ module ContextDev
             )
           end
 
-        # Browser profiles, newest first.
+        # Browser profiles on this page, newest first.
         sig do
           returns(
             T::Array[ContextDev::Models::Browser::ProfileListResponse::Data]
@@ -20,11 +20,11 @@ module ContextDev
         end
         attr_accessor :data
 
-        # Whether a next page exists.
+        # Whether more results are available after this page.
         sig { returns(T::Boolean) }
         attr_accessor :has_more
 
-        # Pass as `cursor` to fetch the next page.
+        # Pass as `cursor` to fetch the next page. `null` on the last page.
         sig { returns(T.nilable(String)) }
         attr_accessor :next_cursor
 
@@ -65,11 +65,11 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Browser profiles, newest first.
+          # Browser profiles on this page, newest first.
           data:,
-          # Whether a next page exists.
+          # Whether more results are available after this page.
           has_more:,
-          # Pass as `cursor` to fetch the next page.
+          # Pass as `cursor` to fetch the next page. `null` on the last page.
           next_cursor:,
           # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
           # support.
@@ -106,15 +106,16 @@ module ContextDev
               )
             end
 
-          # Profile ID to pass as `sharedParams.profile.profileId` on `/web/scrape`.
+          # Unique ID of the browser profile. Pass it as `sharedParams.profile.profileId` on
+          # `POST /web/scrape`.
           sig { returns(String) }
           attr_accessor :id
 
-          # When the profile was created.
+          # When the browser profile was created.
           sig { returns(Time) }
           attr_accessor :created_at
 
-          # The description supplied when the profile was created, or null.
+          # Label set when the profile was created. `null` when none was set.
           sig { returns(T.nilable(String)) }
           attr_accessor :description
 
@@ -126,11 +127,12 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Profile ID to pass as `sharedParams.profile.profileId` on `/web/scrape`.
+            # Unique ID of the browser profile. Pass it as `sharedParams.profile.profileId` on
+            # `POST /web/scrape`.
             id:,
-            # When the profile was created.
+            # When the browser profile was created.
             created_at:,
-            # The description supplied when the profile was created, or null.
+            # Label set when the profile was created. `null` when none was set.
             description:
           )
           end
@@ -157,7 +159,7 @@ module ContextDev
           sig { returns(Integer) }
           attr_accessor :credits_consumed
 
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           sig { returns(Integer) }
           attr_accessor :credits_remaining
 
@@ -171,7 +173,7 @@ module ContextDev
           def self.new(
             # Credits charged for this request.
             credits_consumed:,
-            # Credits remaining for your organization.
+            # Credits your organization has left after this request.
             credits_remaining:
           )
           end

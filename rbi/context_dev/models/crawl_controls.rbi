@@ -8,7 +8,7 @@ module ContextDev
           T.any(ContextDev::CrawlControls, ContextDev::Internal::AnyHash)
         end
 
-      # Pages the crawl skipped. Null when it skipped none.
+      # Matchers for the pages the crawl skipped. `null` when it skipped none.
       sig do
         returns(
           T.nilable(T::Array[ContextDev::CrawlControls::Exclude::Variants])
@@ -16,11 +16,12 @@ module ContextDev
       end
       attr_accessor :exclude
 
-      # Regex pattern URLs must not match to be crawled. Null when the crawl set none.
+      # Regex that excluded matching URLs from the crawl. `null` when the crawl set
+      # none.
       sig { returns(T.nilable(String)) }
       attr_accessor :exclude_url_pattern
 
-      # Links the crawl followed. Null when it followed every link.
+      # Matchers for the links the crawl followed. `null` when it followed every link.
       sig do
         returns(
           T.nilable(T::Array[ContextDev::CrawlControls::Follow::Variants])
@@ -28,25 +29,26 @@ module ContextDev
       end
       attr_accessor :follow
 
-      # Whether links to subdomains were followed. Always false for a sitemap crawl.
+      # Whether links to subdomains were followed. Always `false` for a sitemap crawl.
       sig { returns(T::Boolean) }
       attr_accessor :follow_subdomains
 
-      # Languages whose pages were followed; null when all languages were.
+      # Languages whose pages were followed. `null` when all languages were.
       sig { returns(T.nilable(ContextDev::CrawlControls::Languages::Variants)) }
       attr_accessor :languages
 
-      # Link depth limit. Always 0 for a sitemap crawl, which never follows links off
-      # its URLs; null when a `start_url` crawl set no limit.
+      # Maximum link depth. Always `0` for a sitemap crawl; `null` when a `start_url`
+      # crawl set no limit.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :max_depth
 
       # The `maxUrls` submitted with the crawl. A sitemap crawl scrapes only the URLs
-      # its sitemap actually lists, up to this many, so `input.reserved` is often lower.
+      # its sitemap lists, up to this many, so `input.reserved` can be lower.
       sig { returns(Integer) }
       attr_accessor :max_pages
 
-      # Pages the crawl returned. Null when it returned every fetched page.
+      # Matchers for the pages the crawl returned. `null` when it returned every fetched
+      # page.
       sig do
         returns(
           T.nilable(T::Array[ContextDev::CrawlControls::Scrape::Variants])
@@ -58,7 +60,7 @@ module ContextDev
       sig { returns(ContextDev::CrawlControls::Source::Variants) }
       attr_accessor :source
 
-      # Regex pattern URLs had to match to be crawled. Null when the crawl set none.
+      # Regex that URLs had to match to be crawled. `null` when the crawl set none.
       sig { returns(T.nilable(String)) }
       attr_accessor :url_pattern
 
@@ -115,27 +117,29 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Pages the crawl skipped. Null when it skipped none.
+        # Matchers for the pages the crawl skipped. `null` when it skipped none.
         exclude:,
-        # Regex pattern URLs must not match to be crawled. Null when the crawl set none.
+        # Regex that excluded matching URLs from the crawl. `null` when the crawl set
+        # none.
         exclude_url_pattern:,
-        # Links the crawl followed. Null when it followed every link.
+        # Matchers for the links the crawl followed. `null` when it followed every link.
         follow:,
-        # Whether links to subdomains were followed. Always false for a sitemap crawl.
+        # Whether links to subdomains were followed. Always `false` for a sitemap crawl.
         follow_subdomains:,
-        # Languages whose pages were followed; null when all languages were.
+        # Languages whose pages were followed. `null` when all languages were.
         languages:,
-        # Link depth limit. Always 0 for a sitemap crawl, which never follows links off
-        # its URLs; null when a `start_url` crawl set no limit.
+        # Maximum link depth. Always `0` for a sitemap crawl; `null` when a `start_url`
+        # crawl set no limit.
         max_depth:,
         # The `maxUrls` submitted with the crawl. A sitemap crawl scrapes only the URLs
-        # its sitemap actually lists, up to this many, so `input.reserved` is often lower.
+        # its sitemap lists, up to this many, so `input.reserved` can be lower.
         max_pages:,
-        # Pages the crawl returned. Null when it returned every fetched page.
+        # Matchers for the pages the crawl returned. `null` when it returned every fetched
+        # page.
         scrape:,
         # Where the crawl started.
         source:,
-        # Regex pattern URLs had to match to be crawled. Null when the crawl set none.
+        # Regex that URLs had to match to be crawled. `null` when the crawl set none.
         url_pattern:
       )
       end
@@ -188,7 +192,7 @@ module ContextDev
           sig { returns(Symbol) }
           attr_accessor :kind
 
-          # Regex pattern for the page URL.
+          # Regular expression matched against the page URL.
           sig { returns(String) }
           attr_accessor :pattern
 
@@ -197,7 +201,7 @@ module ContextDev
             params(pattern: String, kind: Symbol).returns(T.attached_class)
           end
           def self.new(
-            # Regex pattern for the page URL.
+            # Regular expression matched against the page URL.
             pattern:,
             # Match pages by URL pattern.
             kind: :regex
@@ -270,7 +274,7 @@ module ContextDev
           sig { returns(Symbol) }
           attr_accessor :kind
 
-          # Regex pattern for the page URL.
+          # Regular expression matched against the page URL.
           sig { returns(String) }
           attr_accessor :pattern
 
@@ -279,7 +283,7 @@ module ContextDev
             params(pattern: String, kind: Symbol).returns(T.attached_class)
           end
           def self.new(
-            # Regex pattern for the page URL.
+            # Regular expression matched against the page URL.
             pattern:,
             # Match pages by URL pattern.
             kind: :regex
@@ -352,7 +356,7 @@ module ContextDev
         end
       end
 
-      # Languages whose pages were followed; null when all languages were.
+      # Languages whose pages were followed. `null` when all languages were.
       module Languages
         extend ContextDev::Internal::Type::Union
 
@@ -809,7 +813,7 @@ module ContextDev
           sig { returns(Symbol) }
           attr_accessor :kind
 
-          # Regex pattern for the page URL.
+          # Regular expression matched against the page URL.
           sig { returns(String) }
           attr_accessor :pattern
 
@@ -818,7 +822,7 @@ module ContextDev
             params(pattern: String, kind: Symbol).returns(T.attached_class)
           end
           def self.new(
-            # Regex pattern for the page URL.
+            # Regular expression matched against the page URL.
             pattern:,
             # Match pages by URL pattern.
             kind: :regex

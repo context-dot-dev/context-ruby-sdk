@@ -11,30 +11,34 @@ module ContextDev
           T.any(ContextDev::FeedbackSubmitParams, ContextDev::Internal::AnyHash)
         end
 
-      # Kind of issue.
+      # Kind of issue. Use `quality_degradation` for wrong or incomplete results and
+      # `bad_brand` for wrong or outdated brand data, such as a logo or colors.
       sig { returns(ContextDev::FeedbackSubmitParams::Category::OrSymbol) }
       attr_accessor :category
 
-      # What went wrong and what you expected instead.
+      # What went wrong and what you expected instead. Leave out API keys and personal
+      # data.
       sig { returns(String) }
       attr_accessor :note
 
-      # The request_id of the API call the feedback is about, from its response body or
-      # X-Request-Id header.
+      # ID of the API call the feedback is about, from its `request_id` or
+      # `X-Request-Id` header. Send this, `url`, or both.
       sig { returns(T.nilable(String)) }
       attr_reader :request_id
 
       sig { params(request_id: String).void }
       attr_writer :request_id
 
-      # Labels for filtering usage in the dashboard.
+      # Labels for this request. Filter usage and request logs by them in the dashboard
+      # or with `GET /org/logs`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # The page the feedback is about, such as one page of a crawl or a docs page.
+      # URL the feedback is about, such as one page of a crawl or a docs page. Send
+      # this, `request_id`, or both.
       sig { returns(T.nilable(String)) }
       attr_reader :url
 
@@ -52,16 +56,20 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Kind of issue.
+        # Kind of issue. Use `quality_degradation` for wrong or incomplete results and
+        # `bad_brand` for wrong or outdated brand data, such as a logo or colors.
         category:,
-        # What went wrong and what you expected instead.
+        # What went wrong and what you expected instead. Leave out API keys and personal
+        # data.
         note:,
-        # The request_id of the API call the feedback is about, from its response body or
-        # X-Request-Id header.
+        # ID of the API call the feedback is about, from its `request_id` or
+        # `X-Request-Id` header. Send this, `url`, or both.
         request_id: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
-        # The page the feedback is about, such as one page of a crawl or a docs page.
+        # URL the feedback is about, such as one page of a crawl or a docs page. Send
+        # this, `request_id`, or both.
         url: nil,
         request_options: {}
       )
@@ -82,7 +90,8 @@ module ContextDev
       def to_hash
       end
 
-      # Kind of issue.
+      # Kind of issue. Use `quality_degradation` for wrong or incomplete results and
+      # `bad_brand` for wrong or outdated brand data, such as a logo or colors.
       module Category
         extend ContextDev::Internal::Type::Enum
 

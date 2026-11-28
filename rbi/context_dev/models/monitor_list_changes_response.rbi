@@ -11,14 +11,17 @@ module ContextDev
           )
         end
 
+      # Changes on this page.
       sig do
         returns(T::Array[ContextDev::Models::MonitorListChangesResponse::Data])
       end
       attr_accessor :data
 
+      # Whether more results are available after this page.
       sig { returns(T::Boolean) }
       attr_accessor :has_more
 
+      # Pass as `cursor` to fetch the next page. `null` on the last page.
       sig { returns(T.nilable(String)) }
       attr_accessor :next_cursor
 
@@ -57,8 +60,11 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Changes on this page.
         data:,
+        # Whether more results are available after this page.
         has_more:,
+        # Pass as `cursor` to fetch the next page. `null` on the last page.
         next_cursor:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
@@ -93,9 +99,11 @@ module ContextDev
             )
           end
 
+        # Unique ID of the change.
         sig { returns(String) }
         attr_accessor :id
 
+        # Change detection type the monitor uses.
         sig do
           returns(
             ContextDev::Models::MonitorListChangesResponse::Data::ChangeDetectionType::TaggedSymbol
@@ -103,10 +111,11 @@ module ContextDev
         end
         attr_accessor :change_detection_type
 
+        # When the change was detected.
         sig { returns(Time) }
         attr_accessor :detected_at
 
-        # Always `web`. Optional.
+        # Monitor category. Always `web`.
         sig do
           returns(
             ContextDev::Models::MonitorListChangesResponse::Data::Mode::TaggedSymbol
@@ -114,20 +123,23 @@ module ContextDev
         end
         attr_accessor :mode
 
+        # ID of the monitor that detected the change.
         sig { returns(String) }
         attr_accessor :monitor_id
 
-        # The run that detected this change.
+        # ID of the run that detected the change.
         sig { returns(String) }
         attr_accessor :run_id
 
+        # Plain-language summary of what changed.
         sig { returns(String) }
         attr_accessor :summary
 
-        # Labels for filtering monitors, their changes, and their usage.
+        # Tags the monitor had when the change was detected.
         sig { returns(T::Array[String]) }
         attr_accessor :tags
 
+        # Type of target the monitor watches.
         sig do
           returns(
             ContextDev::Models::MonitorListChangesResponse::Data::TargetType::TaggedSymbol
@@ -135,51 +147,59 @@ module ContextDev
         end
         attr_accessor :target_type
 
+        # Short headline for the change.
         sig { returns(String) }
         attr_accessor :title
 
-        # The monitored URL. For search targets, the first newly reported result.
+        # Monitored URL. For search targets, the first new result.
         sig { returns(String) }
         attr_accessor :url
 
+        # Total number of URLs added.
         sig { returns(T.nilable(Integer)) }
         attr_reader :added_url_count
 
         sig { params(added_url_count: Integer).void }
         attr_writer :added_url_count
 
-        # At most 500 URLs are included; the corresponding count field is always exact.
+        # URLs added to the sitemap, up to 500. `added_url_count` has the full count.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :added_urls
 
         sig { params(added_urls: T::Array[String]).void }
         attr_writer :added_urls
 
+        # Excerpt of the page text after the change. Page targets only.
         sig { returns(T.nilable(String)) }
         attr_reader :after_text_excerpt
 
         sig { params(after_text_excerpt: String).void }
         attr_writer :after_text_excerpt
 
+        # Excerpt of the page text before the change. Page targets only.
         sig { returns(T.nilable(String)) }
         attr_reader :before_text_excerpt
 
         sig { params(before_text_excerpt: String).void }
         attr_writer :before_text_excerpt
 
+        # Confidence that the change matters, from 0 to 1. Set by `semantic` detection
+        # only.
         sig { returns(T.nilable(Float)) }
         attr_reader :confidence
 
         sig { params(confidence: Float).void }
         attr_writer :confidence
 
-        # Text diff between the previous and current page baseline (page targets).
+        # Text diff of the change, for page and extract targets. Extract diffs have one
+        # section per changed page.
         sig { returns(T.nilable(String)) }
         attr_reader :diff
 
         sig { params(diff: String).void }
         attr_writer :diff
 
+        # Before and after excerpts that support the change.
         sig do
           returns(
             T.nilable(
@@ -201,6 +221,7 @@ module ContextDev
         end
         attr_writer :evidence
 
+        # How important the change is. Set by `semantic` detection only.
         sig do
           returns(
             T.nilable(
@@ -218,33 +239,39 @@ module ContextDev
         end
         attr_writer :importance
 
+        # Total number of matched URLs.
         sig { returns(T.nilable(Integer)) }
         attr_reader :matched_url_count
 
         sig { params(matched_url_count: Integer).void }
         attr_writer :matched_url_count
 
-        # At most 500 URLs are included; the corresponding count field is always exact.
+        # URLs where the change was found: the changed pages for page and extract targets,
+        # or the new results for search targets. Up to 500; `matched_url_count` has the
+        # full count.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :matched_urls
 
         sig { params(matched_urls: T::Array[String]).void }
         attr_writer :matched_urls
 
+        # Total number of URLs removed.
         sig { returns(T.nilable(Integer)) }
         attr_reader :removed_url_count
 
         sig { params(removed_url_count: Integer).void }
         attr_writer :removed_url_count
 
-        # At most 500 URLs are included; the corresponding count field is always exact.
+        # URLs removed from the sitemap, or pages no longer found for extract targets, up
+        # to 500. `removed_url_count` has the full count.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :removed_urls
 
         sig { params(removed_urls: T::Array[String]).void }
         attr_writer :removed_urls
 
-        # Detected change, including applicable diffs, URLs, and supporting evidence.
+        # A change detected by a monitor run, with a summary and, depending on the target,
+        # a text diff, added or removed URLs, matched results, and evidence.
         sig do
           params(
             id: String,
@@ -280,36 +307,56 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
+          # Unique ID of the change.
           id:,
+          # Change detection type the monitor uses.
           change_detection_type:,
+          # When the change was detected.
           detected_at:,
-          # Always `web`. Optional.
+          # Monitor category. Always `web`.
           mode:,
+          # ID of the monitor that detected the change.
           monitor_id:,
-          # The run that detected this change.
+          # ID of the run that detected the change.
           run_id:,
+          # Plain-language summary of what changed.
           summary:,
-          # Labels for filtering monitors, their changes, and their usage.
+          # Tags the monitor had when the change was detected.
           tags:,
+          # Type of target the monitor watches.
           target_type:,
+          # Short headline for the change.
           title:,
-          # The monitored URL. For search targets, the first newly reported result.
+          # Monitored URL. For search targets, the first new result.
           url:,
+          # Total number of URLs added.
           added_url_count: nil,
-          # At most 500 URLs are included; the corresponding count field is always exact.
+          # URLs added to the sitemap, up to 500. `added_url_count` has the full count.
           added_urls: nil,
+          # Excerpt of the page text after the change. Page targets only.
           after_text_excerpt: nil,
+          # Excerpt of the page text before the change. Page targets only.
           before_text_excerpt: nil,
+          # Confidence that the change matters, from 0 to 1. Set by `semantic` detection
+          # only.
           confidence: nil,
-          # Text diff between the previous and current page baseline (page targets).
+          # Text diff of the change, for page and extract targets. Extract diffs have one
+          # section per changed page.
           diff: nil,
+          # Before and after excerpts that support the change.
           evidence: nil,
+          # How important the change is. Set by `semantic` detection only.
           importance: nil,
+          # Total number of matched URLs.
           matched_url_count: nil,
-          # At most 500 URLs are included; the corresponding count field is always exact.
+          # URLs where the change was found: the changed pages for page and extract targets,
+          # or the new results for search targets. Up to 500; `matched_url_count` has the
+          # full count.
           matched_urls: nil,
+          # Total number of URLs removed.
           removed_url_count: nil,
-          # At most 500 URLs are included; the corresponding count field is always exact.
+          # URLs removed from the sitemap, or pages no longer found for extract targets, up
+          # to 500. `removed_url_count` has the full count.
           removed_urls: nil
         )
         end
@@ -353,6 +400,7 @@ module ContextDev
         def to_hash
         end
 
+        # Change detection type the monitor uses.
         module ChangeDetectionType
           extend ContextDev::Internal::Type::Enum
 
@@ -387,7 +435,7 @@ module ContextDev
           end
         end
 
-        # Always `web`. Optional.
+        # Monitor category. Always `web`.
         module Mode
           extend ContextDev::Internal::Type::Enum
 
@@ -417,6 +465,7 @@ module ContextDev
           end
         end
 
+        # Type of target the monitor watches.
         module TargetType
           extend ContextDev::Internal::Type::Enum
 
@@ -470,32 +519,33 @@ module ContextDev
               )
             end
 
-          # Snapshot of the content after the change.
+          # Content after the change.
           sig { returns(String) }
           attr_accessor :after
 
-          # Snapshot of the content before the change.
+          # Content before the change. Empty for new search results.
           sig { returns(String) }
           attr_accessor :before
 
-          # Optional URL the evidence relates to. Absent for whole-target diffs.
+          # Page the evidence comes from. Omitted when the evidence covers the whole target.
           sig { returns(T.nilable(String)) }
           attr_reader :url
 
           sig { params(url: String).void }
           attr_writer :url
 
+          # Before and after excerpts that support a change.
           sig do
             params(after: String, before: String, url: String).returns(
               T.attached_class
             )
           end
           def self.new(
-            # Snapshot of the content after the change.
+            # Content after the change.
             after:,
-            # Snapshot of the content before the change.
+            # Content before the change. Empty for new search results.
             before:,
-            # Optional URL the evidence relates to. Absent for whole-target diffs.
+            # Page the evidence comes from. Omitted when the evidence covers the whole target.
             url: nil
           )
           end
@@ -507,6 +557,7 @@ module ContextDev
           end
         end
 
+        # How important the change is. Set by `semantic` detection only.
         module Importance
           extend ContextDev::Internal::Type::Enum
 
@@ -560,7 +611,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -573,7 +624,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

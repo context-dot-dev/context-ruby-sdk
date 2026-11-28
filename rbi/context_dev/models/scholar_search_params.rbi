@@ -11,12 +11,13 @@ module ContextDev
           T.any(ContextDev::ScholarSearchParams, ContextDev::Internal::AnyHash)
         end
 
-      # A topic or question. Append one arxiv:, pmcid:, pmid:, or doi: ID to search
-      # within an indexed paper.
+      # Topic or question to search for. Append one `arxiv:`, `pmcid:`, `pmid:`, or
+      # `doi:` ID to search within that paper, such as `protein folding pmid:34265844`,
+      # or send the ID on its own.
       sig { returns(String) }
       attr_accessor :query
 
-      # Use next_cursor to fetch the next page.
+      # Cursor from the previous page's `next_cursor`. Omit for the first page.
       sig { returns(T.nilable(String)) }
       attr_accessor :cursor
 
@@ -31,15 +32,15 @@ module ContextDev
       end
       attr_writer :filter_by
 
-      # Papers per page.
+      # Maximum number of papers to return per page.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
       sig { params(limit: Integer).void }
       attr_writer :limit
 
-      # Order the top 250 matches. date_desc puts newest first, with undated papers
-      # last.
+      # `relevance` puts the closest matches first; `date_desc` puts the newest papers
+      # first, with undated papers last. Both orders apply to the top 250 matches.
       sig do
         returns(T.nilable(ContextDev::ScholarSearchParams::Sort::OrSymbol))
       end
@@ -48,7 +49,8 @@ module ContextDev
       sig { params(sort: ContextDev::ScholarSearchParams::Sort::OrSymbol).void }
       attr_writer :sort
 
-      # Labels for filtering usage in the dashboard.
+      # Labels for this request. Filter usage and request logs by them in the dashboard
+      # or with `GET /org/logs`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -67,19 +69,21 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # A topic or question. Append one arxiv:, pmcid:, pmid:, or doi: ID to search
-        # within an indexed paper.
+        # Topic or question to search for. Append one `arxiv:`, `pmcid:`, `pmid:`, or
+        # `doi:` ID to search within that paper, such as `protein folding pmid:34265844`,
+        # or send the ID on its own.
         query:,
-        # Use next_cursor to fetch the next page.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page.
         cursor: nil,
         # Filter by publication date.
         filter_by: nil,
-        # Papers per page.
+        # Maximum number of papers to return per page.
         limit: nil,
-        # Order the top 250 matches. date_desc puts newest first, with undated papers
-        # last.
+        # `relevance` puts the closest matches first; `date_desc` puts the newest papers
+        # first, with undated papers last. Both orders apply to the top 250 matches.
         sort: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
         request_options: {}
       )
@@ -182,8 +186,8 @@ module ContextDev
         end
       end
 
-      # Order the top 250 matches. date_desc puts newest first, with undated papers
-      # last.
+      # `relevance` puts the closest matches first; `date_desc` puts the newest papers
+      # first, with undated papers last. Both orders apply to the top 250 matches.
       module Sort
         extend ContextDev::Internal::Type::Enum
 

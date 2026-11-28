@@ -2,11 +2,12 @@
 
 module ContextDev
   module Resources
-    # Search live and historical news about a company.
+    # Search live and historical news by company or with a natural-language query.
     class News
       # Find news about a company by name, domain, ticker, or ISIN, or search all news
-      # with a natural-language query. Filter articles and continue through results with
-      # a cursor.
+      # with a natural-language query. Each article includes its publisher, type of
+      # coverage, and, for company searches, whether the company is the main subject.
+      # Narrow results by publisher, country, language, article type, or publish date.
       sig do
         params(
           search_by:
@@ -24,25 +25,25 @@ module ContextDev
         ).returns(ContextDev::Models::NewsSearchResponse)
       end
       def search(
-        # What to search for: a specific company, or a natural-language query across all
-        # news.
+        # What to search for: news about a specific company, or a natural-language query
+        # across all news.
         search_by:,
-        # Opaque next_cursor from the previous response, or null for the first page.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page.
         cursor: nil,
-        # Optional result filters. Use at most one of sourceDomain, sourceCountry,
-        # articleLanguage, or articleType. A date range may accompany that category;
-        # date.from must not exceed date.to.
+        # Filters for the results. Use at most one of `sourceDomain`, `sourceCountry`,
+        # `articleLanguage`, or `articleType`, optionally combined with `date`.
         filter_by: nil,
-        # Maximum results to return. Defaults to 10.
+        # Maximum number of articles to return per page.
         limit: nil,
-        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-        # access policies are enabled for your organization; otherwise the request fails
-        # with `ACCESS_POLICIES_NOT_ENABLED`.
+        # Access policy IDs to apply; each URL must pass all of them. Requires access
+        # policies enabled for your organization; otherwise returns
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
-        # Result ordering. Defaults to newest for entity searches. Natural-language
-        # searches are always ordered by relevance.
+        # How to order results. Company searches default to `newest`; natural-language
+        # searches always use `relevance`.
         sort_by: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
         request_options: {}
       )

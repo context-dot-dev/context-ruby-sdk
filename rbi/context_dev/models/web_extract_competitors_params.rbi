@@ -14,19 +14,19 @@ module ContextDev
           )
         end
 
-      # Company domain to analyze, such as `stripe.com`. Full http(s) URLs are accepted
-      # and normalized to their domain.
+      # Company domain, such as `stripe.com`. Full URLs are reduced to their domain.
       sig { returns(String) }
       attr_accessor :domain
 
-      # Exact number of direct competitors to return. Defaults to 5.
+      # Exact number of direct competitors to return.
       sig { returns(T.nilable(Integer)) }
       attr_reader :num_competitors
 
       sig { params(num_competitors: Integer).void }
       attr_writer :num_competitors
 
-      # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+      # usage and request logs by them.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -73,12 +73,12 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Company domain to analyze, such as `stripe.com`. Full http(s) URLs are accepted
-        # and normalized to their domain.
+        # Company domain, such as `stripe.com`. Full URLs are reduced to their domain.
         domain:,
-        # Exact number of direct competitors to return. Defaults to 5.
+        # Exact number of direct competitors to return.
         num_competitors: nil,
-        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        # usage and request logs by them.
         tags: nil,
         # Request deadline and what to return when it passes.
         timeout_opts: nil,
@@ -117,8 +117,8 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         sig do
           returns(
             T.nilable(
@@ -147,8 +147,8 @@ module ContextDev
         def self.new(
           # Deadline in milliseconds.
           milliseconds:,
-          # "fail" returns 408 at the deadline. "return-partial" returns available results;
-          # inspect the response’s partial flag.
+          # `fail` returns 408 at the deadline. `return-partial` returns the results
+          # collected so far and marks the response as partial.
           behavior: nil
         )
         end
@@ -165,8 +165,8 @@ module ContextDev
         def to_hash
         end
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 

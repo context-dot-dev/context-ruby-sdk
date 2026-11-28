@@ -11,30 +11,30 @@ module ContextDev
           T.any(ContextDev::BatchListParams, ContextDev::Internal::AnyHash)
         end
 
-      # Cursor from the previous page.
+      # Cursor from the previous page's `next_cursor`. Omit for the first page.
       sig { returns(T.nilable(String)) }
       attr_reader :cursor
 
       sig { params(cursor: String).void }
       attr_writer :cursor
 
-      # Batches per page. Defaults to 25.
+      # Maximum number of batches to return per page.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
       sig { params(limit: Integer).void }
       attr_writer :limit
 
-      # Free-text search term, matched against the batch id, crawl source (start URL or
-      # sitemap domain), and tags.
+      # Search term matched against batch IDs, crawl sources (start URL or sitemap
+      # domain), and tags.
       sig { returns(T.nilable(String)) }
       attr_reader :q
 
       sig { params(q: String).void }
       attr_writer :q
 
-      # `prefix` for as-you-type prefix matching (default), `exact` for full-token
-      # matching.
+      # How `q` matches: `prefix` matches the start of a term, for search-as-you-type,
+      # and `exact` matches whole terms. Defaults to `prefix`.
       sig do
         returns(T.nilable(ContextDev::BatchListParams::SearchType::OrSymbol))
       end
@@ -47,15 +47,15 @@ module ContextDev
       end
       attr_writer :search_type
 
-      # Filter by status.
+      # Filter by batch status.
       sig { returns(T.nilable(ContextDev::BatchListParams::Status::OrSymbol)) }
       attr_reader :status
 
       sig { params(status: ContextDev::BatchListParams::Status::OrSymbol).void }
       attr_writer :status
 
-      # Tags to filter by (matches batches having any of them). Pass repeated `tags`
-      # params or one comma-separated list, e.g. `tags=docs,competitor`.
+      # Comma-separated tags. Returns batches that have any of them. You can also repeat
+      # the `tags` parameter.
       sig { returns(T.nilable(ContextDev::BatchListParams::Tags::Variants)) }
       attr_reader :tags
 
@@ -74,20 +74,20 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Cursor from the previous page.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page.
         cursor: nil,
-        # Batches per page. Defaults to 25.
+        # Maximum number of batches to return per page.
         limit: nil,
-        # Free-text search term, matched against the batch id, crawl source (start URL or
-        # sitemap domain), and tags.
+        # Search term matched against batch IDs, crawl sources (start URL or sitemap
+        # domain), and tags.
         q: nil,
-        # `prefix` for as-you-type prefix matching (default), `exact` for full-token
-        # matching.
+        # How `q` matches: `prefix` matches the start of a term, for search-as-you-type,
+        # and `exact` matches whole terms. Defaults to `prefix`.
         search_type: nil,
-        # Filter by status.
+        # Filter by batch status.
         status: nil,
-        # Tags to filter by (matches batches having any of them). Pass repeated `tags`
-        # params or one comma-separated list, e.g. `tags=docs,competitor`.
+        # Comma-separated tags. Returns batches that have any of them. You can also repeat
+        # the `tags` parameter.
         tags: nil,
         request_options: {}
       )
@@ -109,8 +109,8 @@ module ContextDev
       def to_hash
       end
 
-      # `prefix` for as-you-type prefix matching (default), `exact` for full-token
-      # matching.
+      # How `q` matches: `prefix` matches the start of a term, for search-as-you-type,
+      # and `exact` matches whole terms. Defaults to `prefix`.
       module SearchType
         extend ContextDev::Internal::Type::Enum
 
@@ -134,7 +134,7 @@ module ContextDev
         end
       end
 
-      # Filter by status.
+      # Filter by batch status.
       module Status
         extend ContextDev::Internal::Type::Enum
 
@@ -166,8 +166,8 @@ module ContextDev
         end
       end
 
-      # Tags to filter by (matches batches having any of them). Pass repeated `tags`
-      # params or one comma-separated list, e.g. `tags=docs,competitor`.
+      # Comma-separated tags. Returns batches that have any of them. You can also repeat
+      # the `tags` parameter.
       module Tags
         extend ContextDev::Internal::Type::Union
 

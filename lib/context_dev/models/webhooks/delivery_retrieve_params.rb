@@ -9,21 +9,25 @@ module ContextDev
         include ContextDev::Internal::Type::RequestParameters
 
         # @!attribute delivery_id
-        #   Delivery ID.
+        #   ID of the delivery.
         #
         #   @return [String]
         required :delivery_id, String
 
         # @!attribute tags
-        #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        #   Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        #   usage and request logs by them.
         #
         #   @return [Array<String>, nil]
         optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
         # @!method initialize(delivery_id:, tags: nil, request_options: {})
-        #   @param delivery_id [String] Delivery ID.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::Webhooks::DeliveryRetrieveParams} for more details.
         #
-        #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        #   @param delivery_id [String] ID of the delivery.
+        #
+        #   @param tags [Array<String>] Comma-separated labels for this request, such as `production,team-alpha`. Filter
         #
         #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
       end

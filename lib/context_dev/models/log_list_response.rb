@@ -5,19 +5,19 @@ module ContextDev
     # @see ContextDev::Resources::Logs#list
     class LogListResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute data
-      #   Log entries, newest first.
+      #   Log entries on this page, newest first.
       #
       #   @return [Array<ContextDev::Models::LogListResponse::Data>]
       required :data, -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::LogListResponse::Data] }
 
       # @!attribute has_more
-      #   Whether a next page exists.
+      #   Whether more results are available after this page.
       #
       #   @return [Boolean]
       required :has_more, ContextDev::Internal::Type::Boolean
 
       # @!attribute limit
-      #   Entries per page.
+      #   Maximum number of log entries to return per page.
       #
       #   @return [Integer]
       required :limit, Integer
@@ -45,11 +45,11 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::LogListResponse} for more details.
       #
-      #   @param data [Array<ContextDev::Models::LogListResponse::Data>] Log entries, newest first.
+      #   @param data [Array<ContextDev::Models::LogListResponse::Data>] Log entries on this page, newest first.
       #
-      #   @param has_more [Boolean] Whether a next page exists.
+      #   @param has_more [Boolean] Whether more results are available after this page.
       #
-      #   @param limit [Integer] Entries per page.
+      #   @param limit [Integer] Maximum number of log entries to return per page.
       #
       #   @param page [Integer] Current page number.
       #
@@ -65,50 +65,50 @@ module ContextDev
         required :credits_used, Integer
 
         # @!attribute error_code
-        #   The `error_code` from the response, or null on success.
+        #   The response's `error_code`. `null` on success.
         #
         #   @return [String, nil]
         required :error_code, String, nil?: true
 
         # @!attribute key_id
-        #   ID of the API key that made the request.
+        #   ID of the API key that made the request. Can be `null` for `MONITOR` and `BATCH`
+        #   entries.
         #
         #   @return [String, nil]
         required :key_id, String, nil?: true
 
         # @!attribute latency_ms
-        #   Server-side processing time in milliseconds.
+        #   Server-side processing time, in milliseconds.
         #
         #   @return [Float]
         required :latency_ms, Float
 
         # @!attribute method_
-        #   HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement
-        #   entries.
+        #   HTTP method, or `MONITOR` for a monitor run and `BATCH` for a batch settlement.
         #
         #   @return [String]
         required :method_, String, api_name: :method
 
         # @!attribute path
-        #   Endpoint path as called.
+        #   Endpoint path that was called.
         #
         #   @return [String]
         required :path, String
 
         # @!attribute request_id
-        #   Request ID of the logged API call.
+        #   ID of the logged request.
         #
         #   @return [String]
         required :request_id, String
 
         # @!attribute status_code
-        #   HTTP status code returned.
+        #   HTTP status code of the response.
         #
         #   @return [Integer]
         required :status_code, Integer
 
         # @!attribute tags
-        #   Request tags supplied by the caller.
+        #   Tags sent with the request.
         #
         #   @return [Array<String>]
         required :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -120,7 +120,7 @@ module ContextDev
         required :timestamp, Time
 
         # @!attribute zdr
-        #   Whether the request was made under zero data retention.
+        #   Whether the request used zero data retention (ZDR).
         #
         #   @return [Boolean]
         required :zdr, ContextDev::Internal::Type::Boolean
@@ -131,25 +131,25 @@ module ContextDev
         #
         #   @param credits_used [Integer] Credits charged for this request.
         #
-        #   @param error_code [String, nil] The `error_code` from the response, or null on success.
+        #   @param error_code [String, nil] The response's `error_code`. `null` on success.
         #
-        #   @param key_id [String, nil] ID of the API key that made the request.
+        #   @param key_id [String, nil] ID of the API key that made the request. Can be `null` for `MONITOR` and `BATCH`
         #
-        #   @param latency_ms [Float] Server-side processing time in milliseconds.
+        #   @param latency_ms [Float] Server-side processing time, in milliseconds.
         #
-        #   @param method_ [String] HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement entries
+        #   @param method_ [String] HTTP method, or `MONITOR` for a monitor run and `BATCH` for a batch settlement.
         #
-        #   @param path [String] Endpoint path as called.
+        #   @param path [String] Endpoint path that was called.
         #
-        #   @param request_id [String] Request ID of the logged API call.
+        #   @param request_id [String] ID of the logged request.
         #
-        #   @param status_code [Integer] HTTP status code returned.
+        #   @param status_code [Integer] HTTP status code of the response.
         #
-        #   @param tags [Array<String>] Request tags supplied by the caller.
+        #   @param tags [Array<String>] Tags sent with the request.
         #
         #   @param timestamp [Time] When the request completed.
         #
-        #   @param zdr [Boolean] Whether the request was made under zero data retention.
+        #   @param zdr [Boolean] Whether the request used zero data retention (ZDR).
       end
 
       # @see ContextDev::Models::LogListResponse#key_metadata
@@ -161,7 +161,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -171,7 +171,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

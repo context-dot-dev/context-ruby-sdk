@@ -15,7 +15,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :url
 
-      # Fetch from this country (ISO 3166-1 alpha-2).
+      # Country to fetch from, as an ISO 3166-1 alpha-2 code.
       sig do
         returns(T.nilable(ContextDev::WebWebCrawlMdParams::Country::OrSymbol))
       end
@@ -26,31 +26,30 @@ module ContextDev
       end
       attr_writer :country
 
-      # Remove matching elements after inclusions. Exclusions take precedence.
+      # Remove elements matching these CSS selectors. Overrides `includeSelectors`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_accessor :exclude_selectors
 
-      # Regex pattern. URLs matching this pattern are never followed or scraped, even
-      # when they match urlRegex. The starting URL is always scraped.
+      # Never follow or scrape URLs matching this regex, even when they match
+      # `urlRegex`. The start URL is always scraped.
       sig { returns(T.nilable(String)) }
       attr_reader :exclude_url_regex
 
       sig { params(exclude_url_regex: String).void }
       attr_writer :exclude_url_regex
 
-      # When true, follow links on subdomains of the starting URL's domain (e.g.
-      # docs.example.com when starting from example.com). www and apex are always
-      # treated as equivalent.
+      # Follow links to subdomains of the start URL's domain, such as `docs.example.com`
+      # from `example.com`. `www` and the apex domain always count as the same site.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :follow_subdomains
 
       sig { params(follow_subdomains: T::Boolean).void }
       attr_writer :follow_subdomains
 
-      # Which iframe contents to render to Markdown for each crawled page. `auto`
-      # (default) inlines only iframes that hold page content, such as same-site
-      # documents, framesets, job boards, forms and embedded documents, and skips ads
-      # and widgets. `true` inlines every iframe. `false` inlines none.
+      # Which iframe contents to include in each page's Markdown. `auto` inlines only
+      # iframes that hold page content, such as same-site documents, framesets, job
+      # boards, forms, and embedded documents, and skips ads and widgets. `true` inlines
+      # every iframe; `false` inlines none.
       sig do
         returns(
           T.nilable(
@@ -74,52 +73,54 @@ module ContextDev
       end
       attr_writer :include_frames
 
-      # Include image references in the Markdown output (`html-conversion` only).
+      # Include image references in the Markdown (`html-conversion` only).
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :include_images
 
       sig { params(include_images: T::Boolean).void }
       attr_writer :include_images
 
-      # Preserve hyperlinks in the Markdown output (`html-conversion` only).
+      # Keep link URLs in the Markdown (`html-conversion` only).
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :include_links
 
       sig { params(include_links: T::Boolean).void }
       attr_writer :include_links
 
-      # Keep matching HTML subtrees before converting each page to Markdown.
+      # Keep only elements matching these CSS selectors.
       sig { returns(T.nilable(T::Array[String])) }
       attr_accessor :include_selectors
 
-      # Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
+      # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+      # Defaults to 1 day (86400000 ms). Maximum: 30 days (2592000000 ms).
       sig { returns(T.nilable(Integer)) }
       attr_accessor :max_age_ms
 
-      # Maximum link depth from the starting URL (0 = only the starting page)
+      # Maximum link depth from the start URL. `0` crawls only the start URL. Omit for
+      # no depth limit.
       sig { returns(T.nilable(Integer)) }
       attr_reader :max_depth
 
       sig { params(max_depth: Integer).void }
       attr_writer :max_depth
 
-      # Maximum pages to crawl.
+      # Maximum number of pages to crawl.
       sig { returns(T.nilable(Integer)) }
       attr_reader :max_pages
 
       sig { params(max_pages: Integer).void }
       attr_writer :max_pages
 
-      # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+      # Whether to parse PDFs and which pages to read.
       sig { returns(T.nilable(ContextDev::WebWebCrawlMdParams::Pdf)) }
       attr_reader :pdf
 
       sig { params(pdf: ContextDev::WebWebCrawlMdParams::Pdf::OrHash).void }
       attr_writer :pdf
 
-      # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-      # access policies are enabled for your organization; otherwise the request fails
-      # with `ACCESS_POLICIES_NOT_ENABLED`.
+      # Access policy IDs to apply; each URL must pass all of them. Requires access
+      # policies enabled for your organization; otherwise returns
+      # `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
@@ -134,8 +135,7 @@ module ContextDev
       sig { params(settle_animations: T::Boolean).void }
       attr_writer :settle_animations
 
-      # Truncate base64-encoded image data in the Markdown output (`html-conversion`
-      # only).
+      # Shorten inline base64 image data (`html-conversion` only).
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :shorten_base64_images
 
@@ -165,15 +165,16 @@ module ContextDev
       end
       attr_writer :source_preference
 
-      # Soft crawl deadline in milliseconds. Returns pages collected before the next
-      # deadline check.
+      # Soft time budget for the crawl, in milliseconds. When it runs out, the crawl
+      # returns the pages collected so far. Larger values are capped at 110 seconds.
       sig { returns(T.nilable(Integer)) }
       attr_reader :stop_after_ms
 
       sig { params(stop_after_ms: Integer).void }
       attr_writer :stop_after_ms
 
-      # Labels for filtering usage in the dashboard.
+      # Labels for this request. Filter usage and request logs by them in the dashboard
+      # or with `GET /org/logs`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -191,25 +192,24 @@ module ContextDev
       end
       attr_writer :timeout_opts
 
-      # Regex pattern. Only URLs matching this pattern will be followed and scraped. An
-      # automatic prefix scope in the form ^<starting URL> follows a redirect of the
-      # starting page.
+      # Only follow and scrape URLs matching this regex. A prefix pattern of the form
+      # `^<start URL>` also follows a redirect of the start page.
       sig { returns(T.nilable(String)) }
       attr_reader :url_regex
 
       sig { params(url_regex: String).void }
       attr_writer :url_regex
 
-      # Extract only the main content, stripping headers, footers, sidebars, and
-      # navigation
+      # Keep only the main content, without navigation, headers, footers, or sidebars.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :use_main_content_only
 
       sig { params(use_main_content_only: T::Boolean).void }
       attr_writer :use_main_content_only
 
-      # Browser wait time in milliseconds after initial page load for each crawled page.
-      # Defaults to 3500 (3.5 seconds). Min: 0. Max: 30000 (30 seconds).
+      # Time to wait after each page loads before reading it, in milliseconds. `0` waits
+      # 500 ms. `timeoutOpts.milliseconds` must be at least `waitForMs` plus 10000 ms,
+      # or the request fails with `TIMEOUT_TOO_SHORT_FOR_WAIT`.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :wait_for_ms
 
@@ -260,65 +260,65 @@ module ContextDev
       def self.new(
         # Start URL, including `http://` or `https://`.
         url:,
-        # Fetch from this country (ISO 3166-1 alpha-2).
+        # Country to fetch from, as an ISO 3166-1 alpha-2 code.
         country: nil,
-        # Remove matching elements after inclusions. Exclusions take precedence.
+        # Remove elements matching these CSS selectors. Overrides `includeSelectors`.
         exclude_selectors: nil,
-        # Regex pattern. URLs matching this pattern are never followed or scraped, even
-        # when they match urlRegex. The starting URL is always scraped.
+        # Never follow or scrape URLs matching this regex, even when they match
+        # `urlRegex`. The start URL is always scraped.
         exclude_url_regex: nil,
-        # When true, follow links on subdomains of the starting URL's domain (e.g.
-        # docs.example.com when starting from example.com). www and apex are always
-        # treated as equivalent.
+        # Follow links to subdomains of the start URL's domain, such as `docs.example.com`
+        # from `example.com`. `www` and the apex domain always count as the same site.
         follow_subdomains: nil,
-        # Which iframe contents to render to Markdown for each crawled page. `auto`
-        # (default) inlines only iframes that hold page content, such as same-site
-        # documents, framesets, job boards, forms and embedded documents, and skips ads
-        # and widgets. `true` inlines every iframe. `false` inlines none.
+        # Which iframe contents to include in each page's Markdown. `auto` inlines only
+        # iframes that hold page content, such as same-site documents, framesets, job
+        # boards, forms, and embedded documents, and skips ads and widgets. `true` inlines
+        # every iframe; `false` inlines none.
         include_frames: nil,
-        # Include image references in the Markdown output (`html-conversion` only).
+        # Include image references in the Markdown (`html-conversion` only).
         include_images: nil,
-        # Preserve hyperlinks in the Markdown output (`html-conversion` only).
+        # Keep link URLs in the Markdown (`html-conversion` only).
         include_links: nil,
-        # Keep matching HTML subtrees before converting each page to Markdown.
+        # Keep only elements matching these CSS selectors.
         include_selectors: nil,
-        # Maximum cache age in milliseconds. Defaults to 1 day; `0` fetches fresh.
+        # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+        # Defaults to 1 day (86400000 ms). Maximum: 30 days (2592000000 ms).
         max_age_ms: nil,
-        # Maximum link depth from the starting URL (0 = only the starting page)
+        # Maximum link depth from the start URL. `0` crawls only the start URL. Omit for
+        # no depth limit.
         max_depth: nil,
-        # Maximum pages to crawl.
+        # Maximum number of pages to crawl.
         max_pages: nil,
-        # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+        # Whether to parse PDFs and which pages to read.
         pdf: nil,
-        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-        # access policies are enabled for your organization; otherwise the request fails
-        # with `ACCESS_POLICIES_NOT_ENABLED`.
+        # Access policy IDs to apply; each URL must pass all of them. Requires access
+        # policies enabled for your organization; otherwise returns
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Wait briefly for CSS animations and transitions to settle before reading each
         # page.
         settle_animations: nil,
-        # Truncate base64-encoded image data in the Markdown output (`html-conversion`
-        # only).
+        # Shorten inline base64 image data (`html-conversion` only).
         shorten_base64_images: nil,
         # Markdown sources in order of preference: `html-conversion` converts the page
         # HTML, `markdown-direct` uses Markdown the site publishes.
         source_preference: nil,
-        # Soft crawl deadline in milliseconds. Returns pages collected before the next
-        # deadline check.
+        # Soft time budget for the crawl, in milliseconds. When it runs out, the crawl
+        # returns the pages collected so far. Larger values are capped at 110 seconds.
         stop_after_ms: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
         # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Regex pattern. Only URLs matching this pattern will be followed and scraped. An
-        # automatic prefix scope in the form ^<starting URL> follows a redirect of the
-        # starting page.
+        # Only follow and scrape URLs matching this regex. A prefix pattern of the form
+        # `^<start URL>` also follows a redirect of the start page.
         url_regex: nil,
-        # Extract only the main content, stripping headers, footers, sidebars, and
-        # navigation
+        # Keep only the main content, without navigation, headers, footers, or sidebars.
         use_main_content_only: nil,
-        # Browser wait time in milliseconds after initial page load for each crawled page.
-        # Defaults to 3500 (3.5 seconds). Min: 0. Max: 30000 (30 seconds).
+        # Time to wait after each page loads before reading it, in milliseconds. `0` waits
+        # 500 ms. `timeoutOpts.milliseconds` must be at least `waitForMs` plus 10000 ms,
+        # or the request fails with `TIMEOUT_TOO_SHORT_FOR_WAIT`.
         wait_for_ms: nil,
         # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
         # your organization has ZDR.
@@ -368,7 +368,7 @@ module ContextDev
       def to_hash
       end
 
-      # Fetch from this country (ISO 3166-1 alpha-2).
+      # Country to fetch from, as an ISO 3166-1 alpha-2 code.
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -592,10 +592,10 @@ module ContextDev
         end
       end
 
-      # Which iframe contents to render to Markdown for each crawled page. `auto`
-      # (default) inlines only iframes that hold page content, such as same-site
-      # documents, framesets, job boards, forms and embedded documents, and skips ads
-      # and widgets. `true` inlines every iframe. `false` inlines none.
+      # Which iframe contents to include in each page's Markdown. `auto` inlines only
+      # iframes that hold page content, such as same-site documents, framesets, job
+      # boards, forms, and embedded documents, and skips ads and widgets. `true` inlines
+      # every iframe; `false` inlines none.
       module IncludeFrames
         extend ContextDev::Internal::Type::Union
 
@@ -637,37 +637,36 @@ module ContextDev
             )
           end
 
-        # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-        # be >= start.
+        # Last page to parse. Defaults to the last page. Must be at least `start`.
         sig { returns(T.nilable(Integer)) }
         attr_reader :end_
 
         sig { params(end_: Integer).void }
         attr_writer :end_
 
-        # Read scanned PDF pages with OCR; preserve pages that already have text.
+        # Read scanned PDF pages with OCR. Pages that already have text are kept as is.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :ocr
 
         sig { params(ocr: T::Boolean).void }
         attr_writer :ocr
 
-        # When true, PDF pages are fetched and parsed. When false, PDF pages are skipped
-        # entirely (not included in results and not counted as failures).
+        # Parse PDF pages. When `false`, PDFs are left out of the results and not counted
+        # as failures.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :should_parse
 
         sig { params(should_parse: T::Boolean).void }
         attr_writer :should_parse
 
-        # First 1-based PDF page to parse.
+        # First page to parse, starting at 1.
         sig { returns(T.nilable(Integer)) }
         attr_reader :start
 
         sig { params(start: Integer).void }
         attr_writer :start
 
-        # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+        # Whether to parse PDFs and which pages to read.
         sig do
           params(
             end_: Integer,
@@ -677,15 +676,14 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-          # be >= start.
+          # Last page to parse. Defaults to the last page. Must be at least `start`.
           end_: nil,
-          # Read scanned PDF pages with OCR; preserve pages that already have text.
+          # Read scanned PDF pages with OCR. Pages that already have text are kept as is.
           ocr: nil,
-          # When true, PDF pages are fetched and parsed. When false, PDF pages are skipped
-          # entirely (not included in results and not counted as failures).
+          # Parse PDF pages. When `false`, PDFs are left out of the results and not counted
+          # as failures.
           should_parse: nil,
-          # First 1-based PDF page to parse.
+          # First page to parse, starting at 1.
           start: nil
         )
         end
@@ -748,8 +746,8 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         sig do
           returns(
             T.nilable(
@@ -778,8 +776,8 @@ module ContextDev
         def self.new(
           # Deadline in milliseconds.
           milliseconds:,
-          # "fail" returns 408 at the deadline. "return-partial" returns available results;
-          # inspect the response’s partial flag.
+          # `fail` returns 408 at the deadline. `return-partial` returns the results
+          # collected so far and marks the response as partial.
           behavior: nil
         )
         end
@@ -796,8 +794,8 @@ module ContextDev
         def to_hash
         end
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 

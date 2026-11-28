@@ -5,6 +5,7 @@ module ContextDev
     # @see ContextDev::Resources::Monitors#get_credit_usage
     class MonitorGetCreditUsageResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute data
+      #   Usage per monitor, highest first.
       #
       #   @return [Array<ContextDev::Models::MonitorGetCreditUsageResponse::Data>]
       required :data,
@@ -18,7 +19,7 @@ module ContextDev
       required :request_id, String
 
       # @!attribute total_credits
-      #   Sum of credits across all monitors in the window.
+      #   Total credits across the monitors in `data`.
       #
       #   @return [Integer]
       required :total_credits, Integer
@@ -33,46 +34,47 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorGetCreditUsageResponse} for more details.
       #
-      #   @param data [Array<ContextDev::Models::MonitorGetCreditUsageResponse::Data>]
+      #   @param data [Array<ContextDev::Models::MonitorGetCreditUsageResponse::Data>] Usage per monitor, highest first.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param total_credits [Integer] Sum of credits across all monitors in the window.
+      #   @param total_credits [Integer] Total credits across the monitors in `data`.
       #
       #   @param key_metadata [ContextDev::Models::MonitorGetCreditUsageResponse::KeyMetadata] Credits this request used and your remaining balance.
 
       class Data < ContextDev::Internal::Type::BaseModel
         # @!attribute credits
-        #   Credits charged to this monitor over the window.
+        #   Credits charged to the monitor in the window.
         #
         #   @return [Integer]
         required :credits, Integer
 
         # @!attribute monitor_id
+        #   ID of the monitor.
         #
         #   @return [String]
         required :monitor_id, String
 
         # @!attribute name
-        #   Monitor name (falls back to the id when the monitor was deleted).
+        #   Name of the monitor, or its ID if the monitor was deleted.
         #
         #   @return [String]
         required :name, String
 
         # @!attribute runs
-        #   Number of billed runs over the window.
+        #   Number of billed runs in the window.
         #
         #   @return [Integer]
         required :runs, Integer
 
         # @!method initialize(credits:, monitor_id:, name:, runs:)
-        #   @param credits [Integer] Credits charged to this monitor over the window.
+        #   @param credits [Integer] Credits charged to the monitor in the window.
         #
-        #   @param monitor_id [String]
+        #   @param monitor_id [String] ID of the monitor.
         #
-        #   @param name [String] Monitor name (falls back to the id when the monitor was deleted).
+        #   @param name [String] Name of the monitor, or its ID if the monitor was deleted.
         #
-        #   @param runs [Integer] Number of billed runs over the window.
+        #   @param runs [Integer] Number of billed runs in the window.
       end
 
       # @see ContextDev::Models::MonitorGetCreditUsageResponse#key_metadata
@@ -84,7 +86,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -94,7 +96,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

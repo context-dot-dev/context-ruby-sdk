@@ -25,7 +25,7 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::PersonSearchResponse::KeyMetadata }
 
       # @!attribute next_cursor
-      #   Pass as cursor to fetch the next page; null when there are no more results.
+      #   Pass as `cursor` to fetch the next page. `null` on the last page.
       #
       #   @return [String, nil]
       optional :next_cursor, String, nil?: true
@@ -40,7 +40,7 @@ module ContextDev
       #
       #   @param key_metadata [ContextDev::Models::PersonSearchResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param next_cursor [String, nil] Pass as cursor to fetch the next page; null when there are no more results.
+      #   @param next_cursor [String, nil] Pass as `cursor` to fetch the next page. `null` on the last page.
 
       class Result < ContextDev::Internal::Type::BaseModel
         # @!attribute description
@@ -50,7 +50,7 @@ module ContextDev
         required :description, String, nil?: true
 
         # @!attribute is_founder
-        #   Whether the person is currently a founder or co-founder.
+        #   Whether the person is currently a founder or co-founder. `null` when unknown.
         #
         #   @return [Boolean, nil]
         required :is_founder, ContextDev::Internal::Type::Boolean, nil?: true
@@ -68,13 +68,14 @@ module ContextDev
         required :name, String, nil?: true
 
         # @!attribute profiles
-        #   Public professional profile URLs.
+        #   Public professional profile URLs. Send one to `POST /people/enrich` as
+        #   `social_urls` for the full profile.
         #
         #   @return [Array<String>]
         required :profiles, ContextDev::Internal::Type::ArrayOf[String]
 
         # @!attribute role
-        #   The person’s current role.
+        #   The person's current role.
         #
         #   @return [ContextDev::Models::PersonSearchResponse::Result::Role]
         required :role, -> { ContextDev::Models::PersonSearchResponse::Result::Role }
@@ -92,39 +93,42 @@ module ContextDev
         required :skills, ContextDev::Internal::Type::ArrayOf[String]
 
         # @!attribute years_of_experience
-        #   Years of professional experience.
+        #   Years of professional experience. `null` when unknown.
         #
         #   @return [Integer, nil]
         required :years_of_experience, Integer, nil?: true
 
         # @!attribute match
-        #   How well the person matches the query. Only returned in `ultra` mode.
+        #   How well the person matches the query. Returned only in `ultra` mode.
         #
         #   @return [ContextDev::Models::PersonSearchResponse::Result::Match, nil]
         optional :match, -> { ContextDev::Models::PersonSearchResponse::Result::Match }
 
         # @!method initialize(description:, is_founder:, location:, name:, profiles:, role:, schools:, skills:, years_of_experience:, match: nil)
-        #   A person matching your search; unavailable details are null or empty lists.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::PersonSearchResponse::Result} for more details.
+        #
+        #   A person who matches your search. Unknown details are `null` or empty lists.
         #
         #   @param description [String, nil] What the person does.
         #
-        #   @param is_founder [Boolean, nil] Whether the person is currently a founder or co-founder.
+        #   @param is_founder [Boolean, nil] Whether the person is currently a founder or co-founder. `null` when unknown.
         #
         #   @param location [ContextDev::Models::PersonSearchResponse::Result::Location] Where the person lives.
         #
         #   @param name [String, nil] Full name.
         #
-        #   @param profiles [Array<String>] Public professional profile URLs.
+        #   @param profiles [Array<String>] Public professional profile URLs. Send one to `POST /people/enrich` as `social_u
         #
-        #   @param role [ContextDev::Models::PersonSearchResponse::Result::Role] The person’s current role.
+        #   @param role [ContextDev::Models::PersonSearchResponse::Result::Role] The person's current role.
         #
         #   @param schools [Array<String>] Schools attended.
         #
         #   @param skills [Array<String>] Professional skills.
         #
-        #   @param years_of_experience [Integer, nil] Years of professional experience.
+        #   @param years_of_experience [Integer, nil] Years of professional experience. `null` when unknown.
         #
-        #   @param match [ContextDev::Models::PersonSearchResponse::Result::Match] How well the person matches the query. Only returned in `ultra` mode.
+        #   @param match [ContextDev::Models::PersonSearchResponse::Result::Match] How well the person matches the query. Returned only in `ultra` mode.
 
         # @see ContextDev::Models::PersonSearchResponse::Result#location
         class Location < ContextDev::Internal::Type::BaseModel
@@ -135,7 +139,7 @@ module ContextDev
           required :city, String, nil?: true
 
           # @!attribute country_code
-          #   Country as a two-letter code, such as US or GB.
+          #   ISO 3166-1 alpha-2 country code, such as `US`.
           #
           #   @return [String, nil]
           required :country_code, String, nil?: true
@@ -151,7 +155,7 @@ module ContextDev
           #
           #   @param city [String, nil] City.
           #
-          #   @param country_code [String, nil] Country as a two-letter code, such as US or GB.
+          #   @param country_code [String, nil] ISO 3166-1 alpha-2 country code, such as `US`.
           #
           #   @param region [String, nil] State or region.
         end
@@ -159,25 +163,25 @@ module ContextDev
         # @see ContextDev::Models::PersonSearchResponse::Result#role
         class Role < ContextDev::Internal::Type::BaseModel
           # @!attribute company
-          #   Current employer, when known.
+          #   Current employer. `null` when unknown.
           #
           #   @return [ContextDev::Models::PersonSearchResponse::Result::Role::Company, nil]
           required :company, -> { ContextDev::Models::PersonSearchResponse::Result::Role::Company }, nil?: true
 
           # @!attribute functions
-          #   Areas of responsibility.
+          #   Areas of responsibility, such as `sales`.
           #
           #   @return [Array<String>]
           required :functions, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute seniority
-          #   Seniority level.
+          #   Seniority level, such as `executive`.
           #
           #   @return [String, nil]
           required :seniority, String, nil?: true
 
           # @!attribute started_on
-          #   Role start date (YYYY-MM-DD).
+          #   When the role started, as `YYYY-MM-DD`.
           #
           #   @return [String, nil]
           required :started_on, String, nil?: true
@@ -189,22 +193,22 @@ module ContextDev
           required :title, String, nil?: true
 
           # @!method initialize(company:, functions:, seniority:, started_on:, title:)
-          #   The person’s current role.
+          #   The person's current role.
           #
-          #   @param company [ContextDev::Models::PersonSearchResponse::Result::Role::Company, nil] Current employer, when known.
+          #   @param company [ContextDev::Models::PersonSearchResponse::Result::Role::Company, nil] Current employer. `null` when unknown.
           #
-          #   @param functions [Array<String>] Areas of responsibility.
+          #   @param functions [Array<String>] Areas of responsibility, such as `sales`.
           #
-          #   @param seniority [String, nil] Seniority level.
+          #   @param seniority [String, nil] Seniority level, such as `executive`.
           #
-          #   @param started_on [String, nil] Role start date (YYYY-MM-DD).
+          #   @param started_on [String, nil] When the role started, as `YYYY-MM-DD`.
           #
           #   @param title [String, nil] Job title.
 
           # @see ContextDev::Models::PersonSearchResponse::Result::Role#company
           class Company < ContextDev::Internal::Type::BaseModel
             # @!attribute domain
-            #   The company’s website domain.
+            #   Website domain of the company.
             #
             #   @return [String, nil]
             required :domain, String, nil?: true
@@ -216,9 +220,9 @@ module ContextDev
             required :name, String, nil?: true
 
             # @!method initialize(domain:, name:)
-            #   Current employer, when known.
+            #   Current employer. `null` when unknown.
             #
-            #   @param domain [String, nil] The company’s website domain.
+            #   @param domain [String, nil] Website domain of the company.
             #
             #   @param name [String, nil] Company name.
           end
@@ -233,7 +237,7 @@ module ContextDev
           required :confidence, Float
 
           # @!method initialize(confidence:)
-          #   How well the person matches the query. Only returned in `ultra` mode.
+          #   How well the person matches the query. Returned only in `ultra` mode.
           #
           #   @param confidence [Float] How well the person matches the query, from 0 to 1.
         end
@@ -248,7 +252,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -258,7 +262,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

@@ -14,26 +14,26 @@ module ContextDev
       optional :change_detection_type, enum: -> { ContextDev::MonitorListParams::ChangeDetectionType }
 
       # @!attribute cursor
-      #   Opaque pagination cursor from a previous response.
+      #   Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
       #   @return [String, nil]
       optional :cursor, String
 
       # @!attribute limit
-      #   Maximum number of items to return per page (1-100). Defaults to 25.
+      #   Maximum number of monitors to return per page. Defaults to 25.
       #
       #   @return [Integer, nil]
       optional :limit, Integer
 
       # @!attribute q
-      #   Free-text search term, matched against the fields named in `search_by`.
+      #   Text to search for in the fields listed in `search_by`.
       #
       #   @return [String, nil]
       optional :q, String
 
       # @!attribute search_by
-      #   Fields to search with `q`. Defaults to all fields; page, extract, and search
-      #   targets can have instructions, and `url` matches a search target’s query.
+      #   Comma-separated fields to search with `q`. Defaults to all fields. For search
+      #   targets, `url` matches the target's `query`.
       #
       #   @return [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil]
       optional :search_by,
@@ -41,20 +41,20 @@ module ContextDev
                nil?: true
 
       # @!attribute search_type
-      #   `prefix` for as-you-type prefix matching (default), `exact` for full-token
-      #   matching.
+      #   How `q` matches. `prefix` matches the start of words and tolerates one typo, for
+      #   search as you type; `exact` matches whole words only. Defaults to `prefix`.
       #
       #   @return [Symbol, ContextDev::Models::MonitorListParams::SearchType, nil]
       optional :search_type, enum: -> { ContextDev::MonitorListParams::SearchType }
 
       # @!attribute status
-      #   Filter monitors by lifecycle status.
+      #   Filter by monitor status.
       #
       #   @return [Symbol, ContextDev::Models::MonitorListParams::Status, nil]
       optional :status, enum: -> { ContextDev::MonitorListParams::Status }
 
       # @!attribute tags
-      #   Comma-separated list of tags to filter by (matches monitors having any of them).
+      #   Comma-separated tags. Returns monitors that have any of them.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String], nil?: true
@@ -71,19 +71,19 @@ module ContextDev
       #
       #   @param change_detection_type [Symbol, ContextDev::Models::MonitorListParams::ChangeDetectionType] Filter by change detection type.
       #
-      #   @param cursor [String] Opaque pagination cursor from a previous response.
+      #   @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
-      #   @param limit [Integer] Maximum number of items to return per page (1-100). Defaults to 25.
+      #   @param limit [Integer] Maximum number of monitors to return per page. Defaults to 25.
       #
-      #   @param q [String] Free-text search term, matched against the fields named in `search_by`.
+      #   @param q [String] Text to search for in the fields listed in `search_by`.
       #
-      #   @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil] Fields to search with `q`. Defaults to all fields; page, extract, and search tar
+      #   @param search_by [Array<Symbol, ContextDev::Models::MonitorListParams::SearchBy>, nil] Comma-separated fields to search with `q`. Defaults to all fields. For search ta
       #
-      #   @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] `prefix` for as-you-type prefix matching (default), `exact` for full-token match
+      #   @param search_type [Symbol, ContextDev::Models::MonitorListParams::SearchType] How `q` matches. `prefix` matches the start of words and tolerates one typo, for
       #
-      #   @param status [Symbol, ContextDev::Models::MonitorListParams::Status] Filter monitors by lifecycle status.
+      #   @param status [Symbol, ContextDev::Models::MonitorListParams::Status] Filter by monitor status.
       #
-      #   @param tags [Array<String>, nil] Comma-separated list of tags to filter by (matches monitors having any of them).
+      #   @param tags [Array<String>, nil] Comma-separated tags. Returns monitors that have any of them.
       #
       #   @param target_type [Symbol, ContextDev::Models::MonitorListParams::TargetType] Filter by target type.
       #
@@ -112,8 +112,8 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # `prefix` for as-you-type prefix matching (default), `exact` for full-token
-      # matching.
+      # How `q` matches. `prefix` matches the start of words and tolerates one typo, for
+      # search as you type; `exact` matches whole words only. Defaults to `prefix`.
       module SearchType
         extend ContextDev::Internal::Type::Enum
 
@@ -124,7 +124,7 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Filter monitors by lifecycle status.
+      # Filter by monitor status.
       module Status
         extend ContextDev::Internal::Type::Enum
 

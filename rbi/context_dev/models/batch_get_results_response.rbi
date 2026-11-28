@@ -16,7 +16,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Result records on this page.
+      # Results on this page.
       sig do
         returns(
           T.nilable(
@@ -41,7 +41,7 @@ module ContextDev
       end
       attr_writer :data
 
-      # Whether another page is available.
+      # Whether more results are available after this page.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :has_more
 
@@ -64,7 +64,7 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # Cursor for the next page.
+      # Pass as `cursor` to fetch the next page. `null` on the last page.
       sig { returns(T.nilable(String)) }
       attr_accessor :next_cursor
 
@@ -88,13 +88,13 @@ module ContextDev
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # Result records on this page.
+        # Results on this page.
         data: nil,
-        # Whether another page is available.
+        # Whether more results are available after this page.
         has_more: nil,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
-        # Cursor for the next page.
+        # Pass as `cursor` to fetch the next page. `null` on the last page.
         next_cursor: nil
       )
       end
@@ -117,8 +117,8 @@ module ContextDev
       def to_hash
       end
 
-      # One scrape outcome. result uses the single Scrape Anything response schema;
-      # itemId and meta identify your input.
+      # The outcome for one page. `result` has the same shape as a `POST /web/scrape`
+      # response, and `itemId` and `meta` echo your input.
       module Data
         extend ContextDev::Internal::Type::Union
 
@@ -139,13 +139,12 @@ module ContextDev
               )
             end
 
-          # Credits charged for this page, including OCR. Cached outputs use the same
-          # pricing as POST /web/scrape.
+          # Credits charged for this page, including OCR. Cached results are priced the same
+          # as in `POST /web/scrape`.
           sig { returns(Integer) }
           attr_accessor :credits_used
 
-          # The same response as POST /web/scrape, including per-format success, failure,
-          # and partial results.
+          # Scrape output, in the same shape as a `POST /web/scrape` response.
           sig do
             returns(
               ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result
@@ -161,6 +160,7 @@ module ContextDev
           end
           attr_writer :result
 
+          # The page was scraped.
           sig { returns(Symbol) }
           attr_accessor :status
 
@@ -168,29 +168,29 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :url
 
-          # Your `itemId` from submission.
+          # The `itemId` you submitted with this URL.
           sig { returns(T.nilable(String)) }
           attr_reader :item_id
 
           sig { params(item_id: String).void }
           attr_writer :item_id
 
-          # Caller-supplied metadata echoed from submission.
+          # The `meta` you submitted with this URL.
           sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
           attr_reader :meta
 
           sig { params(meta: T::Hash[Symbol, T.anything]).void }
           attr_writer :meta
 
-          # PDF pages recovered by OCR. Omitted when OCR did not run.
+          # Number of PDF pages read with OCR. Omitted when OCR did not run.
           sig { returns(T.nilable(Integer)) }
           attr_reader :ocr_pages
 
           sig { params(ocr_pages: Integer).void }
           attr_writer :ocr_pages
 
-          # At least one requested output succeeded. Check result.isPartial and each output
-          # success for incomplete results.
+          # A page where at least one requested format succeeded. Check `result.isPartial`
+          # and each format's `success` for incomplete results.
           sig do
             params(
               credits_used: Integer,
@@ -204,20 +204,20 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Credits charged for this page, including OCR. Cached outputs use the same
-            # pricing as POST /web/scrape.
+            # Credits charged for this page, including OCR. Cached results are priced the same
+            # as in `POST /web/scrape`.
             credits_used:,
-            # The same response as POST /web/scrape, including per-format success, failure,
-            # and partial results.
+            # Scrape output, in the same shape as a `POST /web/scrape` response.
             result:,
             # URL as submitted, or as discovered by the crawl.
             url:,
-            # Your `itemId` from submission.
+            # The `itemId` you submitted with this URL.
             item_id: nil,
-            # Caller-supplied metadata echoed from submission.
+            # The `meta` you submitted with this URL.
             meta: nil,
-            # PDF pages recovered by OCR. Omitted when OCR did not run.
+            # Number of PDF pages read with OCR. Omitted when OCR did not run.
             ocr_pages: nil,
+            # The page was scraped.
             status: :ok
           )
           end
@@ -264,7 +264,7 @@ module ContextDev
             end
             attr_writer :bytes
 
-            # Whether this response came from cache.
+            # Cache status of this response.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::CacheMetadata
@@ -297,7 +297,7 @@ module ContextDev
             end
             attr_writer :highlights
 
-            # Rendered HTML after content filters.
+            # Rendered HTML of the page, after content filters.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::HTML
@@ -313,7 +313,7 @@ module ContextDev
             end
             attr_writer :html
 
-            # Images after content filters. `[]` when none are found.
+            # Images found on the page, after content filters. `[]` when there are none.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Images
@@ -345,7 +345,7 @@ module ContextDev
             end
             attr_writer :json
 
-            # Markdown after content filters.
+            # Page content as Markdown, after content filters.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Markdown
@@ -377,28 +377,9 @@ module ContextDev
             end
             attr_writer :metadata
 
-            # Custom rules return fields after content filters; unmatched fields are null ([]
-            # for lists). The google-maps parser returns business records in data.results,
-            # google-maps-reviews returns data.reviews, and the google-play parser returns one
-            # app record as data, google-play-reviews returns data.reviews, app-store and
-            # app-store-reviews do the same for the App Store, g2-reviews returns data.reviews
-            # for a G2 product, instagram-profile and instagram-post return one record as
-            # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
-            # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
-            # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-            # data.users, yelp-search returns up to 20 ranked organic businesses in
-            # data.businesses, plus total and pagination, from a Yelp search URL; yelp-reviews
-            # returns up to 20 latest public reviews in data.reviews, with business details
-            # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
-            # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-            # hotel, restaurant, or attraction review URL; car-rental-availability returns
-            # every vehicle with pay-now and pay-later prices in data.vehicles from an
-            # avis.com or budget.com vehicle-availability search URL; car-rental-locations
-            # returns rental branches with codes, addresses, coordinates and hours in
-            # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
-            # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
-            # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
-            # their data directly, independently of DOM filters and other outputs.
+            # Fields extracted by `parseParams`. Custom rules return each field after content
+            # filters, with `null` when nothing matches (`[]` for `list` rules). Prebuilt
+            # parsers return the record or lists described under `parseParams.parser`.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed
@@ -430,8 +411,7 @@ module ContextDev
             end
             attr_writer :product
 
-            # Authenticated browser profile used for this scrape, or null when no profile was
-            # requested. New and existing profile requests both return the profile ID.
+            # Browser profile used for this scrape. `null` when no profile was requested.
             sig do
               returns(
                 T.nilable(
@@ -476,8 +456,8 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :url
 
-            # True when at least one requested output succeeds but the response has failed or
-            # incomplete outputs. Absent when all requested outputs fail.
+            # `true` when at least one requested output succeeded but others failed or are
+            # incomplete. Absent otherwise.
             sig do
               returns(
                 T.nilable(
@@ -513,8 +493,7 @@ module ContextDev
             end
             attr_writer :key_metadata
 
-            # The same response as POST /web/scrape, including per-format success, failure,
-            # and partial results.
+            # Scrape output, in the same shape as a `POST /web/scrape` response.
             sig do
               params(
                 bytes:
@@ -554,48 +533,28 @@ module ContextDev
             def self.new(
               # The original HTTP response body, unchanged by waits, actions, and filters.
               bytes:,
-              # Whether this response came from cache.
+              # Cache status of this response.
               cache_metadata:,
               # Relevant Markdown excerpts in page order. `[Heading]` adds context; `…` marks
               # omitted text.
               highlights:,
-              # Rendered HTML after content filters.
+              # Rendered HTML of the page, after content filters.
               html:,
-              # Images after content filters. `[]` when none are found.
+              # Images found on the page, after content filters. `[]` when there are none.
               images:,
               # Object matching `jsonParams.schema`.
               json:,
-              # Markdown after content filters.
+              # Page content as Markdown, after content filters.
               markdown:,
               # Page metadata. Fields are omitted when not found.
               metadata:,
-              # Custom rules return fields after content filters; unmatched fields are null ([]
-              # for lists). The google-maps parser returns business records in data.results,
-              # google-maps-reviews returns data.reviews, and the google-play parser returns one
-              # app record as data, google-play-reviews returns data.reviews, app-store and
-              # app-store-reviews do the same for the App Store, g2-reviews returns data.reviews
-              # for a G2 product, instagram-profile and instagram-post return one record as
-              # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
-              # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
-              # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-              # data.users, yelp-search returns up to 20 ranked organic businesses in
-              # data.businesses, plus total and pagination, from a Yelp search URL; yelp-reviews
-              # returns up to 20 latest public reviews in data.reviews, with business details
-              # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
-              # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-              # hotel, restaurant, or attraction review URL; car-rental-availability returns
-              # every vehicle with pay-now and pay-later prices in data.vehicles from an
-              # avis.com or budget.com vehicle-availability search URL; car-rental-locations
-              # returns rental branches with codes, addresses, coordinates and hours in
-              # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
-              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
-              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
-              # their data directly, independently of DOM filters and other outputs.
+              # Fields extracted by `parseParams`. Custom rules return each field after content
+              # filters, with `null` when nothing matches (`[]` for `list` rules). Prebuilt
+              # parsers return the record or lists described under `parseParams.parser`.
               parsed:,
               # Product details found on the page.
               product:,
-              # Authenticated browser profile used for this scrape, or null when no profile was
-              # requested. New and existing profile requests both return the profile ID.
+              # Browser profile used for this scrape. `null` when no profile was requested.
               profile:,
               # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
               # support.
@@ -604,8 +563,8 @@ module ContextDev
               screenshot:,
               # Final URL after redirects and browser actions.
               url:,
-              # True when at least one requested output succeeds but the response has failed or
-              # incomplete outputs. Absent when all requested outputs fail.
+              # `true` when at least one requested output succeeded but others failed or are
+              # incomplete. Absent otherwise.
               is_partial: nil,
               # Credits this request used and your remaining balance.
               key_metadata: nil
@@ -681,21 +640,23 @@ module ContextDev
               end
               attr_writer :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
@@ -717,12 +678,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -753,10 +716,11 @@ module ContextDev
                     )
                   end
 
-                # Body as base64, after HTTP decompression. Up to 50 MiB decoded.
+                # Response body as base64, after HTTP decompression. Up to 50 MiB decoded.
                 sig { returns(String) }
                 attr_accessor :base64
 
+                # `Content-Type` of the response.
                 sig { returns(String) }
                 attr_accessor :content_type
 
@@ -766,8 +730,9 @@ module ContextDev
                   )
                 end
                 def self.new(
-                  # Body as base64, after HTTP decompression. Up to 50 MiB decoded.
+                  # Response body as base64, after HTTP decompression. Up to 50 MiB decoded.
                   base64:,
+                  # `Content-Type` of the response.
                   content_type:
                 )
                 end
@@ -789,12 +754,12 @@ module ContextDev
                   )
                 end
 
-              # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+              # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
               sig { returns(Integer) }
               attr_accessor :age_ms
 
-              # Whether the response was served from cache, required fresh work, or honored
-              # zero-data-retention cache bypass.
+              # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+              # retention bypassed the cache.
               sig do
                 returns(
                   ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::CacheMetadata::Status::TaggedSymbol
@@ -802,7 +767,7 @@ module ContextDev
               end
               attr_accessor :status
 
-              # Whether this response came from cache.
+              # Cache status of this response.
               sig do
                 params(
                   age_ms: Integer,
@@ -811,10 +776,10 @@ module ContextDev
                 ).returns(T.attached_class)
               end
               def self.new(
-                # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+                # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
                 age_ms:,
-                # Whether the response was served from cache, required fresh work, or honored
-                # zero-data-retention cache bypass.
+                # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+                # retention bypassed the cache.
                 status:
               )
               end
@@ -831,8 +796,8 @@ module ContextDev
               def to_hash
               end
 
-              # Whether the response was served from cache, required fresh work, or honored
-              # zero-data-retention cache bypass.
+              # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+              # retention bypassed the cache.
               module Status
                 extend ContextDev::Internal::Type::Enum
 
@@ -885,21 +850,23 @@ module ContextDev
               sig { returns(T.nilable(T::Array[String])) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
@@ -919,12 +886,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -956,28 +925,30 @@ module ContextDev
               sig { returns(T.nilable(String)) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
               sig { params(message: String).void }
               attr_writer :message
 
-              # Rendered HTML after content filters.
+              # Rendered HTML of the page, after content filters.
               sig do
                 params(
                   data: T.nilable(String),
@@ -989,12 +960,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -1034,28 +1007,30 @@ module ContextDev
               end
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
               sig { params(message: String).void }
               attr_writer :message
 
-              # Images after content filters. `[]` when none are found.
+              # Images found on the page, after content filters. `[]` when there are none.
               sig do
                 params(
                   data:
@@ -1072,12 +1047,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -1110,7 +1087,7 @@ module ContextDev
                     )
                   end
 
-                # Alt text, if present.
+                # Alt text. `null` when the image has none.
                 sig { returns(T.nilable(String)) }
                 attr_accessor :alt
 
@@ -1118,6 +1095,8 @@ module ContextDev
                 sig { returns(String) }
                 attr_accessor :url
 
+                # What the image shows, such as a photo, logo, or icon. Requires `classification`
+                # enrichment.
                 sig do
                   returns(
                     T.nilable(
@@ -1135,20 +1114,22 @@ module ContextDev
                 end
                 attr_writer :classification
 
-                # Hosted image URL, valid for 24 hours after capture. Requires `file` enrichment
-                # and ZDR disabled.
+                # Hosted copy of the image, valid for 24 hours after capture. Requires `file`
+                # enrichment; not returned with ZDR.
                 sig { returns(T.nilable(String)) }
                 attr_reader :file_url
 
                 sig { params(file_url: String).void }
                 attr_writer :file_url
 
+                # Image height in pixels. Requires `dimensions` enrichment.
                 sig { returns(T.nilable(Integer)) }
                 attr_reader :height
 
                 sig { params(height: Integer).void }
                 attr_writer :height
 
+                # Image width in pixels. Requires `dimensions` enrichment.
                 sig { returns(T.nilable(Integer)) }
                 attr_reader :width
 
@@ -1167,15 +1148,19 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Alt text, if present.
+                  # Alt text. `null` when the image has none.
                   alt:,
                   # Image URL, or a data URI for inline images.
                   url:,
+                  # What the image shows, such as a photo, logo, or icon. Requires `classification`
+                  # enrichment.
                   classification: nil,
-                  # Hosted image URL, valid for 24 hours after capture. Requires `file` enrichment
-                  # and ZDR disabled.
+                  # Hosted copy of the image, valid for 24 hours after capture. Requires `file`
+                  # enrichment; not returned with ZDR.
                   file_url: nil,
+                  # Image height in pixels. Requires `dimensions` enrichment.
                   height: nil,
+                  # Image width in pixels. Requires `dimensions` enrichment.
                   width: nil
                 )
                 end
@@ -1196,6 +1181,8 @@ module ContextDev
                 def to_hash
                 end
 
+                # What the image shows, such as a photo, logo, or icon. Requires `classification`
+                # enrichment.
                 module Classification
                   extend ContextDev::Internal::Type::Enum
 
@@ -1274,22 +1261,24 @@ module ContextDev
               sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # True when the page was too long to read in full, so values found only in the
-              # unread parts may be missing.
+              # `true` when the page was too long to read in full, so values that appear only in
+              # the unread part may be missing.
               sig do
                 returns(
                   T.nilable(
@@ -1307,7 +1296,7 @@ module ContextDev
               end
               attr_writer :is_truncated
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
@@ -1328,15 +1317,17 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # True when the page was too long to read in full, so values found only in the
-                # unread parts may be missing.
+                # `true` when the page was too long to read in full, so values that appear only in
+                # the unread part may be missing.
                 is_truncated: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -1357,8 +1348,8 @@ module ContextDev
               def to_hash
               end
 
-              # True when the page was too long to read in full, so values found only in the
-              # unread parts may be missing.
+              # `true` when the page was too long to read in full, so values that appear only in
+              # the unread part may be missing.
               module IsTruncated
                 extend ContextDev::Internal::Type::Enum
 
@@ -1401,28 +1392,30 @@ module ContextDev
               sig { returns(T.nilable(String)) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
               sig { params(message: String).void }
               attr_writer :message
 
-              # Markdown after content filters.
+              # Page content as Markdown, after content filters.
               sig do
                 params(
                   data: T.nilable(String),
@@ -1434,12 +1427,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -1468,7 +1463,7 @@ module ContextDev
                   )
                 end
 
-              # Additional non-social meta tags not promoted to top-level metadata fields.
+              # Other non-social meta tags that don't have their own field.
               sig do
                 returns(
                   T.nilable(
@@ -1492,7 +1487,7 @@ module ContextDev
               end
               attr_writer :additional_meta
 
-              # Resolved alternate links from link rel=alternate tags.
+              # Alternate links from `link rel="alternate"` tags, as absolute URLs.
               sig do
                 returns(
                   T.nilable(
@@ -1514,35 +1509,36 @@ module ContextDev
               end
               attr_writer :alternates
 
-              # Author metadata, when present.
+              # Author, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :author
 
               sig { params(author: String).void }
               attr_writer :author
 
-              # Resolved canonical URL, when present.
+              # Absolute canonical URL, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :canonical_url
 
               sig { params(canonical_url: String).void }
               attr_writer :canonical_url
 
-              # Best description extracted from standard, Open Graph, or Twitter metadata.
+              # Best available description, from standard, Open Graph, or Twitter meta tags.
               sig { returns(T.nilable(String)) }
               attr_reader :description
 
               sig { params(description: String).void }
               attr_writer :description
 
-              # Resolved favicon URL, when present.
+              # Absolute favicon URL, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :favicon
 
               sig { params(favicon: String).void }
               attr_writer :favicon
 
-              # Up to 500 h1–h6 headings in document order, before content filtering.
+              # Headings (`h1` to `h6`) in document order, from the full page before any
+              # filtering. Up to 500. Omitted when the page has none.
               sig do
                 returns(
                   T.nilable(
@@ -1564,7 +1560,7 @@ module ContextDev
               end
               attr_writer :headings
 
-              # Primary resolved preview image from Open Graph, Twitter, or image metadata.
+              # Main preview image URL, from Open Graph, Twitter, or image meta tags.
               sig { returns(T.nilable(String)) }
               attr_reader :image
 
@@ -1580,28 +1576,28 @@ module ContextDev
               end
               attr_writer :json_ld
 
-              # Keywords extracted from the page's keywords meta tag.
+              # Keywords from the page's `keywords` meta tag.
               sig { returns(T.nilable(T::Array[String])) }
               attr_reader :keywords
 
               sig { params(keywords: T::Array[String]).void }
               attr_writer :keywords
 
-              # Language extracted from html lang or language meta tags.
+              # Page language, from the `html` `lang` attribute or language meta tags.
               sig { returns(T.nilable(String)) }
               attr_reader :language
 
               sig { params(language: String).void }
               attr_writer :language
 
-              # Modified timestamp/date from page metadata, when present.
+              # Last-modified date or timestamp from page metadata, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :modified_time
 
               sig { params(modified_time: String).void }
               attr_writer :modified_time
 
-              # Open Graph metadata with the og: prefix removed and keys camel-cased.
+              # Open Graph tags, with the `og:` prefix removed and keys in camelCase.
               sig do
                 returns(
                   T.nilable(
@@ -1625,35 +1621,35 @@ module ContextDev
               end
               attr_writer :open_graph
 
-              # Published timestamp/date from page metadata, when present.
+              # Publish date or timestamp from page metadata, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :published_time
 
               sig { params(published_time: String).void }
               attr_writer :published_time
 
-              # Robots meta directive, when present.
+              # `robots` meta directive, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :robots
 
               sig { params(robots: String).void }
               attr_writer :robots
 
-              # Site or application name from page metadata.
+              # Site or app name from page metadata.
               sig { returns(T.nilable(String)) }
               attr_reader :site_name
 
               sig { params(site_name: String).void }
               attr_writer :site_name
 
-              # Best title extracted from the page.
+              # Best available page title.
               sig { returns(T.nilable(String)) }
               attr_reader :title
 
               sig { params(title: String).void }
               attr_writer :title
 
-              # Twitter card metadata with the twitter: prefix removed and keys camel-cased.
+              # Twitter card tags, with the `twitter:` prefix removed and keys in camelCase.
               sig do
                 returns(
                   T.nilable(
@@ -1719,41 +1715,42 @@ module ContextDev
                 ).returns(T.attached_class)
               end
               def self.new(
-                # Additional non-social meta tags not promoted to top-level metadata fields.
+                # Other non-social meta tags that don't have their own field.
                 additional_meta: nil,
-                # Resolved alternate links from link rel=alternate tags.
+                # Alternate links from `link rel="alternate"` tags, as absolute URLs.
                 alternates: nil,
-                # Author metadata, when present.
+                # Author, when present.
                 author: nil,
-                # Resolved canonical URL, when present.
+                # Absolute canonical URL, when present.
                 canonical_url: nil,
-                # Best description extracted from standard, Open Graph, or Twitter metadata.
+                # Best available description, from standard, Open Graph, or Twitter meta tags.
                 description: nil,
-                # Resolved favicon URL, when present.
+                # Absolute favicon URL, when present.
                 favicon: nil,
-                # Up to 500 h1–h6 headings in document order, before content filtering.
+                # Headings (`h1` to `h6`) in document order, from the full page before any
+                # filtering. Up to 500. Omitted when the page has none.
                 headings: nil,
-                # Primary resolved preview image from Open Graph, Twitter, or image metadata.
+                # Main preview image URL, from Open Graph, Twitter, or image meta tags.
                 image: nil,
                 # JSON-LD structured data blocks parsed from the page.
                 json_ld: nil,
-                # Keywords extracted from the page's keywords meta tag.
+                # Keywords from the page's `keywords` meta tag.
                 keywords: nil,
-                # Language extracted from html lang or language meta tags.
+                # Page language, from the `html` `lang` attribute or language meta tags.
                 language: nil,
-                # Modified timestamp/date from page metadata, when present.
+                # Last-modified date or timestamp from page metadata, when present.
                 modified_time: nil,
-                # Open Graph metadata with the og: prefix removed and keys camel-cased.
+                # Open Graph tags, with the `og:` prefix removed and keys in camelCase.
                 open_graph: nil,
-                # Published timestamp/date from page metadata, when present.
+                # Publish date or timestamp from page metadata, when present.
                 published_time: nil,
-                # Robots meta directive, when present.
+                # `robots` meta directive, when present.
                 robots: nil,
-                # Site or application name from page metadata.
+                # Site or app name from page metadata.
                 site_name: nil,
-                # Best title extracted from the page.
+                # Best available page title.
                 title: nil,
-                # Twitter card metadata with the twitter: prefix removed and keys camel-cased.
+                # Twitter card tags, with the `twitter:` prefix removed and keys in camelCase.
                 twitter: nil
               )
               end
@@ -1834,25 +1831,25 @@ module ContextDev
                     )
                   end
 
-                # Resolved alternate URL.
+                # Absolute URL of the alternate version.
                 sig { returns(String) }
                 attr_accessor :href
 
-                # Language or locale for the alternate URL, when present.
+                # Language or locale of the alternate version, when present.
                 sig { returns(T.nilable(String)) }
                 attr_reader :hreflang
 
                 sig { params(hreflang: String).void }
                 attr_writer :hreflang
 
-                # Alternate resource title, when present.
+                # Title of the alternate version, when present.
                 sig { returns(T.nilable(String)) }
                 attr_reader :title
 
                 sig { params(title: String).void }
                 attr_writer :title
 
-                # Alternate resource MIME type, when present.
+                # MIME type of the alternate version, when present.
                 sig { returns(T.nilable(String)) }
                 attr_reader :type
 
@@ -1868,13 +1865,13 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Resolved alternate URL.
+                  # Absolute URL of the alternate version.
                   href:,
-                  # Language or locale for the alternate URL, when present.
+                  # Language or locale of the alternate version, when present.
                   hreflang: nil,
-                  # Alternate resource title, when present.
+                  # Title of the alternate version, when present.
                   title: nil,
-                  # Alternate resource MIME type, when present.
+                  # MIME type of the alternate version, when present.
                   type: nil
                 )
                 end
@@ -1902,7 +1899,7 @@ module ContextDev
                     )
                   end
 
-                # Heading level, 1–6 (from h1–h6).
+                # Heading level, from 1 (`h1`) to 6 (`h6`).
                 sig { returns(Integer) }
                 attr_accessor :level
 
@@ -1914,7 +1911,7 @@ module ContextDev
                   params(level: Integer, text: String).returns(T.attached_class)
                 end
                 def self.new(
-                  # Heading level, 1–6 (from h1–h6).
+                  # Heading level, from 1 (`h1`) to 6 (`h6`).
                   level:,
                   # Heading text with whitespace collapsed, truncated to 1000 characters.
                   text:
@@ -1983,15 +1980,17 @@ module ContextDev
               sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # The selected prebuilt parser name, or custom when type is omitted, custom rules
-              # are used, or parsing is not requested.
+              # Prebuilt parser that ran, or `custom` for custom rules or when `parse` was not
+              # requested.
               sig do
                 returns(
                   ContextDev::Models::BatchGetResultsResponse::Data::Ok::Result::Parsed::Type::TaggedSymbol
@@ -1999,42 +1998,23 @@ module ContextDev
               end
               attr_accessor :type
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
               sig { params(message: String).void }
               attr_writer :message
 
-              # Custom rules return fields after content filters; unmatched fields are null ([]
-              # for lists). The google-maps parser returns business records in data.results,
-              # google-maps-reviews returns data.reviews, and the google-play parser returns one
-              # app record as data, google-play-reviews returns data.reviews, app-store and
-              # app-store-reviews do the same for the App Store, g2-reviews returns data.reviews
-              # for a G2 product, instagram-profile and instagram-post return one record as
-              # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
-              # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
-              # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-              # data.users, yelp-search returns up to 20 ranked organic businesses in
-              # data.businesses, plus total and pagination, from a Yelp search URL; yelp-reviews
-              # returns up to 20 latest public reviews in data.reviews, with business details
-              # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
-              # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-              # hotel, restaurant, or attraction review URL; car-rental-availability returns
-              # every vehicle with pay-now and pay-later prices in data.vehicles from an
-              # avis.com or budget.com vehicle-availability search URL; car-rental-locations
-              # returns rental branches with codes, addresses, coordinates and hours in
-              # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
-              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
-              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
-              # their data directly, independently of DOM filters and other outputs.
+              # Fields extracted by `parseParams`. Custom rules return each field after content
+              # filters, with `null` when nothing matches (`[]` for `list` rules). Prebuilt
+              # parsers return the record or lists described under `parseParams.parser`.
               sig do
                 params(
                   data: T.nilable(T::Hash[Symbol, T.anything]),
@@ -2048,15 +2028,17 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # The selected prebuilt parser name, or custom when type is omitted, custom rules
-                # are used, or parsing is not requested.
+                # Prebuilt parser that ran, or `custom` for custom rules or when `parse` was not
+                # requested.
                 type:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -2077,8 +2059,8 @@ module ContextDev
               def to_hash
               end
 
-              # The selected prebuilt parser name, or custom when type is omitted, custom rules
-              # are used, or parsing is not requested.
+              # Prebuilt parser that ran, or `custom` for custom rules or when `parse` was not
+              # requested.
               module Type
                 extend ContextDev::Internal::Type::Enum
 
@@ -2282,21 +2264,23 @@ module ContextDev
               end
               attr_writer :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
@@ -2318,12 +2302,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -2358,7 +2344,7 @@ module ContextDev
                 sig { returns(T::Boolean) }
                 attr_accessor :is_product_page
 
-                # The extracted product, or null when the page is not a product detail page.
+                # The extracted product. `null` when the page is not a product detail page.
                 sig do
                   returns(
                     T.nilable(
@@ -2390,7 +2376,7 @@ module ContextDev
                 def self.new(
                   # Whether the page is a product detail page.
                   is_product_page:,
-                  # The extracted product, or null when the page is not a product detail page.
+                  # The extracted product. `null` when the page is not a product detail page.
                   product:
                 )
                 end
@@ -2436,7 +2422,7 @@ module ContextDev
                   sig { returns(T.nilable(String)) }
                   attr_accessor :category
 
-                  # ISO 4217 currency code.
+                  # ISO 4217 currency code of `price`.
                   sig { returns(T.nilable(String)) }
                   attr_accessor :currency
 
@@ -2484,9 +2470,8 @@ module ContextDev
                   sig { returns(T::Array[String]) }
                   attr_accessor :target_audience
 
-                  # Product variations, such as different colors or sizes, with their attributes and
-                  # images. Empty if none are found. May not include every variation offered by the
-                  # store.
+                  # Product variants, such as colors or sizes, with their attributes and images.
+                  # `[]` when none are found. May not include every variant the store offers.
                   sig do
                     returns(
                       T::Array[
@@ -2496,7 +2481,7 @@ module ContextDev
                   end
                   attr_accessor :variants
 
-                  # The extracted product, or null when the page is not a product detail page.
+                  # The extracted product. `null` when the page is not a product detail page.
                   sig do
                     params(
                       availability:
@@ -2530,7 +2515,7 @@ module ContextDev
                     brand:,
                     # Product category.
                     category:,
-                    # ISO 4217 currency code.
+                    # ISO 4217 currency code of `price`.
                     currency:,
                     # Product description.
                     description:,
@@ -2554,9 +2539,8 @@ module ContextDev
                     tags:,
                     # Intended audience.
                     target_audience:,
-                    # Product variations, such as different colors or sizes, with their attributes and
-                    # images. Empty if none are found. May not include every variation offered by the
-                    # store.
+                    # Product variants, such as colors or sizes, with their attributes and images.
+                    # `[]` when none are found. May not include every variant the store offers.
                     variants:
                   )
                   end
@@ -2661,23 +2645,25 @@ module ContextDev
                         )
                       end
 
-                    # Explicit variant attributes such as color, size, material, pattern and
-                    # properties declared by page.
+                    # Attributes that define this variant, such as color, size, material, or pattern,
+                    # as stated on the page.
                     sig { returns(T::Hash[Symbol, String]) }
                     attr_accessor :attributes
 
-                    # Original source image URLs explicitly attached to this variant.
+                    # Image URLs the source attaches to this variant.
                     sig { returns(T::Array[String]) }
                     attr_accessor :images
 
+                    # SKU of this variant. `null` when the source does not state one.
                     sig { returns(T.nilable(String)) }
                     attr_accessor :sku
 
-                    # Variant or offer URL when provided by the source. May be shared by variants.
+                    # URL of this variant or offer, when the source provides one. Several variants can
+                    # share a URL.
                     sig { returns(T.nilable(String)) }
                     attr_accessor :url
 
-                    # Normalized stock or ordering availability of this variant.
+                    # Stock or ordering availability of this variant.
                     sig do
                       returns(
                         T.nilable(
@@ -2687,11 +2673,11 @@ module ContextDev
                     end
                     attr_accessor :availability
 
-                    # Currency code for the variant price (e.g., USD, EUR) when stated with it.
+                    # Currency code of `price`, such as `USD` or `EUR`, when stated.
                     sig { returns(T.nilable(String)) }
                     attr_accessor :currency
 
-                    # Price of this variant when the source states one per variant.
+                    # Price of this variant, when the source states one per variant.
                     sig { returns(T.nilable(Float)) }
                     attr_accessor :price
 
@@ -2710,19 +2696,21 @@ module ContextDev
                       ).returns(T.attached_class)
                     end
                     def self.new(
-                      # Explicit variant attributes such as color, size, material, pattern and
-                      # properties declared by page.
+                      # Attributes that define this variant, such as color, size, material, or pattern,
+                      # as stated on the page.
                       attributes:,
-                      # Original source image URLs explicitly attached to this variant.
+                      # Image URLs the source attaches to this variant.
                       images:,
+                      # SKU of this variant. `null` when the source does not state one.
                       sku:,
-                      # Variant or offer URL when provided by the source. May be shared by variants.
+                      # URL of this variant or offer, when the source provides one. Several variants can
+                      # share a URL.
                       url:,
-                      # Normalized stock or ordering availability of this variant.
+                      # Stock or ordering availability of this variant.
                       availability: nil,
-                      # Currency code for the variant price (e.g., USD, EUR) when stated with it.
+                      # Currency code of `price`, such as `USD` or `EUR`, when stated.
                       currency: nil,
-                      # Price of this variant when the source states one per variant.
+                      # Price of this variant, when the source states one per variant.
                       price: nil
                     )
                     end
@@ -2746,7 +2734,7 @@ module ContextDev
                     def to_hash
                     end
 
-                    # Normalized stock or ordering availability of this variant.
+                    # Stock or ordering availability of this variant.
                     module Availability
                       extend ContextDev::Internal::Type::Enum
 
@@ -2819,17 +2807,16 @@ module ContextDev
                   )
                 end
 
-              # Save this ID after creating a profile, then reuse it as
-              # sharedParams.profile.profileId with type "existing".
+              # ID of the browser profile. After creating a profile, save it and pass it as
+              # `sharedParams.profile.profileId` with `type: "existing"`.
               sig { returns(String) }
               attr_accessor :id
 
-              # Authenticated browser profile used for this scrape, or null when no profile was
-              # requested. New and existing profile requests both return the profile ID.
+              # Browser profile used for this scrape. `null` when no profile was requested.
               sig { params(id: String).returns(T.attached_class) }
               def self.new(
-                # Save this ID after creating a profile, then reuse it as
-                # sharedParams.profile.profileId with type "existing".
+                # ID of the browser profile. After creating a profile, save it and pass it as
+                # `sharedParams.profile.profileId` with `type: "existing"`.
                 id:
               )
               end
@@ -2851,21 +2838,23 @@ module ContextDev
               sig { returns(T.nilable(String)) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
@@ -2884,12 +2873,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -2909,8 +2900,8 @@ module ContextDev
               end
             end
 
-            # True when at least one requested output succeeds but the response has failed or
-            # incomplete outputs. Absent when all requested outputs fail.
+            # `true` when at least one requested output succeeded but others failed or are
+            # incomplete. Absent otherwise.
             module IsPartial
               extend ContextDev::Internal::Type::Enum
 
@@ -2953,7 +2944,7 @@ module ContextDev
               sig { returns(Integer) }
               attr_accessor :credits_consumed
 
-              # Credits remaining for your organization.
+              # Credits your organization has left after this request.
               sig { returns(Integer) }
               attr_accessor :credits_remaining
 
@@ -2967,7 +2958,7 @@ module ContextDev
               def self.new(
                 # Credits charged for this request.
                 credits_consumed:,
-                # Credits remaining for your organization.
+                # Credits your organization has left after this request.
                 credits_remaining:
               )
               end
@@ -2992,11 +2983,11 @@ module ContextDev
               )
             end
 
-          # Why the page failed.
+          # Machine-readable error code, such as `NOT_FOUND`.
           sig { returns(String) }
           attr_accessor :error_code
 
-          # Human-readable failure detail.
+          # Human-readable explanation of the error.
           sig { returns(String) }
           attr_accessor :message
 
@@ -3008,37 +2999,37 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :url
 
-          # Credits charged for this page, including OCR. Cached outputs use the same
-          # pricing as POST /web/scrape.
+          # Credits charged for this page, including OCR. Cached results are priced the same
+          # as in `POST /web/scrape`.
           sig { returns(T.nilable(Integer)) }
           attr_reader :credits_used
 
           sig { params(credits_used: Integer).void }
           attr_writer :credits_used
 
-          # Your `itemId` from submission.
+          # The `itemId` you submitted with this URL.
           sig { returns(T.nilable(String)) }
           attr_reader :item_id
 
           sig { params(item_id: String).void }
           attr_writer :item_id
 
-          # Caller-supplied metadata echoed from submission.
+          # The `meta` you submitted with this URL.
           sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
           attr_reader :meta
 
           sig { params(meta: T::Hash[Symbol, T.anything]).void }
           attr_writer :meta
 
-          # PDF pages recovered by OCR. Omitted when OCR did not run.
+          # Number of PDF pages read with OCR. Omitted when OCR did not run.
           sig { returns(T.nilable(Integer)) }
           attr_reader :ocr_pages
 
           sig { params(ocr_pages: Integer).void }
           attr_writer :ocr_pages
 
-          # Per-format failures when scraping returned a structured response. Omitted for
-          # errors that prevent scraping.
+          # Per-format errors, when the scrape returned a response. Omitted when the page
+          # could not be scraped at all.
           sig do
             returns(
               T.nilable(
@@ -3056,7 +3047,7 @@ module ContextDev
           end
           attr_writer :result
 
-          # A page the batch could not fetch.
+          # A page that could not be scraped.
           sig do
             params(
               error_code: String,
@@ -3072,23 +3063,23 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Why the page failed.
+            # Machine-readable error code, such as `NOT_FOUND`.
             error_code:,
-            # Human-readable failure detail.
+            # Human-readable explanation of the error.
             message:,
             # URL as submitted, or as discovered by the crawl.
             url:,
-            # Credits charged for this page, including OCR. Cached outputs use the same
-            # pricing as POST /web/scrape.
+            # Credits charged for this page, including OCR. Cached results are priced the same
+            # as in `POST /web/scrape`.
             credits_used: nil,
-            # Your `itemId` from submission.
+            # The `itemId` you submitted with this URL.
             item_id: nil,
-            # Caller-supplied metadata echoed from submission.
+            # The `meta` you submitted with this URL.
             meta: nil,
-            # PDF pages recovered by OCR. Omitted when OCR did not run.
+            # Number of PDF pages read with OCR. Omitted when OCR did not run.
             ocr_pages: nil,
-            # Per-format failures when scraping returned a structured response. Omitted for
-            # errors that prevent scraping.
+            # Per-format errors, when the scrape returned a response. Omitted when the page
+            # could not be scraped at all.
             result: nil,
             # The page could not be scraped.
             status: :error
@@ -3139,7 +3130,7 @@ module ContextDev
             end
             attr_writer :bytes
 
-            # Whether this response came from cache.
+            # Cache status of this response.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::CacheMetadata
@@ -3172,7 +3163,7 @@ module ContextDev
             end
             attr_writer :highlights
 
-            # Rendered HTML after content filters.
+            # Rendered HTML of the page, after content filters.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::HTML
@@ -3188,7 +3179,7 @@ module ContextDev
             end
             attr_writer :html
 
-            # Images after content filters. `[]` when none are found.
+            # Images found on the page, after content filters. `[]` when there are none.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Images
@@ -3220,7 +3211,7 @@ module ContextDev
             end
             attr_writer :json
 
-            # Markdown after content filters.
+            # Page content as Markdown, after content filters.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Markdown
@@ -3252,28 +3243,9 @@ module ContextDev
             end
             attr_writer :metadata
 
-            # Custom rules return fields after content filters; unmatched fields are null ([]
-            # for lists). The google-maps parser returns business records in data.results,
-            # google-maps-reviews returns data.reviews, and the google-play parser returns one
-            # app record as data, google-play-reviews returns data.reviews, app-store and
-            # app-store-reviews do the same for the App Store, g2-reviews returns data.reviews
-            # for a G2 product, instagram-profile and instagram-post return one record as
-            # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
-            # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
-            # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-            # data.users, yelp-search returns up to 20 ranked organic businesses in
-            # data.businesses, plus total and pagination, from a Yelp search URL; yelp-reviews
-            # returns up to 20 latest public reviews in data.reviews, with business details
-            # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
-            # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-            # hotel, restaurant, or attraction review URL; car-rental-availability returns
-            # every vehicle with pay-now and pay-later prices in data.vehicles from an
-            # avis.com or budget.com vehicle-availability search URL; car-rental-locations
-            # returns rental branches with codes, addresses, coordinates and hours in
-            # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
-            # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
-            # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
-            # their data directly, independently of DOM filters and other outputs.
+            # Fields extracted by `parseParams`. Custom rules return each field after content
+            # filters, with `null` when nothing matches (`[]` for `list` rules). Prebuilt
+            # parsers return the record or lists described under `parseParams.parser`.
             sig do
               returns(
                 ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed
@@ -3305,8 +3277,7 @@ module ContextDev
             end
             attr_writer :product
 
-            # Authenticated browser profile used for this scrape, or null when no profile was
-            # requested. New and existing profile requests both return the profile ID.
+            # Browser profile used for this scrape. `null` when no profile was requested.
             sig do
               returns(
                 T.nilable(
@@ -3351,8 +3322,8 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :url
 
-            # True when at least one requested output succeeds but the response has failed or
-            # incomplete outputs. Absent when all requested outputs fail.
+            # `true` when at least one requested output succeeded but others failed or are
+            # incomplete. Absent otherwise.
             sig do
               returns(
                 T.nilable(
@@ -3388,8 +3359,8 @@ module ContextDev
             end
             attr_writer :key_metadata
 
-            # Per-format failures when scraping returned a structured response. Omitted for
-            # errors that prevent scraping.
+            # Per-format errors, when the scrape returned a response. Omitted when the page
+            # could not be scraped at all.
             sig do
               params(
                 bytes:
@@ -3429,48 +3400,28 @@ module ContextDev
             def self.new(
               # The original HTTP response body, unchanged by waits, actions, and filters.
               bytes:,
-              # Whether this response came from cache.
+              # Cache status of this response.
               cache_metadata:,
               # Relevant Markdown excerpts in page order. `[Heading]` adds context; `…` marks
               # omitted text.
               highlights:,
-              # Rendered HTML after content filters.
+              # Rendered HTML of the page, after content filters.
               html:,
-              # Images after content filters. `[]` when none are found.
+              # Images found on the page, after content filters. `[]` when there are none.
               images:,
               # Object matching `jsonParams.schema`.
               json:,
-              # Markdown after content filters.
+              # Page content as Markdown, after content filters.
               markdown:,
               # Page metadata. Fields are omitted when not found.
               metadata:,
-              # Custom rules return fields after content filters; unmatched fields are null ([]
-              # for lists). The google-maps parser returns business records in data.results,
-              # google-maps-reviews returns data.reviews, and the google-play parser returns one
-              # app record as data, google-play-reviews returns data.reviews, app-store and
-              # app-store-reviews do the same for the App Store, g2-reviews returns data.reviews
-              # for a G2 product, instagram-profile and instagram-post return one record as
-              # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
-              # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
-              # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-              # data.users, yelp-search returns up to 20 ranked organic businesses in
-              # data.businesses, plus total and pagination, from a Yelp search URL; yelp-reviews
-              # returns up to 20 latest public reviews in data.reviews, with business details
-              # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
-              # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-              # hotel, restaurant, or attraction review URL; car-rental-availability returns
-              # every vehicle with pay-now and pay-later prices in data.vehicles from an
-              # avis.com or budget.com vehicle-availability search URL; car-rental-locations
-              # returns rental branches with codes, addresses, coordinates and hours in
-              # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
-              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
-              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
-              # their data directly, independently of DOM filters and other outputs.
+              # Fields extracted by `parseParams`. Custom rules return each field after content
+              # filters, with `null` when nothing matches (`[]` for `list` rules). Prebuilt
+              # parsers return the record or lists described under `parseParams.parser`.
               parsed:,
               # Product details found on the page.
               product:,
-              # Authenticated browser profile used for this scrape, or null when no profile was
-              # requested. New and existing profile requests both return the profile ID.
+              # Browser profile used for this scrape. `null` when no profile was requested.
               profile:,
               # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
               # support.
@@ -3479,8 +3430,8 @@ module ContextDev
               screenshot:,
               # Final URL after redirects and browser actions.
               url:,
-              # True when at least one requested output succeeds but the response has failed or
-              # incomplete outputs. Absent when all requested outputs fail.
+              # `true` when at least one requested output succeeded but others failed or are
+              # incomplete. Absent otherwise.
               is_partial: nil,
               # Credits this request used and your remaining balance.
               key_metadata: nil
@@ -3556,21 +3507,23 @@ module ContextDev
               end
               attr_writer :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
@@ -3592,12 +3545,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -3628,10 +3583,11 @@ module ContextDev
                     )
                   end
 
-                # Body as base64, after HTTP decompression. Up to 50 MiB decoded.
+                # Response body as base64, after HTTP decompression. Up to 50 MiB decoded.
                 sig { returns(String) }
                 attr_accessor :base64
 
+                # `Content-Type` of the response.
                 sig { returns(String) }
                 attr_accessor :content_type
 
@@ -3641,8 +3597,9 @@ module ContextDev
                   )
                 end
                 def self.new(
-                  # Body as base64, after HTTP decompression. Up to 50 MiB decoded.
+                  # Response body as base64, after HTTP decompression. Up to 50 MiB decoded.
                   base64:,
+                  # `Content-Type` of the response.
                   content_type:
                 )
                 end
@@ -3664,12 +3621,12 @@ module ContextDev
                   )
                 end
 
-              # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+              # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
               sig { returns(Integer) }
               attr_accessor :age_ms
 
-              # Whether the response was served from cache, required fresh work, or honored
-              # zero-data-retention cache bypass.
+              # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+              # retention bypassed the cache.
               sig do
                 returns(
                   ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::CacheMetadata::Status::TaggedSymbol
@@ -3677,7 +3634,7 @@ module ContextDev
               end
               attr_accessor :status
 
-              # Whether this response came from cache.
+              # Cache status of this response.
               sig do
                 params(
                   age_ms: Integer,
@@ -3686,10 +3643,10 @@ module ContextDev
                 ).returns(T.attached_class)
               end
               def self.new(
-                # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+                # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
                 age_ms:,
-                # Whether the response was served from cache, required fresh work, or honored
-                # zero-data-retention cache bypass.
+                # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+                # retention bypassed the cache.
                 status:
               )
               end
@@ -3706,8 +3663,8 @@ module ContextDev
               def to_hash
               end
 
-              # Whether the response was served from cache, required fresh work, or honored
-              # zero-data-retention cache bypass.
+              # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+              # retention bypassed the cache.
               module Status
                 extend ContextDev::Internal::Type::Enum
 
@@ -3760,21 +3717,23 @@ module ContextDev
               sig { returns(T.nilable(T::Array[String])) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
@@ -3794,12 +3753,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -3831,28 +3792,30 @@ module ContextDev
               sig { returns(T.nilable(String)) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
               sig { params(message: String).void }
               attr_writer :message
 
-              # Rendered HTML after content filters.
+              # Rendered HTML of the page, after content filters.
               sig do
                 params(
                   data: T.nilable(String),
@@ -3864,12 +3827,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -3909,28 +3874,30 @@ module ContextDev
               end
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
               sig { params(message: String).void }
               attr_writer :message
 
-              # Images after content filters. `[]` when none are found.
+              # Images found on the page, after content filters. `[]` when there are none.
               sig do
                 params(
                   data:
@@ -3947,12 +3914,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -3985,7 +3954,7 @@ module ContextDev
                     )
                   end
 
-                # Alt text, if present.
+                # Alt text. `null` when the image has none.
                 sig { returns(T.nilable(String)) }
                 attr_accessor :alt
 
@@ -3993,6 +3962,8 @@ module ContextDev
                 sig { returns(String) }
                 attr_accessor :url
 
+                # What the image shows, such as a photo, logo, or icon. Requires `classification`
+                # enrichment.
                 sig do
                   returns(
                     T.nilable(
@@ -4010,20 +3981,22 @@ module ContextDev
                 end
                 attr_writer :classification
 
-                # Hosted image URL, valid for 24 hours after capture. Requires `file` enrichment
-                # and ZDR disabled.
+                # Hosted copy of the image, valid for 24 hours after capture. Requires `file`
+                # enrichment; not returned with ZDR.
                 sig { returns(T.nilable(String)) }
                 attr_reader :file_url
 
                 sig { params(file_url: String).void }
                 attr_writer :file_url
 
+                # Image height in pixels. Requires `dimensions` enrichment.
                 sig { returns(T.nilable(Integer)) }
                 attr_reader :height
 
                 sig { params(height: Integer).void }
                 attr_writer :height
 
+                # Image width in pixels. Requires `dimensions` enrichment.
                 sig { returns(T.nilable(Integer)) }
                 attr_reader :width
 
@@ -4042,15 +4015,19 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Alt text, if present.
+                  # Alt text. `null` when the image has none.
                   alt:,
                   # Image URL, or a data URI for inline images.
                   url:,
+                  # What the image shows, such as a photo, logo, or icon. Requires `classification`
+                  # enrichment.
                   classification: nil,
-                  # Hosted image URL, valid for 24 hours after capture. Requires `file` enrichment
-                  # and ZDR disabled.
+                  # Hosted copy of the image, valid for 24 hours after capture. Requires `file`
+                  # enrichment; not returned with ZDR.
                   file_url: nil,
+                  # Image height in pixels. Requires `dimensions` enrichment.
                   height: nil,
+                  # Image width in pixels. Requires `dimensions` enrichment.
                   width: nil
                 )
                 end
@@ -4071,6 +4048,8 @@ module ContextDev
                 def to_hash
                 end
 
+                # What the image shows, such as a photo, logo, or icon. Requires `classification`
+                # enrichment.
                 module Classification
                   extend ContextDev::Internal::Type::Enum
 
@@ -4149,22 +4128,24 @@ module ContextDev
               sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # True when the page was too long to read in full, so values found only in the
-              # unread parts may be missing.
+              # `true` when the page was too long to read in full, so values that appear only in
+              # the unread part may be missing.
               sig do
                 returns(
                   T.nilable(
@@ -4182,7 +4163,7 @@ module ContextDev
               end
               attr_writer :is_truncated
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
@@ -4203,15 +4184,17 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # True when the page was too long to read in full, so values found only in the
-                # unread parts may be missing.
+                # `true` when the page was too long to read in full, so values that appear only in
+                # the unread part may be missing.
                 is_truncated: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -4232,8 +4215,8 @@ module ContextDev
               def to_hash
               end
 
-              # True when the page was too long to read in full, so values found only in the
-              # unread parts may be missing.
+              # `true` when the page was too long to read in full, so values that appear only in
+              # the unread part may be missing.
               module IsTruncated
                 extend ContextDev::Internal::Type::Enum
 
@@ -4276,28 +4259,30 @@ module ContextDev
               sig { returns(T.nilable(String)) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
               sig { params(message: String).void }
               attr_writer :message
 
-              # Markdown after content filters.
+              # Page content as Markdown, after content filters.
               sig do
                 params(
                   data: T.nilable(String),
@@ -4309,12 +4294,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -4343,7 +4330,7 @@ module ContextDev
                   )
                 end
 
-              # Additional non-social meta tags not promoted to top-level metadata fields.
+              # Other non-social meta tags that don't have their own field.
               sig do
                 returns(
                   T.nilable(
@@ -4367,7 +4354,7 @@ module ContextDev
               end
               attr_writer :additional_meta
 
-              # Resolved alternate links from link rel=alternate tags.
+              # Alternate links from `link rel="alternate"` tags, as absolute URLs.
               sig do
                 returns(
                   T.nilable(
@@ -4389,35 +4376,36 @@ module ContextDev
               end
               attr_writer :alternates
 
-              # Author metadata, when present.
+              # Author, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :author
 
               sig { params(author: String).void }
               attr_writer :author
 
-              # Resolved canonical URL, when present.
+              # Absolute canonical URL, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :canonical_url
 
               sig { params(canonical_url: String).void }
               attr_writer :canonical_url
 
-              # Best description extracted from standard, Open Graph, or Twitter metadata.
+              # Best available description, from standard, Open Graph, or Twitter meta tags.
               sig { returns(T.nilable(String)) }
               attr_reader :description
 
               sig { params(description: String).void }
               attr_writer :description
 
-              # Resolved favicon URL, when present.
+              # Absolute favicon URL, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :favicon
 
               sig { params(favicon: String).void }
               attr_writer :favicon
 
-              # Up to 500 h1–h6 headings in document order, before content filtering.
+              # Headings (`h1` to `h6`) in document order, from the full page before any
+              # filtering. Up to 500. Omitted when the page has none.
               sig do
                 returns(
                   T.nilable(
@@ -4439,7 +4427,7 @@ module ContextDev
               end
               attr_writer :headings
 
-              # Primary resolved preview image from Open Graph, Twitter, or image metadata.
+              # Main preview image URL, from Open Graph, Twitter, or image meta tags.
               sig { returns(T.nilable(String)) }
               attr_reader :image
 
@@ -4455,28 +4443,28 @@ module ContextDev
               end
               attr_writer :json_ld
 
-              # Keywords extracted from the page's keywords meta tag.
+              # Keywords from the page's `keywords` meta tag.
               sig { returns(T.nilable(T::Array[String])) }
               attr_reader :keywords
 
               sig { params(keywords: T::Array[String]).void }
               attr_writer :keywords
 
-              # Language extracted from html lang or language meta tags.
+              # Page language, from the `html` `lang` attribute or language meta tags.
               sig { returns(T.nilable(String)) }
               attr_reader :language
 
               sig { params(language: String).void }
               attr_writer :language
 
-              # Modified timestamp/date from page metadata, when present.
+              # Last-modified date or timestamp from page metadata, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :modified_time
 
               sig { params(modified_time: String).void }
               attr_writer :modified_time
 
-              # Open Graph metadata with the og: prefix removed and keys camel-cased.
+              # Open Graph tags, with the `og:` prefix removed and keys in camelCase.
               sig do
                 returns(
                   T.nilable(
@@ -4500,35 +4488,35 @@ module ContextDev
               end
               attr_writer :open_graph
 
-              # Published timestamp/date from page metadata, when present.
+              # Publish date or timestamp from page metadata, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :published_time
 
               sig { params(published_time: String).void }
               attr_writer :published_time
 
-              # Robots meta directive, when present.
+              # `robots` meta directive, when present.
               sig { returns(T.nilable(String)) }
               attr_reader :robots
 
               sig { params(robots: String).void }
               attr_writer :robots
 
-              # Site or application name from page metadata.
+              # Site or app name from page metadata.
               sig { returns(T.nilable(String)) }
               attr_reader :site_name
 
               sig { params(site_name: String).void }
               attr_writer :site_name
 
-              # Best title extracted from the page.
+              # Best available page title.
               sig { returns(T.nilable(String)) }
               attr_reader :title
 
               sig { params(title: String).void }
               attr_writer :title
 
-              # Twitter card metadata with the twitter: prefix removed and keys camel-cased.
+              # Twitter card tags, with the `twitter:` prefix removed and keys in camelCase.
               sig do
                 returns(
                   T.nilable(
@@ -4594,41 +4582,42 @@ module ContextDev
                 ).returns(T.attached_class)
               end
               def self.new(
-                # Additional non-social meta tags not promoted to top-level metadata fields.
+                # Other non-social meta tags that don't have their own field.
                 additional_meta: nil,
-                # Resolved alternate links from link rel=alternate tags.
+                # Alternate links from `link rel="alternate"` tags, as absolute URLs.
                 alternates: nil,
-                # Author metadata, when present.
+                # Author, when present.
                 author: nil,
-                # Resolved canonical URL, when present.
+                # Absolute canonical URL, when present.
                 canonical_url: nil,
-                # Best description extracted from standard, Open Graph, or Twitter metadata.
+                # Best available description, from standard, Open Graph, or Twitter meta tags.
                 description: nil,
-                # Resolved favicon URL, when present.
+                # Absolute favicon URL, when present.
                 favicon: nil,
-                # Up to 500 h1–h6 headings in document order, before content filtering.
+                # Headings (`h1` to `h6`) in document order, from the full page before any
+                # filtering. Up to 500. Omitted when the page has none.
                 headings: nil,
-                # Primary resolved preview image from Open Graph, Twitter, or image metadata.
+                # Main preview image URL, from Open Graph, Twitter, or image meta tags.
                 image: nil,
                 # JSON-LD structured data blocks parsed from the page.
                 json_ld: nil,
-                # Keywords extracted from the page's keywords meta tag.
+                # Keywords from the page's `keywords` meta tag.
                 keywords: nil,
-                # Language extracted from html lang or language meta tags.
+                # Page language, from the `html` `lang` attribute or language meta tags.
                 language: nil,
-                # Modified timestamp/date from page metadata, when present.
+                # Last-modified date or timestamp from page metadata, when present.
                 modified_time: nil,
-                # Open Graph metadata with the og: prefix removed and keys camel-cased.
+                # Open Graph tags, with the `og:` prefix removed and keys in camelCase.
                 open_graph: nil,
-                # Published timestamp/date from page metadata, when present.
+                # Publish date or timestamp from page metadata, when present.
                 published_time: nil,
-                # Robots meta directive, when present.
+                # `robots` meta directive, when present.
                 robots: nil,
-                # Site or application name from page metadata.
+                # Site or app name from page metadata.
                 site_name: nil,
-                # Best title extracted from the page.
+                # Best available page title.
                 title: nil,
-                # Twitter card metadata with the twitter: prefix removed and keys camel-cased.
+                # Twitter card tags, with the `twitter:` prefix removed and keys in camelCase.
                 twitter: nil
               )
               end
@@ -4709,25 +4698,25 @@ module ContextDev
                     )
                   end
 
-                # Resolved alternate URL.
+                # Absolute URL of the alternate version.
                 sig { returns(String) }
                 attr_accessor :href
 
-                # Language or locale for the alternate URL, when present.
+                # Language or locale of the alternate version, when present.
                 sig { returns(T.nilable(String)) }
                 attr_reader :hreflang
 
                 sig { params(hreflang: String).void }
                 attr_writer :hreflang
 
-                # Alternate resource title, when present.
+                # Title of the alternate version, when present.
                 sig { returns(T.nilable(String)) }
                 attr_reader :title
 
                 sig { params(title: String).void }
                 attr_writer :title
 
-                # Alternate resource MIME type, when present.
+                # MIME type of the alternate version, when present.
                 sig { returns(T.nilable(String)) }
                 attr_reader :type
 
@@ -4743,13 +4732,13 @@ module ContextDev
                   ).returns(T.attached_class)
                 end
                 def self.new(
-                  # Resolved alternate URL.
+                  # Absolute URL of the alternate version.
                   href:,
-                  # Language or locale for the alternate URL, when present.
+                  # Language or locale of the alternate version, when present.
                   hreflang: nil,
-                  # Alternate resource title, when present.
+                  # Title of the alternate version, when present.
                   title: nil,
-                  # Alternate resource MIME type, when present.
+                  # MIME type of the alternate version, when present.
                   type: nil
                 )
                 end
@@ -4777,7 +4766,7 @@ module ContextDev
                     )
                   end
 
-                # Heading level, 1–6 (from h1–h6).
+                # Heading level, from 1 (`h1`) to 6 (`h6`).
                 sig { returns(Integer) }
                 attr_accessor :level
 
@@ -4789,7 +4778,7 @@ module ContextDev
                   params(level: Integer, text: String).returns(T.attached_class)
                 end
                 def self.new(
-                  # Heading level, 1–6 (from h1–h6).
+                  # Heading level, from 1 (`h1`) to 6 (`h6`).
                   level:,
                   # Heading text with whitespace collapsed, truncated to 1000 characters.
                   text:
@@ -4858,15 +4847,17 @@ module ContextDev
               sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # The selected prebuilt parser name, or custom when type is omitted, custom rules
-              # are used, or parsing is not requested.
+              # Prebuilt parser that ran, or `custom` for custom rules or when `parse` was not
+              # requested.
               sig do
                 returns(
                   ContextDev::Models::BatchGetResultsResponse::Data::Error::Result::Parsed::Type::TaggedSymbol
@@ -4874,42 +4865,23 @@ module ContextDev
               end
               attr_accessor :type
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
               sig { params(message: String).void }
               attr_writer :message
 
-              # Custom rules return fields after content filters; unmatched fields are null ([]
-              # for lists). The google-maps parser returns business records in data.results,
-              # google-maps-reviews returns data.reviews, and the google-play parser returns one
-              # app record as data, google-play-reviews returns data.reviews, app-store and
-              # app-store-reviews do the same for the App Store, g2-reviews returns data.reviews
-              # for a G2 product, instagram-profile and instagram-post return one record as
-              # data, instagram-feed returns data.posts, tiktok-profile and tiktok-video return
-              # one record as data, tiktok-feed returns data.videos, tiktok-comments returns
-              # data.comments, tiktok-followers, tiktok-following, and tiktok-user-search return
-              # data.users, yelp-search returns up to 20 ranked organic businesses in
-              # data.businesses, plus total and pagination, from a Yelp search URL; yelp-reviews
-              # returns up to 20 latest public reviews in data.reviews, with business details
-              # and next_offset, from a Yelp business URL; tripadvisor-reviews returns 20
-              # reviews in data.reviews, with data.location and next_offset, from a Tripadvisor
-              # hotel, restaurant, or attraction review URL; car-rental-availability returns
-              # every vehicle with pay-now and pay-later prices in data.vehicles from an
-              # avis.com or budget.com vehicle-availability search URL; car-rental-locations
-              # returns rental branches with codes, addresses, coordinates and hours in
-              # data.locations from an avis.com or budget.com /locations?keyword= URL; emails,
-              # phone-numbers, and links return data.emails, data.phone_numbers, and data.links
-              # from the rendered page; the store, Maps, G2, Instagram, and TikTok parsers read
-              # their data directly, independently of DOM filters and other outputs.
+              # Fields extracted by `parseParams`. Custom rules return each field after content
+              # filters, with `null` when nothing matches (`[]` for `list` rules). Prebuilt
+              # parsers return the record or lists described under `parseParams.parser`.
               sig do
                 params(
                   data: T.nilable(T::Hash[Symbol, T.anything]),
@@ -4923,15 +4895,17 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # The selected prebuilt parser name, or custom when type is omitted, custom rules
-                # are used, or parsing is not requested.
+                # Prebuilt parser that ran, or `custom` for custom rules or when `parse` was not
+                # requested.
                 type:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -4952,8 +4926,8 @@ module ContextDev
               def to_hash
               end
 
-              # The selected prebuilt parser name, or custom when type is omitted, custom rules
-              # are used, or parsing is not requested.
+              # Prebuilt parser that ran, or `custom` for custom rules or when `parse` was not
+              # requested.
               module Type
                 extend ContextDev::Internal::Type::Enum
 
@@ -5157,21 +5131,23 @@ module ContextDev
               end
               attr_writer :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
@@ -5193,12 +5169,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -5233,7 +5211,7 @@ module ContextDev
                 sig { returns(T::Boolean) }
                 attr_accessor :is_product_page
 
-                # The extracted product, or null when the page is not a product detail page.
+                # The extracted product. `null` when the page is not a product detail page.
                 sig do
                   returns(
                     T.nilable(
@@ -5265,7 +5243,7 @@ module ContextDev
                 def self.new(
                   # Whether the page is a product detail page.
                   is_product_page:,
-                  # The extracted product, or null when the page is not a product detail page.
+                  # The extracted product. `null` when the page is not a product detail page.
                   product:
                 )
                 end
@@ -5311,7 +5289,7 @@ module ContextDev
                   sig { returns(T.nilable(String)) }
                   attr_accessor :category
 
-                  # ISO 4217 currency code.
+                  # ISO 4217 currency code of `price`.
                   sig { returns(T.nilable(String)) }
                   attr_accessor :currency
 
@@ -5359,9 +5337,8 @@ module ContextDev
                   sig { returns(T::Array[String]) }
                   attr_accessor :target_audience
 
-                  # Product variations, such as different colors or sizes, with their attributes and
-                  # images. Empty if none are found. May not include every variation offered by the
-                  # store.
+                  # Product variants, such as colors or sizes, with their attributes and images.
+                  # `[]` when none are found. May not include every variant the store offers.
                   sig do
                     returns(
                       T::Array[
@@ -5371,7 +5348,7 @@ module ContextDev
                   end
                   attr_accessor :variants
 
-                  # The extracted product, or null when the page is not a product detail page.
+                  # The extracted product. `null` when the page is not a product detail page.
                   sig do
                     params(
                       availability:
@@ -5405,7 +5382,7 @@ module ContextDev
                     brand:,
                     # Product category.
                     category:,
-                    # ISO 4217 currency code.
+                    # ISO 4217 currency code of `price`.
                     currency:,
                     # Product description.
                     description:,
@@ -5429,9 +5406,8 @@ module ContextDev
                     tags:,
                     # Intended audience.
                     target_audience:,
-                    # Product variations, such as different colors or sizes, with their attributes and
-                    # images. Empty if none are found. May not include every variation offered by the
-                    # store.
+                    # Product variants, such as colors or sizes, with their attributes and images.
+                    # `[]` when none are found. May not include every variant the store offers.
                     variants:
                   )
                   end
@@ -5536,23 +5512,25 @@ module ContextDev
                         )
                       end
 
-                    # Explicit variant attributes such as color, size, material, pattern and
-                    # properties declared by page.
+                    # Attributes that define this variant, such as color, size, material, or pattern,
+                    # as stated on the page.
                     sig { returns(T::Hash[Symbol, String]) }
                     attr_accessor :attributes
 
-                    # Original source image URLs explicitly attached to this variant.
+                    # Image URLs the source attaches to this variant.
                     sig { returns(T::Array[String]) }
                     attr_accessor :images
 
+                    # SKU of this variant. `null` when the source does not state one.
                     sig { returns(T.nilable(String)) }
                     attr_accessor :sku
 
-                    # Variant or offer URL when provided by the source. May be shared by variants.
+                    # URL of this variant or offer, when the source provides one. Several variants can
+                    # share a URL.
                     sig { returns(T.nilable(String)) }
                     attr_accessor :url
 
-                    # Normalized stock or ordering availability of this variant.
+                    # Stock or ordering availability of this variant.
                     sig do
                       returns(
                         T.nilable(
@@ -5562,11 +5540,11 @@ module ContextDev
                     end
                     attr_accessor :availability
 
-                    # Currency code for the variant price (e.g., USD, EUR) when stated with it.
+                    # Currency code of `price`, such as `USD` or `EUR`, when stated.
                     sig { returns(T.nilable(String)) }
                     attr_accessor :currency
 
-                    # Price of this variant when the source states one per variant.
+                    # Price of this variant, when the source states one per variant.
                     sig { returns(T.nilable(Float)) }
                     attr_accessor :price
 
@@ -5585,19 +5563,21 @@ module ContextDev
                       ).returns(T.attached_class)
                     end
                     def self.new(
-                      # Explicit variant attributes such as color, size, material, pattern and
-                      # properties declared by page.
+                      # Attributes that define this variant, such as color, size, material, or pattern,
+                      # as stated on the page.
                       attributes:,
-                      # Original source image URLs explicitly attached to this variant.
+                      # Image URLs the source attaches to this variant.
                       images:,
+                      # SKU of this variant. `null` when the source does not state one.
                       sku:,
-                      # Variant or offer URL when provided by the source. May be shared by variants.
+                      # URL of this variant or offer, when the source provides one. Several variants can
+                      # share a URL.
                       url:,
-                      # Normalized stock or ordering availability of this variant.
+                      # Stock or ordering availability of this variant.
                       availability: nil,
-                      # Currency code for the variant price (e.g., USD, EUR) when stated with it.
+                      # Currency code of `price`, such as `USD` or `EUR`, when stated.
                       currency: nil,
-                      # Price of this variant when the source states one per variant.
+                      # Price of this variant, when the source states one per variant.
                       price: nil
                     )
                     end
@@ -5621,7 +5601,7 @@ module ContextDev
                     def to_hash
                     end
 
-                    # Normalized stock or ordering availability of this variant.
+                    # Stock or ordering availability of this variant.
                     module Availability
                       extend ContextDev::Internal::Type::Enum
 
@@ -5694,17 +5674,16 @@ module ContextDev
                   )
                 end
 
-              # Save this ID after creating a profile, then reuse it as
-              # sharedParams.profile.profileId with type "existing".
+              # ID of the browser profile. After creating a profile, save it and pass it as
+              # `sharedParams.profile.profileId` with `type: "existing"`.
               sig { returns(String) }
               attr_accessor :id
 
-              # Authenticated browser profile used for this scrape, or null when no profile was
-              # requested. New and existing profile requests both return the profile ID.
+              # Browser profile used for this scrape. `null` when no profile was requested.
               sig { params(id: String).returns(T.attached_class) }
               def self.new(
-                # Save this ID after creating a profile, then reuse it as
-                # sharedParams.profile.profileId with type "existing".
+                # ID of the browser profile. After creating a profile, save it and pass it as
+                # `sharedParams.profile.profileId` with `type: "existing"`.
                 id:
               )
               end
@@ -5726,21 +5705,23 @@ module ContextDev
               sig { returns(T.nilable(String)) }
               attr_accessor :data
 
+              # Whether you requested this output in `formats`.
               sig { returns(T::Boolean) }
               attr_accessor :requested
 
-              # `true` if returned, `false` if it failed, `null` if not requested.
+              # `true` when the output succeeded, `false` when it failed, `null` when it was not
+              # requested.
               sig { returns(T.nilable(T::Boolean)) }
               attr_accessor :success
 
-              # Why the output failed. Present only when `success` is `false`.
+              # Machine-readable error code. Present only when `success` is `false`.
               sig { returns(T.nilable(String)) }
               attr_reader :error_code
 
               sig { params(error_code: String).void }
               attr_writer :error_code
 
-              # Explanation of the failure and possible next steps.
+              # Human-readable explanation of the error and how to resolve it.
               sig { returns(T.nilable(String)) }
               attr_reader :message
 
@@ -5759,12 +5740,14 @@ module ContextDev
               end
               def self.new(
                 data:,
+                # Whether you requested this output in `formats`.
                 requested:,
-                # `true` if returned, `false` if it failed, `null` if not requested.
+                # `true` when the output succeeded, `false` when it failed, `null` when it was not
+                # requested.
                 success:,
-                # Why the output failed. Present only when `success` is `false`.
+                # Machine-readable error code. Present only when `success` is `false`.
                 error_code: nil,
-                # Explanation of the failure and possible next steps.
+                # Human-readable explanation of the error and how to resolve it.
                 message: nil
               )
               end
@@ -5784,8 +5767,8 @@ module ContextDev
               end
             end
 
-            # True when at least one requested output succeeds but the response has failed or
-            # incomplete outputs. Absent when all requested outputs fail.
+            # `true` when at least one requested output succeeded but others failed or are
+            # incomplete. Absent otherwise.
             module IsPartial
               extend ContextDev::Internal::Type::Enum
 
@@ -5828,7 +5811,7 @@ module ContextDev
               sig { returns(Integer) }
               attr_accessor :credits_consumed
 
-              # Credits remaining for your organization.
+              # Credits your organization has left after this request.
               sig { returns(Integer) }
               attr_accessor :credits_remaining
 
@@ -5842,7 +5825,7 @@ module ContextDev
               def self.new(
                 # Credits charged for this request.
                 credits_consumed:,
-                # Credits remaining for your organization.
+                # Credits your organization has left after this request.
                 credits_remaining:
               )
               end
@@ -5882,7 +5865,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -5895,7 +5878,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

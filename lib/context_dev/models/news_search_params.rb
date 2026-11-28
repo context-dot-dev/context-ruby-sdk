@@ -8,49 +8,49 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute search_by
-      #   What to search for: a specific company, or a natural-language query across all
-      #   news.
+      #   What to search for: news about a specific company, or a natural-language query
+      #   across all news.
       #
       #   @return [ContextDev::Models::NewsSearchParams::SearchBy::NaturalLanguage, ContextDev::Models::NewsSearchParams::SearchBy::Entity]
       required :search_by, union: -> { ContextDev::NewsSearchParams::SearchBy }, api_name: :searchBy
 
       # @!attribute cursor
-      #   Opaque next_cursor from the previous response, or null for the first page.
+      #   Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
       #   @return [String, nil]
       optional :cursor, String, nil?: true
 
       # @!attribute filter_by
-      #   Optional result filters. Use at most one of sourceDomain, sourceCountry,
-      #   articleLanguage, or articleType. A date range may accompany that category;
-      #   date.from must not exceed date.to.
+      #   Filters for the results. Use at most one of `sourceDomain`, `sourceCountry`,
+      #   `articleLanguage`, or `articleType`, optionally combined with `date`.
       #
       #   @return [ContextDev::Models::NewsSearchParams::FilterBy, nil]
       optional :filter_by, -> { ContextDev::NewsSearchParams::FilterBy }, api_name: :filterBy
 
       # @!attribute limit
-      #   Maximum results to return. Defaults to 10.
+      #   Maximum number of articles to return per page.
       #
       #   @return [Integer, nil]
       optional :limit, Integer
 
       # @!attribute policies
-      #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-      #   access policies are enabled for your organization; otherwise the request fails
-      #   with `ACCESS_POLICIES_NOT_ENABLED`.
+      #   Access policy IDs to apply; each URL must pass all of them. Requires access
+      #   policies enabled for your organization; otherwise returns
+      #   `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute sort_by
-      #   Result ordering. Defaults to newest for entity searches. Natural-language
-      #   searches are always ordered by relevance.
+      #   How to order results. Company searches default to `newest`; natural-language
+      #   searches always use `relevance`.
       #
       #   @return [ContextDev::Models::NewsSearchParams::SortBy, nil]
       optional :sort_by, -> { ContextDev::NewsSearchParams::SortBy }, api_name: :sortBy
 
       # @!attribute tags
-      #   Labels for filtering usage in the dashboard.
+      #   Labels for this request. Filter usage and request logs by them in the dashboard
+      #   or with `GET /org/logs`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -59,24 +59,24 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::NewsSearchParams} for more details.
       #
-      #   @param search_by [ContextDev::Models::NewsSearchParams::SearchBy::NaturalLanguage, ContextDev::Models::NewsSearchParams::SearchBy::Entity] What to search for: a specific company, or a natural-language query across all n
+      #   @param search_by [ContextDev::Models::NewsSearchParams::SearchBy::NaturalLanguage, ContextDev::Models::NewsSearchParams::SearchBy::Entity] What to search for: news about a specific company, or a natural-language query a
       #
-      #   @param cursor [String, nil] Opaque next_cursor from the previous response, or null for the first page.
+      #   @param cursor [String, nil] Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
-      #   @param filter_by [ContextDev::Models::NewsSearchParams::FilterBy] Optional result filters. Use at most one of sourceDomain, sourceCountry, article
+      #   @param filter_by [ContextDev::Models::NewsSearchParams::FilterBy] Filters for the results. Use at most one of `sourceDomain`, `sourceCountry`, `ar
       #
-      #   @param limit [Integer] Maximum results to return. Defaults to 10.
+      #   @param limit [Integer] Maximum number of articles to return per page.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+      #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
       #
-      #   @param sort_by [ContextDev::Models::NewsSearchParams::SortBy] Result ordering. Defaults to newest for entity searches. Natural-language search
+      #   @param sort_by [ContextDev::Models::NewsSearchParams::SortBy] How to order results. Company searches default to `newest`; natural-language sea
       #
-      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # What to search for: a specific company, or a natural-language query across all
-      # news.
+      # What to search for: news about a specific company, or a natural-language query
+      # across all news.
       module SearchBy
         extend ContextDev::Internal::Type::Union
 
@@ -90,14 +90,14 @@ module ContextDev
 
         class NaturalLanguage < ContextDev::Internal::Type::BaseModel
           # @!attribute query
-          #   What to search for, in plain language, such as "chip export restrictions to
-          #   China".
+          #   What to search for, in plain language, such as
+          #   `chip export restrictions to China`.
           #
           #   @return [String]
           required :query, String
 
           # @!attribute type
-          #   Use `natural_language` to search all news with a plain-language query.
+          #   Set to `natural_language` to search all news with a plain-language query.
           #
           #   @return [Symbol, :natural_language]
           required :type, const: :natural_language
@@ -110,9 +110,9 @@ module ContextDev
           #   Search all news with a plain-language query. Returns up to 100 matches, ordered
           #   by relevance.
           #
-          #   @param query [String] What to search for, in plain language, such as "chip export restrictions to Chin
+          #   @param query [String] What to search for, in plain language, such as `chip export restrictions to Chin
           #
-          #   @param type [Symbol, :natural_language] Use `natural_language` to search all news with a plain-language query.
+          #   @param type [Symbol, :natural_language] Set to `natural_language` to search all news with a plain-language query.
         end
 
         class Entity < ContextDev::Internal::Type::BaseModel
@@ -123,7 +123,7 @@ module ContextDev
           required :entity, union: -> { ContextDev::NewsSearchParams::SearchBy::Entity::Entity }
 
           # @!attribute type
-          #   Use `entity` to find news about a specific company.
+          #   Set to `entity` to find news about a specific company.
           #
           #   @return [Symbol, :entity]
           required :type, const: :entity
@@ -133,7 +133,7 @@ module ContextDev
           #
           #   @param entity [ContextDev::Models::NewsSearchParams::SearchBy::Entity::Entity::Name, ContextDev::Models::NewsSearchParams::SearchBy::Entity::Entity::Domain, ContextDev::Models::NewsSearchParams::SearchBy::Entity::Entity::Ticker, ContextDev::Models::NewsSearchParams::SearchBy::Entity::Entity::Isin] The company to search news for, identified by name, domain, ticker, or ISIN.
           #
-          #   @param type [Symbol, :entity] Use `entity` to find news about a specific company.
+          #   @param type [Symbol, :entity] Set to `entity` to find news about a specific company.
 
           # The company to search news for, identified by name, domain, ticker, or ISIN.
           #
@@ -149,21 +149,21 @@ module ContextDev
             # Identify the company by website domain.
             variant :domain, -> { ContextDev::NewsSearchParams::SearchBy::Entity::Entity::Domain }
 
-            # Identify the company by stock ticker, optionally scoped to an exchange.
+            # Identify the company by stock ticker, optionally on a specific exchange.
             variant :ticker, -> { ContextDev::NewsSearchParams::SearchBy::Entity::Entity::Ticker }
 
-            # Identify the company by International Securities Identification Number.
+            # Identify the company by International Securities Identification Number (ISIN).
             variant :isin, -> { ContextDev::NewsSearchParams::SearchBy::Entity::Entity::Isin }
 
             class Name < ContextDev::Internal::Type::BaseModel
               # @!attribute name
-              #   Company name.
+              #   Company name, such as `Stripe`.
               #
               #   @return [String]
               required :name, String
 
               # @!attribute type
-              #   Use `name` to identify the company by name.
+              #   Set to `name` to identify the company by name.
               #
               #   @return [Symbol, :name]
               required :type, const: :name
@@ -171,20 +171,20 @@ module ContextDev
               # @!method initialize(name:, type: :name)
               #   Identify the company by name.
               #
-              #   @param name [String] Company name.
+              #   @param name [String] Company name, such as `Stripe`.
               #
-              #   @param type [Symbol, :name] Use `name` to identify the company by name.
+              #   @param type [Symbol, :name] Set to `name` to identify the company by name.
             end
 
             class Domain < ContextDev::Internal::Type::BaseModel
               # @!attribute domain
-              #   Company website domain, such as apple.com.
+              #   Company website domain, such as `apple.com`.
               #
               #   @return [String]
               required :domain, String
 
               # @!attribute type
-              #   Use `domain` to identify the company by website domain.
+              #   Set to `domain` to identify the company by website domain.
               #
               #   @return [Symbol, :domain]
               required :type, const: :domain
@@ -192,27 +192,27 @@ module ContextDev
               # @!method initialize(domain:, type: :domain)
               #   Identify the company by website domain.
               #
-              #   @param domain [String] Company website domain, such as apple.com.
+              #   @param domain [String] Company website domain, such as `apple.com`.
               #
-              #   @param type [Symbol, :domain] Use `domain` to identify the company by website domain.
+              #   @param type [Symbol, :domain] Set to `domain` to identify the company by website domain.
             end
 
             class Ticker < ContextDev::Internal::Type::BaseModel
               # @!attribute ticker
-              #   Public-company ticker.
+              #   Stock ticker symbol, such as `AAPL`.
               #
               #   @return [String]
               required :ticker, String
 
               # @!attribute type
-              #   Use `ticker` to identify a publicly traded company.
+              #   Set to `ticker` to identify a publicly traded company.
               #
               #   @return [Symbol, :ticker]
               required :type, const: :ticker
 
               # @!attribute exchange
-              #   Stock exchange the ticker trades on, used to disambiguate tickers listed on
-              #   multiple exchanges.
+              #   Exchange the ticker trades on. Use it when the same ticker is listed on more
+              #   than one exchange.
               #
               #   @return [Symbol, ContextDev::Models::NewsSearchParams::SearchBy::Entity::Entity::Ticker::Exchange, nil]
               optional :exchange, enum: -> { ContextDev::NewsSearchParams::SearchBy::Entity::Entity::Ticker::Exchange }
@@ -222,16 +222,16 @@ module ContextDev
               #   {ContextDev::Models::NewsSearchParams::SearchBy::Entity::Entity::Ticker} for
               #   more details.
               #
-              #   Identify the company by stock ticker, optionally scoped to an exchange.
+              #   Identify the company by stock ticker, optionally on a specific exchange.
               #
-              #   @param ticker [String] Public-company ticker.
+              #   @param ticker [String] Stock ticker symbol, such as `AAPL`.
               #
-              #   @param exchange [Symbol, ContextDev::Models::NewsSearchParams::SearchBy::Entity::Entity::Ticker::Exchange] Stock exchange the ticker trades on, used to disambiguate tickers listed on mult
+              #   @param exchange [Symbol, ContextDev::Models::NewsSearchParams::SearchBy::Entity::Entity::Ticker::Exchange] Exchange the ticker trades on. Use it when the same ticker is listed on more tha
               #
-              #   @param type [Symbol, :ticker] Use `ticker` to identify a publicly traded company.
+              #   @param type [Symbol, :ticker] Set to `ticker` to identify a publicly traded company.
 
-              # Stock exchange the ticker trades on, used to disambiguate tickers listed on
-              # multiple exchanges.
+              # Exchange the ticker trades on. Use it when the same ticker is listed on more
+              # than one exchange.
               #
               # @see ContextDev::Models::NewsSearchParams::SearchBy::Entity::Entity::Ticker#exchange
               module Exchange
@@ -317,23 +317,28 @@ module ContextDev
 
             class Isin < ContextDev::Internal::Type::BaseModel
               # @!attribute isin
-              #   International Securities Identification Number.
+              #   International Securities Identification Number, such as `US0378331005`.
               #
               #   @return [String]
               required :isin, String
 
               # @!attribute type
-              #   Use `isin` to identify the company by its securities identifier.
+              #   Set to `isin` to identify the company by its International Securities
+              #   Identification Number.
               #
               #   @return [Symbol, :isin]
               required :type, const: :isin
 
               # @!method initialize(isin:, type: :isin)
-              #   Identify the company by International Securities Identification Number.
+              #   Some parameter documentations has been truncated, see
+              #   {ContextDev::Models::NewsSearchParams::SearchBy::Entity::Entity::Isin} for more
+              #   details.
               #
-              #   @param isin [String] International Securities Identification Number.
+              #   Identify the company by International Securities Identification Number (ISIN).
               #
-              #   @param type [Symbol, :isin] Use `isin` to identify the company by its securities identifier.
+              #   @param isin [String] International Securities Identification Number, such as `US0378331005`.
+              #
+              #   @param type [Symbol, :isin] Set to `isin` to identify the company by its International Securities Identifica
             end
 
             # @!method self.variants
@@ -347,7 +352,7 @@ module ContextDev
 
       class FilterBy < ContextDev::Internal::Type::BaseModel
         # @!attribute article_language
-        #   Article languages to include. Up to 3.
+        #   Only return articles in these languages, as ISO 639 codes such as `en`.
         #
         #   @return [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::ArticleLanguage>, nil]
         optional :article_language,
@@ -357,7 +362,7 @@ module ContextDev
                  api_name: :articleLanguage
 
         # @!attribute article_type
-        #   Article types to include. Up to 3.
+        #   Only return these types of coverage, such as `press_release`.
         #
         #   @return [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::ArticleType>, nil]
         optional :article_type,
@@ -367,13 +372,14 @@ module ContextDev
                  api_name: :articleType
 
         # @!attribute date
-        #   Published-at window in epoch milliseconds. from must be before or equal to to.
+        #   Publish date range, in epoch milliseconds. `from` must not be later than `to`.
         #
         #   @return [ContextDev::Models::NewsSearchParams::FilterBy::Date, nil]
         optional :date, -> { ContextDev::NewsSearchParams::FilterBy::Date }
 
         # @!attribute source_country
-        #   Publisher countries to include, as lowercase ISO 3166-1 alpha-2 codes. Up to 3.
+        #   Only return articles from publishers in these countries, as ISO 3166-1 alpha-2
+        #   codes such as `us`.
         #
         #   @return [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::SourceCountry>, nil]
         optional :source_country,
@@ -383,25 +389,27 @@ module ContextDev
                  api_name: :sourceCountry
 
         # @!attribute source_domain
-        #   Publisher domains to include. Up to 3.
+        #   Only return articles from these publisher domains, such as `reuters.com`.
         #
         #   @return [Array<String>, nil]
         optional :source_domain, ContextDev::Internal::Type::ArrayOf[String], api_name: :sourceDomain
 
         # @!method initialize(article_language: nil, article_type: nil, date: nil, source_country: nil, source_domain: nil)
-        #   Optional result filters. Use at most one of sourceDomain, sourceCountry,
-        #   articleLanguage, or articleType. A date range may accompany that category;
-        #   date.from must not exceed date.to.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::NewsSearchParams::FilterBy} for more details.
         #
-        #   @param article_language [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::ArticleLanguage>] Article languages to include. Up to 3.
+        #   Filters for the results. Use at most one of `sourceDomain`, `sourceCountry`,
+        #   `articleLanguage`, or `articleType`, optionally combined with `date`.
         #
-        #   @param article_type [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::ArticleType>] Article types to include. Up to 3.
+        #   @param article_language [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::ArticleLanguage>] Only return articles in these languages, as ISO 639 codes such as `en`.
         #
-        #   @param date [ContextDev::Models::NewsSearchParams::FilterBy::Date] Published-at window in epoch milliseconds. from must be before or equal to to.
+        #   @param article_type [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::ArticleType>] Only return these types of coverage, such as `press_release`.
         #
-        #   @param source_country [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::SourceCountry>] Publisher countries to include, as lowercase ISO 3166-1 alpha-2 codes. Up to 3.
+        #   @param date [ContextDev::Models::NewsSearchParams::FilterBy::Date] Publish date range, in epoch milliseconds. `from` must not be later than `to`.
         #
-        #   @param source_domain [Array<String>] Publisher domains to include. Up to 3.
+        #   @param source_country [Array<Symbol, ContextDev::Models::NewsSearchParams::FilterBy::SourceCountry>] Only return articles from publishers in these countries, as ISO 3166-1 alpha-2 c
+        #
+        #   @param source_domain [Array<String>] Only return articles from these publisher domains, such as `reuters.com`.
 
         module ArticleLanguage
           extend ContextDev::Internal::Type::Enum
@@ -500,23 +508,23 @@ module ContextDev
         # @see ContextDev::Models::NewsSearchParams::FilterBy#date
         class Date < ContextDev::Internal::Type::BaseModel
           # @!attribute from
-          #   Inclusive start of the published-at window, in epoch milliseconds.
+          #   Inclusive start of the publish date range, in epoch milliseconds.
           #
           #   @return [Integer, nil]
           optional :from, Integer
 
           # @!attribute to
-          #   Inclusive end of the published-at window, in epoch milliseconds.
+          #   Inclusive end of the publish date range, in epoch milliseconds.
           #
           #   @return [Integer, nil]
           optional :to, Integer
 
           # @!method initialize(from: nil, to: nil)
-          #   Published-at window in epoch milliseconds. from must be before or equal to to.
+          #   Publish date range, in epoch milliseconds. `from` must not be later than `to`.
           #
-          #   @param from [Integer] Inclusive start of the published-at window, in epoch milliseconds.
+          #   @param from [Integer] Inclusive start of the publish date range, in epoch milliseconds.
           #
-          #   @param to [Integer] Inclusive end of the published-at window, in epoch milliseconds.
+          #   @param to [Integer] Inclusive end of the publish date range, in epoch milliseconds.
         end
 
         module SourceCountry
@@ -557,18 +565,23 @@ module ContextDev
 
       class SortBy < ContextDev::Internal::Type::BaseModel
         # @!attribute type
-        #   Result ordering.
+        #   `newest` puts the most recently published articles first; `relevance` puts the
+        #   closest matches first.
         #
         #   @return [Symbol, ContextDev::Models::NewsSearchParams::SortBy::Type]
         required :type, enum: -> { ContextDev::NewsSearchParams::SortBy::Type }
 
         # @!method initialize(type:)
-        #   Result ordering. Defaults to newest for entity searches. Natural-language
-        #   searches are always ordered by relevance.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::NewsSearchParams::SortBy} for more details.
         #
-        #   @param type [Symbol, ContextDev::Models::NewsSearchParams::SortBy::Type] Result ordering.
+        #   How to order results. Company searches default to `newest`; natural-language
+        #   searches always use `relevance`.
+        #
+        #   @param type [Symbol, ContextDev::Models::NewsSearchParams::SortBy::Type] `newest` puts the most recently published articles first; `relevance` puts the c
 
-        # Result ordering.
+        # `newest` puts the most recently published articles first; `relevance` puts the
+        # closest matches first.
         #
         # @see ContextDev::Models::NewsSearchParams::SortBy#type
         module Type

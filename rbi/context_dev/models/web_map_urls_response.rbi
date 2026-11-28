@@ -11,6 +11,7 @@ module ContextDev
           )
         end
 
+      # Normalized domain that was mapped.
       sig { returns(String) }
       attr_accessor :domain
 
@@ -19,11 +20,13 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
+      # Always `true` on success.
       sig do
         returns(ContextDev::Models::WebMapURLsResponse::Success::TaggedBoolean)
       end
       attr_accessor :success
 
+      # URLs found on the domain, with page metadata when available.
       sig { returns(T::Array[ContextDev::Models::WebMapURLsResponse::URL]) }
       attr_accessor :urls
 
@@ -41,6 +44,8 @@ module ContextDev
       end
       attr_writer :key_metadata
 
+      # `true` when the deadline passed with `timeoutOpts.behavior` set to
+      # `return-partial`. Only results finished in time are included.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :partial
 
@@ -59,14 +64,19 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Normalized domain that was mapped.
         domain:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
+        # Always `true` on success.
         success:,
+        # URLs found on the domain, with page metadata when available.
         urls:,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
+        # `true` when the deadline passed with `timeoutOpts.behavior` set to
+        # `return-partial`. Only results finished in time are included.
         partial: nil
       )
       end
@@ -87,6 +97,7 @@ module ContextDev
       def to_hash
       end
 
+      # Always `true` on success.
       module Success
         extend ContextDev::Internal::Type::Enum
 
@@ -122,27 +133,32 @@ module ContextDev
             )
           end
 
+        # Page URL.
         sig { returns(String) }
         attr_accessor :url
 
+        # Page description, when available.
         sig { returns(T.nilable(String)) }
         attr_reader :description
 
         sig { params(description: String).void }
         attr_writer :description
 
+        # Keywords from the page's `keywords` meta tag.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :keywords
 
         sig { params(keywords: T::Array[String]).void }
         attr_writer :keywords
 
+        # Page language, when available.
         sig { returns(T.nilable(String)) }
         attr_reader :language
 
         sig { params(language: String).void }
         attr_writer :language
 
+        # Page title, when available.
         sig { returns(T.nilable(String)) }
         attr_reader :title
 
@@ -159,10 +175,15 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
+          # Page URL.
           url:,
+          # Page description, when available.
           description: nil,
+          # Keywords from the page's `keywords` meta tag.
           keywords: nil,
+          # Page language, when available.
           language: nil,
+          # Page title, when available.
           title: nil
         )
         end
@@ -195,7 +216,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -208,7 +229,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

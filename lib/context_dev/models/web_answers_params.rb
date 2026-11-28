@@ -8,42 +8,45 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute task
-      #   Research task, up to 2000 characters. The agent selects company/profile lookups,
-      #   web searches, or page reads. Include domains or URLs to focus the research.
+      #   What to research, in plain language, up to 2000 characters. Include domains or
+      #   URLs to focus the research.
       #
       #   @return [String]
       required :task, String
 
       # @!attribute controls
-      #   Limits what the research may use.
+      #   Limit which sites the research can search, read, and cite.
       #
       #   @return [ContextDev::Models::WebAnswersParams::Controls, nil]
       optional :controls, -> { ContextDev::WebAnswersParams::Controls }
 
       # @!attribute json_format
-      #   Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
-      #   characters; unknowns may be null.
+      #   Example of the answer object to return, not a JSON Schema. Up to 8 levels deep,
+      #   500 values, and 16,000 characters. Values that cannot be found come back as
+      #   `null`. Defaults to `{ "result": "" }`.
       #
       #   @return [Hash{Symbol=>Object}, nil]
       optional :json_format, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
 
       # @!attribute mode
-      #   `fast` prioritizes speed, with extra verification for people and companies;
-      #   `ultra` supports deeper research (default).
+      #   `fast` prioritizes speed and adds extra verification for people and companies;
+      #   `ultra` searches and reads more sources for deeper research. Defaults to
+      #   `ultra`.
       #
       #   @return [Symbol, ContextDev::Models::WebAnswersParams::Mode, nil]
       optional :mode, enum: -> { ContextDev::WebAnswersParams::Mode }
 
       # @!attribute policies
-      #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-      #   access policies are enabled for your organization; otherwise the request fails
-      #   with `ACCESS_POLICIES_NOT_ENABLED`.
+      #   Access policy IDs to apply; each URL must pass all of them. Requires access
+      #   policies enabled for your organization; otherwise returns
+      #   `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute tags
-      #   Labels for filtering usage in the dashboard.
+      #   Labels for this request. Filter usage and request logs by them in the dashboard
+      #   or with `GET /org/logs`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -65,17 +68,17 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebAnswersParams} for more details.
       #
-      #   @param task [String] Research task, up to 2000 characters. The agent selects company/profile lookups,
+      #   @param task [String] What to research, in plain language, up to 2000 characters. Include domains or U
       #
-      #   @param controls [ContextDev::Models::WebAnswersParams::Controls] Limits what the research may use.
+      #   @param controls [ContextDev::Models::WebAnswersParams::Controls] Limit which sites the research can search, read, and cite.
       #
-      #   @param json_format [Hash{Symbol=>Object}] Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000 ch
+      #   @param json_format [Hash{Symbol=>Object}] Example of the answer object to return, not a JSON Schema. Up to 8 levels deep,
       #
-      #   @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] `fast` prioritizes speed, with extra verification for people and companies; `ult
+      #   @param mode [Symbol, ContextDev::Models::WebAnswersParams::Mode] `fast` prioritizes speed and adds extra verification for people and companies; `
       #
-      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+      #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
       #
-      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
       #
       #   @param timeout_opts [ContextDev::Models::WebAnswersParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
@@ -85,17 +88,16 @@ module ContextDev
 
       class Controls < ContextDev::Internal::Type::BaseModel
         # @!attribute exclude_sources
-        #   Never search, read or cite these sites, sections or pages. Same format as
-        #   `sources`. Up to 100 entries.
+        #   Never search, read, or cite these sites, sections, or pages. Same format as
+        #   `sources`.
         #
         #   @return [Array<String>, nil]
         optional :exclude_sources, ContextDev::Internal::Type::ArrayOf[String], api_name: :excludeSources
 
         # @!attribute sources
-        #   Only search, read and cite these sites, sections or pages. Each entry is a URL
-        #   prefix: "example.com" covers the site and its subdomains, "example.com/docs"
-        #   covers that section, and "example.com/docs/setup.html" is one page. Up to 20
-        #   entries.
+        #   Only search, read, and cite these sites, sections, or pages. Each entry is a URL
+        #   prefix: `example.com` covers the site and its subdomains, `example.com/docs`
+        #   covers that section, and `example.com/docs/setup.html` is one page.
         #
         #   @return [Array<String>, nil]
         optional :sources, ContextDev::Internal::Type::ArrayOf[String]
@@ -104,15 +106,16 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebAnswersParams::Controls} for more details.
         #
-        #   Limits what the research may use.
+        #   Limit which sites the research can search, read, and cite.
         #
-        #   @param exclude_sources [Array<String>] Never search, read or cite these sites, sections or pages. Same format as `sourc
+        #   @param exclude_sources [Array<String>] Never search, read, or cite these sites, sections, or pages. Same format as `sou
         #
-        #   @param sources [Array<String>] Only search, read and cite these sites, sections or pages. Each entry is a URL p
+        #   @param sources [Array<String>] Only search, read, and cite these sites, sections, or pages. Each entry is a URL
       end
 
-      # `fast` prioritizes speed, with extra verification for people and companies;
-      # `ultra` supports deeper research (default).
+      # `fast` prioritizes speed and adds extra verification for people and companies;
+      # `ultra` searches and reads more sources for deeper research. Defaults to
+      # `ultra`.
       module Mode
         extend ContextDev::Internal::Type::Enum
 
@@ -131,8 +134,8 @@ module ContextDev
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-        #   inspect the response’s partial flag.
+        #   `fail` returns 408 at the deadline. `return-partial` returns the results
+        #   collected so far and marks the response as partial.
         #
         #   @return [Symbol, ContextDev::Models::WebAnswersParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebAnswersParams::TimeoutOpts::Behavior }
@@ -145,10 +148,10 @@ module ContextDev
         #
         #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebAnswersParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   @param behavior [Symbol, ContextDev::Models::WebAnswersParams::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         #
         # @see ContextDev::Models::WebAnswersParams::TimeoutOpts#behavior
         module Behavior

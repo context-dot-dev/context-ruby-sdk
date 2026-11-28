@@ -5,19 +5,19 @@ module ContextDev
     # @see ContextDev::Resources::Brand#retrieve
     class BrandRetrieveResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute brand
-      #   Detailed brand information
+      #   The brand's identity, visual assets, and company details.
       #
       #   @return [ContextDev::Models::BrandRetrieveResponse::Brand]
       required :brand, -> { ContextDev::Models::BrandRetrieveResponse::Brand }
 
       # @!attribute cache_metadata
-      #   Whether this response came from cache.
+      #   Cache status of this response.
       #
       #   @return [ContextDev::Models::BrandRetrieveResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::BrandRetrieveResponse::CacheMetadata }
 
       # @!attribute code
-      #   HTTP status code
+      #   HTTP status code. Always `200` on success.
       #
       #   @return [Integer]
       required :code, Integer
@@ -42,8 +42,8 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::BrandRetrieveResponse::KeyMetadata }
 
       # @!attribute partial
-      #   True when the timeout ended processing and this response contains the usable
-      #   data completed so far. Unfinished fields are omitted.
+      #   `true` when the `timeoutOpts` deadline ended processing early. The response
+      #   holds the data completed so far; unfinished fields are omitted.
       #
       #   @return [Boolean, nil]
       optional :partial, ContextDev::Internal::Type::Boolean
@@ -52,11 +52,11 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BrandRetrieveResponse} for more details.
       #
-      #   @param brand [ContextDev::Models::BrandRetrieveResponse::Brand] Detailed brand information
+      #   @param brand [ContextDev::Models::BrandRetrieveResponse::Brand] The brand's identity, visual assets, and company details.
       #
-      #   @param cache_metadata [ContextDev::Models::BrandRetrieveResponse::CacheMetadata] Whether this response came from cache.
+      #   @param cache_metadata [ContextDev::Models::BrandRetrieveResponse::CacheMetadata] Cache status of this response.
       #
-      #   @param code [Integer] HTTP status code
+      #   @param code [Integer] HTTP status code. Always `200` on success.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
@@ -64,89 +64,88 @@ module ContextDev
       #
       #   @param key_metadata [ContextDev::Models::BrandRetrieveResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param partial [Boolean] True when the timeout ended processing and this response contains the usable dat
+      #   @param partial [Boolean] `true` when the `timeoutOpts` deadline ended processing early. The response hold
 
       # @see ContextDev::Models::BrandRetrieveResponse#brand
       class Brand < ContextDev::Internal::Type::BaseModel
         # @!attribute address
-        #   Physical address of the brand
+        #   Physical address of the brand. Omitted when unknown.
         #
         #   @return [ContextDev::Models::BrandRetrieveResponse::Brand::Address, nil]
         optional :address, -> { ContextDev::Models::BrandRetrieveResponse::Brand::Address }
 
         # @!attribute backdrops
-        #   An array of backdrop images for the brand
+        #   Backdrop images for the brand, such as social profile banners.
         #
         #   @return [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop>, nil]
         optional :backdrops,
                  -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop] }
 
         # @!attribute colors
-        #   An array of brand colors
+        #   Brand colors from the website and logos.
         #
         #   @return [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Color>, nil]
         optional :colors,
                  -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BrandRetrieveResponse::Brand::Color] }
 
         # @!attribute description
-        #   A brief description of the brand
+        #   Short description of the brand.
         #
         #   @return [String, nil]
         optional :description, String
 
         # @!attribute domain
-        #   The domain name of the brand
+        #   Domain of the brand.
         #
         #   @return [String, nil]
         optional :domain, String
 
         # @!attribute email
-        #   Company email address
+        #   Contact email address for the company.
         #
         #   @return [String, nil]
         optional :email, String
 
         # @!attribute employees
-        #   Employee headcount information for the brand (will be null if unknown)
+        #   Employee headcount. Omitted when unknown.
         #
         #   @return [ContextDev::Models::BrandRetrieveResponse::Brand::Employees, nil]
         optional :employees, -> { ContextDev::Models::BrandRetrieveResponse::Brand::Employees }
 
         # @!attribute industries
-        #   Industry classification information for the brand
+        #   Industry classification of the brand.
         #
         #   @return [ContextDev::Models::BrandRetrieveResponse::Brand::Industries, nil]
         optional :industries, -> { ContextDev::Models::BrandRetrieveResponse::Brand::Industries }
 
         # @!attribute is_nsfw
-        #   Indicates whether the brand content is not safe for work (NSFW)
+        #   Whether the brand's content is not safe for work (NSFW).
         #
         #   @return [Boolean, nil]
         optional :is_nsfw, ContextDev::Internal::Type::Boolean
 
         # @!attribute links
-        #   Important website links for the brand
+        #   Key pages on the brand's website.
         #
         #   @return [ContextDev::Models::BrandRetrieveResponse::Brand::Links, nil]
         optional :links, -> { ContextDev::Models::BrandRetrieveResponse::Brand::Links }
 
         # @!attribute logos
-        #   An array of logos associated with the brand. When a similarly shaped SVG variant
-        #   exists, it is returned ahead of its raster equivalent; otherwise relevance order
-        #   is preserved
+        #   Brand logos, most relevant first. An SVG is listed ahead of a raster logo of the
+        #   same shape.
         #
         #   @return [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Logo>, nil]
         optional :logos,
                  -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BrandRetrieveResponse::Brand::Logo] }
 
         # @!attribute phone
-        #   Company phone number
+        #   Contact phone number for the company.
         #
         #   @return [String, nil]
         optional :phone, String
 
         # @!attribute primary_language
-        #   Language, e.g. `english`.
+        #   Lowercase language name, such as `english`.
         #
         #   @return [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage, nil]
         optional :primary_language,
@@ -154,27 +153,26 @@ module ContextDev
                  nil?: true
 
         # @!attribute slogan
-        #   The brand's slogan
+        #   Brand slogan or tagline.
         #
         #   @return [String, nil]
         optional :slogan, String
 
         # @!attribute socials
-        #   An array of social media links for the brand
+        #   Social media profiles of the brand.
         #
         #   @return [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Social>, nil]
         optional :socials,
                  -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BrandRetrieveResponse::Brand::Social] }
 
         # @!attribute stock
-        #   Stock market information for this brand (will be null if not a publicly traded
-        #   company)
+        #   Stock listing. Omitted when the company is not publicly traded.
         #
         #   @return [ContextDev::Models::BrandRetrieveResponse::Brand::Stock, nil]
         optional :stock, -> { ContextDev::Models::BrandRetrieveResponse::Brand::Stock }
 
         # @!attribute title
-        #   The title or name of the brand
+        #   Brand name.
         #
         #   @return [String, nil]
         optional :title, String
@@ -183,198 +181,197 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::BrandRetrieveResponse::Brand} for more details.
         #
-        #   Detailed brand information
+        #   The brand's identity, visual assets, and company details.
         #
-        #   @param address [ContextDev::Models::BrandRetrieveResponse::Brand::Address] Physical address of the brand
+        #   @param address [ContextDev::Models::BrandRetrieveResponse::Brand::Address] Physical address of the brand. Omitted when unknown.
         #
-        #   @param backdrops [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop>] An array of backdrop images for the brand
+        #   @param backdrops [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop>] Backdrop images for the brand, such as social profile banners.
         #
-        #   @param colors [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Color>] An array of brand colors
+        #   @param colors [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Color>] Brand colors from the website and logos.
         #
-        #   @param description [String] A brief description of the brand
+        #   @param description [String] Short description of the brand.
         #
-        #   @param domain [String] The domain name of the brand
+        #   @param domain [String] Domain of the brand.
         #
-        #   @param email [String] Company email address
+        #   @param email [String] Contact email address for the company.
         #
-        #   @param employees [ContextDev::Models::BrandRetrieveResponse::Brand::Employees] Employee headcount information for the brand (will be null if unknown)
+        #   @param employees [ContextDev::Models::BrandRetrieveResponse::Brand::Employees] Employee headcount. Omitted when unknown.
         #
-        #   @param industries [ContextDev::Models::BrandRetrieveResponse::Brand::Industries] Industry classification information for the brand
+        #   @param industries [ContextDev::Models::BrandRetrieveResponse::Brand::Industries] Industry classification of the brand.
         #
-        #   @param is_nsfw [Boolean] Indicates whether the brand content is not safe for work (NSFW)
+        #   @param is_nsfw [Boolean] Whether the brand's content is not safe for work (NSFW).
         #
-        #   @param links [ContextDev::Models::BrandRetrieveResponse::Brand::Links] Important website links for the brand
+        #   @param links [ContextDev::Models::BrandRetrieveResponse::Brand::Links] Key pages on the brand's website.
         #
-        #   @param logos [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Logo>] An array of logos associated with the brand. When a similarly shaped SVG variant
+        #   @param logos [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Logo>] Brand logos, most relevant first. An SVG is listed ahead of a raster logo of the
         #
-        #   @param phone [String] Company phone number
+        #   @param phone [String] Contact phone number for the company.
         #
-        #   @param primary_language [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage, nil] Language, e.g. `english`.
+        #   @param primary_language [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::PrimaryLanguage, nil] Lowercase language name, such as `english`.
         #
-        #   @param slogan [String] The brand's slogan
+        #   @param slogan [String] Brand slogan or tagline.
         #
-        #   @param socials [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Social>] An array of social media links for the brand
+        #   @param socials [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Social>] Social media profiles of the brand.
         #
-        #   @param stock [ContextDev::Models::BrandRetrieveResponse::Brand::Stock] Stock market information for this brand (will be null if not a publicly traded c
+        #   @param stock [ContextDev::Models::BrandRetrieveResponse::Brand::Stock] Stock listing. Omitted when the company is not publicly traded.
         #
-        #   @param title [String] The title or name of the brand
+        #   @param title [String] Brand name.
 
         # @see ContextDev::Models::BrandRetrieveResponse::Brand#address
         class Address < ContextDev::Internal::Type::BaseModel
           # @!attribute city
-          #   City name
+          #   City.
           #
           #   @return [String, nil]
           optional :city, String
 
           # @!attribute country
-          #   Country name
+          #   Country name.
           #
           #   @return [String, nil]
           optional :country, String
 
           # @!attribute country_code
-          #   Country code
+          #   Country code, such as `US`.
           #
           #   @return [String, nil]
           optional :country_code, String
 
           # @!attribute postal_code
-          #   Postal or ZIP code
+          #   Postal or ZIP code.
           #
           #   @return [String, nil]
           optional :postal_code, String
 
           # @!attribute state_code
-          #   State or province code
+          #   State or province code.
           #
           #   @return [String, nil]
           optional :state_code, String
 
           # @!attribute state_province
-          #   State or province name
+          #   State or province name.
           #
           #   @return [String, nil]
           optional :state_province, String
 
           # @!attribute street
-          #   Street address
+          #   Street address.
           #
           #   @return [String, nil]
           optional :street, String
 
           # @!method initialize(city: nil, country: nil, country_code: nil, postal_code: nil, state_code: nil, state_province: nil, street: nil)
-          #   Physical address of the brand
+          #   Physical address of the brand. Omitted when unknown.
           #
-          #   @param city [String] City name
+          #   @param city [String] City.
           #
-          #   @param country [String] Country name
+          #   @param country [String] Country name.
           #
-          #   @param country_code [String] Country code
+          #   @param country_code [String] Country code, such as `US`.
           #
-          #   @param postal_code [String] Postal or ZIP code
+          #   @param postal_code [String] Postal or ZIP code.
           #
-          #   @param state_code [String] State or province code
+          #   @param state_code [String] State or province code.
           #
-          #   @param state_province [String] State or province name
+          #   @param state_province [String] State or province name.
           #
-          #   @param street [String] Street address
+          #   @param street [String] Street address.
         end
 
         class Backdrop < ContextDev::Internal::Type::BaseModel
           # @!attribute colors
-          #   Array of colors in the backdrop image
+          #   Colors in the backdrop image.
           #
           #   @return [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop::Color>, nil]
           optional :colors,
                    -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop::Color] }
 
           # @!attribute resolution
-          #   Resolution of the backdrop image
+          #   Size of the backdrop image.
           #
           #   @return [ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop::Resolution, nil]
           optional :resolution, -> { ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop::Resolution }
 
           # @!attribute url
-          #   URL of the backdrop image
+          #   URL of the backdrop image.
           #
           #   @return [String, nil]
           optional :url, String
 
           # @!method initialize(colors: nil, resolution: nil, url: nil)
-          #   @param colors [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop::Color>] Array of colors in the backdrop image
+          #   @param colors [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop::Color>] Colors in the backdrop image.
           #
-          #   @param resolution [ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop::Resolution] Resolution of the backdrop image
+          #   @param resolution [ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop::Resolution] Size of the backdrop image.
           #
-          #   @param url [String] URL of the backdrop image
+          #   @param url [String] URL of the backdrop image.
 
           class Color < ContextDev::Internal::Type::BaseModel
             # @!attribute hex
-            #   Color in hexadecimal format
+            #   Hex color code, such as `#635BFF`.
             #
             #   @return [String, nil]
             optional :hex, String
 
             # @!attribute name
-            #   Name of the color
+            #   Human-readable color name.
             #
             #   @return [String, nil]
             optional :name, String
 
             # @!method initialize(hex: nil, name: nil)
-            #   @param hex [String] Color in hexadecimal format
+            #   @param hex [String] Hex color code, such as `#635BFF`.
             #
-            #   @param name [String] Name of the color
+            #   @param name [String] Human-readable color name.
           end
 
           # @see ContextDev::Models::BrandRetrieveResponse::Brand::Backdrop#resolution
           class Resolution < ContextDev::Internal::Type::BaseModel
             # @!attribute aspect_ratio
-            #   Aspect ratio of the image (width/height)
+            #   Aspect ratio, as width divided by height.
             #
             #   @return [Float, nil]
             optional :aspect_ratio, Float
 
             # @!attribute height
-            #   Height of the image in pixels
+            #   Height, in pixels.
             #
             #   @return [Integer, nil]
             optional :height, Integer
 
             # @!attribute width
-            #   Width of the image in pixels
+            #   Width, in pixels.
             #
             #   @return [Integer, nil]
             optional :width, Integer
 
             # @!method initialize(aspect_ratio: nil, height: nil, width: nil)
-            #   Resolution of the backdrop image
+            #   Size of the backdrop image.
             #
-            #   @param aspect_ratio [Float] Aspect ratio of the image (width/height)
+            #   @param aspect_ratio [Float] Aspect ratio, as width divided by height.
             #
-            #   @param height [Integer] Height of the image in pixels
+            #   @param height [Integer] Height, in pixels.
             #
-            #   @param width [Integer] Width of the image in pixels
+            #   @param width [Integer] Width, in pixels.
           end
         end
 
         class Color < ContextDev::Internal::Type::BaseModel
           # @!attribute hex
-          #   Color in hexadecimal format
+          #   Hex color code, such as `#635BFF`.
           #
           #   @return [String, nil]
           optional :hex, String
 
           # @!attribute name
-          #   Name of the color
+          #   Human-readable color name.
           #
           #   @return [String, nil]
           optional :name, String
 
           # @!attribute source
-          #   Where the color was observed: 'site' colors come from the website's own theme
-          #   signals (rendered page colors, manifest, theme-color meta), 'logo' colors from
-          #   logo image pixels.
+          #   `site` colors come from the website's own theme (rendered page colors, web app
+          #   manifest, `theme-color` meta tag); `logo` colors come from logo pixels.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Color::Source, nil]
           optional :source, enum: -> { ContextDev::Models::BrandRetrieveResponse::Brand::Color::Source }
@@ -383,15 +380,14 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveResponse::Brand::Color} for more details.
           #
-          #   @param hex [String] Color in hexadecimal format
+          #   @param hex [String] Hex color code, such as `#635BFF`.
           #
-          #   @param name [String] Name of the color
+          #   @param name [String] Human-readable color name.
           #
-          #   @param source [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Color::Source] Where the color was observed: 'site' colors come from the website's own theme si
+          #   @param source [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Color::Source] `site` colors come from the website's own theme (rendered page colors, web app m
 
-          # Where the color was observed: 'site' colors come from the website's own theme
-          # signals (rendered page colors, manifest, theme-color meta), 'logo' colors from
-          # logo image pixels.
+          # `site` colors come from the website's own theme (rendered page colors, web app
+          # manifest, `theme-color` meta tag); `logo` colors come from logo pixels.
           #
           # @see ContextDev::Models::BrandRetrieveResponse::Brand::Color#source
           module Source
@@ -408,25 +404,25 @@ module ContextDev
         # @see ContextDev::Models::BrandRetrieveResponse::Brand#employees
         class Employees < ContextDev::Internal::Type::BaseModel
           # @!attribute exact
-          #   Exact employee count when a precise headcount is known
+          #   Exact employee count, when known.
           #
           #   @return [Integer, nil]
           optional :exact, Integer
 
           # @!attribute range
-          #   Employee count range for the brand (e.g. '11 to 50')
+          #   Headcount range, such as `11 to 50`.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Employees::Range, nil]
           optional :range, enum: -> { ContextDev::Models::BrandRetrieveResponse::Brand::Employees::Range }
 
           # @!method initialize(exact: nil, range: nil)
-          #   Employee headcount information for the brand (will be null if unknown)
+          #   Employee headcount. Omitted when unknown.
           #
-          #   @param exact [Integer] Exact employee count when a precise headcount is known
+          #   @param exact [Integer] Exact employee count, when known.
           #
-          #   @param range [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Employees::Range] Employee count range for the brand (e.g. '11 to 50')
+          #   @param range [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Employees::Range] Headcount range, such as `11 to 50`.
 
-          # Employee count range for the brand (e.g. '11 to 50')
+          # Headcount range, such as `11 to 50`.
           #
           # @see ContextDev::Models::BrandRetrieveResponse::Brand::Employees#range
           module Range
@@ -449,38 +445,42 @@ module ContextDev
         # @see ContextDev::Models::BrandRetrieveResponse::Brand#industries
         class Industries < ContextDev::Internal::Type::BaseModel
           # @!attribute eic
-          #   Easy Industry Classification - array of industry and subindustry pairs
+          #   Industry and subindustry pairs from Context.dev's Easy Industry Classification
+          #   (EIC).
           #
           #   @return [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic>, nil]
           optional :eic,
                    -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic] }
 
           # @!method initialize(eic: nil)
-          #   Industry classification information for the brand
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::BrandRetrieveResponse::Brand::Industries} for more details.
           #
-          #   @param eic [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic>] Easy Industry Classification - array of industry and subindustry pairs
+          #   Industry classification of the brand.
+          #
+          #   @param eic [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic>] Industry and subindustry pairs from Context.dev's Easy Industry Classification (
 
           class Eic < ContextDev::Internal::Type::BaseModel
             # @!attribute industry
-            #   Industry classification enum
+            #   Top-level industry in the Easy Industry Classification (EIC).
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Industry]
             required :industry,
                      enum: -> { ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Industry }
 
             # @!attribute subindustry
-            #   Subindustry classification enum
+            #   Subindustry in the Easy Industry Classification (EIC).
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Subindustry]
             required :subindustry,
                      enum: -> { ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Subindustry }
 
             # @!method initialize(industry:, subindustry:)
-            #   @param industry [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Industry] Industry classification enum
+            #   @param industry [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Industry] Top-level industry in the Easy Industry Classification (EIC).
             #
-            #   @param subindustry [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Subindustry] Subindustry classification enum
+            #   @param subindustry [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic::Subindustry] Subindustry in the Easy Industry Classification (EIC).
 
-            # Industry classification enum
+            # Top-level industry in the Easy Industry Classification (EIC).
             #
             # @see ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic#industry
             module Industry
@@ -515,7 +515,7 @@ module ContextDev
               #   @return [Array<Symbol>]
             end
 
-            # Subindustry classification enum
+            # Subindustry in the Easy Industry Classification (EIC).
             #
             # @see ContextDev::Models::BrandRetrieveResponse::Brand::Industries::Eic#subindustry
             module Subindustry
@@ -751,87 +751,87 @@ module ContextDev
         # @see ContextDev::Models::BrandRetrieveResponse::Brand#links
         class Links < ContextDev::Internal::Type::BaseModel
           # @!attribute blog
-          #   URL to the brand's blog or news page
+          #   URL of the blog or newsroom. `null` when not found.
           #
           #   @return [String, nil]
           optional :blog, String, nil?: true
 
           # @!attribute careers
-          #   URL to the brand's careers or job opportunities page
+          #   URL of the careers page. `null` when not found.
           #
           #   @return [String, nil]
           optional :careers, String, nil?: true
 
           # @!attribute contact
-          #   URL to the brand's contact or contact us page
+          #   URL of the contact page. `null` when not found.
           #
           #   @return [String, nil]
           optional :contact, String, nil?: true
 
           # @!attribute pricing
-          #   URL to the brand's pricing or plans page
+          #   URL of the pricing page. `null` when not found.
           #
           #   @return [String, nil]
           optional :pricing, String, nil?: true
 
           # @!attribute privacy
-          #   URL to the brand's privacy policy page
+          #   URL of the privacy policy. `null` when not found.
           #
           #   @return [String, nil]
           optional :privacy, String, nil?: true
 
           # @!attribute terms
-          #   URL to the brand's terms of service or terms and conditions page
+          #   URL of the terms of service. `null` when not found.
           #
           #   @return [String, nil]
           optional :terms, String, nil?: true
 
           # @!method initialize(blog: nil, careers: nil, contact: nil, pricing: nil, privacy: nil, terms: nil)
-          #   Important website links for the brand
+          #   Key pages on the brand's website.
           #
-          #   @param blog [String, nil] URL to the brand's blog or news page
+          #   @param blog [String, nil] URL of the blog or newsroom. `null` when not found.
           #
-          #   @param careers [String, nil] URL to the brand's careers or job opportunities page
+          #   @param careers [String, nil] URL of the careers page. `null` when not found.
           #
-          #   @param contact [String, nil] URL to the brand's contact or contact us page
+          #   @param contact [String, nil] URL of the contact page. `null` when not found.
           #
-          #   @param pricing [String, nil] URL to the brand's pricing or plans page
+          #   @param pricing [String, nil] URL of the pricing page. `null` when not found.
           #
-          #   @param privacy [String, nil] URL to the brand's privacy policy page
+          #   @param privacy [String, nil] URL of the privacy policy. `null` when not found.
           #
-          #   @param terms [String, nil] URL to the brand's terms of service or terms and conditions page
+          #   @param terms [String, nil] URL of the terms of service. `null` when not found.
         end
 
         class Logo < ContextDev::Internal::Type::BaseModel
           # @!attribute colors
-          #   Array of colors in the logo
+          #   Colors in the logo.
           #
           #   @return [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Color>, nil]
           optional :colors,
                    -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Color] }
 
           # @!attribute mode
-          #   Indicates when this logo is best used: 'light' = best for light mode, 'dark' =
-          #   best for dark mode, 'has_opaque_background' = can be used for either as image
-          #   has its own background
+          #   `light` works best in light mode, `dark` works best in dark mode, and
+          #   `has_opaque_background` works in either because the image has its own
+          #   background.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Mode, nil]
           optional :mode, enum: -> { ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Mode }
 
           # @!attribute resolution
-          #   Resolution of the logo image
+          #   Size of the logo image.
           #
           #   @return [ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Resolution, nil]
           optional :resolution, -> { ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Resolution }
 
           # @!attribute type
-          #   Type of the logo based on resolution (e.g., 'icon', 'logo')
+          #   Whether the image is an `icon` or a full `logo`, based on its dimensions.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Type, nil]
           optional :type, enum: -> { ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Type }
 
           # @!attribute url
-          #   Hosted logo URL.
+          #   URL of the hosted logo image.
           #
           #   @return [String, nil]
           optional :url, String
@@ -840,38 +840,38 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveResponse::Brand::Logo} for more details.
           #
-          #   @param colors [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Color>] Array of colors in the logo
+          #   @param colors [Array<ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Color>] Colors in the logo.
           #
-          #   @param mode [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Mode] Indicates when this logo is best used: 'light' = best for light mode, 'dark' = b
+          #   @param mode [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Mode] `light` works best in light mode, `dark` works best in dark mode, and `has_opaqu
           #
-          #   @param resolution [ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Resolution] Resolution of the logo image
+          #   @param resolution [ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Resolution] Size of the logo image.
           #
-          #   @param type [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Type] Type of the logo based on resolution (e.g., 'icon', 'logo')
+          #   @param type [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Logo::Type] Whether the image is an `icon` or a full `logo`, based on its dimensions.
           #
-          #   @param url [String] Hosted logo URL.
+          #   @param url [String] URL of the hosted logo image.
 
           class Color < ContextDev::Internal::Type::BaseModel
             # @!attribute hex
-            #   Color in hexadecimal format
+            #   Hex color code, such as `#635BFF`.
             #
             #   @return [String, nil]
             optional :hex, String
 
             # @!attribute name
-            #   Name of the color
+            #   Human-readable color name.
             #
             #   @return [String, nil]
             optional :name, String
 
             # @!method initialize(hex: nil, name: nil)
-            #   @param hex [String] Color in hexadecimal format
+            #   @param hex [String] Hex color code, such as `#635BFF`.
             #
-            #   @param name [String] Name of the color
+            #   @param name [String] Human-readable color name.
           end
 
-          # Indicates when this logo is best used: 'light' = best for light mode, 'dark' =
-          # best for dark mode, 'has_opaque_background' = can be used for either as image
-          # has its own background
+          # `light` works best in light mode, `dark` works best in dark mode, and
+          # `has_opaque_background` works in either because the image has its own
+          # background.
           #
           # @see ContextDev::Models::BrandRetrieveResponse::Brand::Logo#mode
           module Mode
@@ -888,34 +888,34 @@ module ContextDev
           # @see ContextDev::Models::BrandRetrieveResponse::Brand::Logo#resolution
           class Resolution < ContextDev::Internal::Type::BaseModel
             # @!attribute aspect_ratio
-            #   Aspect ratio of the image (width/height)
+            #   Aspect ratio, as width divided by height.
             #
             #   @return [Float, nil]
             optional :aspect_ratio, Float
 
             # @!attribute height
-            #   Height of the image in pixels
+            #   Height, in pixels.
             #
             #   @return [Integer, nil]
             optional :height, Integer
 
             # @!attribute width
-            #   Width of the image in pixels
+            #   Width, in pixels.
             #
             #   @return [Integer, nil]
             optional :width, Integer
 
             # @!method initialize(aspect_ratio: nil, height: nil, width: nil)
-            #   Resolution of the logo image
+            #   Size of the logo image.
             #
-            #   @param aspect_ratio [Float] Aspect ratio of the image (width/height)
+            #   @param aspect_ratio [Float] Aspect ratio, as width divided by height.
             #
-            #   @param height [Integer] Height of the image in pixels
+            #   @param height [Integer] Height, in pixels.
             #
-            #   @param width [Integer] Width of the image in pixels
+            #   @param width [Integer] Width, in pixels.
           end
 
-          # Type of the logo based on resolution (e.g., 'icon', 'logo')
+          # Whether the image is an `icon` or a full `logo`, based on its dimensions.
           #
           # @see ContextDev::Models::BrandRetrieveResponse::Brand::Logo#type
           module Type
@@ -929,7 +929,7 @@ module ContextDev
           end
         end
 
-        # Language, e.g. `english`.
+        # Lowercase language name, such as `english`.
         #
         # @see ContextDev::Models::BrandRetrieveResponse::Brand#primary_language
         module PrimaryLanguage
@@ -1062,23 +1062,23 @@ module ContextDev
 
         class Social < ContextDev::Internal::Type::BaseModel
           # @!attribute type
-          #   Type of social media platform
+          #   Social platform.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Social::Type, nil]
           optional :type, enum: -> { ContextDev::Models::BrandRetrieveResponse::Brand::Social::Type }
 
           # @!attribute url
-          #   URL of the social media page
+          #   URL of the brand's profile on that platform.
           #
           #   @return [String, nil]
           optional :url, String
 
           # @!method initialize(type: nil, url: nil)
-          #   @param type [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Social::Type] Type of social media platform
+          #   @param type [Symbol, ContextDev::Models::BrandRetrieveResponse::Brand::Social::Type] Social platform.
           #
-          #   @param url [String] URL of the social media page
+          #   @param url [String] URL of the brand's profile on that platform.
 
-          # Type of social media platform
+          # Social platform.
           #
           # @see ContextDev::Models::BrandRetrieveResponse::Brand::Social#type
           module Type
@@ -1124,38 +1124,37 @@ module ContextDev
         # @see ContextDev::Models::BrandRetrieveResponse::Brand#stock
         class Stock < ContextDev::Internal::Type::BaseModel
           # @!attribute exchange
-          #   Stock exchange name
+          #   Exchange the stock trades on.
           #
           #   @return [String, nil]
           optional :exchange, String
 
           # @!attribute ticker
-          #   Stock ticker symbol
+          #   Stock ticker symbol.
           #
           #   @return [String, nil]
           optional :ticker, String
 
           # @!method initialize(exchange: nil, ticker: nil)
-          #   Stock market information for this brand (will be null if not a publicly traded
-          #   company)
+          #   Stock listing. Omitted when the company is not publicly traded.
           #
-          #   @param exchange [String] Stock exchange name
+          #   @param exchange [String] Exchange the stock trades on.
           #
-          #   @param ticker [String] Stock ticker symbol
+          #   @param ticker [String] Stock ticker symbol.
         end
       end
 
       # @see ContextDev::Models::BrandRetrieveResponse#cache_metadata
       class CacheMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute age_ms
-        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
         #   @return [Integer]
         required :age_ms, Integer
 
         # @!attribute status
-        #   Whether the response was served from cache, required fresh work, or honored
-        #   zero-data-retention cache bypass.
+        #   `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        #   retention bypassed the cache.
         #
         #   @return [Symbol, ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status]
         required :status, enum: -> { ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status }
@@ -1164,14 +1163,14 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::BrandRetrieveResponse::CacheMetadata} for more details.
         #
-        #   Whether this response came from cache.
+        #   Cache status of this response.
         #
-        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   @param age_ms [Integer] Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
-        #   @param status [Symbol, ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+        #   @param status [Symbol, ContextDev::Models::BrandRetrieveResponse::CacheMetadata::Status] `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data re
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         #
         # @see ContextDev::Models::BrandRetrieveResponse::CacheMetadata#status
         module Status
@@ -1195,7 +1194,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -1205,7 +1204,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

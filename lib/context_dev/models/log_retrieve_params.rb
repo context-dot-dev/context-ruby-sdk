@@ -8,13 +8,13 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute request_id
-      #   The request ID of the logged API call.
+      #   ID of the request, from its response's `request_id` or `X-Request-Id` header.
       #
       #   @return [String]
       required :request_id, String
 
       # @!method initialize(request_id:, request_options: {})
-      #   @param request_id [String] The request ID of the logged API call.
+      #   @param request_id [String] ID of the request, from its response's `request_id` or `X-Request-Id` header.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
     end

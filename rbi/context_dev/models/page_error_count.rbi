@@ -12,7 +12,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :code
 
-      # Pages that failed with this code.
+      # Number of pages that failed with this code.
       sig { returns(Integer) }
       attr_accessor :count
 
@@ -21,7 +21,7 @@ module ContextDev
       def self.new(
         # Error code for these failures.
         code:,
-        # Pages that failed with this code.
+        # Number of pages that failed with this code.
         count:
       )
       end

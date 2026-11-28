@@ -8,33 +8,33 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute cursor
-      #   Opaque pagination cursor from a previous response.
+      #   Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
       #   @return [String, nil]
       optional :cursor, String
 
       # @!attribute limit
-      #   Maximum number of items to return per page (1-100). Defaults to 25.
+      #   Maximum number of runs to return per page. Defaults to 25.
       #
       #   @return [Integer, nil]
       optional :limit, Integer
 
       # @!attribute status
-      #   Filter runs by lifecycle status.
+      #   Filter by run status.
       #
       #   @return [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status, nil]
       optional :status, enum: -> { ContextDev::MonitorListAccountRunsParams::Status }
 
       # @!method initialize(cursor: nil, limit: nil, status: nil, request_options: {})
-      #   @param cursor [String] Opaque pagination cursor from a previous response.
+      #   @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
-      #   @param limit [Integer] Maximum number of items to return per page (1-100). Defaults to 25.
+      #   @param limit [Integer] Maximum number of runs to return per page. Defaults to 25.
       #
-      #   @param status [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status] Filter runs by lifecycle status.
+      #   @param status [Symbol, ContextDev::Models::MonitorListAccountRunsParams::Status] Filter by run status.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Filter runs by lifecycle status.
+      # Filter by run status.
       module Status
         extend ContextDev::Internal::Type::Enum
 

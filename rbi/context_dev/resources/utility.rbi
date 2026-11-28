@@ -2,8 +2,10 @@
 
 module ContextDev
   module Resources
+    # Prefetch brand and styleguide data so later lookups return sooner.
     class Utility
-      # Queue brand or styleguide data so a later lookup can return sooner.
+      # Start fetching a domain's brand or styleguide data in the background so a later
+      # lookup returns faster. Accepts a domain or a work email.
       sig do
         params(
           identifier:
@@ -19,17 +21,18 @@ module ContextDev
         ).returns(ContextDev::Models::UtilityPrefetchResponse)
       end
       def prefetch(
-        # Identifier of the target to prefetch. Provide exactly one of domain or email.
+        # Domain or work email to prefetch. Provide exactly one.
         identifier:,
         # Data to prefetch.
         type:,
-        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-        # access policies are enabled for your organization; otherwise the request fails
-        # with `ACCESS_POLICIES_NOT_ENABLED`.
+        # Access policy IDs to apply; each URL must pass all of them. Requires access
+        # policies enabled for your organization; otherwise returns
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
-        # Request deadline and what to return when it passes.
+        # Request deadline. The request fails with 408 when it passes.
         timeout_opts: nil,
         request_options: {}
       )

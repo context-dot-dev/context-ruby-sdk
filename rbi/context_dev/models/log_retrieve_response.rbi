@@ -81,11 +81,11 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_used
 
-        # The `error_code` from the response, or null on success.
+        # The response's `error_code`. `null` on success.
         sig { returns(T.nilable(String)) }
         attr_accessor :error_code
 
-        # What was sent with the request.
+        # Input retained from the request.
         sig { returns(ContextDev::Models::LogRetrieveResponse::Data::Input) }
         attr_reader :input
 
@@ -96,32 +96,32 @@ module ContextDev
         end
         attr_writer :input
 
-        # ID of the API key that made the request.
+        # ID of the API key that made the request. Can be `null` for `MONITOR` and `BATCH`
+        # entries.
         sig { returns(T.nilable(String)) }
         attr_accessor :key_id
 
-        # Server-side processing time in milliseconds.
+        # Server-side processing time, in milliseconds.
         sig { returns(Float) }
         attr_accessor :latency_ms
 
-        # HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement
-        # entries.
+        # HTTP method, or `MONITOR` for a monitor run and `BATCH` for a batch settlement.
         sig { returns(String) }
         attr_accessor :method_
 
-        # Endpoint path as called.
+        # Endpoint path that was called.
         sig { returns(String) }
         attr_accessor :path
 
-        # Request ID of the logged API call.
+        # ID of the logged request.
         sig { returns(String) }
         attr_accessor :request_id
 
-        # HTTP status code returned.
+        # HTTP status code of the response.
         sig { returns(Integer) }
         attr_accessor :status_code
 
-        # Request tags supplied by the caller.
+        # Tags sent with the request.
         sig { returns(T::Array[String]) }
         attr_accessor :tags
 
@@ -129,15 +129,16 @@ module ContextDev
         sig { returns(Time) }
         attr_accessor :timestamp
 
-        # User-Agent header of the request.
+        # The request's `User-Agent` header.
         sig { returns(T.nilable(String)) }
         attr_accessor :user_agent
 
-        # Whether the request was made under zero data retention.
+        # Whether the request used zero data retention (ZDR).
         sig { returns(T::Boolean) }
         attr_accessor :zdr
 
-        # The retained JSON response with credentials redacted, or null when unavailable.
+        # Retained JSON response with credentials redacted. `null` when unavailable, such
+        # as under ZDR.
         sig { returns(T.nilable(T.anything)) }
         attr_reader :response
 
@@ -165,32 +166,33 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_used:,
-          # The `error_code` from the response, or null on success.
+          # The response's `error_code`. `null` on success.
           error_code:,
-          # What was sent with the request.
+          # Input retained from the request.
           input:,
-          # ID of the API key that made the request.
-          key_id:,
-          # Server-side processing time in milliseconds.
-          latency_ms:,
-          # HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement
+          # ID of the API key that made the request. Can be `null` for `MONITOR` and `BATCH`
           # entries.
+          key_id:,
+          # Server-side processing time, in milliseconds.
+          latency_ms:,
+          # HTTP method, or `MONITOR` for a monitor run and `BATCH` for a batch settlement.
           method_:,
-          # Endpoint path as called.
+          # Endpoint path that was called.
           path:,
-          # Request ID of the logged API call.
+          # ID of the logged request.
           request_id:,
-          # HTTP status code returned.
+          # HTTP status code of the response.
           status_code:,
-          # Request tags supplied by the caller.
+          # Tags sent with the request.
           tags:,
           # When the request completed.
           timestamp:,
-          # User-Agent header of the request.
+          # The request's `User-Agent` header.
           user_agent:,
-          # Whether the request was made under zero data retention.
+          # Whether the request used zero data retention (ZDR).
           zdr:,
-          # The retained JSON response with credentials redacted, or null when unavailable.
+          # Retained JSON response with credentials redacted. `null` when unavailable, such
+          # as under ZDR.
           response: nil
         )
         end
@@ -227,7 +229,7 @@ module ContextDev
               )
             end
 
-          # Query parameters as sent.
+          # Query parameters of the request.
           sig { returns(T::Hash[Symbol, T.anything]) }
           attr_accessor :query
 
@@ -238,7 +240,7 @@ module ContextDev
           sig { params(body: T.anything).void }
           attr_writer :body
 
-          # What was sent with the request.
+          # Input retained from the request.
           sig do
             params(
               query: T::Hash[Symbol, T.anything],
@@ -246,7 +248,7 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Query parameters as sent.
+            # Query parameters of the request.
             query:,
             # Request body with credentials and uploaded content redacted.
             body: nil
@@ -276,7 +278,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -289,7 +291,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

@@ -29,29 +29,29 @@ module ContextDev
       end
       attr_writer :change_detection_type
 
-      # Opaque pagination cursor from a previous response.
+      # Cursor from the previous page's `next_cursor`. Omit for the first page.
       sig { returns(T.nilable(String)) }
       attr_reader :cursor
 
       sig { params(cursor: String).void }
       attr_writer :cursor
 
-      # Maximum number of items to return per page (1-100). Defaults to 25.
+      # Maximum number of monitors to return per page. Defaults to 25.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
       sig { params(limit: Integer).void }
       attr_writer :limit
 
-      # Free-text search term, matched against the fields named in `search_by`.
+      # Text to search for in the fields listed in `search_by`.
       sig { returns(T.nilable(String)) }
       attr_reader :q
 
       sig { params(q: String).void }
       attr_writer :q
 
-      # Fields to search with `q`. Defaults to all fields; page, extract, and search
-      # targets can have instructions, and `url` matches a search target’s query.
+      # Comma-separated fields to search with `q`. Defaults to all fields. For search
+      # targets, `url` matches the target's `query`.
       sig do
         returns(
           T.nilable(T::Array[ContextDev::MonitorListParams::SearchBy::OrSymbol])
@@ -59,8 +59,8 @@ module ContextDev
       end
       attr_accessor :search_by
 
-      # `prefix` for as-you-type prefix matching (default), `exact` for full-token
-      # matching.
+      # How `q` matches. `prefix` matches the start of words and tolerates one typo, for
+      # search as you type; `exact` matches whole words only. Defaults to `prefix`.
       sig do
         returns(T.nilable(ContextDev::MonitorListParams::SearchType::OrSymbol))
       end
@@ -73,7 +73,7 @@ module ContextDev
       end
       attr_writer :search_type
 
-      # Filter monitors by lifecycle status.
+      # Filter by monitor status.
       sig do
         returns(T.nilable(ContextDev::MonitorListParams::Status::OrSymbol))
       end
@@ -84,7 +84,7 @@ module ContextDev
       end
       attr_writer :status
 
-      # Comma-separated list of tags to filter by (matches monitors having any of them).
+      # Comma-separated tags. Returns monitors that have any of them.
       sig { returns(T.nilable(T::Array[String])) }
       attr_accessor :tags
 
@@ -122,21 +122,21 @@ module ContextDev
       def self.new(
         # Filter by change detection type.
         change_detection_type: nil,
-        # Opaque pagination cursor from a previous response.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page.
         cursor: nil,
-        # Maximum number of items to return per page (1-100). Defaults to 25.
+        # Maximum number of monitors to return per page. Defaults to 25.
         limit: nil,
-        # Free-text search term, matched against the fields named in `search_by`.
+        # Text to search for in the fields listed in `search_by`.
         q: nil,
-        # Fields to search with `q`. Defaults to all fields; page, extract, and search
-        # targets can have instructions, and `url` matches a search target’s query.
+        # Comma-separated fields to search with `q`. Defaults to all fields. For search
+        # targets, `url` matches the target's `query`.
         search_by: nil,
-        # `prefix` for as-you-type prefix matching (default), `exact` for full-token
-        # matching.
+        # How `q` matches. `prefix` matches the start of words and tolerates one typo, for
+        # search as you type; `exact` matches whole words only. Defaults to `prefix`.
         search_type: nil,
-        # Filter monitors by lifecycle status.
+        # Filter by monitor status.
         status: nil,
-        # Comma-separated list of tags to filter by (matches monitors having any of them).
+        # Comma-separated tags. Returns monitors that have any of them.
         tags: nil,
         # Filter by target type.
         target_type: nil,
@@ -228,8 +228,8 @@ module ContextDev
         end
       end
 
-      # `prefix` for as-you-type prefix matching (default), `exact` for full-token
-      # matching.
+      # How `q` matches. `prefix` matches the start of words and tolerates one typo, for
+      # search as you type; `exact` matches whole words only. Defaults to `prefix`.
       module SearchType
         extend ContextDev::Internal::Type::Enum
 
@@ -256,7 +256,7 @@ module ContextDev
         end
       end
 
-      # Filter monitors by lifecycle status.
+      # Filter by monitor status.
       module Status
         extend ContextDev::Internal::Type::Enum
 

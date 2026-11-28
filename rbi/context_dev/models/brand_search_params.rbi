@@ -11,13 +11,13 @@ module ContextDev
           T.any(ContextDev::BrandSearchParams, ContextDev::Internal::AnyHash)
         end
 
-      # Search term, matched against the fields selected by queryBy (e.g. 'nike',
-      # 'nike.com', 'nik').
+      # Search term, matched against the fields in `queryBy`, such as `nike`,
+      # `nike.com`, or `nik`.
       sig { returns(String) }
       attr_accessor :query
 
-      # Whether the search term matches by prefix, so partial words match as they are
-      # typed (e.g. 'nik' matches Nike). Set to false to match whole words only.
+      # Match the search term as a prefix, so `nik` matches Nike while the user is still
+      # typing. Set to `false` to match whole words only.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :autocomplete
 
@@ -25,7 +25,7 @@ module ContextDev
       attr_writer :autocomplete
 
       # Only return brands in this country, as an uppercase ISO 3166-1 alpha-2 code such
-      # as US or GB.
+      # as `US` or `GB`.
       sig do
         returns(T.nilable(ContextDev::BrandSearchParams::Country::OrSymbol))
       end
@@ -36,7 +36,7 @@ module ContextDev
       end
       attr_writer :country
 
-      # Only return brands with this primary language, such as english or french.
+      # Only return brands with this primary language, such as `english` or `french`.
       sig do
         returns(T.nilable(ContextDev::BrandSearchParams::Language::OrSymbol))
       end
@@ -47,8 +47,8 @@ module ContextDev
       end
       attr_writer :language
 
-      # Fields to match the search term against, as a comma-separated list or repeated
-      # parameter: 'name', 'domain', or both. Defaults to both.
+      # Fields to match the search term against: `name`, `domain`, or both. Send a
+      # comma-separated list or repeat the parameter.
       sig do
         returns(
           T.nilable(T::Array[ContextDev::BrandSearchParams::QueryBy::OrSymbol])
@@ -63,15 +63,15 @@ module ContextDev
       end
       attr_writer :query_by
 
-      # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+      # usage and request logs by them.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
-      # typo tolerance).
+      # Maximum number of typos to tolerate when matching. `0` requires exact spelling.
       sig { returns(T.nilable(Integer)) }
       attr_reader :typo_tolerance
 
@@ -91,24 +91,24 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Search term, matched against the fields selected by queryBy (e.g. 'nike',
-        # 'nike.com', 'nik').
+        # Search term, matched against the fields in `queryBy`, such as `nike`,
+        # `nike.com`, or `nik`.
         query:,
-        # Whether the search term matches by prefix, so partial words match as they are
-        # typed (e.g. 'nik' matches Nike). Set to false to match whole words only.
+        # Match the search term as a prefix, so `nik` matches Nike while the user is still
+        # typing. Set to `false` to match whole words only.
         autocomplete: nil,
         # Only return brands in this country, as an uppercase ISO 3166-1 alpha-2 code such
-        # as US or GB.
+        # as `US` or `GB`.
         country: nil,
-        # Only return brands with this primary language, such as english or french.
+        # Only return brands with this primary language, such as `english` or `french`.
         language: nil,
-        # Fields to match the search term against, as a comma-separated list or repeated
-        # parameter: 'name', 'domain', or both. Defaults to both.
+        # Fields to match the search term against: `name`, `domain`, or both. Send a
+        # comma-separated list or repeat the parameter.
         query_by: nil,
-        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        # usage and request logs by them.
         tags: nil,
-        # Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
-        # typo tolerance).
+        # Maximum number of typos to tolerate when matching. `0` requires exact spelling.
         typo_tolerance: nil,
         request_options: {}
       )
@@ -133,7 +133,7 @@ module ContextDev
       end
 
       # Only return brands in this country, as an uppercase ISO 3166-1 alpha-2 code such
-      # as US or GB.
+      # as `US` or `GB`.
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -400,7 +400,7 @@ module ContextDev
         end
       end
 
-      # Only return brands with this primary language, such as english or french.
+      # Only return brands with this primary language, such as `english` or `french`.
       module Language
         extend ContextDev::Internal::Type::Enum
 

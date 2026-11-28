@@ -9,37 +9,42 @@ module ContextDev
         include ContextDev::Internal::Type::RequestParameters
 
         # @!attribute delivery_id
-        #   Delivery ID.
+        #   ID of the delivery.
         #
         #   @return [String]
         required :delivery_id, String
 
         # @!attribute force
-        #   Resend even if the delivery already succeeded. Defaults to false.
+        #   Resend even if the delivery already succeeded.
         #
         #   @return [Boolean, nil]
         optional :force, ContextDev::Internal::Type::Boolean
 
         # @!attribute tags
-        #   Labels for filtering usage in the dashboard.
+        #   Labels for this request. Filter usage and request logs by them in the dashboard
+        #   or with `GET /org/logs`.
         #
         #   @return [Array<String>, nil]
         optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
         # @!attribute idempotency_key
-        #   Unique key to prevent duplicate retry requests.
+        #   Unique key for this retry. Repeating the request with the same key does not send
+        #   the payload again.
         #
         #   @return [String, nil]
         optional :idempotency_key, String
 
         # @!method initialize(delivery_id:, force: nil, tags: nil, idempotency_key: nil, request_options: {})
-        #   @param delivery_id [String] Delivery ID.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::Webhooks::DeliveryRetryParams} for more details.
         #
-        #   @param force [Boolean] Resend even if the delivery already succeeded. Defaults to false.
+        #   @param delivery_id [String] ID of the delivery.
         #
-        #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+        #   @param force [Boolean] Resend even if the delivery already succeeded.
         #
-        #   @param idempotency_key [String] Unique key to prevent duplicate retry requests.
+        #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
+        #
+        #   @param idempotency_key [String] Unique key for this retry. Repeating the request with the same key does not send
         #
         #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
       end

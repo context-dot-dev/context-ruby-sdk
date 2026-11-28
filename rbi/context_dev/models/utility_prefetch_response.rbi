@@ -16,7 +16,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # The domain that was queued for prefetching
+      # Domain queued for prefetching.
       sig { returns(T.nilable(String)) }
       attr_reader :domain
 
@@ -39,7 +39,7 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # Success message
+      # Human-readable confirmation.
       sig { returns(T.nilable(String)) }
       attr_reader :message
 
@@ -53,7 +53,7 @@ module ContextDev
       sig { params(status: String).void }
       attr_writer :status
 
-      # The type of prefetch that was queued, echoed from the request
+      # Data type that was queued, from the request.
       sig do
         returns(
           T.nilable(
@@ -85,15 +85,15 @@ module ContextDev
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # The domain that was queued for prefetching
+        # Domain queued for prefetching.
         domain: nil,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
-        # Success message
+        # Human-readable confirmation.
         message: nil,
         # Always `ok` on success.
         status: nil,
-        # The type of prefetch that was queued, echoed from the request
+        # Data type that was queued, from the request.
         type: nil
       )
       end
@@ -128,7 +128,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -141,7 +141,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end
@@ -155,7 +155,7 @@ module ContextDev
         end
       end
 
-      # The type of prefetch that was queued, echoed from the request
+      # Data type that was queued, from the request.
       module Type
         extend ContextDev::Internal::Type::Enum
 

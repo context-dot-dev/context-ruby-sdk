@@ -14,7 +14,7 @@ module ContextDev
       required :monitor_id, String
 
       # @!attribute run_id
-      #   ID of the monitor run.
+      #   ID of the run.
       #
       #   @return [String]
       required :run_id, String
@@ -22,7 +22,7 @@ module ContextDev
       # @!method initialize(monitor_id:, run_id:, request_options: {})
       #   @param monitor_id [String] ID of the monitor.
       #
-      #   @param run_id [String] ID of the monitor run.
+      #   @param run_id [String] ID of the run.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
     end

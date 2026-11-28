@@ -12,15 +12,15 @@ module ContextDev
             )
           end
 
-        # Webhook deliveries.
+        # Webhook deliveries on this page.
         sig { returns(T::Array[ContextDev::Webhooks::DeliverySummary]) }
         attr_accessor :data
 
-        # Whether more deliveries are available.
+        # Whether more results are available after this page.
         sig { returns(T::Boolean) }
         attr_accessor :has_more
 
-        # Next page cursor, or null on the last page.
+        # Pass as `cursor` to fetch the next page. `null` on the last page.
         sig { returns(T.nilable(String)) }
         attr_accessor :next_cursor
 
@@ -58,11 +58,11 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Webhook deliveries.
+          # Webhook deliveries on this page.
           data:,
-          # Whether more deliveries are available.
+          # Whether more results are available after this page.
           has_more:,
-          # Next page cursor, or null on the last page.
+          # Pass as `cursor` to fetch the next page. `null` on the last page.
           next_cursor:,
           # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
           # support.
@@ -100,7 +100,7 @@ module ContextDev
           sig { returns(Integer) }
           attr_accessor :credits_consumed
 
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           sig { returns(Integer) }
           attr_accessor :credits_remaining
 
@@ -114,7 +114,7 @@ module ContextDev
           def self.new(
             # Credits charged for this request.
             credits_consumed:,
-            # Credits remaining for your organization.
+            # Credits your organization has left after this request.
             credits_remaining:
           )
           end

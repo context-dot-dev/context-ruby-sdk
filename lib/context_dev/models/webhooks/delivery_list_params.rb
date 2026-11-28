@@ -28,7 +28,7 @@ module ContextDev
 
           class Batch < ContextDev::Internal::Type::BaseModel
             # @!attribute type
-            #   Delivery source.
+            #   List batch webhook deliveries.
             #
             #   @return [Symbol, :batch]
             required :type, const: :batch
@@ -40,19 +40,19 @@ module ContextDev
             optional :batch_id, String
 
             # @!attribute created_after
-            #   Only include events created after this ISO 8601 timestamp.
+            #   Only include deliveries created after this time.
             #
             #   @return [Time, nil]
             optional :created_after, Time
 
             # @!attribute cursor
-            #   The next_cursor from the previous response.
+            #   Cursor from the previous page's `next_cursor`. Omit for the first page.
             #
             #   @return [String, nil]
             optional :cursor, String
 
             # @!attribute limit
-            #   Number of deliveries to return.
+            #   Maximum number of deliveries to return per page.
             #
             #   @return [Integer, nil]
             optional :limit, Integer
@@ -64,25 +64,30 @@ module ContextDev
             optional :status, enum: -> { ContextDev::Webhooks::DeliveryListParams::Body::Batch::Status }
 
             # @!attribute tags
-            #   Labels for filtering usage in the dashboard.
+            #   Labels for this request. Filter usage and request logs by them in the dashboard
+            #   or with `GET /org/logs`.
             #
             #   @return [Array<String>, nil]
             optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
             # @!method initialize(batch_id: nil, created_after: nil, cursor: nil, limit: nil, status: nil, tags: nil, type: :batch)
+            #   Some parameter documentations has been truncated, see
+            #   {ContextDev::Models::Webhooks::DeliveryListParams::Body::Batch} for more
+            #   details.
+            #
             #   @param batch_id [String] Filter by batch ID.
             #
-            #   @param created_after [Time] Only include events created after this ISO 8601 timestamp.
+            #   @param created_after [Time] Only include deliveries created after this time.
             #
-            #   @param cursor [String] The next_cursor from the previous response.
+            #   @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page.
             #
-            #   @param limit [Integer] Number of deliveries to return.
+            #   @param limit [Integer] Maximum number of deliveries to return per page.
             #
             #   @param status [Symbol, ContextDev::Models::Webhooks::DeliveryListParams::Body::Batch::Status] Filter by delivery status.
             #
-            #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+            #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
             #
-            #   @param type [Symbol, :batch] Delivery source.
+            #   @param type [Symbol, :batch] List batch webhook deliveries.
 
             # Filter by delivery status.
             #
@@ -104,25 +109,25 @@ module ContextDev
 
           class Monitor < ContextDev::Internal::Type::BaseModel
             # @!attribute type
-            #   Delivery source.
+            #   List monitor webhook deliveries.
             #
             #   @return [Symbol, :monitor]
             required :type, const: :monitor
 
             # @!attribute created_after
-            #   Only include events created after this ISO 8601 timestamp.
+            #   Only include deliveries created after this time.
             #
             #   @return [Time, nil]
             optional :created_after, Time
 
             # @!attribute cursor
-            #   The next_cursor from the previous response.
+            #   Cursor from the previous page's `next_cursor`. Omit for the first page.
             #
             #   @return [String, nil]
             optional :cursor, String
 
             # @!attribute limit
-            #   Number of deliveries to return.
+            #   Maximum number of deliveries to return per page.
             #
             #   @return [Integer, nil]
             optional :limit, Integer
@@ -146,17 +151,22 @@ module ContextDev
             optional :status, enum: -> { ContextDev::Webhooks::DeliveryListParams::Body::Monitor::Status }
 
             # @!attribute tags
-            #   Labels for filtering usage in the dashboard.
+            #   Labels for this request. Filter usage and request logs by them in the dashboard
+            #   or with `GET /org/logs`.
             #
             #   @return [Array<String>, nil]
             optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
             # @!method initialize(created_after: nil, cursor: nil, limit: nil, monitor_id: nil, run_id: nil, status: nil, tags: nil, type: :monitor)
-            #   @param created_after [Time] Only include events created after this ISO 8601 timestamp.
+            #   Some parameter documentations has been truncated, see
+            #   {ContextDev::Models::Webhooks::DeliveryListParams::Body::Monitor} for more
+            #   details.
             #
-            #   @param cursor [String] The next_cursor from the previous response.
+            #   @param created_after [Time] Only include deliveries created after this time.
             #
-            #   @param limit [Integer] Number of deliveries to return.
+            #   @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page.
+            #
+            #   @param limit [Integer] Maximum number of deliveries to return per page.
             #
             #   @param monitor_id [String] Filter by monitor ID.
             #
@@ -164,9 +174,9 @@ module ContextDev
             #
             #   @param status [Symbol, ContextDev::Models::Webhooks::DeliveryListParams::Body::Monitor::Status] Filter by delivery status.
             #
-            #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+            #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
             #
-            #   @param type [Symbol, :monitor] Delivery source.
+            #   @param type [Symbol, :monitor] List monitor webhook deliveries.
 
             # Filter by delivery status.
             #

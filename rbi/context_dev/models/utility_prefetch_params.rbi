@@ -14,7 +14,7 @@ module ContextDev
           )
         end
 
-      # Identifier of the target to prefetch. Provide exactly one of domain or email.
+      # Domain or work email to prefetch. Provide exactly one.
       sig do
         returns(
           T.any(
@@ -29,23 +29,24 @@ module ContextDev
       sig { returns(ContextDev::UtilityPrefetchParams::Type::OrSymbol) }
       attr_accessor :type
 
-      # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-      # access policies are enabled for your organization; otherwise the request fails
-      # with `ACCESS_POLICIES_NOT_ENABLED`.
+      # Access policy IDs to apply; each URL must pass all of them. Requires access
+      # policies enabled for your organization; otherwise returns
+      # `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
       sig { params(policies: T::Array[String]).void }
       attr_writer :policies
 
-      # Labels for filtering usage in the dashboard.
+      # Labels for this request. Filter usage and request logs by them in the dashboard
+      # or with `GET /org/logs`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
       sig { params(tags: T::Array[String]).void }
       attr_writer :tags
 
-      # Request deadline and what to return when it passes.
+      # Request deadline. The request fails with 408 when it passes.
       sig { returns(T.nilable(ContextDev::UtilityPrefetchParams::TimeoutOpts)) }
       attr_reader :timeout_opts
 
@@ -71,17 +72,18 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Identifier of the target to prefetch. Provide exactly one of domain or email.
+        # Domain or work email to prefetch. Provide exactly one.
         identifier:,
         # Data to prefetch.
         type:,
-        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-        # access policies are enabled for your organization; otherwise the request fails
-        # with `ACCESS_POLICIES_NOT_ENABLED`.
+        # Access policy IDs to apply; each URL must pass all of them. Requires access
+        # policies enabled for your organization; otherwise returns
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
-        # Request deadline and what to return when it passes.
+        # Request deadline. The request fails with 408 when it passes.
         timeout_opts: nil,
         request_options: {}
       )
@@ -106,7 +108,7 @@ module ContextDev
       def to_hash
       end
 
-      # Identifier of the target to prefetch. Provide exactly one of domain or email.
+      # Domain or work email to prefetch. Provide exactly one.
       module Identifier
         extend ContextDev::Internal::Type::Union
 
@@ -127,14 +129,14 @@ module ContextDev
               )
             end
 
-          # Domain, e.g. `stripe.com`.
+          # Domain to prefetch, such as `stripe.com`.
           sig { returns(String) }
           attr_accessor :domain
 
           # Prefetch by domain.
           sig { params(domain: String).returns(T.attached_class) }
           def self.new(
-            # Domain, e.g. `stripe.com`.
+            # Domain to prefetch, such as `stripe.com`.
             domain:
           )
           end
@@ -153,18 +155,16 @@ module ContextDev
               )
             end
 
-          # Email address to prefetch data for. The domain will be extracted from the email.
-          # Free email providers (gmail.com, yahoo.com, etc.) and disposable email addresses
-          # are not allowed.
+          # Work email whose domain to prefetch. Free email providers such as `gmail.com`
+          # and disposable addresses are rejected with 422.
           sig { returns(String) }
           attr_accessor :email
 
-          # Prefetch by email. The domain will be extracted and validated.
+          # Prefetch by work email. Context.dev uses the email's domain.
           sig { params(email: String).returns(T.attached_class) }
           def self.new(
-            # Email address to prefetch data for. The domain will be extracted from the email.
-            # Free email providers (gmail.com, yahoo.com, etc.) and disposable email addresses
-            # are not allowed.
+            # Work email whose domain to prefetch. Free email providers such as `gmail.com`
+            # and disposable addresses are rejected with 422.
             email:
           )
           end
@@ -223,7 +223,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # Only "fail" is supported: return 408 at the deadline.
+        # Only `fail` is supported: the request returns 408 at the deadline.
         sig do
           returns(
             T.nilable(
@@ -241,7 +241,7 @@ module ContextDev
         end
         attr_writer :behavior
 
-        # Request deadline and what to return when it passes.
+        # Request deadline. The request fails with 408 when it passes.
         sig do
           params(
             milliseconds: Integer,
@@ -252,7 +252,7 @@ module ContextDev
         def self.new(
           # Deadline in milliseconds.
           milliseconds:,
-          # Only "fail" is supported: return 408 at the deadline.
+          # Only `fail` is supported: the request returns 408 at the deadline.
           behavior: nil
         )
         end
@@ -269,7 +269,7 @@ module ContextDev
         def to_hash
         end
 
-        # Only "fail" is supported: return 408 at the deadline.
+        # Only `fail` is supported: the request returns 408 at the deadline.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 

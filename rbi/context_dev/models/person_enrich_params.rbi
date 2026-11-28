@@ -11,7 +11,7 @@ module ContextDev
           T.any(ContextDev::PersonEnrichParams, ContextDev::Internal::AnyHash)
         end
 
-      # Company context to help identify the person. Provide a name or domain.
+      # Company associated with the person. Send a `name`, a `domain`, or both.
       sig { returns(T.nilable(ContextDev::PersonEnrichParams::Company)) }
       attr_reader :company
 
@@ -33,15 +33,16 @@ module ContextDev
       end
       attr_writer :education
 
-      # Email address of the person to find.
+      # Work email address of the person. Free and disposable email providers
+      # return 422.
       sig { returns(T.nilable(String)) }
       attr_reader :email
 
       sig { params(email: String).void }
       attr_writer :email
 
-      # Location context to help identify the person. Provide a city, region, or
-      # country.
+      # Location associated with the person. Send at least one of `city`, `region`, or
+      # `country`.
       sig { returns(T.nilable(ContextDev::PersonEnrichParams::Location)) }
       attr_reader :location
 
@@ -50,23 +51,24 @@ module ContextDev
       end
       attr_writer :location
 
-      # Person name. Without an email or person-profile URL, provide both first and last
-      # name plus company, education, or location.
+      # Name of the person. Without an email or profile URL, send both `first` and
+      # `last` plus `company`, `education`, or `location`.
       sig { returns(T.nilable(ContextDev::PersonEnrichParams::Name)) }
       attr_reader :name
 
       sig { params(name: ContextDev::PersonEnrichParams::Name::OrHash).void }
       attr_writer :name
 
-      # Public profile URLs for the person. A person-profile URL can identify the person
-      # without a name.
+      # Public profile URLs for the person. A person-profile URL is enough to identify
+      # them without a name.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :social_urls
 
       sig { params(social_urls: T::Array[String]).void }
       attr_writer :social_urls
 
-      # Labels for filtering usage in the dashboard.
+      # Labels for this request. Filter usage and request logs by them in the dashboard
+      # or with `GET /org/logs`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -108,22 +110,24 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Company context to help identify the person. Provide a name or domain.
+        # Company associated with the person. Send a `name`, a `domain`, or both.
         company: nil,
         # Education history to help distinguish people with similar names.
         education: nil,
-        # Email address of the person to find.
+        # Work email address of the person. Free and disposable email providers
+        # return 422.
         email: nil,
-        # Location context to help identify the person. Provide a city, region, or
-        # country.
+        # Location associated with the person. Send at least one of `city`, `region`, or
+        # `country`.
         location: nil,
-        # Person name. Without an email or person-profile URL, provide both first and last
-        # name plus company, education, or location.
+        # Name of the person. Without an email or profile URL, send both `first` and
+        # `last` plus `company`, `education`, or `location`.
         name: nil,
-        # Public profile URLs for the person. A person-profile URL can identify the person
-        # without a name.
+        # Public profile URLs for the person. A person-profile URL is enough to identify
+        # them without a name.
         social_urls: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
         # Request deadline and what to return when it passes.
         timeout_opts: nil,
@@ -176,7 +180,7 @@ module ContextDev
         sig { params(name: String).void }
         attr_writer :name
 
-        # Company context to help identify the person. Provide a name or domain.
+        # Company associated with the person. Send a `name`, a `domain`, or both.
         sig { params(domain: String, name: String).returns(T.attached_class) }
         def self.new(
           # Website domain of a company associated with the person.
@@ -341,8 +345,8 @@ module ContextDev
         sig { params(region: String).void }
         attr_writer :region
 
-        # Location context to help identify the person. Provide a city, region, or
-        # country.
+        # Location associated with the person. Send at least one of `city`, `region`, or
+        # `country`.
         sig do
           params(city: String, country: String, region: String).returns(
             T.attached_class
@@ -388,8 +392,8 @@ module ContextDev
         sig { params(last: String).void }
         attr_writer :last
 
-        # Person name. Without an email or person-profile URL, provide both first and last
-        # name plus company, education, or location.
+        # Name of the person. Without an email or profile URL, send both `first` and
+        # `last` plus `company`, `education`, or `location`.
         sig { params(first: String, last: String).returns(T.attached_class) }
         def self.new(
           # First or given name.
@@ -417,8 +421,8 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         sig do
           returns(
             T.nilable(
@@ -447,8 +451,8 @@ module ContextDev
         def self.new(
           # Deadline in milliseconds.
           milliseconds:,
-          # "fail" returns 408 at the deadline. "return-partial" returns available results;
-          # inspect the response’s partial flag.
+          # `fail` returns 408 at the deadline. `return-partial` returns the results
+          # collected so far and marks the response as partial.
           behavior: nil
         )
         end
@@ -465,8 +469,8 @@ module ContextDev
         def to_hash
         end
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 

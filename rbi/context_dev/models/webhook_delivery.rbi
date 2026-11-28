@@ -8,6 +8,7 @@ module ContextDev
           T.any(ContextDev::WebhookDelivery, ContextDev::Internal::AnyHash)
         end
 
+      # When the delivery was attempted.
       sig { returns(Time) }
       attr_accessor :attempted_at
 
@@ -21,25 +22,25 @@ module ContextDev
       end
       attr_writer :error
 
-      # The event this delivery carried. Deliveries recorded before event selection
-      # existed report change.detected.
+      # Event this delivery carried.
       sig { returns(ContextDev::WebhookDelivery::Event::TaggedSymbol) }
       attr_accessor :event
 
-      # Identifier sent in the X-Context-Id header.
+      # Event ID, sent in the `X-Context-Id` header.
       sig { returns(String) }
       attr_accessor :event_id
 
-      # The endpoint's final HTTP response status, or null when no response was
-      # received.
+      # Final HTTP status from your endpoint. `null` when no response was received.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :http_status
 
-      # Outcome of the delivery attempt. Any 2xx response counts as delivered.
+      # Outcome of the delivery: `delivered` (2xx response), `rejected` (non-2xx
+      # response), `failed` (no response), or `skipped_unsafe_url` (the URL isn't a safe
+      # public endpoint).
       sig { returns(ContextDev::WebhookDelivery::Status::TaggedSymbol) }
       attr_accessor :status
 
-      # Delivery ID for status checks and retries, when available.
+      # ID for looking up or retrying this delivery, when available.
       sig { returns(T.nilable(String)) }
       attr_reader :delivery_id
 
@@ -58,19 +59,20 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # When the delivery was attempted.
         attempted_at:,
         error:,
-        # The event this delivery carried. Deliveries recorded before event selection
-        # existed report change.detected.
+        # Event this delivery carried.
         event:,
-        # Identifier sent in the X-Context-Id header.
+        # Event ID, sent in the `X-Context-Id` header.
         event_id:,
-        # The endpoint's final HTTP response status, or null when no response was
-        # received.
+        # Final HTTP status from your endpoint. `null` when no response was received.
         http_status:,
-        # Outcome of the delivery attempt. Any 2xx response counts as delivered.
+        # Outcome of the delivery: `delivered` (2xx response), `rejected` (non-2xx
+        # response), `failed` (no response), or `skipped_unsafe_url` (the URL isn't a safe
+        # public endpoint).
         status:,
-        # Delivery ID for status checks and retries, when available.
+        # ID for looking up or retrying this delivery, when available.
         delivery_id: nil
       )
       end
@@ -100,14 +102,21 @@ module ContextDev
             )
           end
 
+        # Machine-readable error code, such as `fetch_failed`.
         sig { returns(String) }
         attr_accessor :code
 
+        # Human-readable explanation of the error.
         sig { returns(String) }
         attr_accessor :message
 
         sig { params(code: String, message: String).returns(T.attached_class) }
-        def self.new(code:, message:)
+        def self.new(
+          # Machine-readable error code, such as `fetch_failed`.
+          code:,
+          # Human-readable explanation of the error.
+          message:
+        )
         end
 
         sig { override.returns({ code: String, message: String }) }
@@ -115,8 +124,7 @@ module ContextDev
         end
       end
 
-      # The event this delivery carried. Deliveries recorded before event selection
-      # existed report change.detected.
+      # Event this delivery carried.
       module Event
         extend ContextDev::Internal::Type::Enum
 
@@ -144,7 +152,9 @@ module ContextDev
         end
       end
 
-      # Outcome of the delivery attempt. Any 2xx response counts as delivered.
+      # Outcome of the delivery: `delivered` (2xx response), `rejected` (non-2xx
+      # response), `failed` (no response), or `skipped_unsafe_url` (the URL isn't a safe
+      # public endpoint).
       module Status
         extend ContextDev::Internal::Type::Enum
 

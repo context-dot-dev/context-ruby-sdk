@@ -18,35 +18,35 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :monitor_id
 
-      # Opaque pagination cursor from a previous response.
+      # Cursor from the previous page's `next_cursor`. Omit for the first page.
       sig { returns(T.nilable(String)) }
       attr_reader :cursor
 
       sig { params(cursor: String).void }
       attr_writer :cursor
 
-      # Maximum number of items to return per page (1-100). Defaults to 25.
+      # Maximum number of changes to return per page. Defaults to 25.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
       sig { params(limit: Integer).void }
       attr_writer :limit
 
-      # Only include items at or after this ISO 8601 timestamp.
+      # Return only changes detected at or after this time.
       sig { returns(T.nilable(Time)) }
       attr_reader :since
 
       sig { params(since: Time).void }
       attr_writer :since
 
-      # Filter to items that have this tag.
+      # Return only changes that have this tag.
       sig { returns(T.nilable(String)) }
       attr_reader :tag
 
       sig { params(tag: String).void }
       attr_writer :tag
 
-      # Only include items before this ISO 8601 timestamp.
+      # Return only changes detected at or before this time.
       sig { returns(T.nilable(Time)) }
       attr_reader :until_
 
@@ -67,15 +67,15 @@ module ContextDev
       def self.new(
         # ID of the monitor.
         monitor_id:,
-        # Opaque pagination cursor from a previous response.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page.
         cursor: nil,
-        # Maximum number of items to return per page (1-100). Defaults to 25.
+        # Maximum number of changes to return per page. Defaults to 25.
         limit: nil,
-        # Only include items at or after this ISO 8601 timestamp.
+        # Return only changes detected at or after this time.
         since: nil,
-        # Filter to items that have this tag.
+        # Return only changes that have this tag.
         tag: nil,
-        # Only include items before this ISO 8601 timestamp.
+        # Return only changes detected at or before this time.
         until_: nil,
         request_options: {}
       )

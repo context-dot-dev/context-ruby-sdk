@@ -6,7 +6,7 @@ module ContextDev
       # @see ContextDev::Resources::Webhooks::Deliveries#retry_
       class DeliveryRetryResponse < ContextDev::Internal::Type::BaseModel
         # @!attribute id
-        #   Delivery ID.
+        #   Unique ID of the delivery.
         #
         #   @return [String]
         required :id, String
@@ -28,7 +28,7 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::Webhooks::DeliveryRetryResponse} for more details.
         #
-        #   @param id [String] Delivery ID.
+        #   @param id [String] Unique ID of the delivery.
         #
         #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
         #
@@ -43,7 +43,7 @@ module ContextDev
           required :credits_consumed, Integer
 
           # @!attribute credits_remaining
-          #   Credits remaining for your organization.
+          #   Credits your organization has left after this request.
           #
           #   @return [Integer]
           required :credits_remaining, Integer
@@ -53,7 +53,7 @@ module ContextDev
           #
           #   @param credits_consumed [Integer] Credits charged for this request.
           #
-          #   @param credits_remaining [Integer] Credits remaining for your organization.
+          #   @param credits_remaining [Integer] Credits your organization has left after this request.
         end
       end
     end

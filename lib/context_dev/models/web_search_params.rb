@@ -8,15 +8,15 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute query
-      #   Search query. Accepts natural language as well as Google-style search operators
-      #   such as `site:`, `-site:`, `inurl:`, `intitle:`, quoted phrases, and `OR`.
+      #   Search query. Accepts natural language and search operators such as `site:`,
+      #   `-site:`, `inurl:`, `intitle:`, quoted phrases, and `OR`.
       #
       #   @return [String]
       required :query, String
 
       # @!attribute country
-      #   Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
-      #   country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
+      #   Localize results to this country, as an ISO 3166-1 alpha-2 code such as `us` or
+      #   `de`.
       #
       #   @return [Symbol, ContextDev::Models::WebSearchParams::Country, nil]
       optional :country, enum: -> { ContextDev::WebSearchParams::Country }
@@ -28,8 +28,7 @@ module ContextDev
       optional :description_max_characters, Integer, api_name: :descriptionMaxCharacters, nil?: true
 
       # @!attribute exclude_domains
-      #   Blocklist — drop results from these domains. Up to 100 domains. Example:
-      #   ["pinterest.com", "reddit.com"].
+      #   Leave out results from these domains, such as `pinterest.com`.
       #
       #   @return [Array<String>, nil]
       optional :exclude_domains, ContextDev::Internal::Type::ArrayOf[String], api_name: :excludeDomains
@@ -41,8 +40,8 @@ module ContextDev
       optional :freshness, enum: -> { ContextDev::WebSearchParams::Freshness }
 
       # @!attribute highlights_options
-      #   Passages from each result page that are relevant to the query. Pages are read
-      #   with the `markdownOptions` settings.
+      #   Return passages from each result page that are relevant to the query. Pages are
+      #   read with the `markdownOptions` settings.
       #
       #   @return [ContextDev::Models::WebSearchParams::HighlightsOptions, nil]
       optional :highlights_options,
@@ -51,21 +50,20 @@ module ContextDev
                nil?: true
 
       # @!attribute include_domains
-      #   Allowlist — only return results from these domains. Up to 100 domains. Example:
-      #   ["arxiv.org", "github.com"].
+      #   Only return results from these domains, such as `arxiv.org`.
       #
       #   @return [Array<String>, nil]
       optional :include_domains, ContextDev::Internal::Type::ArrayOf[String], api_name: :includeDomains
 
       # @!attribute languages
-      #   Languages to return results in, as BCP 47 language codes such as `en` or `de`,
-      #   or "all" for any language. Defaults to "all". Example: ["en", "de"].
+      #   Languages to return results in, as BCP 47 codes such as `en` or `de`, or `all`
+      #   for any language.
       #
       #   @return [Symbol, Array<Symbol, ContextDev::Models::WebSearchParams::Languages::UnionMember1>, ContextDev::Models::WebSearchParams::Languages, nil]
       optional :languages, union: -> { ContextDev::WebSearchParams::Languages }
 
       # @!attribute markdown_options
-      #   Inline Markdown scraping for each result. Set `enabled: true` to activate.
+      #   Scrape each result page to Markdown. Set `enabled` to `true` to turn it on.
       #
       #   @return [ContextDev::Models::WebSearchParams::MarkdownOptions, nil]
       optional :markdown_options,
@@ -74,21 +72,22 @@ module ContextDev
                nil?: true
 
       # @!attribute num_results
-      #   Number of results to request and return (1–100). Defaults to 10.
+      #   Number of results to return.
       #
       #   @return [Integer, nil]
       optional :num_results, Integer, api_name: :numResults
 
       # @!attribute policies
-      #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-      #   access policies are enabled for your organization; otherwise the request fails
-      #   with `ACCESS_POLICIES_NOT_ENABLED`.
+      #   Access policy IDs to apply; each URL must pass all of them. Requires access
+      #   policies enabled for your organization; otherwise returns
+      #   `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute tags
-      #   Labels for filtering usage in the dashboard.
+      #   Labels for this request. Filter usage and request logs by them in the dashboard
+      #   or with `GET /org/logs`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -110,29 +109,29 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebSearchParams} for more details.
       #
-      #   @param query [String] Search query. Accepts natural language as well as Google-style search operators
+      #   @param query [String] Search query. Accepts natural language and search operators such as `site:`, `-s
       #
-      #   @param country [Symbol, ContextDev::Models::WebSearchParams::Country] Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific cou
+      #   @param country [Symbol, ContextDev::Models::WebSearchParams::Country] Localize results to this country, as an ISO 3166-1 alpha-2 code such as `us` or
       #
       #   @param description_max_characters [Integer, nil] Maximum length of each result's `description`, in characters.
       #
-      #   @param exclude_domains [Array<String>] Blocklist — drop results from these domains. Up to 100 domains. Example: ["pinte
+      #   @param exclude_domains [Array<String>] Leave out results from these domains, such as `pinterest.com`.
       #
       #   @param freshness [Symbol, ContextDev::Models::WebSearchParams::Freshness] Restrict results to content published within this window.
       #
-      #   @param highlights_options [ContextDev::Models::WebSearchParams::HighlightsOptions, nil] Passages from each result page that are relevant to the query. Pages are read wi
+      #   @param highlights_options [ContextDev::Models::WebSearchParams::HighlightsOptions, nil] Return passages from each result page that are relevant to the query. Pages are
       #
-      #   @param include_domains [Array<String>] Allowlist — only return results from these domains. Up to 100 domains. Example:
+      #   @param include_domains [Array<String>] Only return results from these domains, such as `arxiv.org`.
       #
-      #   @param languages [Symbol, Array<Symbol, ContextDev::Models::WebSearchParams::Languages::UnionMember1>, ContextDev::Models::WebSearchParams::Languages] Languages to return results in, as BCP 47 language codes such as `en` or `de`, o
+      #   @param languages [Symbol, Array<Symbol, ContextDev::Models::WebSearchParams::Languages::UnionMember1>, ContextDev::Models::WebSearchParams::Languages] Languages to return results in, as BCP 47 codes such as `en` or `de`, or `all` f
       #
-      #   @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions, nil] Inline Markdown scraping for each result. Set `enabled: true` to activate.
+      #   @param markdown_options [ContextDev::Models::WebSearchParams::MarkdownOptions, nil] Scrape each result page to Markdown. Set `enabled` to `true` to turn it on.
       #
-      #   @param num_results [Integer] Number of results to request and return (1–100). Defaults to 10.
+      #   @param num_results [Integer] Number of results to return.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+      #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
       #
-      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
       #
       #   @param timeout_opts [ContextDev::Models::WebSearchParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
@@ -140,8 +139,8 @@ module ContextDev
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
-      # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
+      # Localize results to this country, as an ISO 3166-1 alpha-2 code such as `us` or
+      # `de`.
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -410,22 +409,22 @@ module ContextDev
         optional :enabled, ContextDev::Internal::Type::Boolean
 
         # @!attribute max_characters
-        #   Maximum combined length of passages per result.
+        #   Maximum combined length of passages per result, in characters.
         #
         #   @return [Integer, nil]
         optional :max_characters, Integer, api_name: :maxCharacters
 
         # @!method initialize(enabled: nil, max_characters: nil)
-        #   Passages from each result page that are relevant to the query. Pages are read
-        #   with the `markdownOptions` settings.
+        #   Return passages from each result page that are relevant to the query. Pages are
+        #   read with the `markdownOptions` settings.
         #
         #   @param enabled [Boolean] Return relevant passages for each result. Adds 1 credit per 10 results.
         #
-        #   @param max_characters [Integer] Maximum combined length of passages per result.
+        #   @param max_characters [Integer] Maximum combined length of passages per result, in characters.
       end
 
-      # Languages to return results in, as BCP 47 language codes such as `en` or `de`,
-      # or "all" for any language. Defaults to "all". Example: ["en", "de"].
+      # Languages to return results in, as BCP 47 codes such as `en` or `de`, or `all`
+      # for any language.
       module Languages
         extend ContextDev::Internal::Type::Union
 
@@ -542,16 +541,17 @@ module ContextDev
 
       class MarkdownOptions < ContextDev::Internal::Type::BaseModel
         # @!attribute enabled
-        #   Scrape each result to Markdown. Adds 1 credit per result with Markdown.
+        #   Scrape each result page to Markdown. Adds 1 credit per result that returns
+        #   Markdown.
         #
         #   @return [Boolean, nil]
         optional :enabled, ContextDev::Internal::Type::Boolean
 
         # @!attribute include_frames
-        #   Which iframe contents to render into the Markdown. `auto` (default) inlines only
-        #   iframes that hold page content, such as same-site documents, framesets, job
-        #   boards, forms and embedded documents, and skips ads and widgets. `true` inlines
-        #   every iframe. `false` inlines none.
+        #   Which iframe contents to include in the Markdown. `auto` inlines only iframes
+        #   that hold page content, such as same-site documents, framesets, job boards,
+        #   forms, and embedded documents, and skips ads and widgets. `true` inlines every
+        #   iframe; `false` inlines none.
         #
         #   @return [Boolean, Symbol, ContextDev::Models::WebSearchParams::MarkdownOptions::IncludeFrames, nil]
         optional :include_frames,
@@ -559,34 +559,33 @@ module ContextDev
                  api_name: :includeFrames
 
         # @!attribute include_images
-        #   Emit image references in the Markdown.
+        #   Include image references in the Markdown.
         #
         #   @return [Boolean, nil]
         optional :include_images, ContextDev::Internal::Type::Boolean, api_name: :includeImages
 
         # @!attribute include_links
-        #   Keep hyperlinks in the Markdown.
+        #   Keep link URLs in the Markdown.
         #
         #   @return [Boolean, nil]
         optional :include_links, ContextDev::Internal::Type::Boolean, api_name: :includeLinks
 
         # @!attribute max_age_ms
-        #   Maximum cache age in milliseconds for result page content. Defaults to 180 days
-        #   (15552000000 ms) when Markdown is requested, or 365 days (31536000000 ms) when
-        #   only highlights are requested. Explicit values override either default. Maximum:
-        #   365 days. Set to 0 to force a fresh scrape.
+        #   Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+        #   Defaults to 180 days (15552000000 ms) with Markdown, or 365 days (31536000000
+        #   ms) with highlights only.
         #
         #   @return [Integer, nil]
         optional :max_age_ms, Integer, api_name: :maxAgeMs, nil?: true
 
         # @!attribute pdf
-        #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+        #   Whether to parse PDFs and which pages to read.
         #
         #   @return [ContextDev::Models::WebSearchParams::MarkdownOptions::Pdf, nil]
         optional :pdf, -> { ContextDev::WebSearchParams::MarkdownOptions::Pdf }
 
         # @!attribute shorten_base64_images
-        #   Truncate inline base64 image payloads to keep responses small.
+        #   Shorten inline base64 image data.
         #
         #   @return [Boolean, nil]
         optional :shorten_base64_images, ContextDev::Internal::Type::Boolean, api_name: :shortenBase64Images
@@ -600,14 +599,14 @@ module ContextDev
                  api_name: :timeoutOpts
 
         # @!attribute use_main_content_only
-        #   Strip nav, header, footer, and sidebar — keep only the primary article content.
+        #   Keep only the main content, without navigation, headers, footers, or sidebars.
         #
         #   @return [Boolean, nil]
         optional :use_main_content_only, ContextDev::Internal::Type::Boolean, api_name: :useMainContentOnly
 
         # @!attribute wait_for_ms
-        #   Extra wait after page load before rendering, in ms (0–30000). Useful for
-        #   JS-heavy pages.
+        #   Time to wait after each result page loads before reading it, in milliseconds.
+        #   `0` waits 500 ms. Helps with JavaScript-heavy pages.
         #
         #   @return [Integer, nil]
         optional :wait_for_ms, Integer, api_name: :waitForMs, nil?: true
@@ -616,32 +615,32 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebSearchParams::MarkdownOptions} for more details.
         #
-        #   Inline Markdown scraping for each result. Set `enabled: true` to activate.
+        #   Scrape each result page to Markdown. Set `enabled` to `true` to turn it on.
         #
-        #   @param enabled [Boolean] Scrape each result to Markdown. Adds 1 credit per result with Markdown.
+        #   @param enabled [Boolean] Scrape each result page to Markdown. Adds 1 credit per result that returns Markd
         #
-        #   @param include_frames [Boolean, Symbol, ContextDev::Models::WebSearchParams::MarkdownOptions::IncludeFrames] Which iframe contents to render into the Markdown. `auto` (default) inlines only
+        #   @param include_frames [Boolean, Symbol, ContextDev::Models::WebSearchParams::MarkdownOptions::IncludeFrames] Which iframe contents to include in the Markdown. `auto` inlines only iframes th
         #
-        #   @param include_images [Boolean] Emit image references in the Markdown.
+        #   @param include_images [Boolean] Include image references in the Markdown.
         #
-        #   @param include_links [Boolean] Keep hyperlinks in the Markdown.
+        #   @param include_links [Boolean] Keep link URLs in the Markdown.
         #
-        #   @param max_age_ms [Integer, nil] Maximum cache age in milliseconds for result page content. Defaults to 180 days
+        #   @param max_age_ms [Integer, nil] Maximum age of a cached result, in milliseconds. `0` always fetches fresh. Defau
         #
-        #   @param pdf [ContextDev::Models::WebSearchParams::MarkdownOptions::Pdf] PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+        #   @param pdf [ContextDev::Models::WebSearchParams::MarkdownOptions::Pdf] Whether to parse PDFs and which pages to read.
         #
-        #   @param shorten_base64_images [Boolean] Truncate inline base64 image payloads to keep responses small.
+        #   @param shorten_base64_images [Boolean] Shorten inline base64 image data.
         #
         #   @param timeout_opts [ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts] Request deadline and what to return when it passes.
         #
-        #   @param use_main_content_only [Boolean] Strip nav, header, footer, and sidebar — keep only the primary article content.
+        #   @param use_main_content_only [Boolean] Keep only the main content, without navigation, headers, footers, or sidebars.
         #
-        #   @param wait_for_ms [Integer, nil] Extra wait after page load before rendering, in ms (0–30000). Useful for JS-heav
+        #   @param wait_for_ms [Integer, nil] Time to wait after each result page loads before reading it, in milliseconds. `0
 
-        # Which iframe contents to render into the Markdown. `auto` (default) inlines only
-        # iframes that hold page content, such as same-site documents, framesets, job
-        # boards, forms and embedded documents, and skips ads and widgets. `true` inlines
-        # every iframe. `false` inlines none.
+        # Which iframe contents to include in the Markdown. `auto` inlines only iframes
+        # that hold page content, such as same-site documents, framesets, job boards,
+        # forms, and embedded documents, and skips ads and widgets. `true` inlines every
+        # iframe; `false` inlines none.
         #
         # @see ContextDev::Models::WebSearchParams::MarkdownOptions#include_frames
         module IncludeFrames
@@ -668,35 +667,31 @@ module ContextDev
         # @see ContextDev::Models::WebSearchParams::MarkdownOptions#pdf
         class Pdf < ContextDev::Internal::Type::BaseModel
           # @!attribute end_
-          #   Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-          #   be >= start.
+          #   Last page to parse. Defaults to the last page. Must be at least `start`.
           #
           #   @return [Integer, nil]
           optional :end_, Integer, api_name: :end
 
           # @!attribute should_parse
-          #   Parse PDF URLs. When false, PDF results are skipped with WEBSITE_ACCESS_ERROR.
+          #   Parse PDF results. When `false`, PDF results fail with `WEBSITE_ACCESS_ERROR`.
           #
           #   @return [Boolean, nil]
           optional :should_parse, ContextDev::Internal::Type::Boolean, api_name: :shouldParse
 
           # @!attribute start
-          #   First 1-based PDF page to parse.
+          #   First page to parse, starting at 1.
           #
           #   @return [Integer, nil]
           optional :start, Integer
 
           # @!method initialize(end_: nil, should_parse: nil, start: nil)
-          #   Some parameter documentations has been truncated, see
-          #   {ContextDev::Models::WebSearchParams::MarkdownOptions::Pdf} for more details.
+          #   Whether to parse PDFs and which pages to read.
           #
-          #   PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+          #   @param end_ [Integer] Last page to parse. Defaults to the last page. Must be at least `start`.
           #
-          #   @param end_ [Integer] Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must be
+          #   @param should_parse [Boolean] Parse PDF results. When `false`, PDF results fail with `WEBSITE_ACCESS_ERROR`.
           #
-          #   @param should_parse [Boolean] Parse PDF URLs. When false, PDF results are skipped with WEBSITE_ACCESS_ERROR.
-          #
-          #   @param start [Integer] First 1-based PDF page to parse.
+          #   @param start [Integer] First page to parse, starting at 1.
         end
 
         # @see ContextDev::Models::WebSearchParams::MarkdownOptions#timeout_opts
@@ -708,11 +703,11 @@ module ContextDev
           required :milliseconds, Integer
 
           # @!attribute behavior
-          #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-          #   inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-          #   On POST /web/scrape, an output that is not ready in time fails with error_code
-          #   REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-          #   only when the whole request cannot respond by the deadline.
+          #   `fail` returns 408 at the deadline. `return-partial` returns the results
+          #   collected so far and marks the response as partial. `return-partial` requires at
+          #   least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+          #   with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+          #   the whole request could not respond by the deadline.
           #
           #   @return [Symbol, ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::Behavior, nil]
           optional :behavior, enum: -> { ContextDev::WebSearchParams::MarkdownOptions::TimeoutOpts::Behavior }
@@ -726,13 +721,13 @@ module ContextDev
           #
           #   @param milliseconds [Integer] Deadline in milliseconds.
           #
-          #   @param behavior [Symbol, ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+          #   @param behavior [Symbol, ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-          # "fail" returns 408 at the deadline. "return-partial" returns available results;
-          # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-          # On POST /web/scrape, an output that is not ready in time fails with error_code
-          # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-          # only when the whole request cannot respond by the deadline.
+          # `fail` returns 408 at the deadline. `return-partial` returns the results
+          # collected so far and marks the response as partial. `return-partial` requires at
+          # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+          # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+          # the whole request could not respond by the deadline.
           #
           # @see ContextDev::Models::WebSearchParams::MarkdownOptions::TimeoutOpts#behavior
           module Behavior
@@ -755,8 +750,8 @@ module ContextDev
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-        #   inspect the response’s partial flag.
+        #   `fail` returns 408 at the deadline. `return-partial` returns the results
+        #   collected so far and marks the response as partial.
         #
         #   @return [Symbol, ContextDev::Models::WebSearchParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebSearchParams::TimeoutOpts::Behavior }
@@ -769,10 +764,10 @@ module ContextDev
         #
         #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebSearchParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   @param behavior [Symbol, ContextDev::Models::WebSearchParams::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         #
         # @see ContextDev::Models::WebSearchParams::TimeoutOpts#behavior
         module Behavior

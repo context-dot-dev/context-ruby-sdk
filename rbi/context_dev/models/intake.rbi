@@ -8,30 +8,29 @@ module ContextDev
           T.any(ContextDev::Intake, ContextDev::Internal::AnyHash)
         end
 
-      # URLs dropped before reserving because another entry resolved to the same page.
-      # Non-zero for sitemap crawls too, whose sitemaps routinely list a page more than
-      # once.
+      # URLs dropped because another entry resolved to the same page. Sitemap crawls
+      # report duplicates too, since sitemaps often list a page more than once.
       sig { returns(Integer) }
       attr_accessor :duplicates
 
-      # Rejected input URLs; `null` for a crawl.
+      # URLs rejected as invalid. `null` for a crawl.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :invalid
 
-      # Pages accepted; progress counts toward this total.
+      # Pages accepted for scraping. `progress` counts toward this total.
       sig { returns(Integer) }
       attr_accessor :reserved
 
-      # True when `reserved` is a crawl ceiling; false when it is an exact URL count.
+      # `true` when `reserved` is a crawl ceiling, `false` when it is an exact URL
+      # count.
       sig { returns(T::Boolean) }
       attr_accessor :reserved_is_ceiling
 
-      # URLs in the list you sent, before validation and de-duplication. Null for a
-      # crawl, which is given a source rather than a list.
+      # URLs in your list before validation and de-duplication. `null` for a crawl.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :submitted
 
-      # What the submission accepted.
+      # Page counts from your submission.
       sig do
         params(
           duplicates: Integer,
@@ -42,18 +41,17 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # URLs dropped before reserving because another entry resolved to the same page.
-        # Non-zero for sitemap crawls too, whose sitemaps routinely list a page more than
-        # once.
+        # URLs dropped because another entry resolved to the same page. Sitemap crawls
+        # report duplicates too, since sitemaps often list a page more than once.
         duplicates:,
-        # Rejected input URLs; `null` for a crawl.
+        # URLs rejected as invalid. `null` for a crawl.
         invalid:,
-        # Pages accepted; progress counts toward this total.
+        # Pages accepted for scraping. `progress` counts toward this total.
         reserved:,
-        # True when `reserved` is a crawl ceiling; false when it is an exact URL count.
+        # `true` when `reserved` is a crawl ceiling, `false` when it is an exact URL
+        # count.
         reserved_is_ceiling:,
-        # URLs in the list you sent, before validation and de-duplication. Null for a
-        # crawl, which is given a source rather than a list.
+        # URLs in your list before validation and de-duplication. `null` for a crawl.
         submitted:
       )
       end

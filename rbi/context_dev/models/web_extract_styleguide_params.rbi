@@ -14,8 +14,7 @@ module ContextDev
           )
         end
 
-      # Optional browser color scheme to emulate for websites that respond to
-      # prefers-color-scheme. This value is part of the styleguide cache key.
+      # Emulate a light or dark color scheme. Each scheme is cached separately.
       sig do
         returns(
           T.nilable(
@@ -33,37 +32,38 @@ module ContextDev
       end
       attr_writer :color_scheme
 
-      # Exact URL to inspect. Provide either `domain` or `directUrl`, not both.
+      # Exact page URL to analyze. Provide either `domain` or `directUrl`, not both.
       sig { returns(T.nilable(String)) }
       attr_reader :direct_url
 
       sig { params(direct_url: String).void }
       attr_writer :direct_url
 
-      # Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
-      # domain will be automatically normalized and validated. You must provide either
-      # 'domain' or 'directUrl', but not both.
+      # Domain to analyze, such as `stripe.com`. Provide either `domain` or `directUrl`,
+      # not both.
       sig { returns(T.nilable(String)) }
       attr_reader :domain
 
       sig { params(domain: String).void }
       attr_writer :domain
 
-      # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-      # year. `0` refreshes.
+      # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+      # Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+      # capped at 1 year.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :max_age_ms
 
-      # Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
-      # it out unless access policies are enabled for your organization; otherwise the
-      # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
+      # Comma-separated access policy IDs to apply; each URL must pass all of them.
+      # Requires access policies enabled for your organization; otherwise returns
+      # `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
       sig { params(policies: T::Array[String]).void }
       attr_writer :policies
 
-      # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+      # usage and request logs by them.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -84,8 +84,8 @@ module ContextDev
       end
       attr_writer :timeout_opts
 
-      # `enabled` disables request logs and traces and omits request and response
-      # content from usage logs. Brand data and hosted assets may still be stored.
+      # `enabled` turns off request logs and traces and keeps request and response
+      # content out of usage logs. Brand data and hosted assets may still be stored.
       # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
       sig do
         returns(
@@ -115,28 +115,28 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Optional browser color scheme to emulate for websites that respond to
-        # prefers-color-scheme. This value is part of the styleguide cache key.
+        # Emulate a light or dark color scheme. Each scheme is cached separately.
         color_scheme: nil,
-        # Exact URL to inspect. Provide either `domain` or `directUrl`, not both.
+        # Exact page URL to analyze. Provide either `domain` or `directUrl`, not both.
         direct_url: nil,
-        # Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
-        # domain will be automatically normalized and validated. You must provide either
-        # 'domain' or 'directUrl', but not both.
+        # Domain to analyze, such as `stripe.com`. Provide either `domain` or `directUrl`,
+        # not both.
         domain: nil,
-        # Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-        # year. `0` refreshes.
+        # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+        # Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+        # capped at 1 year.
         max_age_ms: nil,
-        # Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
-        # it out unless access policies are enabled for your organization; otherwise the
-        # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
+        # Comma-separated access policy IDs to apply; each URL must pass all of them.
+        # Requires access policies enabled for your organization; otherwise returns
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
-        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        # usage and request logs by them.
         tags: nil,
         # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # `enabled` disables request logs and traces and omits request and response
-        # content from usage logs. Brand data and hosted assets may still be stored.
+        # `enabled` turns off request logs and traces and keeps request and response
+        # content out of usage logs. Brand data and hosted assets may still be stored.
         # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
         zdr: nil,
         request_options: {}
@@ -162,8 +162,7 @@ module ContextDev
       def to_hash
       end
 
-      # Optional browser color scheme to emulate for websites that respond to
-      # prefers-color-scheme. This value is part of the styleguide cache key.
+      # Emulate a light or dark color scheme. Each scheme is cached separately.
       module ColorScheme
         extend ContextDev::Internal::Type::Enum
 
@@ -208,11 +207,11 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-        # On POST /web/scrape, an output that is not ready in time fails with error_code
-        # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-        # only when the whole request cannot respond by the deadline.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial. `return-partial` requires at
+        # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+        # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+        # the whole request could not respond by the deadline.
         sig do
           returns(
             T.nilable(
@@ -241,11 +240,11 @@ module ContextDev
         def self.new(
           # Deadline in milliseconds.
           milliseconds:,
-          # "fail" returns 408 at the deadline. "return-partial" returns available results;
-          # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-          # On POST /web/scrape, an output that is not ready in time fails with error_code
-          # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-          # only when the whole request cannot respond by the deadline.
+          # `fail` returns 408 at the deadline. `return-partial` returns the results
+          # collected so far and marks the response as partial. `return-partial` requires at
+          # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+          # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+          # the whole request could not respond by the deadline.
           behavior: nil
         )
         end
@@ -262,11 +261,11 @@ module ContextDev
         def to_hash
         end
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-        # On POST /web/scrape, an output that is not ready in time fails with error_code
-        # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-        # only when the whole request cannot respond by the deadline.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial. `return-partial` requires at
+        # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+        # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+        # the whole request could not respond by the deadline.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 
@@ -302,8 +301,8 @@ module ContextDev
         end
       end
 
-      # `enabled` disables request logs and traces and omits request and response
-      # content from usage logs. Brand data and hosted assets may still be stored.
+      # `enabled` turns off request logs and traces and keeps request and response
+      # content out of usage logs. Brand data and hosted assets may still be stored.
       # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum

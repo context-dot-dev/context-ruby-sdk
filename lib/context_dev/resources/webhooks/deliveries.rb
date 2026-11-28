@@ -5,13 +5,16 @@ module ContextDev
     class Webhooks
       # Inspect and retry batch and monitor webhook deliveries.
       class Deliveries
-        # Retrieve a webhook delivery’s status and original payload.
+        # Some parameter documentations has been truncated, see
+        # {ContextDev::Models::Webhooks::DeliveryRetrieveParams} for more details.
+        #
+        # Retrieve a webhook delivery's status, retry settings, and most recent attempt.
         #
         # @overload retrieve(delivery_id, tags: nil, request_options: {})
         #
-        # @param delivery_id [String] Delivery ID.
+        # @param delivery_id [String] ID of the delivery.
         #
-        # @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # @param tags [Array<String>] Comma-separated labels for this request, such as `production,team-alpha`. Filter
         #
         # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
         #
@@ -30,7 +33,8 @@ module ContextDev
           )
         end
 
-        # List batch and monitor webhook deliveries from the last 30 days.
+        # List webhook deliveries for your batches or monitors from the last 30 days,
+        # newest first. Filter by source, status, or creation time.
         #
         # @overload list(body:, request_options: {})
         #
@@ -51,17 +55,20 @@ module ContextDev
           )
         end
 
-        # List a delivery’s attempts, newest first.
+        # Some parameter documentations has been truncated, see
+        # {ContextDev::Models::Webhooks::DeliveryListAttemptsParams} for more details.
+        #
+        # List a webhook delivery's attempts, newest first.
         #
         # @overload list_attempts(delivery_id, cursor: nil, limit: nil, tags: nil, request_options: {})
         #
-        # @param delivery_id [String] Delivery ID.
+        # @param delivery_id [String] ID of the delivery.
         #
-        # @param cursor [String] The next_cursor from the previous response.
+        # @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page.
         #
-        # @param limit [Integer] Number of attempts to return.
+        # @param limit [Integer] Maximum number of attempts to return per page.
         #
-        # @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # @param tags [Array<String>] Comma-separated labels for this request, such as `production,team-alpha`. Filter
         #
         # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
         #
@@ -80,18 +87,21 @@ module ContextDev
           )
         end
 
-        # Resend the original payload using the source’s current URL and secret. Available
-        # for 7 days after the event.
+        # Some parameter documentations has been truncated, see
+        # {ContextDev::Models::Webhooks::DeliveryRetryParams} for more details.
+        #
+        # Resend a delivery's original payload to the source's current webhook URL, signed
+        # with its current secret. Available for 7 days after the event.
         #
         # @overload retry_(delivery_id, force: nil, tags: nil, idempotency_key: nil, request_options: {})
         #
-        # @param delivery_id [String] Path param: Delivery ID.
+        # @param delivery_id [String] Path param: ID of the delivery.
         #
-        # @param force [Boolean] Body param: Resend even if the delivery already succeeded. Defaults to false.
+        # @param force [Boolean] Body param: Resend even if the delivery already succeeded.
         #
-        # @param tags [Array<String>] Body param: Labels for filtering usage in the dashboard.
+        # @param tags [Array<String>] Body param: Labels for this request. Filter usage and request logs by them in th
         #
-        # @param idempotency_key [String] Header param: Unique key to prevent duplicate retry requests.
+        # @param idempotency_key [String] Header param: Unique key for this retry. Repeating the request with the same key
         #
         # @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}, nil]
         #

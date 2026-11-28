@@ -11,13 +11,13 @@ module ContextDev
           T.any(ContextDev::WebSearchParams, ContextDev::Internal::AnyHash)
         end
 
-      # Search query. Accepts natural language as well as Google-style search operators
-      # such as `site:`, `-site:`, `inurl:`, `intitle:`, quoted phrases, and `OR`.
+      # Search query. Accepts natural language and search operators such as `site:`,
+      # `-site:`, `inurl:`, `intitle:`, quoted phrases, and `OR`.
       sig { returns(String) }
       attr_accessor :query
 
-      # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
-      # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
+      # Localize results to this country, as an ISO 3166-1 alpha-2 code such as `us` or
+      # `de`.
       sig { returns(T.nilable(ContextDev::WebSearchParams::Country::OrSymbol)) }
       attr_reader :country
 
@@ -30,8 +30,7 @@ module ContextDev
       sig { returns(T.nilable(Integer)) }
       attr_accessor :description_max_characters
 
-      # Blocklist — drop results from these domains. Up to 100 domains. Example:
-      # ["pinterest.com", "reddit.com"].
+      # Leave out results from these domains, such as `pinterest.com`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :exclude_domains
 
@@ -49,8 +48,8 @@ module ContextDev
       end
       attr_writer :freshness
 
-      # Passages from each result page that are relevant to the query. Pages are read
-      # with the `markdownOptions` settings.
+      # Return passages from each result page that are relevant to the query. Pages are
+      # read with the `markdownOptions` settings.
       sig { returns(T.nilable(ContextDev::WebSearchParams::HighlightsOptions)) }
       attr_reader :highlights_options
 
@@ -62,16 +61,15 @@ module ContextDev
       end
       attr_writer :highlights_options
 
-      # Allowlist — only return results from these domains. Up to 100 domains. Example:
-      # ["arxiv.org", "github.com"].
+      # Only return results from these domains, such as `arxiv.org`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :include_domains
 
       sig { params(include_domains: T::Array[String]).void }
       attr_writer :include_domains
 
-      # Languages to return results in, as BCP 47 language codes such as `en` or `de`,
-      # or "all" for any language. Defaults to "all". Example: ["en", "de"].
+      # Languages to return results in, as BCP 47 codes such as `en` or `de`, or `all`
+      # for any language.
       sig do
         returns(
           T.nilable(
@@ -99,7 +97,7 @@ module ContextDev
       end
       attr_writer :languages
 
-      # Inline Markdown scraping for each result. Set `enabled: true` to activate.
+      # Scrape each result page to Markdown. Set `enabled` to `true` to turn it on.
       sig { returns(T.nilable(ContextDev::WebSearchParams::MarkdownOptions)) }
       attr_reader :markdown_options
 
@@ -111,23 +109,24 @@ module ContextDev
       end
       attr_writer :markdown_options
 
-      # Number of results to request and return (1–100). Defaults to 10.
+      # Number of results to return.
       sig { returns(T.nilable(Integer)) }
       attr_reader :num_results
 
       sig { params(num_results: Integer).void }
       attr_writer :num_results
 
-      # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-      # access policies are enabled for your organization; otherwise the request fails
-      # with `ACCESS_POLICIES_NOT_ENABLED`.
+      # Access policy IDs to apply; each URL must pass all of them. Requires access
+      # policies enabled for your organization; otherwise returns
+      # `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
       sig { params(policies: T::Array[String]).void }
       attr_writer :policies
 
-      # Labels for filtering usage in the dashboard.
+      # Labels for this request. Filter usage and request logs by them in the dashboard
+      # or with `GET /org/logs`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -181,37 +180,36 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Search query. Accepts natural language as well as Google-style search operators
-        # such as `site:`, `-site:`, `inurl:`, `intitle:`, quoted phrases, and `OR`.
+        # Search query. Accepts natural language and search operators such as `site:`,
+        # `-site:`, `inurl:`, `intitle:`, quoted phrases, and `OR`.
         query:,
-        # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
-        # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
+        # Localize results to this country, as an ISO 3166-1 alpha-2 code such as `us` or
+        # `de`.
         country: nil,
         # Maximum length of each result's `description`, in characters.
         description_max_characters: nil,
-        # Blocklist — drop results from these domains. Up to 100 domains. Example:
-        # ["pinterest.com", "reddit.com"].
+        # Leave out results from these domains, such as `pinterest.com`.
         exclude_domains: nil,
         # Restrict results to content published within this window.
         freshness: nil,
-        # Passages from each result page that are relevant to the query. Pages are read
-        # with the `markdownOptions` settings.
+        # Return passages from each result page that are relevant to the query. Pages are
+        # read with the `markdownOptions` settings.
         highlights_options: nil,
-        # Allowlist — only return results from these domains. Up to 100 domains. Example:
-        # ["arxiv.org", "github.com"].
+        # Only return results from these domains, such as `arxiv.org`.
         include_domains: nil,
-        # Languages to return results in, as BCP 47 language codes such as `en` or `de`,
-        # or "all" for any language. Defaults to "all". Example: ["en", "de"].
+        # Languages to return results in, as BCP 47 codes such as `en` or `de`, or `all`
+        # for any language.
         languages: nil,
-        # Inline Markdown scraping for each result. Set `enabled: true` to activate.
+        # Scrape each result page to Markdown. Set `enabled` to `true` to turn it on.
         markdown_options: nil,
-        # Number of results to request and return (1–100). Defaults to 10.
+        # Number of results to return.
         num_results: nil,
-        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-        # access policies are enabled for your organization; otherwise the request fails
-        # with `ACCESS_POLICIES_NOT_ENABLED`.
+        # Access policy IDs to apply; each URL must pass all of them. Requires access
+        # policies enabled for your organization; otherwise returns
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
         # Request deadline and what to return when it passes.
         timeout_opts: nil,
@@ -254,8 +252,8 @@ module ContextDev
       def to_hash
       end
 
-      # Two-letter ISO 3166-1 alpha-2 country code to localize results to a specific
-      # country (maps to Google's `gl` parameter). Example: "us", "gb", "de".
+      # Localize results to this country, as an ISO 3166-1 alpha-2 code such as `us` or
+      # `de`.
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -566,15 +564,15 @@ module ContextDev
         sig { params(enabled: T::Boolean).void }
         attr_writer :enabled
 
-        # Maximum combined length of passages per result.
+        # Maximum combined length of passages per result, in characters.
         sig { returns(T.nilable(Integer)) }
         attr_reader :max_characters
 
         sig { params(max_characters: Integer).void }
         attr_writer :max_characters
 
-        # Passages from each result page that are relevant to the query. Pages are read
-        # with the `markdownOptions` settings.
+        # Return passages from each result page that are relevant to the query. Pages are
+        # read with the `markdownOptions` settings.
         sig do
           params(enabled: T::Boolean, max_characters: Integer).returns(
             T.attached_class
@@ -583,7 +581,7 @@ module ContextDev
         def self.new(
           # Return relevant passages for each result. Adds 1 credit per 10 results.
           enabled: nil,
-          # Maximum combined length of passages per result.
+          # Maximum combined length of passages per result, in characters.
           max_characters: nil
         )
         end
@@ -595,8 +593,8 @@ module ContextDev
         end
       end
 
-      # Languages to return results in, as BCP 47 language codes such as `en` or `de`,
-      # or "all" for any language. Defaults to "all". Example: ["en", "de"].
+      # Languages to return results in, as BCP 47 codes such as `en` or `de`, or `all`
+      # for any language.
       module Languages
         extend ContextDev::Internal::Type::Union
 
@@ -1036,17 +1034,18 @@ module ContextDev
             )
           end
 
-        # Scrape each result to Markdown. Adds 1 credit per result with Markdown.
+        # Scrape each result page to Markdown. Adds 1 credit per result that returns
+        # Markdown.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :enabled
 
         sig { params(enabled: T::Boolean).void }
         attr_writer :enabled
 
-        # Which iframe contents to render into the Markdown. `auto` (default) inlines only
-        # iframes that hold page content, such as same-site documents, framesets, job
-        # boards, forms and embedded documents, and skips ads and widgets. `true` inlines
-        # every iframe. `false` inlines none.
+        # Which iframe contents to include in the Markdown. `auto` inlines only iframes
+        # that hold page content, such as same-site documents, framesets, job boards,
+        # forms, and embedded documents, and skips ads and widgets. `true` inlines every
+        # iframe; `false` inlines none.
         sig do
           returns(
             T.nilable(
@@ -1070,28 +1069,27 @@ module ContextDev
         end
         attr_writer :include_frames
 
-        # Emit image references in the Markdown.
+        # Include image references in the Markdown.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :include_images
 
         sig { params(include_images: T::Boolean).void }
         attr_writer :include_images
 
-        # Keep hyperlinks in the Markdown.
+        # Keep link URLs in the Markdown.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :include_links
 
         sig { params(include_links: T::Boolean).void }
         attr_writer :include_links
 
-        # Maximum cache age in milliseconds for result page content. Defaults to 180 days
-        # (15552000000 ms) when Markdown is requested, or 365 days (31536000000 ms) when
-        # only highlights are requested. Explicit values override either default. Maximum:
-        # 365 days. Set to 0 to force a fresh scrape.
+        # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+        # Defaults to 180 days (15552000000 ms) with Markdown, or 365 days (31536000000
+        # ms) with highlights only.
         sig { returns(T.nilable(Integer)) }
         attr_accessor :max_age_ms
 
-        # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+        # Whether to parse PDFs and which pages to read.
         sig do
           returns(T.nilable(ContextDev::WebSearchParams::MarkdownOptions::Pdf))
         end
@@ -1104,7 +1102,7 @@ module ContextDev
         end
         attr_writer :pdf
 
-        # Truncate inline base64 image payloads to keep responses small.
+        # Shorten inline base64 image data.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :shorten_base64_images
 
@@ -1127,19 +1125,19 @@ module ContextDev
         end
         attr_writer :timeout_opts
 
-        # Strip nav, header, footer, and sidebar — keep only the primary article content.
+        # Keep only the main content, without navigation, headers, footers, or sidebars.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :use_main_content_only
 
         sig { params(use_main_content_only: T::Boolean).void }
         attr_writer :use_main_content_only
 
-        # Extra wait after page load before rendering, in ms (0–30000). Useful for
-        # JS-heavy pages.
+        # Time to wait after each result page loads before reading it, in milliseconds.
+        # `0` waits 500 ms. Helps with JavaScript-heavy pages.
         sig { returns(T.nilable(Integer)) }
         attr_accessor :wait_for_ms
 
-        # Inline Markdown scraping for each result. Set `enabled: true` to activate.
+        # Scrape each result page to Markdown. Set `enabled` to `true` to turn it on.
         sig do
           params(
             enabled: T::Boolean,
@@ -1160,32 +1158,32 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Scrape each result to Markdown. Adds 1 credit per result with Markdown.
+          # Scrape each result page to Markdown. Adds 1 credit per result that returns
+          # Markdown.
           enabled: nil,
-          # Which iframe contents to render into the Markdown. `auto` (default) inlines only
-          # iframes that hold page content, such as same-site documents, framesets, job
-          # boards, forms and embedded documents, and skips ads and widgets. `true` inlines
-          # every iframe. `false` inlines none.
+          # Which iframe contents to include in the Markdown. `auto` inlines only iframes
+          # that hold page content, such as same-site documents, framesets, job boards,
+          # forms, and embedded documents, and skips ads and widgets. `true` inlines every
+          # iframe; `false` inlines none.
           include_frames: nil,
-          # Emit image references in the Markdown.
+          # Include image references in the Markdown.
           include_images: nil,
-          # Keep hyperlinks in the Markdown.
+          # Keep link URLs in the Markdown.
           include_links: nil,
-          # Maximum cache age in milliseconds for result page content. Defaults to 180 days
-          # (15552000000 ms) when Markdown is requested, or 365 days (31536000000 ms) when
-          # only highlights are requested. Explicit values override either default. Maximum:
-          # 365 days. Set to 0 to force a fresh scrape.
+          # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+          # Defaults to 180 days (15552000000 ms) with Markdown, or 365 days (31536000000
+          # ms) with highlights only.
           max_age_ms: nil,
-          # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+          # Whether to parse PDFs and which pages to read.
           pdf: nil,
-          # Truncate inline base64 image payloads to keep responses small.
+          # Shorten inline base64 image data.
           shorten_base64_images: nil,
           # Request deadline and what to return when it passes.
           timeout_opts: nil,
-          # Strip nav, header, footer, and sidebar — keep only the primary article content.
+          # Keep only the main content, without navigation, headers, footers, or sidebars.
           use_main_content_only: nil,
-          # Extra wait after page load before rendering, in ms (0–30000). Useful for
-          # JS-heavy pages.
+          # Time to wait after each result page loads before reading it, in milliseconds.
+          # `0` waits 500 ms. Helps with JavaScript-heavy pages.
           wait_for_ms: nil
         )
         end
@@ -1214,10 +1212,10 @@ module ContextDev
         def to_hash
         end
 
-        # Which iframe contents to render into the Markdown. `auto` (default) inlines only
-        # iframes that hold page content, such as same-site documents, framesets, job
-        # boards, forms and embedded documents, and skips ads and widgets. `true` inlines
-        # every iframe. `false` inlines none.
+        # Which iframe contents to include in the Markdown. `auto` inlines only iframes
+        # that hold page content, such as same-site documents, framesets, job boards,
+        # forms, and embedded documents, and skips ads and widgets. `true` inlines every
+        # iframe; `false` inlines none.
         module IncludeFrames
           extend ContextDev::Internal::Type::Union
 
@@ -1264,29 +1262,28 @@ module ContextDev
               )
             end
 
-          # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-          # be >= start.
+          # Last page to parse. Defaults to the last page. Must be at least `start`.
           sig { returns(T.nilable(Integer)) }
           attr_reader :end_
 
           sig { params(end_: Integer).void }
           attr_writer :end_
 
-          # Parse PDF URLs. When false, PDF results are skipped with WEBSITE_ACCESS_ERROR.
+          # Parse PDF results. When `false`, PDF results fail with `WEBSITE_ACCESS_ERROR`.
           sig { returns(T.nilable(T::Boolean)) }
           attr_reader :should_parse
 
           sig { params(should_parse: T::Boolean).void }
           attr_writer :should_parse
 
-          # First 1-based PDF page to parse.
+          # First page to parse, starting at 1.
           sig { returns(T.nilable(Integer)) }
           attr_reader :start
 
           sig { params(start: Integer).void }
           attr_writer :start
 
-          # PDF handling. `start`/`end` limit parsing to an inclusive, 1-based page range.
+          # Whether to parse PDFs and which pages to read.
           sig do
             params(
               end_: Integer,
@@ -1295,12 +1292,11 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-            # be >= start.
+            # Last page to parse. Defaults to the last page. Must be at least `start`.
             end_: nil,
-            # Parse PDF URLs. When false, PDF results are skipped with WEBSITE_ACCESS_ERROR.
+            # Parse PDF results. When `false`, PDF results fail with `WEBSITE_ACCESS_ERROR`.
             should_parse: nil,
-            # First 1-based PDF page to parse.
+            # First page to parse, starting at 1.
             start: nil
           )
           end
@@ -1327,11 +1323,11 @@ module ContextDev
           sig { returns(Integer) }
           attr_accessor :milliseconds
 
-          # "fail" returns 408 at the deadline. "return-partial" returns available results;
-          # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-          # On POST /web/scrape, an output that is not ready in time fails with error_code
-          # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-          # only when the whole request cannot respond by the deadline.
+          # `fail` returns 408 at the deadline. `return-partial` returns the results
+          # collected so far and marks the response as partial. `return-partial` requires at
+          # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+          # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+          # the whole request could not respond by the deadline.
           sig do
             returns(
               T.nilable(
@@ -1360,11 +1356,11 @@ module ContextDev
           def self.new(
             # Deadline in milliseconds.
             milliseconds:,
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-            # On POST /web/scrape, an output that is not ready in time fails with error_code
-            # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-            # only when the whole request cannot respond by the deadline.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial. `return-partial` requires at
+            # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+            # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+            # the whole request could not respond by the deadline.
             behavior: nil
           )
           end
@@ -1381,11 +1377,11 @@ module ContextDev
           def to_hash
           end
 
-          # "fail" returns 408 at the deadline. "return-partial" returns available results;
-          # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-          # On POST /web/scrape, an output that is not ready in time fails with error_code
-          # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-          # only when the whole request cannot respond by the deadline.
+          # `fail` returns 408 at the deadline. `return-partial` returns the results
+          # collected so far and marks the response as partial. `return-partial` requires at
+          # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+          # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+          # the whole request could not respond by the deadline.
           module Behavior
             extend ContextDev::Internal::Type::Enum
 
@@ -1435,8 +1431,8 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         sig do
           returns(
             T.nilable(
@@ -1465,8 +1461,8 @@ module ContextDev
         def self.new(
           # Deadline in milliseconds.
           milliseconds:,
-          # "fail" returns 408 at the deadline. "return-partial" returns available results;
-          # inspect the response’s partial flag.
+          # `fail` returns 408 at the deadline. `return-partial` returns the results
+          # collected so far and marks the response as partial.
           behavior: nil
         )
         end
@@ -1483,8 +1479,8 @@ module ContextDev
         def to_hash
         end
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 

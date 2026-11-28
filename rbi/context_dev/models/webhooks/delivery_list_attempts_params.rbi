@@ -15,25 +15,26 @@ module ContextDev
             )
           end
 
-        # Delivery ID.
+        # ID of the delivery.
         sig { returns(String) }
         attr_accessor :delivery_id
 
-        # The next_cursor from the previous response.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page.
         sig { returns(T.nilable(String)) }
         attr_reader :cursor
 
         sig { params(cursor: String).void }
         attr_writer :cursor
 
-        # Number of attempts to return.
+        # Maximum number of attempts to return per page.
         sig { returns(T.nilable(Integer)) }
         attr_reader :limit
 
         sig { params(limit: Integer).void }
         attr_writer :limit
 
-        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        # usage and request logs by them.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :tags
 
@@ -50,13 +51,14 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Delivery ID.
+          # ID of the delivery.
           delivery_id:,
-          # The next_cursor from the previous response.
+          # Cursor from the previous page's `next_cursor`. Omit for the first page.
           cursor: nil,
-          # Number of attempts to return.
+          # Maximum number of attempts to return per page.
           limit: nil,
-          # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+          # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+          # usage and request logs by them.
           tags: nil,
           request_options: {}
         )

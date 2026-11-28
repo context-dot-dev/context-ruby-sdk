@@ -11,8 +11,8 @@ module ContextDev
           T.any(ContextDev::NewsSearchParams, ContextDev::Internal::AnyHash)
         end
 
-      # What to search for: a specific company, or a natural-language query across all
-      # news.
+      # What to search for: news about a specific company, or a natural-language query
+      # across all news.
       sig do
         returns(
           T.any(
@@ -23,13 +23,12 @@ module ContextDev
       end
       attr_accessor :search_by
 
-      # Opaque next_cursor from the previous response, or null for the first page.
+      # Cursor from the previous page's `next_cursor`. Omit for the first page.
       sig { returns(T.nilable(String)) }
       attr_accessor :cursor
 
-      # Optional result filters. Use at most one of sourceDomain, sourceCountry,
-      # articleLanguage, or articleType. A date range may accompany that category;
-      # date.from must not exceed date.to.
+      # Filters for the results. Use at most one of `sourceDomain`, `sourceCountry`,
+      # `articleLanguage`, or `articleType`, optionally combined with `date`.
       sig { returns(T.nilable(ContextDev::NewsSearchParams::FilterBy)) }
       attr_reader :filter_by
 
@@ -38,31 +37,32 @@ module ContextDev
       end
       attr_writer :filter_by
 
-      # Maximum results to return. Defaults to 10.
+      # Maximum number of articles to return per page.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
       sig { params(limit: Integer).void }
       attr_writer :limit
 
-      # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-      # access policies are enabled for your organization; otherwise the request fails
-      # with `ACCESS_POLICIES_NOT_ENABLED`.
+      # Access policy IDs to apply; each URL must pass all of them. Requires access
+      # policies enabled for your organization; otherwise returns
+      # `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
       sig { params(policies: T::Array[String]).void }
       attr_writer :policies
 
-      # Result ordering. Defaults to newest for entity searches. Natural-language
-      # searches are always ordered by relevance.
+      # How to order results. Company searches default to `newest`; natural-language
+      # searches always use `relevance`.
       sig { returns(T.nilable(ContextDev::NewsSearchParams::SortBy)) }
       attr_reader :sort_by
 
       sig { params(sort_by: ContextDev::NewsSearchParams::SortBy::OrHash).void }
       attr_writer :sort_by
 
-      # Labels for filtering usage in the dashboard.
+      # Labels for this request. Filter usage and request logs by them in the dashboard
+      # or with `GET /org/logs`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -86,25 +86,25 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # What to search for: a specific company, or a natural-language query across all
-        # news.
+        # What to search for: news about a specific company, or a natural-language query
+        # across all news.
         search_by:,
-        # Opaque next_cursor from the previous response, or null for the first page.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page.
         cursor: nil,
-        # Optional result filters. Use at most one of sourceDomain, sourceCountry,
-        # articleLanguage, or articleType. A date range may accompany that category;
-        # date.from must not exceed date.to.
+        # Filters for the results. Use at most one of `sourceDomain`, `sourceCountry`,
+        # `articleLanguage`, or `articleType`, optionally combined with `date`.
         filter_by: nil,
-        # Maximum results to return. Defaults to 10.
+        # Maximum number of articles to return per page.
         limit: nil,
-        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-        # access policies are enabled for your organization; otherwise the request fails
-        # with `ACCESS_POLICIES_NOT_ENABLED`.
+        # Access policy IDs to apply; each URL must pass all of them. Requires access
+        # policies enabled for your organization; otherwise returns
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
-        # Result ordering. Defaults to newest for entity searches. Natural-language
-        # searches are always ordered by relevance.
+        # How to order results. Company searches default to `newest`; natural-language
+        # searches always use `relevance`.
         sort_by: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
         request_options: {}
       )
@@ -131,8 +131,8 @@ module ContextDev
       def to_hash
       end
 
-      # What to search for: a specific company, or a natural-language query across all
-      # news.
+      # What to search for: news about a specific company, or a natural-language query
+      # across all news.
       module SearchBy
         extend ContextDev::Internal::Type::Union
 
@@ -153,12 +153,12 @@ module ContextDev
               )
             end
 
-          # What to search for, in plain language, such as "chip export restrictions to
-          # China".
+          # What to search for, in plain language, such as
+          # `chip export restrictions to China`.
           sig { returns(String) }
           attr_accessor :query
 
-          # Use `natural_language` to search all news with a plain-language query.
+          # Set to `natural_language` to search all news with a plain-language query.
           sig { returns(Symbol) }
           attr_accessor :type
 
@@ -166,10 +166,10 @@ module ContextDev
           # by relevance.
           sig { params(query: String, type: Symbol).returns(T.attached_class) }
           def self.new(
-            # What to search for, in plain language, such as "chip export restrictions to
-            # China".
+            # What to search for, in plain language, such as
+            # `chip export restrictions to China`.
             query:,
-            # Use `natural_language` to search all news with a plain-language query.
+            # Set to `natural_language` to search all news with a plain-language query.
             type: :natural_language
           )
           end
@@ -201,7 +201,7 @@ module ContextDev
           end
           attr_accessor :entity
 
-          # Use `entity` to find news about a specific company.
+          # Set to `entity` to find news about a specific company.
           sig { returns(Symbol) }
           attr_accessor :type
 
@@ -221,7 +221,7 @@ module ContextDev
           def self.new(
             # The company to search news for, identified by name, domain, ticker, or ISIN.
             entity:,
-            # Use `entity` to find news about a specific company.
+            # Set to `entity` to find news about a specific company.
             type: :entity
           )
           end
@@ -266,11 +266,11 @@ module ContextDev
                   )
                 end
 
-              # Company name.
+              # Company name, such as `Stripe`.
               sig { returns(String) }
               attr_accessor :name
 
-              # Use `name` to identify the company by name.
+              # Set to `name` to identify the company by name.
               sig { returns(Symbol) }
               attr_accessor :type
 
@@ -279,9 +279,9 @@ module ContextDev
                 params(name: String, type: Symbol).returns(T.attached_class)
               end
               def self.new(
-                # Company name.
+                # Company name, such as `Stripe`.
                 name:,
-                # Use `name` to identify the company by name.
+                # Set to `name` to identify the company by name.
                 type: :name
               )
               end
@@ -300,11 +300,11 @@ module ContextDev
                   )
                 end
 
-              # Company website domain, such as apple.com.
+              # Company website domain, such as `apple.com`.
               sig { returns(String) }
               attr_accessor :domain
 
-              # Use `domain` to identify the company by website domain.
+              # Set to `domain` to identify the company by website domain.
               sig { returns(Symbol) }
               attr_accessor :type
 
@@ -313,9 +313,9 @@ module ContextDev
                 params(domain: String, type: Symbol).returns(T.attached_class)
               end
               def self.new(
-                # Company website domain, such as apple.com.
+                # Company website domain, such as `apple.com`.
                 domain:,
-                # Use `domain` to identify the company by website domain.
+                # Set to `domain` to identify the company by website domain.
                 type: :domain
               )
               end
@@ -334,16 +334,16 @@ module ContextDev
                   )
                 end
 
-              # Public-company ticker.
+              # Stock ticker symbol, such as `AAPL`.
               sig { returns(String) }
               attr_accessor :ticker
 
-              # Use `ticker` to identify a publicly traded company.
+              # Set to `ticker` to identify a publicly traded company.
               sig { returns(Symbol) }
               attr_accessor :type
 
-              # Stock exchange the ticker trades on, used to disambiguate tickers listed on
-              # multiple exchanges.
+              # Exchange the ticker trades on. Use it when the same ticker is listed on more
+              # than one exchange.
               sig do
                 returns(
                   T.nilable(
@@ -361,7 +361,7 @@ module ContextDev
               end
               attr_writer :exchange
 
-              # Identify the company by stock ticker, optionally scoped to an exchange.
+              # Identify the company by stock ticker, optionally on a specific exchange.
               sig do
                 params(
                   ticker: String,
@@ -371,12 +371,12 @@ module ContextDev
                 ).returns(T.attached_class)
               end
               def self.new(
-                # Public-company ticker.
+                # Stock ticker symbol, such as `AAPL`.
                 ticker:,
-                # Stock exchange the ticker trades on, used to disambiguate tickers listed on
-                # multiple exchanges.
+                # Exchange the ticker trades on. Use it when the same ticker is listed on more
+                # than one exchange.
                 exchange: nil,
-                # Use `ticker` to identify a publicly traded company.
+                # Set to `ticker` to identify a publicly traded company.
                 type: :ticker
               )
               end
@@ -394,8 +394,8 @@ module ContextDev
               def to_hash
               end
 
-              # Stock exchange the ticker trades on, used to disambiguate tickers listed on
-              # multiple exchanges.
+              # Exchange the ticker trades on. Use it when the same ticker is listed on more
+              # than one exchange.
               module Exchange
                 extend ContextDev::Internal::Type::Enum
 
@@ -790,22 +790,24 @@ module ContextDev
                   )
                 end
 
-              # International Securities Identification Number.
+              # International Securities Identification Number, such as `US0378331005`.
               sig { returns(String) }
               attr_accessor :isin
 
-              # Use `isin` to identify the company by its securities identifier.
+              # Set to `isin` to identify the company by its International Securities
+              # Identification Number.
               sig { returns(Symbol) }
               attr_accessor :type
 
-              # Identify the company by International Securities Identification Number.
+              # Identify the company by International Securities Identification Number (ISIN).
               sig do
                 params(isin: String, type: Symbol).returns(T.attached_class)
               end
               def self.new(
-                # International Securities Identification Number.
+                # International Securities Identification Number, such as `US0378331005`.
                 isin:,
-                # Use `isin` to identify the company by its securities identifier.
+                # Set to `isin` to identify the company by its International Securities
+                # Identification Number.
                 type: :isin
               )
               end
@@ -845,7 +847,7 @@ module ContextDev
             )
           end
 
-        # Article languages to include. Up to 3.
+        # Only return articles in these languages, as ISO 639 codes such as `en`.
         sig do
           returns(
             T.nilable(
@@ -867,7 +869,7 @@ module ContextDev
         end
         attr_writer :article_language
 
-        # Article types to include. Up to 3.
+        # Only return these types of coverage, such as `press_release`.
         sig do
           returns(
             T.nilable(
@@ -889,7 +891,7 @@ module ContextDev
         end
         attr_writer :article_type
 
-        # Published-at window in epoch milliseconds. from must be before or equal to to.
+        # Publish date range, in epoch milliseconds. `from` must not be later than `to`.
         sig { returns(T.nilable(ContextDev::NewsSearchParams::FilterBy::Date)) }
         attr_reader :date
 
@@ -900,7 +902,8 @@ module ContextDev
         end
         attr_writer :date
 
-        # Publisher countries to include, as lowercase ISO 3166-1 alpha-2 codes. Up to 3.
+        # Only return articles from publishers in these countries, as ISO 3166-1 alpha-2
+        # codes such as `us`.
         sig do
           returns(
             T.nilable(
@@ -922,16 +925,15 @@ module ContextDev
         end
         attr_writer :source_country
 
-        # Publisher domains to include. Up to 3.
+        # Only return articles from these publisher domains, such as `reuters.com`.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :source_domain
 
         sig { params(source_domain: T::Array[String]).void }
         attr_writer :source_domain
 
-        # Optional result filters. Use at most one of sourceDomain, sourceCountry,
-        # articleLanguage, or articleType. A date range may accompany that category;
-        # date.from must not exceed date.to.
+        # Filters for the results. Use at most one of `sourceDomain`, `sourceCountry`,
+        # `articleLanguage`, or `articleType`, optionally combined with `date`.
         sig do
           params(
             article_language:
@@ -951,15 +953,16 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Article languages to include. Up to 3.
+          # Only return articles in these languages, as ISO 639 codes such as `en`.
           article_language: nil,
-          # Article types to include. Up to 3.
+          # Only return these types of coverage, such as `press_release`.
           article_type: nil,
-          # Published-at window in epoch milliseconds. from must be before or equal to to.
+          # Publish date range, in epoch milliseconds. `from` must not be later than `to`.
           date: nil,
-          # Publisher countries to include, as lowercase ISO 3166-1 alpha-2 codes. Up to 3.
+          # Only return articles from publishers in these countries, as ISO 3166-1 alpha-2
+          # codes such as `us`.
           source_country: nil,
-          # Publisher domains to include. Up to 3.
+          # Only return articles from these publisher domains, such as `reuters.com`.
           source_domain: nil
         )
         end
@@ -1431,26 +1434,26 @@ module ContextDev
               )
             end
 
-          # Inclusive start of the published-at window, in epoch milliseconds.
+          # Inclusive start of the publish date range, in epoch milliseconds.
           sig { returns(T.nilable(Integer)) }
           attr_reader :from
 
           sig { params(from: Integer).void }
           attr_writer :from
 
-          # Inclusive end of the published-at window, in epoch milliseconds.
+          # Inclusive end of the publish date range, in epoch milliseconds.
           sig { returns(T.nilable(Integer)) }
           attr_reader :to
 
           sig { params(to: Integer).void }
           attr_writer :to
 
-          # Published-at window in epoch milliseconds. from must be before or equal to to.
+          # Publish date range, in epoch milliseconds. `from` must not be later than `to`.
           sig { params(from: Integer, to: Integer).returns(T.attached_class) }
           def self.new(
-            # Inclusive start of the published-at window, in epoch milliseconds.
+            # Inclusive start of the publish date range, in epoch milliseconds.
             from: nil,
-            # Inclusive end of the published-at window, in epoch milliseconds.
+            # Inclusive end of the publish date range, in epoch milliseconds.
             to: nil
           )
           end
@@ -1629,19 +1632,21 @@ module ContextDev
             )
           end
 
-        # Result ordering.
+        # `newest` puts the most recently published articles first; `relevance` puts the
+        # closest matches first.
         sig { returns(ContextDev::NewsSearchParams::SortBy::Type::OrSymbol) }
         attr_accessor :type
 
-        # Result ordering. Defaults to newest for entity searches. Natural-language
-        # searches are always ordered by relevance.
+        # How to order results. Company searches default to `newest`; natural-language
+        # searches always use `relevance`.
         sig do
           params(
             type: ContextDev::NewsSearchParams::SortBy::Type::OrSymbol
           ).returns(T.attached_class)
         end
         def self.new(
-          # Result ordering.
+          # `newest` puts the most recently published articles first; `relevance` puts the
+          # closest matches first.
           type:
         )
         end
@@ -1654,7 +1659,8 @@ module ContextDev
         def to_hash
         end
 
-        # Result ordering.
+        # `newest` puts the most recently published articles first; `relevance` puts the
+        # closest matches first.
         module Type
           extend ContextDev::Internal::Type::Enum
 

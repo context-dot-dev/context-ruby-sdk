@@ -2,6 +2,7 @@
 
 module ContextDev
   module Resources
+    # Extract structured data, competitors, styleguides, and fonts from any website.
     class Industry
       # Classify a company into NAICS industry codes.
       sig do
@@ -26,7 +27,8 @@ module ContextDev
         max_results: nil,
         # Minimum number of NAICS codes to return. Must be at least 1. Defaults to 1.
         min_results: nil,
-        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        # usage and request logs by them.
         tags: nil,
         # Request deadline and what to return when it passes.
         timeout_opts: nil,
@@ -60,7 +62,8 @@ module ContextDev
         max_results: nil,
         # Minimum number of SIC codes to return. Must be at least 1. Defaults to 1.
         min_results: nil,
-        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        # usage and request logs by them.
         tags: nil,
         # Request deadline and what to return when it passes.
         timeout_opts: nil,

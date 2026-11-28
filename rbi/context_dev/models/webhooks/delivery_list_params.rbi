@@ -73,7 +73,7 @@ module ContextDev
                 )
               end
 
-            # Delivery source.
+            # List batch webhook deliveries.
             sig { returns(Symbol) }
             attr_accessor :type
 
@@ -84,21 +84,21 @@ module ContextDev
             sig { params(batch_id: String).void }
             attr_writer :batch_id
 
-            # Only include events created after this ISO 8601 timestamp.
+            # Only include deliveries created after this time.
             sig { returns(T.nilable(Time)) }
             attr_reader :created_after
 
             sig { params(created_after: Time).void }
             attr_writer :created_after
 
-            # The next_cursor from the previous response.
+            # Cursor from the previous page's `next_cursor`. Omit for the first page.
             sig { returns(T.nilable(String)) }
             attr_reader :cursor
 
             sig { params(cursor: String).void }
             attr_writer :cursor
 
-            # Number of deliveries to return.
+            # Maximum number of deliveries to return per page.
             sig { returns(T.nilable(Integer)) }
             attr_reader :limit
 
@@ -123,7 +123,8 @@ module ContextDev
             end
             attr_writer :status
 
-            # Labels for filtering usage in the dashboard.
+            # Labels for this request. Filter usage and request logs by them in the dashboard
+            # or with `GET /org/logs`.
             sig { returns(T.nilable(T::Array[String])) }
             attr_reader :tags
 
@@ -145,17 +146,18 @@ module ContextDev
             def self.new(
               # Filter by batch ID.
               batch_id: nil,
-              # Only include events created after this ISO 8601 timestamp.
+              # Only include deliveries created after this time.
               created_after: nil,
-              # The next_cursor from the previous response.
+              # Cursor from the previous page's `next_cursor`. Omit for the first page.
               cursor: nil,
-              # Number of deliveries to return.
+              # Maximum number of deliveries to return per page.
               limit: nil,
               # Filter by delivery status.
               status: nil,
-              # Labels for filtering usage in the dashboard.
+              # Labels for this request. Filter usage and request logs by them in the dashboard
+              # or with `GET /org/logs`.
               tags: nil,
-              # Delivery source.
+              # List batch webhook deliveries.
               type: :batch
             )
             end
@@ -242,25 +244,25 @@ module ContextDev
                 )
               end
 
-            # Delivery source.
+            # List monitor webhook deliveries.
             sig { returns(Symbol) }
             attr_accessor :type
 
-            # Only include events created after this ISO 8601 timestamp.
+            # Only include deliveries created after this time.
             sig { returns(T.nilable(Time)) }
             attr_reader :created_after
 
             sig { params(created_after: Time).void }
             attr_writer :created_after
 
-            # The next_cursor from the previous response.
+            # Cursor from the previous page's `next_cursor`. Omit for the first page.
             sig { returns(T.nilable(String)) }
             attr_reader :cursor
 
             sig { params(cursor: String).void }
             attr_writer :cursor
 
-            # Number of deliveries to return.
+            # Maximum number of deliveries to return per page.
             sig { returns(T.nilable(Integer)) }
             attr_reader :limit
 
@@ -299,7 +301,8 @@ module ContextDev
             end
             attr_writer :status
 
-            # Labels for filtering usage in the dashboard.
+            # Labels for this request. Filter usage and request logs by them in the dashboard
+            # or with `GET /org/logs`.
             sig { returns(T.nilable(T::Array[String])) }
             attr_reader :tags
 
@@ -320,11 +323,11 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Only include events created after this ISO 8601 timestamp.
+              # Only include deliveries created after this time.
               created_after: nil,
-              # The next_cursor from the previous response.
+              # Cursor from the previous page's `next_cursor`. Omit for the first page.
               cursor: nil,
-              # Number of deliveries to return.
+              # Maximum number of deliveries to return per page.
               limit: nil,
               # Filter by monitor ID.
               monitor_id: nil,
@@ -332,9 +335,10 @@ module ContextDev
               run_id: nil,
               # Filter by delivery status.
               status: nil,
-              # Labels for filtering usage in the dashboard.
+              # Labels for this request. Filter usage and request logs by them in the dashboard
+              # or with `GET /org/logs`.
               tags: nil,
-              # Delivery source.
+              # List monitor webhook deliveries.
               type: :monitor
             )
             end

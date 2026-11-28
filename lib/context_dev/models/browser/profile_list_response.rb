@@ -6,20 +6,20 @@ module ContextDev
       # @see ContextDev::Resources::Browser::Profiles#list
       class ProfileListResponse < ContextDev::Internal::Type::BaseModel
         # @!attribute data
-        #   Browser profiles, newest first.
+        #   Browser profiles on this page, newest first.
         #
         #   @return [Array<ContextDev::Models::Browser::ProfileListResponse::Data>]
         required :data,
                  -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::Browser::ProfileListResponse::Data] }
 
         # @!attribute has_more
-        #   Whether a next page exists.
+        #   Whether more results are available after this page.
         #
         #   @return [Boolean]
         required :has_more, ContextDev::Internal::Type::Boolean
 
         # @!attribute next_cursor
-        #   Pass as `cursor` to fetch the next page.
+        #   Pass as `cursor` to fetch the next page. `null` on the last page.
         #
         #   @return [String, nil]
         required :next_cursor, String, nil?: true
@@ -41,11 +41,11 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::Browser::ProfileListResponse} for more details.
         #
-        #   @param data [Array<ContextDev::Models::Browser::ProfileListResponse::Data>] Browser profiles, newest first.
+        #   @param data [Array<ContextDev::Models::Browser::ProfileListResponse::Data>] Browser profiles on this page, newest first.
         #
-        #   @param has_more [Boolean] Whether a next page exists.
+        #   @param has_more [Boolean] Whether more results are available after this page.
         #
-        #   @param next_cursor [String, nil] Pass as `cursor` to fetch the next page.
+        #   @param next_cursor [String, nil] Pass as `cursor` to fetch the next page. `null` on the last page.
         #
         #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
         #
@@ -53,29 +53,33 @@ module ContextDev
 
         class Data < ContextDev::Internal::Type::BaseModel
           # @!attribute id
-          #   Profile ID to pass as `sharedParams.profile.profileId` on `/web/scrape`.
+          #   Unique ID of the browser profile. Pass it as `sharedParams.profile.profileId` on
+          #   `POST /web/scrape`.
           #
           #   @return [String]
           required :id, String
 
           # @!attribute created_at
-          #   When the profile was created.
+          #   When the browser profile was created.
           #
           #   @return [Time]
           required :created_at, Time
 
           # @!attribute description
-          #   The description supplied when the profile was created, or null.
+          #   Label set when the profile was created. `null` when none was set.
           #
           #   @return [String, nil]
           required :description, String, nil?: true
 
           # @!method initialize(id:, created_at:, description:)
-          #   @param id [String] Profile ID to pass as `sharedParams.profile.profileId` on `/web/scrape`.
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::Browser::ProfileListResponse::Data} for more details.
           #
-          #   @param created_at [Time] When the profile was created.
+          #   @param id [String] Unique ID of the browser profile. Pass it as `sharedParams.profile.profileId` on
           #
-          #   @param description [String, nil] The description supplied when the profile was created, or null.
+          #   @param created_at [Time] When the browser profile was created.
+          #
+          #   @param description [String, nil] Label set when the profile was created. `null` when none was set.
         end
 
         # @see ContextDev::Models::Browser::ProfileListResponse#key_metadata
@@ -87,7 +91,7 @@ module ContextDev
           required :credits_consumed, Integer
 
           # @!attribute credits_remaining
-          #   Credits remaining for your organization.
+          #   Credits your organization has left after this request.
           #
           #   @return [Integer]
           required :credits_remaining, Integer
@@ -97,7 +101,7 @@ module ContextDev
           #
           #   @param credits_consumed [Integer] Credits charged for this request.
           #
-          #   @param credits_remaining [Integer] Credits remaining for your organization.
+          #   @param credits_remaining [Integer] Credits your organization has left after this request.
         end
       end
     end

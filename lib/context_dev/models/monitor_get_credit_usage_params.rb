@@ -8,20 +8,20 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute since
-      #   Only include items at or after this ISO 8601 timestamp.
+      #   Count only runs created at or after this time.
       #
       #   @return [Time, nil]
       optional :since, Time
 
       # @!attribute tag
-      #   Only include monitors that currently have this tag. Deleted monitors are left
-      #   out.
+      #   Return usage only for monitors that currently have this tag. Deleted monitors
+      #   are excluded.
       #
       #   @return [String, nil]
       optional :tag, String
 
       # @!attribute until_
-      #   Only include items before this ISO 8601 timestamp.
+      #   Count only runs created at or before this time.
       #
       #   @return [Time, nil]
       optional :until_, Time
@@ -30,11 +30,11 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorGetCreditUsageParams} for more details.
       #
-      #   @param since [Time] Only include items at or after this ISO 8601 timestamp.
+      #   @param since [Time] Count only runs created at or after this time.
       #
-      #   @param tag [String] Only include monitors that currently have this tag. Deleted monitors are left ou
+      #   @param tag [String] Return usage only for monitors that currently have this tag. Deleted monitors ar
       #
-      #   @param until_ [Time] Only include items before this ISO 8601 timestamp.
+      #   @param until_ [Time] Count only runs created at or before this time.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
     end

@@ -11,7 +11,7 @@ module ContextDev
           )
         end
 
-      # Direct competitors ordered by relevance and confidence.
+      # Direct competitors, ordered by relevance and confidence.
       sig do
         returns(
           T::Array[
@@ -21,7 +21,7 @@ module ContextDev
       end
       attr_accessor :competitors
 
-      # Normalized input domain.
+      # Normalized domain from the request.
       sig { returns(String) }
       attr_accessor :domain
 
@@ -30,7 +30,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Status of the response.
+      # Always `ok` on success.
       sig do
         returns(
           ContextDev::Models::WebExtractCompetitorsResponse::Status::TaggedSymbol
@@ -38,7 +38,7 @@ module ContextDev
       end
       attr_accessor :status
 
-      # Target company profile inferred from the landing page.
+      # Profile of the requested company, inferred from its website.
       sig { returns(ContextDev::Models::WebExtractCompetitorsResponse::Target) }
       attr_reader :target
 
@@ -68,8 +68,8 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # True when the timeout ended processing and this response contains only usable
-      # results completed so far. Unfinished results are omitted.
+      # `true` when the deadline passed with `timeoutOpts.behavior` set to
+      # `return-partial`. Only results finished in time are included.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :partial
 
@@ -94,21 +94,21 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Direct competitors ordered by relevance and confidence.
+        # Direct competitors, ordered by relevance and confidence.
         competitors:,
-        # Normalized input domain.
+        # Normalized domain from the request.
         domain:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # Status of the response.
+        # Always `ok` on success.
         status:,
-        # Target company profile inferred from the landing page.
+        # Profile of the requested company, inferred from its website.
         target:,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
-        # True when the timeout ended processing and this response contains only usable
-        # results completed so far. Unfinished results are omitted.
+        # `true` when the deadline passed with `timeoutOpts.behavior` set to
+        # `return-partial`. Only results finished in time are included.
         partial: nil
       )
       end
@@ -151,11 +151,11 @@ module ContextDev
         end
         attr_accessor :confidence
 
-        # Short description of the competitor.
+        # Short description of what the competitor offers.
         sig { returns(String) }
         attr_accessor :description
 
-        # Competitor's normalized official domain.
+        # Competitor's official domain, normalized.
         sig { returns(String) }
         attr_accessor :domain
 
@@ -167,7 +167,7 @@ module ContextDev
         sig { returns(T::Array[String]) }
         attr_accessor :source_urls
 
-        # Competitor website URL.
+        # Competitor's website URL.
         sig { returns(String) }
         attr_accessor :url
 
@@ -185,15 +185,15 @@ module ContextDev
         def self.new(
           # Confidence that this company is a direct competitor.
           confidence:,
-          # Short description of the competitor.
+          # Short description of what the competitor offers.
           description:,
-          # Competitor's normalized official domain.
+          # Competitor's official domain, normalized.
           domain:,
           # Competitor company or product name.
           name:,
           # Search result URLs used as evidence for this competitor.
           source_urls:,
-          # Competitor website URL.
+          # Competitor's website URL.
           url:
         )
         end
@@ -250,7 +250,7 @@ module ContextDev
         end
       end
 
-      # Status of the response.
+      # Always `ok` on success.
       module Status
         extend ContextDev::Internal::Type::Enum
 
@@ -289,23 +289,23 @@ module ContextDev
             )
           end
 
-        # Company or product name inferred from the landing page.
+        # Company or product name, inferred from its website.
         sig { returns(String) }
         attr_accessor :company_name
 
-        # Specific operating field, product category, or market.
+        # Product category or market the company operates in.
         sig { returns(String) }
         attr_accessor :field
 
-        # One-sentence description of what the target company sells and who it serves.
+        # One-sentence summary of what the company sells and who it serves.
         sig { returns(String) }
         attr_accessor :field_description
 
-        # Resolved URL used for the landing page analysis.
+        # Website URL that was analyzed.
         sig { returns(String) }
         attr_accessor :website_url
 
-        # Target company profile inferred from the landing page.
+        # Profile of the requested company, inferred from its website.
         sig do
           params(
             company_name: String,
@@ -315,13 +315,13 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Company or product name inferred from the landing page.
+          # Company or product name, inferred from its website.
           company_name:,
-          # Specific operating field, product category, or market.
+          # Product category or market the company operates in.
           field:,
-          # One-sentence description of what the target company sells and who it serves.
+          # One-sentence summary of what the company sells and who it serves.
           field_description:,
-          # Resolved URL used for the landing page analysis.
+          # Website URL that was analyzed.
           website_url:
         )
         end
@@ -353,7 +353,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -366,7 +366,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

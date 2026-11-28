@@ -3,7 +3,7 @@
 module ContextDev
   module Resources
     class Browser
-      # See the authenticated browser profiles your organization created.
+      # List the authenticated browser profiles your organization created.
       sig { returns(ContextDev::Resources::Browser::Profiles) }
       attr_reader :profiles
 

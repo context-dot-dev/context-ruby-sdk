@@ -5,6 +5,7 @@ module ContextDev
     # @see ContextDev::Resources::Web#map_urls
     class WebMapURLsResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute domain
+      #   Normalized domain that was mapped.
       #
       #   @return [String]
       required :domain, String
@@ -17,11 +18,13 @@ module ContextDev
       required :request_id, String
 
       # @!attribute success
+      #   Always `true` on success.
       #
       #   @return [Boolean, ContextDev::Models::WebMapURLsResponse::Success]
       required :success, enum: -> { ContextDev::Models::WebMapURLsResponse::Success }
 
       # @!attribute urls
+      #   URLs found on the domain, with page metadata when available.
       #
       #   @return [Array<ContextDev::Models::WebMapURLsResponse::URL>]
       required :urls, -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebMapURLsResponse::URL] }
@@ -33,6 +36,8 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::WebMapURLsResponse::KeyMetadata }
 
       # @!attribute partial
+      #   `true` when the deadline passed with `timeoutOpts.behavior` set to
+      #   `return-partial`. Only results finished in time are included.
       #
       #   @return [Boolean, nil]
       optional :partial, ContextDev::Internal::Type::Boolean
@@ -41,18 +46,20 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebMapURLsResponse} for more details.
       #
-      #   @param domain [String]
+      #   @param domain [String] Normalized domain that was mapped.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param success [Boolean, ContextDev::Models::WebMapURLsResponse::Success]
+      #   @param success [Boolean, ContextDev::Models::WebMapURLsResponse::Success] Always `true` on success.
       #
-      #   @param urls [Array<ContextDev::Models::WebMapURLsResponse::URL>]
+      #   @param urls [Array<ContextDev::Models::WebMapURLsResponse::URL>] URLs found on the domain, with page metadata when available.
       #
       #   @param key_metadata [ContextDev::Models::WebMapURLsResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param partial [Boolean]
+      #   @param partial [Boolean] `true` when the deadline passed with `timeoutOpts.behavior` set to `return-parti
 
+      # Always `true` on success.
+      #
       # @see ContextDev::Models::WebMapURLsResponse#success
       module Success
         extend ContextDev::Internal::Type::Enum
@@ -65,36 +72,45 @@ module ContextDev
 
       class URL < ContextDev::Internal::Type::BaseModel
         # @!attribute url
+        #   Page URL.
         #
         #   @return [String]
         required :url, String
 
         # @!attribute description
+        #   Page description, when available.
         #
         #   @return [String, nil]
         optional :description, String
 
         # @!attribute keywords
+        #   Keywords from the page's `keywords` meta tag.
         #
         #   @return [Array<String>, nil]
         optional :keywords, ContextDev::Internal::Type::ArrayOf[String]
 
         # @!attribute language
+        #   Page language, when available.
         #
         #   @return [String, nil]
         optional :language, String
 
         # @!attribute title
+        #   Page title, when available.
         #
         #   @return [String, nil]
         optional :title, String
 
         # @!method initialize(url:, description: nil, keywords: nil, language: nil, title: nil)
-        #   @param url [String]
-        #   @param description [String]
-        #   @param keywords [Array<String>]
-        #   @param language [String]
-        #   @param title [String]
+        #   @param url [String] Page URL.
+        #
+        #   @param description [String] Page description, when available.
+        #
+        #   @param keywords [Array<String>] Keywords from the page's `keywords` meta tag.
+        #
+        #   @param language [String] Page language, when available.
+        #
+        #   @param title [String] Page title, when available.
       end
 
       # @see ContextDev::Models::WebMapURLsResponse#key_metadata
@@ -106,7 +122,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -116,7 +132,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

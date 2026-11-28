@@ -9,37 +9,41 @@ module ContextDev
         include ContextDev::Internal::Type::RequestParameters
 
         # @!attribute delivery_id
-        #   Delivery ID.
+        #   ID of the delivery.
         #
         #   @return [String]
         required :delivery_id, String
 
         # @!attribute cursor
-        #   The next_cursor from the previous response.
+        #   Cursor from the previous page's `next_cursor`. Omit for the first page.
         #
         #   @return [String, nil]
         optional :cursor, String
 
         # @!attribute limit
-        #   Number of attempts to return.
+        #   Maximum number of attempts to return per page.
         #
         #   @return [Integer, nil]
         optional :limit, Integer
 
         # @!attribute tags
-        #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        #   Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        #   usage and request logs by them.
         #
         #   @return [Array<String>, nil]
         optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
         # @!method initialize(delivery_id:, cursor: nil, limit: nil, tags: nil, request_options: {})
-        #   @param delivery_id [String] Delivery ID.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::Webhooks::DeliveryListAttemptsParams} for more details.
         #
-        #   @param cursor [String] The next_cursor from the previous response.
+        #   @param delivery_id [String] ID of the delivery.
         #
-        #   @param limit [Integer] Number of attempts to return.
+        #   @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page.
         #
-        #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        #   @param limit [Integer] Maximum number of attempts to return per page.
+        #
+        #   @param tags [Array<String>] Comma-separated labels for this request, such as `production,team-alpha`. Filter
         #
         #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
       end

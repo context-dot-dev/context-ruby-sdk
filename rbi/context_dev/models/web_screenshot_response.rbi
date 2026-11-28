@@ -11,7 +11,7 @@ module ContextDev
           )
         end
 
-      # Whether this response came from cache.
+      # Cache status of this response.
       sig { returns(ContextDev::Models::WebScreenshotResponse::CacheMetadata) }
       attr_reader :cache_metadata
 
@@ -28,14 +28,14 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # HTTP status code
+      # HTTP status code, repeated in the body.
       sig { returns(T.nilable(Integer)) }
       attr_reader :code
 
       sig { params(code: Integer).void }
       attr_writer :code
 
-      # The normalized domain that was processed
+      # Normalized domain that was captured.
       sig { returns(T.nilable(String)) }
       attr_reader :domain
 
@@ -61,7 +61,7 @@ module ContextDev
       end
       attr_writer :final_dom_state
 
-      # Height in pixels of the returned screenshot image
+      # Height of the returned image, in pixels.
       sig { returns(T.nilable(Integer)) }
       attr_reader :height
 
@@ -84,15 +84,15 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # Public image URL for standard requests, or an in-memory data URL when ZDR or
-      # non-empty custom headers are supplied.
+      # URL of the screenshot image. A data URL instead when `zdr` is `enabled` or
+      # `headers` are sent.
       sig { returns(T.nilable(String)) }
       attr_reader :screenshot
 
       sig { params(screenshot: String).void }
       attr_writer :screenshot
 
-      # Type of screenshot that was captured
+      # Whether the image covers the viewport or the full page.
       sig do
         returns(
           T.nilable(
@@ -117,7 +117,7 @@ module ContextDev
       sig { params(status: String).void }
       attr_writer :status
 
-      # Width in pixels of the returned screenshot image
+      # Width of the returned image, in pixels.
       sig { returns(T.nilable(Integer)) }
       attr_reader :width
 
@@ -144,30 +144,30 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Whether this response came from cache.
+        # Cache status of this response.
         cache_metadata:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # HTTP status code
+        # HTTP status code, repeated in the body.
         code: nil,
-        # The normalized domain that was processed
+        # Normalized domain that was captured.
         domain: nil,
         # `loaded`, or `still-loading` when capture ended before the page finished
         # loading.
         final_dom_state: nil,
-        # Height in pixels of the returned screenshot image
+        # Height of the returned image, in pixels.
         height: nil,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
-        # Public image URL for standard requests, or an in-memory data URL when ZDR or
-        # non-empty custom headers are supplied.
+        # URL of the screenshot image. A data URL instead when `zdr` is `enabled` or
+        # `headers` are sent.
         screenshot: nil,
-        # Type of screenshot that was captured
+        # Whether the image covers the viewport or the full page.
         screenshot_type: nil,
         # Always `ok` on success.
         status: nil,
-        # Width in pixels of the returned screenshot image
+        # Width of the returned image, in pixels.
         width: nil
       )
       end
@@ -205,12 +205,12 @@ module ContextDev
             )
           end
 
-        # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         sig { returns(Integer) }
         attr_accessor :age_ms
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         sig do
           returns(
             ContextDev::Models::WebScreenshotResponse::CacheMetadata::Status::TaggedSymbol
@@ -218,7 +218,7 @@ module ContextDev
         end
         attr_accessor :status
 
-        # Whether this response came from cache.
+        # Cache status of this response.
         sig do
           params(
             age_ms: Integer,
@@ -227,10 +227,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+          # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
           age_ms:,
-          # Whether the response was served from cache, required fresh work, or honored
-          # zero-data-retention cache bypass.
+          # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+          # retention bypassed the cache.
           status:
         )
         end
@@ -247,8 +247,8 @@ module ContextDev
         def to_hash
         end
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         module Status
           extend ContextDev::Internal::Type::Enum
 
@@ -338,7 +338,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -351,7 +351,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end
@@ -365,7 +365,7 @@ module ContextDev
         end
       end
 
-      # Type of screenshot that was captured
+      # Whether the image covers the viewport or the full page.
       module ScreenshotType
         extend ContextDev::Internal::Type::Enum
 

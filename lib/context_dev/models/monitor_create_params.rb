@@ -22,41 +22,40 @@ module ContextDev
 
       # @!attribute change_detection
       #   How changes are judged. Defaults to `semantic` for extract and search targets
-      #   and page targets with `instructions`, otherwise `exact`.
+      #   and for page targets with `instructions`; otherwise `exact`. Sitemap targets
+      #   support only `exact`, and extract targets only `semantic`.
       #
       #   @return [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic, nil]
       optional :change_detection, union: -> { ContextDev::MonitorCreateParams::ChangeDetection }
 
       # @!attribute mode
-      #   Always `web`. Optional.
+      #   Monitor category. Always `web`.
       #
       #   @return [Symbol, ContextDev::Models::MonitorCreateParams::Mode, nil]
       optional :mode, enum: -> { ContextDev::MonitorCreateParams::Mode }
 
       # @!attribute policies
-      #   Access policy IDs to apply to every run. Leave it out unless access policies are
-      #   enabled for your organization; otherwise the request fails with
-      #   `ACCESS_POLICIES_NOT_ENABLED`.
+      #   Access policy IDs to apply to every run. Requires access policies enabled for
+      #   your organization; otherwise returns `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute schedule
-      #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-      #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
-      #   between 10 minutes and 1 year.
+      #   Run the monitor at a fixed interval, such as every 6 hours or every 2 days. The
+      #   interval must be between 10 minutes and 1 year.
       #
       #   @return [ContextDev::Models::MonitorCreateParams::Schedule, nil]
       optional :schedule, -> { ContextDev::MonitorCreateParams::Schedule }
 
       # @!attribute tags
-      #   Labels for filtering monitors, their changes, and their usage.
+      #   Labels for grouping monitors. Filter monitors, changes, and credit usage by tag.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute webhook
-      #   Webhook destination and delivery settings. Null means no webhook is configured.
+      #   Webhook that receives monitor events. `null` when no webhook is configured.
       #
       #   @return [ContextDev::Models::MonitorCreateParams::Webhook, nil]
       optional :webhook, -> { ContextDev::MonitorCreateParams::Webhook }, nil?: true
@@ -71,15 +70,15 @@ module ContextDev
       #
       #   @param change_detection [ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic] How changes are judged. Defaults to `semantic` for extract and search targets an
       #
-      #   @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Always `web`. Optional.
+      #   @param mode [Symbol, ContextDev::Models::MonitorCreateParams::Mode] Monitor category. Always `web`.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply to every run. Leave it out unless access policies are
+      #   @param policies [Array<String>] Access policy IDs to apply to every run. Requires access policies enabled for yo
       #
-      #   @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor on a fixed interval defined by a frequency and a unit, e.g. ever
+      #   @param schedule [ContextDev::Models::MonitorCreateParams::Schedule] Run the monitor at a fixed interval, such as every 6 hours or every 2 days. The
       #
-      #   @param tags [Array<String>] Labels for filtering monitors, their changes, and their usage.
+      #   @param tags [Array<String>] Labels for grouping monitors. Filter monitors, changes, and credit usage by tag.
       #
-      #   @param webhook [ContextDev::Models::MonitorCreateParams::Webhook, nil] Webhook destination and delivery settings. Null means no webhook is configured.
+      #   @param webhook [ContextDev::Models::MonitorCreateParams::Webhook, nil] Webhook that receives monitor events. `null` when no webhook is configured.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
@@ -90,16 +89,16 @@ module ContextDev
 
         discriminator :type
 
-        # Watch a single web page. Exact detection reports visible-text diffs; semantic detection judges confirmed stable diffs against `instructions`.
+        # Watch one web page. `exact` detection reports any change to the visible text; `semantic` detection reports only confirmed changes that match `instructions`.
         variant :page, -> { ContextDev::MonitorCreateParams::Target::Page }
 
-        # Watch a site’s URL inventory for confirmed additions and removals.
+        # Watch a sitemap and report URLs that are added or removed.
         variant :sitemap, -> { ContextDev::MonitorCreateParams::Target::Sitemap }
 
-        # Track relevant pages selected by `schema` and `instructions`; refresh the page set periodically.
+        # Extract structured data from the most relevant pages of a site and report meaningful changes. Pages are chosen from `schema` and `instructions`, and the page set is refreshed periodically.
         variant :extract, -> { ContextDev::MonitorCreateParams::Target::Extract }
 
-        # Search the web on every run and report results not seen before, listed in the change’s `matched_urls` and `evidence`. Semantic detection reports only results describing a new development that matches `instructions`; exact detection reports every new result.
+        # Search the web on every run and report results not seen before, listed in the change's `matched_urls` and `evidence`. `semantic` detection reports only results about a new development that matches `instructions`; `exact` detection reports every new result.
         variant :search, -> { ContextDev::MonitorCreateParams::Target::Search }
 
         class Page < ContextDev::Internal::Type::BaseModel
@@ -110,15 +109,14 @@ module ContextDev
           required :type, const: :page
 
           # @!attribute url
-          #   Public HTTP(S) page URL to monitor.
+          #   Public HTTP(S) URL of the page to watch.
           #
           #   @return [String]
           required :url, String
 
           # @!attribute actions
-          #   Optional browser actions executed in array order after the page loads, before
-          #   content is captured, on every run. Requires a paid plan. Maximum: 5 actions.
-          #   Changes create a new baseline.
+          #   Browser actions to run in order after the page loads and before each capture.
+          #   Requires a paid plan. Changing it resets the baseline.
           #
           #   @return [Array<ContextDev::Models::MonitorCreateParams::Target::Page::Action::Wait, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Perform, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll>, nil]
           optional :actions,
@@ -128,27 +126,29 @@ module ContextDev
                    nil?: true
 
           # @!attribute exclude_selectors
-          #   Remove matching regions after inclusions. Changes create a new baseline.
+          #   CSS selectors for regions to ignore, applied after `include_selectors`. Changing
+          #   it resets the baseline.
           #
           #   @return [Array<String>, nil]
           optional :exclude_selectors, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute include_selectors
-          #   Monitor these CSS-selected regions. Empty or omitted uses main content. Changes
-          #   create a new baseline.
+          #   CSS selectors for the regions to watch. Omit or leave empty to watch the main
+          #   content. Changing it resets the baseline.
           #
           #   @return [Array<String>, nil]
           optional :include_selectors, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute instructions
-          #   Plain-language goal describing which page changes matter. When provided without
-          #   change_detection, semantic detection is inferred.
+          #   Plain-language description of the changes that matter. Requires `semantic`
+          #   detection, which is selected when `change_detection` is omitted.
           #
           #   @return [String, nil]
           optional :instructions, String
 
           # @!attribute normalize_whitespace
-          #   Normalize whitespace before comparing or analyzing text.
+          #   Collapse whitespace before comparing text, so spacing-only edits are not
+          #   reported.
           #
           #   @return [Boolean, nil]
           optional :normalize_whitespace, ContextDev::Internal::Type::Boolean
@@ -157,37 +157,36 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorCreateParams::Target::Page} for more details.
           #
-          #   Watch a single web page. Exact detection reports visible-text diffs; semantic
-          #   detection judges confirmed stable diffs against `instructions`.
+          #   Watch one web page. `exact` detection reports any change to the visible text;
+          #   `semantic` detection reports only confirmed changes that match `instructions`.
           #
-          #   @param url [String] Public HTTP(S) page URL to monitor.
+          #   @param url [String] Public HTTP(S) URL of the page to watch.
           #
-          #   @param actions [Array<ContextDev::Models::MonitorCreateParams::Target::Page::Action::Wait, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Perform, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll>, nil] Optional browser actions executed in array order after the page loads, before co
+          #   @param actions [Array<ContextDev::Models::MonitorCreateParams::Target::Page::Action::Wait, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Perform, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll>, nil] Browser actions to run in order after the page loads and before each capture. Re
           #
-          #   @param exclude_selectors [Array<String>] Remove matching regions after inclusions. Changes create a new baseline.
+          #   @param exclude_selectors [Array<String>] CSS selectors for regions to ignore, applied after `include_selectors`. Changing
           #
-          #   @param include_selectors [Array<String>] Monitor these CSS-selected regions. Empty or omitted uses main content. Changes
+          #   @param include_selectors [Array<String>] CSS selectors for the regions to watch. Omit or leave empty to watch the main co
           #
-          #   @param instructions [String] Plain-language goal describing which page changes matter. When provided without
+          #   @param instructions [String] Plain-language description of the changes that matter. Requires `semantic` detec
           #
-          #   @param normalize_whitespace [Boolean] Normalize whitespace before comparing or analyzing text.
+          #   @param normalize_whitespace [Boolean] Collapse whitespace before comparing text, so spacing-only edits are not reporte
           #
           #   @param type [Symbol, :page] Use `page` to watch one web page.
 
-          # Browser action discriminated by `do`. Each variant exposes only its applicable
-          # fields.
+          # One browser action. `do` selects the type: `wait`, `perform`, or `scroll`.
           module Action
             extend ContextDev::Internal::Type::Union
 
             discriminator :do
 
-            # Pause for a fixed number of milliseconds before continuing to the next action.
+            # Pause for a fixed time before the next action.
             variant :wait, -> { ContextDev::MonitorCreateParams::Target::Page::Action::Wait }
 
-            # Resolve and perform one natural-language browser action.
+            # Perform one browser instruction written in plain language.
             variant :perform, -> { ContextDev::MonitorCreateParams::Target::Page::Action::Perform }
 
-            # Scroll the page or a selected scrollable container, waiting adaptively for content and dimensions to settle after each iteration.
+            # Scroll the page or a scrollable container. Waits for new content to settle after each scroll.
             variant :scroll, -> { ContextDev::MonitorCreateParams::Target::Page::Action::Scroll }
 
             class Wait < ContextDev::Internal::Type::BaseModel
@@ -204,7 +203,7 @@ module ContextDev
               required :time_ms, Integer, api_name: :timeMs
 
               # @!method initialize(time_ms:, do_: :wait)
-              #   Pause for a fixed number of milliseconds before continuing to the next action.
+              #   Pause for a fixed time before the next action.
               #
               #   @param time_ms [Integer] Time to pause in milliseconds before the next action.
               #
@@ -225,7 +224,7 @@ module ContextDev
               required :do_, const: :perform, api_name: :do
 
               # @!method initialize(action:, do_: :perform)
-              #   Resolve and perform one natural-language browser action.
+              #   Perform one browser instruction written in plain language.
               #
               #   @param action [String] One browser instruction, such as clicking a button or entering text.
               #
@@ -240,51 +239,44 @@ module ContextDev
               required :do_, const: :scroll, api_name: :do
 
               # @!attribute amount
-              #   Pixels per scroll, one visible viewport, or the current scroll boundary.
-              #   Defaults to viewport.
+              #   Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
               #
               #   @return [Integer, Symbol, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll::Amount, nil]
               optional :amount, union: -> { ContextDev::MonitorCreateParams::Target::Page::Action::Scroll::Amount }
 
               # @!attribute container
-              #   CSS selector for the first matching scroll container. Defaults to the page.
+              #   Scroll the first container matching this CSS selector. Omit to scroll the page.
               #
               #   @return [String, nil]
               optional :container, String
 
               # @!attribute direction
-              #   Direction to scroll. Defaults to down.
+              #   Direction to scroll.
               #
               #   @return [Symbol, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll::Direction, nil]
               optional :direction, enum: -> { ContextDev::MonitorCreateParams::Target::Page::Action::Scroll::Direction }
 
               # @!attribute max_scrolls
-              #   Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
-              #   changing. Defaults to 1.
+              #   Maximum number of scroll steps. Stops early when the page stops changing.
               #
               #   @return [Integer, nil]
               optional :max_scrolls, Integer, api_name: :maxScrolls
 
               # @!method initialize(amount: nil, container: nil, direction: nil, max_scrolls: nil, do_: :scroll)
-              #   Some parameter documentations has been truncated, see
-              #   {ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll} for more
-              #   details.
+              #   Scroll the page or a scrollable container. Waits for new content to settle after
+              #   each scroll.
               #
-              #   Scroll the page or a selected scrollable container, waiting adaptively for
-              #   content and dimensions to settle after each iteration.
+              #   @param amount [Integer, Symbol, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll::Amount] Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
               #
-              #   @param amount [Integer, Symbol, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll::Amount] Pixels per scroll, one visible viewport, or the current scroll boundary. Default
+              #   @param container [String] Scroll the first container matching this CSS selector. Omit to scroll the page.
               #
-              #   @param container [String] CSS selector for the first matching scroll container. Defaults to the page.
+              #   @param direction [Symbol, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll::Direction] Direction to scroll.
               #
-              #   @param direction [Symbol, ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll::Direction] Direction to scroll. Defaults to down.
-              #
-              #   @param max_scrolls [Integer] Maximum scroll iterations. Stops early when scrolling and scrollable extent stop
+              #   @param max_scrolls [Integer] Maximum number of scroll steps. Stops early when the page stops changing.
               #
               #   @param do_ [Symbol, :scroll] Use `scroll` to move through the page or a container.
 
-              # Pixels per scroll, one visible viewport, or the current scroll boundary.
-              # Defaults to viewport.
+              # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
               #
               # @see ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll#amount
               module Amount
@@ -311,7 +303,7 @@ module ContextDev
                 # @!endgroup
               end
 
-              # Direction to scroll. Defaults to down.
+              # Direction to scroll.
               #
               # @see ContextDev::Models::MonitorCreateParams::Target::Page::Action::Scroll#direction
               module Direction
@@ -340,47 +332,47 @@ module ContextDev
           required :type, const: :sitemap
 
           # @!attribute url
-          #   Sitemap URL to monitor.
+          #   Public HTTP(S) URL of the sitemap to watch.
           #
           #   @return [String]
           required :url, String
 
           # @!attribute exclude
-          #   URL path patterns to exclude (max 50).
+          #   Path patterns of URLs to ignore, such as `/legal/*`.
           #
           #   @return [Array<String>, nil]
           optional :exclude, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute include
-          #   URL path patterns to include (max 50).
+          #   Path patterns of URLs to track, such as `/blog/*`.
           #
           #   @return [Array<String>, nil]
           optional :include, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute max_urls
-          #   Maximum number of sitemap URLs to track (capped at 10,000).
+          #   Maximum number of URLs to track.
           #
           #   @return [Integer, nil]
           optional :max_urls, Integer
 
           # @!method initialize(url:, exclude: nil, include: nil, max_urls: nil, type: :sitemap)
-          #   Watch a site’s URL inventory for confirmed additions and removals.
+          #   Watch a sitemap and report URLs that are added or removed.
           #
-          #   @param url [String] Sitemap URL to monitor.
+          #   @param url [String] Public HTTP(S) URL of the sitemap to watch.
           #
-          #   @param exclude [Array<String>] URL path patterns to exclude (max 50).
+          #   @param exclude [Array<String>] Path patterns of URLs to ignore, such as `/legal/*`.
           #
-          #   @param include [Array<String>] URL path patterns to include (max 50).
+          #   @param include [Array<String>] Path patterns of URLs to track, such as `/blog/*`.
           #
-          #   @param max_urls [Integer] Maximum number of sitemap URLs to track (capped at 10,000).
+          #   @param max_urls [Integer] Maximum number of URLs to track.
           #
           #   @param type [Symbol, :sitemap] Use `sitemap` to watch a site for added or removed URLs.
         end
 
         class Extract < ContextDev::Internal::Type::BaseModel
           # @!attribute instructions
-          #   Natural-language instructions guiding which pages and facts to track and which
-          #   changes to report.
+          #   Plain-language description of the pages and facts to track and the changes to
+          #   report.
           #
           #   @return [String]
           required :instructions, String
@@ -392,19 +384,19 @@ module ContextDev
           required :type, const: :extract
 
           # @!attribute url
-          #   Root URL to extract structured data from.
+          #   Public HTTP(S) URL where page discovery starts, usually the site home page.
           #
           #   @return [String]
           required :url, String
 
           # @!attribute follow_subdomains
-          #   Allow page discovery on subdomains of the target site.
+          #   Also discover pages on subdomains of the site.
           #
           #   @return [Boolean, nil]
           optional :follow_subdomains, ContextDev::Internal::Type::Boolean
 
           # @!attribute max_depth
-          #   Optional maximum link depth from the starting URL (0 = only the starting page).
+          #   Maximum link depth from `url`. `0` tracks only the starting page.
           #
           #   @return [Integer, nil]
           optional :max_depth, Integer
@@ -416,8 +408,8 @@ module ContextDev
           optional :max_pages, Integer
 
           # @!attribute schema
-          #   JSON Schema for page selection and the baseline snapshot. Changes return diffs
-          #   and evidence.
+          #   JSON Schema for the data to extract, up to 20,000 characters; it also guides
+          #   which pages are tracked. Defaults to a `summary` string and a `key_points` list.
           #
           #   @return [Hash{Symbol=>Object}, nil]
           optional :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
@@ -426,40 +418,42 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::MonitorCreateParams::Target::Extract} for more details.
           #
-          #   Track relevant pages selected by `schema` and `instructions`; refresh the page
-          #   set periodically.
+          #   Extract structured data from the most relevant pages of a site and report
+          #   meaningful changes. Pages are chosen from `schema` and `instructions`, and the
+          #   page set is refreshed periodically.
           #
-          #   @param instructions [String] Natural-language instructions guiding which pages and facts to track and which c
+          #   @param instructions [String] Plain-language description of the pages and facts to track and the changes to re
           #
-          #   @param url [String] Root URL to extract structured data from.
+          #   @param url [String] Public HTTP(S) URL where page discovery starts, usually the site home page.
           #
-          #   @param follow_subdomains [Boolean] Allow page discovery on subdomains of the target site.
+          #   @param follow_subdomains [Boolean] Also discover pages on subdomains of the site.
           #
-          #   @param max_depth [Integer] Optional maximum link depth from the starting URL (0 = only the starting page).
+          #   @param max_depth [Integer] Maximum link depth from `url`. `0` tracks only the starting page.
           #
           #   @param max_pages [Integer] Maximum number of pages to track.
           #
-          #   @param schema [Hash{Symbol=>Object}] JSON Schema for page selection and the baseline snapshot. Changes return diffs a
+          #   @param schema [Hash{Symbol=>Object}] JSON Schema for the data to extract, up to 20,000 characters; it also guides whi
           #
           #   @param type [Symbol, :extract] Use `extract` to watch structured data across selected pages.
         end
 
         class Search < ContextDev::Internal::Type::BaseModel
           # @!attribute query
-          #   Web search query to run on every check. Supports operators such as `site:`,
-          #   `-site:`, and quoted phrases.
+          #   Web search query to run on every check. Supports `site:`, `-site:`, and quoted
+          #   phrases.
           #
           #   @return [String]
           required :query, String
 
           # @!attribute type
-          #   Use `search` to watch the whole web for new results about a topic.
+          #   Use `search` to watch the web for new results about a topic.
           #
           #   @return [Symbol, :search]
           required :type, const: :search
 
           # @!attribute instructions
-          #   Plain-language description of which new results matter. Defaults to the query.
+          #   Plain-language description of the new results that matter. Defaults to `query`.
+          #   Not allowed with `exact` detection.
           #
           #   @return [String, nil]
           optional :instructions, String
@@ -469,15 +463,15 @@ module ContextDev
           #   {ContextDev::Models::MonitorCreateParams::Target::Search} for more details.
           #
           #   Search the web on every run and report results not seen before, listed in the
-          #   change’s `matched_urls` and `evidence`. Semantic detection reports only results
-          #   describing a new development that matches `instructions`; exact detection
+          #   change's `matched_urls` and `evidence`. `semantic` detection reports only
+          #   results about a new development that matches `instructions`; `exact` detection
           #   reports every new result.
           #
-          #   @param query [String] Web search query to run on every check. Supports operators such as `site:`, `-si
+          #   @param query [String] Web search query to run on every check. Supports `site:`, `-site:`, and quoted p
           #
-          #   @param instructions [String] Plain-language description of which new results matter. Defaults to the query.
+          #   @param instructions [String] Plain-language description of the new results that matter. Defaults to `query`.
           #
-          #   @param type [Symbol, :search] Use `search` to watch the whole web for new results about a topic.
+          #   @param type [Symbol, :search] Use `search` to watch the web for new results about a topic.
         end
 
         # @!method self.variants
@@ -485,16 +479,17 @@ module ContextDev
       end
 
       # How changes are judged. Defaults to `semantic` for extract and search targets
-      # and page targets with `instructions`, otherwise `exact`.
+      # and for page targets with `instructions`; otherwise `exact`. Sitemap targets
+      # support only `exact`, and extract targets only `semantic`.
       module ChangeDetection
         extend ContextDev::Internal::Type::Union
 
         discriminator :type
 
-        # Detect exact changes. For page targets, this means visible text diffs. For sitemap targets, this means URL additions and removals. For search targets, this means every new result.
+        # Report every change: visible-text diffs for pages, added or removed URLs for sitemaps, and every new result for searches.
         variant :exact, -> { ContextDev::MonitorCreateParams::ChangeDetection::Exact }
 
-        # Detect meaningful content changes using the target’s instructions and optional schema.
+        # Report only changes that matter, judged against the target's `instructions` and, for extract targets, its `schema`.
         variant :semantic, -> { ContextDev::MonitorCreateParams::ChangeDetection::Semantic }
 
         class Exact < ContextDev::Internal::Type::BaseModel
@@ -505,40 +500,44 @@ module ContextDev
           required :type, const: :exact
 
           # @!method initialize(type: :exact)
-          #   Detect exact changes. For page targets, this means visible text diffs. For
-          #   sitemap targets, this means URL additions and removals. For search targets, this
-          #   means every new result.
+          #   Report every change: visible-text diffs for pages, added or removed URLs for
+          #   sitemaps, and every new result for searches.
           #
           #   @param type [Symbol, :exact] Use `exact` to compare visible text, sitemap URLs, or search results.
         end
 
         class Semantic < ContextDev::Internal::Type::BaseModel
           # @!attribute type
-          #   Use `semantic` to judge changes against the target instructions.
+          #   Use `semantic` to report only changes that match the target's `instructions`.
           #
           #   @return [Symbol, :semantic]
           required :type, const: :semantic
 
           # @!attribute confidence_threshold
-          #   Minimum confidence required to report a meaningful change, from 0 to 1.
+          #   Minimum confidence a change needs to be reported. Higher values mean fewer, more
+          #   certain alerts.
           #
           #   @return [Float, nil]
           optional :confidence_threshold, Float
 
           # @!method initialize(confidence_threshold: nil, type: :semantic)
-          #   Detect meaningful content changes using the target’s instructions and optional
-          #   schema.
+          #   Some parameter documentations has been truncated, see
+          #   {ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic} for more
+          #   details.
           #
-          #   @param confidence_threshold [Float] Minimum confidence required to report a meaningful change, from 0 to 1.
+          #   Report only changes that matter, judged against the target's `instructions` and,
+          #   for extract targets, its `schema`.
           #
-          #   @param type [Symbol, :semantic] Use `semantic` to judge changes against the target instructions.
+          #   @param confidence_threshold [Float] Minimum confidence a change needs to be reported. Higher values mean fewer, more
+          #
+          #   @param type [Symbol, :semantic] Use `semantic` to report only changes that match the target's `instructions`.
         end
 
         # @!method self.variants
         #   @return [Array(ContextDev::Models::MonitorCreateParams::ChangeDetection::Exact, ContextDev::Models::MonitorCreateParams::ChangeDetection::Semantic)]
       end
 
-      # Always `web`. Optional.
+      # Monitor category. Always `web`.
       module Mode
         extend ContextDev::Internal::Type::Enum
 
@@ -550,9 +549,8 @@ module ContextDev
 
       class Schedule < ContextDev::Internal::Type::BaseModel
         # @!attribute frequency
-        #   Number of units between runs. The resulting interval (frequency × unit) must be
-        #   at least 10 minutes and at most 1 year (e.g. minimum 10 when unit is minutes;
-        #   maximum 365 when unit is days).
+        #   Number of `unit` periods between runs. The interval must be between 10 minutes
+        #   and 1 year, so at least `10` with `minutes` and at most `365` with `days`.
         #
         #   @return [Integer]
         required :frequency, Integer
@@ -564,7 +562,7 @@ module ContextDev
         required :type, enum: -> { ContextDev::MonitorCreateParams::Schedule::Type }
 
         # @!attribute unit
-        #   Time unit used with `frequency` to set the run interval.
+        #   Time unit for `frequency`.
         #
         #   @return [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Unit]
         required :unit, enum: -> { ContextDev::MonitorCreateParams::Schedule::Unit }
@@ -573,15 +571,14 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::MonitorCreateParams::Schedule} for more details.
         #
-        #   Run the monitor on a fixed interval defined by a frequency and a unit, e.g.
-        #   every 6 hours or every 2 days. The total interval (frequency × unit) must be
-        #   between 10 minutes and 1 year.
+        #   Run the monitor at a fixed interval, such as every 6 hours or every 2 days. The
+        #   interval must be between 10 minutes and 1 year.
         #
-        #   @param frequency [Integer] Number of units between runs. The resulting interval (frequency × unit) must be
+        #   @param frequency [Integer] Number of `unit` periods between runs. The interval must be between 10 minutes a
         #
         #   @param type [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Type] Use `interval` to run on a repeating schedule.
         #
-        #   @param unit [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Unit] Time unit used with `frequency` to set the run interval.
+        #   @param unit [Symbol, ContextDev::Models::MonitorCreateParams::Schedule::Unit] Time unit for `frequency`.
 
         # Use `interval` to run on a repeating schedule.
         #
@@ -595,7 +592,7 @@ module ContextDev
           #   @return [Array<Symbol>]
         end
 
-        # Time unit used with `frequency` to set the run interval.
+        # Time unit for `frequency`.
         #
         # @see ContextDev::Models::MonitorCreateParams::Schedule#unit
         module Unit
@@ -612,22 +609,22 @@ module ContextDev
 
       class Webhook < ContextDev::Internal::Type::BaseModel
         # @!attribute url
-        #   Public HTTP(S) URL that receives events. Slack and GovSlack URLs get formatted
-        #   messages.
+        #   Public HTTP(S) URL that receives events. Slack and GovSlack webhook URLs get
+        #   formatted messages.
         #
         #   @return [String]
         required :url, String
 
         # @!attribute events
-        #   Events to deliver. Defaults to `change.detected`; `run.completed` also includes
-        #   unchanged runs.
+        #   Events to send. Defaults to `change.detected`. Add `run.completed` to get a
+        #   delivery after every completed run, including runs with no change.
         #
         #   @return [Array<Symbol, ContextDev::Models::MonitorCreateParams::Webhook::Event>, nil]
         optional :events,
                  -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::MonitorCreateParams::Webhook::Event] }
 
         # @!attribute retry_
-        #   Webhook retry settings. Use {} for the default schedule.
+        #   Automatic retry settings. Pass `{}` for the default schedule.
         #
         #   @return [ContextDev::Models::RetryConfig, nil]
         optional :retry_, -> { ContextDev::RetryConfig }, api_name: :retry
@@ -636,13 +633,13 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::MonitorCreateParams::Webhook} for more details.
         #
-        #   Webhook destination and delivery settings. Null means no webhook is configured.
+        #   Webhook that receives monitor events. `null` when no webhook is configured.
         #
-        #   @param url [String] Public HTTP(S) URL that receives events. Slack and GovSlack URLs get formatted m
+        #   @param url [String] Public HTTP(S) URL that receives events. Slack and GovSlack webhook URLs get for
         #
-        #   @param events [Array<Symbol, ContextDev::Models::MonitorCreateParams::Webhook::Event>] Events to deliver. Defaults to `change.detected`; `run.completed` also includes
+        #   @param events [Array<Symbol, ContextDev::Models::MonitorCreateParams::Webhook::Event>] Events to send. Defaults to `change.detected`. Add `run.completed` to get a deli
         #
-        #   @param retry_ [ContextDev::Models::RetryConfig] Webhook retry settings. Use {} for the default schedule.
+        #   @param retry_ [ContextDev::Models::RetryConfig] Automatic retry settings. Pass `{}` for the default schedule.
 
         module Event
           extend ContextDev::Internal::Type::Enum

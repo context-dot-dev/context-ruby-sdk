@@ -2,38 +2,38 @@
 
 module ContextDev
   module Resources
+    # Convert uploaded files, such as PDFs and Office documents, into Markdown.
     class Parse
       # Some parameter documentations has been truncated, see
       # {ContextDev::Models::ParseHandleParams} for more details.
       #
-      # Convert uploaded file bytes into Markdown and optional HTML. WARC and WARC.GZ
-      # archives combine HTTP response, resource, and conversion records in archive
-      # order. Revisit and segmented records are skipped. Decoded WARC content is
-      # limited to 50 MiB.
+      # Convert a file to Markdown. Handles PDF, Word, Excel, PowerPoint, HTML, XML,
+      # CSV, JSON, YAML, source code, subtitles, images, and WARC archives. Send the raw
+      # bytes as the request body; set `ocr=true` to read scanned pages and images.
       #
       # @overload handle(body:, client: nil, extension: nil, include_images: nil, include_links: nil, include_numbered_pages: nil, ocr: nil, pdf: nil, shorten_base64_images: nil, tags: nil, use_main_content_only: nil, zdr: nil, request_options: {})
       #
       # @param body [Pathname, StringIO, IO, String, ContextDev::FilePart] Body param
       #
-      # @param client [String] Query param: Optional client identifier used for usage attribution.
+      # @param client [String] Query param: Client identifier for usage attribution.
       #
-      # @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] Query param: Optional file extension hint, such as pdf, docx, xlsx, pptx, html,
+      # @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] Query param: File type hint, such as `pdf`, `docx`, `xlsx`, `pptx`, `html`, `jso
       #
-      # @param include_images [Boolean] Query param: Include image references in Markdown output
+      # @param include_images [Boolean] Query param: Include image references in the Markdown.
       #
-      # @param include_links [Boolean] Query param: Preserve hyperlinks in Markdown output
+      # @param include_links [Boolean] Query param: Keep link URLs in the Markdown.
       #
       # @param include_numbered_pages [Boolean] Query param: Start each PDF page in the Markdown with a `<!-- page N -->` line,
       #
-      # @param ocr [Boolean] Query param: Read text from images and scanned PDF pages. PDF page ranges still
+      # @param ocr [Boolean] Query param: Read text from images and scanned PDF pages with OCR, within the `p
       #
-      # @param pdf [ContextDev::Models::ParseHandleParams::Pdf] Query param: PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5
+      # @param pdf [ContextDev::Models::ParseHandleParams::Pdf] Query param: PDF page range as a JSON object, such as `{"start": 2, "end": 5}`.
       #
-      # @param shorten_base64_images [Boolean] Query param: Shorten base64-encoded image data in the Markdown output
+      # @param shorten_base64_images [Boolean] Query param: Shorten inline base64 image data.
       #
-      # @param tags [Array<String>] Query param: Comma-separated labels for filtering usage, e.g. `production,team-a
+      # @param tags [Array<String>] Query param: Comma-separated labels for this request, such as `production,team-a
       #
-      # @param use_main_content_only [Boolean] Query param: Extract only the main content from HTML-like inputs
+      # @param use_main_content_only [Boolean] Query param: Keep only the main content, without navigation, headers, footers, o
       #
       # @param zdr [Symbol, ContextDev::Models::ParseHandleParams::Zdr] Query param: `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLE
       #

@@ -2,9 +2,13 @@
 
 module ContextDev
   module Resources
+    # Retrieve a brand's logos, colors, company details, and social links, or find
+    # brands by name or domain.
     class Brand
-      # Retrieve logos, colors, company details, and social links using one lookup
-      # identifier. A direct URL limits extraction to that page.
+      # Look up a brand by domain, company name, work email, stock ticker, page URL, or
+      # card transaction descriptor. Returns logos, colors, backdrops, description,
+      # industries, address, stock listing, and social links. A `by_direct_url` lookup
+      # reads only that page.
       sig do
         params(
           body:
@@ -20,16 +24,16 @@ module ContextDev
         ).returns(ContextDev::Models::BrandRetrieveResponse)
       end
       def retrieve(
-        # One lookup, chosen by `type`.
+        # Brand lookup. Set `type` to choose how to identify the brand.
         body:,
         request_options: {}
       )
       end
 
-      # Find up to 10 brands by name or domain, ordered by popularity. Optionally filter
-      # by country and primary language; both filters must match when provided together.
-      # Results include description, country, and language when available. Use the
-      # returned domain to retrieve a full brand profile.
+      # Autocomplete brand names and domains as a user types, with up to 10 brands
+      # ranked by popularity and a ready-to-use logo URL for each. Filter by country and
+      # primary language. Pass a returned `domain` to `POST /brand/retrieve` for the
+      # full brand profile.
       sig do
         params(
           query: String,
@@ -43,24 +47,24 @@ module ContextDev
         ).returns(ContextDev::Models::BrandSearchResponse)
       end
       def search(
-        # Search term, matched against the fields selected by queryBy (e.g. 'nike',
-        # 'nike.com', 'nik').
+        # Search term, matched against the fields in `queryBy`, such as `nike`,
+        # `nike.com`, or `nik`.
         query:,
-        # Whether the search term matches by prefix, so partial words match as they are
-        # typed (e.g. 'nik' matches Nike). Set to false to match whole words only.
+        # Match the search term as a prefix, so `nik` matches Nike while the user is still
+        # typing. Set to `false` to match whole words only.
         autocomplete: nil,
         # Only return brands in this country, as an uppercase ISO 3166-1 alpha-2 code such
-        # as US or GB.
+        # as `US` or `GB`.
         country: nil,
-        # Only return brands with this primary language, such as english or french.
+        # Only return brands with this primary language, such as `english` or `french`.
         language: nil,
-        # Fields to match the search term against, as a comma-separated list or repeated
-        # parameter: 'name', 'domain', or both. Defaults to both.
+        # Fields to match the search term against: `name`, `domain`, or both. Send a
+        # comma-separated list or repeat the parameter.
         query_by: nil,
-        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        # usage and request logs by them.
         tags: nil,
-        # Maximum number of typos tolerated when matching, from 0 to 2. Defaults to 0 (no
-        # typo tolerance).
+        # Maximum number of typos to tolerate when matching. `0` requires exact spelling.
         typo_tolerance: nil,
         request_options: {}
       )

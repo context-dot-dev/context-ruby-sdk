@@ -11,12 +11,12 @@ module ContextDev
           )
         end
 
-      # True when feedback for this request_id was already recorded; the original
-      # feedback_id is returned.
+      # `true` when feedback for this `request_id` was already recorded. `feedback_id`
+      # is then the original ID.
       sig { returns(T::Boolean) }
       attr_accessor :already_submitted
 
-      # ID of the stored feedback.
+      # Unique ID of the feedback.
       sig { returns(String) }
       attr_accessor :feedback_id
 
@@ -51,10 +51,10 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # True when feedback for this request_id was already recorded; the original
-        # feedback_id is returned.
+        # `true` when feedback for this `request_id` was already recorded. `feedback_id`
+        # is then the original ID.
         already_submitted:,
-        # ID of the stored feedback.
+        # Unique ID of the feedback.
         feedback_id:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
@@ -91,7 +91,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -104,7 +104,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

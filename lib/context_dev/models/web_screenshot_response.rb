@@ -5,7 +5,7 @@ module ContextDev
     # @see ContextDev::Resources::Web#screenshot
     class WebScreenshotResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute cache_metadata
-      #   Whether this response came from cache.
+      #   Cache status of this response.
       #
       #   @return [ContextDev::Models::WebScreenshotResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebScreenshotResponse::CacheMetadata }
@@ -18,13 +18,13 @@ module ContextDev
       required :request_id, String
 
       # @!attribute code
-      #   HTTP status code
+      #   HTTP status code, repeated in the body.
       #
       #   @return [Integer, nil]
       optional :code, Integer
 
       # @!attribute domain
-      #   The normalized domain that was processed
+      #   Normalized domain that was captured.
       #
       #   @return [String, nil]
       optional :domain, String
@@ -39,7 +39,7 @@ module ContextDev
                api_name: :finalDOMState
 
       # @!attribute height
-      #   Height in pixels of the returned screenshot image
+      #   Height of the returned image, in pixels.
       #
       #   @return [Integer, nil]
       optional :height, Integer
@@ -51,14 +51,14 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::WebScreenshotResponse::KeyMetadata }
 
       # @!attribute screenshot
-      #   Public image URL for standard requests, or an in-memory data URL when ZDR or
-      #   non-empty custom headers are supplied.
+      #   URL of the screenshot image. A data URL instead when `zdr` is `enabled` or
+      #   `headers` are sent.
       #
       #   @return [String, nil]
       optional :screenshot, String
 
       # @!attribute screenshot_type
-      #   Type of screenshot that was captured
+      #   Whether the image covers the viewport or the full page.
       #
       #   @return [Symbol, ContextDev::Models::WebScreenshotResponse::ScreenshotType, nil]
       optional :screenshot_type,
@@ -72,7 +72,7 @@ module ContextDev
       optional :status, String
 
       # @!attribute width
-      #   Width in pixels of the returned screenshot image
+      #   Width of the returned image, in pixels.
       #
       #   @return [Integer, nil]
       optional :width, Integer
@@ -81,39 +81,39 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebScreenshotResponse} for more details.
       #
-      #   @param cache_metadata [ContextDev::Models::WebScreenshotResponse::CacheMetadata] Whether this response came from cache.
+      #   @param cache_metadata [ContextDev::Models::WebScreenshotResponse::CacheMetadata] Cache status of this response.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param code [Integer] HTTP status code
+      #   @param code [Integer] HTTP status code, repeated in the body.
       #
-      #   @param domain [String] The normalized domain that was processed
+      #   @param domain [String] Normalized domain that was captured.
       #
       #   @param final_dom_state [Symbol, ContextDev::Models::WebScreenshotResponse::FinalDomState] `loaded`, or `still-loading` when capture ended before the page finished loading
       #
-      #   @param height [Integer] Height in pixels of the returned screenshot image
+      #   @param height [Integer] Height of the returned image, in pixels.
       #
       #   @param key_metadata [ContextDev::Models::WebScreenshotResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param screenshot [String] Public image URL for standard requests, or an in-memory data URL when ZDR or non
+      #   @param screenshot [String] URL of the screenshot image. A data URL instead when `zdr` is `enabled` or `head
       #
-      #   @param screenshot_type [Symbol, ContextDev::Models::WebScreenshotResponse::ScreenshotType] Type of screenshot that was captured
+      #   @param screenshot_type [Symbol, ContextDev::Models::WebScreenshotResponse::ScreenshotType] Whether the image covers the viewport or the full page.
       #
       #   @param status [String] Always `ok` on success.
       #
-      #   @param width [Integer] Width in pixels of the returned screenshot image
+      #   @param width [Integer] Width of the returned image, in pixels.
 
       # @see ContextDev::Models::WebScreenshotResponse#cache_metadata
       class CacheMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute age_ms
-        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
         #   @return [Integer]
         required :age_ms, Integer
 
         # @!attribute status
-        #   Whether the response was served from cache, required fresh work, or honored
-        #   zero-data-retention cache bypass.
+        #   `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        #   retention bypassed the cache.
         #
         #   @return [Symbol, ContextDev::Models::WebScreenshotResponse::CacheMetadata::Status]
         required :status, enum: -> { ContextDev::Models::WebScreenshotResponse::CacheMetadata::Status }
@@ -122,14 +122,14 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScreenshotResponse::CacheMetadata} for more details.
         #
-        #   Whether this response came from cache.
+        #   Cache status of this response.
         #
-        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   @param age_ms [Integer] Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
-        #   @param status [Symbol, ContextDev::Models::WebScreenshotResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+        #   @param status [Symbol, ContextDev::Models::WebScreenshotResponse::CacheMetadata::Status] `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data re
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         #
         # @see ContextDev::Models::WebScreenshotResponse::CacheMetadata#status
         module Status
@@ -167,7 +167,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -177,10 +177,10 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
 
-      # Type of screenshot that was captured
+      # Whether the image covers the viewport or the full page.
       #
       # @see ContextDev::Models::WebScreenshotResponse#screenshot_type
       module ScreenshotType

@@ -11,12 +11,12 @@ module ContextDev
           T.any(ContextDev::WebAnswersParams, ContextDev::Internal::AnyHash)
         end
 
-      # Research task, up to 2000 characters. The agent selects company/profile lookups,
-      # web searches, or page reads. Include domains or URLs to focus the research.
+      # What to research, in plain language, up to 2000 characters. Include domains or
+      # URLs to focus the research.
       sig { returns(String) }
       attr_accessor :task
 
-      # Limits what the research may use.
+      # Limit which sites the research can search, read, and cite.
       sig { returns(T.nilable(ContextDev::WebAnswersParams::Controls)) }
       attr_reader :controls
 
@@ -25,32 +25,35 @@ module ContextDev
       end
       attr_writer :controls
 
-      # Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
-      # characters; unknowns may be null.
+      # Example of the answer object to return, not a JSON Schema. Up to 8 levels deep,
+      # 500 values, and 16,000 characters. Values that cannot be found come back as
+      # `null`. Defaults to `{ "result": "" }`.
       sig { returns(T.nilable(T::Hash[Symbol, T.anything])) }
       attr_reader :json_format
 
       sig { params(json_format: T::Hash[Symbol, T.anything]).void }
       attr_writer :json_format
 
-      # `fast` prioritizes speed, with extra verification for people and companies;
-      # `ultra` supports deeper research (default).
+      # `fast` prioritizes speed and adds extra verification for people and companies;
+      # `ultra` searches and reads more sources for deeper research. Defaults to
+      # `ultra`.
       sig { returns(T.nilable(ContextDev::WebAnswersParams::Mode::OrSymbol)) }
       attr_reader :mode
 
       sig { params(mode: ContextDev::WebAnswersParams::Mode::OrSymbol).void }
       attr_writer :mode
 
-      # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-      # access policies are enabled for your organization; otherwise the request fails
-      # with `ACCESS_POLICIES_NOT_ENABLED`.
+      # Access policy IDs to apply; each URL must pass all of them. Requires access
+      # policies enabled for your organization; otherwise returns
+      # `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
       sig { params(policies: T::Array[String]).void }
       attr_writer :policies
 
-      # Labels for filtering usage in the dashboard.
+      # Labels for this request. Filter usage and request logs by them in the dashboard
+      # or with `GET /org/logs`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -90,22 +93,25 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Research task, up to 2000 characters. The agent selects company/profile lookups,
-        # web searches, or page reads. Include domains or URLs to focus the research.
+        # What to research, in plain language, up to 2000 characters. Include domains or
+        # URLs to focus the research.
         task:,
-        # Limits what the research may use.
+        # Limit which sites the research can search, read, and cite.
         controls: nil,
-        # Example answer object, not JSON Schema. Up to 8 levels, 500 values, and 16000
-        # characters; unknowns may be null.
+        # Example of the answer object to return, not a JSON Schema. Up to 8 levels deep,
+        # 500 values, and 16,000 characters. Values that cannot be found come back as
+        # `null`. Defaults to `{ "result": "" }`.
         json_format: nil,
-        # `fast` prioritizes speed, with extra verification for people and companies;
-        # `ultra` supports deeper research (default).
+        # `fast` prioritizes speed and adds extra verification for people and companies;
+        # `ultra` searches and reads more sources for deeper research. Defaults to
+        # `ultra`.
         mode: nil,
-        # Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-        # access policies are enabled for your organization; otherwise the request fails
-        # with `ACCESS_POLICIES_NOT_ENABLED`.
+        # Access policy IDs to apply; each URL must pass all of them. Requires access
+        # policies enabled for your organization; otherwise returns
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
         # Request deadline and what to return when it passes.
         timeout_opts: nil,
@@ -143,25 +149,24 @@ module ContextDev
             )
           end
 
-        # Never search, read or cite these sites, sections or pages. Same format as
-        # `sources`. Up to 100 entries.
+        # Never search, read, or cite these sites, sections, or pages. Same format as
+        # `sources`.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :exclude_sources
 
         sig { params(exclude_sources: T::Array[String]).void }
         attr_writer :exclude_sources
 
-        # Only search, read and cite these sites, sections or pages. Each entry is a URL
-        # prefix: "example.com" covers the site and its subdomains, "example.com/docs"
-        # covers that section, and "example.com/docs/setup.html" is one page. Up to 20
-        # entries.
+        # Only search, read, and cite these sites, sections, or pages. Each entry is a URL
+        # prefix: `example.com` covers the site and its subdomains, `example.com/docs`
+        # covers that section, and `example.com/docs/setup.html` is one page.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :sources
 
         sig { params(sources: T::Array[String]).void }
         attr_writer :sources
 
-        # Limits what the research may use.
+        # Limit which sites the research can search, read, and cite.
         sig do
           params(
             exclude_sources: T::Array[String],
@@ -169,13 +174,12 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Never search, read or cite these sites, sections or pages. Same format as
-          # `sources`. Up to 100 entries.
+          # Never search, read, or cite these sites, sections, or pages. Same format as
+          # `sources`.
           exclude_sources: nil,
-          # Only search, read and cite these sites, sections or pages. Each entry is a URL
-          # prefix: "example.com" covers the site and its subdomains, "example.com/docs"
-          # covers that section, and "example.com/docs/setup.html" is one page. Up to 20
-          # entries.
+          # Only search, read, and cite these sites, sections, or pages. Each entry is a URL
+          # prefix: `example.com` covers the site and its subdomains, `example.com/docs`
+          # covers that section, and `example.com/docs/setup.html` is one page.
           sources: nil
         )
         end
@@ -189,8 +193,9 @@ module ContextDev
         end
       end
 
-      # `fast` prioritizes speed, with extra verification for people and companies;
-      # `ultra` supports deeper research (default).
+      # `fast` prioritizes speed and adds extra verification for people and companies;
+      # `ultra` searches and reads more sources for deeper research. Defaults to
+      # `ultra`.
       module Mode
         extend ContextDev::Internal::Type::Enum
 
@@ -223,8 +228,8 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         sig do
           returns(
             T.nilable(
@@ -253,8 +258,8 @@ module ContextDev
         def self.new(
           # Deadline in milliseconds.
           milliseconds:,
-          # "fail" returns 408 at the deadline. "return-partial" returns available results;
-          # inspect the response’s partial flag.
+          # `fail` returns 408 at the deadline. `return-partial` returns the results
+          # collected so far and marks the response as partial.
           behavior: nil
         )
         end
@@ -271,8 +276,8 @@ module ContextDev
         def to_hash
         end
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 

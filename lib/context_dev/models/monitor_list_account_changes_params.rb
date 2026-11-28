@@ -15,31 +15,31 @@ module ContextDev
                enum: -> { ContextDev::MonitorListAccountChangesParams::ChangeDetectionType }
 
       # @!attribute cursor
-      #   Opaque pagination cursor from a previous response.
+      #   Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
       #   @return [String, nil]
       optional :cursor, String
 
       # @!attribute limit
-      #   Maximum number of items to return per page (1-100). Defaults to 25.
+      #   Maximum number of changes to return per page. Defaults to 25.
       #
       #   @return [Integer, nil]
       optional :limit, Integer
 
       # @!attribute monitor_id
-      #   Filter changes to a single monitor.
+      #   Return only changes from this monitor.
       #
       #   @return [String, nil]
       optional :monitor_id, String
 
       # @!attribute since
-      #   Only include items at or after this ISO 8601 timestamp.
+      #   Return only changes detected at or after this time.
       #
       #   @return [Time, nil]
       optional :since, Time
 
       # @!attribute tag
-      #   Filter to items that have this tag.
+      #   Return only changes that have this tag.
       #
       #   @return [String, nil]
       optional :tag, String
@@ -51,7 +51,7 @@ module ContextDev
       optional :target_type, enum: -> { ContextDev::MonitorListAccountChangesParams::TargetType }
 
       # @!attribute until_
-      #   Only include items before this ISO 8601 timestamp.
+      #   Return only changes detected at or before this time.
       #
       #   @return [Time, nil]
       optional :until_, Time
@@ -59,19 +59,19 @@ module ContextDev
       # @!method initialize(change_detection_type: nil, cursor: nil, limit: nil, monitor_id: nil, since: nil, tag: nil, target_type: nil, until_: nil, request_options: {})
       #   @param change_detection_type [Symbol, ContextDev::Models::MonitorListAccountChangesParams::ChangeDetectionType] Filter by change detection type.
       #
-      #   @param cursor [String] Opaque pagination cursor from a previous response.
+      #   @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page.
       #
-      #   @param limit [Integer] Maximum number of items to return per page (1-100). Defaults to 25.
+      #   @param limit [Integer] Maximum number of changes to return per page. Defaults to 25.
       #
-      #   @param monitor_id [String] Filter changes to a single monitor.
+      #   @param monitor_id [String] Return only changes from this monitor.
       #
-      #   @param since [Time] Only include items at or after this ISO 8601 timestamp.
+      #   @param since [Time] Return only changes detected at or after this time.
       #
-      #   @param tag [String] Filter to items that have this tag.
+      #   @param tag [String] Return only changes that have this tag.
       #
       #   @param target_type [Symbol, ContextDev::Models::MonitorListAccountChangesParams::TargetType] Filter by target type.
       #
-      #   @param until_ [Time] Only include items before this ISO 8601 timestamp.
+      #   @param until_ [Time] Return only changes detected at or before this time.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 

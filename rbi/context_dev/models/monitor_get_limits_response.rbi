@@ -11,16 +11,17 @@ module ContextDev
           )
         end
 
-      # Most monitors you can have: your plan's allowance or a custom limit.
+      # Maximum number of monitors your organization can have, from your plan or a
+      # custom limit.
       sig { returns(Integer) }
       attr_accessor :monitors_limit
 
-      # Number of monitors the account currently has.
+      # Number of monitors your organization has.
       sig { returns(Integer) }
       attr_accessor :monitors_used
 
-      # `starter` means Developer; `pro` means Pro or Growth; `scale` means Scale or
-      # Enterprise.
+      # Your plan tier. `free` is Free, `starter` is Developer, `pro` is Pro or Growth,
+      # and `scale` is Scale or Enterprise.
       sig do
         returns(
           ContextDev::Models::MonitorGetLimitsResponse::Plan::TaggedSymbol
@@ -60,12 +61,13 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Most monitors you can have: your plan's allowance or a custom limit.
+        # Maximum number of monitors your organization can have, from your plan or a
+        # custom limit.
         monitors_limit:,
-        # Number of monitors the account currently has.
+        # Number of monitors your organization has.
         monitors_used:,
-        # `starter` means Developer; `pro` means Pro or Growth; `scale` means Scale or
-        # Enterprise.
+        # Your plan tier. `free` is Free, `starter` is Developer, `pro` is Pro or Growth,
+        # and `scale` is Scale or Enterprise.
         plan:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
@@ -91,8 +93,8 @@ module ContextDev
       def to_hash
       end
 
-      # `starter` means Developer; `pro` means Pro or Growth; `scale` means Scale or
-      # Enterprise.
+      # Your plan tier. `free` is Free, `starter` is Developer, `pro` is Pro or Growth,
+      # and `scale` is Scale or Enterprise.
       module Plan
         extend ContextDev::Internal::Type::Enum
 
@@ -147,7 +149,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -160,7 +162,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

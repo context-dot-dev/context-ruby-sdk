@@ -12,7 +12,7 @@ module ContextDev
       required :request_id, String
 
       # @!attribute domain
-      #   The domain that was queued for prefetching
+      #   Domain queued for prefetching.
       #
       #   @return [String, nil]
       optional :domain, String
@@ -24,7 +24,7 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::UtilityPrefetchResponse::KeyMetadata }
 
       # @!attribute message
-      #   Success message
+      #   Human-readable confirmation.
       #
       #   @return [String, nil]
       optional :message, String
@@ -36,7 +36,7 @@ module ContextDev
       optional :status, String
 
       # @!attribute type
-      #   The type of prefetch that was queued, echoed from the request
+      #   Data type that was queued, from the request.
       #
       #   @return [Symbol, ContextDev::Models::UtilityPrefetchResponse::Type, nil]
       optional :type, enum: -> { ContextDev::Models::UtilityPrefetchResponse::Type }
@@ -47,15 +47,15 @@ module ContextDev
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param domain [String] The domain that was queued for prefetching
+      #   @param domain [String] Domain queued for prefetching.
       #
       #   @param key_metadata [ContextDev::Models::UtilityPrefetchResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param message [String] Success message
+      #   @param message [String] Human-readable confirmation.
       #
       #   @param status [String] Always `ok` on success.
       #
-      #   @param type [Symbol, ContextDev::Models::UtilityPrefetchResponse::Type] The type of prefetch that was queued, echoed from the request
+      #   @param type [Symbol, ContextDev::Models::UtilityPrefetchResponse::Type] Data type that was queued, from the request.
 
       # @see ContextDev::Models::UtilityPrefetchResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
@@ -66,7 +66,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -76,10 +76,10 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
 
-      # The type of prefetch that was queued, echoed from the request
+      # Data type that was queued, from the request.
       #
       # @see ContextDev::Models::UtilityPrefetchResponse#type
       module Type

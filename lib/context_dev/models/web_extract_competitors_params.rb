@@ -8,20 +8,20 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute domain
-      #   Company domain to analyze, such as `stripe.com`. Full http(s) URLs are accepted
-      #   and normalized to their domain.
+      #   Company domain, such as `stripe.com`. Full URLs are reduced to their domain.
       #
       #   @return [String]
       required :domain, String
 
       # @!attribute num_competitors
-      #   Exact number of direct competitors to return. Defaults to 5.
+      #   Exact number of direct competitors to return.
       #
       #   @return [Integer, nil]
       optional :num_competitors, Integer
 
       # @!attribute tags
-      #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      #   Comma-separated labels for this request, such as `production,team-alpha`. Filter
+      #   usage and request logs by them.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -43,11 +43,11 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractCompetitorsParams} for more details.
       #
-      #   @param domain [String] Company domain to analyze, such as `stripe.com`. Full http(s) URLs are accepted
+      #   @param domain [String] Company domain, such as `stripe.com`. Full URLs are reduced to their domain.
       #
-      #   @param num_competitors [Integer] Exact number of direct competitors to return. Defaults to 5.
+      #   @param num_competitors [Integer] Exact number of direct competitors to return.
       #
-      #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      #   @param tags [Array<String>] Comma-separated labels for this request, such as `production,team-alpha`. Filter
       #
       #   @param timeout_opts [ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
@@ -63,8 +63,8 @@ module ContextDev
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-        #   inspect the response’s partial flag.
+        #   `fail` returns 408 at the deadline. `return-partial` returns the results
+        #   collected so far and marks the response as partial.
         #
         #   @return [Symbol, ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebExtractCompetitorsParams::TimeoutOpts::Behavior }
@@ -77,10 +77,10 @@ module ContextDev
         #
         #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   @param behavior [Symbol, ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         #
         # @see ContextDev::Models::WebExtractCompetitorsParams::TimeoutOpts#behavior
         module Behavior

@@ -11,19 +11,14 @@ module ContextDev
           T.any(ContextDev::WebScreenshotParams, ContextDev::Internal::AnyHash)
         end
 
-      # Optional parameter for comprehensive popup cleanup. If 'true', the browser
-      # dismisses detected cookie/consent UI and clears other detected obstructive
-      # popups and overlays before capture. If 'false' or not provided, this parameter
-      # requests no cleanup; handleCookiePopup can still request cookie/consent handling
-      # independently.
+      # Dismiss cookie banners and close other popups and overlays before capture.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :clear_popups
 
       sig { params(clear_popups: T::Boolean).void }
       attr_writer :clear_popups
 
-      # Optional parameter to choose the site's visual theme in the screenshot. Use
-      # 'light' or 'dark' when the site offers both appearances.
+      # Emulate a light or dark color scheme.
       sig do
         returns(
           T.nilable(ContextDev::WebScreenshotParams::ColorScheme::OrSymbol)
@@ -38,7 +33,7 @@ module ContextDev
       end
       attr_writer :color_scheme
 
-      # Fetch from this country (ISO 3166-1 alpha-2).
+      # Country to fetch from, as an ISO 3166-1 alpha-2 code.
       sig do
         returns(T.nilable(ContextDev::WebScreenshotParams::Country::OrSymbol))
       end
@@ -49,27 +44,23 @@ module ContextDev
       end
       attr_writer :country
 
-      # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
-      # 'https://example.com/pricing'). When provided, the screenshot is taken of this
-      # exact URL. You must provide either 'domain' or 'directUrl', but not both.
+      # Exact URL to capture, such as `https://example.com/pricing`. Provide either
+      # `domain` or `directUrl`, not both.
       sig { returns(T.nilable(String)) }
       attr_reader :direct_url
 
       sig { params(direct_url: String).void }
       attr_writer :direct_url
 
-      # Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The
-      # domain will be automatically normalized and validated. You must provide either
-      # 'domain' or 'directUrl', but not both.
+      # Domain to capture, such as `stripe.com`. Provide either `domain` or `directUrl`,
+      # not both.
       sig { returns(T.nilable(String)) }
       attr_reader :domain
 
       sig { params(domain: String).void }
       attr_writer :domain
 
-      # Optional parameter to determine screenshot type. If 'true', takes a full page
-      # screenshot capturing all content. If 'false' or not provided, takes a viewport
-      # screenshot (standard browser view).
+      # Capture the full scrollable page instead of only the viewport.
       sig do
         returns(
           T.nilable(ContextDev::WebScreenshotParams::FullScreenshot::OrSymbol)
@@ -85,39 +76,29 @@ module ContextDev
       end
       attr_writer :full_screenshot
 
-      # Optional parameter to control cookie/consent popup handling. If 'true', we
-      # dismiss cookie banner before capture. If 'false' or not provided, captures the
-      # page without that step.
+      # Dismiss cookie consent banners before capture.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :handle_cookie_popup
 
       sig { params(handle_cookie_popup: T::Boolean).void }
       attr_writer :handle_cookie_popup
 
-      # Optional outbound HTTP headers, using the same JSON object or deep-object query
-      # format as other scrape endpoints (for example headers[Authorization]=Bearer
-      # token). Headers are scoped to the target origin during capture. For domain/page
-      # requests, discovery receives no custom headers and only pages on the resolved
-      # origin are eligible. Non-empty headers bypass screenshot caching and return an
-      # in-memory data URL; no screenshot is uploaded. Empty objects behave like omitted
-      # headers.
+      # HTTP headers to send to the target origin, such as
+      # `headers[Authorization]=Bearer token`. Requests with headers skip the cache and
+      # return the image as a data URL.
       sig { returns(T.nilable(T::Hash[Symbol, String])) }
       attr_reader :headers
 
       sig { params(headers: T::Hash[Symbol, String]).void }
       attr_writer :headers
 
-      # Return a cached screenshot if a prior screenshot for the same parameters exists
-      # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-      # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
+      # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+      # Defaults to 1 day (86400000 ms). Maximum: 30 days (2592000000 ms).
       sig { returns(T.nilable(Integer)) }
       attr_accessor :max_age_ms
 
-      # Optional parameter to specify which page type to screenshot. If provided, the
-      # system will scrape the domain's links and use heuristics to find the most
-      # appropriate URL for the specified page type (30 supported languages). If not
-      # provided, screenshots the main domain landing page. Only applicable when using
-      # 'domain', not 'directUrl'.
+      # Capture this type of page instead of the home page. Context.dev finds it among
+      # the domain's links, in 30 languages. Only with `domain`.
       sig do
         returns(T.nilable(ContextDev::WebScreenshotParams::Page::OrSymbol))
       end
@@ -126,16 +107,14 @@ module ContextDev
       sig { params(page: ContextDev::WebScreenshotParams::Page::OrSymbol).void }
       attr_writer :page
 
-      # Optional vertical scroll offset in pixels for capturing a long page in
-      # viewport-sized chunks. When provided, the full page is captured once and the
-      # returned image is the viewport-sized slice that begins at this Y offset (e.g.
-      # request scrollOffset=0, then 1080, then 2160 to walk a 1920x1080 landing page
-      # top to bottom). The final slice may be shorter than the viewport height. Takes
-      # precedence over fullScreenshot. Max: 100000.
+      # Return the viewport-sized slice of the full page that starts this many pixels
+      # from the top. Step by the viewport height, such as `0`, `1080`, `2160`, to walk
+      # a long page. The last slice can be shorter. Overrides `fullScreenshot`.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :scroll_offset
 
-      # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+      # usage and request logs by them.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -153,7 +132,7 @@ module ContextDev
       end
       attr_writer :timeout_opts
 
-      # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
+      # Browser viewport size in pixels.
       sig { returns(T.nilable(ContextDev::WebScreenshotParams::Viewport)) }
       attr_reader :viewport
 
@@ -162,11 +141,9 @@ module ContextDev
       end
       attr_writer :viewport
 
-      # Optional browser wait time in milliseconds after initial page load before taking
-      # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
-      # omitted. When combined with timeoutOpts, timeoutOpts.milliseconds must be at
-      # least waitForMs + 10000 ms; a shorter deadline is rejected with 400
-      # TIMEOUT_TOO_SHORT_FOR_WAIT.
+      # Time to wait after the page loads before capturing, in milliseconds. `0` waits
+      # 500 ms. `timeoutOpts.milliseconds` must be at least `waitForMs` plus 10000 ms,
+      # or the request fails with `TIMEOUT_TOO_SHORT_FOR_WAIT`.
       sig { returns(T.nilable(Integer)) }
       attr_accessor :wait_for_ms
 
@@ -201,69 +178,46 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Optional parameter for comprehensive popup cleanup. If 'true', the browser
-        # dismisses detected cookie/consent UI and clears other detected obstructive
-        # popups and overlays before capture. If 'false' or not provided, this parameter
-        # requests no cleanup; handleCookiePopup can still request cookie/consent handling
-        # independently.
+        # Dismiss cookie banners and close other popups and overlays before capture.
         clear_popups: nil,
-        # Optional parameter to choose the site's visual theme in the screenshot. Use
-        # 'light' or 'dark' when the site offers both appearances.
+        # Emulate a light or dark color scheme.
         color_scheme: nil,
-        # Fetch from this country (ISO 3166-1 alpha-2).
+        # Country to fetch from, as an ISO 3166-1 alpha-2 code.
         country: nil,
-        # A specific URL to screenshot directly, bypassing domain resolution (e.g.,
-        # 'https://example.com/pricing'). When provided, the screenshot is taken of this
-        # exact URL. You must provide either 'domain' or 'directUrl', but not both.
+        # Exact URL to capture, such as `https://example.com/pricing`. Provide either
+        # `domain` or `directUrl`, not both.
         direct_url: nil,
-        # Domain name to take screenshot of (e.g., 'example.com', 'google.com'). The
-        # domain will be automatically normalized and validated. You must provide either
-        # 'domain' or 'directUrl', but not both.
+        # Domain to capture, such as `stripe.com`. Provide either `domain` or `directUrl`,
+        # not both.
         domain: nil,
-        # Optional parameter to determine screenshot type. If 'true', takes a full page
-        # screenshot capturing all content. If 'false' or not provided, takes a viewport
-        # screenshot (standard browser view).
+        # Capture the full scrollable page instead of only the viewport.
         full_screenshot: nil,
-        # Optional parameter to control cookie/consent popup handling. If 'true', we
-        # dismiss cookie banner before capture. If 'false' or not provided, captures the
-        # page without that step.
+        # Dismiss cookie consent banners before capture.
         handle_cookie_popup: nil,
-        # Optional outbound HTTP headers, using the same JSON object or deep-object query
-        # format as other scrape endpoints (for example headers[Authorization]=Bearer
-        # token). Headers are scoped to the target origin during capture. For domain/page
-        # requests, discovery receives no custom headers and only pages on the resolved
-        # origin are eligible. Non-empty headers bypass screenshot caching and return an
-        # in-memory data URL; no screenshot is uploaded. Empty objects behave like omitted
-        # headers.
+        # HTTP headers to send to the target origin, such as
+        # `headers[Authorization]=Bearer token`. Requests with headers skip the cache and
+        # return the image as a data URL.
         headers: nil,
-        # Return a cached screenshot if a prior screenshot for the same parameters exists
-        # and is younger than this many milliseconds. Defaults to 1 day (86400000 ms) when
-        # omitted. Max is 30 days (2592000000 ms). Set to 0 to always capture fresh.
+        # Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+        # Defaults to 1 day (86400000 ms). Maximum: 30 days (2592000000 ms).
         max_age_ms: nil,
-        # Optional parameter to specify which page type to screenshot. If provided, the
-        # system will scrape the domain's links and use heuristics to find the most
-        # appropriate URL for the specified page type (30 supported languages). If not
-        # provided, screenshots the main domain landing page. Only applicable when using
-        # 'domain', not 'directUrl'.
+        # Capture this type of page instead of the home page. Context.dev finds it among
+        # the domain's links, in 30 languages. Only with `domain`.
         page: nil,
-        # Optional vertical scroll offset in pixels for capturing a long page in
-        # viewport-sized chunks. When provided, the full page is captured once and the
-        # returned image is the viewport-sized slice that begins at this Y offset (e.g.
-        # request scrollOffset=0, then 1080, then 2160 to walk a 1920x1080 landing page
-        # top to bottom). The final slice may be shorter than the viewport height. Takes
-        # precedence over fullScreenshot. Max: 100000.
+        # Return the viewport-sized slice of the full page that starts this many pixels
+        # from the top. Step by the viewport height, such as `0`, `1080`, `2160`, to walk
+        # a long page. The last slice can be shorter. Overrides `fullScreenshot`.
         scroll_offset: nil,
-        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        # usage and request logs by them.
         tags: nil,
         # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
+        # Browser viewport size in pixels.
         viewport: nil,
-        # Optional browser wait time in milliseconds after initial page load before taking
-        # the screenshot. Min: 0. Max: 30000 (30 seconds). Defaults to 3000 ms when
-        # omitted. When combined with timeoutOpts, timeoutOpts.milliseconds must be at
-        # least waitForMs + 10000 ms; a shorter deadline is rejected with 400
-        # TIMEOUT_TOO_SHORT_FOR_WAIT.
+        # Time to wait after the page loads before capturing, in milliseconds. `0` waits
+        # 500 ms. `timeoutOpts.milliseconds` must be at least `waitForMs` plus 10000 ms,
+        # or the request fails with `TIMEOUT_TOO_SHORT_FOR_WAIT`.
         wait_for_ms: nil,
         # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
         # your organization has ZDR.
@@ -300,8 +254,7 @@ module ContextDev
       def to_hash
       end
 
-      # Optional parameter to choose the site's visual theme in the screenshot. Use
-      # 'light' or 'dark' when the site offers both appearances.
+      # Emulate a light or dark color scheme.
       module ColorScheme
         extend ContextDev::Internal::Type::Enum
 
@@ -331,7 +284,7 @@ module ContextDev
         end
       end
 
-      # Fetch from this country (ISO 3166-1 alpha-2).
+      # Country to fetch from, as an ISO 3166-1 alpha-2 code.
       module Country
         extend ContextDev::Internal::Type::Enum
 
@@ -555,9 +508,7 @@ module ContextDev
         end
       end
 
-      # Optional parameter to determine screenshot type. If 'true', takes a full page
-      # screenshot capturing all content. If 'false' or not provided, takes a viewport
-      # screenshot (standard browser view).
+      # Capture the full scrollable page instead of only the viewport.
       module FullScreenshot
         extend ContextDev::Internal::Type::Enum
 
@@ -589,11 +540,8 @@ module ContextDev
         end
       end
 
-      # Optional parameter to specify which page type to screenshot. If provided, the
-      # system will scrape the domain's links and use heuristics to find the most
-      # appropriate URL for the specified page type (30 supported languages). If not
-      # provided, screenshots the main domain landing page. Only applicable when using
-      # 'domain', not 'directUrl'.
+      # Capture this type of page instead of the home page. Context.dev finds it among
+      # the domain's links, in 30 languages. Only with `domain`.
       module Page
         extend ContextDev::Internal::Type::Enum
 
@@ -639,11 +587,11 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-        # On POST /web/scrape, an output that is not ready in time fails with error_code
-        # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-        # only when the whole request cannot respond by the deadline.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial. `return-partial` requires at
+        # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+        # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+        # the whole request could not respond by the deadline.
         sig do
           returns(
             T.nilable(
@@ -672,11 +620,11 @@ module ContextDev
         def self.new(
           # Deadline in milliseconds.
           milliseconds:,
-          # "fail" returns 408 at the deadline. "return-partial" returns available results;
-          # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-          # On POST /web/scrape, an output that is not ready in time fails with error_code
-          # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-          # only when the whole request cannot respond by the deadline.
+          # `fail` returns 408 at the deadline. `return-partial` returns the results
+          # collected so far and marks the response as partial. `return-partial` requires at
+          # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+          # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+          # the whole request could not respond by the deadline.
           behavior: nil
         )
         end
@@ -693,11 +641,11 @@ module ContextDev
         def to_hash
         end
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-        # On POST /web/scrape, an output that is not ready in time fails with error_code
-        # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-        # only when the whole request cannot respond by the deadline.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial. `return-partial` requires at
+        # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+        # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+        # the whole request could not respond by the deadline.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 
@@ -756,7 +704,7 @@ module ContextDev
         sig { params(width: Integer).void }
         attr_writer :width
 
-        # Optional browser viewport dimensions for the screenshot. Defaults to 1920x1080.
+        # Browser viewport size in pixels.
         sig do
           params(height: Integer, width: Integer).returns(T.attached_class)
         end

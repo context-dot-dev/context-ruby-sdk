@@ -5,7 +5,7 @@ module ContextDev
     # @see ContextDev::Resources::Web#answers
     class WebAnswersResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute json_content
-      #   The answer, in the shape requested by json_format.
+      #   The answer, in the shape of `json_format`.
       #
       #   @return [Hash{Symbol=>Object}]
       required :json_content, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
@@ -18,8 +18,8 @@ module ContextDev
       required :request_id, String
 
       # @!attribute sources
-      #   URLs of the pages and company/profile records read for the answer, followed by
-      #   URLs cited in json_content.
+      #   URLs of the pages and company or profile records read for the answer, followed
+      #   by URLs cited in `json_content`.
       #
       #   @return [Array<String>]
       required :sources, ContextDev::Internal::Type::ArrayOf[String]
@@ -31,7 +31,7 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::WebAnswersResponse::KeyMetadata }
 
       # @!attribute partial
-      #   True when the answer is incomplete: the request deadline ended research, or a
+      #   `true` when the answer is incomplete because the deadline ended research or a
       #   requested list item has no researched values.
       #
       #   @return [Boolean, nil]
@@ -41,15 +41,15 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebAnswersResponse} for more details.
       #
-      #   @param json_content [Hash{Symbol=>Object}] The answer, in the shape requested by json_format.
+      #   @param json_content [Hash{Symbol=>Object}] The answer, in the shape of `json_format`.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param sources [Array<String>] URLs of the pages and company/profile records read for the answer, followed by U
+      #   @param sources [Array<String>] URLs of the pages and company or profile records read for the answer, followed b
       #
       #   @param key_metadata [ContextDev::Models::WebAnswersResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param partial [Boolean] True when the answer is incomplete: the request deadline ended research, or a re
+      #   @param partial [Boolean] `true` when the answer is incomplete because the deadline ended research or a re
 
       # @see ContextDev::Models::WebAnswersResponse#key_metadata
       class KeyMetadata < ContextDev::Internal::Type::BaseModel
@@ -60,7 +60,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -70,7 +70,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

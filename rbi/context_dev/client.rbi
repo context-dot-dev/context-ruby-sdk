@@ -13,36 +13,43 @@ module ContextDev
     sig { returns(String) }
     attr_reader :api_key
 
+    # Convert uploaded files, such as PDFs and Office documents, into Markdown.
     sig { returns(ContextDev::Resources::Parse) }
     attr_reader :parse
 
     sig { returns(ContextDev::Resources::Web) }
     attr_reader :web
 
+    # Retrieve a brand's logos, colors, company details, and social links, or find
+    # brands by name or domain.
     sig { returns(ContextDev::Resources::Brand) }
     attr_reader :brand
 
+    # Extract structured data, competitors, styleguides, and fonts from any website.
     sig { returns(ContextDev::Resources::Industry) }
     attr_reader :industry
 
+    # Prefetch brand and styleguide data so later lookups return sooner.
     sig { returns(ContextDev::Resources::Utility) }
     attr_reader :utility
 
-    # Watch websites for exact or meaningful changes.
+    # Watch websites on a schedule for exact or meaningful changes.
     sig { returns(ContextDev::Resources::Monitors) }
     attr_reader :monitors
 
-    # Scrape many pages or crawl a site asynchronously.
+    # Scrape up to 100,000 URLs or crawl a site asynchronously.
     sig { returns(ContextDev::Resources::Batch) }
     attr_reader :batch
 
     sig { returns(ContextDev::Resources::Webhooks) }
     attr_reader :webhooks
 
+    # Enrich a person from identity clues, or find people with a natural-language
+    # query.
     sig { returns(ContextDev::Resources::People) }
     attr_reader :people
 
-    # Search live and historical news about a company.
+    # Search live and historical news by company or with a natural-language query.
     sig { returns(ContextDev::Resources::News) }
     attr_reader :news
 
@@ -50,14 +57,15 @@ module ContextDev
     sig { returns(ContextDev::Resources::Scholar) }
     attr_reader :scholar
 
-    # Read your organization's API request logs.
+    # Inspect your organization's API requests, including retained inputs and
+    # responses.
     sig { returns(ContextDev::Resources::Logs) }
     attr_reader :logs
 
     sig { returns(ContextDev::Resources::Browser) }
     attr_reader :browser
 
-    # Report API issues and documentation mismatches.
+    # Report bugs, wrong results, and docs mismatches to the Context.dev team.
     sig { returns(ContextDev::Resources::Feedback) }
     attr_reader :feedback
 

@@ -11,7 +11,7 @@ module ContextDev
           )
         end
 
-      # The answer, in the shape requested by json_format.
+      # The answer, in the shape of `json_format`.
       sig { returns(T::Hash[Symbol, T.anything]) }
       attr_accessor :json_content
 
@@ -20,8 +20,8 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # URLs of the pages and company/profile records read for the answer, followed by
-      # URLs cited in json_content.
+      # URLs of the pages and company or profile records read for the answer, followed
+      # by URLs cited in `json_content`.
       sig { returns(T::Array[String]) }
       attr_accessor :sources
 
@@ -39,7 +39,7 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # True when the answer is incomplete: the request deadline ended research, or a
+      # `true` when the answer is incomplete because the deadline ended research or a
       # requested list item has no researched values.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :partial
@@ -58,17 +58,17 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # The answer, in the shape requested by json_format.
+        # The answer, in the shape of `json_format`.
         json_content:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # URLs of the pages and company/profile records read for the answer, followed by
-        # URLs cited in json_content.
+        # URLs of the pages and company or profile records read for the answer, followed
+        # by URLs cited in `json_content`.
         sources:,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
-        # True when the answer is incomplete: the request deadline ended research, or a
+        # `true` when the answer is incomplete because the deadline ended research or a
         # requested list item has no researched values.
         partial: nil
       )
@@ -101,7 +101,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -114,7 +114,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

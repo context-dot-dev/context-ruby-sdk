@@ -5,43 +5,43 @@ module ContextDev
     module Webhooks
       class DeliverySummary < ContextDev::Internal::Type::BaseModel
         # @!attribute id
-        #   Delivery ID.
+        #   Unique ID of the delivery.
         #
         #   @return [String]
         required :id, String
 
         # @!attribute created_at
-        #   Event creation time.
+        #   When the event was created.
         #
         #   @return [Time]
         required :created_at, Time
 
         # @!attribute delivered_at
-        #   Last successful delivery time, or null if never delivered.
+        #   When the delivery last succeeded. `null` until it succeeds.
         #
         #   @return [Time, nil]
         required :delivered_at, Time, nil?: true
 
         # @!attribute event
-        #   Webhook event type.
+        #   Event that triggered the delivery.
         #
         #   @return [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Event]
         required :event, enum: -> { ContextDev::Webhooks::DeliverySummary::Event }
 
         # @!attribute last_error
-        #   Latest delivery error, or null if none.
+        #   Most recent delivery error. `null` when there is none.
         #
         #   @return [ContextDev::Models::Webhooks::DeliverySummary::LastError, nil]
         required :last_error, -> { ContextDev::Webhooks::DeliverySummary::LastError }, nil?: true
 
         # @!attribute next_attempt_at
-        #   Next scheduled attempt, or null if none.
+        #   When the next attempt is scheduled. `null` when none is scheduled.
         #
         #   @return [Time, nil]
         required :next_attempt_at, Time, nil?: true
 
         # @!attribute retry_expires_at
-        #   Last time you can retry manually (7 days after the event).
+        #   Last time you can retry the delivery manually, 7 days after the event.
         #
         #   @return [Time]
         required :retry_expires_at, Time
@@ -53,14 +53,16 @@ module ContextDev
         required :source, union: -> { ContextDev::Webhooks::DeliverySummary::Source }
 
         # @!attribute status
-        #   `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled`
-        #   (source or its webhook was removed).
+        #   Delivery state. `pending` is waiting for an attempt, `delivering` has an attempt
+        #   in progress, `retrying` is waiting for an automatic retry, `delivered` was
+        #   acknowledged with a 2xx, `failed` has no automatic retries left, and `cancelled`
+        #   means the source or its webhook was removed.
         #
         #   @return [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Status]
         required :status, enum: -> { ContextDev::Webhooks::DeliverySummary::Status }
 
         # @!attribute url
-        #   Webhook destination URL.
+        #   URL the webhook is sent to.
         #
         #   @return [String]
         required :url, String
@@ -69,27 +71,27 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::Webhooks::DeliverySummary} for more details.
         #
-        #   @param id [String] Delivery ID.
+        #   @param id [String] Unique ID of the delivery.
         #
-        #   @param created_at [Time] Event creation time.
+        #   @param created_at [Time] When the event was created.
         #
-        #   @param delivered_at [Time, nil] Last successful delivery time, or null if never delivered.
+        #   @param delivered_at [Time, nil] When the delivery last succeeded. `null` until it succeeds.
         #
-        #   @param event [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Event] Webhook event type.
+        #   @param event [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Event] Event that triggered the delivery.
         #
-        #   @param last_error [ContextDev::Models::Webhooks::DeliverySummary::LastError, nil] Latest delivery error, or null if none.
+        #   @param last_error [ContextDev::Models::Webhooks::DeliverySummary::LastError, nil] Most recent delivery error. `null` when there is none.
         #
-        #   @param next_attempt_at [Time, nil] Next scheduled attempt, or null if none.
+        #   @param next_attempt_at [Time, nil] When the next attempt is scheduled. `null` when none is scheduled.
         #
-        #   @param retry_expires_at [Time] Last time you can retry manually (7 days after the event).
+        #   @param retry_expires_at [Time] Last time you can retry the delivery manually, 7 days after the event.
         #
         #   @param source [ContextDev::Models::Webhooks::DeliverySummary::Source::Batch, ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor] Batch or monitor run that produced the event.
         #
-        #   @param status [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Status] `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled` (sour
+        #   @param status [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Status] Delivery state. `pending` is waiting for an attempt, `delivering` has an attempt
         #
-        #   @param url [String] Webhook destination URL.
+        #   @param url [String] URL the webhook is sent to.
 
-        # Webhook event type.
+        # Event that triggered the delivery.
         #
         # @see ContextDev::Models::Webhooks::DeliverySummary#event
         module Event
@@ -108,23 +110,23 @@ module ContextDev
         # @see ContextDev::Models::Webhooks::DeliverySummary#last_error
         class LastError < ContextDev::Internal::Type::BaseModel
           # @!attribute code
-          #   Error code.
+          #   Machine-readable error code.
           #
           #   @return [String]
           required :code, String
 
           # @!attribute message
-          #   Error details.
+          #   Human-readable explanation of the error.
           #
           #   @return [String]
           required :message, String
 
           # @!method initialize(code:, message:)
-          #   Latest delivery error, or null if none.
+          #   Most recent delivery error. `null` when there is none.
           #
-          #   @param code [String] Error code.
+          #   @param code [String] Machine-readable error code.
           #
-          #   @param message [String] Error details.
+          #   @param message [String] Human-readable explanation of the error.
         end
 
         # Batch or monitor run that produced the event.
@@ -139,23 +141,23 @@ module ContextDev
 
           class Batch < ContextDev::Internal::Type::BaseModel
             # @!attribute batch_id
-            #   Batch ID.
+            #   ID of the batch.
             #
             #   @return [String]
             required :batch_id, String
 
             # @!attribute type
-            #   Which deliveries to list: `batch` or `monitor`.
+            #   The event came from a batch.
             #
             #   @return [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Source::Batch::Type]
             required :type, enum: -> { ContextDev::Webhooks::DeliverySummary::Source::Batch::Type }
 
             # @!method initialize(batch_id:, type:)
-            #   @param batch_id [String] Batch ID.
+            #   @param batch_id [String] ID of the batch.
             #
-            #   @param type [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Source::Batch::Type] Which deliveries to list: `batch` or `monitor`.
+            #   @param type [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Source::Batch::Type] The event came from a batch.
 
-            # Which deliveries to list: `batch` or `monitor`.
+            # The event came from a batch.
             #
             # @see ContextDev::Models::Webhooks::DeliverySummary::Source::Batch#type
             module Type
@@ -170,31 +172,31 @@ module ContextDev
 
           class Monitor < ContextDev::Internal::Type::BaseModel
             # @!attribute monitor_id
-            #   Monitor ID.
+            #   ID of the monitor.
             #
             #   @return [String]
             required :monitor_id, String
 
             # @!attribute run_id
-            #   Monitor run ID.
+            #   ID of the monitor run.
             #
             #   @return [String]
             required :run_id, String
 
             # @!attribute type
-            #   Which deliveries to list: `batch` or `monitor`.
+            #   The event came from a monitor run.
             #
             #   @return [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor::Type]
             required :type, enum: -> { ContextDev::Webhooks::DeliverySummary::Source::Monitor::Type }
 
             # @!method initialize(monitor_id:, run_id:, type:)
-            #   @param monitor_id [String] Monitor ID.
+            #   @param monitor_id [String] ID of the monitor.
             #
-            #   @param run_id [String] Monitor run ID.
+            #   @param run_id [String] ID of the monitor run.
             #
-            #   @param type [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor::Type] Which deliveries to list: `batch` or `monitor`.
+            #   @param type [Symbol, ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor::Type] The event came from a monitor run.
 
-            # Which deliveries to list: `batch` or `monitor`.
+            # The event came from a monitor run.
             #
             # @see ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor#type
             module Type
@@ -211,8 +213,10 @@ module ContextDev
           #   @return [Array(ContextDev::Models::Webhooks::DeliverySummary::Source::Batch, ContextDev::Models::Webhooks::DeliverySummary::Source::Monitor)]
         end
 
-        # `pending`, `delivering`, `retrying`, `delivered`, `failed`, or `cancelled`
-        # (source or its webhook was removed).
+        # Delivery state. `pending` is waiting for an attempt, `delivering` has an attempt
+        # in progress, `retrying` is waiting for an automatic retry, `delivered` was
+        # acknowledged with a 2xx, `failed` has no automatic retries left, and `cancelled`
+        # means the source or its webhook was removed.
         #
         # @see ContextDev::Models::Webhooks::DeliverySummary#status
         module Status

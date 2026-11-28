@@ -8,7 +8,7 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute company
-      #   Company context to help identify the person. Provide a name or domain.
+      #   Company associated with the person. Send a `name`, a `domain`, or both.
       #
       #   @return [ContextDev::Models::PersonEnrichParams::Company, nil]
       optional :company, -> { ContextDev::PersonEnrichParams::Company }
@@ -20,34 +20,36 @@ module ContextDev
       optional :education, -> { ContextDev::Internal::Type::ArrayOf[ContextDev::PersonEnrichParams::Education] }
 
       # @!attribute email
-      #   Email address of the person to find.
+      #   Work email address of the person. Free and disposable email providers
+      #   return 422.
       #
       #   @return [String, nil]
       optional :email, String
 
       # @!attribute location
-      #   Location context to help identify the person. Provide a city, region, or
-      #   country.
+      #   Location associated with the person. Send at least one of `city`, `region`, or
+      #   `country`.
       #
       #   @return [ContextDev::Models::PersonEnrichParams::Location, nil]
       optional :location, -> { ContextDev::PersonEnrichParams::Location }
 
       # @!attribute name
-      #   Person name. Without an email or person-profile URL, provide both first and last
-      #   name plus company, education, or location.
+      #   Name of the person. Without an email or profile URL, send both `first` and
+      #   `last` plus `company`, `education`, or `location`.
       #
       #   @return [ContextDev::Models::PersonEnrichParams::Name, nil]
       optional :name, -> { ContextDev::PersonEnrichParams::Name }
 
       # @!attribute social_urls
-      #   Public profile URLs for the person. A person-profile URL can identify the person
-      #   without a name.
+      #   Public profile URLs for the person. A person-profile URL is enough to identify
+      #   them without a name.
       #
       #   @return [Array<String>, nil]
       optional :social_urls, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute tags
-      #   Labels for filtering usage in the dashboard.
+      #   Labels for this request. Filter usage and request logs by them in the dashboard
+      #   or with `GET /org/logs`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -69,19 +71,19 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::PersonEnrichParams} for more details.
       #
-      #   @param company [ContextDev::Models::PersonEnrichParams::Company] Company context to help identify the person. Provide a name or domain.
+      #   @param company [ContextDev::Models::PersonEnrichParams::Company] Company associated with the person. Send a `name`, a `domain`, or both.
       #
       #   @param education [Array<ContextDev::Models::PersonEnrichParams::Education>] Education history to help distinguish people with similar names.
       #
-      #   @param email [String] Email address of the person to find.
+      #   @param email [String] Work email address of the person. Free and disposable email providers return 422
       #
-      #   @param location [ContextDev::Models::PersonEnrichParams::Location] Location context to help identify the person. Provide a city, region, or country
+      #   @param location [ContextDev::Models::PersonEnrichParams::Location] Location associated with the person. Send at least one of `city`, `region`, or `
       #
-      #   @param name [ContextDev::Models::PersonEnrichParams::Name] Person name. Without an email or person-profile URL, provide both first and last
+      #   @param name [ContextDev::Models::PersonEnrichParams::Name] Name of the person. Without an email or profile URL, send both `first` and `last
       #
-      #   @param social_urls [Array<String>] Public profile URLs for the person. A person-profile URL can identify the person
+      #   @param social_urls [Array<String>] Public profile URLs for the person. A person-profile URL is enough to identify t
       #
-      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
       #
       #   @param timeout_opts [ContextDev::Models::PersonEnrichParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
@@ -103,7 +105,7 @@ module ContextDev
         optional :name, String
 
         # @!method initialize(domain: nil, name: nil)
-        #   Company context to help identify the person. Provide a name or domain.
+        #   Company associated with the person. Send a `name`, a `domain`, or both.
         #
         #   @param domain [String] Website domain of a company associated with the person.
         #
@@ -187,8 +189,8 @@ module ContextDev
         optional :region, String
 
         # @!method initialize(city: nil, country: nil, region: nil)
-        #   Location context to help identify the person. Provide a city, region, or
-        #   country.
+        #   Location associated with the person. Send at least one of `city`, `region`, or
+        #   `country`.
         #
         #   @param city [String] City associated with the person.
         #
@@ -211,8 +213,8 @@ module ContextDev
         optional :last, String
 
         # @!method initialize(first: nil, last: nil)
-        #   Person name. Without an email or person-profile URL, provide both first and last
-        #   name plus company, education, or location.
+        #   Name of the person. Without an email or profile URL, send both `first` and
+        #   `last` plus `company`, `education`, or `location`.
         #
         #   @param first [String] First or given name.
         #
@@ -227,8 +229,8 @@ module ContextDev
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-        #   inspect the response’s partial flag.
+        #   `fail` returns 408 at the deadline. `return-partial` returns the results
+        #   collected so far and marks the response as partial.
         #
         #   @return [Symbol, ContextDev::Models::PersonEnrichParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::PersonEnrichParams::TimeoutOpts::Behavior }
@@ -241,10 +243,10 @@ module ContextDev
         #
         #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::PersonEnrichParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   @param behavior [Symbol, ContextDev::Models::PersonEnrichParams::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         #
         # @see ContextDev::Models::PersonEnrichParams::TimeoutOpts#behavior
         module Behavior

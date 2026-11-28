@@ -18,7 +18,7 @@ module ContextDev
       optional :id, String
 
       # @!attribute deleted
-      #   Always true on success.
+      #   Always `true`.
       #
       #   @return [Boolean, nil]
       optional :deleted, ContextDev::Internal::Type::Boolean
@@ -37,7 +37,7 @@ module ContextDev
       #
       #   @param id [String] ID of the deleted batch.
       #
-      #   @param deleted [Boolean] Always true on success.
+      #   @param deleted [Boolean] Always `true`.
       #
       #   @param key_metadata [ContextDev::Models::BatchDeleteResponse::KeyMetadata] Credits this request used and your remaining balance.
 
@@ -50,7 +50,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -60,7 +60,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

@@ -20,7 +20,8 @@ module ContextDev
       required :url, String
 
       # @!attribute highlights_params
-      #   Requires `formats.highlights: true`; required when it is set.
+      #   Query for the `highlights` output. Required when `formats.highlights` is `true`,
+      #   and allowed only then.
       #
       #   @return [ContextDev::Models::WebScrapeParams::HighlightsParams, nil]
       optional :highlights_params,
@@ -28,52 +29,54 @@ module ContextDev
                api_name: :highlightsParams
 
       # @!attribute image_params
-      #   Image options. Requires formats.images: true.
+      #   Options for the `images` output. Requires `formats.images: true`.
       #
       #   @return [ContextDev::Models::WebScrapeParams::ImageParams, nil]
       optional :image_params, -> { ContextDev::WebScrapeParams::ImageParams }, api_name: :imageParams
 
       # @!attribute json_params
-      #   Requires `formats.json: true`; required when it is set.
+      #   Schema and instructions for the `json` output. Required when `formats.json` is
+      #   `true`, and allowed only then.
       #
       #   @return [ContextDev::Models::WebScrapeParams::JsonParams, nil]
       optional :json_params, -> { ContextDev::WebScrapeParams::JsonParams }, api_name: :jsonParams
 
       # @!attribute markdown_params
-      #   Markdown options. Requires `formats.markdown`.
+      #   Options for the `markdown` output. Requires `formats.markdown: true`.
       #
       #   @return [ContextDev::Models::WebScrapeParams::MarkdownParams, nil]
       optional :markdown_params, -> { ContextDev::WebScrapeParams::MarkdownParams }, api_name: :markdownParams
 
       # @!attribute max_age_ms
-      #   Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
-      #   3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
+      #   Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+      #   Defaults to 3 days (259200000 ms). Maximum: 1 year (31536000000 ms).
       #
       #   @return [Integer, nil]
       optional :max_age_ms, Integer, api_name: :maxAgeMs
 
       # @!attribute parse_params
-      #   Requires `formats.parse: true`; required when it is set.
+      #   Custom rules or a prebuilt parser for the `parsed` output. Required when
+      #   `formats.parse` is `true`, and allowed only then.
       #
       #   @return [ContextDev::Models::WebScrapeParams::ParseParams::CustomParser, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser, nil]
       optional :parse_params, union: -> { ContextDev::WebScrapeParams::ParseParams }, api_name: :parseParams
 
       # @!attribute policies
-      #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-      #   access policies are enabled for your organization; otherwise the request fails
-      #   with `ACCESS_POLICIES_NOT_ENABLED`.
+      #   Access policy IDs to apply; each URL must pass all of them. Requires access
+      #   policies enabled for your organization; otherwise returns
+      #   `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute product_params
-      #   Product options. Requires formats.product: true.
+      #   Options for the `product` output. Requires `formats.product: true`.
       #
       #   @return [ContextDev::Models::WebScrapeParams::ProductParams, nil]
       optional :product_params, -> { ContextDev::WebScrapeParams::ProductParams }, api_name: :productParams
 
       # @!attribute screenshot_params
-      #   Screenshot options. Requires formats.screenshot: true.
+      #   Options for the `screenshot` output. Requires `formats.screenshot: true`.
       #
       #   @return [ContextDev::Models::WebScrapeParams::ScreenshotParams, nil]
       optional :screenshot_params,
@@ -87,7 +90,8 @@ module ContextDev
       optional :shared_params, -> { ContextDev::WebScrapeParams::SharedParams }, api_name: :sharedParams
 
       # @!attribute tags
-      #   Labels for filtering usage in the dashboard.
+      #   Labels for this request. Filter usage and request logs by them in the dashboard
+      #   or with `GET /org/logs`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -99,7 +103,8 @@ module ContextDev
       optional :timeout_opts, -> { ContextDev::WebScrapeParams::TimeoutOpts }, api_name: :timeoutOpts
 
       # @!attribute zdr
-      #   `enabled` turns on zero data retention. Your organization must have ZDR enabled.
+      #   `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      #   your organization has ZDR.
       #
       #   @return [Symbol, ContextDev::Models::WebScrapeParams::Zdr, nil]
       optional :zdr, enum: -> { ContextDev::WebScrapeParams::Zdr }
@@ -112,86 +117,86 @@ module ContextDev
       #
       #   @param url [String] Public HTTP or HTTPS URL to scrape.
       #
-      #   @param highlights_params [ContextDev::Models::WebScrapeParams::HighlightsParams] Requires `formats.highlights: true`; required when it is set.
+      #   @param highlights_params [ContextDev::Models::WebScrapeParams::HighlightsParams] Query for the `highlights` output. Required when `formats.highlights` is `true`,
       #
-      #   @param image_params [ContextDev::Models::WebScrapeParams::ImageParams] Image options. Requires formats.images: true.
+      #   @param image_params [ContextDev::Models::WebScrapeParams::ImageParams] Options for the `images` output. Requires `formats.images: true`.
       #
-      #   @param json_params [ContextDev::Models::WebScrapeParams::JsonParams] Requires `formats.json: true`; required when it is set.
+      #   @param json_params [ContextDev::Models::WebScrapeParams::JsonParams] Schema and instructions for the `json` output. Required when `formats.json` is `
       #
-      #   @param markdown_params [ContextDev::Models::WebScrapeParams::MarkdownParams] Markdown options. Requires `formats.markdown`.
+      #   @param markdown_params [ContextDev::Models::WebScrapeParams::MarkdownParams] Options for the `markdown` output. Requires `formats.markdown: true`.
       #
-      #   @param max_age_ms [Integer] Maximum age of a cached output, in milliseconds. `0` fetches fresh. Defaults to
+      #   @param max_age_ms [Integer] Maximum age of a cached result, in milliseconds. `0` always fetches fresh. Defau
       #
-      #   @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams::CustomParser, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser] Requires `formats.parse: true`; required when it is set.
+      #   @param parse_params [ContextDev::Models::WebScrapeParams::ParseParams::CustomParser, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser] Custom rules or a prebuilt parser for the `parsed` output. Required when `format
       #
-      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+      #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
       #
-      #   @param product_params [ContextDev::Models::WebScrapeParams::ProductParams] Product options. Requires formats.product: true.
+      #   @param product_params [ContextDev::Models::WebScrapeParams::ProductParams] Options for the `product` output. Requires `formats.product: true`.
       #
-      #   @param screenshot_params [ContextDev::Models::WebScrapeParams::ScreenshotParams] Screenshot options. Requires formats.screenshot: true.
+      #   @param screenshot_params [ContextDev::Models::WebScrapeParams::ScreenshotParams] Options for the `screenshot` output. Requires `formats.screenshot: true`.
       #
       #   @param shared_params [ContextDev::Models::WebScrapeParams::SharedParams] Browser and content settings shared by all outputs.
       #
-      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
       #
       #   @param timeout_opts [ContextDev::Models::WebScrapeParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
-      #   @param zdr [Symbol, ContextDev::Models::WebScrapeParams::Zdr] `enabled` turns on zero data retention. Your organization must have ZDR enabled.
+      #   @param zdr [Symbol, ContextDev::Models::WebScrapeParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
       class Formats < ContextDev::Internal::Type::BaseModel
         # @!attribute bytes
-        #   The original HTTP response body.
+        #   Return the original HTTP response body.
         #
         #   @return [Boolean, nil]
         optional :bytes, ContextDev::Internal::Type::Boolean
 
         # @!attribute highlights
-        #   Markdown excerpts relevant to `highlightsParams.query`.
+        #   Return Markdown excerpts relevant to `highlightsParams.query`.
         #
         #   @return [Boolean, nil]
         optional :highlights, ContextDev::Internal::Type::Boolean
 
         # @!attribute html
-        #   Rendered HTML.
+        #   Return the rendered HTML.
         #
         #   @return [Boolean, nil]
         optional :html, ContextDev::Internal::Type::Boolean
 
         # @!attribute images
-        #   Images found on the page.
+        #   Return the images found on the page.
         #
         #   @return [Boolean, nil]
         optional :images, ContextDev::Internal::Type::Boolean
 
         # @!attribute json
-        #   An object matching `jsonParams.schema`, extracted from the page text and its
-        #   embedded data (JSON-LD, meta tags, framework state).
+        #   Return an object matching `jsonParams.schema`, extracted from the page text and
+        #   embedded data such as JSON-LD, meta tags, and framework state.
         #
         #   @return [Boolean, nil]
         optional :json, ContextDev::Internal::Type::Boolean
 
         # @!attribute markdown
-        #   Page content or video transcript as Markdown.
+        #   Return the page content, or a video transcript, as Markdown.
         #
         #   @return [Boolean, nil]
         optional :markdown, ContextDev::Internal::Type::Boolean
 
         # @!attribute parse
-        #   Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
+        #   Return fields extracted with custom rules or a prebuilt parser, as `parsed`.
         #
         #   @return [Boolean, nil]
         optional :parse, ContextDev::Internal::Type::Boolean
 
         # @!attribute product
-        #   Product details such as name, price, and availability.
+        #   Return product details such as name, price, and availability.
         #
         #   @return [Boolean, nil]
         optional :product, ContextDev::Internal::Type::Boolean
 
         # @!attribute screenshot
-        #   A screenshot of the page.
+        #   Return a screenshot of the page.
         #
         #   @return [Boolean, nil]
         optional :screenshot, ContextDev::Internal::Type::Boolean
@@ -202,68 +207,73 @@ module ContextDev
         #
         #   Outputs to return. Set at least one to `true`.
         #
-        #   @param bytes [Boolean] The original HTTP response body.
+        #   @param bytes [Boolean] Return the original HTTP response body.
         #
-        #   @param highlights [Boolean] Markdown excerpts relevant to `highlightsParams.query`.
+        #   @param highlights [Boolean] Return Markdown excerpts relevant to `highlightsParams.query`.
         #
-        #   @param html [Boolean] Rendered HTML.
+        #   @param html [Boolean] Return the rendered HTML.
         #
-        #   @param images [Boolean] Images found on the page.
+        #   @param images [Boolean] Return the images found on the page.
         #
-        #   @param json [Boolean] An object matching `jsonParams.schema`, extracted from the page text and its emb
+        #   @param json [Boolean] Return an object matching `jsonParams.schema`, extracted from the page text and
         #
-        #   @param markdown [Boolean] Page content or video transcript as Markdown.
+        #   @param markdown [Boolean] Return the page content, or a video transcript, as Markdown.
         #
-        #   @param parse [Boolean] Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
+        #   @param parse [Boolean] Return fields extracted with custom rules or a prebuilt parser, as `parsed`.
         #
-        #   @param product [Boolean] Product details such as name, price, and availability.
+        #   @param product [Boolean] Return product details such as name, price, and availability.
         #
-        #   @param screenshot [Boolean] A screenshot of the page.
+        #   @param screenshot [Boolean] Return a screenshot of the page.
       end
 
       class HighlightsParams < ContextDev::Internal::Type::BaseModel
         # @!attribute query
-        #   The question or topic to find passages for.
+        #   Question or topic to find relevant passages for.
         #
         #   @return [String]
         required :query, String
 
         # @!attribute max_characters
-        #   Maximum combined length of returned passages.
+        #   Maximum combined length of the returned passages, in characters.
         #
         #   @return [Integer, nil]
         optional :max_characters, Integer, api_name: :maxCharacters
 
         # @!method initialize(query:, max_characters: nil)
-        #   Requires `formats.highlights: true`; required when it is set.
+        #   Query for the `highlights` output. Required when `formats.highlights` is `true`,
+        #   and allowed only then.
         #
-        #   @param query [String] The question or topic to find passages for.
+        #   @param query [String] Question or topic to find relevant passages for.
         #
-        #   @param max_characters [Integer] Maximum combined length of returned passages.
+        #   @param max_characters [Integer] Maximum combined length of the returned passages, in characters.
       end
 
       class ImageParams < ContextDev::Internal::Type::BaseModel
         # @!attribute dedupe
-        #   Set `visual` to drop visual duplicates, keeping the largest copy.
+        #   Set to `visual` to drop visually duplicate images, keeping the largest copy.
         #
         #   @return [Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Dedupe, nil]
         optional :dedupe, enum: -> { ContextDev::WebScrapeParams::ImageParams::Dedupe }
 
         # @!attribute enrich
-        #   Extra data per image: `dimensions`, `classification`, or a hosted `file` URL.
+        #   Extra data to add to each image: `dimensions` adds `width` and `height`,
+        #   `classification` adds `classification`, and `file` adds a hosted `fileUrl`.
         #
         #   @return [Array<Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Enrich>, nil]
         optional :enrich,
                  -> { ContextDev::Internal::Type::ArrayOf[enum: ContextDev::WebScrapeParams::ImageParams::Enrich] }
 
         # @!method initialize(dedupe: nil, enrich: nil)
-        #   Image options. Requires formats.images: true.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::WebScrapeParams::ImageParams} for more details.
         #
-        #   @param dedupe [Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Dedupe] Set `visual` to drop visual duplicates, keeping the largest copy.
+        #   Options for the `images` output. Requires `formats.images: true`.
         #
-        #   @param enrich [Array<Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Enrich>] Extra data per image: `dimensions`, `classification`, or a hosted `file` URL.
+        #   @param dedupe [Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Dedupe] Set to `visual` to drop visually duplicate images, keeping the largest copy.
+        #
+        #   @param enrich [Array<Symbol, ContextDev::Models::WebScrapeParams::ImageParams::Enrich>] Extra data to add to each image: `dimensions` adds `width` and `height`, `classi
 
-        # Set `visual` to drop visual duplicates, keeping the largest copy.
+        # Set to `visual` to drop visually duplicate images, keeping the largest copy.
         #
         # @see ContextDev::Models::WebScrapeParams::ImageParams#dedupe
         module Dedupe
@@ -290,8 +300,9 @@ module ContextDev
 
       class JsonParams < ContextDev::Internal::Type::BaseModel
         # @!attribute schema
-        #   JSON Schema (not an example object) for a top-level object, up to 50 KB. Use
-        #   optional or nullable fields for missing facts.
+        #   JSON Schema for the object to extract, not an example object. Must describe a
+        #   top-level object, up to 50 KB. Make fields optional or nullable when the page
+        #   may not state them.
         #
         #   @return [Hash{Symbol=>Object}]
         required :schema, ContextDev::Internal::Type::HashOf[ContextDev::Internal::Type::Unknown]
@@ -306,16 +317,17 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeParams::JsonParams} for more details.
         #
-        #   Requires `formats.json: true`; required when it is set.
+        #   Schema and instructions for the `json` output. Required when `formats.json` is
+        #   `true`, and allowed only then.
         #
-        #   @param schema [Hash{Symbol=>Object}] JSON Schema (not an example object) for a top-level object, up to 50 KB. Use opt
+        #   @param schema [Hash{Symbol=>Object}] JSON Schema for the object to extract, not an example object. Must describe a to
         #
         #   @param instructions [String] Extra guidance, such as which facts to prefer or how to read a field.
       end
 
       class MarkdownParams < ContextDev::Internal::Type::BaseModel
         # @!attribute include_images
-        #   Include images in the Markdown (`html-conversion` only).
+        #   Include image references in the Markdown (`html-conversion` only).
         #
         #   @return [Boolean, nil]
         optional :include_images, ContextDev::Internal::Type::Boolean, api_name: :includeImages
@@ -327,7 +339,8 @@ module ContextDev
         optional :include_links, ContextDev::Internal::Type::Boolean, api_name: :includeLinks
 
         # @!attribute inline_images
-        #   How base64 images appear when `includeImages` is set (`html-conversion` only).
+        #   How to write base64 images when `includeImages` is `true`: `placeholder`
+        #   shortens the data, `preserve` keeps it in full (`html-conversion` only).
         #
         #   @return [Symbol, ContextDev::Models::WebScrapeParams::MarkdownParams::InlineImages, nil]
         optional :inline_images,
@@ -349,17 +362,18 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeParams::MarkdownParams} for more details.
         #
-        #   Markdown options. Requires `formats.markdown`.
+        #   Options for the `markdown` output. Requires `formats.markdown: true`.
         #
-        #   @param include_images [Boolean] Include images in the Markdown (`html-conversion` only).
+        #   @param include_images [Boolean] Include image references in the Markdown (`html-conversion` only).
         #
         #   @param include_links [Boolean] Keep link URLs in the Markdown (`html-conversion` only).
         #
-        #   @param inline_images [Symbol, ContextDev::Models::WebScrapeParams::MarkdownParams::InlineImages] How base64 images appear when `includeImages` is set (`html-conversion` only).
+        #   @param inline_images [Symbol, ContextDev::Models::WebScrapeParams::MarkdownParams::InlineImages] How to write base64 images when `includeImages` is `true`: `placeholder` shorten
         #
         #   @param source_preference [Array<Symbol, ContextDev::Models::WebScrapeParams::MarkdownParams::SourcePreference>] Markdown sources in order of preference: `html-conversion` converts the page HTM
 
-        # How base64 images appear when `includeImages` is set (`html-conversion` only).
+        # How to write base64 images when `includeImages` is `true`: `placeholder`
+        # shortens the data, `preserve` keeps it in full (`html-conversion` only).
         #
         # @see ContextDev::Models::WebScrapeParams::MarkdownParams#inline_images
         module InlineImages
@@ -383,7 +397,8 @@ module ContextDev
         end
       end
 
-      # Requires `formats.parse: true`; required when it is set.
+      # Custom rules or a prebuilt parser for the `parsed` output. Required when
+      # `formats.parse` is `true`, and allowed only then.
       module ParseParams
         extend ContextDev::Internal::Type::Union
 
@@ -393,15 +408,15 @@ module ContextDev
 
         class CustomParser < ContextDev::Internal::Type::BaseModel
           # @!attribute rules
-          #   Field names mapped to CSS selectors (`h1`, `a@href`) or rule objects. Max 100
-          #   fields, 5 levels.
+          #   Output field names mapped to a CSS selector (such as `h1` or `a@href`) or a rule
+          #   object. Up to 100 fields, nested up to 5 levels.
           #
           #   @return [Hash{Symbol=>String, ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Rule::UnionMember1}]
           required :rules,
                    -> { ContextDev::Internal::Type::HashOf[union: ContextDev::WebScrapeParams::ParseParams::CustomParser::Rule] }
 
           # @!attribute type
-          #   Extract fields using custom CSS rules. This is the default when type is omitted.
+          #   Extract fields with custom CSS rules. The default when `type` is omitted.
           #
           #   @return [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Type, nil]
           optional :type, enum: -> { ContextDev::WebScrapeParams::ParseParams::CustomParser::Type }
@@ -411,9 +426,9 @@ module ContextDev
           #   {ContextDev::Models::WebScrapeParams::ParseParams::CustomParser} for more
           #   details.
           #
-          #   @param rules [Hash{Symbol=>String, ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Rule::UnionMember1}] Field names mapped to CSS selectors (`h1`, `a@href`) or rule objects. Max 100 fi
+          #   @param rules [Hash{Symbol=>String, ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Rule::UnionMember1}] Output field names mapped to a CSS selector (such as `h1` or `a@href`) or a rule
           #
-          #   @param type [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Type] Extract fields using custom CSS rules. This is the default when type is omitted.
+          #   @param type [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Type] Extract fields with custom CSS rules. The default when `type` is omitted.
 
           module Rule
             extend ContextDev::Internal::Type::Union
@@ -430,8 +445,8 @@ module ContextDev
               required :selector, String
 
               # @!attribute output
-              #   Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
-              #   to text.
+              #   What to return: `text`, `html`, an attribute such as `@href`, or nested field
+              #   rules. Defaults to `text`.
               #
               #   @return [Symbol, String, Object, ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Rule::UnionMember1::Output, nil]
               optional :output,
@@ -451,12 +466,12 @@ module ContextDev
               #
               #   @param selector [String] CSS selector to match within the current page or parent rule.
               #
-              #   @param output [Symbol, String, Object, ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Rule::UnionMember1::Output] Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
+              #   @param output [Symbol, String, Object, ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Rule::UnionMember1::Output] What to return: `text`, `html`, an attribute such as `@href`, or nested field ru
               #
               #   @param type [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Rule::UnionMember1::Type] Return the first match with `item` or all matches with `list`.
 
-              # Return text, HTML, an attribute such as `@href`, or nested field rules. Defaults
-              # to text.
+              # What to return: `text`, `html`, an attribute such as `@href`, or nested field
+              # rules. Defaults to `text`.
               #
               # @see ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Rule::UnionMember1#output
               module Output
@@ -509,7 +524,7 @@ module ContextDev
             #   @return [Array(String, ContextDev::Models::WebScrapeParams::ParseParams::CustomParser::Rule::UnionMember1)]
           end
 
-          # Extract fields using custom CSS rules. This is the default when type is omitted.
+          # Extract fields with custom CSS rules. The default when `type` is omitted.
           #
           # @see ContextDev::Models::WebScrapeParams::ParseParams::CustomParser#type
           module Type
@@ -524,150 +539,178 @@ module ContextDev
 
         class PrebuiltParser < ContextDev::Internal::Type::BaseModel
           # @!attribute parser
-          #   google-maps parses Google Maps business data into data.results. Accepts Maps
-          #   place, search, and internal data URLs; a search page returns up to 200 places,
-          #   ranked as Google ranks them. Uses an exit in the gl country of the URL (US when
-          #   absent) and English labels regardless of hl or Accept-Language.
-          #   google-maps-reviews returns the reviews of a place in data.reviews, in the same
-          #   shape as the Serper reviews API (rating, date, isoDate, snippet,
-          #   translatedSnippet, likes, user, media, response, link, id), plus language,
-          #   guided ratings in details, and user.isLocalGuide; data also carries the place
-          #   featureId, cid, and sort. sort and limit pick the order and count, and oldest is
-          #   exact. It accepts Maps place, search, and ?cid= URLs, plus
-          #   search.google.com/local/reviews URLs, so the google_maps_url and
-          #   google_reviews_url fields of google-maps results work as input. An unknown place
-          #   returns no reviews. google-play parses a Play Store app into data: details,
-          #   developer contact, ratings, price, permissions, and data safety, plus the
-          #   country storefront the record describes and is_available, whether the app is
-          #   offered there. Ratings are counted per storefront, so rating, rating_count, and
-          #   rating_histogram are null in a storefront where nobody rated the app.
-          #   google-play-reviews returns up to the 200 newest reviews written in the hl
-          #   language, with developer replies, in data.reviews; an app with fewer such
-          #   reviews returns them all. Both Play parsers accept app details URLs
-          #   (play.google.com/store/apps/details?id=…); hl and gl set the language and
-          #   storefront, defaulting to en and us. Without gl, google-play reads an app that
-          #   is not offered in the US from the country of its developer instead. app-store
-          #   parses an App Store app into data: details, developer, ratings, price, version,
-          #   and screenshots. app-store-reviews returns up to the 500 newest reviews in
-          #   data.reviews. Both App Store parsers accept app URLs
-          #   (apps.apple.com/us/app/…/id…); the country in the path sets the storefront,
-          #   defaulting to us. g2-reviews returns the 25 most recently published reviews of a
-          #   G2 product in data.reviews (rating, title, likes, dislikes, problems_solved,
-          #   reviewer role, company size, and industry), plus data.product. It accepts G2
-          #   product URLs (g2.com/products/…), follows renamed products, and keeps
-          #   star-rating filters from the URL (filters[nps_score][]=1 to 5); other filters,
-          #   sort orders, and pages are ignored. instagram-profile parses a public profile
-          #   (instagram.com/{username}) into data: bio, links, follower and post counts,
-          #   category, business address, similar_accounts, and latest_posts (up to the 12
-          #   posts at the top of the profile, newest first). Instagram lists pinned posts
-          #   there ahead of newer ones, so posts with is_pinned true can be older; when
-          #   Instagram shows only a rounded post count (32K), post_count is that rounded
-          #   number and is_post_count_rounded is true. instagram-post parses a post or reel
-          #   (/p/…, /reel/…) into data: caption, hashtags, mentions, like, comment, and view
-          #   counts (like_count and view_count are null when the owner hides them), media
-          #   URLs, tagged users, collaborators, location, and the top ~14 comments in
-          #   data.comments. instagram-feed returns the top posts for a hashtag or keyword
-          #   (/explore/tags/…, /popular/…) or the recent posts at a location
-          #   (/explore/locations/{id}/…) in data.posts; keyword posts carry only the
-          #   shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
-          #   it. All three Instagram parsers read public data without logging in, so private
-          #   accounts return no posts and follower lists are unavailable. tiktok-profile
-          #   parses a public profile (tiktok.com/@{username}) into data: nickname, bio, bio
-          #   link, follower, following, like, and video counts, verified, private, and
-          #   business flags, and business category; it does not list videos. tiktok-video
-          #   parses a video or photo post (/@{username}/video/{id} or
-          #   /@{username}/photo/{id}) into data: caption, hashtags, mentions, author, view,
-          #   like, comment, share, save, and repost counts, duration, thumbnail, a video_url
-          #   that downloads without cookies, image_urls for photo posts, music, location, and
-          #   ad, paid-partnership, and AI-generated flags. tiktok-feed returns videos in the
-          #   tiktok-video shape as data.videos: the latest 15 from a profile URL, the top 30
-          #   from a hashtag URL (/tag/{name}), or the top 12 from a search URL
-          #   (/search?q={query}). tiktok-comments returns the first 20 comments of a video or
-          #   photo post as data.comments: text, posted_at, like and reply counts, whether the
-          #   author liked it, and the commenter. tiktok-followers and tiktok-following return
-          #   up to 30 accounts of a profile as data.users, in the tiktok-profile shape.
-          #   tiktok-user-search returns the top 10 accounts for a user search URL
-          #   (/search/user?q={query}) as data.users: id, username, nickname, biography,
-          #   avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
-          #   parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-          #   links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). reddit-post parses a post
-          #   (reddit.com/r/{subreddit}/comments/{id}, reddit.com/comments/{id}, or
-          #   redd.it/{id}) into data.post: title, body as Markdown, type (text, link, image,
-          #   gallery, or video), link_url, subreddit, author, flairs, score, upvote_ratio,
-          #   comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
-          #   flags, images (every gallery image in order), and video (an MP4 url plus an
-          #   hls_url that carries the audio). data.comments holds the comment tree, each
-          #   comment with id, author, body as Markdown, score, posted_at, depth, parent_id,
-          #   url, is_submitter, is_deleted, and its replies; limit caps the total number of
-          #   comments (default 100), filled shallowest first so whole conversations are kept,
-          #   and data.has_more_comments says whether the thread has more. The sort query of
-          #   the URL (best, top, new, controversial, old, qa) orders the comments.
-          #   reddit-search returns search results for a search URL
-          #   (reddit.com/search?q={query}, or reddit.com/r/{subreddit}/search?q={query} to
-          #   search one subreddit). With type=link or no type it returns posts in the
-          #   reddit-post shape as data.posts, ordered by the sort (relevance, hot, top, new,
-          #   comments) and limited to the t time range (hour, day, week, month, year, all) of
-          #   the URL; type=sr returns communities as data.communities (name, title,
-          #   description, sidebar, subscriber_count, created_at, type, NSFW and quarantine
-          #   flags, language, category, icon and banner URLs, and allowed post types);
-          #   type=user returns accounts as data.users (username, display_name, bio,
-          #   created_at, post and comment karma, avatar and banner URLs, and verified,
-          #   employee, moderator, premium, and NSFW flags). limit caps the number of results
-          #   (default 100), in the order Reddit returns them, and data.has_more says whether
-          #   Reddit has more. reddit-subreddit reads a subreddit URL
-          #   (reddit.com/r/{subreddit}, optionally followed by /hot, /new, /top, /rising, or
-          #   /controversial, with t setting the time range of top and controversial, default
-          #   day) into data.subreddit in the community shape of reddit-search, data.rules
-          #   (name, description, applies_to, violation_reason, created_at), and data.posts in
-          #   the reddit-post shape, ordered like the tab (default hot) and with stickied
-          #   posts flagged; r/all and r/popular return posts with a null subreddit and rules.
-          #   limit caps the posts (default 100) and data.has_more says whether Reddit has
-          #   more. Private and quarantined subreddits return WEBSITE_ACCESS_ERROR.
-          #   reddit-user reads a profile URL (reddit.com/user/{username} or
-          #   reddit.com/u/{username}, optionally followed by /overview, /submitted, or
-          #   /comments, with sort set to new, hot, top, or controversial and t setting the
-          #   time range of top and controversial, default all) into data.user (id, username,
-          #   display_name, bio, created_at, total, post, comment, awardee, and awarder karma,
-          #   avatar and banner URLs, and verified, suspended, employee, moderator, premium,
-          #   and NSFW flags), data.trophies (name, description, icon_url, granted_at, url),
-          #   data.moderated_communities (name, title, url, subscriber_count, icon_url,
-          #   is_nsfw), data.posts in the reddit-post shape, and data.comments, each with id,
-          #   author, body as Markdown, score, posted_at, edited_at, url, subreddit, parent_id
-          #   (null for a top-level comment), is_submitter, is_stickied, distinguished,
-          #   award_count, and the post it was left on (id, title, url, author, is_nsfw). The
-          #   overview tab returns both posts and comments; submitted returns null comments
-          #   and comments returns null posts. limit caps the posts and comments together
-          #   (default 100) and data.has_more says whether Reddit has more. Users who hide
-          #   their activity return empty lists, and suspended accounts return their profile
-          #   with null posts and comments. yelp-search accepts Yelp search URLs with
-          #   find_desc and find_loc, reads start as the result offset, and returns up to 20
-          #   ranked organic businesses in data.businesses with total and pagination.
-          #   yelp-reviews accepts a Yelp business URL (yelp.com/biz/{alias}), uses optional
-          #   start for the offset, and always sorts newest first; unsupported sort and review
-          #   filters are rejected, while tracking params are ignored. It returns up to 20
-          #   latest public reviews in data.reviews with business details and
-          #   pagination.next_offset. Each review has rating, full text, updated_at, and
-          #   author (id is the Yelp user id from the reviewer profile URL, url links to that
-          #   profile, plus name, location, and review_count); owner replies and photos are
-          #   not included. tripadvisor-reviews accepts a Tripadvisor hotel, restaurant, or
-          #   attraction review URL (tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html,
-          #   on any Tripadvisor country domain), reads -or{N}- in the path as the offset, and
-          #   returns 20 reviews in data.reviews in the order Tripadvisor shows them, with
-          #   data.location (id, name, type, url, review_count) and pagination.next_offset.
-          #   Each review has id, url, title, full text, rating, language, published_at,
-          #   visit_month, helpful_votes, subratings, photo_urls, owner_response (text,
-          #   published_at, author_name), and author (id, username, name, url,
-          #   contribution_count); an unknown location returns no reviews. emails accepts any
-          #   page and returns its email addresses as data.emails ([{ email }]), read from
-          #   mailto links, Cloudflare-protected addresses, and visible text. phone-numbers
-          #   accepts any page and returns its valid phone numbers in E.164 as
-          #   data.phone_numbers ([{ phone }]), read from tel links and visible text; numbers
-          #   without a country code are read for the country of the site TLD, defaulting to
-          #   US. links accepts any page and returns its unique http(s) links as data.links
-          #   ([{ url, text }]), with absolute URLs; text falls back to aria-label or image
-          #   alt and is null when a link has none. The emails parser reads the rendered page
-          #   and respects content filters; the other prebuilt parsers read their data
-          #   independently of DOM filters.
+          #   Prebuilt parser to run. Each one accepts specific URLs and returns its result in
+          #   `parsed.data`. `emails`, `phone-numbers`, and `links` read the rendered page and
+          #   respect content filters; the others read their source directly, independently of
+          #   content filters and other outputs.
+          #
+          #   - `google-maps`: Google Maps place, search, and internal data URLs. Returns
+          #     businesses in `data.results`; a search URL returns up to 200 places. Results
+          #     use the country set in the URL, or the US when none is set, and come back with
+          #     English labels.
+          #   - `google-maps-reviews`: Google Maps place, search, and `?cid=` URLs, plus
+          #     `search.google.com/local/reviews` URLs, so the `google_maps_url` and
+          #     `google_reviews_url` fields of `google-maps` results work as input. Returns
+          #     the reviews of the place in `data.reviews` (`rating`, `date`, `isoDate`,
+          #     `snippet`, `translatedSnippet`, `likes`, `user`, `media`, `response`, `link`,
+          #     `id`, `language`, guided ratings in `details`, and `user.isLocalGuide`), plus
+          #     the place `featureId`, `cid`, and `sort` in `data`. `sort` and `limit` set the
+          #     order and count; `oldest` is exact. An unknown place returns no reviews.
+          #   - `google-play`: Play Store app details URLs
+          #     (`play.google.com/store/apps/details?id=…`). Returns one app in `data`:
+          #     details, developer contact, ratings, price, permissions, data safety, the
+          #     storefront country the record describes, and `is_available` (whether the app
+          #     is offered there). Ratings are counted per storefront, so `rating`,
+          #     `rating_count`, and `rating_histogram` are `null` where nobody rated the app.
+          #     The language and storefront country set in the URL apply (default English and
+          #     the US); without a storefront country, an app not offered in the US is read
+          #     from the country of its developer.
+          #   - `google-play-reviews`: Same URLs as `google-play`. Returns up to the 200
+          #     newest reviews in the language set in the URL, with developer replies, in
+          #     `data.reviews`; an app with fewer such reviews returns them all.
+          #   - `app-store`: App Store app URLs (`apps.apple.com/us/app/…/id…`). Returns one
+          #     app in `data`: details, developer, ratings, price, version, and screenshots.
+          #     The country in the path sets the storefront (default `us`).
+          #   - `app-store-reviews`: Same URLs as `app-store`. Returns up to the 500 newest
+          #     reviews in `data.reviews`.
+          #   - `g2-reviews`: G2 product URLs (`g2.com/products/…`), following renamed
+          #     products. Returns the 25 most recently published reviews in `data.reviews`
+          #     (rating, title, likes, dislikes, `problems_solved`, reviewer role, company
+          #     size, and industry), plus `data.product`. Keeps star-rating filters from the
+          #     URL (`filters[nps_score][]=1` to `5`) and ignores other filters, sort orders,
+          #     and pages.
+          #   - `instagram-profile`: Public profile URLs (`instagram.com/{username}`). Returns
+          #     one profile in `data`: bio, links, follower and post counts, category,
+          #     business address, `similar_accounts`, and `latest_posts` (up to the 12 posts
+          #     at the top of the profile, newest first). Instagram lists pinned posts first,
+          #     so posts with `is_pinned: true` can be older. When Instagram shows only a
+          #     rounded post count (such as 32K), `post_count` is that rounded number and
+          #     `is_post_count_rounded` is `true`.
+          #   - `instagram-post`: Post and reel URLs (`/p/…`, `/reel/…`). Returns one post in
+          #     `data`: caption, hashtags, mentions, like, comment, and view counts
+          #     (`like_count` and `view_count` are `null` when the owner hides them), media
+          #     URLs, tagged users, collaborators, location, and about the top 14 comments in
+          #     `data.comments`.
+          #   - `instagram-feed`: Hashtag and keyword URLs (`/explore/tags/…`, `/popular/…`)
+          #     return the top posts; location URLs (`/explore/locations/{id}/…`) return
+          #     recent posts. Posts are in `data.posts`; keyword posts carry only the
+          #     shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
+          #     it. All three Instagram parsers read public data without signing in, so
+          #     private accounts return no posts and follower lists are unavailable.
+          #   - `tiktok-profile`: Public profile URLs (`tiktok.com/@{username}`). Returns one
+          #     profile in `data`: nickname, bio, bio link, follower, following, like, and
+          #     video counts, verified, private, and business flags, and business category.
+          #     Does not list videos.
+          #   - `tiktok-video`: Video and photo post URLs (`/@{username}/video/{id}`,
+          #     `/@{username}/photo/{id}`). Returns one post in `data`: caption, hashtags,
+          #     mentions, author, view, like, comment, share, save, and repost counts,
+          #     duration, thumbnail, a `video_url` that downloads without cookies,
+          #     `image_urls` for photo posts, music, location, and ad, paid-partnership, and
+          #     AI-generated flags.
+          #   - `tiktok-feed`: Returns videos in the `tiktok-video` shape in `data.videos`:
+          #     the latest 15 from a profile URL, the top 30 from a hashtag URL
+          #     (`/tag/{name}`), or the top 12 from a search URL (`/search?q={query}`).
+          #   - `tiktok-comments`: Video and photo post URLs. Returns the first 20 comments in
+          #     `data.comments`: text, `posted_at`, like and reply counts, whether the author
+          #     liked it, and the commenter.
+          #   - `tiktok-followers`, `tiktok-following`: Profile URLs. Return up to 30 accounts
+          #     in `data.users`, in the `tiktok-profile` shape.
+          #   - `tiktok-user-search`: User search URLs (`/search/user?q={query}`). Returns the
+          #     top 10 accounts in `data.users`: `id`, `username`, `nickname`, `biography`,
+          #     `avatar_url`, `sec_uid`, `follower_count`, `like_count`, and `is_verified`.
+          #     The TikTok parsers accept `tiktok.com`, `www.tiktok.com`, and `m.tiktok.com`
+          #     URLs, not short links (`vm.tiktok.com`, `vt.tiktok.com`, `tiktok.com/t/…`).
+          #   - `reddit-post`: Post URLs (`reddit.com/r/{subreddit}/comments/{id}`,
+          #     `reddit.com/comments/{id}`, `redd.it/{id}`). Returns the post in `data.post`:
+          #     title, body as Markdown, type (`text`, `link`, `image`, `gallery`, or
+          #     `video`), `link_url`, subreddit, author, flairs, score, `upvote_ratio`,
+          #     comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
+          #     flags, images (every gallery image in order), and video (an MP4 `url` plus an
+          #     `hls_url` that carries the audio). `data.comments` holds the comment tree;
+          #     each comment has `id`, `author`, `body` (Markdown), `score`, `posted_at`,
+          #     `depth`, `parent_id`, `url`, `is_submitter`, `is_deleted`, and its `replies`.
+          #     `limit` caps the total number of comments (default 100), filled shallowest
+          #     first so whole conversations are kept, and `data.has_more_comments` says
+          #     whether the thread has more. The `sort` in the URL (`best`, `top`, `new`,
+          #     `controversial`, `old`, `qa`) orders the comments.
+          #   - `reddit-search`: Search URLs (`reddit.com/search?q={query}`, or
+          #     `reddit.com/r/{subreddit}/search?q={query}` to search one subreddit). With
+          #     `type=link` or no `type`, returns posts in the `reddit-post` shape in
+          #     `data.posts`, ordered by the `sort` in the URL (`relevance`, `hot`, `top`,
+          #     `new`, `comments`) within its `t` time range (`hour`, `day`, `week`, `month`,
+          #     `year`, `all`). `type=sr` returns communities in `data.communities` (name,
+          #     title, description, sidebar, `subscriber_count`, `created_at`, type, NSFW and
+          #     quarantine flags, language, category, icon and banner URLs, and allowed post
+          #     types). `type=user` returns accounts in `data.users` (username,
+          #     `display_name`, bio, `created_at`, post and comment karma, avatar and banner
+          #     URLs, and verified, employee, moderator, premium, and NSFW flags). `limit`
+          #     caps the number of results (default 100), in the order Reddit returns them,
+          #     and `data.has_more` says whether Reddit has more.
+          #   - `reddit-subreddit`: Subreddit URLs (`reddit.com/r/{subreddit}`, optionally
+          #     followed by `/hot`, `/new`, `/top`, `/rising`, or `/controversial`, with `t`
+          #     setting the time range of `top` and `controversial`, default `day`). Returns
+          #     `data.subreddit` in the community shape of `reddit-search`, `data.rules`
+          #     (`name`, `description`, `applies_to`, `violation_reason`, `created_at`), and
+          #     `data.posts` in the `reddit-post` shape, ordered like the tab (default `hot`)
+          #     with stickied posts flagged. `r/all` and `r/popular` return posts with `null`
+          #     `subreddit` and `rules`. `limit` caps the posts (default 100) and
+          #     `data.has_more` says whether Reddit has more. Private and quarantined
+          #     subreddits return `WEBSITE_ACCESS_ERROR`.
+          #   - `reddit-user`: Profile URLs (`reddit.com/user/{username}` or
+          #     `reddit.com/u/{username}`, optionally followed by `/overview`, `/submitted`,
+          #     or `/comments`, with `sort` set to `new`, `hot`, `top`, or `controversial` and
+          #     `t` setting the time range of `top` and `controversial`, default `all`).
+          #     Returns `data.user` (`id`, `username`, `display_name`, bio, `created_at`,
+          #     total, post, comment, awardee, and awarder karma, avatar and banner URLs, and
+          #     verified, suspended, employee, moderator, premium, and NSFW flags),
+          #     `data.trophies` (`name`, `description`, `icon_url`, `granted_at`, `url`),
+          #     `data.moderated_communities` (`name`, `title`, `url`, `subscriber_count`,
+          #     `icon_url`, `is_nsfw`), `data.posts` in the `reddit-post` shape, and
+          #     `data.comments`, each with `id`, `author`, `body` (Markdown), `score`,
+          #     `posted_at`, `edited_at`, `url`, `subreddit`, `parent_id` (`null` for a
+          #     top-level comment), `is_submitter`, `is_stickied`, `distinguished`,
+          #     `award_count`, and the post it was left on (`id`, `title`, `url`, `author`,
+          #     `is_nsfw`). The overview tab returns both posts and comments; `submitted`
+          #     returns `null` comments and `comments` returns `null` posts. `limit` caps
+          #     posts and comments together (default 100) and `data.has_more` says whether
+          #     Reddit has more. Users who hide their activity return empty lists, and
+          #     suspended accounts return their profile with `null` posts and comments.
+          #   - `yelp-search`: Yelp search URLs with `find_desc` and `find_loc`; `start` sets
+          #     the result offset. Returns up to 20 ranked organic businesses in
+          #     `data.businesses`, with `total` and `pagination`.
+          #   - `yelp-reviews`: Yelp business URLs (`yelp.com/biz/{alias}`); optional `start`
+          #     sets the offset. Returns up to 20 of the latest public reviews, always newest
+          #     first, in `data.reviews`, with business details and `pagination.next_offset`.
+          #     Each review has rating, full text, `updated_at`, and author (`id` from the
+          #     reviewer profile URL, `url` linking to that profile, `name`, `location`, and
+          #     `review_count`); owner replies and photos are not included. Unsupported sort
+          #     and review filters are rejected; tracking parameters are ignored.
+          #   - `tripadvisor-reviews`: Tripadvisor hotel, restaurant, and attraction review
+          #     URLs (`tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html`, on any
+          #     Tripadvisor country domain); `-or{N}-` in the path sets the offset. Returns 20
+          #     reviews in `data.reviews` in the order Tripadvisor shows them, with
+          #     `data.location` (`id`, `name`, `type`, `url`, `review_count`) and
+          #     `pagination.next_offset`. Each review has `id`, `url`, `title`, full text,
+          #     `rating`, `language`, `published_at`, `visit_month`, `helpful_votes`,
+          #     `subratings`, `photo_urls`, `owner_response` (`text`, `published_at`,
+          #     `author_name`), and `author` (`id`, `username`, `name`, `url`,
+          #     `contribution_count`). An unknown location returns no reviews.
+          #   - `car-rental-availability`: avis.com and budget.com vehicle-availability search
+          #     URLs. Returns every vehicle with pay-now and pay-later prices in
+          #     `data.vehicles`.
+          #   - `car-rental-locations`: avis.com and budget.com `/locations?keyword=` URLs.
+          #     Returns rental branches with codes, addresses, coordinates, and hours in
+          #     `data.locations`.
+          #   - `emails`: Any page. Returns its email addresses in `data.emails`
+          #     (`[{ email }]`), read from `mailto:` links, Cloudflare-protected addresses,
+          #     and visible text.
+          #   - `phone-numbers`: Any page. Returns its valid phone numbers in E.164 format in
+          #     `data.phone_numbers` (`[{ phone }]`), read from `tel:` links and visible text.
+          #     Numbers without a country code are read for the country of the site TLD (US by
+          #     default).
+          #   - `links`: Any page. Returns its unique HTTP and HTTPS links as absolute URLs in
+          #     `data.links` (`[{ url, text }]`). `text` falls back to `aria-label` or image
+          #     alt text and is `null` when a link has none.
           #
           #   @return [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser::Parser]
           required :parser, enum: -> { ContextDev::WebScrapeParams::ParseParams::PrebuiltParser::Parser }
@@ -679,18 +722,17 @@ module ContextDev
           required :type, const: :prebuilt
 
           # @!attribute limit
-          #   google-maps-reviews and reddit parsers only. Maximum number of reviews
-          #   (google-maps-reviews, default 100), comments (reddit-post, default 100), or
-          #   results (reddit-search, reddit-subreddit, and reddit-user, default 100) to
-          #   return; maximum 1000.
+          #   Maximum number of reviews (`google-maps-reviews`, default 100), comments
+          #   (`reddit-post`, default 100), or results (`reddit-search`, `reddit-subreddit`,
+          #   and `reddit-user`, default 100) to return. Only these parsers accept it.
           #
           #   @return [Integer, nil]
           optional :limit, Integer
 
           # @!attribute sort
-          #   google-maps-reviews only. Order of data.reviews. newest, relevant, highest, and
-          #   lowest follow Google; oldest returns the earliest reviews first, which Google
-          #   itself does not offer.
+          #   Order of `data.reviews` for `google-maps-reviews`. `newest`, `relevant`,
+          #   `highest`, and `lowest` use the same orders as Google Maps; `oldest` returns the
+          #   earliest reviews first.
           #
           #   @return [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser::Sort, nil]
           optional :sort, enum: -> { ContextDev::WebScrapeParams::ParseParams::PrebuiltParser::Sort }
@@ -700,158 +742,186 @@ module ContextDev
           #   {ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser} for more
           #   details.
           #
-          #   @param parser [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser::Parser] google-maps parses Google Maps business data into data.results. Accepts Maps pla
+          #   @param parser [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser::Parser] Prebuilt parser to run. Each one accepts specific URLs and returns its result in
           #
-          #   @param limit [Integer] google-maps-reviews and reddit parsers only. Maximum number of reviews (google-m
+          #   @param limit [Integer] Maximum number of reviews (`google-maps-reviews`, default 100), comments (`reddi
           #
-          #   @param sort [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser::Sort] google-maps-reviews only. Order of data.reviews. newest, relevant, highest, and
+          #   @param sort [Symbol, ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser::Sort] Order of `data.reviews` for `google-maps-reviews`. `newest`, `relevant`, `highes
           #
           #   @param type [Symbol, :prebuilt] Use a prebuilt parser instead of custom rules.
 
-          # google-maps parses Google Maps business data into data.results. Accepts Maps
-          # place, search, and internal data URLs; a search page returns up to 200 places,
-          # ranked as Google ranks them. Uses an exit in the gl country of the URL (US when
-          # absent) and English labels regardless of hl or Accept-Language.
-          # google-maps-reviews returns the reviews of a place in data.reviews, in the same
-          # shape as the Serper reviews API (rating, date, isoDate, snippet,
-          # translatedSnippet, likes, user, media, response, link, id), plus language,
-          # guided ratings in details, and user.isLocalGuide; data also carries the place
-          # featureId, cid, and sort. sort and limit pick the order and count, and oldest is
-          # exact. It accepts Maps place, search, and ?cid= URLs, plus
-          # search.google.com/local/reviews URLs, so the google_maps_url and
-          # google_reviews_url fields of google-maps results work as input. An unknown place
-          # returns no reviews. google-play parses a Play Store app into data: details,
-          # developer contact, ratings, price, permissions, and data safety, plus the
-          # country storefront the record describes and is_available, whether the app is
-          # offered there. Ratings are counted per storefront, so rating, rating_count, and
-          # rating_histogram are null in a storefront where nobody rated the app.
-          # google-play-reviews returns up to the 200 newest reviews written in the hl
-          # language, with developer replies, in data.reviews; an app with fewer such
-          # reviews returns them all. Both Play parsers accept app details URLs
-          # (play.google.com/store/apps/details?id=…); hl and gl set the language and
-          # storefront, defaulting to en and us. Without gl, google-play reads an app that
-          # is not offered in the US from the country of its developer instead. app-store
-          # parses an App Store app into data: details, developer, ratings, price, version,
-          # and screenshots. app-store-reviews returns up to the 500 newest reviews in
-          # data.reviews. Both App Store parsers accept app URLs
-          # (apps.apple.com/us/app/…/id…); the country in the path sets the storefront,
-          # defaulting to us. g2-reviews returns the 25 most recently published reviews of a
-          # G2 product in data.reviews (rating, title, likes, dislikes, problems_solved,
-          # reviewer role, company size, and industry), plus data.product. It accepts G2
-          # product URLs (g2.com/products/…), follows renamed products, and keeps
-          # star-rating filters from the URL (filters[nps_score][]=1 to 5); other filters,
-          # sort orders, and pages are ignored. instagram-profile parses a public profile
-          # (instagram.com/{username}) into data: bio, links, follower and post counts,
-          # category, business address, similar_accounts, and latest_posts (up to the 12
-          # posts at the top of the profile, newest first). Instagram lists pinned posts
-          # there ahead of newer ones, so posts with is_pinned true can be older; when
-          # Instagram shows only a rounded post count (32K), post_count is that rounded
-          # number and is_post_count_rounded is true. instagram-post parses a post or reel
-          # (/p/…, /reel/…) into data: caption, hashtags, mentions, like, comment, and view
-          # counts (like_count and view_count are null when the owner hides them), media
-          # URLs, tagged users, collaborators, location, and the top ~14 comments in
-          # data.comments. instagram-feed returns the top posts for a hashtag or keyword
-          # (/explore/tags/…, /popular/…) or the recent posts at a location
-          # (/explore/locations/{id}/…) in data.posts; keyword posts carry only the
-          # shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
-          # it. All three Instagram parsers read public data without logging in, so private
-          # accounts return no posts and follower lists are unavailable. tiktok-profile
-          # parses a public profile (tiktok.com/@{username}) into data: nickname, bio, bio
-          # link, follower, following, like, and video counts, verified, private, and
-          # business flags, and business category; it does not list videos. tiktok-video
-          # parses a video or photo post (/@{username}/video/{id} or
-          # /@{username}/photo/{id}) into data: caption, hashtags, mentions, author, view,
-          # like, comment, share, save, and repost counts, duration, thumbnail, a video_url
-          # that downloads without cookies, image_urls for photo posts, music, location, and
-          # ad, paid-partnership, and AI-generated flags. tiktok-feed returns videos in the
-          # tiktok-video shape as data.videos: the latest 15 from a profile URL, the top 30
-          # from a hashtag URL (/tag/{name}), or the top 12 from a search URL
-          # (/search?q={query}). tiktok-comments returns the first 20 comments of a video or
-          # photo post as data.comments: text, posted_at, like and reply counts, whether the
-          # author liked it, and the commenter. tiktok-followers and tiktok-following return
-          # up to 30 accounts of a profile as data.users, in the tiktok-profile shape.
-          # tiktok-user-search returns the top 10 accounts for a user search URL
-          # (/search/user?q={query}) as data.users: id, username, nickname, biography,
-          # avatar_url, sec_uid, follower_count, like_count, and is_verified. The TikTok
-          # parsers accept tiktok.com, www.tiktok.com, and m.tiktok.com URLs but not short
-          # links (vm.tiktok.com, vt.tiktok.com, tiktok.com/t/…). reddit-post parses a post
-          # (reddit.com/r/{subreddit}/comments/{id}, reddit.com/comments/{id}, or
-          # redd.it/{id}) into data.post: title, body as Markdown, type (text, link, image,
-          # gallery, or video), link_url, subreddit, author, flairs, score, upvote_ratio,
-          # comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
-          # flags, images (every gallery image in order), and video (an MP4 url plus an
-          # hls_url that carries the audio). data.comments holds the comment tree, each
-          # comment with id, author, body as Markdown, score, posted_at, depth, parent_id,
-          # url, is_submitter, is_deleted, and its replies; limit caps the total number of
-          # comments (default 100), filled shallowest first so whole conversations are kept,
-          # and data.has_more_comments says whether the thread has more. The sort query of
-          # the URL (best, top, new, controversial, old, qa) orders the comments.
-          # reddit-search returns search results for a search URL
-          # (reddit.com/search?q={query}, or reddit.com/r/{subreddit}/search?q={query} to
-          # search one subreddit). With type=link or no type it returns posts in the
-          # reddit-post shape as data.posts, ordered by the sort (relevance, hot, top, new,
-          # comments) and limited to the t time range (hour, day, week, month, year, all) of
-          # the URL; type=sr returns communities as data.communities (name, title,
-          # description, sidebar, subscriber_count, created_at, type, NSFW and quarantine
-          # flags, language, category, icon and banner URLs, and allowed post types);
-          # type=user returns accounts as data.users (username, display_name, bio,
-          # created_at, post and comment karma, avatar and banner URLs, and verified,
-          # employee, moderator, premium, and NSFW flags). limit caps the number of results
-          # (default 100), in the order Reddit returns them, and data.has_more says whether
-          # Reddit has more. reddit-subreddit reads a subreddit URL
-          # (reddit.com/r/{subreddit}, optionally followed by /hot, /new, /top, /rising, or
-          # /controversial, with t setting the time range of top and controversial, default
-          # day) into data.subreddit in the community shape of reddit-search, data.rules
-          # (name, description, applies_to, violation_reason, created_at), and data.posts in
-          # the reddit-post shape, ordered like the tab (default hot) and with stickied
-          # posts flagged; r/all and r/popular return posts with a null subreddit and rules.
-          # limit caps the posts (default 100) and data.has_more says whether Reddit has
-          # more. Private and quarantined subreddits return WEBSITE_ACCESS_ERROR.
-          # reddit-user reads a profile URL (reddit.com/user/{username} or
-          # reddit.com/u/{username}, optionally followed by /overview, /submitted, or
-          # /comments, with sort set to new, hot, top, or controversial and t setting the
-          # time range of top and controversial, default all) into data.user (id, username,
-          # display_name, bio, created_at, total, post, comment, awardee, and awarder karma,
-          # avatar and banner URLs, and verified, suspended, employee, moderator, premium,
-          # and NSFW flags), data.trophies (name, description, icon_url, granted_at, url),
-          # data.moderated_communities (name, title, url, subscriber_count, icon_url,
-          # is_nsfw), data.posts in the reddit-post shape, and data.comments, each with id,
-          # author, body as Markdown, score, posted_at, edited_at, url, subreddit, parent_id
-          # (null for a top-level comment), is_submitter, is_stickied, distinguished,
-          # award_count, and the post it was left on (id, title, url, author, is_nsfw). The
-          # overview tab returns both posts and comments; submitted returns null comments
-          # and comments returns null posts. limit caps the posts and comments together
-          # (default 100) and data.has_more says whether Reddit has more. Users who hide
-          # their activity return empty lists, and suspended accounts return their profile
-          # with null posts and comments. yelp-search accepts Yelp search URLs with
-          # find_desc and find_loc, reads start as the result offset, and returns up to 20
-          # ranked organic businesses in data.businesses with total and pagination.
-          # yelp-reviews accepts a Yelp business URL (yelp.com/biz/{alias}), uses optional
-          # start for the offset, and always sorts newest first; unsupported sort and review
-          # filters are rejected, while tracking params are ignored. It returns up to 20
-          # latest public reviews in data.reviews with business details and
-          # pagination.next_offset. Each review has rating, full text, updated_at, and
-          # author (id is the Yelp user id from the reviewer profile URL, url links to that
-          # profile, plus name, location, and review_count); owner replies and photos are
-          # not included. tripadvisor-reviews accepts a Tripadvisor hotel, restaurant, or
-          # attraction review URL (tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html,
-          # on any Tripadvisor country domain), reads -or{N}- in the path as the offset, and
-          # returns 20 reviews in data.reviews in the order Tripadvisor shows them, with
-          # data.location (id, name, type, url, review_count) and pagination.next_offset.
-          # Each review has id, url, title, full text, rating, language, published_at,
-          # visit_month, helpful_votes, subratings, photo_urls, owner_response (text,
-          # published_at, author_name), and author (id, username, name, url,
-          # contribution_count); an unknown location returns no reviews. emails accepts any
-          # page and returns its email addresses as data.emails ([{ email }]), read from
-          # mailto links, Cloudflare-protected addresses, and visible text. phone-numbers
-          # accepts any page and returns its valid phone numbers in E.164 as
-          # data.phone_numbers ([{ phone }]), read from tel links and visible text; numbers
-          # without a country code are read for the country of the site TLD, defaulting to
-          # US. links accepts any page and returns its unique http(s) links as data.links
-          # ([{ url, text }]), with absolute URLs; text falls back to aria-label or image
-          # alt and is null when a link has none. The emails parser reads the rendered page
-          # and respects content filters; the other prebuilt parsers read their data
-          # independently of DOM filters.
+          # Prebuilt parser to run. Each one accepts specific URLs and returns its result in
+          # `parsed.data`. `emails`, `phone-numbers`, and `links` read the rendered page and
+          # respect content filters; the others read their source directly, independently of
+          # content filters and other outputs.
+          #
+          # - `google-maps`: Google Maps place, search, and internal data URLs. Returns
+          #   businesses in `data.results`; a search URL returns up to 200 places. Results
+          #   use the country set in the URL, or the US when none is set, and come back with
+          #   English labels.
+          # - `google-maps-reviews`: Google Maps place, search, and `?cid=` URLs, plus
+          #   `search.google.com/local/reviews` URLs, so the `google_maps_url` and
+          #   `google_reviews_url` fields of `google-maps` results work as input. Returns
+          #   the reviews of the place in `data.reviews` (`rating`, `date`, `isoDate`,
+          #   `snippet`, `translatedSnippet`, `likes`, `user`, `media`, `response`, `link`,
+          #   `id`, `language`, guided ratings in `details`, and `user.isLocalGuide`), plus
+          #   the place `featureId`, `cid`, and `sort` in `data`. `sort` and `limit` set the
+          #   order and count; `oldest` is exact. An unknown place returns no reviews.
+          # - `google-play`: Play Store app details URLs
+          #   (`play.google.com/store/apps/details?id=…`). Returns one app in `data`:
+          #   details, developer contact, ratings, price, permissions, data safety, the
+          #   storefront country the record describes, and `is_available` (whether the app
+          #   is offered there). Ratings are counted per storefront, so `rating`,
+          #   `rating_count`, and `rating_histogram` are `null` where nobody rated the app.
+          #   The language and storefront country set in the URL apply (default English and
+          #   the US); without a storefront country, an app not offered in the US is read
+          #   from the country of its developer.
+          # - `google-play-reviews`: Same URLs as `google-play`. Returns up to the 200
+          #   newest reviews in the language set in the URL, with developer replies, in
+          #   `data.reviews`; an app with fewer such reviews returns them all.
+          # - `app-store`: App Store app URLs (`apps.apple.com/us/app/…/id…`). Returns one
+          #   app in `data`: details, developer, ratings, price, version, and screenshots.
+          #   The country in the path sets the storefront (default `us`).
+          # - `app-store-reviews`: Same URLs as `app-store`. Returns up to the 500 newest
+          #   reviews in `data.reviews`.
+          # - `g2-reviews`: G2 product URLs (`g2.com/products/…`), following renamed
+          #   products. Returns the 25 most recently published reviews in `data.reviews`
+          #   (rating, title, likes, dislikes, `problems_solved`, reviewer role, company
+          #   size, and industry), plus `data.product`. Keeps star-rating filters from the
+          #   URL (`filters[nps_score][]=1` to `5`) and ignores other filters, sort orders,
+          #   and pages.
+          # - `instagram-profile`: Public profile URLs (`instagram.com/{username}`). Returns
+          #   one profile in `data`: bio, links, follower and post counts, category,
+          #   business address, `similar_accounts`, and `latest_posts` (up to the 12 posts
+          #   at the top of the profile, newest first). Instagram lists pinned posts first,
+          #   so posts with `is_pinned: true` can be older. When Instagram shows only a
+          #   rounded post count (such as 32K), `post_count` is that rounded number and
+          #   `is_post_count_rounded` is `true`.
+          # - `instagram-post`: Post and reel URLs (`/p/…`, `/reel/…`). Returns one post in
+          #   `data`: caption, hashtags, mentions, like, comment, and view counts
+          #   (`like_count` and `view_count` are `null` when the owner hides them), media
+          #   URLs, tagged users, collaborators, location, and about the top 14 comments in
+          #   `data.comments`.
+          # - `instagram-feed`: Hashtag and keyword URLs (`/explore/tags/…`, `/popular/…`)
+          #   return the top posts; location URLs (`/explore/locations/{id}/…`) return
+          #   recent posts. Posts are in `data.posts`; keyword posts carry only the
+          #   shortcode, owner, thumbnail, and views, plus the caption when Instagram shows
+          #   it. All three Instagram parsers read public data without signing in, so
+          #   private accounts return no posts and follower lists are unavailable.
+          # - `tiktok-profile`: Public profile URLs (`tiktok.com/@{username}`). Returns one
+          #   profile in `data`: nickname, bio, bio link, follower, following, like, and
+          #   video counts, verified, private, and business flags, and business category.
+          #   Does not list videos.
+          # - `tiktok-video`: Video and photo post URLs (`/@{username}/video/{id}`,
+          #   `/@{username}/photo/{id}`). Returns one post in `data`: caption, hashtags,
+          #   mentions, author, view, like, comment, share, save, and repost counts,
+          #   duration, thumbnail, a `video_url` that downloads without cookies,
+          #   `image_urls` for photo posts, music, location, and ad, paid-partnership, and
+          #   AI-generated flags.
+          # - `tiktok-feed`: Returns videos in the `tiktok-video` shape in `data.videos`:
+          #   the latest 15 from a profile URL, the top 30 from a hashtag URL
+          #   (`/tag/{name}`), or the top 12 from a search URL (`/search?q={query}`).
+          # - `tiktok-comments`: Video and photo post URLs. Returns the first 20 comments in
+          #   `data.comments`: text, `posted_at`, like and reply counts, whether the author
+          #   liked it, and the commenter.
+          # - `tiktok-followers`, `tiktok-following`: Profile URLs. Return up to 30 accounts
+          #   in `data.users`, in the `tiktok-profile` shape.
+          # - `tiktok-user-search`: User search URLs (`/search/user?q={query}`). Returns the
+          #   top 10 accounts in `data.users`: `id`, `username`, `nickname`, `biography`,
+          #   `avatar_url`, `sec_uid`, `follower_count`, `like_count`, and `is_verified`.
+          #   The TikTok parsers accept `tiktok.com`, `www.tiktok.com`, and `m.tiktok.com`
+          #   URLs, not short links (`vm.tiktok.com`, `vt.tiktok.com`, `tiktok.com/t/…`).
+          # - `reddit-post`: Post URLs (`reddit.com/r/{subreddit}/comments/{id}`,
+          #   `reddit.com/comments/{id}`, `redd.it/{id}`). Returns the post in `data.post`:
+          #   title, body as Markdown, type (`text`, `link`, `image`, `gallery`, or
+          #   `video`), `link_url`, subreddit, author, flairs, score, `upvote_ratio`,
+          #   comment and crosspost counts, NSFW, spoiler, locked, stickied, and archived
+          #   flags, images (every gallery image in order), and video (an MP4 `url` plus an
+          #   `hls_url` that carries the audio). `data.comments` holds the comment tree;
+          #   each comment has `id`, `author`, `body` (Markdown), `score`, `posted_at`,
+          #   `depth`, `parent_id`, `url`, `is_submitter`, `is_deleted`, and its `replies`.
+          #   `limit` caps the total number of comments (default 100), filled shallowest
+          #   first so whole conversations are kept, and `data.has_more_comments` says
+          #   whether the thread has more. The `sort` in the URL (`best`, `top`, `new`,
+          #   `controversial`, `old`, `qa`) orders the comments.
+          # - `reddit-search`: Search URLs (`reddit.com/search?q={query}`, or
+          #   `reddit.com/r/{subreddit}/search?q={query}` to search one subreddit). With
+          #   `type=link` or no `type`, returns posts in the `reddit-post` shape in
+          #   `data.posts`, ordered by the `sort` in the URL (`relevance`, `hot`, `top`,
+          #   `new`, `comments`) within its `t` time range (`hour`, `day`, `week`, `month`,
+          #   `year`, `all`). `type=sr` returns communities in `data.communities` (name,
+          #   title, description, sidebar, `subscriber_count`, `created_at`, type, NSFW and
+          #   quarantine flags, language, category, icon and banner URLs, and allowed post
+          #   types). `type=user` returns accounts in `data.users` (username,
+          #   `display_name`, bio, `created_at`, post and comment karma, avatar and banner
+          #   URLs, and verified, employee, moderator, premium, and NSFW flags). `limit`
+          #   caps the number of results (default 100), in the order Reddit returns them,
+          #   and `data.has_more` says whether Reddit has more.
+          # - `reddit-subreddit`: Subreddit URLs (`reddit.com/r/{subreddit}`, optionally
+          #   followed by `/hot`, `/new`, `/top`, `/rising`, or `/controversial`, with `t`
+          #   setting the time range of `top` and `controversial`, default `day`). Returns
+          #   `data.subreddit` in the community shape of `reddit-search`, `data.rules`
+          #   (`name`, `description`, `applies_to`, `violation_reason`, `created_at`), and
+          #   `data.posts` in the `reddit-post` shape, ordered like the tab (default `hot`)
+          #   with stickied posts flagged. `r/all` and `r/popular` return posts with `null`
+          #   `subreddit` and `rules`. `limit` caps the posts (default 100) and
+          #   `data.has_more` says whether Reddit has more. Private and quarantined
+          #   subreddits return `WEBSITE_ACCESS_ERROR`.
+          # - `reddit-user`: Profile URLs (`reddit.com/user/{username}` or
+          #   `reddit.com/u/{username}`, optionally followed by `/overview`, `/submitted`,
+          #   or `/comments`, with `sort` set to `new`, `hot`, `top`, or `controversial` and
+          #   `t` setting the time range of `top` and `controversial`, default `all`).
+          #   Returns `data.user` (`id`, `username`, `display_name`, bio, `created_at`,
+          #   total, post, comment, awardee, and awarder karma, avatar and banner URLs, and
+          #   verified, suspended, employee, moderator, premium, and NSFW flags),
+          #   `data.trophies` (`name`, `description`, `icon_url`, `granted_at`, `url`),
+          #   `data.moderated_communities` (`name`, `title`, `url`, `subscriber_count`,
+          #   `icon_url`, `is_nsfw`), `data.posts` in the `reddit-post` shape, and
+          #   `data.comments`, each with `id`, `author`, `body` (Markdown), `score`,
+          #   `posted_at`, `edited_at`, `url`, `subreddit`, `parent_id` (`null` for a
+          #   top-level comment), `is_submitter`, `is_stickied`, `distinguished`,
+          #   `award_count`, and the post it was left on (`id`, `title`, `url`, `author`,
+          #   `is_nsfw`). The overview tab returns both posts and comments; `submitted`
+          #   returns `null` comments and `comments` returns `null` posts. `limit` caps
+          #   posts and comments together (default 100) and `data.has_more` says whether
+          #   Reddit has more. Users who hide their activity return empty lists, and
+          #   suspended accounts return their profile with `null` posts and comments.
+          # - `yelp-search`: Yelp search URLs with `find_desc` and `find_loc`; `start` sets
+          #   the result offset. Returns up to 20 ranked organic businesses in
+          #   `data.businesses`, with `total` and `pagination`.
+          # - `yelp-reviews`: Yelp business URLs (`yelp.com/biz/{alias}`); optional `start`
+          #   sets the offset. Returns up to 20 of the latest public reviews, always newest
+          #   first, in `data.reviews`, with business details and `pagination.next_offset`.
+          #   Each review has rating, full text, `updated_at`, and author (`id` from the
+          #   reviewer profile URL, `url` linking to that profile, `name`, `location`, and
+          #   `review_count`); owner replies and photos are not included. Unsupported sort
+          #   and review filters are rejected; tracking parameters are ignored.
+          # - `tripadvisor-reviews`: Tripadvisor hotel, restaurant, and attraction review
+          #   URLs (`tripadvisor.com/Hotel_Review-g{geo}-d{id}-Reviews-….html`, on any
+          #   Tripadvisor country domain); `-or{N}-` in the path sets the offset. Returns 20
+          #   reviews in `data.reviews` in the order Tripadvisor shows them, with
+          #   `data.location` (`id`, `name`, `type`, `url`, `review_count`) and
+          #   `pagination.next_offset`. Each review has `id`, `url`, `title`, full text,
+          #   `rating`, `language`, `published_at`, `visit_month`, `helpful_votes`,
+          #   `subratings`, `photo_urls`, `owner_response` (`text`, `published_at`,
+          #   `author_name`), and `author` (`id`, `username`, `name`, `url`,
+          #   `contribution_count`). An unknown location returns no reviews.
+          # - `car-rental-availability`: avis.com and budget.com vehicle-availability search
+          #   URLs. Returns every vehicle with pay-now and pay-later prices in
+          #   `data.vehicles`.
+          # - `car-rental-locations`: avis.com and budget.com `/locations?keyword=` URLs.
+          #   Returns rental branches with codes, addresses, coordinates, and hours in
+          #   `data.locations`.
+          # - `emails`: Any page. Returns its email addresses in `data.emails`
+          #   (`[{ email }]`), read from `mailto:` links, Cloudflare-protected addresses,
+          #   and visible text.
+          # - `phone-numbers`: Any page. Returns its valid phone numbers in E.164 format in
+          #   `data.phone_numbers` (`[{ phone }]`), read from `tel:` links and visible text.
+          #   Numbers without a country code are read for the country of the site TLD (US by
+          #   default).
+          # - `links`: Any page. Returns its unique HTTP and HTTPS links as absolute URLs in
+          #   `data.links` (`[{ url, text }]`). `text` falls back to `aria-label` or image
+          #   alt text and is `null` when a link has none.
           #
           # @see ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser#parser
           module Parser
@@ -891,9 +961,9 @@ module ContextDev
             #   @return [Array<Symbol>]
           end
 
-          # google-maps-reviews only. Order of data.reviews. newest, relevant, highest, and
-          # lowest follow Google; oldest returns the earliest reviews first, which Google
-          # itself does not offer.
+          # Order of `data.reviews` for `google-maps-reviews`. `newest`, `relevant`,
+          # `highest`, and `lowest` use the same orders as Google Maps; `oldest` returns the
+          # earliest reviews first.
           #
           # @see ContextDev::Models::WebScrapeParams::ParseParams::PrebuiltParser#sort
           module Sort
@@ -930,7 +1000,7 @@ module ContextDev
         optional :use_ai_fallback, ContextDev::Internal::Type::Boolean, api_name: :useAIFallback
 
         # @!method initialize(dedupe_images: nil, use_ai_fallback: nil)
-        #   Product options. Requires formats.product: true.
+        #   Options for the `product` output. Requires `formats.product: true`.
         #
         #   @param dedupe_images [Boolean] Drop visually duplicate product images, keeping the largest copy.
         #
@@ -939,7 +1009,7 @@ module ContextDev
 
       class ScreenshotParams < ContextDev::Internal::Type::BaseModel
         # @!attribute area
-        #   What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
+        #   What to capture: `viewport`, `fullPage`, one element, or a rectangle. Up to 40
         #   megapixels.
         #
         #   @return [Symbol, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Page, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Element, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Rectangle, nil]
@@ -959,13 +1029,13 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebScrapeParams::ScreenshotParams} for more details.
         #
-        #   Screenshot options. Requires formats.screenshot: true.
+        #   Options for the `screenshot` output. Requires `formats.screenshot: true`.
         #
-        #   @param area [Symbol, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Page, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Element, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Rectangle] What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40 meg
+        #   @param area [Symbol, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Page, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Element, ContextDev::Models::WebScrapeParams::ScreenshotParams::Area::Rectangle] What to capture: `viewport`, `fullPage`, one element, or a rectangle. Up to 40 m
         #
         #   @param format_ [Symbol, ContextDev::Models::WebScrapeParams::ScreenshotParams::Format] Image format for the screenshot.
 
-        # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Max 40
+        # What to capture: `viewport`, `fullPage`, one element, or a rectangle. Up to 40
         # megapixels.
         #
         # @see ContextDev::Models::WebScrapeParams::ScreenshotParams#area
@@ -976,7 +1046,7 @@ module ContextDev
 
           variant -> { ContextDev::WebScrapeParams::ScreenshotParams::Area::Element }
 
-          # Pixels from the document origin.
+          # Rectangle to capture, in pixels from the document origin.
           variant -> { ContextDev::WebScrapeParams::ScreenshotParams::Area::Rectangle }
 
           module Page
@@ -1026,7 +1096,7 @@ module ContextDev
             required :y_, Integer, api_name: :y
 
             # @!method initialize(height:, width:, x:, y_:)
-            #   Pixels from the document origin.
+            #   Rectangle to capture, in pixels from the document origin.
             #
             #   @param height [Integer] Height of the capture in pixels.
             #
@@ -1058,7 +1128,7 @@ module ContextDev
 
       class SharedParams < ContextDev::Internal::Type::BaseModel
         # @!attribute actions
-        #   Browser steps run in order before capture. Requires a paid plan. Skips the
+        #   Browser steps to run in order before capture. Requires a paid plan. Skips the
         #   cache.
         #
         #   @return [Array<ContextDev::Models::WebScrapeParams::SharedParams::Action::Perform, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll, ContextDev::Models::WebScrapeParams::SharedParams::Action::Wait, ContextDev::Models::WebScrapeParams::SharedParams::Action::WaitFor>, nil]
@@ -1066,7 +1136,8 @@ module ContextDev
                  -> { ContextDev::Internal::Type::ArrayOf[union: ContextDev::WebScrapeParams::SharedParams::Action] }
 
         # @!attribute country
-        #   Proxy country as a two-letter code, such as `US`. Case-insensitive.
+        #   Country to fetch from, as an ISO 3166-1 alpha-2 code such as `US`.
+        #   Case-insensitive.
         #
         #   @return [String, nil]
         optional :country, String
@@ -1096,11 +1167,10 @@ module ContextDev
         optional :headers, ContextDev::Internal::Type::HashOf[String]
 
         # @!attribute include_frames
-        #   Which iframe contents to include in HTML and text outputs. Screenshots always
-        #   show visible frames. `auto` (default) inlines only iframes that hold page
-        #   content, such as same-site documents, framesets, job boards, forms and embedded
-        #   documents, and skips ads and widgets. `true` inlines every iframe. `false`
-        #   inlines none.
+        #   Which iframes to inline in HTML and text outputs. Screenshots always show
+        #   visible frames. `auto` inlines only iframes that hold page content, such as
+        #   same-site documents, framesets, job boards, forms, and embedded documents, and
+        #   skips ads and widgets. `true` inlines every iframe; `false` inlines none.
         #
         #   @return [Boolean, Symbol, ContextDev::Models::WebScrapeParams::SharedParams::IncludeFrames, nil]
         optional :include_frames,
@@ -1114,28 +1184,31 @@ module ContextDev
         optional :include_selectors, ContextDev::Internal::Type::ArrayOf[String], api_name: :includeSelectors
 
         # @!attribute main_content_only
-        #   Keep only the main content. Doesn't affect `screenshot`, `bytes`, or `product`.
+        #   Keep only the main content, without navigation, headers, footers, or sidebars.
+        #   Does not affect `screenshot`, `bytes`, or `product`.
         #
         #   @return [Boolean, nil]
         optional :main_content_only, ContextDev::Internal::Type::Boolean, api_name: :mainContentOnly
 
         # @!attribute parsers
-        #   Document parsing options.
+        #   Options for parsing documents such as PDFs.
         #
         #   @return [ContextDev::Models::WebScrapeParams::SharedParams::Parsers, nil]
         optional :parsers, -> { ContextDev::WebScrapeParams::SharedParams::Parsers }
 
         # @!attribute profile
-        #   Create or reuse an authenticated browser profile. Requires a paid plan and an
-        #   HTTPS target. Profiles persist session state, bypass shared caches, and cannot
-        #   be combined with ZDR, custom headers, raw bytes, or prebuilt parsers.
+        #   Scrape as a signed-in user. Create a profile with `type: "new"` and your
+        #   credentials, then reuse it with `type: "existing"`. Requires a paid plan and an
+        #   HTTPS URL. Profiles keep their session between requests, skip the cache, and
+        #   cannot be combined with ZDR, custom headers, `formats.bytes`, or prebuilt
+        #   parsers other than `emails`, `phone-numbers`, and `links`.
         #
         #   @return [ContextDev::Models::WebScrapeParams::SharedParams::Profile::Existing, ContextDev::Models::WebScrapeParams::SharedParams::Profile::New, nil]
         optional :profile, union: -> { ContextDev::WebScrapeParams::SharedParams::Profile }
 
         # @!attribute settle_animations
         #   Wait for CSS animations to finish before capture. Defaults to `true` when
-        #   `screenshot` is requested.
+        #   `formats.screenshot` is `true`.
         #
         #   @return [Boolean, nil]
         optional :settle_animations, ContextDev::Internal::Type::Boolean, api_name: :settleAnimations
@@ -1147,15 +1220,16 @@ module ContextDev
         optional :theme, enum: -> { ContextDev::WebScrapeParams::SharedParams::Theme }
 
         # @!attribute viewport
-        #   Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
-        #   default to 1440 × 900.
+        #   Browser viewport in pixels. Defaults to 1920 × 1080. If you pass `viewport`, a
+        #   missing `width` defaults to 1440 and a missing `height` to 900.
         #
         #   @return [ContextDev::Models::WebScrapeParams::SharedParams::Viewport, nil]
         optional :viewport, -> { ContextDev::WebScrapeParams::SharedParams::Viewport }
 
         # @!attribute wait_for
-        #   Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
-        #   (2000 with frames or XML).
+        #   Time to wait after actions, in milliseconds, or a CSS selector to wait for.
+        #   Defaults to 500 ms, or 2000 ms when `includeFrames` is `true` or the URL ends in
+        #   `.xml`.
         #
         #   @return [Integer, String, nil]
         optional :wait_for,
@@ -1170,9 +1244,9 @@ module ContextDev
         #
         #   Browser and content settings shared by all outputs.
         #
-        #   @param actions [Array<ContextDev::Models::WebScrapeParams::SharedParams::Action::Perform, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll, ContextDev::Models::WebScrapeParams::SharedParams::Action::Wait, ContextDev::Models::WebScrapeParams::SharedParams::Action::WaitFor>] Browser steps run in order before capture. Requires a paid plan. Skips the cache
+        #   @param actions [Array<ContextDev::Models::WebScrapeParams::SharedParams::Action::Perform, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll, ContextDev::Models::WebScrapeParams::SharedParams::Action::Wait, ContextDev::Models::WebScrapeParams::SharedParams::Action::WaitFor>] Browser steps to run in order before capture. Requires a paid plan. Skips the ca
         #
-        #   @param country [String] Proxy country as a two-letter code, such as `US`. Case-insensitive.
+        #   @param country [String] Country to fetch from, as an ISO 3166-1 alpha-2 code such as `US`. Case-insensit
         #
         #   @param dismiss_cookies [Boolean] Accept cookie banners before actions and capture.
         #
@@ -1182,23 +1256,23 @@ module ContextDev
         #
         #   @param headers [Hash{Symbol=>String}] HTTP headers to send to the target site. Requests with headers skip the cache.
         #
-        #   @param include_frames [Boolean, Symbol, ContextDev::Models::WebScrapeParams::SharedParams::IncludeFrames] Which iframe contents to include in HTML and text outputs. Screenshots always sh
+        #   @param include_frames [Boolean, Symbol, ContextDev::Models::WebScrapeParams::SharedParams::IncludeFrames] Which iframes to inline in HTML and text outputs. Screenshots always show visibl
         #
         #   @param include_selectors [Array<String>] Keep only elements matching these CSS selectors.
         #
-        #   @param main_content_only [Boolean] Keep only the main content. Doesn't affect `screenshot`, `bytes`, or `product`.
+        #   @param main_content_only [Boolean] Keep only the main content, without navigation, headers, footers, or sidebars. D
         #
-        #   @param parsers [ContextDev::Models::WebScrapeParams::SharedParams::Parsers] Document parsing options.
+        #   @param parsers [ContextDev::Models::WebScrapeParams::SharedParams::Parsers] Options for parsing documents such as PDFs.
         #
-        #   @param profile [ContextDev::Models::WebScrapeParams::SharedParams::Profile::Existing, ContextDev::Models::WebScrapeParams::SharedParams::Profile::New] Create or reuse an authenticated browser profile. Requires a paid plan and an HT
+        #   @param profile [ContextDev::Models::WebScrapeParams::SharedParams::Profile::Existing, ContextDev::Models::WebScrapeParams::SharedParams::Profile::New] Scrape as a signed-in user. Create a profile with `type: "new"` and your credent
         #
-        #   @param settle_animations [Boolean] Wait for CSS animations to finish before capture. Defaults to `true` when `scree
+        #   @param settle_animations [Boolean] Wait for CSS animations to finish before capture. Defaults to `true` when `forma
         #
         #   @param theme [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Theme] Emulate a light or dark color scheme.
         #
-        #   @param viewport [ContextDev::Models::WebScrapeParams::SharedParams::Viewport] Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
+        #   @param viewport [ContextDev::Models::WebScrapeParams::SharedParams::Viewport] Browser viewport in pixels. Defaults to 1920 × 1080. If you pass `viewport`, a m
         #
-        #   @param wait_for [Integer, String] Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500 (200
+        #   @param wait_for [Integer, String] Time to wait after actions, in milliseconds, or a CSS selector to wait for. Defa
 
         module Action
           extend ContextDev::Internal::Type::Union
@@ -1221,7 +1295,7 @@ module ContextDev
             required :action, String
 
             # @!attribute type
-            #   Use `perform` for a plain-language browser instruction.
+            #   Follow a plain-language instruction.
             #
             #   @return [Symbol, :perform]
             required :type, const: :perform
@@ -1229,18 +1303,19 @@ module ContextDev
             # @!method initialize(action:, type: :perform)
             #   @param action [String] One browser instruction, such as clicking a button or entering text.
             #
-            #   @param type [Symbol, :perform] Use `perform` for a plain-language browser instruction.
+            #   @param type [Symbol, :perform] Follow a plain-language instruction.
           end
 
           class Scroll < ContextDev::Internal::Type::BaseModel
             # @!attribute type
-            #   Use `scroll` to move through the page or a container.
+            #   Scroll the page or a container.
             #
             #   @return [Symbol, :scroll]
             required :type, const: :scroll
 
             # @!attribute amount
-            #   Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
+            #   Distance per scroll step: a number of pixels, one `viewport`, or `max` to reach
+            #   the end.
             #
             #   @return [Integer, Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::Amount, nil]
             optional :amount, union: -> { ContextDev::WebScrapeParams::SharedParams::Action::Scroll::Amount }
@@ -1258,23 +1333,28 @@ module ContextDev
             optional :max_scrolls, Integer, api_name: :maxScrolls
 
             # @!attribute selector
-            #   Scroll this container. Omit to scroll the page.
+            #   CSS selector of the container to scroll. Omit to scroll the page.
             #
             #   @return [String, nil]
             optional :selector, String
 
             # @!method initialize(amount: nil, direction: nil, max_scrolls: nil, selector: nil, type: :scroll)
-            #   @param amount [Integer, Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::Amount] Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
+            #   Some parameter documentations has been truncated, see
+            #   {ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll} for more
+            #   details.
+            #
+            #   @param amount [Integer, Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::Amount] Distance per scroll step: a number of pixels, one `viewport`, or `max` to reach
             #
             #   @param direction [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll::Direction] Direction to scroll.
             #
             #   @param max_scrolls [Integer] Maximum number of scroll steps for this action.
             #
-            #   @param selector [String] Scroll this container. Omit to scroll the page.
+            #   @param selector [String] CSS selector of the container to scroll. Omit to scroll the page.
             #
-            #   @param type [Symbol, :scroll] Use `scroll` to move through the page or a container.
+            #   @param type [Symbol, :scroll] Scroll the page or a container.
 
-            # Distance per scroll: pixels, one `viewport`, or `max` to reach the end.
+            # Distance per scroll step: a number of pixels, one `viewport`, or `max` to reach
+            # the end.
             #
             # @see ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll#amount
             module Amount
@@ -1319,21 +1399,21 @@ module ContextDev
 
           class Wait < ContextDev::Internal::Type::BaseModel
             # @!attribute milliseconds
-            #   Time to pause in milliseconds before the next action.
+            #   How long to pause before the next action, in milliseconds.
             #
             #   @return [Integer]
             required :milliseconds, Integer
 
             # @!attribute type
-            #   Use `wait` to pause for a fixed duration.
+            #   Pause for a fixed time.
             #
             #   @return [Symbol, :wait]
             required :type, const: :wait
 
             # @!method initialize(milliseconds:, type: :wait)
-            #   @param milliseconds [Integer] Time to pause in milliseconds before the next action.
+            #   @param milliseconds [Integer] How long to pause before the next action, in milliseconds.
             #
-            #   @param type [Symbol, :wait] Use `wait` to pause for a fixed duration.
+            #   @param type [Symbol, :wait] Pause for a fixed time.
           end
 
           class WaitFor < ContextDev::Internal::Type::BaseModel
@@ -1344,7 +1424,7 @@ module ContextDev
             required :selector, String
 
             # @!attribute type
-            #   Use `waitFor` to wait for a matching element.
+            #   Wait for an element matching `selector`.
             #
             #   @return [Symbol, :waitFor]
             required :type, const: :waitFor
@@ -1352,18 +1432,17 @@ module ContextDev
             # @!method initialize(selector:, type: :waitFor)
             #   @param selector [String] CSS selector to wait for before continuing.
             #
-            #   @param type [Symbol, :waitFor] Use `waitFor` to wait for a matching element.
+            #   @param type [Symbol, :waitFor] Wait for an element matching `selector`.
           end
 
           # @!method self.variants
           #   @return [Array(ContextDev::Models::WebScrapeParams::SharedParams::Action::Perform, ContextDev::Models::WebScrapeParams::SharedParams::Action::Scroll, ContextDev::Models::WebScrapeParams::SharedParams::Action::Wait, ContextDev::Models::WebScrapeParams::SharedParams::Action::WaitFor)]
         end
 
-        # Which iframe contents to include in HTML and text outputs. Screenshots always
-        # show visible frames. `auto` (default) inlines only iframes that hold page
-        # content, such as same-site documents, framesets, job boards, forms and embedded
-        # documents, and skips ads and widgets. `true` inlines every iframe. `false`
-        # inlines none.
+        # Which iframes to inline in HTML and text outputs. Screenshots always show
+        # visible frames. `auto` inlines only iframes that hold page content, such as
+        # same-site documents, framesets, job boards, forms, and embedded documents, and
+        # skips ads and widgets. `true` inlines every iframe; `false` inlines none.
         #
         # @see ContextDev::Models::WebScrapeParams::SharedParams#include_frames
         module IncludeFrames
@@ -1390,27 +1469,27 @@ module ContextDev
         # @see ContextDev::Models::WebScrapeParams::SharedParams#parsers
         class Parsers < ContextDev::Internal::Type::BaseModel
           # @!attribute pdf
-          #   PDF page range and OCR.
+          #   Page range, OCR, and page markers for PDFs.
           #
           #   @return [ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf, nil]
           optional :pdf, -> { ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf }
 
           # @!method initialize(pdf: nil)
-          #   Document parsing options.
+          #   Options for parsing documents such as PDFs.
           #
-          #   @param pdf [ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf] PDF page range and OCR.
+          #   @param pdf [ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf] Page range, OCR, and page markers for PDFs.
 
           # @see ContextDev::Models::WebScrapeParams::SharedParams::Parsers#pdf
           class Pdf < ContextDev::Internal::Type::BaseModel
             # @!attribute end_page
-            #   Last page to parse. Must be at least `startPage`.
+            #   Last page to parse. Defaults to the last page. Must be at least `startPage`.
             #
             #   @return [Integer, nil]
             optional :end_page, Integer, api_name: :endPage
 
             # @!attribute include_numbered_pages
-            #   Start each page in the Markdown with a `<!-- page N -->` line using its original
-            #   1-based page number; these responses are never served from cache.
+            #   Start each PDF page in the Markdown with a `<!-- page N -->` line, where `N` is
+            #   the original 1-based page number. These responses are never served from cache.
             #
             #   @return [Boolean, nil]
             optional :include_numbered_pages,
@@ -1418,7 +1497,7 @@ module ContextDev
                      api_name: :includeNumberedPages
 
             # @!attribute ocr
-            #   Set `auto` to read scanned pages with OCR.
+            #   Set to `auto` to read scanned pages with OCR. Adds 1 credit per page read.
             #
             #   @return [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::Ocr, nil]
             optional :ocr, enum: -> { ContextDev::WebScrapeParams::SharedParams::Parsers::Pdf::Ocr }
@@ -1434,17 +1513,17 @@ module ContextDev
             #   {ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf} for more
             #   details.
             #
-            #   PDF page range and OCR.
+            #   Page range, OCR, and page markers for PDFs.
             #
-            #   @param end_page [Integer] Last page to parse. Must be at least `startPage`.
+            #   @param end_page [Integer] Last page to parse. Defaults to the last page. Must be at least `startPage`.
             #
-            #   @param include_numbered_pages [Boolean] Start each page in the Markdown with a `<!-- page N -->` line using its original
+            #   @param include_numbered_pages [Boolean] Start each PDF page in the Markdown with a `<!-- page N -->` line, where `N` is
             #
-            #   @param ocr [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::Ocr] Set `auto` to read scanned pages with OCR.
+            #   @param ocr [Symbol, ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf::Ocr] Set to `auto` to read scanned pages with OCR. Adds 1 credit per page read.
             #
             #   @param start_page [Integer] First page to parse, starting at 1.
 
-            # Set `auto` to read scanned pages with OCR.
+            # Set to `auto` to read scanned pages with OCR. Adds 1 credit per page read.
             #
             # @see ContextDev::Models::WebScrapeParams::SharedParams::Parsers::Pdf#ocr
             module Ocr
@@ -1459,9 +1538,11 @@ module ContextDev
           end
         end
 
-        # Create or reuse an authenticated browser profile. Requires a paid plan and an
-        # HTTPS target. Profiles persist session state, bypass shared caches, and cannot
-        # be combined with ZDR, custom headers, raw bytes, or prebuilt parsers.
+        # Scrape as a signed-in user. Create a profile with `type: "new"` and your
+        # credentials, then reuse it with `type: "existing"`. Requires a paid plan and an
+        # HTTPS URL. Profiles keep their session between requests, skip the cache, and
+        # cannot be combined with ZDR, custom headers, `formats.bytes`, or prebuilt
+        # parsers other than `emails`, `phone-numbers`, and `links`.
         #
         # @see ContextDev::Models::WebScrapeParams::SharedParams#profile
         module Profile
@@ -1475,7 +1556,7 @@ module ContextDev
 
           class Existing < ContextDev::Internal::Type::BaseModel
             # @!attribute profile_id
-            #   The ID returned in profile.id by an earlier scrape.
+            #   ID of the browser profile, from `profile.id` in an earlier scrape response.
             #
             #   @return [String]
             required :profile_id, String, api_name: :profileId
@@ -1487,46 +1568,46 @@ module ContextDev
             required :type, const: :existing
 
             # @!method initialize(profile_id:, type: :existing)
-            #   @param profile_id [String] The ID returned in profile.id by an earlier scrape.
+            #   @param profile_id [String] ID of the browser profile, from `profile.id` in an earlier scrape response.
             #
             #   @param type [Symbol, :existing] Reuse a saved browser profile.
           end
 
           class New < ContextDev::Internal::Type::BaseModel
             # @!attribute identifier
-            #   Username or email for the target website.
+            #   Username or email address for the website.
             #
             #   @return [String]
             required :identifier, String
 
             # @!attribute type
-            #   Sign in and create a browser profile.
+            #   Sign in and save a new browser profile.
             #
             #   @return [Symbol, :new]
             required :type, const: :new
 
             # @!attribute description
-            #   Optional label shown when listing profiles with `GET /org/browser/profiles`.
+            #   Label for the profile, shown by `GET /org/browser/profiles`.
             #
             #   @return [String, nil]
             optional :description, String
 
             request_only do
               # @!attribute password
-              #   Password used to sign in. It is never stored in the profile.
+              #   Password for the website. Used to sign in and never stored.
               #
               #   @return [String]
               required :password, String
             end
 
             # @!method initialize(identifier:, password:, description: nil, type: :new)
-            #   @param identifier [String] Username or email for the target website.
+            #   @param identifier [String] Username or email address for the website.
             #
-            #   @param password [String] Password used to sign in. It is never stored in the profile.
+            #   @param password [String] Password for the website. Used to sign in and never stored.
             #
-            #   @param description [String] Optional label shown when listing profiles with `GET /org/browser/profiles`.
+            #   @param description [String] Label for the profile, shown by `GET /org/browser/profiles`.
             #
-            #   @param type [Symbol, :new] Sign in and create a browser profile.
+            #   @param type [Symbol, :new] Sign in and save a new browser profile.
           end
 
           # @!method self.variants
@@ -1561,16 +1642,17 @@ module ContextDev
           optional :width, Integer
 
           # @!method initialize(height: nil, width: nil)
-          #   Browser size in pixels. Omit for 1920 × 1080. When provided, missing dimensions
-          #   default to 1440 × 900.
+          #   Browser viewport in pixels. Defaults to 1920 × 1080. If you pass `viewport`, a
+          #   missing `width` defaults to 1440 and a missing `height` to 900.
           #
           #   @param height [Integer] Browser viewport height in pixels.
           #
           #   @param width [Integer] Browser viewport width in pixels.
         end
 
-        # Milliseconds, or a CSS selector to wait for, after actions. Defaults to 500
-        # (2000 with frames or XML).
+        # Time to wait after actions, in milliseconds, or a CSS selector to wait for.
+        # Defaults to 500 ms, or 2000 ms when `includeFrames` is `true` or the URL ends in
+        # `.xml`.
         #
         # @see ContextDev::Models::WebScrapeParams::SharedParams#wait_for
         module WaitFor
@@ -1593,11 +1675,11 @@ module ContextDev
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-        #   inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-        #   On POST /web/scrape, an output that is not ready in time fails with error_code
-        #   REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-        #   only when the whole request cannot respond by the deadline.
+        #   `fail` returns 408 at the deadline. `return-partial` returns the results
+        #   collected so far and marks the response as partial. `return-partial` requires at
+        #   least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+        #   with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+        #   the whole request could not respond by the deadline.
         #
         #   @return [Symbol, ContextDev::Models::WebScrapeParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebScrapeParams::TimeoutOpts::Behavior }
@@ -1610,13 +1692,13 @@ module ContextDev
         #
         #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebScrapeParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   @param behavior [Symbol, ContextDev::Models::WebScrapeParams::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-        # On POST /web/scrape, an output that is not ready in time fails with error_code
-        # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-        # only when the whole request cannot respond by the deadline.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial. `return-partial` requires at
+        # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+        # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+        # the whole request could not respond by the deadline.
         #
         # @see ContextDev::Models::WebScrapeParams::TimeoutOpts#behavior
         module Behavior
@@ -1630,7 +1712,8 @@ module ContextDev
         end
       end
 
-      # `enabled` turns on zero data retention. Your organization must have ZDR enabled.
+      # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
+      # your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum
 

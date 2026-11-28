@@ -11,6 +11,7 @@ module ContextDev
           )
         end
 
+      # Runs on this page.
       sig do
         returns(
           T::Array[ContextDev::Models::MonitorListAccountRunsResponse::Data]
@@ -18,9 +19,11 @@ module ContextDev
       end
       attr_accessor :data
 
+      # Whether more results are available after this page.
       sig { returns(T::Boolean) }
       attr_accessor :has_more
 
+      # Pass as `cursor` to fetch the next page. `null` on the last page.
       sig { returns(T.nilable(String)) }
       attr_accessor :next_cursor
 
@@ -61,8 +64,11 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Runs on this page.
         data:,
+        # Whether more results are available after this page.
         has_more:,
+        # Pass as `cursor` to fetch the next page. `null` on the last page.
         next_cursor:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
@@ -99,17 +105,20 @@ module ContextDev
             )
           end
 
+        # Unique ID of the run.
         sig { returns(String) }
         attr_accessor :id
 
-        # True when this run established the monitor's initial baseline; baseline runs
-        # perform no change detection.
+        # `true` when this run captured the monitor's baseline instead of checking for
+        # changes.
         sig { returns(T::Boolean) }
         attr_accessor :baseline_created
 
+        # Whether the run detected a change.
         sig { returns(T::Boolean) }
         attr_accessor :change_detected
 
+        # Change detection type the monitor uses.
         sig do
           returns(
             ContextDev::Models::MonitorListAccountRunsResponse::Data::ChangeDetectionType::TaggedSymbol
@@ -117,14 +126,16 @@ module ContextDev
         end
         attr_accessor :change_detection_type
 
-        # Credits charged for this run (0 for skipped/failed runs).
+        # Credits charged for this run. `0` for skipped and failed runs.
         sig { returns(Integer) }
         attr_accessor :credits_charged
 
+        # ID of the monitor this run belongs to.
         sig { returns(String) }
         attr_accessor :monitor_id
 
-        # A baseline run follows creation or a target or detection change.
+        # `baseline` runs capture a fresh baseline after creation or a target or detection
+        # change. `scheduled` runs, including on-demand ones, check for changes.
         sig do
           returns(
             ContextDev::Models::MonitorListAccountRunsResponse::Data::RunType::TaggedSymbol
@@ -132,8 +143,7 @@ module ContextDev
         end
         attr_accessor :run_type
 
-        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-        # (insufficient credits, monitor paused, or superseded by a concurrent run).
+        # Run status. `skipped` runs never executed; `skip_reason` says why.
         sig do
           returns(
             ContextDev::Models::MonitorListAccountRunsResponse::Data::Status::TaggedSymbol
@@ -141,6 +151,7 @@ module ContextDev
         end
         attr_accessor :status
 
+        # Type of target the monitor watches.
         sig do
           returns(
             ContextDev::Models::MonitorListAccountRunsResponse::Data::TargetType::TaggedSymbol
@@ -148,9 +159,11 @@ module ContextDev
         end
         attr_accessor :target_type
 
+        # ID of the change this run detected. `null` when it found none.
         sig { returns(T.nilable(String)) }
         attr_accessor :change_id
 
+        # When the run ended. `null` until it ends.
         sig { returns(T.nilable(Time)) }
         attr_accessor :completed_at
 
@@ -173,7 +186,8 @@ module ContextDev
         end
         attr_writer :error
 
-        # Why a skipped run never executed; null unless status is `skipped`.
+        # Why the run was skipped; `superseded` means a concurrent run took its place or
+        # the monitor was deleted. `null` unless `status` is `skipped`.
         sig do
           returns(
             T.nilable(
@@ -183,12 +197,12 @@ module ContextDev
         end
         attr_accessor :skip_reason
 
+        # When the run started. `null` until it starts.
         sig { returns(T.nilable(Time)) }
         attr_accessor :started_at
 
-        # All webhook deliveries attempted by this run — one per subscribed event that
-        # fired. Omitted when no webhook was attempted, including runs created before
-        # event selection was added.
+        # Webhook deliveries for this run, one per subscribed event that fired. Omitted
+        # when no delivery was attempted.
         sig { returns(T.nilable(T::Array[ContextDev::WebhookDelivery])) }
         attr_reader :webhook_deliveries
 
@@ -208,7 +222,7 @@ module ContextDev
         end
         attr_writer :webhook_delivery
 
-        # Webhook delivery IDs for this run.
+        # IDs of the webhook deliveries sent for this run.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :webhook_delivery_ids
 
@@ -247,34 +261,42 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
+          # Unique ID of the run.
           id:,
-          # True when this run established the monitor's initial baseline; baseline runs
-          # perform no change detection.
+          # `true` when this run captured the monitor's baseline instead of checking for
+          # changes.
           baseline_created:,
+          # Whether the run detected a change.
           change_detected:,
+          # Change detection type the monitor uses.
           change_detection_type:,
-          # Credits charged for this run (0 for skipped/failed runs).
+          # Credits charged for this run. `0` for skipped and failed runs.
           credits_charged:,
+          # ID of the monitor this run belongs to.
           monitor_id:,
-          # A baseline run follows creation or a target or detection change.
+          # `baseline` runs capture a fresh baseline after creation or a target or detection
+          # change. `scheduled` runs, including on-demand ones, check for changes.
           run_type:,
-          # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-          # (insufficient credits, monitor paused, or superseded by a concurrent run).
+          # Run status. `skipped` runs never executed; `skip_reason` says why.
           status:,
+          # Type of target the monitor watches.
           target_type:,
+          # ID of the change this run detected. `null` when it found none.
           change_id: nil,
+          # When the run ended. `null` until it ends.
           completed_at: nil,
           error: nil,
-          # Why a skipped run never executed; null unless status is `skipped`.
+          # Why the run was skipped; `superseded` means a concurrent run took its place or
+          # the monitor was deleted. `null` unless `status` is `skipped`.
           skip_reason: nil,
+          # When the run started. `null` until it starts.
           started_at: nil,
-          # All webhook deliveries attempted by this run — one per subscribed event that
-          # fired. Omitted when no webhook was attempted, including runs created before
-          # event selection was added.
+          # Webhook deliveries for this run, one per subscribed event that fired. Omitted
+          # when no delivery was attempted.
           webhook_deliveries: nil,
           # Deprecated. Use `webhook_deliveries` for all attempts.
           webhook_delivery: nil,
-          # Webhook delivery IDs for this run.
+          # IDs of the webhook deliveries sent for this run.
           webhook_delivery_ids: nil
         )
         end
@@ -315,6 +337,7 @@ module ContextDev
         def to_hash
         end
 
+        # Change detection type the monitor uses.
         module ChangeDetectionType
           extend ContextDev::Internal::Type::Enum
 
@@ -349,7 +372,8 @@ module ContextDev
           end
         end
 
-        # A baseline run follows creation or a target or detection change.
+        # `baseline` runs capture a fresh baseline after creation or a target or detection
+        # change. `scheduled` runs, including on-demand ones, check for changes.
         module RunType
           extend ContextDev::Internal::Type::Enum
 
@@ -384,8 +408,7 @@ module ContextDev
           end
         end
 
-        # Lifecycle status of a run. `skipped` runs never executed — see `skip_reason`
-        # (insufficient credits, monitor paused, or superseded by a concurrent run).
+        # Run status. `skipped` runs never executed; `skip_reason` says why.
         module Status
           extend ContextDev::Internal::Type::Enum
 
@@ -435,6 +458,7 @@ module ContextDev
           end
         end
 
+        # Type of target the monitor watches.
         module TargetType
           extend ContextDev::Internal::Type::Enum
 
@@ -488,16 +512,23 @@ module ContextDev
               )
             end
 
+          # Machine-readable error code, such as `fetch_failed`.
           sig { returns(String) }
           attr_accessor :code
 
+          # Human-readable explanation of the error.
           sig { returns(String) }
           attr_accessor :message
 
           sig do
             params(code: String, message: String).returns(T.attached_class)
           end
-          def self.new(code:, message:)
+          def self.new(
+            # Machine-readable error code, such as `fetch_failed`.
+            code:,
+            # Human-readable explanation of the error.
+            message:
+          )
           end
 
           sig { override.returns({ code: String, message: String }) }
@@ -505,7 +536,8 @@ module ContextDev
           end
         end
 
-        # Why a skipped run never executed; null unless status is `skipped`.
+        # Why the run was skipped; `superseded` means a concurrent run took its place or
+        # the monitor was deleted. `null` unless `status` is `skipped`.
         module SkipReason
           extend ContextDev::Internal::Type::Enum
 
@@ -559,7 +591,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -572,7 +604,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

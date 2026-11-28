@@ -11,7 +11,7 @@ module ContextDev
           T.any(ContextDev::BatchRetrieveParams, ContextDev::Internal::AnyHash)
         end
 
-      # Batch ID.
+      # ID of the batch.
       sig { returns(String) }
       attr_accessor :batch_id
 
@@ -22,7 +22,7 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Batch ID.
+        # ID of the batch.
         batch_id:,
         request_options: {}
       )

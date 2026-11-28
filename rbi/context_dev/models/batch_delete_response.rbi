@@ -23,7 +23,7 @@ module ContextDev
       sig { params(id: String).void }
       attr_writer :id
 
-      # Always true on success.
+      # Always `true`.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :deleted
 
@@ -59,7 +59,7 @@ module ContextDev
         request_id:,
         # ID of the deleted batch.
         id: nil,
-        # Always true on success.
+        # Always `true`.
         deleted: nil,
         # Credits this request used and your remaining balance.
         key_metadata: nil
@@ -92,7 +92,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -105,7 +105,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

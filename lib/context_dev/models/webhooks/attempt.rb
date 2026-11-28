@@ -11,79 +11,86 @@ module ContextDev
         required :attempt, Integer
 
         # @!attribute completed_at
-        #   Completion time, or null while in progress.
+        #   When the attempt finished. `null` while in progress.
         #
         #   @return [Time, nil]
         required :completed_at, Time, nil?: true
 
         # @!attribute error
-        #   Attempt error, or null if none.
+        #   Why the attempt failed. `null` when it did not fail.
         #
         #   @return [ContextDev::Models::Webhooks::Attempt::Error, nil]
         required :error, -> { ContextDev::Webhooks::Attempt::Error }, nil?: true
 
         # @!attribute http_status
-        #   HTTP response status, or null if no response was received.
+        #   HTTP status your endpoint returned. `null` when no response was received.
         #
         #   @return [Integer, nil]
         required :http_status, Integer, nil?: true
 
         # @!attribute started_at
-        #   Attempt start time.
+        #   When the attempt started.
         #
         #   @return [Time]
         required :started_at, Time
 
         # @!attribute trigger
-        #   `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
+        #   What started the attempt: `initial` is the first send, `automatic` is a
+        #   scheduled retry, and `manual` came from
+        #   `POST /webhooks/deliveries/{delivery_id}/retry`.
         #
         #   @return [Symbol, ContextDev::Models::Webhooks::Attempt::Trigger]
         required :trigger, enum: -> { ContextDev::Webhooks::Attempt::Trigger }
 
         # @!attribute url
-        #   URL used for this attempt.
+        #   URL this attempt was sent to.
         #
         #   @return [String]
         required :url, String
 
         # @!method initialize(attempt:, completed_at:, error:, http_status:, started_at:, trigger:, url:)
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::Webhooks::Attempt} for more details.
+        #
         #   @param attempt [Integer] Attempt number, starting at 1.
         #
-        #   @param completed_at [Time, nil] Completion time, or null while in progress.
+        #   @param completed_at [Time, nil] When the attempt finished. `null` while in progress.
         #
-        #   @param error [ContextDev::Models::Webhooks::Attempt::Error, nil] Attempt error, or null if none.
+        #   @param error [ContextDev::Models::Webhooks::Attempt::Error, nil] Why the attempt failed. `null` when it did not fail.
         #
-        #   @param http_status [Integer, nil] HTTP response status, or null if no response was received.
+        #   @param http_status [Integer, nil] HTTP status your endpoint returned. `null` when no response was received.
         #
-        #   @param started_at [Time] Attempt start time.
+        #   @param started_at [Time] When the attempt started.
         #
-        #   @param trigger [Symbol, ContextDev::Models::Webhooks::Attempt::Trigger] `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
+        #   @param trigger [Symbol, ContextDev::Models::Webhooks::Attempt::Trigger] What started the attempt: `initial` is the first send, `automatic` is a schedule
         #
-        #   @param url [String] URL used for this attempt.
+        #   @param url [String] URL this attempt was sent to.
 
         # @see ContextDev::Models::Webhooks::Attempt#error
         class Error < ContextDev::Internal::Type::BaseModel
           # @!attribute code
-          #   Error code.
+          #   Machine-readable error code.
           #
           #   @return [String]
           required :code, String
 
           # @!attribute message
-          #   Error details.
+          #   Human-readable explanation of the error.
           #
           #   @return [String]
           required :message, String
 
           # @!method initialize(code:, message:)
-          #   Attempt error, or null if none.
+          #   Why the attempt failed. `null` when it did not fail.
           #
-          #   @param code [String] Error code.
+          #   @param code [String] Machine-readable error code.
           #
-          #   @param message [String] Error details.
+          #   @param message [String] Human-readable explanation of the error.
         end
 
-        # `initial`, `automatic` (scheduled retry), or `manual` (Retry endpoint).
+        # What started the attempt: `initial` is the first send, `automatic` is a
+        # scheduled retry, and `manual` came from
+        # `POST /webhooks/deliveries/{delivery_id}/retry`.
         #
         # @see ContextDev::Models::Webhooks::Attempt#trigger
         module Trigger

@@ -18,29 +18,28 @@ module ContextDev
       sig { params(error_code: String).void }
       attr_writer :error_code
 
-      # Only include requests that returned a 4xx or 5xx status.
+      # Return only requests that failed with a 4xx or 5xx status.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :errors_only
 
       sig { params(errors_only: T::Boolean).void }
       attr_writer :errors_only
 
-      # Only include requests at or after this ISO 8601 timestamp. Defaults to 24 hours
-      # before `to`.
+      # Return requests at or after this time. Defaults to 24 hours before `to`.
       sig { returns(T.nilable(Time)) }
       attr_reader :from
 
       sig { params(from: Time).void }
       attr_writer :from
 
-      # Filter by the API key that made the request.
+      # Filter by the ID of the API key that made the request.
       sig { returns(T.nilable(String)) }
       attr_reader :key_id
 
       sig { params(key_id: String).void }
       attr_writer :key_id
 
-      # Number of log entries per page.
+      # Maximum number of log entries to return per page.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
@@ -54,15 +53,14 @@ module ContextDev
       sig { params(page: Integer).void }
       attr_writer :page
 
-      # Filter by endpoint path, with or without the /v1 prefix.
+      # Filter by endpoint path, with or without the `/v1` prefix.
       sig { returns(T.nilable(String)) }
       attr_reader :path
 
       sig { params(path: String).void }
       attr_writer :path
 
-      # Case-insensitive substring match against the request query and body, e.g. a
-      # domain.
+      # Case-insensitive text to find in the request query or body, such as a domain.
       sig { returns(T.nilable(String)) }
       attr_reader :search
 
@@ -76,15 +74,15 @@ module ContextDev
       sig { params(status_code: Integer).void }
       attr_writer :status_code
 
-      # Comma-separated request tags. Matches requests carrying any of them. Up to 20
-      # tags, each 1-50 characters.
+      # Comma-separated tags. Returns log entries that have any of them. Up to 20 tags
+      # of 1 to 50 characters each.
       sig { returns(T.nilable(String)) }
       attr_reader :tags
 
       sig { params(tags: String).void }
       attr_writer :tags
 
-      # Only include requests at or before this ISO 8601 timestamp. Defaults to now.
+      # Return requests at or before this time. Defaults to now.
       sig { returns(T.nilable(Time)) }
       attr_reader :to
 
@@ -110,28 +108,26 @@ module ContextDev
       def self.new(
         # Filter by the `error_code` returned in the response.
         error_code: nil,
-        # Only include requests that returned a 4xx or 5xx status.
+        # Return only requests that failed with a 4xx or 5xx status.
         errors_only: nil,
-        # Only include requests at or after this ISO 8601 timestamp. Defaults to 24 hours
-        # before `to`.
+        # Return requests at or after this time. Defaults to 24 hours before `to`.
         from: nil,
-        # Filter by the API key that made the request.
+        # Filter by the ID of the API key that made the request.
         key_id: nil,
-        # Number of log entries per page.
+        # Maximum number of log entries to return per page.
         limit: nil,
         # Page number, starting at 1.
         page: nil,
-        # Filter by endpoint path, with or without the /v1 prefix.
+        # Filter by endpoint path, with or without the `/v1` prefix.
         path: nil,
-        # Case-insensitive substring match against the request query and body, e.g. a
-        # domain.
+        # Case-insensitive text to find in the request query or body, such as a domain.
         search: nil,
         # Filter by exact HTTP status code.
         status_code: nil,
-        # Comma-separated request tags. Matches requests carrying any of them. Up to 20
-        # tags, each 1-50 characters.
+        # Comma-separated tags. Returns log entries that have any of them. Up to 20 tags
+        # of 1 to 50 characters each.
         tags: nil,
-        # Only include requests at or before this ISO 8601 timestamp. Defaults to now.
+        # Return requests at or before this time. Defaults to now.
         to: nil,
         request_options: {}
       )

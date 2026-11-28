@@ -5,7 +5,7 @@ module ContextDev
     # @see ContextDev::Resources::Web#web_crawl_md
     class WebWebCrawlMdResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute cache_metadata
-      #   Whether this response came from cache.
+      #   Cache status of this response.
       #
       #   @return [ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata }
@@ -35,9 +35,9 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata }
 
       # @!attribute partial
-      #   True when timeoutOpts.behavior=return-partial returned the usable results
-      #   collected before the deadline. Partial collections are not cached as complete
-      #   results.
+      #   `true` when the deadline passed with `timeoutOpts.behavior` set to
+      #   `return-partial`. Only results finished in time are included. Partial results
+      #   are not cached.
       #
       #   @return [Boolean, nil]
       optional :partial, ContextDev::Internal::Type::Boolean
@@ -46,7 +46,7 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebWebCrawlMdResponse} for more details.
       #
-      #   @param cache_metadata [ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata] Whether this response came from cache.
+      #   @param cache_metadata [ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata] Cache status of this response.
       #
       #   @param metadata [ContextDev::Models::WebWebCrawlMdResponse::Metadata]
       #
@@ -56,19 +56,19 @@ module ContextDev
       #
       #   @param key_metadata [ContextDev::Models::WebWebCrawlMdResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param partial [Boolean] True when timeoutOpts.behavior=return-partial returned the usable results collec
+      #   @param partial [Boolean] `true` when the deadline passed with `timeoutOpts.behavior` set to `return-parti
 
       # @see ContextDev::Models::WebWebCrawlMdResponse#cache_metadata
       class CacheMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute age_ms
-        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
         #   @return [Integer]
         required :age_ms, Integer
 
         # @!attribute status
-        #   Whether the response was served from cache, required fresh work, or honored
-        #   zero-data-retention cache bypass.
+        #   `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        #   retention bypassed the cache.
         #
         #   @return [Symbol, ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata::Status]
         required :status, enum: -> { ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata::Status }
@@ -77,14 +77,14 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata} for more details.
         #
-        #   Whether this response came from cache.
+        #   Cache status of this response.
         #
-        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   @param age_ms [Integer] Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
-        #   @param status [Symbol, ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+        #   @param status [Symbol, ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata::Status] `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data re
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         #
         # @see ContextDev::Models::WebWebCrawlMdResponse::CacheMetadata#status
         module Status
@@ -102,32 +102,32 @@ module ContextDev
       # @see ContextDev::Models::WebWebCrawlMdResponse#metadata
       class Metadata < ContextDev::Internal::Type::BaseModel
         # @!attribute max_crawl_depth
-        #   Maximum crawl depth reached during the crawl
+        #   Deepest link depth reached.
         #
         #   @return [Integer]
         required :max_crawl_depth, Integer, api_name: :maxCrawlDepth
 
         # @!attribute num_failed
-        #   Number of pages that failed to crawl
+        #   Number of pages that failed.
         #
         #   @return [Integer]
         required :num_failed, Integer, api_name: :numFailed
 
         # @!attribute num_skipped
-        #   Number of URLs skipped (PDFs when pdf.shouldParse=false, URLs not matching
-        #   urlRegex, or URLs matching excludeUrlRegex)
+        #   Number of URLs skipped: PDFs when `pdf.shouldParse` is `false`, URLs that do not
+        #   match `urlRegex`, and URLs that match `excludeUrlRegex`.
         #
         #   @return [Integer]
         required :num_skipped, Integer, api_name: :numSkipped
 
         # @!attribute num_succeeded
-        #   Number of pages successfully crawled
+        #   Number of pages crawled successfully.
         #
         #   @return [Integer]
         required :num_succeeded, Integer, api_name: :numSucceeded
 
         # @!attribute num_urls
-        #   Total number of URLs crawled
+        #   Number of URLs crawled.
         #
         #   @return [Integer]
         required :num_urls, Integer, api_name: :numUrls
@@ -136,20 +136,20 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebWebCrawlMdResponse::Metadata} for more details.
         #
-        #   @param max_crawl_depth [Integer] Maximum crawl depth reached during the crawl
+        #   @param max_crawl_depth [Integer] Deepest link depth reached.
         #
-        #   @param num_failed [Integer] Number of pages that failed to crawl
+        #   @param num_failed [Integer] Number of pages that failed.
         #
-        #   @param num_skipped [Integer] Number of URLs skipped (PDFs when pdf.shouldParse=false, URLs not matching urlRe
+        #   @param num_skipped [Integer] Number of URLs skipped: PDFs when `pdf.shouldParse` is `false`, URLs that do not
         #
-        #   @param num_succeeded [Integer] Number of pages successfully crawled
+        #   @param num_succeeded [Integer] Number of pages crawled successfully.
         #
-        #   @param num_urls [Integer] Total number of URLs crawled
+        #   @param num_urls [Integer] Number of URLs crawled.
       end
 
       class Result < ContextDev::Internal::Type::BaseModel
         # @!attribute markdown
-        #   Extracted page content as Markdown (empty string on failure)
+        #   Page content as Markdown. Empty string when the page failed.
         #
         #   @return [String]
         required :markdown, String
@@ -160,57 +160,56 @@ module ContextDev
         required :metadata, -> { ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata }
 
         # @!method initialize(markdown:, metadata:)
-        #   @param markdown [String] Extracted page content as Markdown (empty string on failure)
+        #   @param markdown [String] Page content as Markdown. Empty string when the page failed.
         #
         #   @param metadata [ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata]
 
         # @see ContextDev::Models::WebWebCrawlMdResponse::Result#metadata
         class Metadata < ContextDev::Internal::Type::BaseModel
           # @!attribute crawl_depth
-          #   Depth relative to the start URL. 0 = start URL, 1 = one link away.
+          #   Link depth from the start URL. `0` is the start URL, `1` is one link away.
           #
           #   @return [Integer]
           required :crawl_depth, Integer, api_name: :crawlDepth
 
           # @!attribute final_url
-          #   Final URL scraped after redirects or scraper fallback, when known. Falls back to
-          #   sourceUrl when unavailable.
+          #   URL that was scraped, after redirects. Same as `sourceUrl` when unknown.
           #
           #   @return [String]
           required :final_url, String, api_name: :finalUrl
 
           # @!attribute source_url
-          #   Original URL requested by the caller.
+          #   URL that was requested, before redirects.
           #
           #   @return [String]
           required :source_url, String, api_name: :sourceUrl
 
           # @!attribute status_code
-          #   HTTP status code of the response (0 when the page could not be retrieved)
+          #   HTTP status code of the page. `0` when the page could not be retrieved.
           #
           #   @return [Integer]
           required :status_code, Integer, api_name: :statusCode
 
           # @!attribute success
-          #   true if the page was fetched and parsed successfully
+          #   Whether the page was fetched and parsed.
           #
           #   @return [Boolean]
           required :success, ContextDev::Internal::Type::Boolean
 
           # @!attribute title
-          #   Best page title extracted from the page (empty string if unavailable).
+          #   Page title. Empty string when unavailable.
           #
           #   @return [String]
           required :title, String
 
           # @!attribute url
-          #   The crawl URL fetched for this page.
+          #   URL fetched for this page.
           #
           #   @return [String]
           required :url, String
 
           # @!attribute additional_meta
-          #   Additional non-social meta tags not promoted to top-level metadata fields.
+          #   Other non-social meta tags that don't have their own field.
           #
           #   @return [Hash{Symbol=>String, Array<String>}, nil]
           optional :additional_meta,
@@ -218,26 +217,26 @@ module ContextDev
                    api_name: :additionalMeta
 
           # @!attribute alternates
-          #   Resolved alternate links from link rel=alternate tags.
+          #   Alternate links from `link rel="alternate"` tags, as absolute URLs.
           #
           #   @return [Array<ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Alternate>, nil]
           optional :alternates,
                    -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Alternate] }
 
           # @!attribute author
-          #   Author metadata, when present.
+          #   Author, when present.
           #
           #   @return [String, nil]
           optional :author, String
 
           # @!attribute canonical_url
-          #   Resolved canonical URL, when present.
+          #   Absolute canonical URL, when present.
           #
           #   @return [String, nil]
           optional :canonical_url, String, api_name: :canonicalUrl
 
           # @!attribute description
-          #   Best description extracted from standard, Open Graph, or Twitter metadata.
+          #   Best available description, from standard, Open Graph, or Twitter meta tags.
           #
           #   @return [String, nil]
           optional :description, String
@@ -252,21 +251,21 @@ module ContextDev
           optional :error_code, String
 
           # @!attribute favicon
-          #   Resolved favicon URL, when present.
+          #   Absolute favicon URL, when present.
           #
           #   @return [String, nil]
           optional :favicon, String
 
           # @!attribute headings
-          #   Page headings (h1–h6) in document order, extracted from the unfiltered document.
-          #   Capped at the first 500 headings. Omitted when the page has none.
+          #   Headings (`h1` to `h6`) in document order, from the full page before any
+          #   filtering. Up to 500. Omitted when the page has none.
           #
           #   @return [Array<ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading>, nil]
           optional :headings,
                    -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading] }
 
           # @!attribute image
-          #   Primary resolved preview image from Open Graph, Twitter, or image metadata.
+          #   Main preview image URL, from Open Graph, Twitter, or image meta tags.
           #
           #   @return [String, nil]
           optional :image, String
@@ -280,25 +279,25 @@ module ContextDev
                    api_name: :jsonLd
 
           # @!attribute keywords
-          #   Keywords extracted from the page's keywords meta tag.
+          #   Keywords from the page's `keywords` meta tag.
           #
           #   @return [Array<String>, nil]
           optional :keywords, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute language
-          #   Language extracted from html lang or language meta tags.
+          #   Page language, from the `html` `lang` attribute or language meta tags.
           #
           #   @return [String, nil]
           optional :language, String
 
           # @!attribute modified_time
-          #   Modified timestamp/date from page metadata, when present.
+          #   Last-modified date or timestamp from page metadata, when present.
           #
           #   @return [String, nil]
           optional :modified_time, String, api_name: :modifiedTime
 
           # @!attribute open_graph
-          #   Open Graph metadata with the og: prefix removed and keys camel-cased.
+          #   Open Graph tags, with the `og:` prefix removed and keys in camelCase.
           #
           #   @return [Hash{Symbol=>String, Array<String>}, nil]
           optional :open_graph,
@@ -306,25 +305,25 @@ module ContextDev
                    api_name: :openGraph
 
           # @!attribute published_time
-          #   Published timestamp/date from page metadata, when present.
+          #   Publish date or timestamp from page metadata, when present.
           #
           #   @return [String, nil]
           optional :published_time, String, api_name: :publishedTime
 
           # @!attribute robots
-          #   Robots meta directive, when present.
+          #   `robots` meta directive, when present.
           #
           #   @return [String, nil]
           optional :robots, String
 
           # @!attribute site_name
-          #   Site or application name from page metadata.
+          #   Site or app name from page metadata.
           #
           #   @return [String, nil]
           optional :site_name, String, api_name: :siteName
 
           # @!attribute twitter
-          #   Twitter card metadata with the twitter: prefix removed and keys camel-cased.
+          #   Twitter card tags, with the `twitter:` prefix removed and keys in camelCase.
           #
           #   @return [Hash{Symbol=>String, Array<String>}, nil]
           optional :twitter,
@@ -334,55 +333,55 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata} for more details.
           #
-          #   @param crawl_depth [Integer] Depth relative to the start URL. 0 = start URL, 1 = one link away.
+          #   @param crawl_depth [Integer] Link depth from the start URL. `0` is the start URL, `1` is one link away.
           #
-          #   @param final_url [String] Final URL scraped after redirects or scraper fallback, when known. Falls back to
+          #   @param final_url [String] URL that was scraped, after redirects. Same as `sourceUrl` when unknown.
           #
-          #   @param source_url [String] Original URL requested by the caller.
+          #   @param source_url [String] URL that was requested, before redirects.
           #
-          #   @param status_code [Integer] HTTP status code of the response (0 when the page could not be retrieved)
+          #   @param status_code [Integer] HTTP status code of the page. `0` when the page could not be retrieved.
           #
-          #   @param success [Boolean] true if the page was fetched and parsed successfully
+          #   @param success [Boolean] Whether the page was fetched and parsed.
           #
-          #   @param title [String] Best page title extracted from the page (empty string if unavailable).
+          #   @param title [String] Page title. Empty string when unavailable.
           #
-          #   @param url [String] The crawl URL fetched for this page.
+          #   @param url [String] URL fetched for this page.
           #
-          #   @param additional_meta [Hash{Symbol=>String, Array<String>}] Additional non-social meta tags not promoted to top-level metadata fields.
+          #   @param additional_meta [Hash{Symbol=>String, Array<String>}] Other non-social meta tags that don't have their own field.
           #
-          #   @param alternates [Array<ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Alternate>] Resolved alternate links from link rel=alternate tags.
+          #   @param alternates [Array<ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Alternate>] Alternate links from `link rel="alternate"` tags, as absolute URLs.
           #
-          #   @param author [String] Author metadata, when present.
+          #   @param author [String] Author, when present.
           #
-          #   @param canonical_url [String] Resolved canonical URL, when present.
+          #   @param canonical_url [String] Absolute canonical URL, when present.
           #
-          #   @param description [String] Best description extracted from standard, Open Graph, or Twitter metadata.
+          #   @param description [String] Best available description, from standard, Open Graph, or Twitter meta tags.
           #
           #   @param error_code [String] Why the page failed. Present only when `success` is `false`: `WEBSITE_BLOCKED` (
           #
-          #   @param favicon [String] Resolved favicon URL, when present.
+          #   @param favicon [String] Absolute favicon URL, when present.
           #
-          #   @param headings [Array<ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading>] Page headings (h1–h6) in document order, extracted from the unfiltered document.
+          #   @param headings [Array<ContextDev::Models::WebWebCrawlMdResponse::Result::Metadata::Heading>] Headings (`h1` to `h6`) in document order, from the full page before any filteri
           #
-          #   @param image [String] Primary resolved preview image from Open Graph, Twitter, or image metadata.
+          #   @param image [String] Main preview image URL, from Open Graph, Twitter, or image meta tags.
           #
           #   @param json_ld [Array<Hash{Symbol=>Object}>] JSON-LD structured data blocks parsed from the page.
           #
-          #   @param keywords [Array<String>] Keywords extracted from the page's keywords meta tag.
+          #   @param keywords [Array<String>] Keywords from the page's `keywords` meta tag.
           #
-          #   @param language [String] Language extracted from html lang or language meta tags.
+          #   @param language [String] Page language, from the `html` `lang` attribute or language meta tags.
           #
-          #   @param modified_time [String] Modified timestamp/date from page metadata, when present.
+          #   @param modified_time [String] Last-modified date or timestamp from page metadata, when present.
           #
-          #   @param open_graph [Hash{Symbol=>String, Array<String>}] Open Graph metadata with the og: prefix removed and keys camel-cased.
+          #   @param open_graph [Hash{Symbol=>String, Array<String>}] Open Graph tags, with the `og:` prefix removed and keys in camelCase.
           #
-          #   @param published_time [String] Published timestamp/date from page metadata, when present.
+          #   @param published_time [String] Publish date or timestamp from page metadata, when present.
           #
-          #   @param robots [String] Robots meta directive, when present.
+          #   @param robots [String] `robots` meta directive, when present.
           #
-          #   @param site_name [String] Site or application name from page metadata.
+          #   @param site_name [String] Site or app name from page metadata.
           #
-          #   @param twitter [Hash{Symbol=>String, Array<String>}] Twitter card metadata with the twitter: prefix removed and keys camel-cased.
+          #   @param twitter [Hash{Symbol=>String, Array<String>}] Twitter card tags, with the `twitter:` prefix removed and keys in camelCase.
 
           module AdditionalMeta
             extend ContextDev::Internal::Type::Union
@@ -400,42 +399,42 @@ module ContextDev
 
           class Alternate < ContextDev::Internal::Type::BaseModel
             # @!attribute href
-            #   Resolved alternate URL.
+            #   Absolute URL of the alternate version.
             #
             #   @return [String]
             required :href, String
 
             # @!attribute hreflang
-            #   Language or locale for the alternate URL, when present.
+            #   Language or locale of the alternate version, when present.
             #
             #   @return [String, nil]
             optional :hreflang, String
 
             # @!attribute title
-            #   Alternate resource title, when present.
+            #   Title of the alternate version, when present.
             #
             #   @return [String, nil]
             optional :title, String
 
             # @!attribute type
-            #   Alternate resource MIME type, when present.
+            #   MIME type of the alternate version, when present.
             #
             #   @return [String, nil]
             optional :type, String
 
             # @!method initialize(href:, hreflang: nil, title: nil, type: nil)
-            #   @param href [String] Resolved alternate URL.
+            #   @param href [String] Absolute URL of the alternate version.
             #
-            #   @param hreflang [String] Language or locale for the alternate URL, when present.
+            #   @param hreflang [String] Language or locale of the alternate version, when present.
             #
-            #   @param title [String] Alternate resource title, when present.
+            #   @param title [String] Title of the alternate version, when present.
             #
-            #   @param type [String] Alternate resource MIME type, when present.
+            #   @param type [String] MIME type of the alternate version, when present.
           end
 
           class Heading < ContextDev::Internal::Type::BaseModel
             # @!attribute level
-            #   Heading level, 1–6 (from h1–h6).
+            #   Heading level, from 1 (`h1`) to 6 (`h6`).
             #
             #   @return [Integer]
             required :level, Integer
@@ -447,7 +446,7 @@ module ContextDev
             required :text, String
 
             # @!method initialize(level:, text:)
-            #   @param level [Integer] Heading level, 1–6 (from h1–h6).
+            #   @param level [Integer] Heading level, from 1 (`h1`) to 6 (`h6`).
             #
             #   @param text [String] Heading text with whitespace collapsed, truncated to 1000 characters.
           end
@@ -491,7 +490,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -501,7 +500,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

@@ -8,35 +8,37 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute query
-      #   Describe the people to find. Up to 500 characters in `fast` mode and 5000 in
-      #   `ultra` mode.
+      #   Plain-language description of the people to find. Up to 500 characters in `fast`
+      #   mode and 5000 in `ultra` mode.
       #
       #   @return [String]
       required :query, String
 
       # @!attribute cursor
-      #   Use next_cursor with the same query, mode and filters to fetch the next page.
+      #   Cursor from the previous page's `next_cursor`. Omit for the first page. Send the
+      #   same `query`, `mode`, and `filters` with it.
       #
       #   @return [String, nil]
       optional :cursor, String
 
       # @!attribute filters
-      #   Additional constraints every result must match.
+      #   Constraints every result must match, in addition to `query`.
       #
       #   @return [ContextDev::Models::PersonSearchParams::Filters, nil]
       optional :filters, -> { ContextDev::PersonSearchParams::Filters }
 
       # @!attribute mode
-      #   `fast` matches people on basic criteria (e.g. their role, location or
-      #   background); `ultra` plans a deeper search, judges each candidate against every
-      #   criterion in the query. Complex `ultra` searches can take up to 30 seconds to
-      #   complete, so allow for that in your client timeout.
+      #   `fast` matches people on basic criteria such as role, location, or background;
+      #   `ultra` runs a deeper search, checks every candidate against each criterion in
+      #   your query, and adds a `match` score. Complex `ultra` searches can take up to 30
+      #   seconds, so set your client timeout to match.
       #
       #   @return [Symbol, ContextDev::Models::PersonSearchParams::Mode, nil]
       optional :mode, enum: -> { ContextDev::PersonSearchParams::Mode }
 
       # @!attribute tags
-      #   Labels for filtering usage in the dashboard.
+      #   Labels for this request. Filter usage and request logs by them in the dashboard
+      #   or with `GET /org/logs`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -52,15 +54,15 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::PersonSearchParams} for more details.
       #
-      #   @param query [String] Describe the people to find. Up to 500 characters in `fast` mode and 5000 in `ul
+      #   @param query [String] Plain-language description of the people to find. Up to 500 characters in `fast`
       #
-      #   @param cursor [String] Use next_cursor with the same query, mode and filters to fetch the next page.
+      #   @param cursor [String] Cursor from the previous page's `next_cursor`. Omit for the first page. Send the
       #
-      #   @param filters [ContextDev::Models::PersonSearchParams::Filters] Additional constraints every result must match.
+      #   @param filters [ContextDev::Models::PersonSearchParams::Filters] Constraints every result must match, in addition to `query`.
       #
-      #   @param mode [Symbol, ContextDev::Models::PersonSearchParams::Mode] `fast` matches people on basic criteria (e.g. their role, location or background
+      #   @param mode [Symbol, ContextDev::Models::PersonSearchParams::Mode] `fast` matches people on basic criteria such as role, location, or background; `
       #
-      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
       #
       #   @param zdr [Symbol, ContextDev::Models::PersonSearchParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
@@ -68,7 +70,8 @@ module ContextDev
 
       class Filters < ContextDev::Internal::Type::BaseModel
         # @!attribute countries
-        #   Countries people live in as two-letter codes, such as US or GB.
+        #   Only return people who live in these countries, as ISO 3166-1 alpha-2 codes such
+        #   as `US`.
         #
         #   @return [Array<String>, nil]
         optional :countries, ContextDev::Internal::Type::ArrayOf[String]
@@ -86,19 +89,22 @@ module ContextDev
         optional :years_of_experience_min, Integer
 
         # @!method initialize(countries: nil, years_of_experience_max: nil, years_of_experience_min: nil)
-        #   Additional constraints every result must match.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::PersonSearchParams::Filters} for more details.
         #
-        #   @param countries [Array<String>] Countries people live in as two-letter codes, such as US or GB.
+        #   Constraints every result must match, in addition to `query`.
+        #
+        #   @param countries [Array<String>] Only return people who live in these countries, as ISO 3166-1 alpha-2 codes such
         #
         #   @param years_of_experience_max [Integer] Maximum years of professional experience.
         #
         #   @param years_of_experience_min [Integer] Minimum years of professional experience.
       end
 
-      # `fast` matches people on basic criteria (e.g. their role, location or
-      # background); `ultra` plans a deeper search, judges each candidate against every
-      # criterion in the query. Complex `ultra` searches can take up to 30 seconds to
-      # complete, so allow for that in your client timeout.
+      # `fast` matches people on basic criteria such as role, location, or background;
+      # `ultra` runs a deeper search, checks every candidate against each criterion in
+      # your query, and adds a `match` score. Complex `ultra` searches can take up to 30
+      # seconds, so set your client timeout to match.
       module Mode
         extend ContextDev::Internal::Type::Enum
 

@@ -3,10 +3,11 @@
 module ContextDev
   module Resources
     class Browser
-      # See the authenticated browser profiles your organization created.
+      # List the authenticated browser profiles your organization created.
       class Profiles
-        # List the browser profiles your organization created with `/web/scrape`, newest
-        # first.
+        # List the browser profiles your organization saved through `POST /web/scrape`,
+        # newest first. Pass a profile `id` as `sharedParams.profile.profileId` to scrape
+        # as that signed-in user.
         sig do
           params(
             cursor: String,
@@ -15,9 +16,9 @@ module ContextDev
           ).returns(ContextDev::Models::Browser::ProfileListResponse)
         end
         def list(
-          # The `next_cursor` from the previous page.
+          # Cursor from the previous page's `next_cursor`. Omit for the first page.
           cursor: nil,
-          # Number of profiles per page.
+          # Maximum number of profiles to return per page.
           limit: nil,
           request_options: {}
         )

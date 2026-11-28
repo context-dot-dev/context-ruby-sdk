@@ -11,7 +11,7 @@ module ContextDev
           )
         end
 
-      # Whether this response came from cache.
+      # Cache status of this response.
       sig do
         returns(ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata)
       end
@@ -30,14 +30,14 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # HTTP status code
+      # HTTP status code, repeated in the body.
       sig { returns(T.nilable(Integer)) }
       attr_reader :code
 
       sig { params(code: Integer).void }
       attr_writer :code
 
-      # The normalized domain that was processed
+      # Normalized domain that was analyzed.
       sig { returns(T.nilable(String)) }
       attr_reader :domain
 
@@ -88,7 +88,7 @@ module ContextDev
       sig { params(status: String).void }
       attr_writer :status
 
-      # Comprehensive styleguide data extracted from the website
+      # Design tokens and component styles extracted from the website.
       sig do
         returns(
           T.nilable(
@@ -123,14 +123,14 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Whether this response came from cache.
+        # Cache status of this response.
         cache_metadata:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # HTTP status code
+        # HTTP status code, repeated in the body.
         code: nil,
-        # The normalized domain that was processed
+        # Normalized domain that was analyzed.
         domain: nil,
         # `loaded`, or `still-loading` when capture ended before the page finished
         # loading.
@@ -139,7 +139,7 @@ module ContextDev
         key_metadata: nil,
         # Always `ok` on success.
         status: nil,
-        # Comprehensive styleguide data extracted from the website
+        # Design tokens and component styles extracted from the website.
         styleguide: nil
       )
       end
@@ -174,12 +174,12 @@ module ContextDev
             )
           end
 
-        # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         sig { returns(Integer) }
         attr_accessor :age_ms
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         sig do
           returns(
             ContextDev::Models::WebExtractStyleguideResponse::CacheMetadata::Status::TaggedSymbol
@@ -187,7 +187,7 @@ module ContextDev
         end
         attr_accessor :status
 
-        # Whether this response came from cache.
+        # Cache status of this response.
         sig do
           params(
             age_ms: Integer,
@@ -196,10 +196,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+          # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
           age_ms:,
-          # Whether the response was served from cache, required fresh work, or honored
-          # zero-data-retention cache bypass.
+          # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+          # retention bypassed the cache.
           status:
         )
         end
@@ -216,8 +216,8 @@ module ContextDev
         def to_hash
         end
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         module Status
           extend ContextDev::Internal::Type::Enum
 
@@ -307,7 +307,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -320,7 +320,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end
@@ -343,7 +343,7 @@ module ContextDev
             )
           end
 
-        # Primary colors used on the website
+        # Core colors used on the website.
         sig do
           returns(
             ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Colors
@@ -359,7 +359,7 @@ module ContextDev
         end
         attr_writer :colors
 
-        # UI component styles
+        # Styles for buttons and cards.
         sig do
           returns(
             ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components
@@ -375,7 +375,7 @@ module ContextDev
         end
         attr_writer :components
 
-        # Spacing system used on the website
+        # Spacing scale used on the website, from `xs` to `xl`.
         sig do
           returns(
             ContextDev::Models::WebExtractStyleguideResponse::Styleguide::ElementSpacing
@@ -391,9 +391,9 @@ module ContextDev
         end
         attr_writer :element_spacing
 
-        # Font assets keyed by family name as it appears in fontFamily/fontFallbacks
-        # (non-generic names only). Match font style and weight against faces to select a
-        # file URL.
+        # Font files keyed by family name, as it appears in `fontFamily` and
+        # `fontFallbacks`. Generic families are left out. Match style and weight against
+        # `faces` to pick a file.
         sig do
           returns(
             T::Hash[
@@ -404,7 +404,7 @@ module ContextDev
         end
         attr_accessor :font_links
 
-        # The primary color mode of the website design
+        # Whether the site's design is mainly light or dark.
         sig do
           returns(
             ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Mode::TaggedSymbol
@@ -412,7 +412,7 @@ module ContextDev
         end
         attr_accessor :mode
 
-        # Shadow styles used on the website
+        # Box shadow scale used on the website, from `sm` to `xl`, plus `inner`.
         sig do
           returns(
             ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Shadows
@@ -428,7 +428,7 @@ module ContextDev
         end
         attr_writer :shadows
 
-        # Typography styles used on the website
+        # Text styles for headings and body text.
         sig do
           returns(
             ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography
@@ -444,7 +444,7 @@ module ContextDev
         end
         attr_writer :typography
 
-        # Comprehensive styleguide data extracted from the website
+        # Design tokens and component styles extracted from the website.
         sig do
           params(
             colors:
@@ -467,21 +467,21 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Primary colors used on the website
+          # Core colors used on the website.
           colors:,
-          # UI component styles
+          # Styles for buttons and cards.
           components:,
-          # Spacing system used on the website
+          # Spacing scale used on the website, from `xs` to `xl`.
           element_spacing:,
-          # Font assets keyed by family name as it appears in fontFamily/fontFallbacks
-          # (non-generic names only). Match font style and weight against faces to select a
-          # file URL.
+          # Font files keyed by family name, as it appears in `fontFamily` and
+          # `fontFallbacks`. Generic families are left out. Match style and weight against
+          # `faces` to pick a file.
           font_links:,
-          # The primary color mode of the website design
+          # Whether the site's design is mainly light or dark.
           mode:,
-          # Shadow styles used on the website
+          # Box shadow scale used on the website, from `sm` to `xl`, plus `inner`.
           shadows:,
-          # Typography styles used on the website
+          # Text styles for headings and body text.
           typography:
         )
         end
@@ -521,30 +521,30 @@ module ContextDev
               )
             end
 
-          # Accent color (hex format)
+          # Accent color, in hex.
           sig { returns(String) }
           attr_accessor :accent
 
-          # Background color (hex format)
+          # Background color, in hex.
           sig { returns(String) }
           attr_accessor :background
 
-          # Text color (hex format)
+          # Text color, in hex.
           sig { returns(String) }
           attr_accessor :text
 
-          # Primary colors used on the website
+          # Core colors used on the website.
           sig do
             params(accent: String, background: String, text: String).returns(
               T.attached_class
             )
           end
           def self.new(
-            # Accent color (hex format)
+            # Accent color, in hex.
             accent:,
-            # Background color (hex format)
+            # Background color, in hex.
             background:,
-            # Text color (hex format)
+            # Text color, in hex.
             text:
           )
           end
@@ -567,7 +567,7 @@ module ContextDev
               )
             end
 
-          # Button component styles
+          # Primary, secondary, and link button styles.
           sig do
             returns(
               ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Components::Button
@@ -583,7 +583,7 @@ module ContextDev
           end
           attr_writer :button
 
-          # Card component style
+          # Card style.
           sig do
             returns(
               T.nilable(
@@ -601,7 +601,7 @@ module ContextDev
           end
           attr_writer :card
 
-          # UI component styles
+          # Styles for buttons and cards.
           sig do
             params(
               button:
@@ -611,9 +611,9 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Button component styles
+            # Primary, secondary, and link button styles.
             button:,
-            # Card component style
+            # Card style.
             card: nil
           )
           end
@@ -691,7 +691,7 @@ module ContextDev
             end
             attr_writer :secondary
 
-            # Button component styles
+            # Primary, secondary, and link button styles.
             sig do
               params(
                 link:
@@ -732,8 +732,7 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :background_color
 
-              # Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-              # alpha)
+              # Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
               sig { returns(String) }
               attr_accessor :border_color
 
@@ -746,14 +745,14 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :border_width
 
-              # Computed box-shadow (comma-separated layers when present)
+              # Computed `box-shadow`, with layers separated by commas.
               sig { returns(String) }
               attr_accessor :box_shadow
 
               sig { returns(String) }
               attr_accessor :color
 
-              # Ready-to-use CSS declaration block for this component style
+              # Ready-to-use CSS declarations for this style.
               sig { returns(String) }
               attr_accessor :css
 
@@ -763,11 +762,11 @@ module ContextDev
               sig { returns(Float) }
               attr_accessor :font_weight
 
-              # Sampled minimum height of the button box (typically px)
+              # Minimum height as a CSS length, usually in pixels.
               sig { returns(String) }
               attr_accessor :min_height
 
-              # Minimum width (usually px).
+              # Minimum width as a CSS length, usually in pixels.
               sig { returns(String) }
               attr_accessor :min_width
 
@@ -777,21 +776,21 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :text_decoration
 
-              # Full ordered font list from computed font-family
+              # Full font stack from the computed `font-family`, in order.
               sig { returns(T.nilable(T::Array[String])) }
               attr_reader :font_fallbacks
 
               sig { params(font_fallbacks: T::Array[String]).void }
               attr_writer :font_fallbacks
 
-              # Primary button typeface (first in fontFallbacks)
+              # Button typeface, the first entry in `fontFallbacks`.
               sig { returns(T.nilable(String)) }
               attr_reader :font_family
 
               sig { params(font_family: String).void }
               attr_writer :font_family
 
-              # Hex color of the underline when it differs from the text color
+              # Underline color in hex, when it differs from the text color.
               sig { returns(T.nilable(String)) }
               attr_reader :text_decoration_color
 
@@ -821,30 +820,29 @@ module ContextDev
               end
               def self.new(
                 background_color:,
-                # Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-                # alpha)
+                # Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
                 border_color:,
                 border_radius:,
                 border_style:,
                 border_width:,
-                # Computed box-shadow (comma-separated layers when present)
+                # Computed `box-shadow`, with layers separated by commas.
                 box_shadow:,
                 color:,
-                # Ready-to-use CSS declaration block for this component style
+                # Ready-to-use CSS declarations for this style.
                 css:,
                 font_size:,
                 font_weight:,
-                # Sampled minimum height of the button box (typically px)
+                # Minimum height as a CSS length, usually in pixels.
                 min_height:,
-                # Minimum width (usually px).
+                # Minimum width as a CSS length, usually in pixels.
                 min_width:,
                 padding:,
                 text_decoration:,
-                # Full ordered font list from computed font-family
+                # Full font stack from the computed `font-family`, in order.
                 font_fallbacks: nil,
-                # Primary button typeface (first in fontFallbacks)
+                # Button typeface, the first entry in `fontFallbacks`.
                 font_family: nil,
-                # Hex color of the underline when it differs from the text color
+                # Underline color in hex, when it differs from the text color.
                 text_decoration_color: nil
               )
               end
@@ -888,8 +886,7 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :background_color
 
-              # Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-              # alpha)
+              # Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
               sig { returns(String) }
               attr_accessor :border_color
 
@@ -902,14 +899,14 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :border_width
 
-              # Computed box-shadow (comma-separated layers when present)
+              # Computed `box-shadow`, with layers separated by commas.
               sig { returns(String) }
               attr_accessor :box_shadow
 
               sig { returns(String) }
               attr_accessor :color
 
-              # Ready-to-use CSS declaration block for this component style
+              # Ready-to-use CSS declarations for this style.
               sig { returns(String) }
               attr_accessor :css
 
@@ -919,11 +916,11 @@ module ContextDev
               sig { returns(Float) }
               attr_accessor :font_weight
 
-              # Sampled minimum height of the button box (typically px)
+              # Minimum height as a CSS length, usually in pixels.
               sig { returns(String) }
               attr_accessor :min_height
 
-              # Minimum width (usually px).
+              # Minimum width as a CSS length, usually in pixels.
               sig { returns(String) }
               attr_accessor :min_width
 
@@ -933,21 +930,21 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :text_decoration
 
-              # Full ordered font list from computed font-family
+              # Full font stack from the computed `font-family`, in order.
               sig { returns(T.nilable(T::Array[String])) }
               attr_reader :font_fallbacks
 
               sig { params(font_fallbacks: T::Array[String]).void }
               attr_writer :font_fallbacks
 
-              # Primary button typeface (first in fontFallbacks)
+              # Button typeface, the first entry in `fontFallbacks`.
               sig { returns(T.nilable(String)) }
               attr_reader :font_family
 
               sig { params(font_family: String).void }
               attr_writer :font_family
 
-              # Hex color of the underline when it differs from the text color
+              # Underline color in hex, when it differs from the text color.
               sig { returns(T.nilable(String)) }
               attr_reader :text_decoration_color
 
@@ -977,30 +974,29 @@ module ContextDev
               end
               def self.new(
                 background_color:,
-                # Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-                # alpha)
+                # Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
                 border_color:,
                 border_radius:,
                 border_style:,
                 border_width:,
-                # Computed box-shadow (comma-separated layers when present)
+                # Computed `box-shadow`, with layers separated by commas.
                 box_shadow:,
                 color:,
-                # Ready-to-use CSS declaration block for this component style
+                # Ready-to-use CSS declarations for this style.
                 css:,
                 font_size:,
                 font_weight:,
-                # Sampled minimum height of the button box (typically px)
+                # Minimum height as a CSS length, usually in pixels.
                 min_height:,
-                # Minimum width (usually px).
+                # Minimum width as a CSS length, usually in pixels.
                 min_width:,
                 padding:,
                 text_decoration:,
-                # Full ordered font list from computed font-family
+                # Full font stack from the computed `font-family`, in order.
                 font_fallbacks: nil,
-                # Primary button typeface (first in fontFallbacks)
+                # Button typeface, the first entry in `fontFallbacks`.
                 font_family: nil,
-                # Hex color of the underline when it differs from the text color
+                # Underline color in hex, when it differs from the text color.
                 text_decoration_color: nil
               )
               end
@@ -1044,8 +1040,7 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :background_color
 
-              # Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-              # alpha)
+              # Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
               sig { returns(String) }
               attr_accessor :border_color
 
@@ -1058,14 +1053,14 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :border_width
 
-              # Computed box-shadow (comma-separated layers when present)
+              # Computed `box-shadow`, with layers separated by commas.
               sig { returns(String) }
               attr_accessor :box_shadow
 
               sig { returns(String) }
               attr_accessor :color
 
-              # Ready-to-use CSS declaration block for this component style
+              # Ready-to-use CSS declarations for this style.
               sig { returns(String) }
               attr_accessor :css
 
@@ -1075,11 +1070,11 @@ module ContextDev
               sig { returns(Float) }
               attr_accessor :font_weight
 
-              # Sampled minimum height of the button box (typically px)
+              # Minimum height as a CSS length, usually in pixels.
               sig { returns(String) }
               attr_accessor :min_height
 
-              # Minimum width (usually px).
+              # Minimum width as a CSS length, usually in pixels.
               sig { returns(String) }
               attr_accessor :min_width
 
@@ -1089,21 +1084,21 @@ module ContextDev
               sig { returns(String) }
               attr_accessor :text_decoration
 
-              # Full ordered font list from computed font-family
+              # Full font stack from the computed `font-family`, in order.
               sig { returns(T.nilable(T::Array[String])) }
               attr_reader :font_fallbacks
 
               sig { params(font_fallbacks: T::Array[String]).void }
               attr_writer :font_fallbacks
 
-              # Primary button typeface (first in fontFallbacks)
+              # Button typeface, the first entry in `fontFallbacks`.
               sig { returns(T.nilable(String)) }
               attr_reader :font_family
 
               sig { params(font_family: String).void }
               attr_writer :font_family
 
-              # Hex color of the underline when it differs from the text color
+              # Underline color in hex, when it differs from the text color.
               sig { returns(T.nilable(String)) }
               attr_reader :text_decoration_color
 
@@ -1133,30 +1128,29 @@ module ContextDev
               end
               def self.new(
                 background_color:,
-                # Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-                # alpha)
+                # Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
                 border_color:,
                 border_radius:,
                 border_style:,
                 border_width:,
-                # Computed box-shadow (comma-separated layers when present)
+                # Computed `box-shadow`, with layers separated by commas.
                 box_shadow:,
                 color:,
-                # Ready-to-use CSS declaration block for this component style
+                # Ready-to-use CSS declarations for this style.
                 css:,
                 font_size:,
                 font_weight:,
-                # Sampled minimum height of the button box (typically px)
+                # Minimum height as a CSS length, usually in pixels.
                 min_height:,
-                # Minimum width (usually px).
+                # Minimum width as a CSS length, usually in pixels.
                 min_width:,
                 padding:,
                 text_decoration:,
-                # Full ordered font list from computed font-family
+                # Full font stack from the computed `font-family`, in order.
                 font_fallbacks: nil,
-                # Primary button typeface (first in fontFallbacks)
+                # Button typeface, the first entry in `fontFallbacks`.
                 font_family: nil,
-                # Hex color of the underline when it differs from the text color
+                # Underline color in hex, when it differs from the text color.
                 text_decoration_color: nil
               )
               end
@@ -1201,8 +1195,7 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :background_color
 
-            # Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-            # alpha)
+            # Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
             sig { returns(String) }
             attr_accessor :border_color
 
@@ -1218,7 +1211,7 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :box_shadow
 
-            # Ready-to-use CSS declaration block for this component style
+            # Ready-to-use CSS declarations for this style.
             sig { returns(String) }
             attr_accessor :css
 
@@ -1228,7 +1221,7 @@ module ContextDev
             sig { returns(String) }
             attr_accessor :text_color
 
-            # Card component style
+            # Card style.
             sig do
               params(
                 background_color: String,
@@ -1244,14 +1237,13 @@ module ContextDev
             end
             def self.new(
               background_color:,
-              # Border color as CSS hex (#RRGGBB or #RRGGBBAA when computed border-color has
-              # alpha)
+              # Border color in hex: `#RRGGBB`, or `#RRGGBBAA` when the border is translucent.
               border_color:,
               border_radius:,
               border_style:,
               border_width:,
               box_shadow:,
-              # Ready-to-use CSS declaration block for this component style
+              # Ready-to-use CSS declarations for this style.
               css:,
               padding:,
               text_color:
@@ -1302,7 +1294,7 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :xs
 
-          # Spacing system used on the website
+          # Spacing scale used on the website, from `xs` to `xl`.
           sig do
             params(
               lg: String,
@@ -1333,6 +1325,7 @@ module ContextDev
               )
             end
 
+          # `google` for Google Fonts, `custom` for any other font source.
           sig do
             returns(
               ContextDev::Models::WebExtractStyleguideResponse::Styleguide::FontLink::Type::TaggedSymbol
@@ -1340,23 +1333,23 @@ module ContextDev
           end
           attr_accessor :type
 
-          # Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
-          # display, handwriting). Omitted for custom fonts when unknown.
+          # Google Fonts category, such as `sans-serif`, `serif`, `monospace`, `display`, or
+          # `handwriting`. Omitted for custom fonts when unknown.
           sig { returns(T.nilable(String)) }
           attr_reader :category
 
           sig { params(category: String).void }
           attr_writer :category
 
-          # Human-readable family name. For custom fonts, derived from the fontLinks key;
-          # for Google fonts, the canonical Google Fonts family name.
+          # Human-readable family name: the `fontLinks` key for custom fonts, or the
+          # official Google Fonts name for Google fonts.
           sig { returns(T.nilable(String)) }
           attr_reader :display_name
 
           sig { params(display_name: String).void }
           attr_writer :display_name
 
-          # Discovered font faces, including style, weight, and distinct Unicode subsets.
+          # Font faces found for this family, one per style, weight, and Unicode subset.
           sig do
             returns(
               T.nilable(
@@ -1401,14 +1394,15 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
+            # `google` for Google Fonts, `custom` for any other font source.
             type:,
-            # Google Fonts category when type is google (e.g. sans-serif, serif, monospace,
-            # display, handwriting). Omitted for custom fonts when unknown.
+            # Google Fonts category, such as `sans-serif`, `serif`, `monospace`, `display`, or
+            # `handwriting`. Omitted for custom fonts when unknown.
             category: nil,
-            # Human-readable family name. For custom fonts, derived from the fontLinks key;
-            # for Google fonts, the canonical Google Fonts family name.
+            # Human-readable family name: the `fontLinks` key for custom fonts, or the
+            # official Google Fonts name for Google fonts.
             display_name: nil,
-            # Discovered font faces, including style, weight, and distinct Unicode subsets.
+            # Font faces found for this family, one per style, weight, and Unicode subset.
             faces: nil,
             # Deprecated upright font lookup keyed by weight string. A variable font can map
             # several standard weight keys to the same URL; faces retains its actual weight
@@ -1435,6 +1429,7 @@ module ContextDev
           def to_hash
           end
 
+          # `google` for Google Fonts, `custom` for any other font source.
           module Type
             extend ContextDev::Internal::Type::Enum
 
@@ -1478,28 +1473,28 @@ module ContextDev
                 )
               end
 
-            # CSS font-style descriptor: normal, italic, or oblique, including an optional
-            # oblique angle or angle range (e.g. oblique 10deg 20deg).
+            # CSS `font-style` descriptor: `normal`, `italic`, or `oblique`, with an optional
+            # angle or angle range such as `oblique 10deg 20deg`.
             sig { returns(String) }
             attr_accessor :style
 
-            # Preferred font file URL or inline font data URL.
+            # URL of the font file, or an inline data URL.
             sig { returns(String) }
             attr_accessor :url
 
-            # CSS font-weight descriptor. A variable font file can have a range such as "300
-            # 500", covering intermediate weights without separate files.
+            # CSS `font-weight` descriptor. A variable font can have a range such as
+            # `300 500`, which covers every weight in between with one file.
             sig { returns(String) }
             attr_accessor :weight
 
-            # CSS unicode-range descriptor.
+            # CSS `unicode-range` descriptor.
             sig { returns(T.nilable(String)) }
             attr_reader :unicode_range
 
             sig { params(unicode_range: String).void }
             attr_writer :unicode_range
 
-            # CSS font-width or font-stretch descriptor.
+            # CSS `font-width` or `font-stretch` descriptor.
             sig { returns(T.nilable(String)) }
             attr_reader :width
 
@@ -1516,17 +1511,17 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # CSS font-style descriptor: normal, italic, or oblique, including an optional
-              # oblique angle or angle range (e.g. oblique 10deg 20deg).
+              # CSS `font-style` descriptor: `normal`, `italic`, or `oblique`, with an optional
+              # angle or angle range such as `oblique 10deg 20deg`.
               style:,
-              # Preferred font file URL or inline font data URL.
+              # URL of the font file, or an inline data URL.
               url:,
-              # CSS font-weight descriptor. A variable font file can have a range such as "300
-              # 500", covering intermediate weights without separate files.
+              # CSS `font-weight` descriptor. A variable font can have a range such as
+              # `300 500`, which covers every weight in between with one file.
               weight:,
-              # CSS unicode-range descriptor.
+              # CSS `unicode-range` descriptor.
               unicode_range: nil,
-              # CSS font-width or font-stretch descriptor.
+              # CSS `font-width` or `font-stretch` descriptor.
               width: nil
             )
             end
@@ -1547,7 +1542,7 @@ module ContextDev
           end
         end
 
-        # The primary color mode of the website design
+        # Whether the site's design is mainly light or dark.
         module Mode
           extend ContextDev::Internal::Type::Enum
 
@@ -1606,7 +1601,7 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :xl
 
-          # Shadow styles used on the website
+          # Box shadow scale used on the website, from `sm` to `xl`, plus `inner`.
           sig do
             params(
               inner: String,
@@ -1637,7 +1632,7 @@ module ContextDev
               )
             end
 
-          # Heading styles
+          # Styles for `h1` through `h4` headings.
           sig do
             returns(
               ContextDev::Models::WebExtractStyleguideResponse::Styleguide::Typography::Headings
@@ -1670,7 +1665,7 @@ module ContextDev
           end
           attr_writer :p_
 
-          # Typography styles used on the website
+          # Text styles for headings and body text.
           sig do
             params(
               headings:
@@ -1680,7 +1675,7 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Heading styles
+            # Styles for `h1` through `h4` headings.
             headings:,
             p_: nil
           )
@@ -1776,7 +1771,7 @@ module ContextDev
             end
             attr_writer :h4
 
-            # Heading styles
+            # Styles for `h1` through `h4` headings.
             sig do
               params(
                 h1:
@@ -1818,7 +1813,7 @@ module ContextDev
                   )
                 end
 
-              # Full ordered font list from resolved computed font-family
+              # Full font stack from the computed `font-family`, in order.
               sig { returns(T::Array[String]) }
               attr_accessor :font_fallbacks
 
@@ -1849,7 +1844,7 @@ module ContextDev
                 ).returns(T.attached_class)
               end
               def self.new(
-                # Full ordered font list from resolved computed font-family
+                # Full font stack from the computed `font-family`, in order.
                 font_fallbacks:,
                 # First font in the stack.
                 font_family:,
@@ -1885,7 +1880,7 @@ module ContextDev
                   )
                 end
 
-              # Full ordered font list from resolved computed font-family
+              # Full font stack from the computed `font-family`, in order.
               sig { returns(T::Array[String]) }
               attr_accessor :font_fallbacks
 
@@ -1916,7 +1911,7 @@ module ContextDev
                 ).returns(T.attached_class)
               end
               def self.new(
-                # Full ordered font list from resolved computed font-family
+                # Full font stack from the computed `font-family`, in order.
                 font_fallbacks:,
                 # First font in the stack.
                 font_family:,
@@ -1952,7 +1947,7 @@ module ContextDev
                   )
                 end
 
-              # Full ordered font list from resolved computed font-family
+              # Full font stack from the computed `font-family`, in order.
               sig { returns(T::Array[String]) }
               attr_accessor :font_fallbacks
 
@@ -1983,7 +1978,7 @@ module ContextDev
                 ).returns(T.attached_class)
               end
               def self.new(
-                # Full ordered font list from resolved computed font-family
+                # Full font stack from the computed `font-family`, in order.
                 font_fallbacks:,
                 # First font in the stack.
                 font_family:,
@@ -2019,7 +2014,7 @@ module ContextDev
                   )
                 end
 
-              # Full ordered font list from resolved computed font-family
+              # Full font stack from the computed `font-family`, in order.
               sig { returns(T::Array[String]) }
               attr_accessor :font_fallbacks
 
@@ -2050,7 +2045,7 @@ module ContextDev
                 ).returns(T.attached_class)
               end
               def self.new(
-                # Full ordered font list from resolved computed font-family
+                # Full font stack from the computed `font-family`, in order.
                 font_fallbacks:,
                 # First font in the stack.
                 font_family:,
@@ -2087,7 +2082,7 @@ module ContextDev
                 )
               end
 
-            # Full ordered font list from resolved computed font-family
+            # Full font stack from the computed `font-family`, in order.
             sig { returns(T::Array[String]) }
             attr_accessor :font_fallbacks
 
@@ -2118,7 +2113,7 @@ module ContextDev
               ).returns(T.attached_class)
             end
             def self.new(
-              # Full ordered font list from resolved computed font-family
+              # Full font stack from the computed `font-family`, in order.
               font_fallbacks:,
               # First font in the stack.
               font_family:,

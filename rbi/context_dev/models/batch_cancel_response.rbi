@@ -11,7 +11,7 @@ module ContextDev
           )
         end
 
-      # Batch ID.
+      # Unique ID of the batch.
       sig { returns(String) }
       attr_accessor :id
 
@@ -22,7 +22,7 @@ module ContextDev
       sig { params(crawl: T.nilable(ContextDev::CrawlControls::OrHash)).void }
       attr_writer :crawl
 
-      # What this batch cost so far.
+      # Credits reserved for the batch.
       sig { returns(ContextDev::Models::BatchCancelResponse::Credits) }
       attr_reader :credits
 
@@ -33,7 +33,7 @@ module ContextDev
       end
       attr_writer :credits
 
-      # Outputs requested for each page. Matches input.data.formats on submission.
+      # Formats requested for each page, as submitted in `input.data.formats`.
       sig { returns(ContextDev::Models::BatchCancelResponse::Formats) }
       attr_reader :formats
 
@@ -44,20 +44,20 @@ module ContextDev
       end
       attr_writer :formats
 
-      # What the submission accepted.
+      # Page counts from your submission.
       sig { returns(ContextDev::Intake) }
       attr_reader :input
 
       sig { params(input: ContextDev::Intake::OrHash).void }
       attr_writer :input
 
-      # How pages were selected.
+      # `scrape` for a URL list, `crawl` for a site crawl.
       sig do
         returns(ContextDev::Models::BatchCancelResponse::Mode::TaggedSymbol)
       end
       attr_accessor :mode
 
-      # Page failures so far, grouped by error code and sorted by count.
+      # Page failures so far, grouped by error code, most common first.
       sig { returns(T::Array[ContextDev::PageErrorCount]) }
       attr_accessor :page_errors
 
@@ -77,18 +77,18 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Always `cancelling`. Work already in flight finishes; the batch reaches
-      # `cancelled` shortly after.
+      # Always `cancelling`. Pages in progress finish, then the batch becomes
+      # `cancelled`.
       sig do
         returns(ContextDev::Models::BatchCancelResponse::Status::TaggedSymbol)
       end
       attr_accessor :status
 
-      # Tags stored on the batch at submission.
+      # Tags set when the batch was submitted.
       sig { returns(T::Array[String]) }
       attr_accessor :tags
 
-      # Batch timestamps.
+      # When the batch was created and started.
       sig { returns(ContextDev::Models::BatchCancelResponse::Timing) }
       attr_reader :timing
 
@@ -132,31 +132,31 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Batch ID.
+        # Unique ID of the batch.
         id:,
         # Crawl settings as submitted.
         crawl:,
-        # What this batch cost so far.
+        # Credits reserved for the batch.
         credits:,
-        # Outputs requested for each page. Matches input.data.formats on submission.
+        # Formats requested for each page, as submitted in `input.data.formats`.
         formats:,
-        # What the submission accepted.
+        # Page counts from your submission.
         input:,
-        # How pages were selected.
+        # `scrape` for a URL list, `crawl` for a site crawl.
         mode:,
-        # Page failures so far, grouped by error code and sorted by count.
+        # Page failures so far, grouped by error code, most common first.
         page_errors:,
         # How far the batch got before cancellation.
         progress:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # Always `cancelling`. Work already in flight finishes; the batch reaches
-        # `cancelled` shortly after.
+        # Always `cancelling`. Pages in progress finish, then the batch becomes
+        # `cancelled`.
         status:,
-        # Tags stored on the batch at submission.
+        # Tags set when the batch was submitted.
         tags:,
-        # Batch timestamps.
+        # When the batch was created and started.
         timing:,
         # Credits this request used and your remaining balance.
         key_metadata: nil
@@ -195,14 +195,16 @@ module ContextDev
             )
           end
 
-        # Credits held at submission; unused credits are refunded when the batch settles.
+        # Credits reserved for the batch. Unused credits are refunded once it reaches
+        # `cancelled`.
         sig { returns(Integer) }
         attr_accessor :reserved
 
-        # What this batch cost so far.
+        # Credits reserved for the batch.
         sig { params(reserved: Integer).returns(T.attached_class) }
         def self.new(
-          # Credits held at submission; unused credits are refunded when the batch settles.
+          # Credits reserved for the batch. Unused credits are refunded once it reaches
+          # `cancelled`.
           reserved:
         )
         end
@@ -221,71 +223,71 @@ module ContextDev
             )
           end
 
-        # The original HTTP response body.
+        # Return the original HTTP response body.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :bytes
 
         sig { params(bytes: T::Boolean).void }
         attr_writer :bytes
 
-        # Markdown excerpts relevant to `highlightsParams.query`.
+        # Return Markdown excerpts relevant to `highlightsParams.query`.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :highlights
 
         sig { params(highlights: T::Boolean).void }
         attr_writer :highlights
 
-        # Rendered HTML.
+        # Return the rendered HTML.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :html
 
         sig { params(html: T::Boolean).void }
         attr_writer :html
 
-        # Images found on the page.
+        # Return the images found on the page.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :images
 
         sig { params(images: T::Boolean).void }
         attr_writer :images
 
-        # An object matching `jsonParams.schema`, extracted from the page text and its
-        # embedded data (JSON-LD, meta tags, framework state).
+        # Return an object matching `jsonParams.schema`, extracted from the page text and
+        # embedded data such as JSON-LD, meta tags, and framework state.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :json
 
         sig { params(json: T::Boolean).void }
         attr_writer :json
 
-        # Page content or video transcript as Markdown.
+        # Return the page content, or a video transcript, as Markdown.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :markdown
 
         sig { params(markdown: T::Boolean).void }
         attr_writer :markdown
 
-        # Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
+        # Return fields extracted with custom rules or a prebuilt parser, as `parsed`.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :parse
 
         sig { params(parse: T::Boolean).void }
         attr_writer :parse
 
-        # Product details such as name, price, and availability.
+        # Return product details such as name, price, and availability.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :product
 
         sig { params(product: T::Boolean).void }
         attr_writer :product
 
-        # A screenshot of the page.
+        # Return a screenshot of the page.
         sig { returns(T.nilable(T::Boolean)) }
         attr_reader :screenshot
 
         sig { params(screenshot: T::Boolean).void }
         attr_writer :screenshot
 
-        # Outputs requested for each page. Matches input.data.formats on submission.
+        # Formats requested for each page, as submitted in `input.data.formats`.
         sig do
           params(
             bytes: T::Boolean,
@@ -300,24 +302,24 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # The original HTTP response body.
+          # Return the original HTTP response body.
           bytes: nil,
-          # Markdown excerpts relevant to `highlightsParams.query`.
+          # Return Markdown excerpts relevant to `highlightsParams.query`.
           highlights: nil,
-          # Rendered HTML.
+          # Return the rendered HTML.
           html: nil,
-          # Images found on the page.
+          # Return the images found on the page.
           images: nil,
-          # An object matching `jsonParams.schema`, extracted from the page text and its
-          # embedded data (JSON-LD, meta tags, framework state).
+          # Return an object matching `jsonParams.schema`, extracted from the page text and
+          # embedded data such as JSON-LD, meta tags, and framework state.
           json: nil,
-          # Page content or video transcript as Markdown.
+          # Return the page content, or a video transcript, as Markdown.
           markdown: nil,
-          # Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
+          # Return fields extracted with custom rules or a prebuilt parser, as `parsed`.
           parse: nil,
-          # Product details such as name, price, and availability.
+          # Return product details such as name, price, and availability.
           product: nil,
-          # A screenshot of the page.
+          # Return a screenshot of the page.
           screenshot: nil
         )
         end
@@ -341,7 +343,7 @@ module ContextDev
         end
       end
 
-      # How pages were selected.
+      # `scrape` for a URL list, `crawl` for a site crawl.
       module Mode
         extend ContextDev::Internal::Type::Enum
 
@@ -382,15 +384,15 @@ module ContextDev
             )
           end
 
-        # Pages that could not be scraped before the request landed.
+        # Pages that could not be scraped before cancellation.
         sig { returns(Integer) }
         attr_accessor :failed
 
-        # Pages that will be skipped.
+        # Pages not yet attempted, which will be skipped.
         sig { returns(Integer) }
         attr_accessor :pending
 
-        # Pages scraped successfully before the request landed.
+        # Pages scraped successfully before cancellation.
         sig { returns(Integer) }
         attr_accessor :succeeded
 
@@ -401,11 +403,11 @@ module ContextDev
           )
         end
         def self.new(
-          # Pages that could not be scraped before the request landed.
+          # Pages that could not be scraped before cancellation.
           failed:,
-          # Pages that will be skipped.
+          # Pages not yet attempted, which will be skipped.
           pending:,
-          # Pages scraped successfully before the request landed.
+          # Pages scraped successfully before cancellation.
           succeeded:
         )
         end
@@ -419,8 +421,8 @@ module ContextDev
         end
       end
 
-      # Always `cancelling`. Work already in flight finishes; the batch reaches
-      # `cancelled` shortly after.
+      # Always `cancelling`. Pages in progress finish, then the batch becomes
+      # `cancelled`.
       module Status
         extend ContextDev::Internal::Type::Enum
 
@@ -460,11 +462,11 @@ module ContextDev
         sig { returns(String) }
         attr_accessor :created_at
 
-        # When processing started. Null if it was cancelled while still queued.
+        # When scraping started. `null` if the batch was cancelled before it started.
         sig { returns(T.nilable(String)) }
         attr_accessor :started_at
 
-        # Batch timestamps.
+        # When the batch was created and started.
         sig do
           params(created_at: String, started_at: T.nilable(String)).returns(
             T.attached_class
@@ -473,7 +475,7 @@ module ContextDev
         def self.new(
           # When the batch was created.
           created_at:,
-          # When processing started. Null if it was cancelled while still queued.
+          # When scraping started. `null` if the batch was cancelled before it started.
           started_at:
         )
         end
@@ -500,7 +502,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -513,7 +515,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

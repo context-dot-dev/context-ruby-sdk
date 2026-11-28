@@ -8,54 +8,55 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute body
-      #   One lookup, chosen by `type`.
+      #   Brand lookup. Set `type` to choose how to identify the brand.
       #
       #   @return [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction]
       required :body, union: -> { ContextDev::BrandRetrieveParams::Body }
 
       # @!method initialize(body:, request_options: {})
-      #   @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] One lookup, chosen by `type`.
+      #   @param body [ContextDev::Models::BrandRetrieveParams::Body::ByDomain, ContextDev::Models::BrandRetrieveParams::Body::ByName, ContextDev::Models::BrandRetrieveParams::Body::ByEmail, ContextDev::Models::BrandRetrieveParams::Body::ByTicker, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction] Brand lookup. Set `type` to choose how to identify the brand.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # One lookup, chosen by `type`.
+      # Brand lookup. Set `type` to choose how to identify the brand.
       module Body
         extend ContextDev::Internal::Type::Union
 
         discriminator :type
 
-        # Retrieve brand data by domain. Cannot be combined with name, email, or ticker.
+        # Look up a brand by its domain.
         variant :by_domain, -> { ContextDev::BrandRetrieveParams::Body::ByDomain }
 
-        # Retrieve brand data by company name. Cannot be combined with domain, email, or ticker.
+        # Look up a brand by company name.
         variant :by_name, -> { ContextDev::BrandRetrieveParams::Body::ByName }
 
-        # Retrieve brand data by email address. The domain is extracted from the email. Free and disposable email providers are rejected with 422. Cannot be combined with domain, name, or ticker.
+        # Look up a brand from a work email address. Free and disposable email providers return 422.
         variant :by_email, -> { ContextDev::BrandRetrieveParams::Body::ByEmail }
 
-        # Retrieve brand data by stock ticker. Cannot be combined with domain, name, or email.
+        # Look up a publicly traded company by stock ticker.
         variant :by_ticker, -> { ContextDev::BrandRetrieveParams::Body::ByTicker }
 
-        # Retrieve brand data from this exact URL. Cross-site enrichment and other lookup identifiers are excluded.
+        # Extract brand data from a single page. Only that URL is read, and no data from other sources is added.
         variant :by_direct_url, -> { ContextDev::BrandRetrieveParams::Body::ByDirectURL }
 
-        # Identify brand data from a transaction descriptor. Cannot be combined with domain, name, email, or ticker.
+        # Identify the merchant behind a card or bank transaction descriptor.
         variant :by_transaction, -> { ContextDev::BrandRetrieveParams::Body::ByTransaction }
 
         class ByDomain < ContextDev::Internal::Type::BaseModel
           # @!attribute domain
-          #   Domain name to retrieve brand data for (e.g., 'stripe.com').
+          #   Domain of the brand, such as `stripe.com`.
           #
           #   @return [String]
           required :domain, String
 
           # @!attribute type
-          #   Discriminator for domain-based brand retrieval.
+          #   Set to `by_domain` to look up a brand by domain.
           #
           #   @return [Symbol, :by_domain]
           required :type, const: :by_domain
 
           # @!attribute force_language
+          #   Translate the brand's `title`, `description`, and `slogan` into this language.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage, nil]
           optional :force_language,
@@ -63,30 +64,30 @@ module ContextDev
                    nil?: true
 
           # @!attribute max_age_ms
-          #   Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-          #   year. `0` refreshes.
+          #   Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+          #   Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+          #   capped at 1 year.
           #
           #   @return [Integer, nil]
           optional :max_age_ms, Integer, api_name: :maxAgeMs
 
           # @!attribute max_speed
-          #   Optional parameter to optimize the API call for maximum speed. When set to true,
-          #   the API will skip time-consuming operations for faster response at the cost of
-          #   less comprehensive data.
+          #   Skip slower enrichment steps for a faster, less detailed response.
           #
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          #   access policies are enabled for your organization; otherwise the request fails
-          #   with `ACCESS_POLICIES_NOT_ENABLED`.
+          #   Access policy IDs to apply; each URL must pass all of them. Requires access
+          #   policies enabled for your organization; otherwise returns
+          #   `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute tags
-          #   Labels for filtering usage in the dashboard.
+          #   Labels for this request. Filter usage and request logs by them in the dashboard
+          #   or with `GET /org/logs`.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -100,8 +101,8 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs and traces and omits request and response
-          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   `enabled` turns off request logs and traces and keeps request and response
+          #   content out of usage logs. Brand data and hosted assets may still be stored.
           #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::Zdr, nil]
@@ -111,26 +112,28 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByDomain} for more details.
           #
-          #   Retrieve brand data by domain. Cannot be combined with name, email, or ticker.
+          #   Look up a brand by its domain.
           #
-          #   @param domain [String] Domain name to retrieve brand data for (e.g., 'stripe.com').
+          #   @param domain [String] Domain of the brand, such as `stripe.com`.
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage, nil]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::ForceLanguage, nil] Translate the brand's `title`, `description`, and `slogan` into this language.
           #
-          #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
+          #   @param max_age_ms [Integer] Maximum age of cached brand data, in milliseconds. `0` always fetches fresh. Def
           #
-          #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #   @param max_speed [Boolean] Skip slower enrichment steps for a faster, less detailed response.
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+          #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
           #
-          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+          #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::Zdr] `enabled` disables request logs and traces and omits request and response conten
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::Zdr] `enabled` turns off request logs and traces and keeps request and response conte
           #
-          #   @param type [Symbol, :by_domain] Discriminator for domain-based brand retrieval.
+          #   @param type [Symbol, :by_domain] Set to `by_domain` to look up a brand by domain.
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
+          #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByDomain#force_language
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
@@ -269,8 +272,8 @@ module ContextDev
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-            #   inspect the response’s partial flag.
+            #   `fail` returns 408 at the deadline. `return-partial` returns the results
+            #   collected so far and marks the response as partial.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior, nil]
             optional :behavior, enum: -> { ContextDev::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior }
@@ -284,10 +287,10 @@ module ContextDev
             #
             #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByDomain::TimeoutOpts#behavior
             module Behavior
@@ -301,8 +304,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByDomain#zdr
@@ -319,13 +322,13 @@ module ContextDev
 
         class ByName < ContextDev::Internal::Type::BaseModel
           # @!attribute name
-          #   Company name to retrieve brand data for (e.g., 'Apple Inc').
+          #   Company name, such as `Apple Inc`.
           #
           #   @return [String]
           required :name, String
 
           # @!attribute type
-          #   Discriminator for name-based brand retrieval.
+          #   Set to `by_name` to look up a brand by company name.
           #
           #   @return [Symbol, :by_name]
           required :type, const: :by_name
@@ -337,6 +340,7 @@ module ContextDev
           optional :country, enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::Country }
 
           # @!attribute force_language
+          #   Translate the brand's `title`, `description`, and `slogan` into this language.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage, nil]
           optional :force_language,
@@ -344,30 +348,30 @@ module ContextDev
                    nil?: true
 
           # @!attribute max_age_ms
-          #   Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-          #   year. `0` refreshes.
+          #   Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+          #   Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+          #   capped at 1 year.
           #
           #   @return [Integer, nil]
           optional :max_age_ms, Integer, api_name: :maxAgeMs
 
           # @!attribute max_speed
-          #   Optional parameter to optimize the API call for maximum speed. When set to true,
-          #   the API will skip time-consuming operations for faster response at the cost of
-          #   less comprehensive data.
+          #   Skip slower enrichment steps for a faster, less detailed response.
           #
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          #   access policies are enabled for your organization; otherwise the request fails
-          #   with `ACCESS_POLICIES_NOT_ENABLED`.
+          #   Access policy IDs to apply; each URL must pass all of them. Requires access
+          #   policies enabled for your organization; otherwise returns
+          #   `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute tags
-          #   Labels for filtering usage in the dashboard.
+          #   Labels for this request. Filter usage and request logs by them in the dashboard
+          #   or with `GET /org/logs`.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -381,8 +385,8 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs and traces and omits request and response
-          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   `enabled` turns off request logs and traces and keeps request and response
+          #   content out of usage logs. Brand data and hosted assets may still be stored.
           #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::Zdr, nil]
@@ -392,28 +396,27 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByName} for more details.
           #
-          #   Retrieve brand data by company name. Cannot be combined with domain, email, or
-          #   ticker.
+          #   Look up a brand by company name.
           #
-          #   @param name [String] Company name to retrieve brand data for (e.g., 'Apple Inc').
+          #   @param name [String] Company name, such as `Apple Inc`.
           #
           #   @param country [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::Country] Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage, nil]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::ForceLanguage, nil] Translate the brand's `title`, `description`, and `slogan` into this language.
           #
-          #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
+          #   @param max_age_ms [Integer] Maximum age of cached brand data, in milliseconds. `0` always fetches fresh. Def
           #
-          #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #   @param max_speed [Boolean] Skip slower enrichment steps for a faster, less detailed response.
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+          #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
           #
-          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+          #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::Zdr] `enabled` disables request logs and traces and omits request and response conten
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::Zdr] `enabled` turns off request logs and traces and keeps request and response conte
           #
-          #   @param type [Symbol, :by_name] Discriminator for name-based brand retrieval.
+          #   @param type [Symbol, :by_name] Set to `by_name` to look up a brand by company name.
 
           # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           #
@@ -665,6 +668,8 @@ module ContextDev
             #   @return [Array<Symbol>]
           end
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
+          #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByName#force_language
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
@@ -803,8 +808,8 @@ module ContextDev
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-            #   inspect the response’s partial flag.
+            #   `fail` returns 408 at the deadline. `return-partial` returns the results
+            #   collected so far and marks the response as partial.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior, nil]
             optional :behavior, enum: -> { ContextDev::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior }
@@ -818,10 +823,10 @@ module ContextDev
             #
             #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByName::TimeoutOpts#behavior
             module Behavior
@@ -835,8 +840,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByName#zdr
@@ -853,18 +858,20 @@ module ContextDev
 
         class ByEmail < ContextDev::Internal::Type::BaseModel
           # @!attribute email
-          #   Email address to retrieve brand data for (e.g., 'jane@stripe.com').
+          #   Work email address, such as `jane@stripe.com`. The brand is looked up from its
+          #   domain.
           #
           #   @return [String]
           required :email, String
 
           # @!attribute type
-          #   Discriminator for email-based brand retrieval.
+          #   Set to `by_email` to look up a brand from a work email address.
           #
           #   @return [Symbol, :by_email]
           required :type, const: :by_email
 
           # @!attribute force_language
+          #   Translate the brand's `title`, `description`, and `slogan` into this language.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage, nil]
           optional :force_language,
@@ -872,30 +879,30 @@ module ContextDev
                    nil?: true
 
           # @!attribute max_age_ms
-          #   Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-          #   year. `0` refreshes.
+          #   Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+          #   Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+          #   capped at 1 year.
           #
           #   @return [Integer, nil]
           optional :max_age_ms, Integer, api_name: :maxAgeMs
 
           # @!attribute max_speed
-          #   Optional parameter to optimize the API call for maximum speed. When set to true,
-          #   the API will skip time-consuming operations for faster response at the cost of
-          #   less comprehensive data.
+          #   Skip slower enrichment steps for a faster, less detailed response.
           #
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          #   access policies are enabled for your organization; otherwise the request fails
-          #   with `ACCESS_POLICIES_NOT_ENABLED`.
+          #   Access policy IDs to apply; each URL must pass all of them. Requires access
+          #   policies enabled for your organization; otherwise returns
+          #   `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute tags
-          #   Labels for filtering usage in the dashboard.
+          #   Labels for this request. Filter usage and request logs by them in the dashboard
+          #   or with `GET /org/logs`.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -909,8 +916,8 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs and traces and omits request and response
-          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   `enabled` turns off request logs and traces and keeps request and response
+          #   content out of usage logs. Brand data and hosted assets may still be stored.
           #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::Zdr, nil]
@@ -920,28 +927,29 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByEmail} for more details.
           #
-          #   Retrieve brand data by email address. The domain is extracted from the email.
-          #   Free and disposable email providers are rejected with 422. Cannot be combined
-          #   with domain, name, or ticker.
+          #   Look up a brand from a work email address. Free and disposable email providers
+          #   return 422.
           #
-          #   @param email [String] Email address to retrieve brand data for (e.g., 'jane@stripe.com').
+          #   @param email [String] Work email address, such as `jane@stripe.com`. The brand is looked up from its d
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage, nil]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::ForceLanguage, nil] Translate the brand's `title`, `description`, and `slogan` into this language.
           #
-          #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
+          #   @param max_age_ms [Integer] Maximum age of cached brand data, in milliseconds. `0` always fetches fresh. Def
           #
-          #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #   @param max_speed [Boolean] Skip slower enrichment steps for a faster, less detailed response.
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+          #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
           #
-          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+          #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::Zdr] `enabled` disables request logs and traces and omits request and response conten
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::Zdr] `enabled` turns off request logs and traces and keeps request and response conte
           #
-          #   @param type [Symbol, :by_email] Discriminator for email-based brand retrieval.
+          #   @param type [Symbol, :by_email] Set to `by_email` to look up a brand from a work email address.
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
+          #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByEmail#force_language
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
@@ -1080,8 +1088,8 @@ module ContextDev
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-            #   inspect the response’s partial flag.
+            #   `fail` returns 408 at the deadline. `return-partial` returns the results
+            #   collected so far and marks the response as partial.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior, nil]
             optional :behavior, enum: -> { ContextDev::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior }
@@ -1095,10 +1103,10 @@ module ContextDev
             #
             #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByEmail::TimeoutOpts#behavior
             module Behavior
@@ -1112,8 +1120,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByEmail#zdr
@@ -1130,18 +1138,19 @@ module ContextDev
 
         class ByTicker < ContextDev::Internal::Type::BaseModel
           # @!attribute ticker
-          #   Stock ticker symbol to retrieve brand data for (e.g., 'AAPL').
+          #   Stock ticker symbol, such as `AAPL`.
           #
           #   @return [String]
           required :ticker, String
 
           # @!attribute type
-          #   Discriminator for ticker-based brand retrieval.
+          #   Set to `by_ticker` to look up a brand by stock ticker.
           #
           #   @return [Symbol, :by_ticker]
           required :type, const: :by_ticker
 
           # @!attribute force_language
+          #   Translate the brand's `title`, `description`, and `slogan` into this language.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage, nil]
           optional :force_language,
@@ -1149,36 +1158,36 @@ module ContextDev
                    nil?: true
 
           # @!attribute max_age_ms
-          #   Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-          #   year. `0` refreshes.
+          #   Maximum age of cached brand data, in milliseconds. `0` always fetches fresh.
+          #   Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+          #   capped at 1 year.
           #
           #   @return [Integer, nil]
           optional :max_age_ms, Integer, api_name: :maxAgeMs
 
           # @!attribute max_speed
-          #   Optional parameter to optimize the API call for maximum speed. When set to true,
-          #   the API will skip time-consuming operations for faster response at the cost of
-          #   less comprehensive data.
+          #   Skip slower enrichment steps for a faster, less detailed response.
           #
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          #   access policies are enabled for your organization; otherwise the request fails
-          #   with `ACCESS_POLICIES_NOT_ENABLED`.
+          #   Access policy IDs to apply; each URL must pass all of them. Requires access
+          #   policies enabled for your organization; otherwise returns
+          #   `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute tags
-          #   Labels for filtering usage in the dashboard.
+          #   Labels for this request. Filter usage and request logs by them in the dashboard
+          #   or with `GET /org/logs`.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute ticker_exchange
-          #   Stock exchange code.
+          #   Stock exchange code, such as `NASDAQ` or `LSE`.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TickerExchange, nil]
           optional :ticker_exchange, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTicker::TickerExchange }
@@ -1192,8 +1201,8 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs and traces and omits request and response
-          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   `enabled` turns off request logs and traces and keeps request and response
+          #   content out of usage logs. Brand data and hosted assets may still be stored.
           #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::Zdr, nil]
@@ -1203,29 +1212,30 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByTicker} for more details.
           #
-          #   Retrieve brand data by stock ticker. Cannot be combined with domain, name, or
-          #   email.
+          #   Look up a publicly traded company by stock ticker.
           #
-          #   @param ticker [String] Stock ticker symbol to retrieve brand data for (e.g., 'AAPL').
+          #   @param ticker [String] Stock ticker symbol, such as `AAPL`.
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage, nil]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::ForceLanguage, nil] Translate the brand's `title`, `description`, and `slogan` into this language.
           #
-          #   @param max_age_ms [Integer] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
+          #   @param max_age_ms [Integer] Maximum age of cached brand data, in milliseconds. `0` always fetches fresh. Def
           #
-          #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #   @param max_speed [Boolean] Skip slower enrichment steps for a faster, less detailed response.
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+          #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
           #
-          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+          #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
           #
-          #   @param ticker_exchange [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TickerExchange] Stock exchange code.
+          #   @param ticker_exchange [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TickerExchange] Stock exchange code, such as `NASDAQ` or `LSE`.
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::Zdr] `enabled` disables request logs and traces and omits request and response conten
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::Zdr] `enabled` turns off request logs and traces and keeps request and response conte
           #
-          #   @param type [Symbol, :by_ticker] Discriminator for ticker-based brand retrieval.
+          #   @param type [Symbol, :by_ticker] Set to `by_ticker` to look up a brand by stock ticker.
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
+          #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTicker#force_language
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
@@ -1355,7 +1365,7 @@ module ContextDev
             #   @return [Array<Symbol>]
           end
 
-          # Stock exchange code.
+          # Stock exchange code, such as `NASDAQ` or `LSE`.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTicker#ticker_exchange
           module TickerExchange
@@ -1447,8 +1457,8 @@ module ContextDev
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-            #   inspect the response’s partial flag.
+            #   `fail` returns 408 at the deadline. `return-partial` returns the results
+            #   collected so far and marks the response as partial.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior, nil]
             optional :behavior, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior }
@@ -1462,10 +1472,10 @@ module ContextDev
             #
             #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByTicker::TimeoutOpts#behavior
             module Behavior
@@ -1479,8 +1489,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTicker#zdr
@@ -1497,29 +1507,29 @@ module ContextDev
 
         class ByDirectURL < ContextDev::Internal::Type::BaseModel
           # @!attribute direct_url
-          #   Full http(s) URL to fetch brand data from (e.g.,
-          #   'https://stripe.com/enterprise'). Only this URL is fetched — not the entire
-          #   internet.
+          #   Full `http` or `https` URL of the page to read, such as
+          #   `https://stripe.com/enterprise`. Only this page is fetched.
           #
           #   @return [String]
           required :direct_url, String
 
           # @!attribute type
-          #   Discriminator for direct-URL-based brand retrieval.
+          #   Set to `by_direct_url` to extract brand data from a single page.
           #
           #   @return [Symbol, :by_direct_url]
           required :type, const: :by_direct_url
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          #   access policies are enabled for your organization; otherwise the request fails
-          #   with `ACCESS_POLICIES_NOT_ENABLED`.
+          #   Access policy IDs to apply; each URL must pass all of them. Requires access
+          #   policies enabled for your organization; otherwise returns
+          #   `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute tags
-          #   Labels for filtering usage in the dashboard.
+          #   Labels for this request. Filter usage and request logs by them in the dashboard
+          #   or with `GET /org/logs`.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -1533,8 +1543,8 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs and traces and omits request and response
-          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   `enabled` turns off request logs and traces and keeps request and response
+          #   content out of usage logs. Brand data and hosted assets may still be stored.
           #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::Zdr, nil]
@@ -1544,20 +1554,20 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL} for more details.
           #
-          #   Retrieve brand data from this exact URL. Cross-site enrichment and other lookup
-          #   identifiers are excluded.
+          #   Extract brand data from a single page. Only that URL is read, and no data from
+          #   other sources is added.
           #
-          #   @param direct_url [String] Full http(s) URL to fetch brand data from (e.g., 'https://stripe.com/enterprise'
+          #   @param direct_url [String] Full `http` or `https` URL of the page to read, such as `https://stripe.com/ente
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+          #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
           #
-          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+          #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::Zdr] `enabled` disables request logs and traces and omits request and response conten
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::Zdr] `enabled` turns off request logs and traces and keeps request and response conte
           #
-          #   @param type [Symbol, :by_direct_url] Discriminator for direct-URL-based brand retrieval.
+          #   @param type [Symbol, :by_direct_url] Set to `by_direct_url` to extract brand data from a single page.
 
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL#timeout_opts
           class TimeoutOpts < ContextDev::Internal::Type::BaseModel
@@ -1568,8 +1578,8 @@ module ContextDev
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-            #   inspect the response’s partial flag.
+            #   `fail` returns 408 at the deadline. `return-partial` returns the results
+            #   collected so far and marks the response as partial.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior, nil]
             optional :behavior, enum: -> { ContextDev::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior }
@@ -1583,10 +1593,10 @@ module ContextDev
             #
             #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL::TimeoutOpts#behavior
             module Behavior
@@ -1600,8 +1610,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByDirectURL#zdr
@@ -1618,19 +1628,20 @@ module ContextDev
 
         class ByTransaction < ContextDev::Internal::Type::BaseModel
           # @!attribute transaction_info
-          #   Transaction information to identify the brand.
+          #   Transaction descriptor from a card or bank statement, such as `SQ *COFFEE SHOP`.
           #
           #   @return [String]
           required :transaction_info, String
 
           # @!attribute type
-          #   Discriminator for transaction-based brand retrieval.
+          #   Set to `by_transaction` to identify the merchant behind a transaction
+          #   descriptor.
           #
           #   @return [Symbol, :by_transaction]
           required :type, const: :by_transaction
 
           # @!attribute city
-          #   Optional city name to prioritize when searching for the brand.
+          #   City where the transaction took place. Brands in this city are preferred.
           #
           #   @return [String, nil]
           optional :city, String
@@ -1642,6 +1653,7 @@ module ContextDev
           optional :country, enum: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Country }
 
           # @!attribute force_language
+          #   Translate the brand's `title`, `description`, and `slogan` into this language.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage, nil]
           optional :force_language,
@@ -1649,43 +1661,42 @@ module ContextDev
                    nil?: true
 
           # @!attribute high_confidence_only
-          #   When set to true, the API performs additional verification to ensure the
-          #   identified brand matches the transaction with high confidence.
+          #   Run extra verification so the returned brand matches the transaction with high
+          #   confidence.
           #
           #   @return [Boolean, nil]
           optional :high_confidence_only, ContextDev::Internal::Type::Boolean
 
           # @!attribute max_speed
-          #   Optional parameter to optimize the API call for maximum speed. When set to true,
-          #   the API will skip time-consuming operations for faster response at the cost of
-          #   less comprehensive data.
+          #   Skip slower enrichment steps for a faster, less detailed response.
           #
           #   @return [Boolean, nil]
           optional :max_speed, ContextDev::Internal::Type::Boolean, api_name: :maxSpeed
 
           # @!attribute mcc
-          #   Optional Merchant Category Code (MCC) to help identify the business category or
-          #   industry.
+          #   Merchant Category Code (MCC) from the transaction. Helps identify the type of
+          #   business.
           #
           #   @return [String, Float, nil]
           optional :mcc, union: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Mcc }
 
           # @!attribute phone
-          #   Optional phone number from the transaction to help verify brand match.
+          #   Merchant phone number from the transaction. Helps confirm the match.
           #
           #   @return [String, Float, nil]
           optional :phone, union: -> { ContextDev::BrandRetrieveParams::Body::ByTransaction::Phone }
 
           # @!attribute policies
-          #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-          #   access policies are enabled for your organization; otherwise the request fails
-          #   with `ACCESS_POLICIES_NOT_ENABLED`.
+          #   Access policy IDs to apply; each URL must pass all of them. Requires access
+          #   policies enabled for your organization; otherwise returns
+          #   `ACCESS_POLICIES_NOT_ENABLED`.
           #
           #   @return [Array<String>, nil]
           optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
           # @!attribute tags
-          #   Labels for filtering usage in the dashboard.
+          #   Labels for this request. Filter usage and request logs by them in the dashboard
+          #   or with `GET /org/logs`.
           #
           #   @return [Array<String>, nil]
           optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -1699,8 +1710,8 @@ module ContextDev
                    api_name: :timeoutOpts
 
           # @!attribute zdr
-          #   `enabled` disables request logs and traces and omits request and response
-          #   content from usage logs. Brand data and hosted assets may still be stored.
+          #   `enabled` turns off request logs and traces and keeps request and response
+          #   content out of usage logs. Brand data and hosted assets may still be stored.
           #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::Zdr, nil]
@@ -1710,34 +1721,33 @@ module ContextDev
           #   Some parameter documentations has been truncated, see
           #   {ContextDev::Models::BrandRetrieveParams::Body::ByTransaction} for more details.
           #
-          #   Identify brand data from a transaction descriptor. Cannot be combined with
-          #   domain, name, email, or ticker.
+          #   Identify the merchant behind a card or bank transaction descriptor.
           #
-          #   @param transaction_info [String] Transaction information to identify the brand.
+          #   @param transaction_info [String] Transaction descriptor from a card or bank statement, such as `SQ *COFFEE SHOP`.
           #
-          #   @param city [String] Optional city name to prioritize when searching for the brand.
+          #   @param city [String] City where the transaction took place. Brands in this city are preferred.
           #
           #   @param country [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::Country] Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           #
-          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage, nil]
+          #   @param force_language [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::ForceLanguage, nil] Translate the brand's `title`, `description`, and `slogan` into this language.
           #
-          #   @param high_confidence_only [Boolean] When set to true, the API performs additional verification to ensure the identif
+          #   @param high_confidence_only [Boolean] Run extra verification so the returned brand matches the transaction with high c
           #
-          #   @param max_speed [Boolean] Optional parameter to optimize the API call for maximum speed. When set to true,
+          #   @param max_speed [Boolean] Skip slower enrichment steps for a faster, less detailed response.
           #
-          #   @param mcc [String, Float] Optional Merchant Category Code (MCC) to help identify the business category or
+          #   @param mcc [String, Float] Merchant Category Code (MCC) from the transaction. Helps identify the type of bu
           #
-          #   @param phone [String, Float] Optional phone number from the transaction to help verify brand match.
+          #   @param phone [String, Float] Merchant phone number from the transaction. Helps confirm the match.
           #
-          #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+          #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
           #
-          #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+          #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
           #
           #   @param timeout_opts [ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts] Request deadline and what to return when it passes.
           #
-          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::Zdr] `enabled` disables request logs and traces and omits request and response conten
+          #   @param zdr [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::Zdr] `enabled` turns off request logs and traces and keeps request and response conte
           #
-          #   @param type [Symbol, :by_transaction] Discriminator for transaction-based brand retrieval.
+          #   @param type [Symbol, :by_transaction] Set to `by_transaction` to identify the merchant behind a transaction descriptor
 
           # Lowercase ISO 3166-1 alpha-2 country code, such as `us`.
           #
@@ -1989,6 +1999,8 @@ module ContextDev
             #   @return [Array<Symbol>]
           end
 
+          # Translate the brand's `title`, `description`, and `slogan` into this language.
+          #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#force_language
           module ForceLanguage
             extend ContextDev::Internal::Type::Enum
@@ -2118,8 +2130,8 @@ module ContextDev
             #   @return [Array<Symbol>]
           end
 
-          # Optional Merchant Category Code (MCC) to help identify the business category or
-          # industry.
+          # Merchant Category Code (MCC) from the transaction. Helps identify the type of
+          # business.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#mcc
           module Mcc
@@ -2133,7 +2145,7 @@ module ContextDev
             #   @return [Array(String, Float)]
           end
 
-          # Optional phone number from the transaction to help verify brand match.
+          # Merchant phone number from the transaction. Helps confirm the match.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#phone
           module Phone
@@ -2156,8 +2168,8 @@ module ContextDev
             required :milliseconds, Integer
 
             # @!attribute behavior
-            #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-            #   inspect the response’s partial flag.
+            #   `fail` returns 408 at the deadline. `return-partial` returns the results
+            #   collected so far and marks the response as partial.
             #
             #   @return [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior, nil]
             optional :behavior,
@@ -2172,10 +2184,10 @@ module ContextDev
             #
             #   @param milliseconds [Integer] Deadline in milliseconds.
             #
-            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+            #   @param behavior [Symbol, ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-            # "fail" returns 408 at the deadline. "return-partial" returns available results;
-            # inspect the response’s partial flag.
+            # `fail` returns 408 at the deadline. `return-partial` returns the results
+            # collected so far and marks the response as partial.
             #
             # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction::TimeoutOpts#behavior
             module Behavior
@@ -2189,8 +2201,8 @@ module ContextDev
             end
           end
 
-          # `enabled` disables request logs and traces and omits request and response
-          # content from usage logs. Brand data and hosted assets may still be stored.
+          # `enabled` turns off request logs and traces and keeps request and response
+          # content out of usage logs. Brand data and hosted assets may still be stored.
           # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
           #
           # @see ContextDev::Models::BrandRetrieveParams::Body::ByTransaction#zdr

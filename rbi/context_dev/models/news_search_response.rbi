@@ -11,15 +11,15 @@ module ContextDev
           )
         end
 
-      # Articles matching the search, in the requested order.
+      # Articles on this page, in the requested order.
       sig { returns(T::Array[ContextDev::Models::NewsSearchResponse::Data]) }
       attr_accessor :data
 
-      # True when more results are available beyond this page.
+      # Whether more results are available after this page.
       sig { returns(T::Boolean) }
       attr_accessor :has_more
 
-      # Summary information about this response.
+      # Summary of this page.
       sig { returns(ContextDev::Models::NewsSearchResponse::Meta) }
       attr_reader :meta
 
@@ -28,8 +28,7 @@ module ContextDev
       end
       attr_writer :meta
 
-      # Pass as cursor in the next request to fetch the following page. Null when there
-      # are no more results.
+      # Pass as `cursor` to fetch the next page. `null` on the last page.
       sig { returns(T.nilable(String)) }
       attr_accessor :next_cursor
 
@@ -64,14 +63,13 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Articles matching the search, in the requested order.
+        # Articles on this page, in the requested order.
         data:,
-        # True when more results are available beyond this page.
+        # Whether more results are available after this page.
         has_more:,
-        # Summary information about this response.
+        # Summary of this page.
         meta:,
-        # Pass as cursor in the next request to fetch the following page. Null when there
-        # are no more results.
+        # Pass as `cursor` to fetch the next page. `null` on the last page.
         next_cursor:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
@@ -105,30 +103,29 @@ module ContextDev
             )
           end
 
-        # Stable unique identifier for this article. Use it to deduplicate or reference an
-        # article across requests.
+        # Unique ID of the article. It stays the same across requests, so you can use it
+        # to deduplicate.
         sig { returns(String) }
         attr_accessor :id
 
-        # Bylined authors. Empty when no byline is available.
+        # Authors named in the byline. Empty when there is no byline.
         sig { returns(T::Array[String]) }
         attr_accessor :authors
 
-        # Article summary or excerpt. Natural-language search descriptions include
-        # matching passages and are capped at 2,000 characters.
+        # Summary or excerpt of the article. For natural-language searches, it includes
+        # the matching passages, up to 2,000 characters.
         sig { returns(T.nilable(String)) }
         attr_accessor :description
 
-        # Lead image for the article, when one is available.
+        # URL of the article's lead image. `null` when there is none.
         sig { returns(T.nilable(String)) }
         attr_accessor :image_url
 
-        # Language the article is written in, as a lowercase ISO 639-1 code such as en.
-        # Null when unknown.
+        # Language of the article, as an ISO 639-1 code such as `en`. `null` when unknown.
         sig { returns(T.nilable(String)) }
         attr_accessor :language
 
-        # How the article relates to the company you searched for. Null for
+        # How the article relates to the company you searched for. `null` for
         # natural-language searches.
         sig do
           returns(
@@ -147,12 +144,12 @@ module ContextDev
         end
         attr_writer :match
 
-        # When the article was published, as an ISO 8601 timestamp. Null when the
-        # publisher does not state a reliable date.
+        # When the article was published. `null` when the publisher does not give a
+        # reliable date.
         sig { returns(T.nilable(Time)) }
         attr_accessor :published_at
 
-        # The publication that published the article.
+        # Publication that published the article.
         sig { returns(ContextDev::Models::NewsSearchResponse::Data::Source) }
         attr_reader :source
 
@@ -163,17 +160,17 @@ module ContextDev
         end
         attr_writer :source
 
-        # Shared by articles covering the same story on the same day. Use it to group or
-        # collapse syndicated copies of one announcement across outlets.
+        # ID shared by articles that cover the same story on the same day. Use it to group
+        # syndicated copies of one announcement across outlets.
         sig { returns(String) }
         attr_accessor :story_id
 
-        # Article headline.
+        # Headline of the article.
         sig { returns(String) }
         attr_accessor :title
 
-        # Kind of coverage. Use it to separate independent reporting (editorial) from
-        # company-issued content (press_release, regulatory_filing, advisory).
+        # Type of coverage. Use it to separate independent reporting (`editorial`) from
+        # company-issued content (`press_release`, `regulatory_filing`, `advisory`).
         sig do
           returns(
             ContextDev::Models::NewsSearchResponse::Data::Type::TaggedSymbol
@@ -181,7 +178,7 @@ module ContextDev
         end
         attr_accessor :type
 
-        # Link to the article on the publisher site.
+        # URL of the article on the publisher's site.
         sig { returns(String) }
         attr_accessor :url
 
@@ -206,36 +203,35 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Stable unique identifier for this article. Use it to deduplicate or reference an
-          # article across requests.
+          # Unique ID of the article. It stays the same across requests, so you can use it
+          # to deduplicate.
           id:,
-          # Bylined authors. Empty when no byline is available.
+          # Authors named in the byline. Empty when there is no byline.
           authors:,
-          # Article summary or excerpt. Natural-language search descriptions include
-          # matching passages and are capped at 2,000 characters.
+          # Summary or excerpt of the article. For natural-language searches, it includes
+          # the matching passages, up to 2,000 characters.
           description:,
-          # Lead image for the article, when one is available.
+          # URL of the article's lead image. `null` when there is none.
           image_url:,
-          # Language the article is written in, as a lowercase ISO 639-1 code such as en.
-          # Null when unknown.
+          # Language of the article, as an ISO 639-1 code such as `en`. `null` when unknown.
           language:,
-          # How the article relates to the company you searched for. Null for
+          # How the article relates to the company you searched for. `null` for
           # natural-language searches.
           match:,
-          # When the article was published, as an ISO 8601 timestamp. Null when the
-          # publisher does not state a reliable date.
+          # When the article was published. `null` when the publisher does not give a
+          # reliable date.
           published_at:,
-          # The publication that published the article.
+          # Publication that published the article.
           source:,
-          # Shared by articles covering the same story on the same day. Use it to group or
-          # collapse syndicated copies of one announcement across outlets.
+          # ID shared by articles that cover the same story on the same day. Use it to group
+          # syndicated copies of one announcement across outlets.
           story_id:,
-          # Article headline.
+          # Headline of the article.
           title:,
-          # Kind of coverage. Use it to separate independent reporting (editorial) from
-          # company-issued content (press_release, regulatory_filing, advisory).
+          # Type of coverage. Use it to separate independent reporting (`editorial`) from
+          # company-issued content (`press_release`, `regulatory_filing`, `advisory`).
           type:,
-          # Link to the article on the publisher site.
+          # URL of the article on the publisher's site.
           url:
         )
         end
@@ -272,12 +268,12 @@ module ContextDev
               )
             end
 
-          # How confident the match is, from 0 to 1. Null when a score is unavailable.
+          # Confidence in the match, from 0 to 1. `null` when no score is available.
           sig { returns(T.nilable(Float)) }
           attr_accessor :confidence
 
-          # primary when the article is mainly about the company, secondary when the company
-          # is mentioned but is not the main subject.
+          # `primary` when the article is mainly about the company; `secondary` when the
+          # company is mentioned but is not the main subject.
           sig do
             returns(
               ContextDev::Models::NewsSearchResponse::Data::Match::Level::TaggedSymbol
@@ -285,7 +281,7 @@ module ContextDev
           end
           attr_accessor :level
 
-          # How the article relates to the company you searched for. Null for
+          # How the article relates to the company you searched for. `null` for
           # natural-language searches.
           sig do
             params(
@@ -295,10 +291,10 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # How confident the match is, from 0 to 1. Null when a score is unavailable.
+            # Confidence in the match, from 0 to 1. `null` when no score is available.
             confidence:,
-            # primary when the article is mainly about the company, secondary when the company
-            # is mentioned but is not the main subject.
+            # `primary` when the article is mainly about the company; `secondary` when the
+            # company is mentioned but is not the main subject.
             level:
           )
           end
@@ -315,8 +311,8 @@ module ContextDev
           def to_hash
           end
 
-          # primary when the article is mainly about the company, secondary when the company
-          # is mentioned but is not the main subject.
+          # `primary` when the article is mainly about the company; `secondary` when the
+          # company is mentioned but is not the main subject.
           module Level
             extend ContextDev::Internal::Type::Enum
 
@@ -361,11 +357,12 @@ module ContextDev
               )
             end
 
-          # True when Context observed this article in the publisher-owned feed.
+          # Whether the article came directly from the publisher's own feed rather than
+          # through an aggregator.
           sig { returns(T::Boolean) }
           attr_accessor :direct
 
-          # Website domain of the publication.
+          # Website domain of the publication, such as `reuters.com`.
           sig { returns(String) }
           attr_accessor :domain
 
@@ -373,16 +370,17 @@ module ContextDev
           sig { returns(String) }
           attr_accessor :name
 
-          # The publication that published the article.
+          # Publication that published the article.
           sig do
             params(direct: T::Boolean, domain: String, name: String).returns(
               T.attached_class
             )
           end
           def self.new(
-            # True when Context observed this article in the publisher-owned feed.
+            # Whether the article came directly from the publisher's own feed rather than
+            # through an aggregator.
             direct:,
-            # Website domain of the publication.
+            # Website domain of the publication, such as `reuters.com`.
             domain:,
             # Name of the publication, such as Reuters.
             name:
@@ -398,8 +396,8 @@ module ContextDev
           end
         end
 
-        # Kind of coverage. Use it to separate independent reporting (editorial) from
-        # company-issued content (press_release, regulatory_filing, advisory).
+        # Type of coverage. Use it to separate independent reporting (`editorial`) from
+        # company-issued content (`press_release`, `regulatory_filing`, `advisory`).
         module Type
           extend ContextDev::Internal::Type::Enum
 
@@ -451,14 +449,14 @@ module ContextDev
             )
           end
 
-        # Number of articles in this page.
+        # Number of articles on this page.
         sig { returns(Integer) }
         attr_accessor :count
 
-        # Summary information about this response.
+        # Summary of this page.
         sig { params(count: Integer).returns(T.attached_class) }
         def self.new(
-          # Number of articles in this page.
+          # Number of articles on this page.
           count:
         )
         end
@@ -481,7 +479,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -494,7 +492,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

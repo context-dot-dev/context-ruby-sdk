@@ -5,14 +5,14 @@ module ContextDev
     # @see ContextDev::Resources::Feedback#submit
     class FeedbackSubmitResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute already_submitted
-      #   True when feedback for this request_id was already recorded; the original
-      #   feedback_id is returned.
+      #   `true` when feedback for this `request_id` was already recorded. `feedback_id`
+      #   is then the original ID.
       #
       #   @return [Boolean]
       required :already_submitted, ContextDev::Internal::Type::Boolean
 
       # @!attribute feedback_id
-      #   ID of the stored feedback.
+      #   Unique ID of the feedback.
       #
       #   @return [String]
       required :feedback_id, String
@@ -34,9 +34,9 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::FeedbackSubmitResponse} for more details.
       #
-      #   @param already_submitted [Boolean] True when feedback for this request_id was already recorded; the original feedba
+      #   @param already_submitted [Boolean] `true` when feedback for this `request_id` was already recorded. `feedback_id` i
       #
-      #   @param feedback_id [String] ID of the stored feedback.
+      #   @param feedback_id [String] Unique ID of the feedback.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
@@ -51,7 +51,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -61,7 +61,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

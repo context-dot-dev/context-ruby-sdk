@@ -11,15 +11,15 @@ module ContextDev
           )
         end
 
-      # Log entries, newest first.
+      # Log entries on this page, newest first.
       sig { returns(T::Array[ContextDev::Models::LogListResponse::Data]) }
       attr_accessor :data
 
-      # Whether a next page exists.
+      # Whether more results are available after this page.
       sig { returns(T::Boolean) }
       attr_accessor :has_more
 
-      # Entries per page.
+      # Maximum number of log entries to return per page.
       sig { returns(Integer) }
       attr_accessor :limit
 
@@ -56,11 +56,11 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Log entries, newest first.
+        # Log entries on this page, newest first.
         data:,
-        # Whether a next page exists.
+        # Whether more results are available after this page.
         has_more:,
-        # Entries per page.
+        # Maximum number of log entries to return per page.
         limit:,
         # Current page number.
         page:,
@@ -100,36 +100,36 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_used
 
-        # The `error_code` from the response, or null on success.
+        # The response's `error_code`. `null` on success.
         sig { returns(T.nilable(String)) }
         attr_accessor :error_code
 
-        # ID of the API key that made the request.
+        # ID of the API key that made the request. Can be `null` for `MONITOR` and `BATCH`
+        # entries.
         sig { returns(T.nilable(String)) }
         attr_accessor :key_id
 
-        # Server-side processing time in milliseconds.
+        # Server-side processing time, in milliseconds.
         sig { returns(Float) }
         attr_accessor :latency_ms
 
-        # HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement
-        # entries.
+        # HTTP method, or `MONITOR` for a monitor run and `BATCH` for a batch settlement.
         sig { returns(String) }
         attr_accessor :method_
 
-        # Endpoint path as called.
+        # Endpoint path that was called.
         sig { returns(String) }
         attr_accessor :path
 
-        # Request ID of the logged API call.
+        # ID of the logged request.
         sig { returns(String) }
         attr_accessor :request_id
 
-        # HTTP status code returned.
+        # HTTP status code of the response.
         sig { returns(Integer) }
         attr_accessor :status_code
 
-        # Request tags supplied by the caller.
+        # Tags sent with the request.
         sig { returns(T::Array[String]) }
         attr_accessor :tags
 
@@ -137,7 +137,7 @@ module ContextDev
         sig { returns(Time) }
         attr_accessor :timestamp
 
-        # Whether the request was made under zero data retention.
+        # Whether the request used zero data retention (ZDR).
         sig { returns(T::Boolean) }
         attr_accessor :zdr
 
@@ -159,26 +159,26 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_used:,
-          # The `error_code` from the response, or null on success.
+          # The response's `error_code`. `null` on success.
           error_code:,
-          # ID of the API key that made the request.
-          key_id:,
-          # Server-side processing time in milliseconds.
-          latency_ms:,
-          # HTTP method, or `MONITOR` / `BATCH` for monitor-run and batch-settlement
+          # ID of the API key that made the request. Can be `null` for `MONITOR` and `BATCH`
           # entries.
+          key_id:,
+          # Server-side processing time, in milliseconds.
+          latency_ms:,
+          # HTTP method, or `MONITOR` for a monitor run and `BATCH` for a batch settlement.
           method_:,
-          # Endpoint path as called.
+          # Endpoint path that was called.
           path:,
-          # Request ID of the logged API call.
+          # ID of the logged request.
           request_id:,
-          # HTTP status code returned.
+          # HTTP status code of the response.
           status_code:,
-          # Request tags supplied by the caller.
+          # Tags sent with the request.
           tags:,
           # When the request completed.
           timestamp:,
-          # Whether the request was made under zero data retention.
+          # Whether the request used zero data retention (ZDR).
           zdr:
         )
         end
@@ -217,7 +217,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -230,7 +230,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

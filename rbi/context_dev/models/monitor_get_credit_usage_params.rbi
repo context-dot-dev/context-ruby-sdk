@@ -14,22 +14,22 @@ module ContextDev
           )
         end
 
-      # Only include items at or after this ISO 8601 timestamp.
+      # Count only runs created at or after this time.
       sig { returns(T.nilable(Time)) }
       attr_reader :since
 
       sig { params(since: Time).void }
       attr_writer :since
 
-      # Only include monitors that currently have this tag. Deleted monitors are left
-      # out.
+      # Return usage only for monitors that currently have this tag. Deleted monitors
+      # are excluded.
       sig { returns(T.nilable(String)) }
       attr_reader :tag
 
       sig { params(tag: String).void }
       attr_writer :tag
 
-      # Only include items before this ISO 8601 timestamp.
+      # Count only runs created at or before this time.
       sig { returns(T.nilable(Time)) }
       attr_reader :until_
 
@@ -45,12 +45,12 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Only include items at or after this ISO 8601 timestamp.
+        # Count only runs created at or after this time.
         since: nil,
-        # Only include monitors that currently have this tag. Deleted monitors are left
-        # out.
+        # Return usage only for monitors that currently have this tag. Deleted monitors
+        # are excluded.
         tag: nil,
-        # Only include items before this ISO 8601 timestamp.
+        # Count only runs created at or before this time.
         until_: nil,
         request_options: {}
       )

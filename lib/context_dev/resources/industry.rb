@@ -2,6 +2,7 @@
 
 module ContextDev
   module Resources
+    # Extract structured data, competitors, styleguides, and fonts from any website.
     class Industry
       # @deprecated
       #
@@ -18,7 +19,7 @@ module ContextDev
       #
       # @param min_results [Integer] Minimum number of NAICS codes to return. Must be at least 1. Defaults to 1.
       #
-      # @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      # @param tags [Array<String>] Comma-separated labels for this request, such as `production,team-alpha`. Filter
       #
       # @param timeout_opts [ContextDev::Models::IndustryRetrieveNaicsParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
@@ -60,7 +61,7 @@ module ContextDev
       #
       # @param min_results [Integer] Minimum number of SIC codes to return. Must be at least 1. Defaults to 1.
       #
-      # @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      # @param tags [Array<String>] Comma-separated labels for this request, such as `production,team-alpha`. Filter
       #
       # @param timeout_opts [ContextDev::Models::IndustryRetrieveSicParams::TimeoutOpts] Request deadline and what to return when it passes.
       #

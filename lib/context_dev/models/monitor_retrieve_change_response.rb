@@ -5,28 +5,32 @@ module ContextDev
     # @see ContextDev::Resources::Monitors#retrieve_change
     class MonitorRetrieveChangeResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute id
+      #   Unique ID of the change.
       #
       #   @return [String]
       required :id, String
 
       # @!attribute change_detection_type
+      #   Change detection type the monitor uses.
       #
       #   @return [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType]
       required :change_detection_type,
                enum: -> { ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType }
 
       # @!attribute detected_at
+      #   When the change was detected.
       #
       #   @return [Time]
       required :detected_at, Time
 
       # @!attribute mode
-      #   Always `web`. Optional.
+      #   Monitor category. Always `web`.
       #
       #   @return [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::Mode]
       required :mode, enum: -> { ContextDev::Models::MonitorRetrieveChangeResponse::Mode }
 
       # @!attribute monitor_id
+      #   ID of the monitor that detected the change.
       #
       #   @return [String]
       required :monitor_id, String
@@ -39,77 +43,88 @@ module ContextDev
       required :request_id, String
 
       # @!attribute run_id
-      #   The run that detected this change.
+      #   ID of the run that detected the change.
       #
       #   @return [String]
       required :run_id, String
 
       # @!attribute summary
+      #   Plain-language summary of what changed.
       #
       #   @return [String]
       required :summary, String
 
       # @!attribute tags
-      #   Labels for filtering monitors, their changes, and their usage.
+      #   Tags the monitor had when the change was detected.
       #
       #   @return [Array<String>]
       required :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute target_type
+      #   Type of target the monitor watches.
       #
       #   @return [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::TargetType]
       required :target_type, enum: -> { ContextDev::Models::MonitorRetrieveChangeResponse::TargetType }
 
       # @!attribute title
+      #   Short headline for the change.
       #
       #   @return [String]
       required :title, String
 
       # @!attribute url
-      #   The monitored URL. For search targets, the first newly reported result.
+      #   Monitored URL. For search targets, the first new result.
       #
       #   @return [String]
       required :url, String
 
       # @!attribute added_url_count
+      #   Total number of URLs added.
       #
       #   @return [Integer, nil]
       optional :added_url_count, Integer
 
       # @!attribute added_urls
-      #   At most 500 URLs are included; the corresponding count field is always exact.
+      #   URLs added to the sitemap, up to 500. `added_url_count` has the full count.
       #
       #   @return [Array<String>, nil]
       optional :added_urls, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute after_text_excerpt
+      #   Excerpt of the page text after the change. Page targets only.
       #
       #   @return [String, nil]
       optional :after_text_excerpt, String
 
       # @!attribute before_text_excerpt
+      #   Excerpt of the page text before the change. Page targets only.
       #
       #   @return [String, nil]
       optional :before_text_excerpt, String
 
       # @!attribute confidence
+      #   Confidence that the change matters, from 0 to 1. Set by `semantic` detection
+      #   only.
       #
       #   @return [Float, nil]
       optional :confidence, Float
 
       # @!attribute diff
-      #   Text diff between the previous and current page baseline (page targets).
+      #   Text diff of the change, for page and extract targets. Extract diffs have one
+      #   section per changed page.
       #
       #   @return [String, nil]
       optional :diff, String
 
       # @!attribute evidence
+      #   Before and after excerpts that support the change.
       #
       #   @return [Array<ContextDev::Models::MonitorRetrieveChangeResponse::Evidence>, nil]
       optional :evidence,
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::MonitorRetrieveChangeResponse::Evidence] }
 
       # @!attribute importance
+      #   How important the change is. Set by `semantic` detection only.
       #
       #   @return [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::Importance, nil]
       optional :importance, enum: -> { ContextDev::Models::MonitorRetrieveChangeResponse::Importance }
@@ -121,23 +136,28 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::MonitorRetrieveChangeResponse::KeyMetadata }
 
       # @!attribute matched_url_count
+      #   Total number of matched URLs.
       #
       #   @return [Integer, nil]
       optional :matched_url_count, Integer
 
       # @!attribute matched_urls
-      #   At most 500 URLs are included; the corresponding count field is always exact.
+      #   URLs where the change was found: the changed pages for page and extract targets,
+      #   or the new results for search targets. Up to 500; `matched_url_count` has the
+      #   full count.
       #
       #   @return [Array<String>, nil]
       optional :matched_urls, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute removed_url_count
+      #   Total number of URLs removed.
       #
       #   @return [Integer, nil]
       optional :removed_url_count, Integer
 
       # @!attribute removed_urls
-      #   At most 500 URLs are included; the corresponding count field is always exact.
+      #   URLs removed from the sitemap, or pages no longer found for extract targets, up
+      #   to 500. `removed_url_count` has the full count.
       #
       #   @return [Array<String>, nil]
       optional :removed_urls, ContextDev::Internal::Type::ArrayOf[String]
@@ -146,56 +166,58 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::MonitorRetrieveChangeResponse} for more details.
       #
-      #   @param id [String]
+      #   @param id [String] Unique ID of the change.
       #
-      #   @param change_detection_type [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType]
+      #   @param change_detection_type [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::ChangeDetectionType] Change detection type the monitor uses.
       #
-      #   @param detected_at [Time]
+      #   @param detected_at [Time] When the change was detected.
       #
-      #   @param mode [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::Mode] Always `web`. Optional.
+      #   @param mode [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::Mode] Monitor category. Always `web`.
       #
-      #   @param monitor_id [String]
+      #   @param monitor_id [String] ID of the monitor that detected the change.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param run_id [String] The run that detected this change.
+      #   @param run_id [String] ID of the run that detected the change.
       #
-      #   @param summary [String]
+      #   @param summary [String] Plain-language summary of what changed.
       #
-      #   @param tags [Array<String>] Labels for filtering monitors, their changes, and their usage.
+      #   @param tags [Array<String>] Tags the monitor had when the change was detected.
       #
-      #   @param target_type [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::TargetType]
+      #   @param target_type [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::TargetType] Type of target the monitor watches.
       #
-      #   @param title [String]
+      #   @param title [String] Short headline for the change.
       #
-      #   @param url [String] The monitored URL. For search targets, the first newly reported result.
+      #   @param url [String] Monitored URL. For search targets, the first new result.
       #
-      #   @param added_url_count [Integer]
+      #   @param added_url_count [Integer] Total number of URLs added.
       #
-      #   @param added_urls [Array<String>] At most 500 URLs are included; the corresponding count field is always exact.
+      #   @param added_urls [Array<String>] URLs added to the sitemap, up to 500. `added_url_count` has the full count.
       #
-      #   @param after_text_excerpt [String]
+      #   @param after_text_excerpt [String] Excerpt of the page text after the change. Page targets only.
       #
-      #   @param before_text_excerpt [String]
+      #   @param before_text_excerpt [String] Excerpt of the page text before the change. Page targets only.
       #
-      #   @param confidence [Float]
+      #   @param confidence [Float] Confidence that the change matters, from 0 to 1. Set by `semantic` detection onl
       #
-      #   @param diff [String] Text diff between the previous and current page baseline (page targets).
+      #   @param diff [String] Text diff of the change, for page and extract targets. Extract diffs have one se
       #
-      #   @param evidence [Array<ContextDev::Models::MonitorRetrieveChangeResponse::Evidence>]
+      #   @param evidence [Array<ContextDev::Models::MonitorRetrieveChangeResponse::Evidence>] Before and after excerpts that support the change.
       #
-      #   @param importance [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::Importance]
+      #   @param importance [Symbol, ContextDev::Models::MonitorRetrieveChangeResponse::Importance] How important the change is. Set by `semantic` detection only.
       #
       #   @param key_metadata [ContextDev::Models::MonitorRetrieveChangeResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param matched_url_count [Integer]
+      #   @param matched_url_count [Integer] Total number of matched URLs.
       #
-      #   @param matched_urls [Array<String>] At most 500 URLs are included; the corresponding count field is always exact.
+      #   @param matched_urls [Array<String>] URLs where the change was found: the changed pages for page and extract targets,
       #
-      #   @param removed_url_count [Integer]
+      #   @param removed_url_count [Integer] Total number of URLs removed.
       #
-      #   @param removed_urls [Array<String>] At most 500 URLs are included; the corresponding count field is always exact.
+      #   @param removed_urls [Array<String>] URLs removed from the sitemap, or pages no longer found for extract targets, up
 
+      # Change detection type the monitor uses.
+      #
       # @see ContextDev::Models::MonitorRetrieveChangeResponse#change_detection_type
       module ChangeDetectionType
         extend ContextDev::Internal::Type::Enum
@@ -207,7 +229,7 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Always `web`. Optional.
+      # Monitor category. Always `web`.
       #
       # @see ContextDev::Models::MonitorRetrieveChangeResponse#mode
       module Mode
@@ -219,6 +241,8 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
+      # Type of target the monitor watches.
+      #
       # @see ContextDev::Models::MonitorRetrieveChangeResponse#target_type
       module TargetType
         extend ContextDev::Internal::Type::Enum
@@ -234,31 +258,38 @@ module ContextDev
 
       class Evidence < ContextDev::Internal::Type::BaseModel
         # @!attribute after
-        #   Snapshot of the content after the change.
+        #   Content after the change.
         #
         #   @return [String]
         required :after, String
 
         # @!attribute before
-        #   Snapshot of the content before the change.
+        #   Content before the change. Empty for new search results.
         #
         #   @return [String]
         required :before, String
 
         # @!attribute url
-        #   Optional URL the evidence relates to. Absent for whole-target diffs.
+        #   Page the evidence comes from. Omitted when the evidence covers the whole target.
         #
         #   @return [String, nil]
         optional :url, String
 
         # @!method initialize(after:, before:, url: nil)
-        #   @param after [String] Snapshot of the content after the change.
+        #   Some parameter documentations has been truncated, see
+        #   {ContextDev::Models::MonitorRetrieveChangeResponse::Evidence} for more details.
         #
-        #   @param before [String] Snapshot of the content before the change.
+        #   Before and after excerpts that support a change.
         #
-        #   @param url [String] Optional URL the evidence relates to. Absent for whole-target diffs.
+        #   @param after [String] Content after the change.
+        #
+        #   @param before [String] Content before the change. Empty for new search results.
+        #
+        #   @param url [String] Page the evidence comes from. Omitted when the evidence covers the whole target.
       end
 
+      # How important the change is. Set by `semantic` detection only.
+      #
       # @see ContextDev::Models::MonitorRetrieveChangeResponse#importance
       module Importance
         extend ContextDev::Internal::Type::Enum
@@ -280,7 +311,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -290,7 +321,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

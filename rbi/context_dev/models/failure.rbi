@@ -8,21 +8,21 @@ module ContextDev
           T.any(ContextDev::Failure, ContextDev::Internal::AnyHash)
         end
 
-      # Why the batch itself stopped.
+      # Machine-readable failure code, such as `stalled` or `USAGE_EXCEEDED`.
       sig { returns(String) }
       attr_accessor :code
 
-      # Human-readable explanation.
+      # Human-readable explanation of the failure.
       sig { returns(String) }
       attr_accessor :message
 
-      # A failure of the batch as a whole, distinct from the per-page failures in
+      # Why the batch as a whole failed. Individual page failures are counted in
       # `page_errors`.
       sig { params(code: String, message: String).returns(T.attached_class) }
       def self.new(
-        # Why the batch itself stopped.
+        # Machine-readable failure code, such as `stalled` or `USAGE_EXCEEDED`.
         code:,
-        # Human-readable explanation.
+        # Human-readable explanation of the failure.
         message:
       )
       end

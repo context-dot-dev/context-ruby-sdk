@@ -5,13 +5,13 @@ module ContextDev
     # @see ContextDev::Resources::Web#search
     class WebSearchResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute cache_metadata
-      #   Whether this response came from cache.
+      #   Cache status of this response.
       #
       #   @return [ContextDev::Models::WebSearchResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::WebSearchResponse::CacheMetadata }
 
       # @!attribute query
-      #   Echo of the original query (useful when fanout was enabled).
+      #   The query you sent.
       #
       #   @return [String]
       required :query, String
@@ -36,9 +36,9 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::WebSearchResponse::KeyMetadata }
 
       # @!attribute partial
-      #   True when timeoutOpts.behavior=return-partial returned the usable results
-      #   collected before the deadline. Partial collections are not cached as complete
-      #   results.
+      #   `true` when the deadline passed with `timeoutOpts.behavior` set to
+      #   `return-partial`. Only results finished in time are included. Partial results
+      #   are not cached.
       #
       #   @return [Boolean, nil]
       optional :partial, ContextDev::Internal::Type::Boolean
@@ -47,9 +47,9 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebSearchResponse} for more details.
       #
-      #   @param cache_metadata [ContextDev::Models::WebSearchResponse::CacheMetadata] Whether this response came from cache.
+      #   @param cache_metadata [ContextDev::Models::WebSearchResponse::CacheMetadata] Cache status of this response.
       #
-      #   @param query [String] Echo of the original query (useful when fanout was enabled).
+      #   @param query [String] The query you sent.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
@@ -57,19 +57,19 @@ module ContextDev
       #
       #   @param key_metadata [ContextDev::Models::WebSearchResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param partial [Boolean] True when timeoutOpts.behavior=return-partial returned the usable results collec
+      #   @param partial [Boolean] `true` when the deadline passed with `timeoutOpts.behavior` set to `return-parti
 
       # @see ContextDev::Models::WebSearchResponse#cache_metadata
       class CacheMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute age_ms
-        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
         #   @return [Integer]
         required :age_ms, Integer
 
         # @!attribute status
-        #   Whether the response was served from cache, required fresh work, or honored
-        #   zero-data-retention cache bypass.
+        #   `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        #   retention bypassed the cache.
         #
         #   @return [Symbol, ContextDev::Models::WebSearchResponse::CacheMetadata::Status]
         required :status, enum: -> { ContextDev::Models::WebSearchResponse::CacheMetadata::Status }
@@ -78,14 +78,14 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::WebSearchResponse::CacheMetadata} for more details.
         #
-        #   Whether this response came from cache.
+        #   Cache status of this response.
         #
-        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   @param age_ms [Integer] Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
-        #   @param status [Symbol, ContextDev::Models::WebSearchResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+        #   @param status [Symbol, ContextDev::Models::WebSearchResponse::CacheMetadata::Status] `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data re
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         #
         # @see ContextDev::Models::WebSearchResponse::CacheMetadata#status
         module Status
@@ -102,8 +102,7 @@ module ContextDev
 
       class Result < ContextDev::Internal::Type::BaseModel
         # @!attribute description
-        #   Snippet excerpt from the page. Empty string when the search provider does not
-        #   supply a snippet.
+        #   Snippet from the page. Empty string when no snippet is available.
         #
         #   @return [String]
         required :description, String
@@ -121,7 +120,7 @@ module ContextDev
         required :markdown, -> { ContextDev::Models::WebSearchResponse::Result::Markdown }
 
         # @!attribute relevance
-        #   Relevance to the original query.
+        #   How relevant the result is to the query.
         #
         #   @return [Symbol, ContextDev::Models::WebSearchResponse::Result::Relevance]
         required :relevance, enum: -> { ContextDev::Models::WebSearchResponse::Result::Relevance }
@@ -139,16 +138,13 @@ module ContextDev
         required :url, String
 
         # @!method initialize(description:, highlights:, markdown:, relevance:, title:, url:)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::WebSearchResponse::Result} for more details.
-        #
-        #   @param description [String] Snippet excerpt from the page. Empty string when the search provider does not su
+        #   @param description [String] Snippet from the page. Empty string when no snippet is available.
         #
         #   @param highlights [ContextDev::Models::WebSearchResponse::Result::Highlights] Highlights status and passages for this result.
         #
         #   @param markdown [ContextDev::Models::WebSearchResponse::Result::Markdown] Markdown scrape status and content for this result.
         #
-        #   @param relevance [Symbol, ContextDev::Models::WebSearchResponse::Result::Relevance] Relevance to the original query.
+        #   @param relevance [Symbol, ContextDev::Models::WebSearchResponse::Result::Relevance] How relevant the result is to the query.
         #
         #   @param title [String] Page title.
         #
@@ -157,14 +153,14 @@ module ContextDev
         # @see ContextDev::Models::WebSearchResponse::Result#highlights
         class Highlights < ContextDev::Internal::Type::BaseModel
           # @!attribute code
-          #   Per-result highlights outcome. Inspect this before reading `highlights`.
+          #   Highlights outcome for this result. Check it before reading `highlights`.
           #
           #   @return [Symbol, ContextDev::Models::WebSearchResponse::Result::Highlights::Code]
           required :code, enum: -> { ContextDev::Models::WebSearchResponse::Result::Highlights::Code }
 
           # @!attribute highlights
-          #   Passages relevant to the query, in page order. Null unless
-          #   highlightsOptions.enabled is true and the page was read.
+          #   Passages relevant to the query, in page order. `null` unless
+          #   `highlightsOptions.enabled` is `true` and the page was read.
           #
           #   @return [Array<String>, nil]
           required :highlights, ContextDev::Internal::Type::ArrayOf[String], nil?: true
@@ -181,13 +177,13 @@ module ContextDev
           #
           #   Highlights status and passages for this result.
           #
-          #   @param code [Symbol, ContextDev::Models::WebSearchResponse::Result::Highlights::Code] Per-result highlights outcome. Inspect this before reading `highlights`.
+          #   @param code [Symbol, ContextDev::Models::WebSearchResponse::Result::Highlights::Code] Highlights outcome for this result. Check it before reading `highlights`.
           #
-          #   @param highlights [Array<String>, nil] Passages relevant to the query, in page order. Null unless highlightsOptions.ena
+          #   @param highlights [Array<String>, nil] Passages relevant to the query, in page order. `null` unless `highlightsOptions.
           #
           #   @param message [String] Why this output is missing. Present only when `code` is a failure.
 
-          # Per-result highlights outcome. Inspect this before reading `highlights`.
+          # Highlights outcome for this result. Check it before reading `highlights`.
           #
           # @see ContextDev::Models::WebSearchResponse::Result::Highlights#code
           module Code
@@ -210,14 +206,14 @@ module ContextDev
         # @see ContextDev::Models::WebSearchResponse::Result#markdown
         class Markdown < ContextDev::Internal::Type::BaseModel
           # @!attribute code
-          #   Per-result scrape outcome. Inspect this before reading `markdown`.
+          #   Scrape outcome for this result. Check it before reading `markdown`.
           #
           #   @return [Symbol, ContextDev::Models::WebSearchResponse::Result::Markdown::Code]
           required :code, enum: -> { ContextDev::Models::WebSearchResponse::Result::Markdown::Code }
 
           # @!attribute markdown
-          #   GFM Markdown of the page. Null unless markdownOptions.enabled is true and
-          #   scraping succeeded.
+          #   Page content as GitHub-flavored Markdown. `null` unless
+          #   `markdownOptions.enabled` is `true` and the scrape succeeded.
           #
           #   @return [String, nil]
           required :markdown, String, nil?: true
@@ -243,15 +239,15 @@ module ContextDev
           #
           #   Markdown scrape status and content for this result.
           #
-          #   @param code [Symbol, ContextDev::Models::WebSearchResponse::Result::Markdown::Code] Per-result scrape outcome. Inspect this before reading `markdown`.
+          #   @param code [Symbol, ContextDev::Models::WebSearchResponse::Result::Markdown::Code] Scrape outcome for this result. Check it before reading `markdown`.
           #
-          #   @param markdown [String, nil] GFM Markdown of the page. Null unless markdownOptions.enabled is true and scrapi
+          #   @param markdown [String, nil] Page content as GitHub-flavored Markdown. `null` unless `markdownOptions.enabled
           #
           #   @param final_dom_state [Symbol, ContextDev::Models::WebSearchResponse::Result::Markdown::FinalDomState] `loaded`, or `still-loading` when capture ended before the page finished loading
           #
           #   @param message [String] Why this output is missing. Present only when `code` is a failure.
 
-          # Per-result scrape outcome. Inspect this before reading `markdown`.
+          # Scrape outcome for this result. Check it before reading `markdown`.
           #
           # @see ContextDev::Models::WebSearchResponse::Result::Markdown#code
           module Code
@@ -285,7 +281,7 @@ module ContextDev
           end
         end
 
-        # Relevance to the original query.
+        # How relevant the result is to the query.
         #
         # @see ContextDev::Models::WebSearchResponse::Result#relevance
         module Relevance
@@ -309,7 +305,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -319,7 +315,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end

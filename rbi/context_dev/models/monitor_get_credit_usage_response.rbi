@@ -11,6 +11,7 @@ module ContextDev
           )
         end
 
+      # Usage per monitor, highest first.
       sig do
         returns(
           T::Array[ContextDev::Models::MonitorGetCreditUsageResponse::Data]
@@ -23,7 +24,7 @@ module ContextDev
       sig { returns(String) }
       attr_accessor :request_id
 
-      # Sum of credits across all monitors in the window.
+      # Total credits across the monitors in `data`.
       sig { returns(Integer) }
       attr_accessor :total_credits
 
@@ -58,11 +59,12 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
+        # Usage per monitor, highest first.
         data:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
         request_id:,
-        # Sum of credits across all monitors in the window.
+        # Total credits across the monitors in `data`.
         total_credits:,
         # Credits this request used and your remaining balance.
         key_metadata: nil
@@ -93,18 +95,19 @@ module ContextDev
             )
           end
 
-        # Credits charged to this monitor over the window.
+        # Credits charged to the monitor in the window.
         sig { returns(Integer) }
         attr_accessor :credits
 
+        # ID of the monitor.
         sig { returns(String) }
         attr_accessor :monitor_id
 
-        # Monitor name (falls back to the id when the monitor was deleted).
+        # Name of the monitor, or its ID if the monitor was deleted.
         sig { returns(String) }
         attr_accessor :name
 
-        # Number of billed runs over the window.
+        # Number of billed runs in the window.
         sig { returns(Integer) }
         attr_accessor :runs
 
@@ -117,12 +120,13 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Credits charged to this monitor over the window.
+          # Credits charged to the monitor in the window.
           credits:,
+          # ID of the monitor.
           monitor_id:,
-          # Monitor name (falls back to the id when the monitor was deleted).
+          # Name of the monitor, or its ID if the monitor was deleted.
           name:,
-          # Number of billed runs over the window.
+          # Number of billed runs in the window.
           runs:
         )
         end
@@ -154,7 +158,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -167,7 +171,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

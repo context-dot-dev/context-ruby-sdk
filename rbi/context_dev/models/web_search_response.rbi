@@ -11,7 +11,7 @@ module ContextDev
           )
         end
 
-      # Whether this response came from cache.
+      # Cache status of this response.
       sig { returns(ContextDev::Models::WebSearchResponse::CacheMetadata) }
       attr_reader :cache_metadata
 
@@ -23,7 +23,7 @@ module ContextDev
       end
       attr_writer :cache_metadata
 
-      # Echo of the original query (useful when fanout was enabled).
+      # The query you sent.
       sig { returns(String) }
       attr_accessor :query
 
@@ -49,9 +49,9 @@ module ContextDev
       end
       attr_writer :key_metadata
 
-      # True when timeoutOpts.behavior=return-partial returned the usable results
-      # collected before the deadline. Partial collections are not cached as complete
-      # results.
+      # `true` when the deadline passed with `timeoutOpts.behavior` set to
+      # `return-partial`. Only results finished in time are included. Partial results
+      # are not cached.
       sig { returns(T.nilable(T::Boolean)) }
       attr_reader :partial
 
@@ -72,9 +72,9 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Whether this response came from cache.
+        # Cache status of this response.
         cache_metadata:,
-        # Echo of the original query (useful when fanout was enabled).
+        # The query you sent.
         query:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
@@ -82,9 +82,9 @@ module ContextDev
         results:,
         # Credits this request used and your remaining balance.
         key_metadata: nil,
-        # True when timeoutOpts.behavior=return-partial returned the usable results
-        # collected before the deadline. Partial collections are not cached as complete
-        # results.
+        # `true` when the deadline passed with `timeoutOpts.behavior` set to
+        # `return-partial`. Only results finished in time are included. Partial results
+        # are not cached.
         partial: nil
       )
       end
@@ -114,12 +114,12 @@ module ContextDev
             )
           end
 
-        # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         sig { returns(Integer) }
         attr_accessor :age_ms
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         sig do
           returns(
             ContextDev::Models::WebSearchResponse::CacheMetadata::Status::TaggedSymbol
@@ -127,7 +127,7 @@ module ContextDev
         end
         attr_accessor :status
 
-        # Whether this response came from cache.
+        # Cache status of this response.
         sig do
           params(
             age_ms: Integer,
@@ -136,10 +136,10 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Age of the cached data in milliseconds. Zero for miss and zdr responses.
+          # Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
           age_ms:,
-          # Whether the response was served from cache, required fresh work, or honored
-          # zero-data-retention cache bypass.
+          # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+          # retention bypassed the cache.
           status:
         )
         end
@@ -156,8 +156,8 @@ module ContextDev
         def to_hash
         end
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         module Status
           extend ContextDev::Internal::Type::Enum
 
@@ -207,8 +207,7 @@ module ContextDev
             )
           end
 
-        # Snippet excerpt from the page. Empty string when the search provider does not
-        # supply a snippet.
+        # Snippet from the page. Empty string when no snippet is available.
         sig { returns(String) }
         attr_accessor :description
 
@@ -238,7 +237,7 @@ module ContextDev
         end
         attr_writer :markdown
 
-        # Relevance to the original query.
+        # How relevant the result is to the query.
         sig do
           returns(
             ContextDev::Models::WebSearchResponse::Result::Relevance::TaggedSymbol
@@ -268,14 +267,13 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Snippet excerpt from the page. Empty string when the search provider does not
-          # supply a snippet.
+          # Snippet from the page. Empty string when no snippet is available.
           description:,
           # Highlights status and passages for this result.
           highlights:,
           # Markdown scrape status and content for this result.
           markdown:,
-          # Relevance to the original query.
+          # How relevant the result is to the query.
           relevance:,
           # Page title.
           title:,
@@ -310,7 +308,7 @@ module ContextDev
               )
             end
 
-          # Per-result highlights outcome. Inspect this before reading `highlights`.
+          # Highlights outcome for this result. Check it before reading `highlights`.
           sig do
             returns(
               ContextDev::Models::WebSearchResponse::Result::Highlights::Code::TaggedSymbol
@@ -318,8 +316,8 @@ module ContextDev
           end
           attr_accessor :code
 
-          # Passages relevant to the query, in page order. Null unless
-          # highlightsOptions.enabled is true and the page was read.
+          # Passages relevant to the query, in page order. `null` unless
+          # `highlightsOptions.enabled` is `true` and the page was read.
           sig { returns(T.nilable(T::Array[String])) }
           attr_accessor :highlights
 
@@ -340,10 +338,10 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Per-result highlights outcome. Inspect this before reading `highlights`.
+            # Highlights outcome for this result. Check it before reading `highlights`.
             code:,
-            # Passages relevant to the query, in page order. Null unless
-            # highlightsOptions.enabled is true and the page was read.
+            # Passages relevant to the query, in page order. `null` unless
+            # `highlightsOptions.enabled` is `true` and the page was read.
             highlights:,
             # Why this output is missing. Present only when `code` is a failure.
             message: nil
@@ -363,7 +361,7 @@ module ContextDev
           def to_hash
           end
 
-          # Per-result highlights outcome. Inspect this before reading `highlights`.
+          # Highlights outcome for this result. Check it before reading `highlights`.
           module Code
             extend ContextDev::Internal::Type::Enum
 
@@ -438,7 +436,7 @@ module ContextDev
               )
             end
 
-          # Per-result scrape outcome. Inspect this before reading `markdown`.
+          # Scrape outcome for this result. Check it before reading `markdown`.
           sig do
             returns(
               ContextDev::Models::WebSearchResponse::Result::Markdown::Code::TaggedSymbol
@@ -446,8 +444,8 @@ module ContextDev
           end
           attr_accessor :code
 
-          # GFM Markdown of the page. Null unless markdownOptions.enabled is true and
-          # scraping succeeded.
+          # Page content as GitHub-flavored Markdown. `null` unless
+          # `markdownOptions.enabled` is `true` and the scrape succeeded.
           sig { returns(T.nilable(String)) }
           attr_accessor :markdown
 
@@ -489,10 +487,10 @@ module ContextDev
             ).returns(T.attached_class)
           end
           def self.new(
-            # Per-result scrape outcome. Inspect this before reading `markdown`.
+            # Scrape outcome for this result. Check it before reading `markdown`.
             code:,
-            # GFM Markdown of the page. Null unless markdownOptions.enabled is true and
-            # scraping succeeded.
+            # Page content as GitHub-flavored Markdown. `null` unless
+            # `markdownOptions.enabled` is `true` and the scrape succeeded.
             markdown:,
             # `loaded`, or `still-loading` when capture ended before the page finished
             # loading.
@@ -517,7 +515,7 @@ module ContextDev
           def to_hash
           end
 
-          # Per-result scrape outcome. Inspect this before reading `markdown`.
+          # Scrape outcome for this result. Check it before reading `markdown`.
           module Code
             extend ContextDev::Internal::Type::Enum
 
@@ -619,7 +617,7 @@ module ContextDev
           end
         end
 
-        # Relevance to the original query.
+        # How relevant the result is to the query.
         module Relevance
           extend ContextDev::Internal::Type::Enum
 
@@ -673,7 +671,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -686,7 +684,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

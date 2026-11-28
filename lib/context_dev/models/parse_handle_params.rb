@@ -13,63 +13,67 @@ module ContextDev
       required :body, ContextDev::Internal::Type::FileInput
 
       # @!attribute client
-      #   Optional client identifier used for usage attribution.
+      #   Client identifier for usage attribution.
       #
       #   @return [String, nil]
       optional :client, String
 
       # @!attribute extension
-      #   Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
-      #   md, py, rtf, jpg, png, txt, warc, or warc.gz.
+      #   File type hint, such as `pdf`, `docx`, `xlsx`, `pptx`, `html`, `json`, `csv`,
+      #   `md`, `py`, `rtf`, `jpg`, `png`, `txt`, `warc`, or `warc.gz`. Use it when the
+      #   `Content-Type` header is missing or generic.
       #
       #   @return [Symbol, ContextDev::Models::ParseHandleParams::Extension, nil]
       optional :extension, enum: -> { ContextDev::ParseHandleParams::Extension }
 
       # @!attribute include_images
-      #   Include image references in Markdown output
+      #   Include image references in the Markdown.
       #
       #   @return [Boolean, nil]
       optional :include_images, ContextDev::Internal::Type::Boolean
 
       # @!attribute include_links
-      #   Preserve hyperlinks in Markdown output
+      #   Keep link URLs in the Markdown.
       #
       #   @return [Boolean, nil]
       optional :include_links, ContextDev::Internal::Type::Boolean
 
       # @!attribute include_numbered_pages
-      #   Start each PDF page in the Markdown with a `<!-- page N -->` line, where N is
+      #   Start each PDF page in the Markdown with a `<!-- page N -->` line, where `N` is
       #   the original 1-based page number.
       #
       #   @return [Boolean, nil]
       optional :include_numbered_pages, ContextDev::Internal::Type::Boolean
 
       # @!attribute ocr
-      #   Read text from images and scanned PDF pages. PDF page ranges still apply.
+      #   Read text from images and scanned PDF pages with OCR, within the `pdf` page
+      #   range. Adds 1 credit per page read.
       #
       #   @return [Boolean, nil]
       optional :ocr, ContextDev::Internal::Type::Boolean
 
       # @!attribute pdf
-      #   PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
+      #   PDF page range as a JSON object, such as `{"start": 2, "end": 5}`.
       #
       #   @return [ContextDev::Models::ParseHandleParams::Pdf, nil]
       optional :pdf, -> { ContextDev::ParseHandleParams::Pdf }
 
       # @!attribute shorten_base64_images
-      #   Shorten base64-encoded image data in the Markdown output
+      #   Shorten inline base64 image data.
       #
       #   @return [Boolean, nil]
       optional :shorten_base64_images, ContextDev::Internal::Type::Boolean
 
       # @!attribute tags
-      #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      #   Comma-separated labels for this request, such as `production,team-alpha`. Filter
+      #   usage and request logs by them.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute use_main_content_only
-      #   Extract only the main content from HTML-like inputs
+      #   Keep only the main content, without navigation, headers, footers, or sidebars.
+      #   Applies to HTML-like inputs.
       #
       #   @return [Boolean, nil]
       optional :use_main_content_only, ContextDev::Internal::Type::Boolean
@@ -87,32 +91,33 @@ module ContextDev
       #
       #   @param body [Pathname, StringIO, IO, String, ContextDev::FilePart]
       #
-      #   @param client [String] Optional client identifier used for usage attribution.
+      #   @param client [String] Client identifier for usage attribution.
       #
-      #   @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv, md
+      #   @param extension [Symbol, ContextDev::Models::ParseHandleParams::Extension] File type hint, such as `pdf`, `docx`, `xlsx`, `pptx`, `html`, `json`, `csv`, `m
       #
-      #   @param include_images [Boolean] Include image references in Markdown output
+      #   @param include_images [Boolean] Include image references in the Markdown.
       #
-      #   @param include_links [Boolean] Preserve hyperlinks in Markdown output
+      #   @param include_links [Boolean] Keep link URLs in the Markdown.
       #
-      #   @param include_numbered_pages [Boolean] Start each PDF page in the Markdown with a `<!-- page N -->` line, where N is th
+      #   @param include_numbered_pages [Boolean] Start each PDF page in the Markdown with a `<!-- page N -->` line, where `N` is
       #
-      #   @param ocr [Boolean] Read text from images and scanned PDF pages. PDF page ranges still apply.
+      #   @param ocr [Boolean] Read text from images and scanned PDF pages with OCR, within the `pdf` page rang
       #
-      #   @param pdf [ContextDev::Models::ParseHandleParams::Pdf] PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
+      #   @param pdf [ContextDev::Models::ParseHandleParams::Pdf] PDF page range as a JSON object, such as `{"start": 2, "end": 5}`.
       #
-      #   @param shorten_base64_images [Boolean] Shorten base64-encoded image data in the Markdown output
+      #   @param shorten_base64_images [Boolean] Shorten inline base64 image data.
       #
-      #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      #   @param tags [Array<String>] Comma-separated labels for this request, such as `production,team-alpha`. Filter
       #
-      #   @param use_main_content_only [Boolean] Extract only the main content from HTML-like inputs
+      #   @param use_main_content_only [Boolean] Keep only the main content, without navigation, headers, footers, or sidebars. A
       #
       #   @param zdr [Symbol, ContextDev::Models::ParseHandleParams::Zdr] `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless you
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Optional file extension hint, such as pdf, docx, xlsx, pptx, html, json, csv,
-      # md, py, rtf, jpg, png, txt, warc, or warc.gz.
+      # File type hint, such as `pdf`, `docx`, `xlsx`, `pptx`, `html`, `json`, `csv`,
+      # `md`, `py`, `rtf`, `jpg`, `png`, `txt`, `warc`, or `warc.gz`. Use it when the
+      # `Content-Type` header is missing or generic.
       module Extension
         extend ContextDev::Internal::Type::Enum
 
@@ -195,27 +200,23 @@ module ContextDev
 
       class Pdf < ContextDev::Internal::Type::BaseModel
         # @!attribute end_
-        #   Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must
-        #   be >= start.
+        #   Last page to parse. Defaults to the last page. Must be at least `start`.
         #
         #   @return [Integer, nil]
         optional :end_, Integer, api_name: :end
 
         # @!attribute start
-        #   First 1-based PDF page to parse.
+        #   First page to parse, starting at 1.
         #
         #   @return [Integer, nil]
         optional :start, Integer
 
         # @!method initialize(end_: nil, start: nil)
-        #   Some parameter documentations has been truncated, see
-        #   {ContextDev::Models::ParseHandleParams::Pdf} for more details.
+        #   PDF page range as a JSON object, such as `{"start": 2, "end": 5}`.
         #
-        #   PDF page-range options as a JSON object, e.g. {"start": 2, "end": 5}.
+        #   @param end_ [Integer] Last page to parse. Defaults to the last page. Must be at least `start`.
         #
-        #   @param end_ [Integer] Last PDF page to parse (1-based, inclusive). Defaults to the final page. Must be
-        #
-        #   @param start [Integer] First 1-based PDF page to parse.
+        #   @param start [Integer] First page to parse, starting at 1.
       end
 
       # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless

@@ -11,19 +11,20 @@ module ContextDev
           T.any(ContextDev::PersonSearchParams, ContextDev::Internal::AnyHash)
         end
 
-      # Describe the people to find. Up to 500 characters in `fast` mode and 5000 in
-      # `ultra` mode.
+      # Plain-language description of the people to find. Up to 500 characters in `fast`
+      # mode and 5000 in `ultra` mode.
       sig { returns(String) }
       attr_accessor :query
 
-      # Use next_cursor with the same query, mode and filters to fetch the next page.
+      # Cursor from the previous page's `next_cursor`. Omit for the first page. Send the
+      # same `query`, `mode`, and `filters` with it.
       sig { returns(T.nilable(String)) }
       attr_reader :cursor
 
       sig { params(cursor: String).void }
       attr_writer :cursor
 
-      # Additional constraints every result must match.
+      # Constraints every result must match, in addition to `query`.
       sig { returns(T.nilable(ContextDev::PersonSearchParams::Filters)) }
       attr_reader :filters
 
@@ -32,17 +33,18 @@ module ContextDev
       end
       attr_writer :filters
 
-      # `fast` matches people on basic criteria (e.g. their role, location or
-      # background); `ultra` plans a deeper search, judges each candidate against every
-      # criterion in the query. Complex `ultra` searches can take up to 30 seconds to
-      # complete, so allow for that in your client timeout.
+      # `fast` matches people on basic criteria such as role, location, or background;
+      # `ultra` runs a deeper search, checks every candidate against each criterion in
+      # your query, and adds a `match` score. Complex `ultra` searches can take up to 30
+      # seconds, so set your client timeout to match.
       sig { returns(T.nilable(ContextDev::PersonSearchParams::Mode::OrSymbol)) }
       attr_reader :mode
 
       sig { params(mode: ContextDev::PersonSearchParams::Mode::OrSymbol).void }
       attr_writer :mode
 
-      # Labels for filtering usage in the dashboard.
+      # Labels for this request. Filter usage and request logs by them in the dashboard
+      # or with `GET /org/logs`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -69,19 +71,21 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Describe the people to find. Up to 500 characters in `fast` mode and 5000 in
-        # `ultra` mode.
+        # Plain-language description of the people to find. Up to 500 characters in `fast`
+        # mode and 5000 in `ultra` mode.
         query:,
-        # Use next_cursor with the same query, mode and filters to fetch the next page.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page. Send the
+        # same `query`, `mode`, and `filters` with it.
         cursor: nil,
-        # Additional constraints every result must match.
+        # Constraints every result must match, in addition to `query`.
         filters: nil,
-        # `fast` matches people on basic criteria (e.g. their role, location or
-        # background); `ultra` plans a deeper search, judges each candidate against every
-        # criterion in the query. Complex `ultra` searches can take up to 30 seconds to
-        # complete, so allow for that in your client timeout.
+        # `fast` matches people on basic criteria such as role, location, or background;
+        # `ultra` runs a deeper search, checks every candidate against each criterion in
+        # your query, and adds a `match` score. Complex `ultra` searches can take up to 30
+        # seconds, so set your client timeout to match.
         mode: nil,
-        # Labels for filtering usage in the dashboard.
+        # Labels for this request. Filter usage and request logs by them in the dashboard
+        # or with `GET /org/logs`.
         tags: nil,
         # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
         # your organization has ZDR.
@@ -115,7 +119,8 @@ module ContextDev
             )
           end
 
-        # Countries people live in as two-letter codes, such as US or GB.
+        # Only return people who live in these countries, as ISO 3166-1 alpha-2 codes such
+        # as `US`.
         sig { returns(T.nilable(T::Array[String])) }
         attr_reader :countries
 
@@ -136,7 +141,7 @@ module ContextDev
         sig { params(years_of_experience_min: Integer).void }
         attr_writer :years_of_experience_min
 
-        # Additional constraints every result must match.
+        # Constraints every result must match, in addition to `query`.
         sig do
           params(
             countries: T::Array[String],
@@ -145,7 +150,8 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Countries people live in as two-letter codes, such as US or GB.
+          # Only return people who live in these countries, as ISO 3166-1 alpha-2 codes such
+          # as `US`.
           countries: nil,
           # Maximum years of professional experience.
           years_of_experience_max: nil,
@@ -167,10 +173,10 @@ module ContextDev
         end
       end
 
-      # `fast` matches people on basic criteria (e.g. their role, location or
-      # background); `ultra` plans a deeper search, judges each candidate against every
-      # criterion in the query. Complex `ultra` searches can take up to 30 seconds to
-      # complete, so allow for that in your client timeout.
+      # `fast` matches people on basic criteria such as role, location, or background;
+      # `ultra` runs a deeper search, checks every candidate against each criterion in
+      # your query, and adds a `match` score. Complex `ultra` searches can take up to 30
+      # seconds, so set your client timeout to match.
       module Mode
         extend ContextDev::Internal::Type::Enum
 

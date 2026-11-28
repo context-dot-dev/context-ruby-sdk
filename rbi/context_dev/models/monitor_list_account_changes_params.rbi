@@ -32,35 +32,35 @@ module ContextDev
       end
       attr_writer :change_detection_type
 
-      # Opaque pagination cursor from a previous response.
+      # Cursor from the previous page's `next_cursor`. Omit for the first page.
       sig { returns(T.nilable(String)) }
       attr_reader :cursor
 
       sig { params(cursor: String).void }
       attr_writer :cursor
 
-      # Maximum number of items to return per page (1-100). Defaults to 25.
+      # Maximum number of changes to return per page. Defaults to 25.
       sig { returns(T.nilable(Integer)) }
       attr_reader :limit
 
       sig { params(limit: Integer).void }
       attr_writer :limit
 
-      # Filter changes to a single monitor.
+      # Return only changes from this monitor.
       sig { returns(T.nilable(String)) }
       attr_reader :monitor_id
 
       sig { params(monitor_id: String).void }
       attr_writer :monitor_id
 
-      # Only include items at or after this ISO 8601 timestamp.
+      # Return only changes detected at or after this time.
       sig { returns(T.nilable(Time)) }
       attr_reader :since
 
       sig { params(since: Time).void }
       attr_writer :since
 
-      # Filter to items that have this tag.
+      # Return only changes that have this tag.
       sig { returns(T.nilable(String)) }
       attr_reader :tag
 
@@ -85,7 +85,7 @@ module ContextDev
       end
       attr_writer :target_type
 
-      # Only include items before this ISO 8601 timestamp.
+      # Return only changes detected at or before this time.
       sig { returns(T.nilable(Time)) }
       attr_reader :until_
 
@@ -110,19 +110,19 @@ module ContextDev
       def self.new(
         # Filter by change detection type.
         change_detection_type: nil,
-        # Opaque pagination cursor from a previous response.
+        # Cursor from the previous page's `next_cursor`. Omit for the first page.
         cursor: nil,
-        # Maximum number of items to return per page (1-100). Defaults to 25.
+        # Maximum number of changes to return per page. Defaults to 25.
         limit: nil,
-        # Filter changes to a single monitor.
+        # Return only changes from this monitor.
         monitor_id: nil,
-        # Only include items at or after this ISO 8601 timestamp.
+        # Return only changes detected at or after this time.
         since: nil,
-        # Filter to items that have this tag.
+        # Return only changes that have this tag.
         tag: nil,
         # Filter by target type.
         target_type: nil,
-        # Only include items before this ISO 8601 timestamp.
+        # Return only changes detected at or before this time.
         until_: nil,
         request_options: {}
       )

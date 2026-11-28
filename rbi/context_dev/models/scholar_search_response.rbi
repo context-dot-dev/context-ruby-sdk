@@ -11,15 +11,15 @@ module ContextDev
           )
         end
 
-      # Matching papers in the requested order.
+      # Papers on this page, in the requested order.
       sig { returns(T::Array[ContextDev::Models::ScholarSearchResponse::Data]) }
       attr_accessor :data
 
-      # Whether another page is available.
+      # Whether more results are available after this page.
       sig { returns(T::Boolean) }
       attr_accessor :has_more
 
-      # Page summary.
+      # Summary of this page.
       sig { returns(ContextDev::Models::ScholarSearchResponse::Meta) }
       attr_reader :meta
 
@@ -30,7 +30,7 @@ module ContextDev
       end
       attr_writer :meta
 
-      # Cursor for the next page, or null on the last page.
+      # Pass as `cursor` to fetch the next page. `null` on the last page.
       sig { returns(T.nilable(String)) }
       attr_accessor :next_cursor
 
@@ -68,13 +68,13 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Matching papers in the requested order.
+        # Papers on this page, in the requested order.
         data:,
-        # Whether another page is available.
+        # Whether more results are available after this page.
         has_more:,
-        # Page summary.
+        # Summary of this page.
         meta:,
-        # Cursor for the next page, or null on the last page.
+        # Pass as `cursor` to fetch the next page. `null` on the last page.
         next_cursor:,
         # Unique ID of this request, also in `X-Request-Id`. Include it when contacting
         # support.
@@ -108,11 +108,11 @@ module ContextDev
             )
           end
 
-        # Stable paper identifier.
+        # Unique ID of the paper.
         sig { returns(String) }
         attr_accessor :id
 
-        # Format of the linked full text. jats is XML.
+        # Format of the full text at `full_text_url`. `jats` is JATS XML.
         sig do
           returns(
             ContextDev::Models::ScholarSearchResponse::Data::FullTextFormat::TaggedSymbol
@@ -120,23 +120,24 @@ module ContextDev
         end
         attr_accessor :full_text_format
 
-        # Direct link to the full text.
+        # Direct URL of the full text.
         sig { returns(String) }
         attr_accessor :full_text_url
 
-        # Publication time in ISO 8601, or null when unknown.
+        # When the paper was published. `null` when unknown.
         sig { returns(T.nilable(Time)) }
         attr_accessor :published_at
 
-        # Matching passage, or opening passage for an ID-only query.
+        # Passage that matches the query, or the opening passage when the query is only a
+        # paper ID.
         sig { returns(String) }
         attr_accessor :snippet
 
-        # Paper title.
+        # Title of the paper.
         sig { returns(String) }
         attr_accessor :title
 
-        # Paper landing page.
+        # URL of the paper's landing page.
         sig { returns(String) }
         attr_accessor :url
 
@@ -153,19 +154,20 @@ module ContextDev
           ).returns(T.attached_class)
         end
         def self.new(
-          # Stable paper identifier.
+          # Unique ID of the paper.
           id:,
-          # Format of the linked full text. jats is XML.
+          # Format of the full text at `full_text_url`. `jats` is JATS XML.
           full_text_format:,
-          # Direct link to the full text.
+          # Direct URL of the full text.
           full_text_url:,
-          # Publication time in ISO 8601, or null when unknown.
+          # When the paper was published. `null` when unknown.
           published_at:,
-          # Matching passage, or opening passage for an ID-only query.
+          # Passage that matches the query, or the opening passage when the query is only a
+          # paper ID.
           snippet:,
-          # Paper title.
+          # Title of the paper.
           title:,
-          # Paper landing page.
+          # URL of the paper's landing page.
           url:
         )
         end
@@ -187,7 +189,7 @@ module ContextDev
         def to_hash
         end
 
-        # Format of the linked full text. jats is XML.
+        # Format of the full text at `full_text_url`. `jats` is JATS XML.
         module FullTextFormat
           extend ContextDev::Internal::Type::Enum
 
@@ -237,14 +239,14 @@ module ContextDev
             )
           end
 
-        # Papers in this page.
+        # Number of papers on this page.
         sig { returns(Integer) }
         attr_accessor :count
 
-        # Page summary.
+        # Summary of this page.
         sig { params(count: Integer).returns(T.attached_class) }
         def self.new(
-          # Papers in this page.
+          # Number of papers on this page.
           count:
         )
         end
@@ -267,7 +269,7 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :credits_consumed
 
-        # Credits remaining for your organization.
+        # Credits your organization has left after this request.
         sig { returns(Integer) }
         attr_accessor :credits_remaining
 
@@ -280,7 +282,7 @@ module ContextDev
         def self.new(
           # Credits charged for this request.
           credits_consumed:,
-          # Credits remaining for your organization.
+          # Credits your organization has left after this request.
           credits_remaining:
         )
         end

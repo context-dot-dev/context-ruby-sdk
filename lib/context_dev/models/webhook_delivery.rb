@@ -4,6 +4,7 @@ module ContextDev
   module Models
     class WebhookDelivery < ContextDev::Internal::Type::BaseModel
       # @!attribute attempted_at
+      #   When the delivery was attempted.
       #
       #   @return [Time]
       required :attempted_at, Time
@@ -14,33 +15,33 @@ module ContextDev
       required :error, -> { ContextDev::WebhookDelivery::Error }, nil?: true
 
       # @!attribute event
-      #   The event this delivery carried. Deliveries recorded before event selection
-      #   existed report change.detected.
+      #   Event this delivery carried.
       #
       #   @return [Symbol, ContextDev::Models::WebhookDelivery::Event]
       required :event, enum: -> { ContextDev::WebhookDelivery::Event }
 
       # @!attribute event_id
-      #   Identifier sent in the X-Context-Id header.
+      #   Event ID, sent in the `X-Context-Id` header.
       #
       #   @return [String]
       required :event_id, String
 
       # @!attribute http_status
-      #   The endpoint's final HTTP response status, or null when no response was
-      #   received.
+      #   Final HTTP status from your endpoint. `null` when no response was received.
       #
       #   @return [Integer, nil]
       required :http_status, Integer, nil?: true
 
       # @!attribute status
-      #   Outcome of the delivery attempt. Any 2xx response counts as delivered.
+      #   Outcome of the delivery: `delivered` (2xx response), `rejected` (non-2xx
+      #   response), `failed` (no response), or `skipped_unsafe_url` (the URL isn't a safe
+      #   public endpoint).
       #
       #   @return [Symbol, ContextDev::Models::WebhookDelivery::Status]
       required :status, enum: -> { ContextDev::WebhookDelivery::Status }
 
       # @!attribute delivery_id
-      #   Delivery ID for status checks and retries, when available.
+      #   ID for looking up or retrying this delivery, when available.
       #
       #   @return [String, nil]
       optional :delivery_id, String
@@ -49,39 +50,41 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebhookDelivery} for more details.
       #
-      #   @param attempted_at [Time]
+      #   @param attempted_at [Time] When the delivery was attempted.
       #
       #   @param error [ContextDev::Models::WebhookDelivery::Error, nil]
       #
-      #   @param event [Symbol, ContextDev::Models::WebhookDelivery::Event] The event this delivery carried. Deliveries recorded before event selection exis
+      #   @param event [Symbol, ContextDev::Models::WebhookDelivery::Event] Event this delivery carried.
       #
-      #   @param event_id [String] Identifier sent in the X-Context-Id header.
+      #   @param event_id [String] Event ID, sent in the `X-Context-Id` header.
       #
-      #   @param http_status [Integer, nil] The endpoint's final HTTP response status, or null when no response was received
+      #   @param http_status [Integer, nil] Final HTTP status from your endpoint. `null` when no response was received.
       #
-      #   @param status [Symbol, ContextDev::Models::WebhookDelivery::Status] Outcome of the delivery attempt. Any 2xx response counts as delivered.
+      #   @param status [Symbol, ContextDev::Models::WebhookDelivery::Status] Outcome of the delivery: `delivered` (2xx response), `rejected` (non-2xx respons
       #
-      #   @param delivery_id [String] Delivery ID for status checks and retries, when available.
+      #   @param delivery_id [String] ID for looking up or retrying this delivery, when available.
 
       # @see ContextDev::Models::WebhookDelivery#error
       class Error < ContextDev::Internal::Type::BaseModel
         # @!attribute code
+        #   Machine-readable error code, such as `fetch_failed`.
         #
         #   @return [String]
         required :code, String
 
         # @!attribute message
+        #   Human-readable explanation of the error.
         #
         #   @return [String]
         required :message, String
 
         # @!method initialize(code:, message:)
-        #   @param code [String]
-        #   @param message [String]
+        #   @param code [String] Machine-readable error code, such as `fetch_failed`.
+        #
+        #   @param message [String] Human-readable explanation of the error.
       end
 
-      # The event this delivery carried. Deliveries recorded before event selection
-      # existed report change.detected.
+      # Event this delivery carried.
       #
       # @see ContextDev::Models::WebhookDelivery#event
       module Event
@@ -94,7 +97,9 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Outcome of the delivery attempt. Any 2xx response counts as delivered.
+      # Outcome of the delivery: `delivered` (2xx response), `rejected` (non-2xx
+      # response), `failed` (no response), or `skipped_unsafe_url` (the URL isn't a safe
+      # public endpoint).
       #
       # @see ContextDev::Models::WebhookDelivery#status
       module Status

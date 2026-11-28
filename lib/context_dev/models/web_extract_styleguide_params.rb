@@ -8,43 +8,43 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute color_scheme
-      #   Optional browser color scheme to emulate for websites that respond to
-      #   prefers-color-scheme. This value is part of the styleguide cache key.
+      #   Emulate a light or dark color scheme. Each scheme is cached separately.
       #
       #   @return [Symbol, ContextDev::Models::WebExtractStyleguideParams::ColorScheme, nil]
       optional :color_scheme, enum: -> { ContextDev::WebExtractStyleguideParams::ColorScheme }
 
       # @!attribute direct_url
-      #   Exact URL to inspect. Provide either `domain` or `directUrl`, not both.
+      #   Exact page URL to analyze. Provide either `domain` or `directUrl`, not both.
       #
       #   @return [String, nil]
       optional :direct_url, String
 
       # @!attribute domain
-      #   Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
-      #   domain will be automatically normalized and validated. You must provide either
-      #   'domain' or 'directUrl', but not both.
+      #   Domain to analyze, such as `stripe.com`. Provide either `domain` or `directUrl`,
+      #   not both.
       #
       #   @return [String, nil]
       optional :domain, String
 
       # @!attribute max_age_ms
-      #   Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1
-      #   year. `0` refreshes.
+      #   Maximum age of a cached result, in milliseconds. `0` always fetches fresh.
+      #   Defaults to 90 days (7776000000 ms). Values above 1 year (31536000000 ms) are
+      #   capped at 1 year.
       #
       #   @return [Integer, nil]
       optional :max_age_ms, Integer, nil?: true
 
       # @!attribute policies
-      #   Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
-      #   it out unless access policies are enabled for your organization; otherwise the
-      #   request fails with `ACCESS_POLICIES_NOT_ENABLED`.
+      #   Comma-separated access policy IDs to apply; each URL must pass all of them.
+      #   Requires access policies enabled for your organization; otherwise returns
+      #   `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute tags
-      #   Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      #   Comma-separated labels for this request, such as `production,team-alpha`. Filter
+      #   usage and request logs by them.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -56,8 +56,8 @@ module ContextDev
       optional :timeout_opts, -> { ContextDev::WebExtractStyleguideParams::TimeoutOpts }
 
       # @!attribute zdr
-      #   `enabled` disables request logs and traces and omits request and response
-      #   content from usage logs. Brand data and hosted assets may still be stored.
+      #   `enabled` turns off request logs and traces and keeps request and response
+      #   content out of usage logs. Brand data and hosted assets may still be stored.
       #   Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
       #
       #   @return [Symbol, ContextDev::Models::WebExtractStyleguideParams::Zdr, nil]
@@ -67,26 +67,25 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::WebExtractStyleguideParams} for more details.
       #
-      #   @param color_scheme [Symbol, ContextDev::Models::WebExtractStyleguideParams::ColorScheme] Optional browser color scheme to emulate for websites that respond to prefers-co
+      #   @param color_scheme [Symbol, ContextDev::Models::WebExtractStyleguideParams::ColorScheme] Emulate a light or dark color scheme. Each scheme is cached separately.
       #
-      #   @param direct_url [String] Exact URL to inspect. Provide either `domain` or `directUrl`, not both.
+      #   @param direct_url [String] Exact page URL to analyze. Provide either `domain` or `directUrl`, not both.
       #
-      #   @param domain [String] Domain name to extract styleguide from (e.g., 'example.com', 'google.com'). The
+      #   @param domain [String] Domain to analyze, such as `stripe.com`. Provide either `domain` or `directUrl`,
       #
-      #   @param max_age_ms [Integer, nil] Maximum age of cached brand data in ms. Defaults to 3 months; clamped to 0–1 yea
+      #   @param max_age_ms [Integer, nil] Maximum age of a cached result, in milliseconds. `0` always fetches fresh. Defau
       #
-      #   @param policies [Array<String>] Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
+      #   @param policies [Array<String>] Comma-separated access policy IDs to apply; each URL must pass all of them. Requ
       #
-      #   @param tags [Array<String>] Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      #   @param tags [Array<String>] Comma-separated labels for this request, such as `production,team-alpha`. Filter
       #
       #   @param timeout_opts [ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts] Request deadline and what to return when it passes.
       #
-      #   @param zdr [Symbol, ContextDev::Models::WebExtractStyleguideParams::Zdr] `enabled` disables request logs and traces and omits request and response conten
+      #   @param zdr [Symbol, ContextDev::Models::WebExtractStyleguideParams::Zdr] `enabled` turns off request logs and traces and keeps request and response conte
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Optional browser color scheme to emulate for websites that respond to
-      # prefers-color-scheme. This value is part of the styleguide cache key.
+      # Emulate a light or dark color scheme. Each scheme is cached separately.
       module ColorScheme
         extend ContextDev::Internal::Type::Enum
 
@@ -105,11 +104,11 @@ module ContextDev
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   "fail" returns 408 at the deadline. "return-partial" returns available results;
-        #   inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-        #   On POST /web/scrape, an output that is not ready in time fails with error_code
-        #   REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-        #   only when the whole request cannot respond by the deadline.
+        #   `fail` returns 408 at the deadline. `return-partial` returns the results
+        #   collected so far and marks the response as partial. `return-partial` requires at
+        #   least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+        #   with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+        #   the whole request could not respond by the deadline.
         #
         #   @return [Symbol, ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::WebExtractStyleguideParams::TimeoutOpts::Behavior }
@@ -122,13 +121,13 @@ module ContextDev
         #
         #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::Behavior] "fail" returns 408 at the deadline. "return-partial" returns available results;
+        #   @param behavior [Symbol, ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts::Behavior] `fail` returns 408 at the deadline. `return-partial` returns the results collect
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag. "return-partial" requires at least 5000 ms.
-        # On POST /web/scrape, an output that is not ready in time fails with error_code
-        # REQUEST_TIMEOUT inside a 200 response under either behavior; 408 is returned
-        # only when the whole request cannot respond by the deadline.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial. `return-partial` requires at
+        # least 5000 ms. On `POST /web/scrape`, an output that is not ready in time fails
+        # with `REQUEST_TIMEOUT` inside a 200 response under either behavior; 408 means
+        # the whole request could not respond by the deadline.
         #
         # @see ContextDev::Models::WebExtractStyleguideParams::TimeoutOpts#behavior
         module Behavior
@@ -142,8 +141,8 @@ module ContextDev
         end
       end
 
-      # `enabled` disables request logs and traces and omits request and response
-      # content from usage logs. Brand data and hosted assets may still be stored.
+      # `enabled` turns off request logs and traces and keeps request and response
+      # content out of usage logs. Brand data and hosted assets may still be stored.
       # Returns 403 `ZDR_NOT_ENABLED` unless your organization has ZDR.
       module Zdr
         extend ContextDev::Internal::Type::Enum

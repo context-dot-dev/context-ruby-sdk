@@ -10,7 +10,7 @@ module ContextDev
       required :code, String
 
       # @!attribute count
-      #   Pages that failed with this code.
+      #   Number of pages that failed with this code.
       #
       #   @return [Integer]
       required :count, Integer
@@ -20,7 +20,7 @@ module ContextDev
       #
       #   @param code [String] Error code for these failures.
       #
-      #   @param count [Integer] Pages that failed with this code.
+      #   @param count [Integer] Number of pages that failed with this code.
     end
   end
 end

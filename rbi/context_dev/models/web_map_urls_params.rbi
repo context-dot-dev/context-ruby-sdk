@@ -11,19 +11,18 @@ module ContextDev
           T.any(ContextDev::WebMapURLsParams, ContextDev::Internal::AnyHash)
         end
 
-      # Domain to map, e.g. `stripe.com`.
+      # Domain to map, such as `stripe.com`.
       sig { returns(String) }
       attr_accessor :domain
 
-      # Regex pattern. URLs matching this pattern are not returned, even when they match
-      # urlRegex.
+      # Leave out URLs matching this regex, even when they match `urlRegex`.
       sig { returns(T.nilable(String)) }
       attr_reader :exclude_url_regex
 
       sig { params(exclude_url_regex: String).void }
       attr_writer :exclude_url_regex
 
-      # HTTP headers for the target origin. Non-empty headers bypass caching.
+      # HTTP headers to send to the target site. Requests with headers skip the cache.
       sig { returns(T.nilable(T::Hash[Symbol, String])) }
       attr_reader :headers
 
@@ -44,9 +43,9 @@ module ContextDev
       sig { params(max_links: Integer).void }
       attr_writer :max_links
 
-      # Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
-      # it out unless access policies are enabled for your organization; otherwise the
-      # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
+      # Comma-separated access policy IDs to apply; each URL must pass all of them.
+      # Requires access policies enabled for your organization; otherwise returns
+      # `ACCESS_POLICIES_NOT_ENABLED`.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :policies
 
@@ -68,7 +67,8 @@ module ContextDev
       sig { params(sitemap_url: String).void }
       attr_writer :sitemap_url
 
-      # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+      # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+      # usage and request logs by them.
       sig { returns(T.nilable(T::Array[String])) }
       attr_reader :tags
 
@@ -86,8 +86,7 @@ module ContextDev
       end
       attr_writer :timeout_opts
 
-      # Regex pattern. Only URLs matching this pattern are returned and counted against
-      # maxLinks.
+      # Only return URLs matching this regex. Only matches count toward `maxLinks`.
       sig { returns(T.nilable(String)) }
       attr_reader :url_regex
 
@@ -120,32 +119,31 @@ module ContextDev
         ).returns(T.attached_class)
       end
       def self.new(
-        # Domain to map, e.g. `stripe.com`.
+        # Domain to map, such as `stripe.com`.
         domain:,
-        # Regex pattern. URLs matching this pattern are not returned, even when they match
-        # urlRegex.
+        # Leave out URLs matching this regex, even when they match `urlRegex`.
         exclude_url_regex: nil,
-        # HTTP headers for the target origin. Non-empty headers bypass caching.
+        # HTTP headers to send to the target site. Requests with headers skip the cache.
         headers: nil,
         # Include URLs on subdomains.
         include_subdomains: nil,
         # Maximum number of URLs to return.
         max_links: nil,
-        # Comma-separated access policy IDs to apply. A URL must pass every policy. Leave
-        # it out unless access policies are enabled for your organization; otherwise the
-        # request fails with `ACCESS_POLICIES_NOT_ENABLED`.
+        # Comma-separated access policy IDs to apply; each URL must pass all of them.
+        # Requires access policies enabled for your organization; otherwise returns
+        # `ACCESS_POLICIES_NOT_ENABLED`.
         policies: nil,
         # Filter URLs by a topic or phrase, most relevant first.
         search: nil,
         # Fetch this sitemap instead of discovering sitemaps. Must belong to the domain or
         # a subdomain.
         sitemap_url: nil,
-        # Comma-separated labels for filtering usage, e.g. `production,team-alpha`.
+        # Comma-separated labels for this request, such as `production,team-alpha`. Filter
+        # usage and request logs by them.
         tags: nil,
         # Request deadline and what to return when it passes.
         timeout_opts: nil,
-        # Regex pattern. Only URLs matching this pattern are returned and counted against
-        # maxLinks.
+        # Only return URLs matching this regex. Only matches count toward `maxLinks`.
         url_regex: nil,
         # `enabled` turns on zero data retention. Returns 403 `ZDR_NOT_ENABLED` unless
         # your organization has ZDR.
@@ -189,8 +187,8 @@ module ContextDev
         sig { returns(Integer) }
         attr_accessor :milliseconds
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         sig do
           returns(
             T.nilable(
@@ -219,8 +217,8 @@ module ContextDev
         def self.new(
           # Deadline in milliseconds.
           milliseconds:,
-          # "fail" returns 408 at the deadline. "return-partial" returns available results;
-          # inspect the response’s partial flag.
+          # `fail` returns 408 at the deadline. `return-partial` returns the results
+          # collected so far and marks the response as partial.
           behavior: nil
         )
         end
@@ -237,8 +235,8 @@ module ContextDev
         def to_hash
         end
 
-        # "fail" returns 408 at the deadline. "return-partial" returns available results;
-        # inspect the response’s partial flag.
+        # `fail` returns 408 at the deadline. `return-partial` returns the results
+        # collected so far and marks the response as partial.
         module Behavior
           extend ContextDev::Internal::Type::Enum
 

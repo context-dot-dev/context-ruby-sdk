@@ -8,7 +8,7 @@ module ContextDev
       include ContextDev::Internal::Type::RequestParameters
 
       # @!attribute identifier
-      #   Identifier of the target to prefetch. Provide exactly one of domain or email.
+      #   Domain or work email to prefetch. Provide exactly one.
       #
       #   @return [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier]
       required :identifier, union: -> { ContextDev::UtilityPrefetchParams::Identifier }
@@ -20,21 +20,22 @@ module ContextDev
       required :type, enum: -> { ContextDev::UtilityPrefetchParams::Type }
 
       # @!attribute policies
-      #   Access policy IDs to apply. A URL must pass every policy. Leave it out unless
-      #   access policies are enabled for your organization; otherwise the request fails
-      #   with `ACCESS_POLICIES_NOT_ENABLED`.
+      #   Access policy IDs to apply; each URL must pass all of them. Requires access
+      #   policies enabled for your organization; otherwise returns
+      #   `ACCESS_POLICIES_NOT_ENABLED`.
       #
       #   @return [Array<String>, nil]
       optional :policies, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute tags
-      #   Labels for filtering usage in the dashboard.
+      #   Labels for this request. Filter usage and request logs by them in the dashboard
+      #   or with `GET /org/logs`.
       #
       #   @return [Array<String>, nil]
       optional :tags, ContextDev::Internal::Type::ArrayOf[String]
 
       # @!attribute timeout_opts
-      #   Request deadline and what to return when it passes.
+      #   Request deadline. The request fails with 408 when it passes.
       #
       #   @return [ContextDev::Models::UtilityPrefetchParams::TimeoutOpts, nil]
       optional :timeout_opts, -> { ContextDev::UtilityPrefetchParams::TimeoutOpts }, api_name: :timeoutOpts
@@ -43,31 +44,31 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::UtilityPrefetchParams} for more details.
       #
-      #   @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier] Identifier of the target to prefetch. Provide exactly one of domain or email.
+      #   @param identifier [ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier, ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier] Domain or work email to prefetch. Provide exactly one.
       #
       #   @param type [Symbol, ContextDev::Models::UtilityPrefetchParams::Type] Data to prefetch.
       #
-      #   @param policies [Array<String>] Access policy IDs to apply. A URL must pass every policy. Leave it out unless ac
+      #   @param policies [Array<String>] Access policy IDs to apply; each URL must pass all of them. Requires access poli
       #
-      #   @param tags [Array<String>] Labels for filtering usage in the dashboard.
+      #   @param tags [Array<String>] Labels for this request. Filter usage and request logs by them in the dashboard
       #
-      #   @param timeout_opts [ContextDev::Models::UtilityPrefetchParams::TimeoutOpts] Request deadline and what to return when it passes.
+      #   @param timeout_opts [ContextDev::Models::UtilityPrefetchParams::TimeoutOpts] Request deadline. The request fails with 408 when it passes.
       #
       #   @param request_options [ContextDev::RequestOptions, Hash{Symbol=>Object}]
 
-      # Identifier of the target to prefetch. Provide exactly one of domain or email.
+      # Domain or work email to prefetch. Provide exactly one.
       module Identifier
         extend ContextDev::Internal::Type::Union
 
         # Prefetch by domain.
         variant -> { ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchDomainIdentifier }
 
-        # Prefetch by email. The domain will be extracted and validated.
+        # Prefetch by work email. Context.dev uses the email's domain.
         variant -> { ContextDev::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier }
 
         class UtilityPrefetchDomainIdentifier < ContextDev::Internal::Type::BaseModel
           # @!attribute domain
-          #   Domain, e.g. `stripe.com`.
+          #   Domain to prefetch, such as `stripe.com`.
           #
           #   @return [String]
           required :domain, String
@@ -75,14 +76,13 @@ module ContextDev
           # @!method initialize(domain:)
           #   Prefetch by domain.
           #
-          #   @param domain [String] Domain, e.g. `stripe.com`.
+          #   @param domain [String] Domain to prefetch, such as `stripe.com`.
         end
 
         class UtilityPrefetchEmailIdentifier < ContextDev::Internal::Type::BaseModel
           # @!attribute email
-          #   Email address to prefetch data for. The domain will be extracted from the email.
-          #   Free email providers (gmail.com, yahoo.com, etc.) and disposable email addresses
-          #   are not allowed.
+          #   Work email whose domain to prefetch. Free email providers such as `gmail.com`
+          #   and disposable addresses are rejected with 422.
           #
           #   @return [String]
           required :email, String
@@ -92,9 +92,9 @@ module ContextDev
           #   {ContextDev::Models::UtilityPrefetchParams::Identifier::UtilityPrefetchEmailIdentifier}
           #   for more details.
           #
-          #   Prefetch by email. The domain will be extracted and validated.
+          #   Prefetch by work email. Context.dev uses the email's domain.
           #
-          #   @param email [String] Email address to prefetch data for. The domain will be extracted from the email.
+          #   @param email [String] Work email whose domain to prefetch. Free email providers such as `gmail.com` an
         end
 
         # @!method self.variants
@@ -120,19 +120,19 @@ module ContextDev
         required :milliseconds, Integer
 
         # @!attribute behavior
-        #   Only "fail" is supported: return 408 at the deadline.
+        #   Only `fail` is supported: the request returns 408 at the deadline.
         #
         #   @return [Symbol, ContextDev::Models::UtilityPrefetchParams::TimeoutOpts::Behavior, nil]
         optional :behavior, enum: -> { ContextDev::UtilityPrefetchParams::TimeoutOpts::Behavior }
 
         # @!method initialize(milliseconds:, behavior: nil)
-        #   Request deadline and what to return when it passes.
+        #   Request deadline. The request fails with 408 when it passes.
         #
         #   @param milliseconds [Integer] Deadline in milliseconds.
         #
-        #   @param behavior [Symbol, ContextDev::Models::UtilityPrefetchParams::TimeoutOpts::Behavior] Only "fail" is supported: return 408 at the deadline.
+        #   @param behavior [Symbol, ContextDev::Models::UtilityPrefetchParams::TimeoutOpts::Behavior] Only `fail` is supported: the request returns 408 at the deadline.
 
-        # Only "fail" is supported: return 408 at the deadline.
+        # Only `fail` is supported: the request returns 408 at the deadline.
         #
         # @see ContextDev::Models::UtilityPrefetchParams::TimeoutOpts#behavior
         module Behavior

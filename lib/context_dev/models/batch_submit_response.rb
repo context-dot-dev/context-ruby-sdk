@@ -5,13 +5,13 @@ module ContextDev
     # @see ContextDev::Resources::Batch#submit
     class BatchSubmitResponse < ContextDev::Internal::Type::BaseModel
       # @!attribute id
-      #   Batch ID. Poll GET /batch/{batch_id} with it.
+      #   Unique ID of the batch. Pass it to `GET /batch/{batch_id}` to track progress.
       #
       #   @return [String]
       required :id, String
 
       # @!attribute cache_metadata
-      #   Whether this response came from cache.
+      #   Cache status of this response.
       #
       #   @return [ContextDev::Models::BatchSubmitResponse::CacheMetadata]
       required :cache_metadata, -> { ContextDev::Models::BatchSubmitResponse::CacheMetadata }
@@ -29,32 +29,32 @@ module ContextDev
       required :created_at, String
 
       # @!attribute credits
-      #   Credits are reserved after background validation, before scraping starts.
+      #   Credits reserved for the batch.
       #
       #   @return [ContextDev::Models::BatchSubmitResponse::Credits]
       required :credits, -> { ContextDev::Models::BatchSubmitResponse::Credits }
 
       # @!attribute formats
-      #   Outputs requested for each page. Matches input.data.formats on submission.
+      #   Formats requested for each page, as submitted in `input.data.formats`.
       #
       #   @return [ContextDev::Models::BatchSubmitResponse::Formats]
       required :formats, -> { ContextDev::Models::BatchSubmitResponse::Formats }
 
       # @!attribute input
-      #   What the submission accepted.
+      #   Page counts from your submission.
       #
       #   @return [ContextDev::Models::Intake]
       required :input, -> { ContextDev::Intake }
 
       # @!attribute invalid_urls
-      #   Rejected URLs (first 100).
+      #   URLs rejected from your list, up to the first 100.
       #
       #   @return [Array<ContextDev::Models::BatchSubmitResponse::InvalidURL>]
       required :invalid_urls,
                -> { ContextDev::Internal::Type::ArrayOf[ContextDev::Models::BatchSubmitResponse::InvalidURL] }
 
       # @!attribute mode
-      #   How pages will be selected.
+      #   `scrape` for a URL list, `crawl` for a site crawl.
       #
       #   @return [Symbol, ContextDev::Models::BatchSubmitResponse::Mode]
       required :mode, enum: -> { ContextDev::Models::BatchSubmitResponse::Mode }
@@ -67,15 +67,16 @@ module ContextDev
       required :request_id, String
 
       # @!attribute status
-      #   Current state. `pending` means waiting for execution capacity or background
-      #   validation. Capacity-limited batches remain pending until a slot opens.
-      #   `completed`, `cancelled`, and `failed` are final.
+      #   Current state. `pending` batches are being validated or are waiting for a slot
+      #   under your plan's concurrent batch limit, `queued` batches are ready to start,
+      #   and `running` batches are scraping. `completed`, `cancelled`, and `failed` are
+      #   final.
       #
       #   @return [Symbol, ContextDev::Models::BatchSubmitResponse::Status]
       required :status, enum: -> { ContextDev::Models::BatchSubmitResponse::Status }
 
       # @!attribute tags
-      #   Tags stored on the batch.
+      #   Tags set when the batch was submitted.
       #
       #   @return [Array<String>]
       required :tags, ContextDev::Internal::Type::ArrayOf[String]
@@ -87,7 +88,8 @@ module ContextDev
       optional :key_metadata, -> { ContextDev::Models::BatchSubmitResponse::KeyMetadata }
 
       # @!attribute webhook_secret
-      #   Secret for verifying `X-Context-Signature`. Only submit returns it, so store it.
+      #   Secret for verifying `X-Context-Signature` on this batch's webhooks. Returned
+      #   only here and only when you set a webhook, so store it.
       #
       #   @return [String, nil]
       optional :webhook_secret, String
@@ -96,45 +98,45 @@ module ContextDev
       #   Some parameter documentations has been truncated, see
       #   {ContextDev::Models::BatchSubmitResponse} for more details.
       #
-      #   @param id [String] Batch ID. Poll GET /batch/{batch_id} with it.
+      #   @param id [String] Unique ID of the batch. Pass it to `GET /batch/{batch_id}` to track progress.
       #
-      #   @param cache_metadata [ContextDev::Models::BatchSubmitResponse::CacheMetadata] Whether this response came from cache.
+      #   @param cache_metadata [ContextDev::Models::BatchSubmitResponse::CacheMetadata] Cache status of this response.
       #
       #   @param crawl [ContextDev::Models::CrawlControls, nil] Crawl settings as submitted.
       #
       #   @param created_at [String] When the batch was created.
       #
-      #   @param credits [ContextDev::Models::BatchSubmitResponse::Credits] Credits are reserved after background validation, before scraping starts.
+      #   @param credits [ContextDev::Models::BatchSubmitResponse::Credits] Credits reserved for the batch.
       #
-      #   @param formats [ContextDev::Models::BatchSubmitResponse::Formats] Outputs requested for each page. Matches input.data.formats on submission.
+      #   @param formats [ContextDev::Models::BatchSubmitResponse::Formats] Formats requested for each page, as submitted in `input.data.formats`.
       #
-      #   @param input [ContextDev::Models::Intake] What the submission accepted.
+      #   @param input [ContextDev::Models::Intake] Page counts from your submission.
       #
-      #   @param invalid_urls [Array<ContextDev::Models::BatchSubmitResponse::InvalidURL>] Rejected URLs (first 100).
+      #   @param invalid_urls [Array<ContextDev::Models::BatchSubmitResponse::InvalidURL>] URLs rejected from your list, up to the first 100.
       #
-      #   @param mode [Symbol, ContextDev::Models::BatchSubmitResponse::Mode] How pages will be selected.
+      #   @param mode [Symbol, ContextDev::Models::BatchSubmitResponse::Mode] `scrape` for a URL list, `crawl` for a site crawl.
       #
       #   @param request_id [String] Unique ID of this request, also in `X-Request-Id`. Include it when contacting su
       #
-      #   @param status [Symbol, ContextDev::Models::BatchSubmitResponse::Status] Current state. `pending` means waiting for execution capacity or background vali
+      #   @param status [Symbol, ContextDev::Models::BatchSubmitResponse::Status] Current state. `pending` batches are being validated or are waiting for a slot u
       #
-      #   @param tags [Array<String>] Tags stored on the batch.
+      #   @param tags [Array<String>] Tags set when the batch was submitted.
       #
       #   @param key_metadata [ContextDev::Models::BatchSubmitResponse::KeyMetadata] Credits this request used and your remaining balance.
       #
-      #   @param webhook_secret [String] Secret for verifying `X-Context-Signature`. Only submit returns it, so store it.
+      #   @param webhook_secret [String] Secret for verifying `X-Context-Signature` on this batch's webhooks. Returned on
 
       # @see ContextDev::Models::BatchSubmitResponse#cache_metadata
       class CacheMetadata < ContextDev::Internal::Type::BaseModel
         # @!attribute age_ms
-        #   Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
         #   @return [Integer]
         required :age_ms, Integer
 
         # @!attribute status
-        #   Whether the response was served from cache, required fresh work, or honored
-        #   zero-data-retention cache bypass.
+        #   `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        #   retention bypassed the cache.
         #
         #   @return [Symbol, ContextDev::Models::BatchSubmitResponse::CacheMetadata::Status]
         required :status, enum: -> { ContextDev::Models::BatchSubmitResponse::CacheMetadata::Status }
@@ -143,14 +145,14 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::BatchSubmitResponse::CacheMetadata} for more details.
         #
-        #   Whether this response came from cache.
+        #   Cache status of this response.
         #
-        #   @param age_ms [Integer] Age of the cached data in milliseconds. Zero for miss and zdr responses.
+        #   @param age_ms [Integer] Age of the cached data, in milliseconds. `0` for `miss` and `zdr`.
         #
-        #   @param status [Symbol, ContextDev::Models::BatchSubmitResponse::CacheMetadata::Status] Whether the response was served from cache, required fresh work, or honored zero
+        #   @param status [Symbol, ContextDev::Models::BatchSubmitResponse::CacheMetadata::Status] `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data re
 
-        # Whether the response was served from cache, required fresh work, or honored
-        # zero-data-retention cache bypass.
+        # `hit` when served from cache, `miss` when fetched fresh, `zdr` when zero data
+        # retention bypassed the cache.
         #
         # @see ContextDev::Models::BatchSubmitResponse::CacheMetadata#status
         module Status
@@ -168,70 +170,70 @@ module ContextDev
       # @see ContextDev::Models::BatchSubmitResponse#credits
       class Credits < ContextDev::Internal::Type::BaseModel
         # @!attribute reserved
-        #   Credits reserved by background preparation. Zero while pending.
+        #   Credits reserved after validation, before scraping starts. `0` while `pending`.
         #
         #   @return [Integer]
         required :reserved, Integer
 
         # @!method initialize(reserved:)
-        #   Credits are reserved after background validation, before scraping starts.
+        #   Credits reserved for the batch.
         #
-        #   @param reserved [Integer] Credits reserved by background preparation. Zero while pending.
+        #   @param reserved [Integer] Credits reserved after validation, before scraping starts. `0` while `pending`.
       end
 
       # @see ContextDev::Models::BatchSubmitResponse#formats
       class Formats < ContextDev::Internal::Type::BaseModel
         # @!attribute bytes
-        #   The original HTTP response body.
+        #   Return the original HTTP response body.
         #
         #   @return [Boolean, nil]
         optional :bytes, ContextDev::Internal::Type::Boolean
 
         # @!attribute highlights
-        #   Markdown excerpts relevant to `highlightsParams.query`.
+        #   Return Markdown excerpts relevant to `highlightsParams.query`.
         #
         #   @return [Boolean, nil]
         optional :highlights, ContextDev::Internal::Type::Boolean
 
         # @!attribute html
-        #   Rendered HTML.
+        #   Return the rendered HTML.
         #
         #   @return [Boolean, nil]
         optional :html, ContextDev::Internal::Type::Boolean
 
         # @!attribute images
-        #   Images found on the page.
+        #   Return the images found on the page.
         #
         #   @return [Boolean, nil]
         optional :images, ContextDev::Internal::Type::Boolean
 
         # @!attribute json
-        #   An object matching `jsonParams.schema`, extracted from the page text and its
-        #   embedded data (JSON-LD, meta tags, framework state).
+        #   Return an object matching `jsonParams.schema`, extracted from the page text and
+        #   embedded data such as JSON-LD, meta tags, and framework state.
         #
         #   @return [Boolean, nil]
         optional :json, ContextDev::Internal::Type::Boolean
 
         # @!attribute markdown
-        #   Page content or video transcript as Markdown.
+        #   Return the page content, or a video transcript, as Markdown.
         #
         #   @return [Boolean, nil]
         optional :markdown, ContextDev::Internal::Type::Boolean
 
         # @!attribute parse
-        #   Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
+        #   Return fields extracted with custom rules or a prebuilt parser, as `parsed`.
         #
         #   @return [Boolean, nil]
         optional :parse, ContextDev::Internal::Type::Boolean
 
         # @!attribute product
-        #   Product details such as name, price, and availability.
+        #   Return product details such as name, price, and availability.
         #
         #   @return [Boolean, nil]
         optional :product, ContextDev::Internal::Type::Boolean
 
         # @!attribute screenshot
-        #   A screenshot of the page.
+        #   Return a screenshot of the page.
         #
         #   @return [Boolean, nil]
         optional :screenshot, ContextDev::Internal::Type::Boolean
@@ -240,25 +242,25 @@ module ContextDev
         #   Some parameter documentations has been truncated, see
         #   {ContextDev::Models::BatchSubmitResponse::Formats} for more details.
         #
-        #   Outputs requested for each page. Matches input.data.formats on submission.
+        #   Formats requested for each page, as submitted in `input.data.formats`.
         #
-        #   @param bytes [Boolean] The original HTTP response body.
+        #   @param bytes [Boolean] Return the original HTTP response body.
         #
-        #   @param highlights [Boolean] Markdown excerpts relevant to `highlightsParams.query`.
+        #   @param highlights [Boolean] Return Markdown excerpts relevant to `highlightsParams.query`.
         #
-        #   @param html [Boolean] Rendered HTML.
+        #   @param html [Boolean] Return the rendered HTML.
         #
-        #   @param images [Boolean] Images found on the page.
+        #   @param images [Boolean] Return the images found on the page.
         #
-        #   @param json [Boolean] An object matching `jsonParams.schema`, extracted from the page text and its emb
+        #   @param json [Boolean] Return an object matching `jsonParams.schema`, extracted from the page text and
         #
-        #   @param markdown [Boolean] Page content or video transcript as Markdown.
+        #   @param markdown [Boolean] Return the page content, or a video transcript, as Markdown.
         #
-        #   @param parse [Boolean] Fields extracted with custom rules or a prebuilt parser, returned as `parsed`.
+        #   @param parse [Boolean] Return fields extracted with custom rules or a prebuilt parser, as `parsed`.
         #
-        #   @param product [Boolean] Product details such as name, price, and availability.
+        #   @param product [Boolean] Return product details such as name, price, and availability.
         #
-        #   @param screenshot [Boolean] A screenshot of the page.
+        #   @param screenshot [Boolean] Return a screenshot of the page.
       end
 
       class InvalidURL < ContextDev::Internal::Type::BaseModel
@@ -280,7 +282,7 @@ module ContextDev
         #   @param url [String] Rejected URL.
       end
 
-      # How pages will be selected.
+      # `scrape` for a URL list, `crawl` for a site crawl.
       #
       # @see ContextDev::Models::BatchSubmitResponse#mode
       module Mode
@@ -293,9 +295,10 @@ module ContextDev
         #   @return [Array<Symbol>]
       end
 
-      # Current state. `pending` means waiting for execution capacity or background
-      # validation. Capacity-limited batches remain pending until a slot opens.
-      # `completed`, `cancelled`, and `failed` are final.
+      # Current state. `pending` batches are being validated or are waiting for a slot
+      # under your plan's concurrent batch limit, `queued` batches are ready to start,
+      # and `running` batches are scraping. `completed`, `cancelled`, and `failed` are
+      # final.
       #
       # @see ContextDev::Models::BatchSubmitResponse#status
       module Status
@@ -322,7 +325,7 @@ module ContextDev
         required :credits_consumed, Integer
 
         # @!attribute credits_remaining
-        #   Credits remaining for your organization.
+        #   Credits your organization has left after this request.
         #
         #   @return [Integer]
         required :credits_remaining, Integer
@@ -332,7 +335,7 @@ module ContextDev
         #
         #   @param credits_consumed [Integer] Credits charged for this request.
         #
-        #   @param credits_remaining [Integer] Credits remaining for your organization.
+        #   @param credits_remaining [Integer] Credits your organization has left after this request.
       end
     end
   end
